@@ -117,7 +117,7 @@ final class PageJouer extends Page {
             ((TextView) v.getValue()[1]).setText(ouvert ? "" : "◇ niveau " + Acces.niveauJeu(v.getKey()));
         }
         if (boutonChasse != null) boutonChasse.setText(Acces.jeuOuvert("chasse", n) ? "Jouer" : "Niveau " + Acces.niveauJeu("chasse"));
-        resume.setText("Niveau " + n + " · " + total + " xp · ce que tu gagnes ici monte au PC");
+        resume.setText("Niveau " + n + " · " + total + " xp · tes gains remontent au PC");
         int meilleur = Prefs.meilleurChasse(app);
         record.setText(meilleur > 0 ? "Record : " + meilleur : "Pas encore de record");
         int stock = 0;

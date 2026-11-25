@@ -202,8 +202,8 @@ public class CapturesTest {
             System.out.println("CAPTURE-ERREUR " + fichier + " " + e);
         }
         if (!miniatures) return;
-        // Miniature lisible depuis les journaux de la CI : ~320 px de haut (les pages longues, plus).
-        float k = Math.min(1f, 320f / Math.min(b.getHeight(), b.getWidth() * 2f));
+        // Miniature lisible depuis les journaux de la CI : ~560 px de haut (les pages longues, plus).
+        float k = Math.min(1f, 560f / Math.min(b.getHeight(), b.getWidth() * 2f));
         Bitmap mini = Bitmap.createScaledBitmap(b, Math.max(1, Math.round(b.getWidth() * k)), Math.max(1, Math.round(b.getHeight() * k)), true);
         ByteArrayOutputStream o = new ByteArrayOutputStream();
         mini.compress(Bitmap.CompressFormat.PNG, 100, o);

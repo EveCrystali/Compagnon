@@ -152,6 +152,8 @@ public final class Principale extends Activity {
             boutons[k].setBackground(sel ? Ui.arrondi(this, p.voile | 0x10000000, 16, 0) : null);
             libelles[k].setTextColor(sel ? p.bleu : p.doux);
             libelles[k].setTypeface(null, sel ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+            // L'onglet courant est annoncé « sélectionné » par TalkBack.
+            if (boutons[k].getParent() instanceof View) ((View) boutons[k].getParent()).setSelected(sel);
         }
         if (i == courant) {
             page(i).defile.smoothScrollTo(0, 0);
