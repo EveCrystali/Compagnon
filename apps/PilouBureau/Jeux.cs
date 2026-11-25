@@ -102,7 +102,9 @@ public sealed partial class FenetrePilou
     // Appelé à chaque lecture : XP venue de Claude (tours finis, commits, caresses), XP des autres PC.
     private void SuivreXp()
     {
-        if (_suivi.Courant is { } c)
+        // L'XP du mod vient d'une session Claude (toutes portent la même) ; les autres sources sont créditées à part.
+        var claude = _vivantes.Where(e => e.Claude).MaxBy(e => e.T);
+        if (claude is { } c)
         {
             if (_profil.XpClaudeVue < 0)
             {

@@ -1,0 +1,64 @@
+package fr.pilou.compagnon;
+
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.util.Base64;
+import java.util.Locale;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+/**
+ * Même calcul que Telephone.cs côté PC : le code d'appairage donne le sujet ntfy et la clé AES-256-GCM.
+ * Message : base64(nonce 12 octets ‖ chiffré ‖ étiquette 16 octets).
+ */
+public final class Chiffre {
+    static final String ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+
+    private Chiffre() {
+    }
+
+    public static String normaliser(String code) {
+        StringBuilder b = new StringBuilder();
+        for (char c : code.toUpperCase(Locale.ROOT).toCharArray())
+            if (ALPHABET.indexOf(c) >= 0) b.append(c);
+        return b.toString();
+    }
+
+    public static boolean valide(String code) {
+        return code != null && normaliser(code).length() == 16;
+    }
+
+    public static String formater(String code) {
+        String n = normaliser(code);
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < n.length(); i++) {
+            if (i > 0 && i % 4 == 0) b.append('-');
+            b.append(n.charAt(i));
+        }
+        return b.toString();
+    }
+
+    static byte[] hmac(String code, String usage) throws GeneralSecurityException {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(new SecretKeySpec(normaliser(code).getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+        return mac.doFinal(usage.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String sujet(String code) throws GeneralSecurityException {
+        byte[] h = hmac(code, "pilou-sujet-v1");
+        StringBuilder b = new StringBuilder("pilou-");
+        for (int i = 0; i < 12; i++) b.append(String.format(Locale.ROOT, "%02x", h[i]));
+        return b.toString();
+    }
+
+    public static String dechiffrer(String code, String message) throws GeneralSecurityException {
+        byte[] tout = Base64.getDecoder().decode(message.trim());
+        if (tout.length < 28) throw new GeneralSecurityException("message trop court");
+        Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+        c.init(Cipher.DECRYPT_MODE, new SecretKeySpec(hmac(code, "pilou-cle-v1"), "AES"), new GCMParameterSpec(128, tout, 0, 12));
+        return new String(c.doFinal(tout, 12, tout.length - 12), StandardCharsets.UTF_8);
+    }
+}

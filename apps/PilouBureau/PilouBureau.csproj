@@ -8,14 +8,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>PilouBureau</RootNamespace>
     <AssemblyName>PilouBureau</AssemblyName>
-    <Version>0.6.0</Version>
+    <Version>0.8.0</Version>
     <Product>Pilou de bureau</Product>
-    <Description>Le compagnon Pilou qui se promène sur la fenêtre de Claude.</Description>
+    <Description>Pilou, compagnon de tes IA de code (Claude, Codex…), sur le bas de l'écran.</Description>
     <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- QR code d'appairage du téléphone (pur C#, sans dépendance native). -->
+    <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 
 </Project>

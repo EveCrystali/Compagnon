@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.application'
+}
+
+// App sans aucune bibliothèque : le framework Android suffit (notification, widget, fenêtre flottante).
+android {
+    namespace 'fr.pilou.compagnon'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'fr.pilou.compagnon'
+        minSdk 26
+        targetSdk 35
+        // La release fixe les deux (minutes depuis 2025 : toujours croissant) ; en local, on les calcule pareil.
+        versionCode((System.getenv('PILOU_VERSION_CODE') ?: ((System.currentTimeMillis().intdiv(1000) - 1735689600).intdiv(60)).toString()).toInteger())
+        versionName(System.getenv('PILOU_VERSION') ?: '0.9-dev')
+    }
+
+    // Clé de signature publique du dépôt (app installée à la main, hors Play Store) : chaque version
+    // s'installe par-dessus la précédente. PILOU_KEYSTORE remplace la clé par une clé privée.
+    signingConfigs {
+        pilou {
+            storeFile file(System.getenv('PILOU_KEYSTORE') ?: 'pilou.keystore')
+            storePassword System.getenv('PILOU_KEYSTORE_PASS') ?: 'pilou-public'
+            keyAlias 'pilou'
+            keyPassword System.getenv('PILOU_KEYSTORE_PASS') ?: 'pilou-public'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.pilou
+        }
+        debug {
+            signingConfig signingConfigs.pilou
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+}

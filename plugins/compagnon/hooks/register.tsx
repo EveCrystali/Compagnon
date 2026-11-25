@@ -57,7 +57,7 @@ const borne = (n: number) => Math.max(0, Math.min(100, Math.round(n)))
 
 function heure(ms: number) {
   try {
-    return new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', hour12: false }).format(
+    return new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).format(
       new Date(ms),
     )
   } catch {
@@ -130,7 +130,8 @@ async function publier($: EngineInterface) {
   if (dossierBureau === '' || !sale) return
   sale = false
   const etat = {
-    v: 2,
+    v: 3,
+    source: 'claude',
     session: idSession,
     t: await $.clock.now(),
     ...(await propsCreature($)),
@@ -237,7 +238,7 @@ async function caresser($: EngineInterface) {
   await vivre($, { xp: 1, energie: reveil ? 10 : 3, souvenir: reveil ? 'réveillé par une caresse' : undefined })
 }
 
-// Dernier message d'Antoine (horloge du moteur) : au-delà de 20 min, la créature somnole.
+// Dernier message de la personne (horloge du moteur) : au-delà de 20 min, la créature somnole.
 let dernierMessage = 0
 let appels = 0
 
@@ -365,7 +366,7 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // Demande d'autorisation affichée : Claude attend Antoine.
+  // Demande d'autorisation affichée : Claude attend la personne.
   on('classic.Notification', async ($, e, next) => {
     await discret(async () => {
       if (e.notification_type === 'permission_prompt') {

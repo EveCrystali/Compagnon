@@ -12,7 +12,7 @@ using System.Windows.Threading;
 namespace PilouBureau;
 
 // Fenêtre transparente toujours au premier plan : Pilou vit sur le bas de l'écran,
-// avec au-dessus de lui une bulle qui dit où en est chaque session Claude.
+// avec au-dessus de lui une bulle qui dit où en est chaque session (Claude, Codex, autres sources).
 // Seuls ses pixels et la bulle prennent la souris ; le reste laisse passer les clics.
 public sealed partial class FenetrePilou : Window
 {
@@ -45,7 +45,7 @@ public sealed partial class FenetrePilou : Window
     private readonly DispatcherTimer _image;
     private readonly DispatcherTimer _lecture;
     private readonly Dictionary<string, (bool EnTour, string Attente, double FinTour)> _vus = new();
-    // Ce qu'Antoine a déjà lu (clic sur la bulle ou sur Pilou) : session → signature de son état.
+    // Ce que la personne a déjà lu (clic sur la bulle ou sur Pilou) : session → signature de son état.
     private readonly Dictionary<string, string> _lus = new();
     private IReadOnlyList<EtatSession> _vivantes = Array.Empty<EtatSession>();
 
@@ -173,6 +173,7 @@ public sealed partial class FenetrePilou : Window
             Lire();
             _lecture.Start();
             _image.Start();
+            DemarrerMises();
         };
     }
 
@@ -198,7 +199,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
             v => { _reglages.Taille = v; AppliquerTaille(); }));
-        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand Claude t'attend", ModeBulle.Masquee) },
+        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand on t'attend", ModeBulle.Masquee) },
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
@@ -261,6 +262,8 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(MenuIntegrations());
+        menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
         menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
@@ -335,6 +338,7 @@ public sealed partial class FenetrePilou : Window
             _attend = vivantes.Any(e => e.Attente != "");
             Transitions(vivantes);
             SuivreXp();
+            Integrer(vivantes, epoque);
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -555,6 +559,7 @@ public sealed partial class FenetrePilou : Window
         _inactif = Natif.InactifMs();
         Observer(t);
         expr = Sommeil(expr, t);
+        _exprCourante = expr;
         ProposerJeu(t, expr);
 
         if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);
@@ -668,7 +673,7 @@ public sealed partial class FenetrePilou : Window
         Top = Math.Round(_yPieds - (HauteurBulle + Scene.Sol) * K);
     }
 
-    // Claude attend Antoine (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,
+    // Claude t'attend (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,
     // sur l'horizontale, et la suit tant que personne ne répond. Renvoie s'il court.
     private bool Courir(double t, double dt, double min, double max)
     {
@@ -835,7 +840,7 @@ public sealed partial class FenetrePilou : Window
         }
     }
 
-    // Antoine ne bouge plus depuis 3 min : Pilou saute s'accrocher au curseur par l'antenne.
+    // Plus personne ne bouge depuis 3 min : Pilou saute s'accrocher au curseur par l'antenne.
     private bool PreparerSaut(double t)
     {
         var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
@@ -862,7 +867,7 @@ public sealed partial class FenetrePilou : Window
             _yPieds = _sautDepart.Y + (_sautCible.Y - _sautDepart.Y) * a - Math.Sin(Math.PI * a) * haut;
             return;
         }
-        // Accroché : il gigote. Si la souris repart (Antoine est revenu) ou au bout de 2,6 s, il lâche.
+        // Accroché : il gigote. Si la souris repart (on est revenu) ou au bout de 2,6 s, il lâche.
         var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
         bool bouge = (pieds - _sautCible).Length > 25;
         _x = _sautCible.X;

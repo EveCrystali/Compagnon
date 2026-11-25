@@ -1,0 +1,82 @@
+name: Publier
+
+# Chaque fusion sur main publie une release v0.9.<n> (PilouBureau.zip, Pilou.apk, installer.ps1,
+# version.json) : le PC et le téléphone la trouvent tout seuls (.../releases/latest/download/version.json).
+# Une étiquette v* publie la version qu'elle nomme (préversion si elle contient un tiret).
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publier
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Numéro de version
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.9.${GITHUB_RUN_NUMBER}"; fi
+          # Code Android : minutes depuis le 1er janvier 2025, toujours croissant (CI comme release).
+          code=$(( ($(date +%s) - 1735689600) / 60 ))
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "Version $v, code Android $code"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Tests
+        run: |
+          dotnet test apps/PilouBureau/tests
+          (cd android && ./gradlew --no-daemon testReleaseUnitTest)
+
+      - name: Application Android
+        env:
+          PILOU_VERSION: ${{ steps.v.outputs.version }}
+          PILOU_VERSION_CODE: ${{ steps.v.outputs.code }}
+        run: |
+          (cd android && ./gradlew --no-daemon assembleRelease)
+          cp android/app/build/outputs/apk/release/app-release.apk Pilou.apk
+
+      - name: Overlay Windows (exécutable autonome, sans .NET à installer)
+        run: |
+          dotnet publish apps/PilouBureau -c Release -r win-x64 --self-contained -p:EnableWindowsTargeting=true \
+            -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none \
+            -p:Version=${{ steps.v.outputs.version }} -o out
+          (cd out && zip -q ../PilouBureau.zip *)
+
+      - name: version.json
+        run: |
+          cat > version.json <<EOF
+          {"version":"${{ steps.v.outputs.version }}","apkCode":${{ steps.v.outputs.code }},"zip":"PilouBureau.zip","apk":"Pilou.apk","commit":"${GITHUB_SHA::7}"}
+          EOF
+          cat version.json
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Pilou ${{ steps.v.outputs.version }}
+          files: |
+            PilouBureau.zip
+            Pilou.apk
+            installer.ps1
+            version.json
+          generate_release_notes: true
+          prerelease: ${{ contains(steps.v.outputs.version, '-') }}
+          make_latest: ${{ !contains(steps.v.outputs.version, '-') }}
