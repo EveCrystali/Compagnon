@@ -41,6 +41,22 @@ public final class Prefs {
         return de(c).getBoolean("alerteFin", true);
     }
 
+    public static boolean alerteMaj(Context c) {
+        return de(c).getBoolean("alerteMaj", true);
+    }
+
+    public static boolean son(Context c) {
+        return de(c).getBoolean("son", true);
+    }
+
+    public static boolean vibrations(Context c) {
+        return de(c).getBoolean("vibrations", true);
+    }
+
+    public static int meilleurChasse(Context c) {
+        return de(c).getInt("meilleurChasse", 0);
+    }
+
     /** Dernier état déchiffré (pour le widget et au redémarrage). */
     public static Etat etat(Context c) {
         String json = de(c).getString("etat", "");

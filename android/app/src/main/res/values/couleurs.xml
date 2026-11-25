@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fond_icone">#FF1C2128</color>
+    <color name="fond_icone_clair">#FF2D333B</color>
+    <color name="fond">#FFF6F8FA</color>
+    <color name="accent">#FF2F7ED8</color>
+    <color name="nuit">#FF0F141A</color>
 </resources>

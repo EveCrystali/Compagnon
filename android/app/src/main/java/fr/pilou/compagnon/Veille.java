@@ -130,7 +130,22 @@ public final class Veille extends Service {
     static final String ACTION_CACHER = "fr.pilou.compagnon.CACHER", ACTION_MONTRER = "fr.pilou.compagnon.MONTRER";
 
     private boolean cache() {
-        return System.currentTimeMillis() < Prefs.de(this).getLong("cacheJusque", 0);
+        return cache(this);
+    }
+
+    /** Pilou flottant caché (10 min) ? */
+    static boolean cache(android.content.Context c) {
+        return System.currentTimeMillis() < Prefs.de(c).getLong("cacheJusque", 0);
+    }
+
+    /** Cacher Pilou 10 min, ou le montrer tout de suite (depuis l'app). */
+    static void cacher(android.content.Context c, boolean oui) {
+        if (!Chiffre.valide(Prefs.code(c))) {
+            if (oui) Prefs.de(c).edit().putLong("cacheJusque", System.currentTimeMillis() + 10 * 60_000L).apply();
+            else Prefs.de(c).edit().remove("cacheJusque").apply();
+            return;
+        }
+        c.startForegroundService(new Intent(c, Veille.class).setAction(oui ? ACTION_CACHER : ACTION_MONTRER));
     }
 
     private void reglerBulle() {

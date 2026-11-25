@@ -9,10 +9,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Mise à jour depuis la release GitHub (Android demande toujours la confirmation). -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- Jeux : vibration quand Pilou est touché (coupable dans Réglages). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/Theme.Pilou">
@@ -20,7 +23,9 @@
         <activity
             android:name=".Principale"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Pilou.Demarrage"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,6 +38,13 @@
                 <data android:scheme="pilou" android:host="appairer" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ActiviteChasse"
+            android:exported="false"
+            android:label="Chasse aux bugs"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Pilou.Jeu" />
 
         <activity
             android:name=".Atelier"

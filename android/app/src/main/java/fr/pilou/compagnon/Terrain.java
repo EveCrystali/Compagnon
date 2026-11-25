@@ -101,8 +101,12 @@ public final class Terrain extends View {
     }
 
     public void jouer() {
+        jouer(hasard.nextInt(3));
+    }
+
+    /** 0 étoile filante, 1 bulles, 2 tape m'en cinq. */
+    public void jouer(int j) {
         if (occupe()) return;
-        int j = hasard.nextInt(3);
         debut = t();
         if (j == 0) {
             mode = Mode.ETOILE;
