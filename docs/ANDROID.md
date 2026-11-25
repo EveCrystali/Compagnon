@@ -81,6 +81,15 @@ et le cite dans son prochain état ; le téléphone le retire alors de sa file. 
 attendent (« +N en attente du PC ») et repartent. Le panier d'ingrédients du téléphone est le sien ;
 le carnet et les recettes connues s'additionnent.
 
+## Groupe d'appareils
+
+Le code d'appairage est aussi le code du **groupe** : un autre PC qui le saisit (*Intégrations →
+Rejoindre un groupe*) partage l'XP avec celui-ci, sans dossier commun. Chaque PC publie son propre
+compteur sur un troisième sujet (`pilou-groupe-v1`) et garde, pour chacun des autres, la plus grande
+valeur reçue (compteur G) ; le total est la somme. Les gains du téléphone sont crédités par **chaque**
+PC du groupe dans un compteur à part (`XpTelephone`), dont on prend le maximum : ils ne comptent qu'une
+fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que le PC lui transmet.
+
 ## Ce qui est sur le téléphone, et ce qui n'y est pas
 
 | Fonction | PC | Téléphone |

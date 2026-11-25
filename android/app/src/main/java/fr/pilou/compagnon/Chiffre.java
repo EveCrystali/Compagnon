@@ -62,6 +62,14 @@ public final class Chiffre {
         return b.toString();
     }
 
+    /** Sujet du groupe d'appareils (les PC y publient leur compteur d'XP) : même calcul que Groupe.Sujet côté PC. */
+    public static String sujetGroupe(String code) throws GeneralSecurityException {
+        byte[] h = hmac(code, "pilou-groupe-v1");
+        StringBuilder b = new StringBuilder("pilou-");
+        for (int i = 0; i < 12; i++) b.append(String.format(Locale.ROOT, "%02x", h[i]));
+        return b.toString();
+    }
+
     public static String chiffrer(String code, String texte) throws GeneralSecurityException {
         byte[] nonce = new byte[12];
         new java.security.SecureRandom().nextBytes(nonce);

@@ -49,21 +49,9 @@ public sealed partial class FenetrePilou
             m.Items.Add(Entree("… envoyer un essai", () => _ = Essayer()));
         }
 
+        // Un seul code pour le groupe : les autres PC (XP partagée) et le téléphone Android.
         m.Items.Add(new Separator());
-        if (Telephone.Valide(_reglages.Telephone))
-        {
-            m.Items.Add(Entree("Android : appairé ✓ (revoir le code)", () => Appairage.Montrer(_reglages.Telephone, _reglages.Relais)));
-            m.Items.Add(Entree("Android : nouveau code (l'ancien téléphone décroche)", () => Appairer(true)));
-            m.Items.Add(Entree("Android : couper", () =>
-            {
-                _reglages.Telephone = "";
-                _reglages.Ecrire(_dossier);
-                Dire("le téléphone ne reçoit plus rien", 3000);
-            }));
-        }
-        else
-            m.Items.Add(Entree("Android : appairer mon téléphone…", () => Appairer(false)));
-        m.Items.Add(Entree($"Android : relais {_reglages.Relais}…", ChoisirRelais));
+        RemplirGroupe(m);
 
         m.Items.Add(new Separator());
         m.Items.Add(Entree("Brancher un autre logiciel… (aide)", () => Ouvrir(AideBrancher)));
@@ -108,7 +96,7 @@ public sealed partial class FenetrePilou
         var accessoire = _reglages.Porte(DateTime.Now, Niveau).ToString().ToLowerInvariant();
         // Les gains crédités et l'accessoire changent aussi ce que le téléphone doit savoir.
         var signature = Telephone.Signature(sessions, Niveau, humeur,
-            $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}");
+            $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -118,9 +106,14 @@ public sealed partial class FenetrePilou
         bool battement = epoque - _telEnvoi >= 15 * 60_000;
         if (!change && !battement) return;
 
+        var progression = Telephone.Progression(_profil, _xpTotal, accessoire);
+        // Appareils du groupe, pour la liste de l'app (nom, xp, vu il y a) ; ce PC en tête.
+        progression["appareils"] = new[] { new Dictionary<string, object> { ["nom"] = Environment.MachineName, ["xp"] = _profil.Xp, ["t"] = epoque } }
+            .Concat(GroupeMem.Compteurs.OrderByDescending(c => c.T)
+                .Select(c => new Dictionary<string, object> { ["nom"] = c.Nom, ["xp"] = c.Xp, ["t"] = c.T }))
+            .Take(10).ToList();
         var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
-            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count,
-            Telephone.Progression(_profil, _xpTotal, accessoire));
+            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
         var corps = Telephone.Chiffrer(code, charge);
         _telEnCours = true;
@@ -172,7 +165,7 @@ public sealed partial class FenetrePilou
                     if (gains.Count > 0 || dernier != "") _reglages.Ecrire(_dossier);
                     if (gains.Count == 0) return;
                     _profil.Ecrire(DossierPartage);
-                    _xpTotal += total;
+                    _xpTotal = TotalXp();
                     if (total > 0)
                     {
                         Flotter($"+{total} xp");
@@ -251,6 +244,8 @@ public sealed partial class FenetrePilou
         Prevenir(vivantes, epoque);
         PublierTelephone(vivantes, epoque);
         RecevoirTelephone(epoque);
+        PublierGroupe(epoque);
+        LireGroupe(epoque);
     }
 
     // XP gagnée par les autres sources (tour fini, commit, tests) : écart depuis la dernière lecture.

@@ -195,7 +195,7 @@ public static class Telephone
         if (p.Recus.Contains(g.Id)) return 0;
         p.Recus.Add(g.Id);
         if (p.Recus.Count > 100) p.Recus.RemoveRange(0, p.Recus.Count - 100);
-        p.Xp += g.Xp;
+        p.XpTelephone += g.Xp; // à part : chaque PC du groupe crédite les mêmes gains (compté au maximum)
         p.Caresses += g.Caresses;
         foreach (var (id, n) in g.Prises) p.Carnet[id] = p.Carnet.GetValueOrDefault(id) + n;
         foreach (var plat in g.Plats)

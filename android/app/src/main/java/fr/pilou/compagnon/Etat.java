@@ -68,6 +68,24 @@ public final class Etat {
     public String accessoire = "aucun";
     public final java.util.Set<String> carnet = new java.util.TreeSet<>(), plats = new java.util.TreeSet<>();
     public final List<String> recus = new ArrayList<>();
+    /** Appareils du groupe (PC ≥ 0.9.6) : nom, XP de chacun, dernière nouvelle ; le PC qui publie en tête. */
+    public final List<Appareil> appareils = new ArrayList<>();
+
+    public static final class Appareil {
+        public final String nom;
+        public final int xp;
+        public final long t;
+
+        Appareil(String nom, int xp, long t) {
+            this.nom = nom;
+            this.xp = xp;
+            this.t = t;
+        }
+
+        public String texte(long maintenant) {
+            return nom + " · " + xp + " xp · " + (t <= 0 ? "jamais vu" : "vu il y a " + duree(maintenant - t));
+        }
+    }
 
     private Etat(String nom, String titre, String couleur, String humeur, int niveau, int calmes, long t, long decalage, List<Session> sessions) {
         this.nom = nom;
@@ -114,6 +132,13 @@ public final class Etat {
                 else e.recus.add(v);
             }
         }
+        JSONArray ap = r.optJSONArray("appareils");
+        if (ap != null)
+            for (int i = 0; i < Math.min(10, ap.length()); i++) {
+                JSONObject o = ap.optJSONObject(i);
+                if (o == null || o.optString("nom").isEmpty()) continue;
+                e.appareils.add(new Appareil(o.optString("nom"), o.optInt("xp", 0), o.optLong("t", 0) + decalage));
+            }
         return e;
     }
 
