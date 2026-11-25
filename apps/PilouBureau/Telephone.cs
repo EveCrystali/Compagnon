@@ -11,6 +11,8 @@ namespace PilouBureau;
 public static class Telephone
 {
     public const string RelaisParDefaut = "https://ntfy.sh";
+    // ntfy transforme un message de plus de 4 096 octets en pièce jointe : on reste en dessous.
+    public const int TailleMax = 3800;
     private const string Alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
 
     public static string NouveauCode()

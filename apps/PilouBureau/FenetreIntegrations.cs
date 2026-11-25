@@ -19,6 +19,7 @@ public sealed partial class FenetrePilou
     private string _telSignature = "", _telEnvoyee = "";
     private double _telChange = -1e12, _telEnvoi = -1e12, _telPause = -1e12;
     private bool _telEnCours;
+    private string _telEtat = "";
 
     private MenuItem MenuIntegrations()
     {
@@ -52,6 +53,13 @@ public sealed partial class FenetrePilou
         // Un seul code pour le groupe : les autres PC (XP partagée) et le téléphone Android.
         m.Items.Add(new Separator());
         RemplirGroupe(m);
+        if (Telephone.Valide(_reglages.Telephone))
+            m.Items.Add(new MenuItem
+            {
+                Header = _telEnvoi < 0 ? $"   dernier envoi au téléphone : aucun{(_telEtat == "" ? "" : $" · {_telEtat}")}"
+                    : $"   dernier envoi au téléphone : il y a {Statut.Duree(Epoque - _telEnvoi)} · {(_telEtat == "" ? "ok" : _telEtat)}",
+                IsEnabled = false,
+            });
 
         m.Items.Add(new Separator());
         m.Items.Add(Entree("Brancher un autre logiciel… (aide)", () => Ouvrir(AideBrancher)));
@@ -116,22 +124,44 @@ public sealed partial class FenetrePilou
             _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
         var corps = Telephone.Chiffrer(code, charge);
+        // Au-delà de 4 096 octets, ntfy transforme le message en pièce jointe : on retire alors les listes
+        // (carnet, recettes), que le téléphone garde de l'envoi précédent.
+        if (corps.Length > Telephone.TailleMax)
+        {
+            var leger = Telephone.Progression(_profil, _xpTotal, accessoire);
+            leger.Remove("carnet");
+            leger.Remove("plats");
+            charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
+                _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
+            corps = Telephone.Chiffrer(code, charge);
+        }
         _telEnCours = true;
         _ = Task.Run(async () =>
         {
             try
             {
                 using var r = await Relais.PostAsync(url, new StringContent(corps, Encoding.UTF8, "text/plain"));
-                if ((int)r.StatusCode == 429) _telPause = Epoque + 5 * 60_000; // limite du relais : on se tait 5 min
+                if ((int)r.StatusCode == 429)
+                {
+                    _telPause = Epoque + 5 * 60_000; // limite du relais : on se tait 5 min
+                    _telEtat = "limite du relais atteinte (pause 5 min)";
+                }
                 else if (r.IsSuccessStatusCode)
                 {
                     _telEnvoyee = signature;
                     _telEnvoi = Epoque;
+                    _telEtat = "ok";
+                }
+                else
+                {
+                    _telPause = Epoque + 60_000; // refus du relais : pas de nouvel essai avant une minute
+                    _telEtat = $"refusé par le relais (HTTP {(int)r.StatusCode})";
                 }
             }
             catch (Exception e) when (e is HttpRequestException or TaskCanceledException)
             {
                 _telPause = Epoque + 60_000; // hors ligne : on réessaie dans une minute
+                _telEtat = "relais injoignable";
             }
             finally
             {

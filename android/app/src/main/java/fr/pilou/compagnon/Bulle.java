@@ -194,11 +194,12 @@ final class Bulle {
     private final class Glisser implements View.OnTouchListener {
         private float dx, dy, x0, y0;
         private boolean bouge;
+        // Appui long : ouvrir l'app (pour cacher Pilou : le bouton de la notification, qui dit quand il revient).
         private final Runnable longAppui = () -> {
-            cacher();
-            h.postDelayed(Bulle.this::montrer, 10 * 60_000L);
-            pilou.animer(true);
+            appuiLong = true;
+            ctx.startActivity(new android.content.Intent(ctx, Principale.class).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK));
         };
+        private boolean appuiLong;
 
         @Override
         public boolean onTouch(View v, MotionEvent e) {
@@ -209,6 +210,7 @@ final class Bulle {
                     dx = lp.x - x0;
                     dy = lp.y - y0;
                     bouge = false;
+                    appuiLong = false;
                     h.postDelayed(longAppui, 700);
                     return true;
                 case MotionEvent.ACTION_MOVE:
@@ -231,6 +233,7 @@ final class Bulle {
                 case MotionEvent.ACTION_CANCEL:
                     h.removeCallbacks(longAppui);
                     // Hors du traitement du toucher : la fenêtre change de forme une fois le toucher rendu.
+                    if (appuiLong) return true;
                     boolean deplace = bouge;
                     h.post(() -> {
                         if (!pose) return;
