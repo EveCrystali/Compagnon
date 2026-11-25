@@ -94,7 +94,10 @@ public final class Veille extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent == null ? null : intent.getAction();
         if (ACTION_CACHER.equals(action)) Prefs.de(this).edit().putLong("cacheJusque", System.currentTimeMillis() + 10 * 60_000L).apply();
-        else if (ACTION_MONTRER.equals(action)) Prefs.de(this).edit().remove("cacheJusque").apply();
+        else if (ACTION_MONTRER.equals(action)) {
+            Prefs.de(this).edit().remove("cacheJusque").apply();
+            ramener = true;
+        }
         String code = Prefs.code(this);
         if (!Chiffre.valide(code)) {
             stopSelf();
@@ -129,6 +132,8 @@ public final class Veille extends Service {
 
     static final String ACTION_CACHER = "fr.pilou.compagnon.CACHER", ACTION_MONTRER = "fr.pilou.compagnon.MONTRER";
 
+    private boolean ramener;
+
     private boolean cache() {
         return System.currentTimeMillis() < Prefs.de(this).getLong("cacheJusque", 0);
     }
@@ -139,6 +144,10 @@ public final class Veille extends Service {
         if (veut && bulle == null) {
             bulle = new Bulle(this);
             bulle.montrer();
+        }
+        if (veut && ramener) {
+            ramener = false;
+            bulle.ramener();
         } else if (!veut && bulle != null) {
             bulle.cacher();
             bulle = null;
@@ -275,6 +284,9 @@ public final class Veille extends Service {
             b.addAction(new Notification.Action.Builder(null, cache ? "Montrer Pilou" : "Cacher Pilou 10 min",
                     PendingIntent.getForegroundService(this, cache ? 11 : 10, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT)).build());
             if (cache) b.setSubText("Pilou caché");
+            else b.addAction(new Notification.Action.Builder(null, "Ramener Pilou",
+                    PendingIntent.getForegroundService(this, 12, new Intent(this, Veille.class).setAction(ACTION_MONTRER),
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT)).build());
         }
         return b.build();
     }
