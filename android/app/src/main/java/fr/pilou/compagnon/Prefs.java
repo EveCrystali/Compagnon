@@ -26,6 +26,13 @@ public final class Prefs {
         return de(c).getBoolean("bulle", true);
     }
 
+    /** Taille du Pilou flottant : 0,6 (petit) à 2,5 (très grand) ; 1 = taille d'origine. */
+    public static final float TAILLE_MIN = 0.6f, TAILLE_MAX = 2.5f;
+
+    public static float taille(Context c) {
+        return Math.max(TAILLE_MIN, Math.min(TAILLE_MAX, de(c).getFloat("taille", 1f)));
+    }
+
     public static boolean alerteAttente(Context c) {
         return de(c).getBoolean("alerteAttente", true);
     }

@@ -118,6 +118,7 @@ public final class Veille extends Service {
 
     private void reglerBulle() {
         boolean veut = Prefs.bulle(this) && Settings.canDrawOverlays(this);
+        if (veut && bulle != null) bulle.reglerTaille();
         if (veut && bulle == null) {
             bulle = new Bulle(this);
             bulle.montrer();
