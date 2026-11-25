@@ -205,7 +205,8 @@ public sealed partial class FenetrePilou : Window
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
         var accessoires = new MenuItem { Header = $"Accessoire (niveau {Niveau})" };
         foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
-                     Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne })
+                     Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
+                     Accessoire.Tablier, Accessoire.EtoileMer })
         {
             int requis = Reglages.Requis(a);
             var m = new MenuItem
@@ -259,6 +260,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
         menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
         menu.Items.Add(Entree("Jouer maintenant", () => Demarrer((Jeu)(1 + _hasard.Next(3)), Maintenant)));
+        foreach (var m in MenusPeche()) menu.Items.Add(m);
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
@@ -561,6 +563,7 @@ public sealed partial class FenetrePilou : Window
         expr = Sommeil(expr, t);
         _exprCourante = expr;
         ProposerJeu(t, expr);
+        OccuperSeul(t, expr);
 
         if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);
         double sol = _zone.Bottom;
@@ -616,6 +619,7 @@ public sealed partial class FenetrePilou : Window
         }
         var (rx, ry) = RegardSouris(expr, marche);
         if (_geste == Geste.Ballon) rx = _sens;
+        if (_jeuEnCours is Jeu.Peche or Jeu.Cuisine) rx = CoteJeu;
 
         // Accroché au curseur, posé sur l'écran pour toquer, ou caressé par la souris qui s'attarde.
         double suspendu = _geste == Geste.SauteSouris && t - _sautDebut > 700 ? 1 : 0;
@@ -623,7 +627,7 @@ public sealed partial class FenetrePilou : Window
         bool toque = phaseToque is >= 0 and < 1;
         bool ronron = _survolSceneDebut >= 0 && t - _survolSceneDebut > 1500 && _appui is null;
         bool etourdi = t < _etourdiJusque;
-        var montre = _attrape ? Expr.Inquiet : _geste == Geste.SauteSouris ? Expr.Fete : ronron ? Expr.Caresse : expr;
+        var montre = _attrape ? Expr.Inquiet : _geste == Geste.SauteSouris ? Expr.Fete : ronron ? Expr.Caresse : ExprJeu(expr, t);
 
         double depuis = _suivi.DepuisHumeur(epoque);
         double saut = 0;

@@ -74,6 +74,11 @@ public sealed class Scene : FrameworkElement
         [Couleur.Ambre] = new(B("#7a4210"), B("#c97a28"), B("#f2a94e"), B("#ffd59a")),
         [Couleur.Argent] = new(B("#3b4654"), B("#8796a8"), B("#b8c4d2"), B("#e6ecf2")),
         [Couleur.Aurore] = new(B("#3a2a7a"), B("#6a5acd"), B("#9b8cff"), B("#d2caff")),
+        [Couleur.Lagon] = new(B("#0f4a63"), B("#2689b8"), B("#3fb8e0"), B("#a8e4f7")),
+        [Couleur.Braise] = new(B("#6b2f0c"), B("#c45a1a"), B("#f07c2a"), B("#ffc08a")),
+        [Couleur.Nacre] = new(B("#4d5566"), B("#b9b4cf"), B("#e4def5"), B("#ffffff")),
+        [Couleur.Abysse] = new(B("#0a1230"), B("#1b2a6b"), B("#2f45a8"), B("#7f93e8")),
+        [Couleur.Comete] = new(B("#5a4410"), B("#c9a227"), B("#f5d76e"), B("#fff6cc")),
     };
     private static readonly Brush Encre = B("#1c2128");
     private static readonly Brush Blanc = B("#ffffff");
@@ -159,7 +164,7 @@ public sealed class Scene : FrameworkElement
     {
         var t = p.T;
         // Inquiet : orange ; si Pilou est déjà ambre, il vire au bleu (le changement reste visible).
-        var teinte = p.Expr == Expr.Inquiet ? (p.Couleur == Couleur.Ambre ? Bleu : Orange) : Couleurs[p.Couleur];
+        var teinte = p.Expr == Expr.Inquiet ? (p.Couleur is Couleur.Ambre or Couleur.Braise or Couleur.Comete ? Bleu : Orange) : Couleurs[p.Couleur];
         double periode = p.Expr switch { Expr.Dort => 4200, Expr.Concentre or Expr.Attente => 1600, _ => 2600 };
         double b = Math.Sin(2 * Math.PI * t / periode);
         // Grandeurs en anciens pixels, converties ensuite (× E).
@@ -263,6 +268,11 @@ public sealed class Scene : FrameworkElement
             Bonnet(dc, dx, sommet, t);
             Bout(dc, p, 20 + dx, sommet - 11);
         }
+        else if (accessoire == Accessoire.Toque)
+        {
+            Toque(dc, dx, sommet);
+            Bout(dc, p, 13 + dx, sommet - 10);
+        }
         else
         {
             Px(13 + dx, sommet - 1, teinte.Contour);
@@ -293,6 +303,10 @@ public sealed class Scene : FrameworkElement
             {
                 { 1, 0, 0, 1, 1, 0, 0, 1 }, { 1, 1, 0, 1, 1, 0, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 4, 1, 1, 1, 1, 4, 1 },
             }, 9 + dx, sommet - 3, Laine, Bleu.Clair);
+        if (accessoire == Accessoire.ChapeauPeche) ChapeauPeche(dc, dx, sommet);
+        if (accessoire == Accessoire.Tablier) Tablier(dc, dx, ey, pied);
+        if (accessoire == Accessoire.EtoileMer)
+            Motif2(dc, new[,] { { 0, 0, 1, 0, 0 }, { 1, 1, 4, 1, 1 }, { 0, 1, 1, 1, 0 }, { 0, 1, 0, 1, 0 } }, 16 + dx, sommet - 1, Laine, EtincelleClair);
         if (accessoire == Accessoire.Feuille)
             Motif2(dc, new[,] { { 0, 0, 0, 1, 4 }, { 0, 0, 1, 1, 1 }, { 0, 1, 4, 1, 0 }, { 1, 4, 1, 0, 0 }, { 4, 0, 0, 0, 0 } }, 5 + dx, sommet - 2, Feuillage, Nervure);
 
@@ -380,6 +394,50 @@ public sealed class Scene : FrameworkElement
         // Pompon.
         foreach (var (a, b) in new[] { (19, -8), (20, -8), (21, -8), (19, -9), (20, -9), (21, -9), (20, -10), (20, -7) }) Px(a, sommet + b, Creme);
         Px(19, sommet - 9, Blanc);
+    }
+
+    // Chapeau de pêcheur (bob) : bord large, calotte bleu nuit, une mouche orange piquée sur le côté.
+    private static void ChapeauPeche(DrawingContext dc, int dx, int sommet)
+    {
+        void Px(int x, int y, Brush br) => dc.DrawRectangle(br, null, Case(x + dx, y));
+        for (int x = 4; x <= 21; x++) Px(x, sommet + 1, x is 4 or 21 ? Arceau : ArceauClair);
+        for (int y = sommet - 2; y <= sommet; y++)
+            for (int x = 7; x <= 18; x++)
+                if (x != 13 || y != sommet - 2) Px(x, y, y == sommet ? Arceau : (x + y) % 3 == 0 ? Arceau : ArceauClair);
+        Px(17, sommet - 1, Laine);
+        Px(18, sommet - 2, Etincelle);
+        Px(16, sommet - 2, EtincelleClair);
+    }
+
+    // Toque de chef : bandeau, puis un chapeau blanc bouffant (l'antenne ressort au sommet).
+    private static void Toque(DrawingContext dc, int dx, int sommet)
+    {
+        void Px(int x, int y, Brush br) => dc.DrawRectangle(br, null, Case(x + dx, y));
+        for (int x = 8; x <= 17; x++)
+        {
+            Px(x, sommet, CremeOmbre);
+            Px(x, sommet - 1, Creme);
+        }
+        int[][] rangs = { new[] { 8, 17 }, new[] { 7, 18 }, new[] { 7, 18 }, new[] { 7, 18 }, new[] { 8, 17 }, new[] { 10, 15 } };
+        for (int i = 0; i < rangs.Length; i++)
+            for (int x = rangs[i][0]; x <= rangs[i][1]; x++)
+                Px(x, sommet - 2 - i, x == rangs[i][0] || x == rangs[i][1] || i == rangs.Length - 1 ? CremeOmbre : Blanc);
+        Px(10, sommet - 4, CremeOmbre);
+        Px(15, sommet - 5, CremeOmbre);
+    }
+
+    // Tablier crème noué derrière, poche orange au milieu du ventre.
+    private static void Tablier(DrawingContext dc, int dx, int ey, int pied)
+    {
+        void Px(int x, int y, Brush br) => dc.DrawRectangle(br, null, Case(x + dx, y));
+        int haut = ey + 7, bas = pied - 2;
+        for (int y = haut; y <= bas; y++)
+            for (int x = 9; x <= 16; x++)
+                Px(x, y, x is 9 or 16 || y == bas ? CremeOmbre : Creme);
+        for (int x = 11; x <= 14; x++) Px(x, haut + 2, Laine);
+        for (int x = 11; x <= 14; x++) Px(x, haut + 3, LaineOmbre);
+        Px(8, haut, CremeOmbre);
+        Px(17, haut, CremeOmbre);
     }
 
     // Casque audio : arceau gris par-dessus la tête, écouteurs orange de part et d'autre.
