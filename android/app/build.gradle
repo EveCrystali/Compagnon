@@ -60,6 +60,8 @@ android {
                 systemProperty 'robolectric.dependency.dir', layout.buildDirectory.dir('robolectric').get().asFile.absolutePath
                 testLogging {
                     events 'failed'
+                    // Les lignes « CAPTURE » de CapturesTest (miniatures en base64) arrivent dans le journal.
+                    showStandardStreams = true
                     exceptionFormat 'full'
                     showStackTraces true
                     showCauses true
