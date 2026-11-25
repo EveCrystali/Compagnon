@@ -157,6 +157,16 @@ valeur reçue (compteur G) ; le total est la somme. Les gains du téléphone son
 PC du groupe dans un compteur à part (`XpTelephone`), dont on prend le maximum : ils ne comptent qu'une
 fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que le PC lui transmet.
 
+## Météo
+
+Quand le connecteur météo du PC est actif, le message du PC porte un champ facultatif
+`meteo` : `{"etat":"pluie","temperature":8,"ville":"Paris","signe":"☂"}`. Le téléphone ne contacte
+aucun service météo. L'Accueil montre une carte (« ☂ pluie · 8 °C · Paris » et ce qu'en dit Pilou),
+et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes règles que le PC
+(`Meteo.java`, miroir de `Meteo.cs`) : mouillé sans parapluie ni imperméable, grelottant sans bonnet,
+écharpe ni moufles, en sueur sans lunettes ni éventail. Une météo vieille de plus de trois heures
+(PC éteint) n'est plus montrée. Sans le champ (ancien PC, connecteur coupé), rien ne change.
+
 ## Ce qui est sur le téléphone, et ce qui n'y est pas
 
 | Fonction | PC | Téléphone |
@@ -166,7 +176,8 @@ fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que l
 | Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
 | Couleurs | achetées en boutique, portées au clic droit | achetées et portées dans la Boutique |
 | Accessoires (chapeaux historiques) | achetés en boutique, choisis au clic droit | achetés dans la Boutique (choisis sur le PC) |
-| Objets de boutique (tête, yeux, cou, dos, main, compagnon, effet) | ✓ Boutique… | ✓ Boutique (acheter, porter) |
+| Objets de boutique (tête, yeux, cou, dos, main, pieds, compagnon, effet) | ✓ Boutique… | ✓ Boutique (acheter, porter) |
+| Météo (pluie, neige, chaleur… et ce que Pilou en pense) | ✓ connecteur Météo | ✓ carte Accueil, Pilou mouillé ou au sec |
 | Quêtes et pièces d'or | ✓ menu Quêtes | ✓ Accueil ; les parties du téléphone comptent |
 | Niveaux (accès), évolution | ✓ menus Niveau, Évolution | ✓ Collection → Niveaux ; jeux verrouillés « niveau N » |
 | Caresse | ✓ | ✓ toucher Pilou (app, atelier), créditée au PC |

@@ -78,6 +78,10 @@ public final class Etat {
     public final List<String> offres = new ArrayList<>();
     public String promo = "";
     public final List<Quete> quetes = new ArrayList<>();
+    /** Météo vue par le PC (connecteur météo actif), ou null. */
+    public Meteo meteo;
+    /** Au-delà, la météo reçue est trop vieille pour être montrée. */
+    public static final long METEO_VALIDE = 3 * 3600_000L;
 
     public static final class Quete {
         /** 0 jour, 1 semaine, 2 mois. */
@@ -180,6 +184,7 @@ public final class Etat {
                 if (q == null || q.length() < 6) continue;
                 e.quetes.add(new Quete(q.optInt(0), q.optString(1), q.optInt(2), Math.max(1, q.optInt(3)), q.optInt(4), q.optInt(5) == 1));
             }
+        e.meteo = Meteo.lire(r.optJSONObject("meteo"));
         JSONArray ap = r.optJSONArray("appareils");
         if (ap != null)
             for (int i = 0; i < Math.min(10, ap.length()); i++) {
@@ -188,6 +193,17 @@ public final class Etat {
                 e.appareils.add(new Appareil(o.optString("nom"), o.optInt("xp", 0), o.optLong("t", 0) + decalage));
             }
         return e;
+    }
+
+    /** La météo encore valable (le PC a parlé il y a moins de trois heures), ou null. */
+    public Meteo meteo(long maintenant) {
+        return meteo != null && t > 0 && maintenant - t < METEO_VALIDE ? meteo : null;
+    }
+
+    /** Identifiant d'état météo valable, ou "" : ce que PilouVue.meteo attend. */
+    public String etatMeteo(long maintenant) {
+        Meteo m = meteo(maintenant);
+        return m == null ? "" : m.etat;
     }
 
     public static String etiquette(String source) {

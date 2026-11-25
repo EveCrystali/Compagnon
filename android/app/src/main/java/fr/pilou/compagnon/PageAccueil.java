@@ -34,6 +34,8 @@ final class PageAccueil extends Page {
     private TextView titreQuetes;
     private LinearLayout quetes;
     private long derniereCaresse;
+    private final LinearLayout carteMeteo;
+    private final TextView meteoTitre, meteoTexte;
 
     PageAccueil(Principale a) {
         super(a);
@@ -75,6 +77,16 @@ final class PageAccueil extends Page {
         le.gravity = Gravity.CENTER_HORIZONTAL;
         heros.addView(etatPc, le);
         corps.addView(heros, Ui.large(a, 14));
+
+        // Météo (connecteur météo du PC) : le temps chez toi et ce que Pilou en pense.
+        carteMeteo = Ui.carte(a);
+        meteoTitre = Ui.texte(a, "", 17, p.texte, true);
+        carteMeteo.addView(meteoTitre, Ui.large());
+        meteoTexte = Ui.texte(a, "", 14, p.doux, false);
+        meteoTexte.setPadding(0, Ui.dp(a, 4), 0, 0);
+        carteMeteo.addView(meteoTexte, Ui.large());
+        carteMeteo.setVisibility(View.GONE);
+        corps.addView(carteMeteo, Ui.large(a, 14));
 
         // Pas appairé : le guide.
         guide = Ui.carte(a);
@@ -149,6 +161,7 @@ final class PageAccueil extends Page {
         pilou.montrer(appaire ? e.expression(maintenant) : "dort", e.couleur);
         pilou.accessoire(e.accessoire);
         pilou.equipe(Gains.porte(app, e));
+        meteo(e, appaire, maintenant, p);
 
         // Niveau acquis gardé : si l'XP est sous son palier, la barre part du palier de la courbe.
         int total = Gains.xp(app, e), n = Gains.niveau(app, e), bas = Butin.xpPourNiveau(Math.min(n, Butin.niveau(total))), haut = Butin.xpPourNiveau(n + 1);
@@ -182,6 +195,20 @@ final class PageAccueil extends Page {
         quetes(e, p);
         groupe(e, maintenant, p);
         mot.setText("« " + MOTS[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % MOTS.length] + " »");
+    }
+
+    private void meteo(Etat e, boolean appaire, long maintenant, Ui.Palette p) {
+        Meteo m = appaire ? e.meteo(maintenant) : null;
+        pilou.meteo(m == null ? "" : m.etat);
+        carteMeteo.setVisibility(m == null ? View.GONE : View.VISIBLE);
+        if (m == null) return;
+        java.util.List<String> portes = new java.util.ArrayList<>(Gains.porte(app, e).values());
+        if (!"aucun".equals(e.accessoire)) portes.add("acc-" + e.accessoire);
+        Meteo.Effet ef = Meteo.effet(m.etat, portes, 0);
+        meteoTitre.setText(m.ligne());
+        String dit = Meteo.phrase(m.etat, ef);
+        meteoTexte.setText(dit.isEmpty() ? "Pilou profite du temps qu'il fait." : "Pilou : « " + dit + " »");
+        meteoTexte.setTextColor(ef.protege ? p.doux : p.orange);
     }
 
     private void quetes(Etat e, Ui.Palette p) {

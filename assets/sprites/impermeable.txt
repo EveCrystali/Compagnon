@@ -1,0 +1,16 @@
+# Imperméable jaune
+id: impermeable
+slot: dos
+ancre: cou
+decalage: -18 -1
+palette: a=#7a5a10 b=#c9a227 c=#f5d76e d=#fff6cc e=#1c2128
+images:
+....abbbbbcccccccccccccccccdddda....
+...abbbbbccccccccbbcccccccccdddda...
+...abbbbbccccccecbbcecccccccdddda...
+..abbbbbcccccccccbbcccccccccdddda...
+..abbbbccccccccccbbccccccccccdddda..
+..abbbbccccccccecbbceccccccccdddda..
+.abbbbcccccccccccbbcccccccccccdddda.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+....................................

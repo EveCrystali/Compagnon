@@ -98,6 +98,7 @@ final class Bulle {
         etat = e;
         pilou.montrer(e.expression(maintenant), e.couleur);
         pilou.accessoire(e.accessoire);
+        pilou.meteo(e.etatMeteo(maintenant));
         if (ouvert && SystemClock.uptimeMillis() > ouvertJusque && ouvertJusque > 0) fermer();
         else if (ouvert) {
             int[] ici = positionPilou();

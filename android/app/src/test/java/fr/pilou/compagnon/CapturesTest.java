@@ -61,6 +61,8 @@ public class CapturesTest {
                 essayer("neuf", () -> ecrans("neuf"));
                 appairer();
                 essayer("appaire", () -> ecrans("appaire"));
+                essayer("pluie", this::pluie);
+                appairer();
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
@@ -82,9 +84,24 @@ public class CapturesTest {
     }
 
     private void appairer() {
+        appairer("");
+    }
+
+    // Accueil sous la pluie (connecteur météo du PC) : Pilou sans parapluie est mouillé et râle.
+    private void pluie() {
+        appairer("\"meteo\":{\"etat\":\"pluie\",\"temperature\":8,\"ville\":\"Paris\",\"signe\":\"☂\"},");
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        attendre();
+        c.get().aller(Principale.ACCUEIL, false);
+        attendre();
+        ecran(c.get(), "pluie-accueil");
+        c.pause().stop().destroy();
+    }
+
+    private void appairer(String plus) {
         Context ctx = RuntimeEnvironment.getApplication();
         long t = System.currentTimeMillis();
-        String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"Pêcheur du dimanche\",\"couleur\":\"bleu\","
+        String etat = "{\"v\":1," + plus + "\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"Pêcheur du dimanche\",\"couleur\":\"bleu\","
                 + "\"humeur\":\"repos\",\"calmes\":2,\"sessions\":["
                 + "{\"id\":\"b\",\"source\":\"codex\",\"libelle\":\"site-vitrine\",\"etat\":\"permission\",\"depuis\":" + (t - 40_000) + ",\"outil\":\"\"},"
                 + "{\"id\":\"a\",\"source\":\"claude\",\"libelle\":\"refonte du module de facturation\",\"etat\":\"travail\",\"depuis\":" + (t - 95_000) + ",\"outil\":\"Bash\"},"

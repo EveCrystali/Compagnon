@@ -44,6 +44,8 @@ public sealed class Pose
     public string Tenue = "";
     // Petite réaction liée à l'activité : "danse" (musique), "sueur" (processeur chargé pendant le code), "".
     public string Reaction = "";
+    // Effets météo dessinés sur Pilou (sprites « meteo-… » : pluie, mouillé, neige, givre, soleil…).
+    public IReadOnlyList<string> Meteo = Array.Empty<string>();
 }
 
 // Pilou en pixel art, grille fine de 48 × 56 commune avec l'app Android (RenduPilou), affichée en pixels
@@ -131,6 +133,7 @@ public sealed class Scene : FrameworkElement
         var objets = p.Equipe.Where(kv => kv.Key != Boutique.Couleur && kv.Value != "").Select(kv => kv.Value).ToList();
         var couleurAchetee = p.Equipe.GetValueOrDefault(Boutique.Couleur, "");
         if (p.Reaction == "danse" && p.Tenue != "musique") objets.Add("tenue-musique-notes");
+        objets.AddRange(p.Meteo);
         return new Allure
         {
             Expr = p.Expr.ToString().ToLowerInvariant(),
