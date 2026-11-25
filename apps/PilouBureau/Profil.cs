@@ -23,6 +23,12 @@ public sealed class Profil
     public List<string> Recus { get; set; } = new();
     // XP gagnée sur le téléphone (atelier), créditée par chaque PC du groupe : comptée au maximum, pas en somme.
     public int XpTelephone { get; set; }
+    // Activités (compteurs seulement, jamais de titre de fenêtre) : secondes par activité, succès obtenus,
+    // réunions des 7 derniers jours (dates), présentations faites.
+    public Dictionary<string, long> Activites { get; set; } = new();
+    public List<string> Succes { get; set; } = new();
+    public List<DateTime> Reunions { get; set; } = new();
+    public int Presentations { get; set; }
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

@@ -1,0 +1,44 @@
+{
+  "_aide": "Règles d'activités de Pilou. Une règle : processus (nom sans .exe), titre (expression régulière sur le titre de la fenêtre), chemin (expression régulière sur le chemin du programme) ; tous les critères donnés doivent correspondre. La priorité la plus haute gagne. activite vide = ignorer ce programme. Copier ce fichier dans %USERPROFILE%\\.claude\\compagnon\\activites.json pour ajouter ses règles (\"remplacer\": true pour remplacer celles-ci).",
+  "version": 1,
+  "regles": [
+    { "activite": "jeu-mmo", "priorite": 40, "processus": ["wow", "wowclassic", "wow-64", "wowt", "ffxiv_dx11", "ffxiv", "gw2-64", "gw2", "eso64", "eso", "lotroclient64", "lotroclient", "swtor", "lostark", "newworld", "blackdesert64", "runelite", "osclient", "albion-online", "maplestory", "dofus", "wakfu", "pso2", "throneandliberty", "poe", "pathofexile", "pathofexile_x64", "pathofexilesteam" ] },
+    { "activite": "jeu", "priorite": 30, "processus": ["cs2", "csgo", "dota2", "valorant-win64-shipping", "fortniteclient-win64-shipping", "rocketleague", "overwatch", "eldenring", "hearthstone", "leagueclient", "league of legends", "minecraft.windows", "r5apex", "gtav", "gta5", "cyberpunk2077", "bg3", "bg3_dx11", "witcher3", "rdr2", "fifa", "eafc", "starfield", "baldur's gate 3", "terraria", "stardew valley", "factorio", "hollow_knight", "celeste", "hades", "hades2" ] },
+    { "activite": "jeu", "priorite": 28, "processus": ["javaw"], "titre": "^Minecraft" },
+    { "activite": "jeu", "priorite": 25, "chemin": "(?i)\\\\steamapps\\\\common\\\\|\\\\Epic Games\\\\|\\\\GOG Galaxy\\\\Games\\\\|\\\\Riot Games\\\\|\\\\Ubisoft Game Launcher\\\\games\\\\|\\\\EA Games\\\\|\\\\XboxGames\\\\" },
+    { "activite": "jeu", "priorite": 20, "processus": ["steam", "steamwebhelper", "battle.net", "epicgameslauncher", "eadesktop", "origin", "ubisoftconnect", "upc", "galaxyclient", "riotclientservices", "riotclientux", "xboxpcapp", "playnite.desktopapp", "heroic" ] },
+
+    { "activite": "visio", "priorite": 35, "processus": ["teams", "ms-teams", "zoom", "webex", "ciscowebexstart", "skype", "gotomeeting", "jitsi meet" ] },
+    { "activite": "visio", "priorite": 36, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)\\bMeet\\b|Google Meet|Zoom|Microsoft Teams|Jitsi|Whereby|Webex" },
+
+    { "activite": "musique", "priorite": 34, "processus": ["spotify", "deezer", "tidal", "itunes", "applemusic", "amazon music", "musicbee", "foobar2000", "aimp", "winamp", "qobuz" ] },
+    { "activite": "musique", "priorite": 33, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)YouTube Music|Spotify|Deezer|SoundCloud|Bandcamp|Qobuz|Apple Music|Radio France|France Inter|FIP" },
+
+    { "activite": "video", "priorite": 32, "processus": ["vlc", "mpc-hc", "mpc-hc64", "mpc-be64", "mpv", "potplayermini64", "potplayermini", "netflix", "primevideo", "plex", "plex htpc", "kodi", "wmplayer", "video.ui", "stremio", "jellyfin media player" ] },
+    { "activite": "video", "priorite": 30, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)YouTube|Netflix|Prime Video|Disney\\+|Twitch|Crunchyroll|Canal\\+|Molotov|\\bArte\\b|France\\.tv|Dailymotion|\\bHBO Max\\b|\\bMax\\b - |Apple TV" },
+
+    { "activite": "diaporama", "priorite": 29, "processus": ["powerpnt"] },
+    { "activite": "diaporama", "priorite": 29, "processus": ["soffice.bin", "soffice", "simpress"], "titre": "LibreOffice Impress|OpenOffice Impress" },
+    { "activite": "diaporama", "priorite": 29, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)Google Slides|Google Présentations|PowerPoint" },
+
+    { "activite": "tableur", "priorite": 29, "processus": ["excel", "et", "scalc"] },
+    { "activite": "tableur", "priorite": 29, "processus": ["soffice.bin", "soffice"], "titre": "LibreOffice Calc|OpenOffice Calc" },
+    { "activite": "tableur", "priorite": 29, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)Google Sheets|Google Tableurs|Feuilles de calcul|Excel|Airtable|Smartsheet" },
+
+    { "activite": "mail", "priorite": 28, "processus": ["outlook", "olk", "thunderbird", "hxoutlook", "mailspring", "em client", "mailbird" ] },
+    { "activite": "mail", "priorite": 28, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)Gmail|Boîte de réception|Inbox|Outlook|Proton Mail|Yahoo Mail" },
+
+    { "activite": "dessin", "priorite": 27, "processus": ["photoshop", "illustrator", "afterfx", "adobe premiere pro", "indesign", "lightroom", "gimp-2.10", "gimp-3.0", "gimp", "krita", "blender", "inkscape", "paintdotnet", "mspaint", "figma", "aseprite", "clipstudiopaint", "resolve", "substancepainter", "zbrush", "maya", "3dsmax", "unity", "unrealeditor", "godot" ] },
+    { "activite": "dessin", "priorite": 27, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)Figma|Canva|Excalidraw|Miro|Photopea|tldraw" },
+
+    { "activite": "lecture", "priorite": 26, "processus": ["acrord32", "acrobat", "sumatrapdf", "foxitpdfreader", "foxitreader", "foxitphantompdf", "kindle", "calibre", "ebook-viewer", "okular", "pdfxedit" ] },
+    { "activite": "lecture", "priorite": 24, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)\\.pdf\\b|Wikipédia|Wikipedia|Medium|Kindle" },
+
+    { "activite": "texte", "priorite": 25, "processus": ["winword", "wps", "wordpad", "notepad", "notion", "obsidian", "onenote", "onenoteim", "typora", "joplin", "logseq", "evernote", "scrivener", "marktext", "zettlr", "anytype" ] },
+    { "activite": "texte", "priorite": 25, "processus": ["soffice.bin", "soffice", "swriter"], "titre": "LibreOffice Writer|OpenOffice Writer" },
+    { "activite": "texte", "priorite": 25, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)Google Docs|Google Documents|Notion|Word\\b|Confluence|Dropbox Paper|HackMD" },
+
+    { "activite": "code", "priorite": 22, "processus": ["devenv", "code", "code - insiders", "cursor", "windsurf", "zed", "rider64", "idea64", "pycharm64", "webstorm64", "clion64", "goland64", "phpstorm64", "rubymine64", "datagrip64", "studio64", "fleet", "sublime_text", "notepad++", "vim", "gvim", "nvim", "nvim-qt", "neovide", "emacs", "windowsterminal", "wt", "openconsole", "cmd", "powershell", "pwsh", "wsl", "wslhost", "mintty", "alacritty", "wezterm-gui", "kitty", "hyper", "tabby", "githubdesktop", "fork", "gitkraken", "sourcetree", "smartgit", "postman", "insomnia", "bruno", "ssms", "dbeaver", "azuredatastudio", "docker desktop", "claude", "codex", "linqpad8", "linqpad7" ] },
+    { "activite": "code", "priorite": 21, "processus": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi", "arc"], "titre": "(?i)GitHub|GitLab|Bitbucket|Stack Overflow|localhost|127\\.0\\.0\\.1|Azure DevOps|Jira|MDN Web Docs|learn\\.microsoft|Swagger|CodePen|Replit|claude\\.ai/code" }
+  ]
+}

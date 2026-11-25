@@ -80,6 +80,23 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
 
+## Activités
+
+Pilou devine ce que tu fais d'après la fenêtre au premier plan, et en tire une tenue :
+code, tableur, jeu (jeu de rôle en ligne à part), musique (il danse au rythme du son), vidéo,
+lecture, dessin, visio, mail, écriture, diaporama, et la nuit après 23 h. Le temps passé fait monter
+des **métiers** (Codeur, As du tableur, Joueur, Mélomane… de Novice à Légende) et débloque des
+**succès** (Marathon : 4 h de code d'affilée, Noctambule, Visio-man, Explorateur…), avec de l'XP.
+
+- **Discret** : il se cache tout seul en plein écran (jeu, vidéo), en présentation et en visio
+  (caméra ou micro actifs), et revient ensuite. Une IA qui t'attend le garde visible, sauf en présentation.
+- **Vie privée** : tout se passe sur le PC. Le titre de la fenêtre sert à reconnaître l'activité puis
+  est oublié ; seuls des compteurs (« 3 h de tableur ») sont gardés. Clic droit → *Métiers et succès →
+  Activités : réglages* : tout couper, ou activité par activité.
+- **Tes logiciels** : *Ajouter mes logiciels…* ouvre `%USERPROFILE%\.claude\compagnon\activites.json`
+  (programme, titre ou chemin → activité ; relu sans redémarrer). Règles par défaut :
+  `apps/PilouBureau/activites.json`.
+
 ## Mises à jour
 
 Rien à faire. Chaque fusion sur `main` publie une release (`v0.9.<n>`) avec `version.json`.
