@@ -63,6 +63,11 @@ public final class Etat {
     /** Écart d'horloge téléphone − PC, mesuré à la réception (0 si le message sort du cache du relais). */
     public final long decalage;
     public final List<Session> sessions;
+    /** Progression (PC ≥ 0.9.4) : XP totale, accessoire porté, carnet et recettes connues, gains crédités. */
+    public int xp = -1, inventes;
+    public String accessoire = "aucun";
+    public final java.util.Set<String> carnet = new java.util.TreeSet<>(), plats = new java.util.TreeSet<>();
+    public final List<String> recus = new ArrayList<>();
 
     private Etat(String nom, String titre, String couleur, String humeur, int niveau, int calmes, long t, long decalage, List<Session> sessions) {
         this.nom = nom;
@@ -93,8 +98,23 @@ public final class Etat {
                 liste.add(new Session(o.optString("id"), o.optString("source", "claude"), o.optString("libelle"),
                         o.optString("etat"), o.optLong("depuis", 0) + decalage, o.optString("outil")));
             }
-        return new Etat(r.optString("nom", "Pilou"), r.optString("titre"), r.optString("couleur", "bleu"),
+        Etat e = new Etat(r.optString("nom", "Pilou"), r.optString("titre"), r.optString("couleur", "bleu"),
                 r.optString("humeur", "repos"), r.optInt("niveau", 1), r.optInt("calmes", 0), t + decalage, decalage, liste);
+        e.xp = r.optInt("xp", -1);
+        e.accessoire = r.optString("accessoire", "aucun");
+        e.inventes = r.optInt("inventes", 0);
+        for (String cle : new String[]{"carnet", "plats", "recus"}) {
+            JSONArray a = r.optJSONArray(cle);
+            if (a == null) continue;
+            for (int i = 0; i < a.length(); i++) {
+                String v = a.optString(i, "");
+                if (v.isEmpty()) continue;
+                if (cle.equals("carnet")) e.carnet.add(v);
+                else if (cle.equals("plats")) e.plats.add(v);
+                else e.recus.add(v);
+            }
+        }
+        return e;
     }
 
     public static String etiquette(String source) {

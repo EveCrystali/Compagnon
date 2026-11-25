@@ -8,13 +8,15 @@ import android.view.View;
 /** Pilou animé : respire, cligne, sautille quand il se passe quelque chose. */
 public final class PilouVue extends View {
     private float p;
-    private String expr = "dort", couleur = "bleu";
+    private String expr = "dort", couleur = "bleu", accessoire = "aucun";
+    private String passager = "";
+    private long finPassager;
     private long prochainClin = 2500, finClin, debutSaut = -10_000;
     private boolean anime = true;
 
     public PilouVue(Context c, float pixel) {
         super(c);
-        p = pixel;
+        p = pixel * Dessin.ECHELLE;
     }
 
     public void montrer(String expression, String teinte) {
@@ -25,8 +27,22 @@ public final class PilouVue extends View {
         invalidate();
     }
 
-    /** Nouvelle taille de pixel : la vue se remesure. */
+    public void accessoire(String a) {
+        accessoire = a == null || a.isEmpty() ? "aucun" : a;
+        invalidate();
+    }
+
+    /** Humeur passagère (caresse, fête, grimace) pendant ms millisecondes. */
+    public void jouer(String humeur, long ms) {
+        passager = humeur;
+        finPassager = SystemClock.uptimeMillis() + ms;
+        if (humeur.equals("fete") || humeur.equals("caresse")) debutSaut = SystemClock.uptimeMillis();
+        invalidate();
+    }
+
+    /** Nouvelle taille de pixel (même unité qu'au constructeur) : la vue se remesure. */
     public void pixel(float nouveau) {
+        nouveau *= Dessin.ECHELLE;
         if (nouveau == p) return;
         p = nouveau;
         requestLayout();
@@ -56,7 +72,8 @@ public final class PilouVue extends View {
         }
         long ds = t - debutSaut;
         float saut = ds < 600 ? (float) (Math.sin(Math.PI * ds / 600.0) * 3) : 0;
-        Dessin.dessiner(cv, 0, 0, p, expr, t, couleur, t < finClin, saut);
+        String e = t < finPassager ? passager : expr;
+        Dessin.dessiner(cv, 0, 0, p, e, t, couleur, accessoire, t < finClin, saut);
         if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
     }
 }

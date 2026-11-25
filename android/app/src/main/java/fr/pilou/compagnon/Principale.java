@@ -28,6 +28,7 @@ public final class Principale extends Activity {
     private TextView statut;
     private EditText champCode, champRelais;
     private PilouVue pilou;
+    private long derniereCaresse;
     private CheckBox bulle;
 
     @Override
@@ -50,6 +51,18 @@ public final class Principale extends Activity {
         statut.setGravity(Gravity.CENTER_HORIZONTAL);
         statut.setPadding(0, 0, 0, (int) (16 * d));
         pile.addView(statut);
+        // Toucher Pilou : une caresse (comptée au plus toutes les 3 s, créditée au PC).
+        pilou.setOnClickListener(v -> {
+            pilou.jouer("caresse", 2400);
+            long t = android.os.SystemClock.uptimeMillis();
+            if (t - derniereCaresse > 3000) {
+                derniereCaresse = t;
+                Gains.caresse(this);
+            }
+        });
+        Button atelier = bouton("🎣 Atelier de Pilou : pêcher, cuisiner, jouer", v -> startActivity(new Intent(this, Atelier.class)));
+        atelier.setTypeface(Typeface.DEFAULT_BOLD);
+        pile.addView(atelier);
 
         pile.addView(titre("Appairer avec le PC"));
         pile.addView(note("Sur le PC : clic droit sur Pilou → Intégrations → Android : appairer. Vise le QR code avec "
@@ -170,6 +183,7 @@ public final class Principale extends Activity {
         long maintenant = System.currentTimeMillis();
         Etat e = Prefs.etat(this);
         pilou.montrer(e.expression(maintenant), e.couleur);
+        pilou.accessoire(e.accessoire);
         if (!Chiffre.valide(Prefs.code(this))) statut.setText("Pas encore appairé avec un PC.");
         else statut.setText(e.nom + " · niveau " + e.niveau + (e.titre.isEmpty() ? "" : " · " + e.titre) + "\n" + e.resume(maintenant));
         h.postDelayed(this::rafraichir, 5000);

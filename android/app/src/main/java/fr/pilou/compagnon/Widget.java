@@ -22,7 +22,7 @@ public final class Widget extends AppWidgetProvider {
         int[] ids = m.getAppWidgetIds(new ComponentName(c, Widget.class));
         if (ids.length == 0) return;
         RemoteViews v = new RemoteViews(c.getPackageName(), R.layout.widget);
-        v.setImageViewBitmap(R.id.pilou, Dessin.image(etat.expression(maintenant), etat.couleur, 3));
+        v.setImageViewBitmap(R.id.pilou, Dessin.image(etat.expression(maintenant), etat.couleur, etat.accessoire, 3));
         v.setTextViewText(R.id.titre, etat.nom + " · niveau " + etat.niveau);
         v.setTextViewText(R.id.resume, etat.resume(maintenant));
         StringBuilder b = new StringBuilder();

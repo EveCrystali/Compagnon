@@ -59,7 +59,55 @@ La clé de signature `android/app/pilou.keystore` est publique (mot de passe dan
 elle sert à ce que chaque version s'installe par-dessus la précédente. Pour une diffusion plus large,
 fournir une clé privée par `PILOU_KEYSTORE` et `PILOU_KEYSTORE_PASS` (secrets de la CI).
 
+## L'atelier : pêcher, cuisiner, jouer
+
+Bouton « Atelier de Pilou » sur l'écran de l'app : une petite scène en pixels où Pilou pêche, cuisine
+et joue, avec les mêmes règles que sur le PC.
+
+- **Pêche** : Pilou lance sa ligne ; quand le bouchon plonge (« ! »), il reste 1,2 s pour le toucher.
+  Trop tôt, le poisson file. Sans rien faire, Pilou ferre seul : une fois sur trois environ, et jamais
+  mieux que « rare ». 23 prises, cinq raretés reconnaissables au signe (`· ◇ ◆ ✦ ★`) et au cadre
+  (aucun, coins, trait, double, étoilé). La première prise d'une espèce compte double (+5).
+- **Cuisine** : avec ce qu'il a pêché sur le téléphone, Pilou cuisine (30 recettes débloquées par
+  niveau, plats inventés). Toucher la marmite pour remuer évite de brûler le plat.
+- **Jouer** : étoile filante à attraper (+10), trois bulles à éclater (+5 chacune, +5 de bonus),
+  « tape m'en cinq » (+10). **Caresse** : toucher Pilou (+1, au plus toutes les 3 s).
+- **Carnet de pêche, livre de recettes, récompenses** : ce qui est connu sur le PC et sur le
+  téléphone ; « ??? » pour le reste.
+
+L'XP vit sur le PC. Chaque gain part, chiffré, sur un deuxième sujet ntfy tiré du même code
+(`pilou-retour-v1`) ; le PC le relit toutes les 90 s, le crédite une seule fois (par son identifiant)
+et le cite dans son prochain état ; le téléphone le retire alors de sa file. Hors ligne, les gains
+attendent (« +N en attente du PC ») et repartent. Le panier d'ingrédients du téléphone est le sien ;
+le carnet et les recettes connues s'additionnent.
+
+## Ce qui est sur le téléphone, et ce qui n'y est pas
+
+| Fonction | PC | Téléphone |
+|---|---|---|
+| État des sessions (❗ ? ◐ ✓ ■ ✕) | bulle | notification, widget, Pilou flottant |
+| Humeurs (concentré, inquiet, fête, grimace, soulagé, endormi) | ✓ | ✓ (venues du PC ; fête et caresse aussi dans l'atelier) |
+| Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
+| Couleurs (10) | choix au clic droit | affichées (choisies sur le PC) |
+| Accessoires (11) | choix au clic droit | affichés (choisis sur le PC) |
+| Catalogue des récompenses | ✓ | ✓ atelier |
+| Caresse | ✓ | ✓ toucher Pilou (app, atelier), créditée au PC |
+| Étoile filante, bulles, tape m'en cinq | ✓ | ✓ atelier |
+| Pêche, cuisine | ✓ | ✓ atelier |
+| Carnet de pêche, livre de recettes | ✓ | ✓ atelier |
+| Taille de Pilou | ✓ | ✓ curseur |
+| Alertes (une IA attend, a fini) | webhook | ✓ notifications |
+| Mises à jour | automatiques | notification, un appui, confirmation d'Android |
+| Messages du jour (bonjour, bon appétit…) | ✓ | pas encore |
+| Traînée d'étoiles (niveau 9) | ✓ | pas encore |
+| Thème clair/sombre de la bulle | ✓ | pas encore (bulle claire) |
+| Promenade, suit la souris, s'accroche au curseur, toque à l'écran, ballon | ✓ | sans objet (pas de souris) ; on déplace Pilou au doigt |
+| Intégrations (Codex, Discord, webhook, autres logiciels) | ✓ | sans objet : elles vivent sur le PC, le téléphone en voit le résultat |
+
+Le dessin du téléphone est plus fin (grille 34 × 40 au lieu de 26 × 30, même taille à l'écran) ; le
+PC garde pour l'instant sa grille.
+
 ## Pas encore
 
-Caresser Pilou depuis le téléphone (retour vers le PC), XP gagnée sur le téléphone, plusieurs PC
-appairés au même téléphone, Pilou qui se promène sur le bord de l'écran.
+Plusieurs PC appairés au même téléphone, Pilou qui se promène sur le bord de l'écran, messages du
+jour et traînée d'étoiles sur le téléphone.

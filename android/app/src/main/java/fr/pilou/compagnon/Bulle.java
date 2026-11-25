@@ -96,6 +96,7 @@ final class Bulle {
     void maj(Etat e, long maintenant) {
         etat = e;
         pilou.montrer(e.expression(maintenant), e.couleur);
+        pilou.accessoire(e.accessoire);
         if (ouvert && SystemClock.uptimeMillis() > ouvertJusque && ouvertJusque > 0) fermer();
         else if (ouvert) {
             int[] ici = positionPilou();

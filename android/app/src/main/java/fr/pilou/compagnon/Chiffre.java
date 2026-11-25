@@ -54,6 +54,31 @@ public final class Chiffre {
         return b.toString();
     }
 
+    /** Deuxième sujet, tiré du même code : le téléphone y publie ses gains, le PC y lit. */
+    public static String sujetRetour(String code) throws GeneralSecurityException {
+        byte[] h = hmac(code, "pilou-retour-v1");
+        StringBuilder b = new StringBuilder("pilou-");
+        for (int i = 0; i < 12; i++) b.append(String.format(Locale.ROOT, "%02x", h[i]));
+        return b.toString();
+    }
+
+    public static String chiffrer(String code, String texte) throws GeneralSecurityException {
+        byte[] nonce = new byte[12];
+        new java.security.SecureRandom().nextBytes(nonce);
+        return chiffrer(code, texte, nonce);
+    }
+
+    /** base64(nonce ‖ chiffré ‖ étiquette), comme Telephone.Chiffrer côté PC. */
+    public static String chiffrer(String code, String texte, byte[] nonce) throws GeneralSecurityException {
+        Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+        c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(hmac(code, "pilou-cle-v1"), "AES"), new GCMParameterSpec(128, nonce));
+        byte[] chiffre = c.doFinal(texte.getBytes(StandardCharsets.UTF_8));
+        byte[] tout = new byte[12 + chiffre.length];
+        System.arraycopy(nonce, 0, tout, 0, 12);
+        System.arraycopy(chiffre, 0, tout, 12, chiffre.length);
+        return Base64.getEncoder().encodeToString(tout);
+    }
+
     public static String dechiffrer(String code, String message) throws GeneralSecurityException {
         byte[] tout = Base64.getDecoder().decode(message.trim());
         if (tout.length < 28) throw new GeneralSecurityException("message trop court");
