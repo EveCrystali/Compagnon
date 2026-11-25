@@ -64,7 +64,7 @@ final class Bulle {
         lp.x = Prefs.de(c).getInt("bulleX", 0);
         lp.y = Prefs.de(c).getInt("bulleY", (int) (c.getResources().getDisplayMetrics().heightPixels * 0.6));
         pilou.setOnTouchListener(new Glisser());
-        panneau.setOnClickListener(v -> fermer());
+        panneau.setOnClickListener(v -> h.post(this::fermer));
     }
 
     /** Taille choisie dans l'app : appliquée tout de suite, Pilou reste à sa place. */
@@ -141,9 +141,9 @@ final class Bulle {
         int largeurEcran = ctx.getResources().getDisplayMetrics().widthPixels;
         int lp0 = pilou.getMeasuredWidth();
         if (!ouvert) {
-            racine.removeAllViews();
-            racine.addView(panneau);
-            racine.addView(pilou);
+            // Pilou n'est jamais retiré de sa fenêtre (il peut être en train de recevoir un toucher) :
+            // seule la bulle change de place.
+            placerBulle(true);
             lp.x = ici[0];
             lp.y = ici[1];
         } else {
@@ -153,18 +153,18 @@ final class Bulle {
             boolean droite = ici[0] + lp0 / 2 > largeurEcran / 2;
             boolean dessus = ici[1] - hp >= 0;
             racine.setGravity((droite ? Gravity.END : Gravity.START) | Gravity.TOP);
-            racine.removeAllViews();
-            if (dessus) {
-                racine.addView(panneau);
-                racine.addView(pilou);
-            } else {
-                racine.addView(pilou);
-                racine.addView(panneau);
-            }
+            placerBulle(dessus);
             lp.x = droite ? ici[0] + lp0 - w : ici[0];
             lp.y = dessus ? ici[1] - hp : ici[1];
         }
         if (pose) wm.updateViewLayout(racine, lp);
+    }
+
+    private void placerBulle(boolean dessus) {
+        int voulu = dessus ? 0 : 1;
+        if (racine.indexOfChild(panneau) == voulu) return;
+        racine.removeView(panneau);
+        racine.addView(panneau, voulu);
     }
 
     private void remplir(long maintenant) {
@@ -229,9 +229,14 @@ final class Bulle {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     h.removeCallbacks(longAppui);
-                    if (bouge) ranger();
-                    else if (ouvert) fermer();
-                    else ouvrir(0);
+                    // Hors du traitement du toucher : la fenêtre change de forme une fois le toucher rendu.
+                    boolean deplace = bouge;
+                    h.post(() -> {
+                        if (!pose) return;
+                        if (deplace) ranger();
+                        else if (ouvert) fermer();
+                        else ouvrir(0);
+                    });
                     return true;
                 default:
                     return false;

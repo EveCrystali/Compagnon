@@ -60,6 +60,7 @@ public final class Veille extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Journal.installer(this);
         NotificationManager nm = getSystemService(NotificationManager.class);
         NotificationChannel statut = new NotificationChannel(CANAL_STATUT, "Statut des sessions", NotificationManager.IMPORTANCE_LOW);
         statut.setShowBadge(false);
