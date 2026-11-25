@@ -4,161 +4,209 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
+import android.graphics.Insets;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
-import android.text.InputType;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-/** Écran de l'app : appairer avec le PC, choisir ce que Pilou montre, donner les autorisations. */
+/**
+ * L'app Pilou : une seule activité, quatre onglets (Accueil, Jouer, Collection, Réglages) et une barre de
+ * navigation en bas. Bord à bord : le contenu passe sous les barres système, décalé de leur hauteur.
+ */
 public final class Principale extends Activity {
+    static final int ACCUEIL = 0, JOUER = 1, COLLECTION = 2, REGLAGES = 3;
+    static final String EXTRA_ONGLET = "onglet";
+    private static final String[] NOMS = {"Accueil", "Jouer", "Collection", "Réglages"};
+    private static final String[][] ICONES = {Ui.ACCUEIL, Ui.JOUER, Ui.COLLECTION, Ui.REGLAGES};
+
     private final Handler h = new Handler(Looper.getMainLooper());
-    private TextView statut, groupe;
-    private EditText champCode, champRelais;
-    private PilouVue pilou;
-    private long derniereCaresse;
-    private CheckBox bulle;
+    private final Page[] pages = new Page[4];
+    private final LinearLayout[] boutons = new LinearLayout[4];
+    private final Ui.Icone[] icones = new Ui.Icone[4];
+    private final TextView[] libelles = new TextView[4];
+    private FrameLayout contenu;
+    private LinearLayout nav;
+    private int courant = -1;
+    private boolean actif;
 
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
         Journal.installer(this);
-        float d = getResources().getDisplayMetrics().density;
-        LinearLayout pile = new LinearLayout(this);
-        pile.setOrientation(LinearLayout.VERTICAL);
-        int m = (int) (20 * d);
-        pile.setPadding(m, m, m, m);
+        Ui.Palette p = Ui.p(this);
+        Window w = getWindow();
+        w.setBackgroundDrawable(new ColorDrawable(p.fond)); // remplace l'écran de démarrage
+        bordABord(w, p);
 
-        pilou = new PilouVue(this, 4 * d * Prefs.taille(this) / 1.6f);
-        LinearLayout.LayoutParams centre = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        centre.gravity = Gravity.CENTER_HORIZONTAL;
-        pile.addView(pilou, centre);
-
-        statut = new TextView(this);
-        statut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        statut.setGravity(Gravity.CENTER_HORIZONTAL);
-        statut.setPadding(0, 0, 0, (int) (16 * d));
-        pile.addView(statut);
-        // Appareils du groupe (le code d'appairage est aussi celui du groupe : l'XP de tous s'additionne).
-        groupe = new TextView(this);
-        groupe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        groupe.setPadding(0, 0, 0, (int) (12 * getResources().getDisplayMetrics().density));
-        pile.addView(groupe);
-        // Toucher Pilou : une caresse (comptée au plus toutes les 3 s, créditée au PC).
-        pilou.setOnClickListener(v -> {
-            pilou.jouer("caresse", 2400);
-            long t = android.os.SystemClock.uptimeMillis();
-            if (t - derniereCaresse > 3000) {
-                derniereCaresse = t;
-                Gains.caresse(this);
+        LinearLayout racine = Ui.pile(this);
+        racine.setBackgroundColor(p.fond);
+        contenu = new FrameLayout(this);
+        racine.addView(contenu, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+        nav = Ui.rangee(this);
+        nav.setBackgroundColor(p.surface);
+        nav.setElevation(Ui.dp(this, 8));
+        for (int i = 0; i < 4; i++) nav.addView(boutonNav(i), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        racine.addView(nav, Ui.large());
+        racine.setOnApplyWindowInsetsListener((v, ins) -> {
+            int haut, bas, gauche, droite;
+            if (Build.VERSION.SDK_INT >= 30) {
+                Insets b = ins.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                haut = b.top;
+                bas = b.bottom;
+                gauche = b.left;
+                droite = b.right;
+            } else {
+                haut = ins.getSystemWindowInsetTop();
+                bas = ins.getSystemWindowInsetBottom();
+                gauche = ins.getSystemWindowInsetLeft();
+                droite = ins.getSystemWindowInsetRight();
             }
+            contenu.setPadding(gauche, haut, droite, 0);
+            nav.setPadding(gauche, Ui.dp(this, 6), droite, bas + Ui.dp(this, 6));
+            return ins;
         });
-        Button atelier = bouton("🎣 Atelier de Pilou : pêcher, cuisiner, jouer", v -> startActivity(new Intent(this, Atelier.class)));
-        atelier.setTypeface(Typeface.DEFAULT_BOLD);
-        pile.addView(atelier);
+        setContentView(racine);
 
-        pile.addView(titre("Appairer avec le PC"));
-        pile.addView(note("Sur le PC : clic droit sur Pilou → Intégrations → Android : appairer. Vise le QR code avec "
-                + "l'appareil photo du téléphone, ou tape le code ici."));
-        champCode = new EditText(this);
-        champCode.setHint("XXXX-XXXX-XXXX-XXXX");
-        champCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        champCode.setTypeface(Typeface.MONOSPACE);
-        champCode.setText(Chiffre.formater(Prefs.code(this)));
-        pile.addView(champCode);
-        champRelais = new EditText(this);
-        champRelais.setHint(Prefs.RELAIS_DEFAUT);
-        champRelais.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
-        champRelais.setText(Prefs.relais(this));
-        pile.addView(champRelais);
-        pile.addView(bouton("Appairer", v -> appairer(champCode.getText().toString(), champRelais.getText().toString())));
-
-        pile.addView(titre("Ce que Pilou montre"));
-        pile.addView(note("Toujours : une notification avec l'état des sessions, et le widget si tu l'ajoutes à l'écran d'accueil."));
-        bulle = caseACocher("Pilou flottant par-dessus les applis", Prefs.bulle(this), oui -> {
-            Prefs.de(this).edit().putBoolean("bulle", oui).apply();
-            if (oui && !Settings.canDrawOverlays(this))
-                startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())));
-            Veille.demarrer(this);
-        });
-        pile.addView(bulle);
-        pile.addView(note("Taille de Pilou flottant"));
-        pile.addView(curseurTaille());
-        pile.addView(caseACocher("Me prévenir quand une IA attend", Prefs.alerteAttente(this),
-                oui -> Prefs.de(this).edit().putBoolean("alerteAttente", oui).apply()));
-        pile.addView(caseACocher("Me prévenir quand une session finit", Prefs.alerteFin(this),
-                oui -> Prefs.de(this).edit().putBoolean("alerteFin", oui).apply()));
-
-        pile.addView(titre("Autorisations"));
-        pile.addView(bouton("Autoriser les notifications", v -> demanderNotifications()));
-        pile.addView(bouton("Autoriser Pilou par-dessus les applis",
-                v -> startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())))));
-        pile.addView(titre("Version " + versionInstallee()));
-        pile.addView(bouton("Chercher une mise à jour", v -> startActivity(new Intent(this, Installation.class))));
-        pile.addView(bouton("Ne plus écouter le PC", v -> {
-            Prefs.de(this).edit().putString("code", "").remove("etat").remove("dernierId").apply();
-            Veille.arreter(this);
-            champCode.setText("");
-            rafraichir();
-        }));
-
-        // Dernier plantage : visible ici, à copier pour le signaler.
-        String plantage = Journal.dernier(this);
-        if (!plantage.isEmpty()) {
-            pile.addView(titre("Dernier plantage"));
-            TextView trace = note(plantage.length() > 1200 ? plantage.substring(0, 1200) + "…" : plantage);
-            trace.setTypeface(Typeface.MONOSPACE);
-            trace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-            trace.setTextIsSelectable(true);
-            pile.addView(trace);
-            pile.addView(bouton("Copier le rapport", v -> {
-                android.content.ClipboardManager cm = getSystemService(android.content.ClipboardManager.class);
-                cm.setPrimaryClip(android.content.ClipData.newPlainText("Plantage de Pilou", plantage));
-                statut.setText("Rapport copié : colle-le à Claude.");
-            }));
-            pile.addView(bouton("Effacer", v -> {
-                Journal.effacer(this);
-                recreate();
-            }));
-        }
-
-        ScrollView defile = new ScrollView(this);
-        defile.addView(pile);
-        setContentView(defile);
+        int onglet = sauve != null ? sauve.getInt(EXTRA_ONGLET, ACCUEIL) : getIntent().getIntExtra(EXTRA_ONGLET, ACCUEIL);
+        aller(onglet, false);
         lireLien(getIntent());
-        demanderNotifications();
+        if (sauve == null && !Prefs.de(this).getBoolean("notifDemandee", false)) {
+            Prefs.de(this).edit().putBoolean("notifDemandee", true).apply();
+            demanderNotifications();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void bordABord(Window w, Ui.Palette p) {
+        w.setStatusBarColor(0x00000000);
+        w.setNavigationBarColor(p.surface);
+        boolean clair = !Ui.sombre(this);
+        if (Build.VERSION.SDK_INT >= 30) {
+            w.setDecorFitsSystemWindows(false);
+            WindowInsetsController c = w.getInsetsController();
+            if (c != null) {
+                int f = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                c.setSystemBarsAppearance(clair ? f : 0, f);
+            }
+        } else {
+            int f = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            if (clair) f |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            w.getDecorView().setSystemUiVisibility(f);
+        }
+    }
+
+    private View boutonNav(int i) {
+        Ui.Palette p = Ui.p(this);
+        LinearLayout b = Ui.pile(this);
+        b.setGravity(Gravity.CENTER_HORIZONTAL);
+        b.setPadding(0, Ui.dp(this, 4), 0, Ui.dp(this, 2));
+        LinearLayout fond = Ui.rangee(this);
+        fond.setGravity(Gravity.CENTER);
+        fond.setPadding(Ui.dp(this, 18), Ui.dp(this, 5), Ui.dp(this, 18), Ui.dp(this, 5));
+        icones[i] = new Ui.Icone(this, ICONES[i], new int[]{0, p.doux}, 2);
+        fond.addView(icones[i]);
+        boutons[i] = fond;
+        b.addView(fond);
+        libelles[i] = Ui.texte(this, NOMS[i], 12, p.doux, false);
+        libelles[i].setPadding(0, Ui.dp(this, 3), 0, 0);
+        b.addView(libelles[i]);
+        b.setContentDescription(NOMS[i]);
+        b.setOnClickListener(v -> aller(i, true));
+        return b;
+    }
+
+    Page page(int i) {
+        if (pages[i] == null) {
+            switch (i) {
+                case JOUER: pages[i] = new PageJouer(this); break;
+                case COLLECTION: pages[i] = new PageCollection(this); break;
+                case REGLAGES: pages[i] = new PageReglages(this); break;
+                default: pages[i] = new PageAccueil(this);
+            }
+        }
+        return pages[i];
+    }
+
+    /** Va à l'onglet i (fondu et léger glissement). */
+    void aller(int i, boolean anime) {
+        if (i < 0 || i > 3) i = ACCUEIL;
+        Ui.Palette p = Ui.p(this);
+        for (int k = 0; k < 4; k++) {
+            boolean sel = k == i;
+            icones[k].couleurs(new int[]{0, sel ? p.bleu : p.doux});
+            boutons[k].setBackground(sel ? Ui.arrondi(this, p.voile | 0x10000000, 16, 0) : null);
+            libelles[k].setTextColor(sel ? p.bleu : p.doux);
+            libelles[k].setTypeface(null, sel ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+        }
+        if (i == courant) {
+            page(i).defile.smoothScrollTo(0, 0);
+            return;
+        }
+        Page nouvelle = page(i);
+        if (nouvelle.getParent() == null) contenu.addView(nouvelle, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        for (int k = 0; k < 4; k++) if (pages[k] != null && k != i) pages[k].setVisibility(View.GONE);
+        nouvelle.setVisibility(View.VISIBLE);
+        if (anime) {
+            nouvelle.setAlpha(0);
+            nouvelle.setTranslationY(Ui.dp(this, 14));
+            nouvelle.animate().alpha(1).translationY(0).setDuration(190).start();
+        }
+        courant = i;
+        nouvelle.montree();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle b) {
+        super.onSaveInstanceState(b);
+        b.putInt(EXTRA_ONGLET, courant);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onBackPressed() {
+        if (courant != ACCUEIL) aller(ACCUEIL, true);
+        else super.onBackPressed();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (intent.hasExtra(EXTRA_ONGLET)) aller(intent.getIntExtra(EXTRA_ONGLET, ACCUEIL), true);
         lireLien(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bulle.setChecked(Prefs.bulle(this) && Settings.canDrawOverlays(this));
+        actif = true;
         Veille.demarrer(this);
-        rafraichir();
+        tic();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        actif = false;
         h.removeCallbacksAndMessages(null);
+    }
+
+    private void tic() {
+        if (!actif) return;
+        if (courant >= 0) pages[courant].rafraichir();
+        h.postDelayed(this::tic, 1000);
     }
 
     // pilou://appairer?c=CODE[&s=relais] : le QR code du PC, scanné avec l'appareil photo.
@@ -167,114 +215,37 @@ public final class Principale extends Activity {
         if (u == null || !"pilou".equals(u.getScheme())) return;
         String c = u.getQueryParameter("c");
         String s = u.getQueryParameter("s");
-        if (c != null) appairer(c, s == null ? Prefs.RELAIS_DEFAUT : s);
+        if (c != null && appairer(c, s == null ? Prefs.RELAIS_DEFAUT : s)) {
+            Toast.makeText(this, "Appairé avec ton PC ✓", Toast.LENGTH_LONG).show();
+            aller(ACCUEIL, true);
+        }
     }
 
-    private void appairer(String code, String relais) {
-        if (!Chiffre.valide(code)) {
-            statut.setText("Code incomplet : 16 caractères, comme sur le PC.");
-            return;
-        }
+    /** Enregistre le code et (re)lance l'écoute ; false si le code est incomplet. */
+    boolean appairer(String code, String relais) {
+        if (!Chiffre.valide(code)) return false;
         String r = relais == null || relais.trim().isEmpty() ? Prefs.RELAIS_DEFAUT : relais.trim().replaceAll("/+$", "");
         Prefs.de(this).edit().putString("code", Chiffre.normaliser(code)).putString("relais", r)
                 .remove("etat").remove("dernierId").apply();
-        champCode.setText(Chiffre.formater(code));
-        champRelais.setText(r);
         Veille.demarrer(this); // le service voit le nouveau code et repart
-        statut.setText("Appairé ✓ — j'attends des nouvelles du PC…");
+        if (pages[REGLAGES] != null) pages[REGLAGES].rafraichir();
+        return true;
     }
 
-    private void rafraichir() {
-        long maintenant = System.currentTimeMillis();
-        Etat e = Prefs.etat(this);
-        pilou.montrer(e.expression(maintenant), e.couleur);
-        pilou.accessoire(e.accessoire);
-        if (!Chiffre.valide(Prefs.code(this))) statut.setText("Pas encore appairé avec un PC.");
-        else statut.setText(e.nom + " · niveau " + e.niveau + (e.titre.isEmpty() ? "" : " · " + e.titre) + "\n" + e.resume(maintenant));
-        if (e.appareils.isEmpty()) groupe.setVisibility(View.GONE);
-        else {
-            StringBuilder b = new StringBuilder("Appareils du groupe" + (e.xp >= 0 ? " · " + e.xp + " xp en tout" : "") + "\n");
-            for (Etat.Appareil a : e.appareils) b.append("  ✦ ").append(a.texte(maintenant)).append('\n');
-            groupe.setText(b.toString().trim());
-            groupe.setVisibility(View.VISIBLE);
-        }
-        h.postDelayed(this::rafraichir, 5000);
+    void demanderNotifications() {
+        if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
     }
 
-    private String versionInstallee() {
+    boolean notificationsPermises() {
+        return Build.VERSION.SDK_INT < 33 || checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    String version() {
         try {
             return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return "?";
         }
-    }
-
-    private void demanderNotifications() {
-        if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-    }
-
-    private TextView titre(String s) {
-        TextView t = new TextView(this);
-        t.setText(s);
-        t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        t.setTypeface(Typeface.DEFAULT_BOLD);
-        t.setPadding(0, (int) (18 * getResources().getDisplayMetrics().density), 0, 4);
-        return t;
-    }
-
-    private TextView note(String s) {
-        TextView t = new TextView(this);
-        t.setText(s);
-        t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        return t;
-    }
-
-    private Button bouton(String s, View.OnClickListener action) {
-        Button b = new Button(this);
-        b.setText(s);
-        b.setAllCaps(false);
-        b.setOnClickListener(action);
-        return b;
-    }
-
-    // Curseur de 60 % à 250 % ; l'aperçu en haut de l'écran et le Pilou flottant suivent en direct.
-    private View curseurTaille() {
-        android.widget.SeekBar s = new android.widget.SeekBar(this);
-        int min = Math.round(Prefs.TAILLE_MIN * 100), max = Math.round(Prefs.TAILLE_MAX * 100);
-        s.setMax(max - min);
-        s.setProgress(Math.round(Prefs.taille(this) * 100) - min);
-        float d = getResources().getDisplayMetrics().density;
-        s.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(android.widget.SeekBar b, int v, boolean parLaPersonne) {
-                if (!parLaPersonne) return;
-                float t = (v + min) / 100f;
-                Prefs.de(Principale.this).edit().putFloat("taille", t).apply();
-                pilou.pixel(4 * d * t / 1.6f);
-                Veille.demarrer(Principale.this);
-            }
-
-            @Override
-            public void onStartTrackingTouch(android.widget.SeekBar b) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(android.widget.SeekBar b) {
-            }
-        });
-        return s;
-    }
-
-    interface Choix {
-        void choisir(boolean oui);
-    }
-
-    private CheckBox caseACocher(String s, boolean coche, Choix choix) {
-        CheckBox c = new CheckBox(this);
-        c.setText(s);
-        c.setChecked(coche);
-        c.setOnClickListener(v -> choix.choisir(c.isChecked()));
-        return c;
     }
 }

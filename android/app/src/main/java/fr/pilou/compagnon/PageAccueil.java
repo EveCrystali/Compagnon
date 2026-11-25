@@ -1,0 +1,230 @@
+package fr.pilou.compagnon;
+
+import android.os.SystemClock;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Accueil : Pilou en grand (on le caresse), son niveau et sa barre d'XP, l'état du PC, les sessions
+ * en cours, les appareils du groupe, un mot du jour. Pas encore appairé : un guide en trois étapes.
+ */
+final class PageAccueil extends Page {
+    private static final String[] MOTS = {
+            "Un commit par jour éloigne les bugs pour toujours.", "Pilou a rangé tes onglets. Enfin, presque.",
+            "Une pause café ? Les tests tournent tout seuls.", "Les meilleurs bugs sont ceux qu'on trouve avant la prod.",
+            "Pilou te rappelle de boire un verre d'eau.", "Pêche du jour : peut-être une perle ?",
+            "Une recette jamais faite t'attend dans la marmite.", "Respire. La CI finira bien par passer.",
+            "Petit pas, petit commit, grand projet.", "Pilou a battu son record de sieste.",
+            "Lire le message d'erreur jusqu'au bout : la moitié de la solution.", "Les bugs détestent les tests unitaires.",
+            "Aujourd'hui est un bon jour pour supprimer du code mort.", "Une session finie, une étincelle de plus pour Pilou."};
+
+    private final TextView salut, nom, niveau, xp, etatPc, mot, titreSessions;
+    private final Ui.Barre barre;
+    private final PilouVue pilou;
+    private final TextView coeur;
+    private final LinearLayout sessions, groupe, guide, carteSessions;
+    private String empreinteSessions = "", empreinteGroupe = "";
+    private long derniereCaresse;
+
+    PageAccueil(Principale a) {
+        super(a);
+        Ui.Palette p = Ui.p(a);
+        salut = Ui.texte(a, "", 15, p.doux, false);
+        salut.setPadding(Ui.dp(a, 2), Ui.dp(a, 14), 0, 0);
+        corps.addView(salut);
+        nom = Ui.titrePage(a, "Pilou");
+        nom.setPadding(Ui.dp(a, 2), 0, 0, Ui.dp(a, 10));
+        corps.addView(nom);
+
+        // Carte principale : Pilou, niveau, XP.
+        LinearLayout heros = Ui.carte(a);
+        heros.setGravity(Gravity.CENTER_HORIZONTAL);
+        FrameLayout scene = new FrameLayout(a);
+        pilou = new PilouVue(a, 5.2f * a.getResources().getDisplayMetrics().density);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+        scene.addView(pilou, lp);
+        coeur = Ui.texte(a, "♥", 22, p.orange, true);
+        coeur.setAlpha(0);
+        scene.addView(coeur, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        heros.addView(scene, Ui.large());
+        pilou.setOnClickListener(v -> caresser());
+        pilou.setContentDescription("Pilou : toucher pour le caresser");
+        niveau = Ui.texte(a, "", 18, p.texte, true);
+        niveau.setGravity(Gravity.CENTER_HORIZONTAL);
+        heros.addView(niveau, Ui.large());
+        barre = new Ui.Barre(a);
+        LinearLayout.LayoutParams lb = Ui.large();
+        lb.topMargin = Ui.dp(a, 10);
+        heros.addView(barre, lb);
+        xp = Ui.texte(a, "", 13, p.doux, false);
+        xp.setGravity(Gravity.CENTER_HORIZONTAL);
+        xp.setPadding(0, Ui.dp(a, 6), 0, 0);
+        heros.addView(xp, Ui.large());
+        etatPc = Ui.puceTexte(a, "", p.doux);
+        LinearLayout.LayoutParams le = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        le.topMargin = Ui.dp(a, 12);
+        le.gravity = Gravity.CENTER_HORIZONTAL;
+        heros.addView(etatPc, le);
+        corps.addView(heros, Ui.large(a, 14));
+
+        // Pas appairé : le guide.
+        guide = Ui.carte(a);
+        guide.addView(Ui.texte(a, "Pilou ne connaît pas encore ton PC", 17, p.texte, true));
+        String[] etapes = {"Sur le PC, clic droit sur Pilou → Intégrations → Android : appairer.",
+                "Vise le QR code avec l'appareil photo du téléphone : l'app s'ouvre et s'appaire.",
+                "Ou tape le code de 16 caractères dans Réglages → Appairage."};
+        for (int i = 0; i < etapes.length; i++) {
+            LinearLayout r = Ui.rangee(a);
+            r.setGravity(Gravity.TOP);
+            r.setPadding(0, Ui.dp(a, 10), 0, 0);
+            TextView n = Ui.pastille(a, String.valueOf(i + 1), p.bleu);
+            r.addView(n);
+            TextView t = Ui.texte(a, etapes[i], 14, p.texte, false);
+            t.setPadding(Ui.dp(a, 12), Ui.dp(a, 8), 0, 0);
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            guide.addView(r, Ui.large());
+        }
+        LinearLayout.LayoutParams lg = Ui.large();
+        lg.topMargin = Ui.dp(a, 14);
+        guide.addView(Ui.bouton(a, "Appairer avec mon PC", true, v -> a.aller(Principale.REGLAGES, true)), lg);
+        corps.addView(guide, Ui.large(a, 14));
+
+        // Sessions.
+        titreSessions = Ui.titreSection(a, "Sessions");
+        corps.addView(titreSessions);
+        carteSessions = Ui.carte(a);
+        sessions = Ui.pile(a);
+        carteSessions.addView(sessions, Ui.large());
+        corps.addView(carteSessions, Ui.large(a, 6));
+
+        // Groupe.
+        groupe = Ui.pile(a);
+        corps.addView(groupe, Ui.large());
+
+        // Mot du jour.
+        corps.addView(Ui.titreSection(a, "Le mot de Pilou"));
+        LinearLayout carteMot = Ui.carte(a);
+        carteMot.setBackground(Ui.arrondi(a, p.voile | 0x11000000, 18, 0));
+        mot = Ui.texte(a, "", 15, p.texte, false);
+        carteMot.addView(mot);
+        corps.addView(carteMot, Ui.large());
+    }
+
+    private void caresser() {
+        pilou.jouer("caresse", 2400);
+        coeur.setAlpha(1);
+        coeur.setTranslationY(0);
+        coeur.animate().alpha(0).translationY(-Ui.dp(app, 36)).setDuration(900).start();
+        long t = SystemClock.uptimeMillis();
+        if (t - derniereCaresse > 3000) {
+            derniereCaresse = t;
+            Gains.caresse(app);
+        }
+    }
+
+    @Override
+    void rafraichir() {
+        Ui.Palette p = Ui.p(app);
+        long maintenant = System.currentTimeMillis();
+        Etat e = Prefs.etat(app);
+        boolean appaire = Chiffre.valide(Prefs.code(app));
+        int h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        salut.setText(h < 6 ? "Il se fait tard…" : h < 12 ? "Bonjour !" : h < 18 ? "Bon après-midi !" : h < 22 ? "Bonsoir !" : "Il se fait tard…");
+        nom.setText(e.nom);
+        pilou.montrer(appaire ? e.expression(maintenant) : "dort", e.couleur);
+        pilou.accessoire(e.accessoire);
+
+        int total = Gains.xp(app, e), n = Butin.niveau(total), bas = Butin.xpPourNiveau(n), haut = Butin.xpPourNiveau(n + 1);
+        niveau.setText("Niveau " + n + " · " + Butin.titre(n));
+        barre.part((total - bas) / (float) Math.max(1, haut - bas));
+        int attente = Gains.enAttente(app);
+        xp.setText(total + " / " + haut + " xp" + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : ""));
+
+        if (!appaire) {
+            etatPc.setText("◌  pas encore appairé");
+            etatPc.setTextColor(p.doux);
+        } else if (e.muet(maintenant)) {
+            etatPc.setText(e.t == 0 ? "◌  en attente du PC…" : "◌  le PC dort · rien depuis " + Etat.duree(maintenant - e.t));
+            etatPc.setTextColor(p.doux);
+        } else {
+            long recu = Prefs.de(app).getLong("recu", 0);
+            etatPc.setText("●  PC en ligne · dernier signe il y a " + Etat.duree(maintenant - Math.max(recu, e.t)));
+            etatPc.setTextColor(p.bleu);
+        }
+        etatPc.setBackground(Ui.arrondi(app, (etatPc.getCurrentTextColor() & 0x00ffffff) | 0x22000000, 12, 0));
+
+        guide.setVisibility(appaire ? View.GONE : View.VISIBLE);
+        titreSessions.setVisibility(appaire ? View.VISIBLE : View.GONE);
+        carteSessions.setVisibility(appaire ? View.VISIBLE : View.GONE);
+        if (appaire) sessions(e, maintenant, p);
+        groupe(e, maintenant, p);
+        mot.setText("« " + MOTS[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % MOTS.length] + " »");
+    }
+
+    private void sessions(Etat e, long maintenant, Ui.Palette p) {
+        List<Etat.Ligne> lignes = e.lignes(maintenant, (int) (maintenant / 300));
+        StringBuilder emp = new StringBuilder();
+        for (Etat.Ligne l : lignes) emp.append(l.signe).append(l.libelle).append(l.texte).append('|');
+        if (lignes.isEmpty()) emp.append(e.resume(maintenant));
+        String nouvelle = emp.toString();
+        if (nouvelle.equals(empreinteSessions)) return;
+        empreinteSessions = nouvelle;
+        sessions.removeAllViews();
+        titreSessions.setText(("Sessions" + (lignes.isEmpty() ? "" : " · " + lignes.size())).toUpperCase(java.util.Locale.FRENCH));
+        if (lignes.isEmpty()) {
+            TextView vide = Ui.texte(app, e.muet(maintenant) ? "Pilou attend des nouvelles du PC." : "Aucune session en cours — Pilou se repose.", 14, p.doux, false);
+            vide.setPadding(Ui.dp(app, 2), Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            sessions.addView(vide);
+            return;
+        }
+        for (int i = 0; i < lignes.size(); i++) {
+            Etat.Ligne l = lignes.get(i);
+            if (i > 0) sessions.addView(Ui.separateur(app));
+            int couleur = l.ton == Etat.Ton.ATTENTE ? p.orange : l.ton == Etat.Ton.TRAVAIL || l.nouveau ? p.bleu : p.argent;
+            LinearLayout r = Ui.rangee(app);
+            r.setPadding(0, Ui.dp(app, 6), 0, Ui.dp(app, 6));
+            r.addView(Ui.pastille(app, l.signe, couleur));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            TextView titre = Ui.texte(app, l.libelle, 15, p.texte, true);
+            titre.setSingleLine(true);
+            titre.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            t.addView(titre);
+            t.addView(Ui.texte(app, l.texte, 13, l.ton == Etat.Ton.ATTENTE ? p.orange : p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            sessions.addView(r, Ui.large());
+        }
+    }
+
+    private void groupe(Etat e, long maintenant, Ui.Palette p) {
+        StringBuilder emp = new StringBuilder();
+        for (Etat.Appareil a : e.appareils) emp.append(a.texte(maintenant)).append('|');
+        String nouvelle = emp.toString();
+        if (nouvelle.equals(empreinteGroupe)) return;
+        empreinteGroupe = nouvelle;
+        groupe.removeAllViews();
+        if (e.appareils.isEmpty()) return;
+        groupe.addView(Ui.titreSection(app, "Appareils du groupe" + (e.xp >= 0 ? " · " + e.xp + " xp" : "")));
+        LinearLayout c = Ui.carte(app);
+        for (int i = 0; i < e.appareils.size(); i++) {
+            Etat.Appareil a = e.appareils.get(i);
+            if (i > 0) c.addView(Ui.separateur(app));
+            LinearLayout r = Ui.rangee(app);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            r.addView(Ui.pastille(app, "✦", p.bleu));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            t.addView(Ui.texte(app, a.nom, 15, p.texte, true));
+            t.addView(Ui.texte(app, a.xp + " xp · " + (a.t <= 0 ? "jamais vu" : "vu il y a " + Etat.duree(maintenant - a.t)), 13, p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            c.addView(r, Ui.large());
+        }
+        groupe.addView(c, Ui.large(app, 6));
+    }
+}

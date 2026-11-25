@@ -4,13 +4,35 @@ L'app montre sur le téléphone ce que Pilou voit sur le PC : quelles sessions C
 travaillent, lesquelles ont fini, lesquelles t'attendent. Elle ne fait tourner aucune IA : elle écoute
 le PC.
 
+## L'app
+
+Une barre de navigation en bas, quatre onglets (thème clair ou sombre selon le téléphone) :
+
+| Onglet | Ce qu'on y trouve |
+|---|---|
+| **Accueil** | Pilou en grand (le toucher le caresse), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. |
+| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, récompenses par niveau, style (accessoires et couleurs avec aperçu). |
+| **Réglages** | Appairage, Pilou flottant (taille, cacher, ramener), notifications, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
+
+### Chasse aux bugs
+
+Un jeu de tir à vagues, original : Pilou, en bas, tire tout seul des étincelles ; on le déplace en
+glissant le doigt. Les bugs descendent en zigzag (scarabée 30 points, araignée 20, ver 10) et tirent
+de petites croix. Trois boucliers en accolades `{ }` s'effritent sous les tirs ; leur milieu est vide,
+les étincelles y passent. Bonus : **café** (tir rapide 8 s), **✓ tests** (bouclier, encaisse un coup).
+Toutes les 5 vagues, le **Bug de prod** (barre de vie). Trois vies ; si les bugs atteignent la ligne de
+la prod, la partie s'arrête. Sons rétro synthétisés par l'app (aucun fichier), vibrations ; les deux se
+coupent dans Réglages → Jeux. XP de la partie : score / 150 + 2 par vague franchie, au plus 30,
+créditée au PC comme les autres gains.
+
 ## Trois niveaux d'affichage
 
 | Niveau | Ce qu'on voit | Réglage |
 |---|---|---|
 | 1. Notification permanente | « ❗ 1 t'attend · ◐ 2 en cours », les lignes en la dépliant, Pilou en icône | toujours là pendant l'écoute |
 | 2. Widget | Pilou, son niveau et les 4 sessions qui comptent | appui long sur l'écran d'accueil → Widgets → Pilou |
-| 3. Pilou flottant | Pilou par-dessus les autres applis ; toucher : la bulle (au-dessus de lui, ou en dessous s'il est en haut) ; glisser : le déplacer ; appui long : caché 10 min ; taille réglable dans l'app (60 à 250 %) | case « Pilou flottant » (autorisation « Afficher par-dessus d'autres applis ») |
+| 3. Pilou flottant | Pilou par-dessus les autres applis ; toucher : la bulle (au-dessus de lui, ou en dessous s'il est en haut) ; glisser : le déplacer ; appui long : ouvrir l’app ; cacher / ramener : notification ou Réglages ; taille réglable dans l'app (60 à 250 %) | case « Pilou flottant » (autorisation « Afficher par-dessus d'autres applis ») |
 
 Alertes en plus : une notification sonore quand une IA attend ton autorisation ou te pose une
 question, une plus discrète quand une session finit (chacune se coupe dans l'app).
@@ -61,8 +83,9 @@ fournir une clé privée par `PILOU_KEYSTORE` et `PILOU_KEYSTORE_PASS` (secrets 
 
 ## L'atelier : pêcher, cuisiner, jouer
 
-Bouton « Atelier de Pilou » sur l'écran de l'app : une petite scène en pixels où Pilou pêche, cuisine
-et joue, avec les mêmes règles que sur le PC.
+Onglet **Jouer** → une carte de l'atelier : une petite scène en pixels où Pilou pêche, cuisine et
+joue, avec les mêmes règles que sur le PC. Le carnet, les recettes et les récompenses sont dans
+l'onglet **Collection**.
 
 - **Pêche** : Pilou lance sa ligne ; quand le bouchon plonge (« ! »), il reste 1,2 s pour le toucher.
   Trop tôt, le poisson file. Sans rien faire, Pilou ferre seul : une fois sur trois environ, et jamais
@@ -99,11 +122,11 @@ fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que l
 | Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
 | Couleurs (10) | choix au clic droit | affichées (choisies sur le PC) |
 | Accessoires (11) | choix au clic droit | affichés (choisis sur le PC) |
-| Catalogue des récompenses | ✓ | ✓ atelier |
+| Catalogue des récompenses | ✓ | ✓ onglet Collection |
 | Caresse | ✓ | ✓ toucher Pilou (app, atelier), créditée au PC |
 | Étoile filante, bulles, tape m'en cinq | ✓ | ✓ atelier |
 | Pêche, cuisine | ✓ | ✓ atelier |
-| Carnet de pêche, livre de recettes | ✓ | ✓ atelier |
+| Carnet de pêche, livre de recettes | ✓ | ✓ onglet Collection |
 | Taille de Pilou | ✓ | ✓ curseur |
 | Alertes (une IA attend, a fini) | webhook | ✓ notifications |
 | Mises à jour | automatiques | notification, un appui, confirmation d'Android |

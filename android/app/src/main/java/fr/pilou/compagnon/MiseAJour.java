@@ -87,6 +87,7 @@ public final class MiseAJour {
 
     /** Appelé par la Veille : au plus une vérification par jour ; une notification par nouvelle version. */
     public static void peutEtre(Context c) {
+        if (!Prefs.alerteMaj(c)) return;
         long maintenant = System.currentTimeMillis();
         if (maintenant - Prefs.de(c).getLong("majVue", 0) < JOUR) return;
         Prefs.de(c).edit().putLong("majVue", maintenant).apply();

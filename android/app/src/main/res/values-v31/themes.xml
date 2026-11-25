@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Pilou" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:colorPrimary">@color/accent</item>
+        <item name="android:windowBackground">@color/fond</item>
+    </style>
+    <!-- Android 12+ : écran de démarrage du système (fond sombre, Pilou au centre). -->
+    <style name="Theme.Pilou.Demarrage">
+        <item name="android:windowSplashScreenBackground">@color/fond_icone</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_pilou_avant</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/fond_icone</item>
+    </style>
+    <style name="Theme.Pilou.Jeu" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/nuit</item>
+    </style>
+</resources>

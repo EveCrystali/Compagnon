@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Pilou" parent="@android:style/Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Pilou" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:colorPrimary">@color/accent</item>
+        <item name="android:windowBackground">@color/fond</item>
+    </style>
+    <!-- Avant Android 12 : le fond de démarrage (Pilou au centre) s'affiche le temps que l'app se lance. -->
+    <style name="Theme.Pilou.Demarrage">
+        <item name="android:windowBackground">@drawable/demarrage</item>
+    </style>
+    <style name="Theme.Pilou.Jeu" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/nuit</item>
+    </style>
 </resources>
