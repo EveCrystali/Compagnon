@@ -36,7 +36,10 @@ public class RetourTests
         var g = new Telephone.Gain("g1", 12, new Dictionary<string, int> { ["goujon"] = 2 }, new[] { "grille", "inv:Soupe de goujon bleu du lundi" }, 3);
         Assert.Equal(12, Telephone.Crediter(p, g));
         Assert.Equal(0, Telephone.Crediter(p, g));
-        Assert.Equal(112, p.Xp);
+        // Les gains du téléphone vont dans leur compteur à part (maximum sur le groupe), pas dans l'XP du PC.
+        Assert.Equal(100, p.Xp);
+        Assert.Equal(12, p.XpTelephone);
+        Assert.Equal(112, p.Total(Path.Combine(Path.GetTempPath(), "pilou-absent-" + Guid.NewGuid().ToString("N"))));
         Assert.Equal(2, p.Carnet["goujon"]);
         Assert.Equal(3, p.Caresses);
         Assert.Equal(2, p.PlatsCuisines);

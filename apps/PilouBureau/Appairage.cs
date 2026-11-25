@@ -23,7 +23,9 @@ public static class Appairage
         var pile = new StackPanel { Margin = new Thickness(18), Width = 340 };
         pile.Children.Add(new TextBlock
         {
-            Text = "Vise ce QR code avec l'appareil photo du téléphone : l'app Pilou s'ouvre et s'appaire. Ou tape le code dans l'app.",
+            Text = "Code du groupe d'appareils. Téléphone : vise ce QR code avec l'appareil photo (l'app Pilou s'ouvre et s'appaire), " +
+                   "ou tape le code dans l'app. Autre PC : clic droit sur Pilou → Intégrations → Rejoindre un groupe, et tape ce code. " +
+                   "L'XP de tous s'additionne.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,
         });
@@ -50,7 +52,7 @@ public static class Appairage
         pile.Children.Add(ok);
         var f = new Window
         {
-            Title = "Appairer mon téléphone",
+            Title = "Groupe d'appareils",
             Content = pile,
             SizeToContent = SizeToContent.WidthAndHeight,
             ResizeMode = ResizeMode.NoResize,
