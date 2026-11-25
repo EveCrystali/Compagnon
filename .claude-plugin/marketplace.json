@@ -1,0 +1,14 @@
+{
+  "name": "pilou",
+  "owner": {
+    "name": "AntoineJ"
+  },
+  "description": "Pilou, compagnon animé pour Claude Code",
+  "plugins": [
+    {
+      "name": "compagnon",
+      "source": "./plugins/compagnon",
+      "description": "Pilou, petit compagnon en pixels : il suit tes sessions Claude, te dit où elles en sont et joue avec toi."
+    }
+  ]
+}

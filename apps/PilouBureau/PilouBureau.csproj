@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>PilouBureau</RootNamespace>
+    <AssemblyName>PilouBureau</AssemblyName>
+    <Version>0.5.0</Version>
+    <Product>Pilou de bureau</Product>
+    <Description>Le compagnon Pilou qui se promène sur la fenêtre de Claude.</Description>
+    <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="tests\**" />
+  </ItemGroup>
+
+</Project>

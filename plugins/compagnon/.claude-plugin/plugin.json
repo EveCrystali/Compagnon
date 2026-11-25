@@ -1,0 +1,9 @@
+{
+  "name": "compagnon",
+  "version": "0.5.0",
+  "description": "Pilou, petit compagnon animé qui suit les sessions et réagit à ce qui s'y passe",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "AntoineJ"
+  }
+}

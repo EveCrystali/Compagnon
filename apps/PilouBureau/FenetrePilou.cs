@@ -1,0 +1,916 @@
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+
+namespace PilouBureau;
+
+// Fenêtre transparente toujours au premier plan : Pilou vit sur le bas de l'écran,
+// avec au-dessus de lui une bulle qui dit où en est chaque session Claude.
+// Seuls ses pixels et la bulle prennent la souris ; le reste laisse passer les clics.
+public sealed partial class FenetrePilou : Window
+{
+    private const double LargeurBase = 380;
+    private const double HauteurBulle = 150;
+
+    private enum Geste { Rien, Marche, Assis, Baille, Ballon, SauteSouris }
+
+    private sealed record Palette(Brush Fond, Brush Bord, Brush Texte, Brush Pale, Brush Bleu, Brush Orange);
+
+    private static readonly Palette Claire = new(
+        Gel(0xf2, 0xf6, 0xf8, 0xfa), Gel(0xff, 0x6c, 0xb6, 0xff), Gel(0xff, 0x1c, 0x21, 0x28),
+        Gel(0xff, 0x57, 0x60, 0x6a), Gel(0xff, 0x2f, 0x7e, 0xd8), Gel(0xff, 0xc8, 0x6a, 0x1c));
+    private static readonly Palette Sombre = new(
+        Gel(0xf2, 0x2d, 0x33, 0x3b), Gel(0xff, 0x6c, 0xb6, 0xff), Gel(0xff, 0xcd, 0xd9, 0xe5),
+        Gel(0xff, 0x90, 0x9d, 0xab), Gel(0xff, 0x6c, 0xb6, 0xff), Gel(0xff, 0xf6, 0x9d, 0x50));
+
+    private readonly string _dossier;
+    private readonly bool _devant;
+    private readonly Reglages _reglages;
+    private readonly Scene _scene = new();
+    private readonly Grid _racine = new();
+    private readonly Border _bulle;
+    private readonly StackPanel _lignes = new();
+    private readonly StackPanel _pileBulle;
+    private readonly Pixels _queue;
+    private readonly Suivi _suivi = new();
+    private readonly Stopwatch _chrono = Stopwatch.StartNew();
+    private readonly Random _hasard = new();
+    private readonly DispatcherTimer _image;
+    private readonly DispatcherTimer _lecture;
+    private readonly Dictionary<string, (bool EnTour, string Attente, double FinTour)> _vus = new();
+    // Ce qu'Antoine a déjà lu (clic sur la bulle ou sur Pilou) : session → signature de son état.
+    private readonly Dictionary<string, string> _lus = new();
+    private IReadOnlyList<EtatSession> _vivantes = Array.Empty<EtatSession>();
+
+    private IntPtr _nous;
+    private Rect _zone;
+    private bool _zoneConnue;
+    private double _x, _yPieds, _vy;
+    private bool _auSol = true;
+    private double _cible;
+    private Geste _geste = Geste.Rien;
+    private double _gesteFin, _pauseJusque = 3000;
+    private double _assis;
+    private int _sens = 1;
+    private double _clignePlus = 2000, _cligneFin, _regardPlus = 3000, _clinFin;
+    private int _regard;
+    private double _tCaresse = -1e9, _atterri = -1e9, _tSaut = -1e9, _salueJusque = -1e9, _alerteJusque = -1e9;
+    private double _dernierEvenement;
+    private double _cacheJusque;
+    private Point? _appui;
+    private bool _attrape;
+    private Vector _prise;
+    private double _dernierT;
+    private bool _aGauche;
+    private int _image0;
+    private bool _attend;
+    private bool _court;
+    // Jeux : souris, toque, ballon, messages.
+    private Point _souris;
+    private readonly Queue<(double T, Point P)> _trace = new();
+    private double _etourdiJusque = -1e9;
+    private double _survolSceneDebut = -1;
+    private bool _ronronDit;
+    private double _toqueDebut = -1e9;
+    private Point _sautDepart, _sautCible;
+    private double _sautDebut;
+    private double _balleX, _balleRot, _balleKick = -1e9;
+    private string _message = "";
+    private double _messageJusque = -1e9;
+    private readonly HashSet<string> _dit = new();
+    private double _inactif;
+    private bool _survol;
+    private bool _sombre;
+    private double _themeLu = -1e9;
+
+    public FenetrePilou(string dossier, bool devant = false)
+    {
+        _dossier = dossier;
+        _devant = devant;
+        _reglages = Reglages.Lire(dossier);
+        WindowStyle = WindowStyle.None;
+        AllowsTransparency = true;
+        Background = Brushes.Transparent;
+        ShowInTaskbar = false;
+        ResizeMode = ResizeMode.NoResize;
+        ShowActivated = false;
+        Topmost = true;
+        Title = "Pilou";
+
+        // Pointe en escalier : 1 bord, 2 fond (la rangée du haut efface le bord de la bulle).
+        _queue = new Pixels(Pixels.Motif("1222221", "0122210", "0012100", "0001000"), new Brush?[] { null, Brushes.Transparent, Brushes.Transparent }, null, 3);
+        _bulle = new Border
+        {
+            BorderThickness = new Thickness(3),
+            CornerRadius = new CornerRadius(0),
+            Padding = new Thickness(10, 5, 10, 6),
+            MaxWidth = LargeurBase - 8,
+            Child = _lignes,
+            Cursor = Cursors.Hand,
+            ToolTip = "Clic : afficher Claude ; la bulle se range (c'est lu)",
+        };
+        _bulle.MouseLeftButtonUp += (_, e) =>
+        {
+            ToutLu();
+            Natif.Activer(Natif.TrouverClaude());
+            e.Handled = true;
+        };
+        _pileBulle = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            // La bulle descend jusqu'au-dessus de l'antenne (la scène garde une marge vide en haut).
+            RenderTransform = new TranslateTransform(0, Scene.MargeY + 6 * Scene.PA),
+        };
+        _pileBulle.Children.Add(_bulle);
+        _pileBulle.Children.Add(_queue);
+
+        _scene.Width = Scene.Largeur;
+        _scene.Height = Scene.Hauteur;
+        _scene.Cursor = Cursors.Hand;
+
+        _racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(HauteurBulle) });
+        _racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(Scene.Hauteur) });
+        Grid.SetRow(_pileBulle, 0);
+        Grid.SetRow(_scene, 1);
+        _racine.Children.Add(_pileBulle);
+        _racine.Children.Add(_scene);
+        _racine.MouseEnter += (_, _) => _survol = true;
+        _racine.MouseLeave += (_, _) => _survol = false;
+        Content = _racine;
+        InitialiserJeux();
+        AppliquerTaille();
+        Placer(false);
+        Peindre();
+
+        var menu = new ContextMenu();
+        menu.Opened += (_, _) => Remplir(menu);
+        Remplir(menu);
+        _scene.ContextMenu = menu;
+        _bulle.ContextMenu = menu;
+
+        _scene.MouseLeftButtonDown += Appui;
+        _scene.MouseMove += Bouge;
+        _scene.MouseLeftButtonUp += Relache;
+
+        SourceInitialized += (_, _) =>
+        {
+            _nous = new WindowInteropHelper(this).Handle;
+            Natif.StyleDiscret(_nous);
+        };
+
+        _lecture = new DispatcherTimer(TimeSpan.FromMilliseconds(300), DispatcherPriority.Background, (_, _) => Lire(), Dispatcher);
+        _image = new DispatcherTimer(TimeSpan.FromMilliseconds(33), DispatcherPriority.Render, (_, _) => Image(), Dispatcher);
+        Loaded += (_, _) =>
+        {
+            Lire();
+            _lecture.Start();
+            _image.Start();
+        };
+    }
+
+    private static Brush Gel(byte a, byte r, byte g, byte b)
+    {
+        var br = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+        br.Freeze();
+        return br;
+    }
+
+    private double K => _reglages.Taille;
+    private double Maintenant => _chrono.Elapsed.TotalMilliseconds;
+    private static double Epoque => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    private Palette Couleurs => _sombre ? Sombre : Claire;
+
+    // ---- Options (clic droit)
+
+    private void Remplir(ContextMenu menu)
+    {
+        menu.Items.Clear();
+        menu.Items.Add(Entree("♥ Caresser", Caresser));
+        menu.Items.Add(Entree("Afficher Claude", () => Natif.Activer(Natif.TrouverClaude())));
+        menu.Items.Add(new Separator());
+        menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
+            v => { _reglages.Taille = v; AppliquerTaille(); }));
+        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand Claude t'attend", ModeBulle.Masquee) },
+            _reglages.Bulle, v => _reglages.Bulle = v));
+        menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
+            _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
+        var accessoires = new MenuItem { Header = $"Accessoire (niveau {Niveau})" };
+        foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
+                     Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne })
+        {
+            int requis = Reglages.Requis(a);
+            var m = new MenuItem
+            {
+                Header = Niveau >= requis ? Nom(a) : $"{Nom(a)} — niveau {requis}",
+                IsCheckable = true,
+                IsChecked = _reglages.Accessoire == a,
+                IsEnabled = Niveau >= requis,
+            };
+            m.Click += (_, _) =>
+            {
+                _reglages.Accessoire = a;
+                _reglages.Ecrire(_dossier);
+            };
+            accessoires.Items.Add(m);
+        }
+        menu.Items.Add(accessoires);
+        menu.Items.Add(Case("Se promène", _reglages.Promenade, v => _reglages.Promenade = v));
+        menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
+        menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
+        menu.Items.Add(Entree("Jouer maintenant", () => Demarrer((Jeu)(1 + _hasard.Next(3)), Maintenant)));
+        menu.Items.Add(new Separator());
+        menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
+        menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
+    }
+
+    private static MenuItem Entree(string texte, Action action)
+    {
+        var m = new MenuItem { Header = texte };
+        m.Click += (_, _) => action();
+        return m;
+    }
+
+    private MenuItem Choix<T>(string titre, (string Nom, T Valeur)[] options, T actuel, Action<T> choisir)
+    {
+        var parent = new MenuItem { Header = titre };
+        foreach (var (nom, valeur) in options)
+        {
+            var m = new MenuItem { Header = nom, IsCheckable = true, IsChecked = EqualityComparer<T>.Default.Equals(valeur, actuel) };
+            m.Click += (_, _) =>
+            {
+                choisir(valeur);
+                _reglages.Ecrire(_dossier);
+            };
+            parent.Items.Add(m);
+        }
+        return parent;
+    }
+
+    private MenuItem Case(string titre, bool actuel, Action<bool> choisir)
+    {
+        var m = new MenuItem { Header = titre, IsCheckable = true, IsChecked = actuel };
+        m.Click += (_, _) =>
+        {
+            choisir(m.IsChecked);
+            _reglages.Ecrire(_dossier);
+        };
+        return m;
+    }
+
+    private void AppliquerTaille()
+    {
+        _racine.LayoutTransform = new ScaleTransform(K, K);
+        Width = LargeurBase * K;
+        Height = (HauteurBulle + Scene.Hauteur) * K;
+    }
+
+    // ---- Lecture des sessions et bulle
+
+    private void Lire()
+    {
+        try
+        {
+            var etats = Suivi.LireDossier(_dossier).ToList();
+            var epoque = Epoque;
+            _suivi.Observer(etats, epoque);
+            if (_suivi.BureauCoupe && !_devant) Application.Current.Shutdown();
+            var vivantes = _suivi.Vivantes(epoque);
+            _vivantes = vivantes;
+            _attend = vivantes.Any(e => e.Attente != "");
+            Transitions(vivantes);
+            SuivreXp();
+            if (_suivi.Courant is { } c) _scene.ToolTip = $"{c.Nom} · niv {c.Niveau}";
+            if (Maintenant - _themeLu > 5000)
+            {
+                _sombre = _reglages.Sombre();
+                _themeLu = Maintenant;
+            }
+            Heure();
+            Bulle(vivantes, epoque);
+        }
+        catch (IOException)
+        {
+            // dossier momentanément inaccessible : on garde l'état précédent
+        }
+    }
+
+    // Une session vient de finir → Pilou salue ; une session se met à attendre → il sursaute.
+    private void Transitions(IReadOnlyList<EtatSession> vivantes)
+    {
+        var t = Maintenant;
+        foreach (var e in vivantes)
+        {
+            if (_vus.TryGetValue(e.Session, out var avant))
+            {
+                if (e.FinTour > avant.FinTour && !e.EnTour && e.FinRaison == "")
+                {
+                    _salueJusque = t + 1800;
+                    _tSaut = t;
+                    _dernierEvenement = t;
+                }
+                if (e.Attente != "" && avant.Attente == "")
+                {
+                    _alerteJusque = t + 5000;
+                    _tSaut = t;
+                    _dernierEvenement = t;
+                }
+                if (e.EnTour != avant.EnTour) _dernierEvenement = t;
+            }
+            _vus[e.Session] = (e.EnTour, e.Attente, e.FinTour);
+        }
+    }
+
+    private void Peindre()
+    {
+        var c = Couleurs;
+        bool alerte = Maintenant < _alerteJusque;
+        var bord = alerte && (int)(Maintenant / 250) % 2 == 0 ? c.Orange : alerte ? c.Bleu : c.Bord;
+        _bulle.Background = c.Fond;
+        _bulle.BorderBrush = bord;
+        _bulle.BorderThickness = new Thickness(3);
+        _queue.Palette = new Brush?[] { null, bord, c.Fond };
+    }
+
+    // Ce qui change quand il se passe quelque chose de nouveau dans la session (l'outil en cours, non).
+    private static string Signature(EtatSession e) => $"{e.Attente}|{e.EnTour}|{e.DebutTour}|{e.FinTour}|{e.FinRaison}";
+
+    private void ToutLu()
+    {
+        foreach (var e in _vivantes) _lus[e.Session] = Signature(e);
+        _survol = false;
+        _alerteJusque = -1e9;
+        Bulle(_vivantes, Epoque);
+    }
+
+    private void Bulle(IReadOnlyList<EtatSession> vivantes, double epoque)
+    {
+        // Au survol : tout. Sinon : seulement les sessions où il s'est passé quelque chose depuis le dernier « lu ».
+        var nonLues = _survol ? vivantes : vivantes.Where(e => !_lus.TryGetValue(e.Session, out var sig) || sig != Signature(e)).ToList();
+        var (toutes, autres) = Statut.Lignes(nonLues, epoque, _image0++);
+        var resume = Statut.Resumer(vivantes, epoque);
+        bool detail = _reglages.Bulle == ModeBulle.Detaillee || _survol;
+        var urgentes = toutes.Where(l => l.Ton == Ton.Attente || l.Nouveau).ToList();
+        var lignes = detail ? toutes : urgentes;
+
+        _lignes.Children.Clear();
+        if (Maintenant < _messageJusque)
+            _lignes.Children.Add(new TextBlock
+            {
+                Text = _message,
+                FontFamily = new FontFamily("Segoe UI"),
+                FontSize = 12.5,
+                FontStyle = FontStyles.Italic,
+                Foreground = Couleurs.Texte,
+                Margin = new Thickness(0, 1, 0, 1),
+            });
+        foreach (var l in lignes) _lignes.Children.Add(Ligne(l));
+        if (detail && autres > 0)
+            _lignes.Children.Add(Discret($"+ {autres} autre{(autres > 1 ? "s" : "")} session{(autres > 1 ? "s" : "")} au calme"));
+        var texteResume = Statut.TexteResume(resume);
+        if (!detail && _reglages.Bulle == ModeBulle.Compacte && nonLues.Count > 0 && texteResume != "")
+            _lignes.Children.Add(Discret(texteResume));
+        if (_survol && toutes.Count == 0)
+            _lignes.Children.Add(Discret(vivantes.Count == 0 ? "aucune session ouverte" : "rien en cours"));
+
+        bool visible = _lignes.Children.Count > 0;
+        _pileBulle.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+        Peindre();
+    }
+
+    // Pilou parle : une phrase en italique en tête de bulle, quelques secondes.
+    private void Dire(string texte, double ms = 3500)
+    {
+        _message = texte;
+        _messageJusque = Maintenant + ms;
+        Bulle(_vivantes, Epoque);
+    }
+
+    // Phrases liées à l'heure, une fois par jour chacune.
+    private void Heure()
+    {
+        var n = DateTime.Now;
+        string jour = n.ToString("yyyyMMdd");
+        void Une(string cle, bool quand, string texte)
+        {
+            if (quand && _dit.Add($"{cle}-{jour}")) Dire(texte, 6000);
+        }
+        Une("midi", n.Hour == 12 && n.Minute < 20, "bon appétit !");
+        Une("weekend", n.DayOfWeek == DayOfWeek.Friday && n.Hour >= 17, "bon week-end !");
+        Une("tard", n.Hour >= 19 && n.DayOfWeek != DayOfWeek.Friday, "il se fait tard…");
+        Une("matin", n.Hour >= 7 && n.Hour < 10, n.DayOfWeek == DayOfWeek.Monday ? "bonne semaine !" : "bonjour !");
+    }
+
+    private TextBlock Discret(string texte) => new()
+    {
+        Text = texte,
+        FontFamily = new FontFamily("Segoe UI"),
+        FontSize = 11.5,
+        Foreground = Couleurs.Pale,
+        Margin = new Thickness(0, 1, 0, 1),
+    };
+
+    private TextBlock Ligne(LigneStatut l)
+    {
+        var c = Couleurs;
+        var signe = l.Ton switch { Ton.Attente => c.Orange, Ton.Travail => c.Bleu, _ => l.Nouveau ? c.Bleu : c.Pale };
+        var tb = new TextBlock
+        {
+            FontFamily = new FontFamily("Segoe UI"),
+            FontSize = 12.5,
+            Foreground = c.Texte,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Margin = new Thickness(0, 1, 0, 1),
+        };
+        tb.Inlines.Add(new Run(l.Signe) { Foreground = signe, FontWeight = FontWeights.Bold, FontFamily = new FontFamily("Segoe UI Symbol") });
+        tb.Inlines.Add(new Run(" "));
+        if (l.Libelle != "")
+        {
+            tb.Inlines.Add(new Run(l.Libelle) { FontWeight = FontWeights.SemiBold });
+            tb.Inlines.Add(new Run("  "));
+        }
+        tb.Inlines.Add(new Run(l.Texte)
+        {
+            Foreground = l.Ton == Ton.Attente ? c.Orange : l.Nouveau ? c.Bleu : c.Pale,
+            FontWeight = l.Ton == Ton.Attente || l.Nouveau ? FontWeights.SemiBold : FontWeights.Normal,
+        });
+        return tb;
+    }
+
+    // ---- Placement
+
+    private void Placer(bool aGauche)
+    {
+        _aGauche = aGauche;
+        var cote = aGauche ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+        _scene.HorizontalAlignment = cote;
+        _pileBulle.HorizontalAlignment = cote;
+        _queue.HorizontalAlignment = cote;
+        double marge = Scene.Largeur / 2 - 12;
+        _queue.Margin = aGauche ? new Thickness(marge, -6, 0, 0) : new Thickness(0, -6, marge, 0);
+    }
+
+    private double PiedsDansFenetre => (_aGauche ? Scene.Largeur / 2 : LargeurBase - Scene.Largeur / 2) * K;
+
+    private Matrix VersWpf => PresentationSource.FromVisual(this)?.CompositionTarget?.TransformFromDevice ?? Matrix.Identity;
+    private Matrix VersEcran => PresentationSource.FromVisual(this)?.CompositionTarget?.TransformToDevice ?? Matrix.Identity;
+
+    private Rect ZoneSous(double x, double y)
+    {
+        var p = VersEcran.Transform(new Point(x, y));
+        var r = Natif.ZoneTravail((int)p.X, (int)p.Y);
+        var m = VersWpf;
+        return new Rect(m.Transform(new Point(r.Left, r.Top)), m.Transform(new Point(r.Right, r.Bottom)));
+    }
+
+    private void PlacerAuDepart()
+    {
+        var claude = Natif.TrouverClaude();
+        if (claude != IntPtr.Zero && Natif.Cadre(claude) is { } c)
+        {
+            var centre = VersWpf.Transform(new Point((c.Left + c.Right) / 2.0, (c.Top + c.Bottom) / 2.0));
+            _zone = ZoneSous(centre.X, centre.Y);
+        }
+        else _zone = ZoneSous(10, 10);
+        _x = _zone.Right - Scene.Largeur / 2 * K - 30;
+        _yPieds = _zone.Bottom;
+        _cible = _x;
+        _zoneConnue = true;
+    }
+
+    // ---- Animation
+
+    private void Image()
+    {
+        var t = Maintenant;
+        double dt = Math.Clamp((t - _dernierT) / 1000.0, 0, 0.1);
+        _dernierT = t;
+        if (_nous == IntPtr.Zero) return;
+        if (!_zoneConnue) PlacerAuDepart();
+        if (t < _cacheJusque)
+        {
+            if (IsVisible) Hide();
+            return;
+        }
+        if (!IsVisible) Show();
+
+        var epoque = Epoque;
+        var expr = _suivi.Expression(epoque, _tCaresse == -1e9 ? -1e12 : epoque - (t - _tCaresse));
+        if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
+        bool fatigue = _suivi.Courant?.Fatigue ?? false;
+        _inactif = Natif.InactifMs();
+        Observer(t);
+        expr = Sommeil(expr, t);
+        ProposerJeu(t, expr);
+
+        if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);
+        double sol = _zone.Bottom;
+        double demi = Scene.Largeur / 2 * K;
+        double min = _zone.Left + demi, max = _zone.Right - demi;
+
+        bool marche = false;
+        if (_attrape)
+        {
+            _geste = Geste.Rien;
+        }
+        else if (_geste == Geste.SauteSouris)
+        {
+            SauterSouris(t);
+        }
+        else if (!_auSol)
+        {
+            _vy += 2600 * dt;
+            _yPieds += _vy * dt;
+            if (_yPieds >= sol)
+            {
+                _yPieds = sol;
+                if (_vy > 380) _vy = -_vy * 0.32;
+                else
+                {
+                    _vy = 0;
+                    _auSol = true;
+                }
+                _atterri = t;
+            }
+        }
+        else
+        {
+            _yPieds = sol;
+            _x = Math.Clamp(_x, min, max);
+            marche = Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && Gestes(expr, fatigue, t, dt, min, max));
+        }
+
+        // Assis : on s'y pose et on s'en relève en douceur.
+        double viseAssis = _geste == Geste.Assis || _dortBureau ? 1 : 0;
+        _assis += Math.Clamp(viseAssis - _assis, -4 * dt, 4 * dt);
+
+        if (t >= _clignePlus)
+        {
+            _cligneFin = t + 150;
+            _clignePlus = t + 2500 + _hasard.NextDouble() * 4000;
+        }
+        if (t >= _regardPlus)
+        {
+            _regard = _hasard.Next(-1, 2);
+            _regardPlus = t + 1800 + _hasard.NextDouble() * 3500;
+            if (expr == Expr.Repos && _hasard.NextDouble() < 0.1) _clinFin = t + 450;
+        }
+        var (rx, ry) = RegardSouris(expr, marche);
+        if (_geste == Geste.Ballon) rx = _sens;
+
+        // Accroché au curseur, posé sur l'écran pour toquer, ou caressé par la souris qui s'attarde.
+        double suspendu = _geste == Geste.SauteSouris && t - _sautDebut > 700 ? 1 : 0;
+        double phaseToque = (t - _toqueDebut) / 1600;
+        bool toque = phaseToque is >= 0 and < 1;
+        bool ronron = _survolSceneDebut >= 0 && t - _survolSceneDebut > 1500 && _appui is null;
+        bool etourdi = t < _etourdiJusque;
+        var montre = _attrape ? Expr.Inquiet : _geste == Geste.SauteSouris ? Expr.Fete : ronron ? Expr.Caresse : expr;
+
+        double depuis = _suivi.DepuisHumeur(epoque);
+        double saut = 0;
+        if (expr == Expr.Fete) saut = Math.Abs(Math.Sin(Math.PI * depuis / 450)) * 3;
+        else if (expr == Expr.Caresse && t - _tCaresse < 400) saut = Math.Sin(Math.PI * (t - _tCaresse) / 400) * 1.5;
+        else if (t - _tSaut < 600) saut = Math.Sin(Math.PI * (t - _tSaut) / 600) * 2;
+        if (_attrape) saut = 0;
+
+        _scene.Pose = new Pose
+        {
+            Expr = montre,
+            T = t,
+            Depuis = ronron ? t - _survolSceneDebut : expr == Expr.Caresse ? t - _tCaresse : depuis,
+            Regard = rx,
+            RegardY = ry,
+            Cligne = t < _cligneFin,
+            Clin = t < _clinFin,
+            Fatigue = fatigue,
+            Marche = marche,
+            Course = _court,
+            Saut = saut,
+            Tremble = suspendu > 0 ? Math.Sin(t / 70.0) * 0.5
+                : etourdi ? Math.Sin(t / 120.0) * 0.4
+                : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6) : 0,
+            Chute = Math.Max(0, 1 - (t - _atterri) / 220),
+            Assis = _assis,
+            Baille = _geste == Geste.Baille && expr == Expr.Repos,
+            Salue = t < _salueJusque,
+            Accessoire = _reglages.Porte(DateTime.Now, Niveau),
+            Etourdi = etourdi,
+            Zoom = toque ? 1 + 0.38 * Math.Sin(Math.PI * Math.Min(1, phaseToque * 1.15)) : 1,
+            Toque = toque && phaseToque > 0.2 ? (phaseToque - 0.2) / 0.8 : 0,
+            Suspendu = suspendu,
+            Balle = _geste == Geste.Ballon,
+            BalleX = _balleX,
+            BalleRot = _balleRot,
+        };
+        _scene.InvalidateVisual();
+        AnimerJeux(t);
+        if (t < _alerteJusque) Peindre();
+
+        bool gauche = _x < (_zone.Left + _zone.Right) / 2;
+        if (gauche != _aGauche && !_attrape) Placer(gauche);
+        Left = Math.Round(_x - PiedsDansFenetre);
+        Top = Math.Round(_yPieds - (HauteurBulle + Scene.Sol) * K);
+    }
+
+    // Claude attend Antoine (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,
+    // sur l'horizontale, et la suit tant que personne ne répond. Renvoie s'il court.
+    private bool Courir(double t, double dt, double min, double max)
+    {
+        _court = false;
+        bool appel = _vivantes.Any(e => e.Attente != "" && (!_lus.TryGetValue(e.Session, out var sig) || sig != Signature(e)));
+        if (!appel) return false;
+        if (_jeuEnCours != Jeu.Aucun) Arreter("");
+        var (sx, sy) = Natif.Souris();
+        if (sx == int.MinValue) return false;
+        double cible = Math.Clamp(VersWpf.Transform(new Point(sx, sy)).X, min, max);
+        double ecart = cible - _x;
+        _geste = Geste.Rien;
+        if (Math.Abs(ecart) < 6 * K)
+        {
+            // Arrivé sous la souris : il sautille pour se faire voir ; sans réaction depuis 45 s, il toque à l'écran.
+            if (_inactif > 45_000)
+            {
+                if (t - _toqueDebut > 7000)
+                {
+                    _toqueDebut = t;
+                    Dire("toc toc ! Claude t'attend", 2800);
+                }
+            }
+            else if (t - _tSaut > 1400) _tSaut = t;
+            return false;
+        }
+        _sens = Math.Sign(ecart);
+        double vitesse = Math.Min(320, 90 + Math.Abs(ecart) * 1.5) * K;
+        _x += _sens * Math.Min(Math.Abs(ecart), vitesse * dt);
+        _court = true;
+        return true;
+    }
+
+    // Petite vie au repos : marcher, s'asseoir, bâiller, ne rien faire. Renvoie s'il marche.
+    private bool Gestes(Expr expr, bool fatigue, double t, double dt, double min, double max)
+    {
+        bool calme = expr is Expr.Repos;
+        bool assisPermis = expr is Expr.Repos or Expr.Concentre or Expr.Attente;
+        if (!assisPermis || (_geste is Geste.Marche or Geste.Baille or Geste.Ballon && !calme)) _geste = Geste.Rien;
+
+        switch (_geste)
+        {
+            case Geste.Marche:
+            {
+                double ecart = _cible - _x;
+                if (Math.Abs(ecart) < 2)
+                {
+                    _geste = Geste.Rien;
+                    _pauseJusque = t + 2500 + _hasard.NextDouble() * 6000;
+                    return false;
+                }
+                _sens = Math.Sign(ecart);
+                double vitesse = fatigue ? 26 : 40;
+                _x += _sens * Math.Min(Math.Abs(ecart), vitesse * dt * K);
+                return true;
+            }
+            case Geste.Ballon:
+            {
+                if (t >= _gesteFin)
+                {
+                    _geste = Geste.Rien;
+                    _pauseJusque = t + 3000 + _hasard.NextDouble() * 4000;
+                    return false;
+                }
+                double ecart = _cible - _x;
+                if (Math.Abs(ecart) < 4)
+                {
+                    _cible = Math.Clamp(_x + (_hasard.NextDouble() < 0.5 ? -1 : 1) * (120 + _hasard.NextDouble() * 160) * K, min, max);
+                    return false;
+                }
+                _sens = Math.Sign(ecart);
+                double v = 34 * K;
+                _x += _sens * Math.Min(Math.Abs(ecart), v * dt);
+                // La balle roule devant lui ; de temps en temps, un petit coup de pied l'envoie plus loin.
+                if (t - _balleKick > 2600 && _hasard.NextDouble() < 0.02) _balleKick = t;
+                double coup = t - _balleKick < 700 ? Math.Sin(Math.PI * (t - _balleKick) / 700) * 7 : 0;
+                double vise = _sens * (8 + coup);
+                _balleX += Math.Clamp(vise - _balleX, -30 * dt, 30 * dt);
+                _balleRot += _sens * (v * dt + (coup > 0 ? 4 * dt * K : 0)) / (2.2 * Scene.PA * K);
+                return true;
+            }
+            case Geste.Assis or Geste.Baille when t >= _gesteFin:
+                _geste = Geste.Rien;
+                _pauseJusque = t + 2000 + _hasard.NextDouble() * 5000;
+                return false;
+            case Geste.Rien when t >= _pauseJusque && calme:
+            {
+                double ennui = t - _dernierEvenement;
+                double tirage = _hasard.NextDouble();
+                if (_inactif > 180_000 && _hasard.NextDouble() < 0.35 && PreparerSaut(t))
+                    return false;
+                if (_reglages.Promenade && ennui > 60_000 && _hasard.NextDouble() < 0.12)
+                {
+                    _geste = Geste.Ballon;
+                    _gesteFin = t + 9000 + _hasard.NextDouble() * 8000;
+                    _cible = Math.Clamp(_x + (_hasard.NextDouble() < 0.5 ? -1 : 1) * 200 * K, min, max);
+                    _balleX = 0;
+                    return false;
+                }
+                if (tirage < 0.12 && (fatigue || ennui > 180_000))
+                {
+                    _geste = Geste.Baille;
+                    _gesteFin = t + 1700;
+                }
+                else if (tirage < 0.40)
+                {
+                    _geste = Geste.Assis;
+                    _gesteFin = t + 6000 + _hasard.NextDouble() * 12000;
+                }
+                else if (tirage < 0.88 && _reglages.Promenade)
+                {
+                    _geste = Geste.Marche;
+                    _cible = Math.Clamp(_x + (_hasard.NextDouble() * 2 - 1) * 240 * K, min, max);
+                }
+                else
+                {
+                    _tSaut = t;
+                    _pauseJusque = t + 3000 + _hasard.NextDouble() * 5000;
+                }
+                return false;
+            }
+            default:
+                return false;
+        }
+    }
+
+    // Ce que fait la souris autour de lui : secousse (étourdi), survol prolongé (ronron).
+    private void Observer(double t)
+    {
+        var (sx, sy) = Natif.Souris();
+        if (sx == int.MinValue) return;
+        _souris = VersWpf.Transform(new Point(sx, sy));
+        _trace.Enqueue((t, _souris));
+        while (_trace.Count > 0 && t - _trace.Peek().T > 700) _trace.Dequeue();
+        double chemin = 0;
+        Point? avant = null;
+        foreach (var (_, pt) in _trace)
+        {
+            // Un saut de plus de 400 px d'une image à l'autre est une téléportation (premier relevé, autre écran), pas une secousse.
+            if (avant is { } a && (pt - a).Length < 400) chemin += (pt - a).Length;
+            avant = pt;
+        }
+        if (_trace.Count < 8) chemin = 0;
+        double dx = _souris.X - _x, dy = _souris.Y - (_yPieds - 10 * Scene.PA * K);
+        bool pres = Math.Abs(dx) < 380 && Math.Abs(dy) < 380;
+        if (pres && chemin > 1700 && t > _etourdiJusque + 3000 && _geste != Geste.SauteSouris && !_attrape)
+        {
+            _etourdiJusque = t + 2800;
+            Dire("ouh, la tête me tourne…", 2800);
+        }
+        if (_scene.IsMouseOver && !_attrape)
+        {
+            if (_survolSceneDebut < 0) _survolSceneDebut = t;
+            if (!_ronronDit && t - _survolSceneDebut > 1500)
+            {
+                _ronronDit = true;
+                Dire("rrr…", 1800);
+            }
+        }
+        else
+        {
+            _survolSceneDebut = -1;
+            _ronronDit = false;
+        }
+    }
+
+    // Antoine ne bouge plus depuis 3 min : Pilou saute s'accrocher au curseur par l'antenne.
+    private bool PreparerSaut(double t)
+    {
+        var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
+        // Le curseur doit être au-dessus de lui, sur son écran, et pas trop loin.
+        if (pieds.Y > _zone.Bottom - 80 || pieds.Y < _zone.Top + 40) return false;
+        if (_souris.X < _zone.Left || _souris.X > _zone.Right || Math.Abs(_souris.X - _x) > 900) return false;
+        _geste = Geste.SauteSouris;
+        _sautDebut = t;
+        _sautDepart = new Point(_x, _yPieds);
+        _sautCible = pieds;
+        _sens = Math.Sign(_souris.X - _x);
+        Dire("je l'attrape !", 1800);
+        return true;
+    }
+
+    private void SauterSouris(double t)
+    {
+        double a = (t - _sautDebut) / 700;
+        if (a < 1)
+        {
+            // Bond en cloche jusqu'au curseur.
+            double haut = Math.Min(140, Math.Abs(_sautDepart.Y - _sautCible.Y) * 0.3 + 50) * K;
+            _x = _sautDepart.X + (_sautCible.X - _sautDepart.X) * a;
+            _yPieds = _sautDepart.Y + (_sautCible.Y - _sautDepart.Y) * a - Math.Sin(Math.PI * a) * haut;
+            return;
+        }
+        // Accroché : il gigote. Si la souris repart (Antoine est revenu) ou au bout de 2,6 s, il lâche.
+        var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
+        bool bouge = (pieds - _sautCible).Length > 25;
+        _x = _sautCible.X;
+        _yPieds = _sautCible.Y;
+        if (bouge || t - _sautDebut > 700 + 2600)
+        {
+            _geste = Geste.Rien;
+            _auSol = false;
+            _vy = 0;
+            _pauseJusque = t + 5000;
+            if (!bouge) Dire("elle est trop lourde…", 2400);
+        }
+    }
+
+    // Le regard suit la souris quand elle passe près de Pilou.
+    private (int X, int Y) RegardSouris(Expr expr, bool marche)
+    {
+        if (marche) return (_sens, 0);
+        if (expr is not (Expr.Repos or Expr.Inquiet or Expr.Attente)) return (0, 0);
+        if (!_reglages.SuitSouris) return (expr == Expr.Attente ? 0 : _regard, 0);
+        var (sx, sy) = Natif.Souris();
+        if (sx == int.MinValue) return (_regard, 0);
+        var souris = VersWpf.Transform(new Point(sx, sy));
+        double dx = souris.X - _x, dy = souris.Y - (_yPieds - 12 * Scene.PA * K);
+        if (Math.Abs(dx) > 520 || Math.Abs(dy) > 420) return (expr == Expr.Attente ? 0 : _regard, 0);
+        return (Math.Abs(dx) < 22 * K ? 0 : Math.Sign(dx), dy < -50 * K ? -1 : dy > 40 * K ? 1 : 0);
+    }
+
+    // Essai sans écran : ce que dessine la fenêtre, enregistré en PNG (fond transparent).
+    public void Instantane(string chemin)
+    {
+        var rendu = new System.Windows.Media.Imaging.RenderTargetBitmap(
+            (int)Math.Ceiling(Width), (int)Math.Ceiling(Height), 96, 96, PixelFormats.Pbgra32);
+        rendu.Render(_racine);
+        var png = new System.Windows.Media.Imaging.PngBitmapEncoder();
+        png.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rendu));
+        using var f = File.Create(chemin);
+        png.Save(f);
+    }
+
+    // ---- Souris sur Pilou
+
+    private void Caresser()
+    {
+        _tCaresse = Maintenant;
+        _geste = Geste.Rien;
+        try
+        {
+            Directory.CreateDirectory(_dossier);
+            var chemin = System.IO.Path.Combine(_dossier, "caresses.txt");
+            int n = File.Exists(chemin) && int.TryParse(File.ReadAllText(chemin).Trim(), out var v) ? v : 0;
+            File.WriteAllText(chemin, (n + 1).ToString());
+        }
+        catch (IOException)
+        {
+            // la caresse reste locale
+        }
+    }
+
+    private void Appui(object sender, MouseButtonEventArgs e)
+    {
+        _appui = PointToScreen(e.GetPosition(this));
+        var souris = VersWpf.Transform(_appui.Value);
+        _prise = new Vector(souris.X - _x, souris.Y - _yPieds);
+        _scene.CaptureMouse();
+        e.Handled = true;
+    }
+
+    private void Bouge(object sender, MouseEventArgs e)
+    {
+        if (_appui is not { } depart) return;
+        var ecran = PointToScreen(e.GetPosition(this));
+        if (!_attrape && (ecran - depart).Length > 5) _attrape = true;
+        if (!_attrape) return;
+        var dip = VersWpf.Transform(ecran);
+        _x = dip.X - _prise.X;
+        _yPieds = dip.Y - _prise.Y;
+        _auSol = false;
+        _vy = 0;
+    }
+
+    private void Relache(object sender, MouseButtonEventArgs e)
+    {
+        _scene.ReleaseMouseCapture();
+        if (!_attrape && _appui is not null)
+        {
+            Caresser();
+            ToutLu();
+        }
+        if (_attrape)
+        {
+            _attrape = false;
+            _zone = ZoneSous(_x, _yPieds);
+            _cible = _x;
+            _pauseJusque = Maintenant + 4000;
+        }
+        _appui = null;
+        e.Handled = true;
+    }
+}
