@@ -245,6 +245,7 @@ public sealed partial class FenetrePilou
                 _etoile.MouseLeftButtonDown += (_, e) =>
                 {
                     Gagner(10, _etoilePos);
+                    Signaler("jeu", 1);
                     Arreter("bien vu !");
                     _salueJusque = Maintenant + 1500;
                     e.Handled = true;
@@ -274,6 +275,7 @@ public sealed partial class FenetrePilou
                         if (_bullesEclatees == 3)
                         {
                             Gagner(5, new Point(TeteX - 30, TeteY - 40));
+                            Signaler("jeu", 1);
                             Arreter("toutes ! bonus");
                             _salueJusque = Maintenant + 1500;
                         }
@@ -296,6 +298,7 @@ public sealed partial class FenetrePilou
                 _main.MouseLeftButtonDown += (_, e) =>
                 {
                     Gagner(10, new Point(TeteX - 18, TeteY - 30));
+                    Signaler("jeu", 1);
                     Arreter("ouais !");
                     _salueJusque = Maintenant + 1800;
                     _tSaut = Maintenant;

@@ -264,6 +264,8 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(MenuQuetes());
+        menu.Items.Add(Entree("Boutique…", OuvrirBoutique));
         menu.Items.Add(MenuIntegrations());
         menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
@@ -341,6 +343,7 @@ public sealed partial class FenetrePilou : Window
             Transitions(vivantes);
             SuivreXp();
             Integrer(vivantes, epoque);
+            SuivreQuetes(vivantes);
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -365,6 +368,7 @@ public sealed partial class FenetrePilou : Window
             {
                 if (e.FinTour > avant.FinTour && !e.EnTour && e.FinRaison == "")
                 {
+                    Signaler("tour", 1);
                     _salueJusque = t + 1800;
                     _tSaut = t;
                     _dernierEvenement = t;
@@ -657,6 +661,7 @@ public sealed partial class FenetrePilou : Window
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
             Accessoire = _reglages.Porte(DateTime.Now, Niveau),
+            Equipe = EquipeCourant(),
             Couleur = Niveau >= Recompenses.Requis(_reglages.Couleur) ? _reglages.Couleur : Couleur.Bleu,
             Trainee = _reglages.Trainee && Niveau >= Recompenses.RequisTrainee,
             Etourdi = etourdi,
@@ -916,6 +921,7 @@ public sealed partial class FenetrePilou : Window
 
     private void Caresser()
     {
+        Signaler("caresse", 1);
         _tCaresse = Maintenant;
         _geste = Geste.Rien;
         try

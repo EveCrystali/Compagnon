@@ -23,6 +23,9 @@ public sealed class Profil
     public List<string> Recus { get; set; } = new();
     // XP gagnée sur le téléphone (atelier), créditée par chaque PC du groupe : comptée au maximum, pas en somme.
     public int XpTelephone { get; set; }
+    // Pièces d'or, inventaire et équipement (boutique), quêtes de cet appareil.
+    public Bourse Bourse { get; set; } = new();
+    public EtatQuetes Quetes { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

@@ -104,7 +104,9 @@ public sealed partial class FenetrePilou
         var accessoire = _reglages.Porte(DateTime.Now, Niveau).ToString().ToLowerInvariant();
         // Les gains crédités et l'accessoire changent aussi ce que le téléphone doit savoir.
         var signature = Telephone.Signature(sessions, Niveau, humeur,
-            $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}");
+            $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}"
+            + $"|{Bourse().Solde}|{string.Join(",", Bourse().Inventaire)}|{string.Join(",", EquipeCourant().Values)}"
+            + $"|{string.Join(",", _profil.Quetes.Liste.Select(q => q.Fait))}|{Quetes.CleJour(DateTime.Now)}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -115,6 +117,9 @@ public sealed partial class FenetrePilou
         if (!change && !battement) return;
 
         var progression = Telephone.Progression(_profil, _xpTotal, accessoire);
+        var (solde, inventaire, equipe) = Bourse();
+        Quetes.Actualiser(_profil.Quetes, DateTime.Now, IdAppareil);
+        foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) progression[k] = v;
         // Appareils du groupe, pour la liste de l'app (nom, xp, vu il y a) ; ce PC en tête.
         progression["appareils"] = new[] { new Dictionary<string, object> { ["nom"] = Environment.MachineName, ["xp"] = _profil.Xp, ["t"] = epoque } }
             .Concat(GroupeMem.Compteurs.OrderByDescending(c => c.T)
@@ -131,6 +136,7 @@ public sealed partial class FenetrePilou
             var leger = Telephone.Progression(_profil, _xpTotal, accessoire);
             leger.Remove("carnet");
             leger.Remove("plats");
+            foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) leger[k] = v;
             charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
                 _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
             corps = Telephone.Chiffrer(code, charge);
@@ -190,13 +196,24 @@ public sealed partial class FenetrePilou
                 var (gains, dernier) = Telephone.LireRetours(code, texte);
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    int total = gains.Sum(g => Telephone.Crediter(_profil, g));
+                    var ctx = new Telephone.Contexte(DateTime.Now, IdAppareil, Niveau, Bourse().Solde);
+                    var resultats = gains.Select(g => Telephone.Recevoir(_profil, g, ctx with { Solde = Bourse().Solde })).ToList();
+                    _bourseCache = null;
+                    int total = resultats.Sum(r => r.Xp);
+                    var refus = resultats.SelectMany(r => r.Refus).ToList();
                     if (dernier != "") _reglages.RetourDepuis = dernier;
                     if (gains.Count > 0 || dernier != "") _reglages.Ecrire(_dossier);
                     if (gains.Count == 0) return;
                     _profil.Ecrire(DossierPartage);
                     _xpTotal = TotalXp();
-                    if (total > 0)
+                    var recompenses = resultats.SelectMany(r => r.Recompenses).ToList();
+                    if (recompenses.Count > 0)
+                    {
+                        FlotterPo($"+{recompenses.Sum(r => r.Po)} po");
+                        Dire($"✦ quête réussie depuis le téléphone : {recompenses[0].Texte}", 4200);
+                    }
+                    else if (refus.Count > 0) Dire($"achat refusé : {refus[0]}", 4000);
+                    else if (total > 0)
                     {
                         Flotter($"+{total} xp");
                         Dire($"le téléphone a joué : +{total} xp", 3500);

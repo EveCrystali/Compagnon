@@ -7,6 +7,8 @@ namespace PilouBureau;
 public sealed class Pose
 {
     public Expr Expr;
+    // Objets de la boutique portés, par emplacement (tete, yeux, cou, dos, main, compagnon, effet, couleur → id).
+    public IReadOnlyDictionary<string, string> Equipe = new Dictionary<string, string>();
     public double T;            // horloge de l'animation (ms)
     public double Depuis;       // ms depuis le début de l'humeur passagère
     public int Regard;          // -1, 0, 1

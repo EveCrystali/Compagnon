@@ -184,6 +184,8 @@ public sealed partial class FenetrePilou
         MontrerTrophee(Sprite(p.Forme), new Brush?[] { null, Teinte(p.Couleur), Teinte(p.Clair), Teinte(p.Detail) }, p.Rarete);
         Dire($"{Butin.Signe(p.Rarete)} {p.Nom} · {Butin.NomRarete(p.Rarete)}{(nouvelle ? " · nouveau !" : "")}{(seul ? " (tout seul !)" : "")}", 3600);
         Gagner(Butin.XpPrise(p, nouvelle), new Point(TeteX - 18, TeteY - 52));
+        Signaler("peche", 1);
+        if (p.Rarete >= Rarete.Rare) Signaler("peche:rare", 1);
         _salueJusque = t + 1800;
         _tSaut = t;
     }
@@ -335,6 +337,8 @@ public sealed partial class FenetrePilou
         MontrerTrophee(MotifAssiette, palette, plat.Decouverte ? (Rarete)Math.Max((int)rang, (int)Rarete.PeuCommun) : rang);
         Dire(plat.Decouverte ? $"✦ nouveau plat : {plat.Nom} !" : $"{plat.Nom}, encore un régal", 3800);
         Gagner(plat.Xp, new Point(TeteX - 18, TeteY - 52));
+        Signaler("cuisine", 1);
+        if (plat.Decouverte) Signaler("cuisine:nouveau", 1);
         _salueJusque = t + 1800;
         _tSaut = t;
     }

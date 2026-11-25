@@ -21,7 +21,13 @@ public static class Groupe
 
     public sealed record Compteur(
         string Appareil, string Nom, string Machine, int Xp, int XpTelephone, double T,
-        IReadOnlyList<string> Prises, IReadOnlyList<string> Plats);
+        IReadOnlyList<string> Prises, IReadOnlyList<string> Plats,
+        int PoGagnes = 0, int PoDepenses = 0, int PoDepTel = 0,
+        IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null)
+    {
+        public IReadOnlyList<string> Objets => Inventaire ?? Array.Empty<string>();
+        public IReadOnlyDictionary<string, Port> Porte => Equipe ?? new Dictionary<string, Port>();
+    }
 
     // Mémoire locale du groupe (groupe.json, dans le dossier de Pilou, jamais dans le dossier partagé).
     public sealed class Memoire
@@ -83,8 +89,15 @@ public static class Groupe
                 T = Math.Max(avant.T, c.T),
                 Prises = avant.Prises.Union(c.Prises).OrderBy(x => x).ToList(),
                 Plats = avant.Plats.Union(c.Plats).OrderBy(x => x).ToList(),
+                PoGagnes = Math.Max(avant.PoGagnes, c.PoGagnes),
+                PoDepenses = Math.Max(avant.PoDepenses, c.PoDepenses),
+                PoDepTel = Math.Max(avant.PoDepTel, c.PoDepTel),
+                Inventaire = avant.Objets.Union(c.Objets).OrderBy(x => x).ToList(),
+                Equipe = Bourse.FusionEquipe(new[] { avant.Porte, c.Porte }),
             };
             bool change = fusion.Xp != avant.Xp || fusion.XpTelephone != avant.XpTelephone || fusion.T != avant.T
+                          || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
+                          || fusion.Objets.Count != avant.Objets.Count
                           || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom;
             Autres[c.Appareil] = fusion;
             return change;
@@ -102,12 +115,16 @@ public static class Groupe
     public static Compteur Moi(Profil p, string appareil, string nom) => new(
         appareil, nom, p.Machine, p.Xp, p.XpTelephone, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
         p.Carnet.Where(kv => kv.Value > 0).Select(kv => kv.Key).OrderBy(x => x).ToList(),
-        p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList());
+        p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
+        p.Bourse.PoGagnes, p.Bourse.PoDepenses, p.Bourse.PoDepTelephone,
+        p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe));
 
     public static string Json(Compteur c) => JsonSerializer.Serialize(new Dictionary<string, object>
     {
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
+        ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = c.Objets,
+        ["equipe"] = c.Porte.ToDictionary(kv => kv.Key, kv => new Dictionary<string, object> { ["id"] = kv.Value.Id, ["t"] = kv.Value.T }),
     });
 
     public static Compteur? Lire(string json)
@@ -126,7 +143,17 @@ public static class Groupe
             if (appareil == "" || appareil.Length > 64) return null;
             double t = r.TryGetProperty("t", out var tv) && tv.ValueKind == JsonValueKind.Number ? tv.GetDouble() : 0;
             var nom = S("nom");
-            return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200));
+            var equipe = new Dictionary<string, Port>();
+            if (r.TryGetProperty("equipe", out var eq) && eq.ValueKind == JsonValueKind.Object)
+                foreach (var x in eq.EnumerateObject())
+                {
+                    if (!Boutique.Slots.Contains(x.Name) || x.Value.ValueKind != JsonValueKind.Object) continue;
+                    var id = x.Value.TryGetProperty("id", out var iv) && iv.ValueKind == JsonValueKind.String ? iv.GetString() ?? "" : "";
+                    double te = x.Value.TryGetProperty("t", out var tv2) && tv2.ValueKind == JsonValueKind.Number ? tv2.GetDouble() : 0;
+                    if (id == "" || Boutique.Trouver(id)?.Slot == x.Name) equipe[x.Name] = new Port(id, te);
+                }
+            return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
+                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe);
         }
         catch (JsonException)
         {
@@ -182,6 +209,41 @@ public static class Groupe
         }
         return Math.Max(0, moi.Xp) + parMachine.Values.Sum() + tel;
     }
+
+    // Pièces d'or du groupe : Σ (gains − dépenses) par appareil (chacun à sa plus grande valeur vue), moins
+    // les achats faits sur le téléphone (comptés au maximum : chaque PC du groupe les applique).
+    public static int SoldePo(Profil moi, IEnumerable<Profil> dossier, IEnumerable<Compteur> groupe)
+    {
+        var gains = new Dictionary<string, (int G, int D)>(StringComparer.OrdinalIgnoreCase);
+        int tel = moi.Bourse.PoDepTelephone;
+        void Voir(string cle, int g, int d)
+        {
+            if (string.Equals(cle, moi.Machine, StringComparison.OrdinalIgnoreCase)) return;
+            var avant = gains.GetValueOrDefault(cle);
+            gains[cle] = (Math.Max(avant.G, g), Math.Max(avant.D, d));
+        }
+        foreach (var p in dossier)
+        {
+            Voir(p.Machine, p.Bourse.PoGagnes, p.Bourse.PoDepenses);
+            tel = Math.Max(tel, p.Bourse.PoDepTelephone);
+        }
+        foreach (var c in groupe)
+        {
+            Voir(c.Machine == "" ? "appareil:" + c.Appareil : c.Machine, c.PoGagnes, c.PoDepenses);
+            tel = Math.Max(tel, c.PoDepTel);
+        }
+        return moi.Bourse.PoGagnes - moi.Bourse.PoDepenses + gains.Values.Sum(x => x.G - x.D) - tel;
+    }
+
+    // Objets possédés par le groupe (union) et ce que Pilou porte (dernière écriture gagne par emplacement).
+    public static List<string> Inventaire(Profil moi, IEnumerable<Profil> dossier, IEnumerable<Compteur> groupe) =>
+        moi.Bourse.Inventaire.Concat(dossier.SelectMany(p => p.Bourse.Inventaire)).Concat(groupe.SelectMany(c => c.Objets))
+            .Distinct().OrderBy(x => x).ToList();
+
+    public static Dictionary<string, Port> Equipe(Profil moi, IEnumerable<Profil> dossier, IEnumerable<Compteur> groupe) =>
+        Bourse.FusionEquipe(new[] { (IReadOnlyDictionary<string, Port>)moi.Bourse.Equipe }
+            .Concat(dossier.Select(p => (IReadOnlyDictionary<string, Port>)p.Bourse.Equipe))
+            .Concat(groupe.Select(c => c.Porte)));
 
     // « vu il y a 3 min » pour les menus.
     public static string VuIlYa(double t, double maintenant) => t <= 0 ? "jamais vu" : $"vu il y a {Statut.Duree(maintenant - t)}";
