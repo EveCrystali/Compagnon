@@ -280,7 +280,7 @@ public sealed partial class FenetrePilou : Window
         _reglages.Ecrire(_dossier);
         // Ce PC apporte son profil dans le nouveau dossier (il y garde son propre fichier).
         _profil.Ecrire(DossierPartage);
-        _xpTotal = _profil.Total(DossierPartage);
+        _xpTotal = TotalXp();
         Dire($"XP partagée : {_xpTotal} xp en tout", 3500);
     }
 

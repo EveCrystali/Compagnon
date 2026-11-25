@@ -21,6 +21,8 @@ public sealed class Profil
     public int PlatsCuisines { get; set; }
     // Gains du téléphone déjà crédités (identifiants) : un message relu n'est jamais compté deux fois.
     public List<string> Recus { get; set; } = new();
+    // XP gagnée sur le téléphone (atelier), créditée par chaque PC du groupe : comptée au maximum, pas en somme.
+    public int XpTelephone { get; set; }
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
@@ -57,20 +59,23 @@ public sealed class Profil
         }
     }
 
-    // XP de tous les PC du dossier de partage (ce PC compris, avec sa valeur en mémoire).
-    public int Total(string dossier)
+    // XP de tout le groupe : ce PC, les PC du dossier de partage, et ceux du relais (Groupe).
+    public int Total(string dossier, IEnumerable<Groupe.Compteur>? groupe = null) =>
+        Groupe.Total(this, AutresDuDossier(dossier), groupe ?? Array.Empty<Groupe.Compteur>());
+
+    public List<Profil> AutresDuDossier(string dossier)
     {
-        int total = Xp;
+        var autres = new List<Profil>();
         try
         {
-            if (!Directory.Exists(dossier)) return total;
+            if (!Directory.Exists(dossier)) return autres;
             foreach (var f in Directory.EnumerateFiles(dossier, "profil-*.json"))
             {
                 if (string.Equals(f, Chemin(dossier), StringComparison.OrdinalIgnoreCase)) continue;
                 try
                 {
                     var autre = JsonSerializer.Deserialize<Profil>(File.ReadAllText(f), Options);
-                    if (autre is not null) total += Math.Max(0, autre.Xp);
+                    if (autre is not null) autres.Add(autre);
                 }
                 catch (Exception e) when (e is IOException or JsonException)
                 {
@@ -82,7 +87,7 @@ public sealed class Profil
         {
             // dossier de partage momentanément absent (réseau, OneDrive)
         }
-        return total;
+        return autres;
     }
 
     public static int Niveau(int xp) => (int)Math.Floor(Math.Sqrt(xp / 5.0)) + 1;

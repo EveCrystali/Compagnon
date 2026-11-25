@@ -77,7 +77,7 @@ public sealed partial class FenetrePilou
     private void InitialiserJeux()
     {
         _profil = Profil.Lire(DossierPartage);
-        _xpTotal = _profil.Total(DossierPartage);
+        _xpTotal = TotalXp();
         _dernierNiveau = Niveau;
         Grid.SetRowSpan(_jeu, 2);
         _racine.Children.Add(_jeu);
@@ -142,7 +142,7 @@ public sealed partial class FenetrePilou
         }
         if (Maintenant - _totalLu > 5000)
         {
-            _xpTotal = _profil.Total(DossierPartage);
+            _xpTotal = TotalXp();
             _totalLu = Maintenant;
         }
         VerifierNiveau();

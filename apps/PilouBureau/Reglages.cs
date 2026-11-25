@@ -32,8 +32,11 @@ public sealed class Reglages
     // Adresse où prévenir quand une IA attend ou a fini un long travail (webhook Discord, Slack, ntfy).
     public string Webhook { get; set; } = "";
     public bool WebhookSeulementAbsent { get; set; } = true;
-    // Téléphone appairé (app Android) : code d'appairage et relais ntfy (ntfy.sh ou le sien).
+    // Code du groupe d'appareils (16 caractères) : appairage du téléphone ET partage de l'XP entre PC.
+    // Relais ntfy (ntfy.sh ou le sien) commun à tout le groupe.
     public string Telephone { get; set; } = "";
+    // Identifiant de ce PC dans le groupe (nom de la machine + 4 caractères tirés une fois).
+    public string Appareil { get; set; } = "";
     public string Relais { get; set; } = PilouBureau.Telephone.RelaisParDefaut;
     // Dernier message du téléphone lu sur le sujet retour (identifiant ntfy).
     public string RetourDepuis { get; set; } = "";

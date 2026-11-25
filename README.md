@@ -64,6 +64,14 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
   accessoires (chapeau de pêcheur, toque, tablier…), couleurs, canne dorée, marmite en cuivre ;
 - **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
   fichier, le total fait les niveaux ;
+- **Intégrations → Partager l'XP entre mes appareils** (sans dossier commun : PC perso et PC de
+  travail, téléphone) : un code de groupe de 16 caractères, le même que celui du téléphone. Sur un
+  autre PC : *Rejoindre un groupe* et taper le code. Chaque appareil publie son propre compteur d'XP,
+  chiffré, sur le relais ntfy (à chaque gain, au démarrage, puis toutes les heures) et garde la plus
+  grande valeur reçue de chacun des autres ; le niveau se calcule sur la somme. Un PC vu à la fois par
+  le dossier et par le relais compte une fois ; l'XP gagnée dans l'atelier du téléphone compte une
+  fois même si plusieurs PC l'ont reçue. *Appareils du groupe* : nom, XP, vu il y a… ; si le relais est
+  bloqué (proxy d'entreprise), Pilou le dit (« relais injoignable ») ;
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;

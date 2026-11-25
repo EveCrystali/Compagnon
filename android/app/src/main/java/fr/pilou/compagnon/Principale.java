@@ -25,7 +25,7 @@ import android.widget.TextView;
 /** Écran de l'app : appairer avec le PC, choisir ce que Pilou montre, donner les autorisations. */
 public final class Principale extends Activity {
     private final Handler h = new Handler(Looper.getMainLooper());
-    private TextView statut;
+    private TextView statut, groupe;
     private EditText champCode, champRelais;
     private PilouVue pilou;
     private long derniereCaresse;
@@ -51,6 +51,11 @@ public final class Principale extends Activity {
         statut.setGravity(Gravity.CENTER_HORIZONTAL);
         statut.setPadding(0, 0, 0, (int) (16 * d));
         pile.addView(statut);
+        // Appareils du groupe (le code d'appairage est aussi celui du groupe : l'XP de tous s'additionne).
+        groupe = new TextView(this);
+        groupe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        groupe.setPadding(0, 0, 0, (int) (12 * getResources().getDisplayMetrics().density));
+        pile.addView(groupe);
         // Toucher Pilou : une caresse (comptée au plus toutes les 3 s, créditée au PC).
         pilou.setOnClickListener(v -> {
             pilou.jouer("caresse", 2400);
@@ -186,6 +191,13 @@ public final class Principale extends Activity {
         pilou.accessoire(e.accessoire);
         if (!Chiffre.valide(Prefs.code(this))) statut.setText("Pas encore appairé avec un PC.");
         else statut.setText(e.nom + " · niveau " + e.niveau + (e.titre.isEmpty() ? "" : " · " + e.titre) + "\n" + e.resume(maintenant));
+        if (e.appareils.isEmpty()) groupe.setVisibility(View.GONE);
+        else {
+            StringBuilder b = new StringBuilder("Appareils du groupe" + (e.xp >= 0 ? " · " + e.xp + " xp en tout" : "") + "\n");
+            for (Etat.Appareil a : e.appareils) b.append("  ✦ ").append(a.texte(maintenant)).append('\n');
+            groupe.setText(b.toString().trim());
+            groupe.setVisibility(View.VISIBLE);
+        }
         h.postDelayed(this::rafraichir, 5000);
     }
 
