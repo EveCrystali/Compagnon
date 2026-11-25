@@ -105,7 +105,10 @@ public sealed partial class FenetrePilou
         if (!Telephone.Valide(code) || _telEnCours || epoque < _telPause) return;
         var sessions = Telephone.Sessions(vivantes, epoque);
         var humeur = _exprCourante.ToString().ToLowerInvariant();
-        var signature = Telephone.Signature(sessions, Niveau, humeur);
+        var accessoire = _reglages.Porte(DateTime.Now, Niveau).ToString().ToLowerInvariant();
+        // Les gains crédités et l'accessoire changent aussi ce que le téléphone doit savoir.
+        var signature = Telephone.Signature(sessions, Niveau, humeur,
+            $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -116,7 +119,8 @@ public sealed partial class FenetrePilou
         if (!change && !battement) return;
 
         var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
-            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count);
+            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count,
+            Telephone.Progression(_profil, _xpTotal, accessoire));
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
         var corps = Telephone.Chiffrer(code, charge);
         _telEnCours = true;
@@ -139,6 +143,51 @@ public sealed partial class FenetrePilou
             finally
             {
                 _telEnCours = false;
+            }
+        });
+    }
+
+    // Gains du téléphone (atelier) : le sujet retour, relu toutes les 90 s, crédité une fois par gain.
+    private double _retourLu = -1e12;
+    private bool _retourEnCours;
+
+    private void RecevoirTelephone(double epoque)
+    {
+        var code = _reglages.Telephone;
+        if (!Telephone.Valide(code) || _retourEnCours || epoque - _retourLu < 90_000) return;
+        _retourLu = epoque;
+        _retourEnCours = true;
+        var depuis = _reglages.RetourDepuis == "" ? "12h" : _reglages.RetourDepuis;
+        var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.SujetRetour(code)}/json?poll=1&since={Uri.EscapeDataString(depuis)}";
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var texte = await Relais.GetStringAsync(url);
+                var (gains, dernier) = Telephone.LireRetours(code, texte);
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    int total = gains.Sum(g => Telephone.Crediter(_profil, g));
+                    if (dernier != "") _reglages.RetourDepuis = dernier;
+                    if (gains.Count > 0 || dernier != "") _reglages.Ecrire(_dossier);
+                    if (gains.Count == 0) return;
+                    _profil.Ecrire(DossierPartage);
+                    _xpTotal += total;
+                    if (total > 0)
+                    {
+                        Flotter($"+{total} xp");
+                        Dire($"le téléphone a joué : +{total} xp", 3500);
+                    }
+                    VerifierNiveau();
+                });
+            }
+            catch (Exception e) when (e is HttpRequestException or TaskCanceledException)
+            {
+                // hors ligne : on relira au prochain passage
+            }
+            finally
+            {
+                _retourEnCours = false;
             }
         });
     }
@@ -201,6 +250,7 @@ public sealed partial class FenetrePilou
         PublierDiscord(vivantes, epoque);
         Prevenir(vivantes, epoque);
         PublierTelephone(vivantes, epoque);
+        RecevoirTelephone(epoque);
     }
 
     // XP gagnée par les autres sources (tour fini, commit, tests) : écart depuis la dernière lecture.
