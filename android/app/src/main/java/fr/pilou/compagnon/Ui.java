@@ -45,8 +45,10 @@ final class Ui {
         }
     }
 
+    // Thème clair : bleu, orange et argent assombris pour tenir le contraste WCAG AA (≥ 4,5:1) sur le fond
+    // et sur les cartes (texte bleu ou orange, texte blanc sur bouton bleu).
     static final Palette CLAIRE = new Palette(0xfff6f8fa, 0xffffffff, 0xffeef2f6, 0xffd8dee4, 0xff1c2128, 0xff57606a,
-            0xff2f7ed8, 0xffc86a1c, 0xff8796a8, 0xffffffff, 0x142f7ed8);
+            0xff1f6fc5, 0xffa8530f, 0xff6a7889, 0xffffffff, 0x141f6fc5);
     static final Palette SOMBRE = new Palette(0xff161b22, 0xff22272e, 0xff2d333b, 0xff373e47, 0xffcdd9e5, 0xff909dab,
             0xff6cb6ff, 0xfff69d50, 0xffadbac7, 0xff1c2128, 0x226cb6ff);
 
@@ -161,6 +163,7 @@ final class Ui {
         Palette p = p(c);
         LinearLayout r = rangee(c);
         r.setPadding(dp(c, 4), dp(c, 10), dp(c, 4), dp(c, 10));
+        r.setMinimumHeight(dp(c, 48)); // zone tactile minimale
         LinearLayout t = pile(c);
         t.addView(texte(c, titre, 16, couleurTitre == 0 ? p.texte : couleurTitre, false));
         if (sous != null && !sous.isEmpty()) t.addView(texte(c, sous, 13, p.doux, false));
@@ -178,6 +181,7 @@ final class Ui {
         Palette p = p(c);
         LinearLayout r = rangee(c);
         r.setPadding(dp(c, 4), dp(c, 8), 0, dp(c, 8));
+        r.setMinimumHeight(dp(c, 48));
         LinearLayout t = pile(c);
         t.addView(texte(c, titre, 16, p.texte, false));
         if (sous != null && !sous.isEmpty()) t.addView(texte(c, sous, 13, p.doux, false));
@@ -235,6 +239,8 @@ final class Ui {
             this.pal = pal;
             px = dp(c, pxDp);
             pt.setAntiAlias(false);
+            // Icône décorative : le libellé voisin dit déjà ce qu'elle représente (TalkBack la saute).
+            setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
 
         void couleurs(int[] p) {

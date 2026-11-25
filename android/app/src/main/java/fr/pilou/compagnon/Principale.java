@@ -123,6 +123,9 @@ public final class Principale extends Activity {
         boutons[i] = fond;
         b.addView(fond);
         libelles[i] = Ui.texte(this, NOMS[i], 12, p.doux, false);
+        // Le libellé prend toute la largeur de la case (pile verticale) : il faut centrer son texte.
+        libelles[i].setGravity(Gravity.CENTER_HORIZONTAL);
+        libelles[i].setSingleLine(true);
         libelles[i].setPadding(0, Ui.dp(this, 3), 0, 0);
         b.addView(libelles[i]);
         b.setContentDescription(NOMS[i]);
@@ -152,6 +155,8 @@ public final class Principale extends Activity {
             boutons[k].setBackground(sel ? Ui.arrondi(this, p.voile | 0x10000000, 16, 0) : null);
             libelles[k].setTextColor(sel ? p.bleu : p.doux);
             libelles[k].setTypeface(null, sel ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+            // L'onglet courant est annoncé « sélectionné » par TalkBack.
+            if (boutons[k].getParent() instanceof View) ((View) boutons[k].getParent()).setSelected(sel);
         }
         if (i == courant) {
             page(i).defile.smoothScrollTo(0, 0);

@@ -181,7 +181,7 @@ final class PageReglages extends Page {
         blocPlantage = Ui.pile(a);
         blocPlantage.addView(Ui.separateur(a));
         blocPlantage.addView(Ui.texte(a, "Dernier plantage", 15, p.orange, true));
-        plantage = Ui.texte(a, "", 10, p.doux, false);
+        plantage = Ui.texte(a, "", 12, p.doux, false);
         plantage.setTypeface(Typeface.MONOSPACE);
         plantage.setTextIsSelectable(true);
         plantage.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 8));

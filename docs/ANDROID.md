@@ -95,6 +95,36 @@ La clé de signature `android/app/pilou.keystore` est publique (mot de passe dan
 elle sert à ce que chaque version s'installe par-dessus la précédente. Pour une diffusion plus large,
 fournir une clé privée par `PILOU_KEYSTORE` et `PILOU_KEYSTORE_PASS` (secrets de la CI).
 
+## Revue d'interface
+
+L'interface se relit régulièrement, sur captures plutôt que de mémoire.
+
+**Les captures.** `CapturesTest` (Robolectric, rendu graphique natif) photographie chaque écran : Accueil
+(neuf et appairé : sessions, quêtes, groupe), Jouer, Collection (Carnet, Recettes, Niveaux, Style, Boutique),
+Réglages, Atelier (pêche, cuisine), Chasse aux bugs (accueil, partie, pause) et la mise à jour, en thème
+**clair et sombre**, sur un **petit** (360 × 640 dp) et un **grand** téléphone (412 × 915 dp). Les pages qui
+défilent sont aussi prises en entier (`…-long.png`).
+
+- **En local** (SDK Android) : `cd android && ./gradlew testReleaseUnitTest --tests '*CapturesTest*'`,
+  images dans `android/app/build/captures/`.
+- **Dans la CI** : artefact `captures-ui` du job Android. Les miniatures du petit téléphone sont aussi dans
+  le journal du job, en lignes `CAPTURE <nom> <i>/<n> <base64>` ; un petit script les reconstitue en PNG.
+- Le test ne fait jamais échouer le build : un écran qui refuse de se dessiner écrit `CAPTURE-ERREUR`.
+
+**La check-list**, écran par écran, en clair puis en sombre :
+
+| Point | Seuil |
+|---|---|
+| Contraste du texte | ≥ 4,5:1 (WCAG AA) ; ≥ 3:1 pour les signes et icônes |
+| Taille du texte | ≥ 12 sp ; titres de page 28 sp, sections 12 sp en capitales espacées |
+| Zones tactiles | ≥ 48 × 48 dp (lignes de réglage, boutons, onglets) |
+| Marges | grille de 4 / 8 dp ; pages à 18 dp des bords, cartes à 16 dp de padding |
+| Débordements | aucun texte coupé au milieu d'un mot, aucun bloc hors de l'écran sur petit téléphone |
+| États vides | non appairé, aucune session, carnet vide : un message et une action, jamais un trou |
+| Couleurs | jamais rouge contre vert (deutéranopie) ; chaque état a aussi un signe (❗ ? ◐ ✓ ■ ✕ ◇) |
+| Accessibilité | `contentDescription` sur ce qui n'a pas de texte ; icônes décoratives ignorées par TalkBack ; onglet courant « sélectionné » |
+| Cohérence | mêmes composants partout (`Ui.bouton`, `Ui.carte`, `Ui.ligne`) ; pas de bouton Android brut |
+
 ## L'atelier : pêcher, cuisiner, jouer
 
 Onglet **Jouer** → une carte de l'atelier : une petite scène en pixels où Pilou pêche, cuisine et

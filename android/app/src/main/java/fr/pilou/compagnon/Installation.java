@@ -36,19 +36,19 @@ public final class Installation extends Activity {
         pile.setGravity(Gravity.CENTER);
         int m = (int) (24 * d);
         pile.setPadding(m, m, m, m);
+        // Même identité que le reste de l'app : fond, texte et bouton de la palette (clair / sombre).
+        Ui.Palette p = Ui.p(this);
+        pile.setBackgroundColor(p.fond);
         PilouVue pilou = new PilouVue(this, 4 * d);
         pilou.montrer("concentre", "bleu");
+        pilou.setContentDescription("Pilou prépare sa mise à jour");
         pile.addView(pilou);
-        texte = new TextView(this);
-        texte.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        texte = Ui.texte(this, "", 16, p.texte, false);
         texte.setGravity(Gravity.CENTER);
         texte.setPadding(0, m, 0, m);
         pile.addView(texte);
-        Button annuler = new Button(this);
-        annuler.setText("Plus tard");
-        annuler.setAllCaps(false);
-        annuler.setOnClickListener(v -> finish());
-        pile.addView(annuler);
+        Button annuler = Ui.bouton(this, "Plus tard", false, v -> finish());
+        pile.addView(annuler, Ui.large());
         setContentView(pile);
         version = getIntent().getStringExtra("version");
         url = getIntent().getStringExtra("url");

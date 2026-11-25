@@ -132,7 +132,7 @@ final class PageCollection extends Page {
             String sous = Butin.signe(x.rarete) + " " + Butin.nomRarete(x.rarete);
             if (!connue && x.niveauMin > n) sous = "niveau " + x.niveauMin;
             else if (connue && Gains.prises(app, x.id) > 0) sous += " · ×" + Gains.prises(app, x.id);
-            TextView s = Ui.texte(app, sous, 11, x.rarete >= Butin.EPIQUE ? p.orange : x.rarete == Butin.RARE ? p.bleu : p.doux, false);
+            TextView s = Ui.texte(app, sous, 12, x.rarete >= Butin.EPIQUE ? p.orange : x.rarete == Butin.RARE ? p.bleu : p.doux, false);
             s.setGravity(Gravity.CENTER);
             c.addView(s, Ui.large());
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
@@ -405,7 +405,7 @@ final class PageCollection extends Page {
             TextView nom = Ui.texte(app, r[2], 12, ok ? p.texte : p.doux, true);
             nom.setGravity(Gravity.CENTER);
             c.addView(nom, Ui.large());
-            TextView sous = Ui.texte(app, porte ? "● porté" : ok ? "✓ à toi" : niv > n ? "◇ niveau " + niv : "◆ boutique", 11, porte ? p.bleu : p.doux, false);
+            TextView sous = Ui.texte(app, porte ? "● porté" : ok ? "✓ à toi" : niv > n ? "◇ niveau " + niv : "◆ boutique", 12, porte ? p.bleu : p.doux, false);
             sous.setGravity(Gravity.CENTER);
             c.addView(sous, Ui.large());
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
