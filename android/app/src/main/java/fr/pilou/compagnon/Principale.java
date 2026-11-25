@@ -33,6 +33,7 @@ public final class Principale extends Activity {
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
+        Journal.installer(this);
         float d = getResources().getDisplayMetrics().density;
         LinearLayout pile = new LinearLayout(this);
         pile.setOrientation(LinearLayout.VERTICAL);
@@ -94,6 +95,26 @@ public final class Principale extends Activity {
             champCode.setText("");
             rafraichir();
         }));
+
+        // Dernier plantage : visible ici, à copier pour le signaler.
+        String plantage = Journal.dernier(this);
+        if (!plantage.isEmpty()) {
+            pile.addView(titre("Dernier plantage"));
+            TextView trace = note(plantage.length() > 1200 ? plantage.substring(0, 1200) + "…" : plantage);
+            trace.setTypeface(Typeface.MONOSPACE);
+            trace.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+            trace.setTextIsSelectable(true);
+            pile.addView(trace);
+            pile.addView(bouton("Copier le rapport", v -> {
+                android.content.ClipboardManager cm = getSystemService(android.content.ClipboardManager.class);
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("Plantage de Pilou", plantage));
+                statut.setText("Rapport copié : colle-le à Claude.");
+            }));
+            pile.addView(bouton("Effacer", v -> {
+                Journal.effacer(this);
+                recreate();
+            }));
+        }
 
         ScrollView defile = new ScrollView(this);
         defile.addView(pile);
