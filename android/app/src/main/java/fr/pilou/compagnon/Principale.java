@@ -49,7 +49,6 @@ public final class Principale extends Activity {
         Ui.Palette p = Ui.p(this);
         Window w = getWindow();
         w.setBackgroundDrawable(new ColorDrawable(p.fond)); // remplace l'écran de démarrage
-        bordABord(w, p);
 
         LinearLayout racine = Ui.pile(this);
         racine.setBackgroundColor(p.fond);
@@ -79,6 +78,8 @@ public final class Principale extends Activity {
             return ins;
         });
         setContentView(racine);
+        // Après setContentView : la fenêtre (DecorView) existe, son contrôleur des barres système aussi.
+        bordABord(w, p);
 
         int onglet = sauve != null ? sauve.getInt(EXTRA_ONGLET, ACCUEIL) : getIntent().getIntExtra(EXTRA_ONGLET, ACCUEIL);
         aller(onglet, false);
@@ -95,6 +96,7 @@ public final class Principale extends Activity {
         w.setNavigationBarColor(p.surface);
         boolean clair = !Ui.sombre(this);
         if (Build.VERSION.SDK_INT >= 30) {
+            w.getDecorView(); // crée la fenêtre si besoin : getInsetsController() en dépend
             w.setDecorFitsSystemWindows(false);
             WindowInsetsController c = w.getInsetsController();
             if (c != null) {
