@@ -123,6 +123,9 @@ public final class Principale extends Activity {
         boutons[i] = fond;
         b.addView(fond);
         libelles[i] = Ui.texte(this, NOMS[i], 12, p.doux, false);
+        // Le libellé prend toute la largeur de la case (pile verticale) : il faut centrer son texte.
+        libelles[i].setGravity(Gravity.CENTER_HORIZONTAL);
+        libelles[i].setSingleLine(true);
         libelles[i].setPadding(0, Ui.dp(this, 3), 0, 0);
         b.addView(libelles[i]);
         b.setContentDescription(NOMS[i]);
