@@ -19,6 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
+    <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- QR code d'appairage du téléphone (pur C#, sans dépendance native). -->
     <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>

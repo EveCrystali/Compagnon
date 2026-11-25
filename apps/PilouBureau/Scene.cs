@@ -32,6 +32,11 @@ public sealed class Pose
     public double BalleRot;     // rotation de la balle (radians)
     public Couleur Couleur;
     public bool Trainee;        // traînée d'étoiles quand il marche (récompense)
+    // Activité reconnue (Activites.Toutes : code, tableur, jeu-mmo, jeu, musique, video, lecture, dessin,
+    // visio, nuit, mail, texte, diaporama) : la tenue à dessiner ; "" = aucune.
+    public string Tenue = "";
+    // Petite réaction liée à l'activité : "danse" (musique), "sueur" (processeur chargé pendant le code), "".
+    public string Reaction = "";
 }
 
 // Pilou en pixel art : une goutte bleue cernée, une antenne, une étincelle orange.

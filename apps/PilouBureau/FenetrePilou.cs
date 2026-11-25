@@ -174,6 +174,7 @@ public sealed partial class FenetrePilou : Window
             _lecture.Start();
             _image.Start();
             DemarrerMises();
+            DemarrerActivites();
         };
     }
 
@@ -265,6 +266,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
         menu.Items.Add(MenuIntegrations());
+        menu.Items.Add(MenuActivites());
         menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
@@ -547,7 +549,8 @@ public sealed partial class FenetrePilou : Window
         _dernierT = t;
         if (_nous == IntPtr.Zero) return;
         if (!_zoneConnue) PlacerAuDepart();
-        if (t < _cacheJusque)
+        // Caché : à la demande (10 min), ou par discrétion (plein écran, présentation, visio — Activites.Discretion).
+        if (t < _cacheJusque || _discret)
         {
             if (IsVisible) Hide();
             return;
@@ -557,7 +560,7 @@ public sealed partial class FenetrePilou : Window
         var epoque = Epoque;
         var expr = _suivi.Expression(epoque, _tCaresse == -1e9 ? -1e12 : epoque - (t - _tCaresse));
         if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
-        bool fatigue = _suivi.Courant?.Fatigue ?? false;
+        bool fatigue = (_suivi.Courant?.Fatigue ?? false) || TenueAffichee == "nuit";
         _inactif = Natif.InactifMs();
         Observer(t);
         expr = Sommeil(expr, t);
@@ -651,7 +654,8 @@ public sealed partial class FenetrePilou : Window
             Saut = saut,
             Tremble = suspendu > 0 ? Math.Sin(t / 70.0) * 0.5
                 : etourdi ? Math.Sin(t / 120.0) * 0.4
-                : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6) : 0,
+                : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6)
+                : Balancement(t),
             Chute = Math.Max(0, 1 - (t - _atterri) / 220),
             Assis = _assis,
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
@@ -666,6 +670,8 @@ public sealed partial class FenetrePilou : Window
             Balle = _geste == Geste.Ballon,
             BalleX = _balleX,
             BalleRot = _balleRot,
+            Tenue = TenueAffichee,
+            Reaction = ReactionAffichee,
         };
         _scene.InvalidateVisual();
         AnimerJeux(t);

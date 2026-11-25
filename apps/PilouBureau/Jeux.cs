@@ -148,7 +148,8 @@ public sealed partial class FenetrePilou
         VerifierNiveau();
         var nom = _suivi.Courant?.Nom ?? "Pilou";
         int n = Niveau, suivant = Profil.XpPourNiveau(n + 1);
-        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}";
+        var activite = TenueAffichee == "" ? "" : $" · {Activites.Signe(TenueAffichee)} {Activites.Nom(TenueAffichee)}";
+        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}{activite}";
     }
 
     private void VerifierNiveau()
