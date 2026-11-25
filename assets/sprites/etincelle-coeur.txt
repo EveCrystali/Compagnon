@@ -1,0 +1,14 @@
+id: etincelle-coeur
+slot: effet
+ancre: antenne
+decalage: -4 -8
+palette: a=#f69d50 b=#ffd8b0
+images:
+.aa..aa.
+abbaaaaa
+abaaaaaa
+aaaaaaaa
+.aaaaaa.
+..aaaa..
+...aa...
+........

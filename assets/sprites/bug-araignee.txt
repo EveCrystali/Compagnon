@@ -1,0 +1,37 @@
+# bug de Chasse aux bugs (18 × 14 = 9 × 7 unités)
+id: bug-araignee
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 300
+palette: a=#6cb6ff b=#4a8fdc c=#b4dbff d=#ffffff
+images:
+..................
+..................
+.......aaaa.......
+..bb..aaccaa..bb..
+.b..bbadaadabb..b.
+.b....aaaaaa....b.
+b....aaaaaaaa....b
+b.bbbaaccaaaabbb.b
+.b..baaccaaaab..b.
+bb...aaaaaaaa...bb
+b....aaaaaaaa....b
+b.bbbaaaaaaaabbb.b
+.b.....aaaa.....b.
+b................b
+---
+..................
+..................
+.......aaaa.......
+......aaccaa......
+......adaada......
+..bbbbaaaaaabbbb..
+.b..baaaaaaaab..b.
+bb...aaccaaaa...bb
+b....aaccaaaa....b
+b.bbbaaaaaaaabbb.b
+.b..baaaaaaaab..b.
+bb...aaaaaaaa...bb
+b......aaaa......b
+b................b

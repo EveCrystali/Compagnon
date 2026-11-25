@@ -1,0 +1,15 @@
+id: tenue-lecture-lunettes
+slot: yeux
+ancre: yeux
+decalage: -14 -1
+palette: a=#7a5a10 b=#b4dbff
+images:
+...aaaaaa..........aaaaaa...
+..aa....aa........aa....aa..
+.a........a.aaaa.a........a.
+a.bb.......aaaaaa.bb.......a
+a.b........a....a.b........a
+a..........a....a..........a
+.a........a......a........a.
+..aa....aa........aa....aa..
+...aaaaaa..........aaaaaa...

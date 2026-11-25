@@ -308,12 +308,9 @@ public final class Terrain extends View {
 
         // La marmite, à droite.
         boolean cuisine = mode == Mode.CUISINE;
-        motif(new String[]{"0002222222000", "1122222222211", "0233333333320", "0233333333320", "0223333333220", "0022222222200"},
-                MX, MY, new int[]{0, GRIS, GRIS_CLAIR, cuisine ? ORANGE : 0xff57606a}, true);
+        hd("marmite", MX - 1, MY - 4, cuisine ? t : 0);
         if (cuisine || (mode == Mode.PLAT && t - debut < 800)) {
-            String[] feu = (t / 150) % 2 == 0 ? new String[]{"0100010010", "1210121121", "1221222212"}
-                    : new String[]{"0010100100", "1121211210", "2212212221"};
-            motif(feu, MX + 1, MY + 7, new int[]{0, ORANGE, ORANGE_CLAIR}, false);
+            hd("feu", MX, MY + 7, t);
             for (int i = 0; i < 3; i++) {
                 float k = ((t - debut) / 900f + i / 3f) % 1f;
                 motif(new String[]{"0110", "1111", "0110"}, MX + 2 + i * 3 + (int) (Math.sin(k * 6) * 1.5), (int) (MY - 2 - k * 12),
@@ -336,7 +333,7 @@ public final class Terrain extends View {
                 boolean mord = mode == Mode.MORD;
                 int by = BY + (mord ? 2 + (int) ((t / 90) % 2) : (int) Math.round(Math.sin(t / 500.0)));
                 ligne(PX - 5, PY + 15, BX + 1, by, GRIS_CLAIR);
-                motif(new String[]{"020", "232", "222", "111", "010"}, BX, by, new int[]{0, ENCRE, CREME, ORANGE}, false);
+                hd("bouchon", BX - 1, by - 1, mord ? t : 0);
                 if (mord) {
                     motif(new String[]{"1", "1", "1", "0", "1"}, BX + 1, by - 8, new int[]{0, ORANGE}, false);
                     for (int i = 0; i < 6; i++) {
@@ -355,10 +352,11 @@ public final class Terrain extends View {
         String expr = t < finHumeur ? humeur : mode == Mode.MORD ? "attente" : mode == Mode.ATTENTE || mode == Mode.LANCER || cuisine ? "concentre" : "repos";
         long ds = t - debutSaut;
         float saut = ds < 600 ? (float) (Math.sin(Math.PI * ds / 600.0) * 3) : 0;
+        // Même encombrement qu'avant (boîte de 36 cases) avec la grille fine de 48 × 56.
         Dessin.dessiner((g, h, d, b, col) -> {
             pt.setColor(col);
             cv.drawRect(g, h, d, b, pt);
-        }, ox + PX * s, oy + PY * s, s, expr, t, couleur, accessoire, t < finClin, saut);
+        }, ox + PX * s, oy + PY * s, s * 36f / (Dessin.W + 2), expr, t, couleur, accessoire, t < finClin, saut);
 
         // Cœurs de caresse.
         if (t < finCaresse)
@@ -368,32 +366,50 @@ public final class Terrain extends View {
             }
 
         // La prise ou le plat, au-dessus de Pilou, avec un cadre selon la rareté.
-        if (mode == Mode.PRISE && prise != null) objet(sprite(prise.forme), PX + 18, 3, new int[]{0, ENCRE, prise.couleur, prise.clair, prise.detail}, prise.rarete);
+        if (mode == Mode.PRISE && prise != null) {
+            if (Sprites.banque().get("prise-" + prise.id) != null) objetHd("prise-" + prise.id, PX + 18, 3, prise.rarete, t);
+            else objet(sprite(prise.forme), PX + 18, 3, new int[]{0, ENCRE, prise.couleur, prise.clair, prise.detail}, prise.rarete);
+        }
         if (mode == Mode.PLAT && plat != null && !plat.rate)
-            objet(new String[]{"0000223322000", "0002333332200", "0022222222220", "1111111111111", "0111111111110"}, PX + 18, 4,
-                    new int[]{0, CREME, ORANGE, ORANGE_CLAIR}, plat.decouverte ? Butin.RARE : Butin.COMMUN);
+            objetHd(Sprites.banque().plat(plat.inventee ? "" : plat.id, false), PX + 18, 3, plat.decouverte ? Butin.RARE : Butin.COMMUN, t);
 
         // Jeux.
         if (mode == Mode.ETOILE) {
             for (int i = 1; i < 8; i++) c(etoileX + i * 1.5f, etoileY - i * 0.6f, 1, 1, i < 4 ? ORANGE_CLAIR : GRIS);
-            motif(new String[]{"0001000", "0001000", "0012100", "1112111", "0122210", "0012100", "0110110", "0100010"},
-                    (int) etoileX - 3, (int) etoileY - 4, new int[]{0, ORANGE, ORANGE_CLAIR}, true);
+            hd("etoile", (int) etoileX - 4, (int) etoileY - 5, t);
         }
         if (mode == Mode.BULLES)
             for (float[] b : bulles)
-                if (b[3] == 0)
-                    motif(new String[]{"001110", "012221", "123222", "122222", "122222", "012220", "001100"}, (int) b[0], (int) b[1],
-                            new int[]{0, BLEU, 0x556cb6ff, CREME}, false);
-        if (mode == Mode.TAPE)
-            motif(new String[]{"01010100", "01010100", "01010101", "01111101", "11111111", "01111110", "00111110", "00111100"},
-                    70, 28 + (int) Math.round(Math.sin(t / 120.0)), new int[]{0, CREME}, true);
+                if (b[3] == 0) hd("bulle", (int) b[0] - 1, (int) b[1] - 1, t);
+        if (mode == Mode.TAPE) hd("main", 69, 27 + (int) Math.round(Math.sin(t / 120.0)), t);
 
         postInvalidateDelayed(50);
+    }
+
+    // Sprite HD de la banque, deux fois plus fin que les cases du terrain (coin haut-gauche en cases).
+    private void hd(String id, int x, int y, long t) {
+        Sprites.dessiner((g, h, d, b, col) -> {
+            pt.setColor(col);
+            canvas.drawRect(g, h, d, b, pt);
+        }, Sprites.banque().get(id), ox + x * s, oy + y * s, s / 2, t, false);
+    }
+
+    private void objetHd(String id, int centreX, int y, int rarete, long t) {
+        Sprites.Sprite sp = Sprites.banque().get(id);
+        if (sp == null) return;
+        int w = (sp.w() + 1) / 2, h = (sp.h() + 1) / 2, x = centreX - w / 2;
+        cadre(x, y, w, h, rarete);
+        hd(id, x, y, t);
     }
 
     // Cadre de la prise : aucun (commun), coins (peu commun), trait (rare), double (épique), étoilé (légendaire).
     private void objet(String[] m, int centreX, int y, int[] pal, int rarete) {
         int w = m[0].length(), h = m.length, x = centreX - w / 2;
+        cadre(x, y, w, h, rarete);
+        motif(m, x, y, pal, true);
+    }
+
+    private void cadre(int x, int y, int w, int h, int rarete) {
         int g = x - 3, d = x + w + 2, haut = y - 3, bas = y + h + 2;
         int cadre = rarete >= Butin.EPIQUE ? ORANGE : rarete == Butin.RARE ? BLEU : ARGENT;
         if (rarete == Butin.PEU_COMMUN)
@@ -416,7 +432,6 @@ public final class Terrain extends View {
         if (rarete == Butin.LEGENDAIRE)
             for (int[] k : new int[][]{{g - 3, haut - 3}, {d + 1, haut - 3}, {g - 3, bas + 1}, {d + 1, bas + 1}})
                 motif(new String[]{"010", "111", "010"}, k[0], k[1], new int[]{0, ORANGE_CLAIR}, false);
-        motif(m, x, y, pal, true);
     }
 
     static String[] sprite(String forme) {

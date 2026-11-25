@@ -1,0 +1,21 @@
+# prise de pêche
+id: prise-perche
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#7a4210 c=#f2a94e d=#ffffff e=#1c2128 f=#ffd59a
+images:
+.......aaaabbba........a.
+....aaacccbbbbbaa.....aca
+...accbccbccbccbcaa..acca
+..acccbccbccbccbcccaacca.
+.accccbccbccbccbccccccca.
+acccdebccbccbccbccccccca.
+accceebccbccbccbccccccca.
+acccccbccbccbccbccccccca.
+acccccbccbccbccbccccccca.
+.affffbffbffbffbffffccca.
+..afffbffbffbffbfffaacca.
+...acfbffbffbffbfaa..acca
+....aaaccbccbccaa.....aca
+.......aaaaaaaa........a.

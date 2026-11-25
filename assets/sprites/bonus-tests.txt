@@ -1,0 +1,18 @@
+id: bonus-tests
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a8fdc b=#b4dbff c=#1f4f8a
+images:
+aaaaaaaaaaaa
+abbbbbbbbbba
+abbbbbbbbbba
+abbbbbbbccba
+abbbbbbccbba
+abcbbbccbbba
+abccbccbbbba
+abbcccbbbbba
+abbbcbbbbbba
+abbbbbbbbbba
+abbbbbbbbbba
+aaaaaaaaaaaa

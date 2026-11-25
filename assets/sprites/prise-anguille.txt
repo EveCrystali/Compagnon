@@ -1,0 +1,17 @@
+# prise de pêche
+id: prise-anguille
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#0d2a4d b=#2a5ea8 c=#ffffff d=#1c2128
+images:
+.............aaabbbbbbaa........
+............abbbbbbbbbbbaa......
+aaa.......aabbbbbbbbbbbbbba.....
+bbbaaa..aabbbbbbbbbbbbbbbbbaaaa.
+bbbbcdaabbbbbbbbbbbbbbbbbbbbbbba
+bbbbddbbbbbbbbbbbaaaabbbbbbbbbbb
+bbbbbbbbbbbbbbbaa....aabbbbbbbbb
+bbbbbbbbbbbbbaa........aaabbbbbb
+abbbbbbbbbbba.............abbbbb
+.aabbbbbbaaa...............abbba

@@ -1,0 +1,16 @@
+id: couronne-fleurs
+slot: tete
+ancre: tete
+decalage: -17 -7
+palette: a=#0f4a63 b=#6cb6ff c=#9b8cff d=#ffc89a e=#f5d76e f=#f69d50 g=#b4dbff h=#fff6cc i=#2689b8
+images:
+...........aa...aa...aa...........
+......aa..abba.acca.adda..aa......
+.aa..aeeaabbbbaccccaddddaaeea..aa.
+affaaeeeebbbbbcccccddddddeeeeaagga
+ffffeeeeebbbhbccchcdddhdeeeeeegggg
+ffffeeefeebbbbaccccaddddeeefeggggg
+ffhffeeeeiabba.acca.addaaeeeeggghg
+ffffiaeeaa.aa...aa...aa..aeeaagggg
+affaa.aa..................aa..agga
+.aa............................aa.

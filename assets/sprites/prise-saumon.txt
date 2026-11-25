@@ -1,0 +1,21 @@
+# prise de pêche
+id: prise-saumon
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#f69d50 c=#ffffff d=#1c2128 e=#ffd8b0
+images:
+........aaaaaaaaa..........a.
+.....aaabbbbaaaabaaa......aba
+...aabbbbbbbbbbbbbbbaa...abba
+..abbbbbbbbbbbbbbbbbbba.abba.
+.abbbbbbbbbabbbbbbbbbbbabbba.
+abbbcdbbbbbbbbbabbbbbbbbbbba.
+abbbddbbbabbbbbbbbbbbbbbbbba.
+abbbbbbbbbbbbbbbbbbbbbbbbbba.
+abbbbbbbbbbbabbbbbbbbbbbbbba.
+.aeeeeeeeeeeeeeeeeeeeeeabbba.
+..aeeeeeeeeeeeeeeeeeeea.abba.
+...aabeeeeeeeeeeeeeeaa...abba
+.....aaabbbbbbbbbaaa......aba
+........aaaaaaaaa..........a.

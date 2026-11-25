@@ -1,0 +1,28 @@
+id: tenue-mmo-epee
+slot: main
+ancre: main
+decalage: -3 -16
+palette: a=#1c2128 b=#e6ecf2 c=#ffffff d=#b8c4d2 e=#f5d76e f=#c9a227 g=#7a4b26
+images:
+..abcba..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+..abbda..
+aaabbdaaa
+eeeeeeeee
+fffffffff
+aaagggaaa
+..aggga..
+..aggga..
+..aggga..
+..aggga..
+..afffa..
+..afffa..

@@ -1,0 +1,25 @@
+# prise de pêche
+id: prise-ecrevisse
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#d9803a c=#1c2128 d=#f69d50
+images:
+......aaa......aaa......
+.......aaa....aaa.......
+....aa.aaa....aaa.aaa...
+.a.abba.aaa..aaa.abbba..
+abaabbbaaaa..aaaabbbbaa.
+abbbbbba.aaaaaa.abbbbbba
+.abbbbaaabcbbcbaaabbbba.
+..aabbbbbdcddcdbbabbbaa.
+....aabbbdddddddbbaaadda
+.....abbddddddddbbddddda
+.....abbbddddddbbbddddda
+.....abbbbbbbbbbbbaaadda
+.....aabbbbbbbbbba.a.aa.
+....aaaaaabbbbbaaaaaa...
+...aaaaaaaaaaaaaaaaaaa..
+...aaaaaaa.....aaaaaaa..
+..aaaaaaa.......aaaaaaa.
+...a.a.a.........a.a.a..

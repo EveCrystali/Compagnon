@@ -1,0 +1,15 @@
+id: lunettes-rondes
+slot: yeux
+ancre: yeux
+decalage: -14 -1
+palette: a=#1c2128 b=#b4dbff
+images:
+...aaaaaa..........aaaaaa...
+..aa....aa........aa....aa..
+.a........a.aaaa.a........a.
+a.bb.......aaaaaa.bb.......a
+a.b........a....a.b........a
+a..........a....a..........a
+.a........a......a........a.
+..aa....aa........aa....aa..
+...aaaaaa..........aaaaaa...

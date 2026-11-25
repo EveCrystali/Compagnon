@@ -1,0 +1,23 @@
+# poisson grillé sur assiette
+id: plat-assiette
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#768390 b=#6cb6ff c=#f69d50 d=#8a4a1f e=#1c2128 f=#f6f8fa g=#ffffff h=#c9d1d9
+images:
+..........................
+..........................
+...............aaaa.......
+........aaaaaaabbbba...a..
+.....aaacccccccbbbba..aca.
+....accccdccdccdcccaaacca.
+...acceeccdccdccdccccccca.
+...acceeccdccdccdccccccca.
+...acccccccdccdccdcccccca.
+...aaccccccdccdccdcffacca.
+..affgggccccccccgggggffca.
+.affggggggggggggggggggffa.
+.afffggggggggggggggggfffa.
+..affffffggggggggffffffa..
+...ahhhhhhhhhhhhhhhhhha...
+....aaaaaaaaaaaaaaaaaa....

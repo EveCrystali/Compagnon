@@ -30,6 +30,7 @@ final class PageAccueil extends Page {
     private final TextView coeur;
     private final LinearLayout sessions, groupe, guide, carteSessions;
     private String empreinteSessions = "", empreinteGroupe = "", empreinteQuetes = "";
+    private int stadeVu;
     private TextView titreQuetes;
     private LinearLayout quetes;
     private long derniereCaresse;
@@ -151,6 +152,11 @@ final class PageAccueil extends Page {
 
         // Niveau acquis gardé : si l'XP est sous son palier, la barre part du palier de la courbe.
         int total = Gains.xp(app, e), n = Gains.niveau(app, e), bas = Butin.xpPourNiveau(Math.min(n, Butin.niveau(total))), haut = Butin.xpPourNiveau(n + 1);
+        // Stade d'évolution : celui du PC, sinon celui du niveau ; s'il grandit sous nos yeux, Pilou évolue.
+        int stade = e.stade > 0 ? e.stade : Acces.stade(n);
+        if (stadeVu > 0 && stade > stadeVu) pilou.evoluer(stade);
+        else pilou.stade(stade);
+        stadeVu = stade;
         niveau.setText("Niveau " + n + " · " + Butin.titre(n));
         barre.part((total - bas) / (float) Math.max(1, haut - bas));
         int attente = Gains.enAttente(app);

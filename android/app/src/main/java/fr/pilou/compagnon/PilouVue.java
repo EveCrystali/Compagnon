@@ -13,6 +13,12 @@ public final class PilouVue extends View {
     private long finPassager;
     private long prochainClin = 2500, finClin, debutSaut = -10_000;
     private boolean anime = true;
+    private int stade = 2;
+    private String tenue = "";
+    private java.util.List<String> objets = java.util.Collections.emptyList();
+    private long debutEvolution = -1;
+    /** Durée de l'animation d'évolution (silhouette qui alterne, puis éclat). */
+    public static final long DUREE_EVOLUTION = 2600;
 
     public PilouVue(Context c, float pixel) {
         super(c);
@@ -59,6 +65,29 @@ public final class PilouVue extends View {
         invalidate();
     }
 
+    /** Stade (1 Gouttelette … 4 Astral), tenue d'activité, objets de boutique équipés. */
+    public void stade(int s) {
+        stade = s;
+        invalidate();
+    }
+
+    public void tenue(String t) {
+        tenue = t == null ? "" : t;
+        invalidate();
+    }
+
+    public void objets(java.util.List<String> o) {
+        objets = o == null ? java.util.Collections.<String>emptyList() : o;
+        invalidate();
+    }
+
+    /** Joue l'évolution vers le stade donné. */
+    public void evoluer(int versStade) {
+        stade = versStade;
+        debutEvolution = SystemClock.uptimeMillis();
+        invalidate();
+    }
+
     public void sauter() {
         debutSaut = SystemClock.uptimeMillis();
     }
@@ -83,7 +112,23 @@ public final class PilouVue extends View {
         long ds = t - debutSaut;
         float saut = ds < 600 ? (float) (Math.sin(Math.PI * ds / 600.0) * 3) : 0;
         String e = t < finPassager ? passager : expr;
-        Dessin.dessiner(cv, 0, 0, p, e, t, couleur, accessoire, t < finClin, saut);
+        RenduPilou.Allure a = Dessin.allure(e, t, couleur, accessoire, t < finClin, saut);
+        a.stade = stade;
+        a.tenue = tenue;
+        // Objets de la boutique portés (un par emplacement) ; la couleur achetée remplace celle du niveau.
+        java.util.List<String> portes = new java.util.ArrayList<>(objets);
+        for (java.util.Map.Entry<String, String> en : equipe.entrySet()) {
+            if (en.getValue() == null || en.getValue().isEmpty()) continue;
+            if (en.getKey().equals("couleur")) a.couleur = en.getValue();
+            else portes.add(en.getValue());
+        }
+        a.objets = portes;
+        if (debutEvolution >= 0) {
+            double k = (t - debutEvolution) / (double) DUREE_EVOLUTION;
+            if (k >= 1) debutEvolution = -1;
+            else a.evolution = Math.max(0.001, k);
+        }
+        Dessin.dessiner(cv, 0, 0, p, a);
         if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
     }
 }

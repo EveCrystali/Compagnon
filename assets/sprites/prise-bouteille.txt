@@ -1,0 +1,32 @@
+# prise de pêche
+id: prise-bouteille
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1f4f8a b=#a86f3c c=#6cb6ff d=#b4dbff e=#f69d50 f=#f6f8fa g=#768390
+images:
+..abbbbbba..
+..abbbbbba..
+..abbbbbba..
+...acccca...
+...acccca...
+...acccca...
+...acccca...
+..acccccca..
+.accddcccca.
+.acddddccca.
+accddddcccca
+accdddecccca
+accffffffcca
+accffffffcca
+accfggggfcca
+accffffffcca
+accfgggffcca
+accffffffcca
+accffffffcca
+acccccccccca
+.acccccccca.
+.acccccccca.
+..acccccca..
+...acccca...
+....aaaa....

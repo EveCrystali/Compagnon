@@ -1,0 +1,24 @@
+id: parchemin-quete
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#c4a77d c=#e8d5b0 d=#8a6e4b e=#f69d50 f=#d9803a
+images:
+....................
+..aaaaaaaaaaaaaaaa..
+.abbccccccccccccbba.
+abbbbccccccccccbbbba
+abddbccccccccccbbbba
+abddbcdddddddddbbbba
+abddbccccccccccbbbba
+abddbcdddddddddbbbba
+abddbccccccccccbbbba
+abddbcbbbbbbbbbbbbba
+abddbccccccccccbbbba
+abddbcdddddddddbbbba
+abddbccccccccccbbbba
+abddbcdddddddddbbbba
+abbbbcccceeecccbbbba
+.abbccccceeeccccbba.
+..aaaaaaaeeeaaaaaa..
+.......afaaa........

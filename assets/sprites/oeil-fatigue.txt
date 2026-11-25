@@ -1,0 +1,14 @@
+# œil gauche (le droit est son miroir), 6 × 7
+id: oeil-fatigue
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=@ombre b=@contour c=#1c2128 d=#ffffff
+images:
+.aaaa.
+aaaaaa
+bbbbbb
+cddccc
+cccccc
+cccccc
+.cccc.

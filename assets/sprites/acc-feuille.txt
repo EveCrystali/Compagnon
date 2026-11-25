@@ -1,0 +1,18 @@
+id: acc-feuille
+slot: tete
+ancre: tete
+decalage: -14 -10
+palette: a=#8a4a1f b=#d9803a c=#f69d50
+images:
+.......aabba
+......abbcba
+.....abccaa.
+....abccaba.
+...aaccacba.
+..abacaaba..
+.abccacbaa..
+.abccabbaa..
+.abcabbaa...
+abcabaa.....
+abaaa.......
+aaa.........

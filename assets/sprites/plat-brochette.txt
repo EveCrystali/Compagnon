@@ -1,0 +1,16 @@
+id: plat-brochette
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#f69d50 c=#f6f8fa d=#d9803a e=#f5d76e f=#ffd8b0 g=#c9d1d9 h=#a86f3c i=#7a4b26
+images:
+............................
+...aaaa..aaaa..aaaa..aaaa...
+..abbbbaaccccaaddddaaeeeea..
+..abbbbaaccccaaddddaaeeeea..
+aabbfbbbccgcccddfdddeefeeeaa
+hhbbbbbbccccccddddddeeeeeehh
+iibbbbbbccccccddddddeeeeeeii
+aaabbbbaaccccaaddddaaeeeeaaa
+..abbbbaaccccaaddddaaeeeea..
+...aaaa..aaaa..aaaa..aaaa...

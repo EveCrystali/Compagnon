@@ -1,0 +1,22 @@
+id: tenue-mmo-bouclier
+slot: main
+ancre: main-g
+decalage: -11 -6
+palette: a=#1c2128 b=#7a4b26 c=#6cb6ff d=#c9a227 e=#4a8fdc f=#f5d76e
+images:
+...aabbbbbbaa...
+..abbbbbbbbbba..
+.abbbccddccbbba.
+abbccccddcceebba
+abbccccddceeebba
+bbcccccddeeeeebb
+bbcccccffeeeeebb
+bbddddffffddddbb
+bbddddffffddddbb
+bbccceeffeeeeebb
+bbcceeeddeeeeebb
+abbeeeeddeeeebba
+abbeeeeddeeeebba
+.abbbeeddeebbba.
+..abbbbbbbbbba..
+...aabbbbbbaa...

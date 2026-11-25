@@ -1,0 +1,26 @@
+id: plat-souffle
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#768390 b=#fff6cc c=#ffffff d=#c9d1d9 e=#f6f8fa
+images:
+....................
+....................
+.......aaaaaa.......
+.....aabbbbbbaa.....
+....abccccbbbbba....
+...abccccccbbbbba...
+..abbccccccbbbbbba..
+.abbbbccccbbbbbbbba.
+.abbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbba.
+..adededededededea..
+..adededededededea..
+..adededededededea..
+..adededededededea..
+..adededededededea..
+..adededededededea..
+..adededededededea..
+..adededededededea..
+...aaaaaaaaaaaaaa...

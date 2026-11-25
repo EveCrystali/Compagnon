@@ -1,0 +1,14 @@
+id: etincelle-grand
+slot: effet
+ancre: antenne
+decalage: -4 -8
+palette: a=#f69d50 b=#ffd8b0 c=#ffffff
+images:
+...aa...
+...aa...
+..abbaa.
+aabccbaa
+aabccbaa
+.aabbaa.
+...aa...
+...aa...

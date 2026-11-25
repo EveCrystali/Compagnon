@@ -1,0 +1,14 @@
+# œil gauche (le droit est son miroir), 6 × 7
+id: oeil-haut
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffffff
+images:
+.aaaa.
+aabbaa
+aabbaa
+aaaaaa
+.aaaa.
+......
+......

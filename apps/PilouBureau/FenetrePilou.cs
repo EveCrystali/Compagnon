@@ -655,8 +655,8 @@ public sealed partial class FenetrePilou : Window
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
             Accessoire = _reglages.Porte(DateTime.Now, a => Possede(Recompenses.IdAccessoire(a))),
-            Equipe = EquipeCourant(),
-            Stade = StadeAffiche(),
+            Equipe = EquipeEssai(EquipeCourant()),
+            Stade = _essaiStade > 0 ? _essaiStade : StadeAffiche(),
             Evolution = ProgresEvolution(t),
             Couleur = Recompenses.CouleurDe(EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Couleur, "")) ?? Couleur.Bleu,
             Trainee = EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
@@ -667,7 +667,7 @@ public sealed partial class FenetrePilou : Window
             Balle = _geste == Geste.Ballon,
             BalleX = _balleX,
             BalleRot = _balleRot,
-            Tenue = TenueAffichee,
+            Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
             Reaction = ReactionAffichee,
         };
         _scene.InvalidateVisual();

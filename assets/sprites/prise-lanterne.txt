@@ -1,0 +1,27 @@
+# prise de pêche
+id: prise-lanterne
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffd8b0 c=#f69d50 d=#0d2a4d e=#ffffff f=#1f4f8a
+images:
+.aba......................
+abbba.....................
+abbba.....................
+.abca.....................
+..aaca........a...........
+...aca......aaca..........
+....aca.aaaaccca........a.
+.....acadddcccccaa.....ada
+....adddddddddddddaa..adda
+...addddddddddddddddaadda.
+..addddddddddddddddddddda.
+.adddeaddddddddddddddddda.
+.adddaaddddddddddddddddda.
+.adddddddddddddddddddddda.
+.adddddddddddddddddddddda.
+..affffffffffffffffffddda.
+...affffffffffffffffaadda.
+....adffffffffffffaa..adda
+.....aaaddddddddaa.....ada
+........aaaaaaaa........a.

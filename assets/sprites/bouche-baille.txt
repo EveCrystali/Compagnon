@@ -1,0 +1,13 @@
+# bouche, centrée sur l'axe de Pilou
+id: bouche-baille
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3a2a2f c=#f69d50
+images:
+.aaaa.
+abbbba
+abbbba
+abccba
+acccca
+.aaaa.

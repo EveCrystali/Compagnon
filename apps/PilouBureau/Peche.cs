@@ -121,14 +121,16 @@ public sealed partial class FenetrePilou
         _jeu.Children.Add(_eau);
 
         var canne = CoteJeu > 0 ? MotifCanne : Miroir(MotifCanne);
-        _canne = new Pixels(canne, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, 4) { IsHitTestVisible = false };
+        _canne = Pixels.Sprite("canne", 1.2 * Scene.PX, 0, CoteJeu < 0) ?? new Pixels(canne, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, 4);
+        _canne.IsHitTestVisible = false;
         double baseX = TeteX + CoteJeu * 22;
         Canvas.SetLeft(_canne, CoteJeu > 0 ? baseX - 4 : baseX - 36);
         Canvas.SetTop(_canne, SolY - 64);
         _jeu.Children.Add(_canne);
 
         _posBouchon = new Point(CoteJeu > 0 ? EauX + 44 : EauX + LargeurEau - 56, y - 18);
-        _bouchon = new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3) { Cursor = Cursors.Hand };
+        _bouchon = Pixels.Sprite("bouchon", 1.6) ?? new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
+        _bouchon.Cursor = Cursors.Hand;
         _bouchon.MouseLeftButtonDown += (_, e) =>
         {
             ClicBouchon();
@@ -181,13 +183,36 @@ public sealed partial class FenetrePilou
         bool nouvelle = !_profil.Carnet.ContainsKey(p.Id);
         _profil.Carnet[p.Id] = (_profil.Carnet.TryGetValue(p.Id, out var n) ? n : 0) + 1;
         if (p.Comestible) _profil.Stock[p.Id] = (_profil.Stock.TryGetValue(p.Id, out var s) ? s : 0) + 1;
-        MontrerTrophee(Sprite(p.Forme), new Brush?[] { null, Teinte(p.Couleur), Teinte(p.Clair), Teinte(p.Detail) }, p.Rarete);
+        if (!MontrerTropheeHd("prise-" + p.Id, p.Rarete))
+            MontrerTrophee(Sprite(p.Forme), new Brush?[] { null, Teinte(p.Couleur), Teinte(p.Clair), Teinte(p.Detail) }, p.Rarete);
         Dire($"{Butin.Signe(p.Rarete)} {p.Nom} · {Butin.NomRarete(p.Rarete)}{(nouvelle ? " · nouveau !" : "")}{(seul ? " (tout seul !)" : "")}", 3600);
         Gagner(Butin.XpPrise(p, nouvelle), new Point(TeteX - 18, TeteY - 52));
         Signaler("peche", 1);
         if (p.Rarete >= Rarete.Rare) Signaler("peche:rare", 1);
         _salueJusque = t + 1800;
         _tSaut = t;
+    }
+
+    // Sprite HD de la banque au-dessus de la tête (pixel de 1,5 : deux fois plus fin que l'ancien trophée).
+    private bool MontrerTropheeHd(string id, Rarete r)
+    {
+        if (Pixels.DeSprite(id) is not { } d) return false;
+        const double taille = 1.5;
+        int sw = d.Motif.GetLength(1), sh = d.Motif.GetLength(0);
+        double w = (sw + 2) * taille, h = (sh + 2) * taille;
+        double x = Math.Round((TeteX - w / 2) / 3) * 3, y = Math.Max(4, TeteY - 30 - h);
+        if (Cadre(r, (sw + 1) / 2, (sh + 1) / 2) is { } c)
+        {
+            _cadre = new Pixels(c.Motif, c.Palette, null, 3) { IsHitTestVisible = false };
+            Canvas.SetLeft(_cadre, x - 2 * 3);
+            Canvas.SetTop(_cadre, y - 2 * 3);
+            _jeu.Children.Add(_cadre);
+        }
+        _trophee = new Pixels(d.Motif, d.Palette, null, taille) { IsHitTestVisible = false };
+        Canvas.SetLeft(_trophee, x);
+        Canvas.SetTop(_trophee, y);
+        _jeu.Children.Add(_trophee);
+        return true;
     }
 
     // La prise (ou le plat) s'affiche au-dessus de la tête, dans son cadre de rareté.
@@ -273,15 +298,14 @@ public sealed partial class FenetrePilou
         _resultat = false;
         _cuitA = t + 4500;
         _posMarmite = new Point(CoteJeu > 0 ? TeteX + 60 : TeteX - 60 - 15 * 4, SolY - 40);
-        _feu = new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, 4) { IsHitTestVisible = false };
+        _feu = Pixels.Sprite("feu", 1.6) ?? new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, 4);
+        _feu.IsHitTestVisible = false;
         Canvas.SetLeft(_feu, _posMarmite.X + 8);
         Canvas.SetTop(_feu, _posMarmite.Y + 26);
         _jeu.Children.Add(_feu);
-        _marmite = new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, 4)
-        {
-            Cursor = Cursors.Hand,
-            ToolTip = "remuer",
-        };
+        _marmite = Pixels.Sprite("marmite", 2.2) ?? new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, 4);
+        _marmite.Cursor = Cursors.Hand;
+        _marmite.ToolTip = "remuer";
         _marmite.MouseLeftButtonDown += (_, e) =>
         {
             if (!_remue && !_resultat)
@@ -299,7 +323,12 @@ public sealed partial class FenetrePilou
 
     private void AnimerCuisine(double t)
     {
-        if (_feu is not null) _feu.Changer((int)(t / 160) % 2 == 0 ? MotifFeu1 : MotifFeu2);
+        if (_feu is not null)
+        {
+            if (Banque.Commune["feu"] is not null) _feu.Changer("feu", t);
+            else _feu.Changer((int)(t / 160) % 2 == 0 ? MotifFeu1 : MotifFeu2);
+        }
+        if (_marmite is not null && !_resultat && Banque.Commune["marmite"] is not null) _marmite.Changer("marmite", t);
         if (!_resultat)
         {
             if ((int)(t / 420) != (int)((t - 33) / 420)) Volute(new Point(_posMarmite.X + 18 + _hasard.Next(20), _posMarmite.Y - 4), t, Creme);
@@ -334,7 +363,9 @@ public sealed partial class FenetrePilou
         var ingredient = Butin.Trouver(plat.Utilises[0]);
         var palette = new Brush?[] { null, Creme, Teinte(ingredient?.Couleur ?? "#f69d50"), Teinte(ingredient?.Clair ?? "#ffd8b0") };
         var rang = plat.Inventee ? Rarete.Commun : plat.Xp >= 40 ? Rarete.Epique : plat.Xp >= 16 ? Rarete.Rare : Rarete.PeuCommun;
-        MontrerTrophee(MotifAssiette, palette, plat.Decouverte ? (Rarete)Math.Max((int)rang, (int)Rarete.PeuCommun) : rang);
+        var rangAffiche = plat.Decouverte ? (Rarete)Math.Max((int)rang, (int)Rarete.PeuCommun) : rang;
+        if (!MontrerTropheeHd(Banque.Commune.Plat(plat.Inventee ? "" : plat.Id, false), rangAffiche))
+            MontrerTrophee(MotifAssiette, palette, rangAffiche);
         Dire(plat.Decouverte ? $"✦ nouveau plat : {plat.Nom} !" : $"{plat.Nom}, encore un régal", 3800);
         Gagner(plat.Xp, new Point(TeteX - 18, TeteY - 52));
         Signaler("cuisine", 1);

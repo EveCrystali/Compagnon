@@ -1,0 +1,24 @@
+id: acc-tablier
+slot: cou
+ancre: cou
+decalage: -10 -4
+palette: a=#768390 b=#c9d1d9 c=#f6f8fa d=#d9803a e=#f69d50
+images:
+..abbbbbbbbbbbbbba..
+..abbbbbbbbbbbbbba..
+..acccccccccccccca..
+..acccccccccccccca..
+.acccccccccccccccca.
+.acccccccccccccccca.
+.acccccccccccccccca.
+.accccddddddddcccca.
+.acccceeeedeeecccca.
+.acccceeeedeeecccca.
+.acccceeeedeeecccca.
+.acccceeeedeeecccca.
+.acccccccccccccccca.
+acccccccccccccccccca
+acccccccccccccccccca
+acccccccccccccccccca
+acccccccccccccccccca
+.aaaaaaaaaaaaaaaaaa.

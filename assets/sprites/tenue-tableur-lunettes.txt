@@ -1,0 +1,12 @@
+id: tenue-tableur-lunettes
+slot: yeux
+ancre: yeux
+decalage: -14 3
+palette: a=#c9a227 b=#fff6cc
+images:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aa........aa....aa........aa
+.a.bb.....a......a.bb.....a.
+.aa......aa......aa......aa.
+...aaaaaa..........aaaaaa...
+............................

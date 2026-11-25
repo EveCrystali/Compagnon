@@ -1,0 +1,38 @@
+id: aureole
+slot: tete
+ancre: tete
+decalage: -12 -16
+duree: 220
+palette: a=#fff6cc b=#c9a227 c=#f5d76e
+images:
+......abbbbbbbbbbb......
+..bbbbbccccccccccbbbbb..
+.bbbccccc......cccccbbb.
+bbbccccc........cccccbbb
+.bbbccccc......cccccbbb.
+..bbbbbccccccccccbbbbb..
+......bbbbbbabbbbb......
+---
+......bbbbbbabbbbb......
+..bbbbbccccccccccbbbbb..
+.bbbccccc......cccccbbb.
+bbbccccc........cccccbbb
+.bbbccccc......cccccbbb.
+..bbbbbccccccccccbbbbb..
+......abbbbbbbbbbb......
+---
+......abbbbbbbbbbb......
+..bbbbbccccccccccbbbbb..
+.bbbccccc......cccccbbb.
+bbbccccc........cccccbbb
+.bbbccccc......cccccbbb.
+..bbbbbccccccccccbbbbb..
+......bbbbbbabbbbb......
+---
+......bbbbbbabbbbb......
+..bbbbbccccccccccbbbbb..
+.bbbccccc......cccccbbb.
+bbbccccc........cccccbbb
+.bbbccccc......cccccbbb.
+..bbbbbccccccccccbbbbb..
+......abbbbbbbbbbb......

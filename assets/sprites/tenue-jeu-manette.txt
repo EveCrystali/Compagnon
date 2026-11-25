@@ -1,0 +1,16 @@
+id: tenue-jeu-manette
+slot: main
+ancre: corps
+decalage: -10 4
+palette: a=#1c2128 b=#2d333b c=#adbac7 d=#768390 e=#6cb6ff f=#f5d76e g=#f69d50 h=#9b8cff
+images:
+.abbbbaaaaaaaabbbba.
+abbbbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbbbba
+bbbbcbbbdbbdbbbebbbb
+bbbcccbbbbbbbfbbbgbb
+bbbbcbbbbbbbbbbhbbbb
+bbbbbbbbbbbbbbbbbbbb
+abbbbbbaaaaaabbbbbba
+abbbbbba....abbbbbba
+.abbbba......abbbba.

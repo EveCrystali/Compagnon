@@ -1,0 +1,33 @@
+id: tenue-code-clavier
+slot: objet
+ancre: pieds
+decalage: -16 -4
+duree: 140
+palette: a=#1c2128 b=#3b4654 c=#f69d50 d=#adbac7
+images:
+.abbbbbbbbbbbbbbbbbbbbbbbbbba.
+.abbcbdbdbdbdbdbdbdbdbdbdbbba.
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbdbdbdbdbdbdbdbdbdbcbdbdbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbbdbdbdbdbdbdbdbcbdbdbbbbba
+bbbbbbbbbbddddddddddbbbbbbbbbb
+baaaaaaaaaaaaaaaaaaaaaaaaaaaab
+---
+.abbbbbbbbbbbbbbbbbbbbbbbbbba.
+.abbdbdbdbdbcbdbdbdbdbdbdbbba.
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbdbdbcbdbdbdbdbdbdbdbdbdbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbbcbdbdbdbdbdbdbdbdbdbbbbba
+bbbbbbbbbbddddddddddbbbbbbbbbb
+baaaaaaaaaaaaaaaaaaaaaaaaaaaab
+---
+.abbbbbbbbbbbbbbbbbbbbbbbbbba.
+.abbdbdbdbdbdbdbdbdbcbdbdbbba.
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbdbdbdbdbdbdbcbdbdbdbdbdbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbbdbdbdbdbcbdbdbdbdbdbbbbba
+bbbbbbbbbbddddddddddbbbbbbbbbb
+baaaaaaaaaaaaaaaaaaaaaaaaaaaab

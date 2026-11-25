@@ -33,6 +33,45 @@ public sealed class Pixels : FrameworkElement
         }
     }
 
+    // Motif et palette d'une image d'un sprite de la banque (assets/sprites) ; null s'il manque.
+    public static (int[,] Motif, Brush?[] Palette)? DeSprite(string id, double t = 0, bool miroir = false)
+    {
+        var s = Banque.Commune[id];
+        if (s is null) return null;
+        var g = Banque.Grille(s, t);
+        int h = g.GetLength(0), w = g.GetLength(1);
+        var couleurs = new List<uint>();
+        var m = new int[h, w];
+        for (int y = 0; y < h; y++)
+        for (int x = 0; x < w; x++)
+        {
+            uint c = g[y, miroir ? w - 1 - x : x];
+            if (c == 0) continue;
+            int i = couleurs.IndexOf(c);
+            if (i < 0)
+            {
+                couleurs.Add(c);
+                i = couleurs.Count - 1;
+            }
+            m[y, x] = i + 1;
+        }
+        var palette = new Brush?[couleurs.Count + 1];
+        for (int i = 0; i < couleurs.Count; i++) palette[i + 1] = Scene.Pinceau(couleurs[i]);
+        return (m, palette);
+    }
+
+    // Un objet de la banque (prise, plat, jeu…), à la taille de pixel voulue (Scene.PX : celle de Pilou).
+    public static Pixels? Sprite(string id, double taille = Scene.PX, double t = 0, bool miroir = false) =>
+        DeSprite(id, t, miroir) is { } d ? new Pixels(d.Motif, d.Palette, null, taille) : null;
+
+    // Image suivante d'un sprite animé (même taille, même palette si les couleurs n'ont pas bougé).
+    public void Changer(string id, double t, bool miroir = false)
+    {
+        if (DeSprite(id, t, miroir) is not { } d) return;
+        _palette = d.Palette;
+        Changer(d.Motif);
+    }
+
     public void Changer(int[,] motif)
     {
         _motif = motif;

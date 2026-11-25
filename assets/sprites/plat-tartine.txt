@@ -1,0 +1,20 @@
+id: plat-tartine
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7a4b26 b=#f6f8fa c=#ffc89a d=#6cb6ff e=#c9d1d9
+images:
+.......aaaaaaaa.......
+....aaabbbbbbbbaaa....
+...abbccccccbbbbbba...
+..abbbccccccddddbbba..
+.abbbbbbbbbbddddbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbbbbbba.
+.aeeeeeeeeeeeeeeeeeea.
+..aaaaaaaaaaaaaaaaaa..
+......................

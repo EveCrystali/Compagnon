@@ -1,0 +1,57 @@
+id: tenue-tableur-calculatrice
+slot: main
+ancre: main
+decalage: -2 -6
+duree: 700
+palette: a=#3b4654 b=#b4dbff c=#1f4f8a d=#f6f8fa e=#d9803a f=#f69d50
+images:
+aaaaaaaaaaaa
+abbbbbbbbbba
+abccbbbbbbba
+abccccccccba
+abbbbbbbbbba
+aaaaaaaaaaaa
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaffea
+aaddaddaffea
+aaaaaaaaaaaa
+aaaaaaaaaaaa
+---
+aaaaaaaaaaaa
+abbbbbbbbbba
+abccccbbbbba
+abccccccccba
+abbbbbbbbbba
+aaaaaaaaaaaa
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaffea
+aaddaddaffea
+aaaaaaaaaaaa
+aaaaaaaaaaaa
+---
+aaaaaaaaaaaa
+abbbbbbbbbba
+abccccccbbba
+abccccccccba
+abbbbbbbbbba
+aaaaaaaaaaaa
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaddea
+aaddaddaddea
+aaaaaaaaaaea
+aaddaddaffea
+aaddaddaffea
+aaaaaaaaaaaa
+aaaaaaaaaaaa

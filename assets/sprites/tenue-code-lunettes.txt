@@ -1,0 +1,16 @@
+id: tenue-code-lunettes
+slot: yeux
+ancre: yeux
+decalage: -15 -2
+palette: a=#1c2128 b=#b4dbff c=#f6f8fa d=#c9d1d9
+images:
+aaaaaaaaaaaaa....aaaaaaaaaaaaa
+aaaaaaaaaaaaa....aaaaaaaaaaaaa
+aabb.......aa.cc.aabb.......aa
+aab........aaaccaaab........aa
+aa.........aaadcaaa.........aa
+aa.........aaaccaaa.........aa
+aa.........aa.cc.aa.........aa
+aa.........aa....aa.........aa
+aaaaaaaaaaaaa....aaaaaaaaaaaaa
+aaaaaaaaaaaaa....aaaaaaaaaaaaa
