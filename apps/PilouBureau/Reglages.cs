@@ -42,6 +42,12 @@ public sealed class Reglages
     public string RetourDepuis { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
+    // Activités : Pilou regarde la fenêtre au premier plan (rien ne sort du PC) ; discrétion ; activités coupées.
+    public bool Activites { get; set; } = true;
+    public bool CacherPleinEcran { get; set; } = true;
+    public bool CacherPresentation { get; set; } = true;
+    public bool CacherVisio { get; set; } = true;
+    public List<string> ActivitesCoupees { get; set; } = new();
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 

@@ -132,6 +132,9 @@ public static class Telephone
         ["plats"] = p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
         ["inventes"] = p.Plats.Count(x => x.StartsWith("inv:")),
         ["recus"] = p.Recus.TakeLast(10).ToList(),
+        // Métiers (niveau par métier) et succès obtenus : pour un futur affichage sur le téléphone.
+        ["metiers"] = Metiers.Niveaux(p.Activites).Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value),
+        ["succes"] = p.Succes.ToList(),
     };
 
     // ---- Retour : ce que le téléphone a gagné (atelier : pêche, cuisine, jeux, caresses)

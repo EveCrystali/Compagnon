@@ -28,6 +28,12 @@ public sealed class Profil
     public EtatQuetes Quetes { get; set; } = new();
     // Stades d'évolution, niveaux déjà payés en po, migration des anciennes récompenses.
     public Evolution Evolution { get; set; } = new();
+    // Activités (compteurs seulement, jamais de titre de fenêtre) : secondes par activité, succès obtenus,
+    // réunions des 7 derniers jours (dates), présentations faites.
+    public Dictionary<string, long> Activites { get; set; } = new();
+    public List<string> Succes { get; set; } = new();
+    public List<DateTime> Reunions { get; set; } = new();
+    public int Presentations { get; set; }
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
