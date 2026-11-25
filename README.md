@@ -11,7 +11,7 @@ Deux morceaux :
 ## Installer (Windows)
 
 ```powershell
-claude plugin marketplace add EveCrystali/pilou-compagnon
+claude plugin marketplace add EveCrystali/Compagnon
 claude plugin install compagnon@pilou --scope user
 ```
 
