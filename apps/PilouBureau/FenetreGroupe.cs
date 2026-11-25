@@ -120,6 +120,7 @@ public sealed partial class FenetrePilou
                 {
                     bool change = false;
                     foreach (var c in compteurs) change |= memoire.Fusionner(c, moi);
+                    RecevoirSoinsGroupe(compteurs.Where(c => c.Appareil != moi));
                     if (dernier != "") memoire.Depuis = dernier;
                     if (change || dernier != "") memoire.Ecrire(_dossier);
                     if (!change) return;

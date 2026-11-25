@@ -61,6 +61,7 @@ public class CapturesTest {
                 essayer("neuf", () -> ecrans("neuf"));
                 appairer();
                 essayer("appaire", () -> ecrans("appaire"));
+                essayer("soins", this::soins);
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
@@ -96,6 +97,25 @@ public class CapturesTest {
                 + "\"appareils\":[{\"nom\":\"RTX4070Ti\",\"xp\":3100,\"t\":" + (t - 20_000) + "},{\"nom\":\"PC-TAGG\",\"xp\":500,\"t\":" + (t - 7_200_000) + "}]}";
         Prefs.de(ctx).edit().putString("code", "ABCDEFGHJKMNPQRS").putString("etat", etat).putLong("recu", t)
                 .putBoolean("bulle", true).commit();
+    }
+
+    // Soins : Pilou a un petit creux (icône près de lui), variante câlin au stade 2 ; puis tout comblé.
+    private void soins() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        long t = System.currentTimeMillis();
+        String etat = Prefs.de(ctx).getString("etat", "").replace("\"stade\":2,",
+                "\"stade\":2,\"soins\":{\"f\":12,\"p\":64,\"m\":55,\"s\":72,\"t\":" + t + ",\"r\":\"normal\",\"v\":0},\"formes\":{\"2\":\"calin\"},");
+        Prefs.de(ctx).edit().putString("etat", etat).commit();
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = c.get();
+        a.aller(Principale.ACCUEIL, false);
+        attendre();
+        ecran(a, "soins-accueil");
+        Gains.soin(ctx, "soin", "croquettes");
+        a.page(Principale.ACCUEIL).rafraichir();
+        attendre();
+        ecran(a, "soins-accueil-comble");
+        c.pause().stop().destroy();
     }
 
     private void ecrans(String etat) {

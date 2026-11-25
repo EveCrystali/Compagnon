@@ -135,6 +135,10 @@ public static class Telephone
         // Métiers (niveau par métier) et succès obtenus : pour un futur affichage sur le téléphone.
         ["metiers"] = Metiers.Niveaux(p.Activites).Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value),
         ["succes"] = p.Succes.ToList(),
+        // Soins : l'état calculé maintenant (le téléphone y ajoute ses propres soins pas encore reçus ici)
+        // et les variantes d'évolution.
+        ["soins"] = Soins.JsonEtat(Soins.Etat(p.Soins, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())),
+        ["formes"] = p.Evolution.Variantes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
     };
 
     // ---- Retour : ce que le téléphone a gagné (atelier : pêche, cuisine, jeux, caresses)
@@ -143,7 +147,8 @@ public static class Telephone
     public static string SujetRetour(string code) => "pilou-" + Convert.ToHexString(Hmac(code, "pilou-retour-v1")).ToLowerInvariant()[..24];
 
     public sealed record Gain(string Id, int Xp, IReadOnlyDictionary<string, int> Prises, IReadOnlyList<string> Plats, int Caresses,
-        int Jeux = 0, int Chasse = 0, IReadOnlyList<string>? Achats = null, IReadOnlyDictionary<string, string>? Equipe = null, double T = 0);
+        int Jeux = 0, int Chasse = 0, IReadOnlyList<string>? Achats = null, IReadOnlyDictionary<string, string>? Equipe = null, double T = 0,
+        IReadOnlyList<ActionSoin>? Soins = null);
 
     public static Gain? LireGain(string json)
     {
@@ -171,9 +176,10 @@ public static class Telephone
                 foreach (var x in eq.EnumerateObject())
                     if (Boutique.Slots.Contains(x.Name) && x.Value.ValueKind == JsonValueKind.String) equipe[x.Name] = x.Value.GetString() ?? "";
             double t = r.TryGetProperty("t", out var tv) && tv.ValueKind == JsonValueKind.Number ? tv.GetDouble() : 0;
+            var soins = r.TryGetProperty("soins", out var so) ? PilouBureau.Soins.LireActions(so, 50) : new List<ActionSoin>();
             // Bornes : un message vient du téléphone appairé (chiffré), mais on reste prudent.
             return new Gain(id.GetString()!, Math.Clamp(Entier("xp"), 0, 2000), prises, plats.Take(20).ToList(), Math.Clamp(Entier("caresses"), 0, 200),
-                Math.Clamp(Entier("jeux"), 0, 100), Math.Clamp(Entier("chasse"), 0, 10_000_000), achats.Distinct().Take(10).ToList(), equipe, t);
+                Math.Clamp(Entier("jeux"), 0, 100), Math.Clamp(Entier("chasse"), 0, 10_000_000), achats.Distinct().Take(10).ToList(), equipe, t, soins);
         }
         catch (JsonException)
         {
@@ -245,6 +251,11 @@ public static class Telephone
         S("caresse", g.Caresses);
         S("jeu", g.Jeux);
         S("chasse", g.Chasse);
+        // Soins faits sur le téléphone : ajoutés au journal commun (union, par identifiant).
+        int soins = 0;
+        foreach (var a in g.Soins ?? Array.Empty<ActionSoin>())
+            if (PilouBureau.Soins.Ajouter(p.Soins, a) && a.Type is "soin" or "nourrir" or "laver" or "calin") soins++;
+        S("soin", soins);
         var (po, xpQuetes) = Quetes.Appliquer(p, r.Recompenses);
 
         // Boutique : achats et équipement faits sur le téléphone (le PC reste l'arbitre du solde).

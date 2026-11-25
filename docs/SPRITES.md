@@ -71,4 +71,9 @@ Palette : bleus, oranges, argent, violets, jaunes, sables, neutres ; jamais d'op
 et chaque rareté ou état garde aussi un signe de forme. Un identifiant inconnu est ignoré sans erreur.
 
 Sur le PC : `PilouBureau.exe --instantane=<png> --essai=tenue:code` (ou `objet:cape`, `stade:3`,
-`evolution`) rend la fenêtre dans une image.
+`evolution`, `soins:faim|proprete|moral|terne|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
+une image.
+
+Soins : icônes de besoin `soin-faim`, `soin-proprete`, `soin-moral` ; en-cas `encas-*` ; `mousse`
+(toilette) et `rayonnant` (effets animés, 4 images) ; variantes `variante-calin-<stade>` et
+`variante-espiegle-<stade>` (visage), avec `-tete` ; teinte `terne` (Pilou négligé).

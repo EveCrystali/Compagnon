@@ -34,6 +34,11 @@ final class PageAccueil extends Page {
     private TextView titreQuetes;
     private LinearLayout quetes;
     private long derniereCaresse;
+    // Soins : une petite icône près de Pilou seulement quand un besoin baisse (un toucher la comble), et
+    // « Prendre soin de Pilou » qui comble tout.
+    private final TextView besoin;
+    private String besoinMontre = "";
+    private long mousseJusque;
 
     PageAccueil(Principale a) {
         super(a);
@@ -55,6 +60,11 @@ final class PageAccueil extends Page {
         coeur = Ui.texte(a, "♥", 22, p.orange, true);
         coeur.setAlpha(0);
         scene.addView(coeur, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        besoin = Ui.texte(a, "", 24, p.orange, true);
+        besoin.setPadding(Ui.dp(a, 10), Ui.dp(a, 6), Ui.dp(a, 10), Ui.dp(a, 6));
+        besoin.setVisibility(View.GONE);
+        besoin.setOnClickListener(v -> combler(besoinMontre));
+        scene.addView(besoin, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.END | Gravity.TOP));
         heros.addView(scene, Ui.large());
         pilou.setOnClickListener(v -> caresser());
         pilou.setContentDescription("Pilou : toucher pour le caresser");
@@ -69,6 +79,11 @@ final class PageAccueil extends Page {
         xp.setGravity(Gravity.CENTER_HORIZONTAL);
         xp.setPadding(0, Ui.dp(a, 6), 0, 0);
         heros.addView(xp, Ui.large());
+        android.widget.Button soigner = Ui.bouton(a, "♥ Prendre soin de Pilou", false, v -> combler("tout"));
+        LinearLayout.LayoutParams ls = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ls.topMargin = Ui.dp(a, 10);
+        ls.gravity = Gravity.CENTER_HORIZONTAL;
+        heros.addView(soigner, ls);
         etatPc = Ui.puceTexte(a, "", p.doux);
         LinearLayout.LayoutParams le = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         le.topMargin = Ui.dp(a, 12);
@@ -137,6 +152,59 @@ final class PageAccueil extends Page {
         }
     }
 
+    // Un toucher : ce besoin-là est comblé (« tout » : repas, toilette et câlin d'un coup). Il part au PC.
+    private void combler(String quoi) {
+        long t = SystemClock.uptimeMillis();
+        Soins.EtatSoins avant = Gains.soins(app, Prefs.etat(app), System.currentTimeMillis());
+        switch (quoi) {
+            case Soins.FAIM:
+                Gains.soin(app, "nourrir", "croquettes");
+                pilou.jouer("fete", 1400);
+                break;
+            case Soins.PROPRETE:
+                Gains.soin(app, "laver", "");
+                mousseJusque = t + 2000;
+                break;
+            case Soins.MORAL:
+                Gains.soin(app, "calin", "");
+                pilou.jouer("caresse", 2400);
+                break;
+            default:
+                Gains.soin(app, "soin", avant.faim < 80 ? "croquettes" : "");
+                if (avant.proprete < 80) mousseJusque = t + 2000;
+                pilou.jouer("caresse", 2400);
+                break;
+        }
+        coeur.setText(quoi.equals("tout") ? "♥" : Soins.signe(quoi));
+        coeur.setAlpha(1);
+        coeur.setTranslationY(0);
+        coeur.animate().alpha(0).translationY(-Ui.dp(app, 36)).setDuration(900).start();
+        rafraichir();
+        if (mousseJusque > t) pilou.postDelayed(this::rafraichir, 2100);
+    }
+
+    private void soins(Etat e, int stade, long maintenant) {
+        Soins.EtatSoins s = Gains.soins(app, e, maintenant);
+        java.util.List<String> objets = new java.util.ArrayList<>();
+        String v = e.formes.get(stade);
+        if (stade >= 2 && v != null) {
+            objets.add("variante-" + v + "-" + stade);
+            objets.add("variante-" + v + "-" + stade + "-tete");
+        }
+        if (Soins.rayonnant(s)) objets.add("rayonnant");
+        if (SystemClock.uptimeMillis() < mousseJusque) objets.add("mousse");
+        pilou.soins(objets, Soins.terne(s) ? "terne" : "");
+        java.util.List<String> manques = Soins.manques(s);
+        String b = manques.isEmpty() ? "" : manques.get(0);
+        if (b.equals(besoinMontre)) return;
+        besoinMontre = b;
+        besoin.setVisibility(b.isEmpty() ? View.GONE : View.VISIBLE);
+        besoin.setText(b.isEmpty() ? "" : Soins.signe(b));
+        besoin.setContentDescription(b.equals(Soins.FAIM) ? "Pilou a un petit creux : toucher pour le nourrir"
+                : b.equals(Soins.PROPRETE) ? "Pilou aimerait une toilette : toucher pour le laver"
+                : "Pilou a besoin d'un câlin : toucher pour un câlin");
+    }
+
     @Override
     void rafraichir() {
         Ui.Palette p = Ui.p(app);
@@ -157,6 +225,7 @@ final class PageAccueil extends Page {
         if (stadeVu > 0 && stade > stadeVu) pilou.evoluer(stade);
         else pilou.stade(stade);
         stadeVu = stade;
+        soins(e, stade, maintenant);
         niveau.setText("Niveau " + n + " · " + Butin.titre(n));
         barre.part((total - bas) / (float) Math.max(1, haut - bas));
         int attente = Gains.enAttente(app);

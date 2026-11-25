@@ -44,6 +44,10 @@ cornes-viking
 couronne-fleurs
 echarpe
 eclaboussure
+encas-croquettes
+encas-gateau
+encas-pomme
+encas-soupe
 etincelle-alerte
 etincelle-coeur
 etincelle-dort
@@ -60,6 +64,7 @@ marmite
 masque-plongee
 medaille
 monocle
+mousse
 oeil-cligne
 oeil-concentre
 oeil-content
@@ -116,6 +121,10 @@ prise-raie
 prise-saumon
 prise-spirale
 prise-truite
+rayonnant
+soin-faim
+soin-moral
+soin-proprete
 tasse-cafe
 tenue-code-clavier
 tenue-code-lunettes
@@ -141,4 +150,16 @@ tenue-visio-micro
 trainee-coeurs
 trainee-notes
 vapeur
+variante-calin-2
+variante-calin-2-tete
+variante-calin-3
+variante-calin-3-tete
+variante-calin-4
+variante-calin-4-tete
+variante-espiegle-2
+variante-espiegle-2-tete
+variante-espiegle-3
+variante-espiegle-3-tete
+variante-espiegle-4
+variante-espiegle-4-tete
 vie

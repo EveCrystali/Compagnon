@@ -58,6 +58,7 @@ public static class Quetes
         new("cuisine:nouveau", "Découvre {0} nouveau{x} plat{s}", Mesure.Somme, [], [1, 3], [5, 8], true),
         new("jeu", "Gagne {0} petit{s} jeu{x}", Mesure.Somme, [2, 4], [10, 15], [], true),
         new("caresse", "Caresse Pilou {0} fois", Mesure.Somme, [3, 6], [], [], true),
+        new("soin", "Prends soin de Pilou {0} fois", Mesure.Somme, [], [2, 4], [], true),
         new("presence", "Passe {0} min avec Pilou", Mesure.Somme, [60, 180], [600, 1200], [2400, 3600], true, 30),
         new("chasse", "Atteins {0} points à Chasse aux bugs", Mesure.Max, [800, 2000], [3000, 6000], [], false, 100),
         new("activite:code", "Code pendant {0} min", Mesure.Somme, [30, 120], [300, 600], [1500, 2400], false, 15),

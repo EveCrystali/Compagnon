@@ -39,6 +39,10 @@ public static class Boutique
         yield return new Article(CanneDoree, "Canne dorée (plus de prises légendaires)", Bonus, 500, 30, Rarete.Legendaire, true);
         yield return new Article(MarmiteCuivre, "Marmite en cuivre (moins de plats brûlés)", Bonus, 520, 35, Rarete.Legendaire, true);
         yield return new Article(PierreCalme, "Pierre de calme (retient une évolution)", Consommable, 150, 9, Rarete.PeuCommun, true);
+        // En-cas (soins) : Pilou mange d'abord le meilleur ; sans en-cas, il a toujours des croquettes gratuites.
+        yield return new Article("pomme", "Pomme dorée (+ moral)", Consommable, 60, 1, Rarete.Commun, true);
+        yield return new Article("soupe", "Soupe chaude (+ moral)", Consommable, 80, 2, Rarete.PeuCommun, true);
+        yield return new Article("gateau", "Gâteau (+ moral)", Consommable, 120, 3, Rarete.PeuCommun, true);
     }
 
     private static Rarete Rang(int niveau) => niveau switch

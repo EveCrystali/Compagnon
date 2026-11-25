@@ -48,6 +48,7 @@ public class LancementTest {
                 + "\"sessions\":[{\"id\":\"a\",\"source\":\"claude\",\"libelle\":\"api\",\"etat\":\"travail\",\"depuis\":" + (t - 5000) + ",\"outil\":\"Bash\"}],"
                 + "\"xp\":300,\"accessoire\":\"feuille\",\"carnet\":[\"truite\"],\"plats\":[],\"recus\":[],"
                 + "\"po\":240,\"objets\":[\"echarpe\"],\"porte\":{\"cou\":\"echarpe\"},\"offres\":[\"cape\",\"monocle\",\"aura\",\"parapluie\"],"
+                + "\"soins\":{\"f\":8,\"p\":5,\"m\":40,\"s\":30,\"t\":" + (t - 3_600_000) + ",\"r\":\"doux\",\"v\":0},\"formes\":{\"2\":\"espiegle\",\"x\":\"y\"},"
                 + "\"promo\":\"cape\",\"serie\":2,\"quetes\":[[0,\"Pêche 3 prises\",1,3,30,0],[1,\"Cuisine 5 plats\",5,5,120,1]]}";
         Prefs.de(ctx).edit()
                 .putString("code", "ABCDEFGHJKMNPQRS")

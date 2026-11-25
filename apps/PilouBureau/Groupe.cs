@@ -23,8 +23,12 @@ public static class Groupe
         string Appareil, string Nom, string Machine, int Xp, int XpTelephone, double T,
         IReadOnlyList<string> Prises, IReadOnlyList<string> Plats,
         int PoGagnes = 0, int PoDepenses = 0, int PoDepTel = 0,
-        IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null, int NiveauPaye = 0, int NiveauAcquis = 0)
+        IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null, int NiveauPaye = 0, int NiveauAcquis = 0,
+        EtatSoins? SoinsBase = null, string SoinsOrigine = "", IReadOnlyList<ActionSoin>? SoinsActions = null,
+        IReadOnlyDictionary<int, string>? Variantes = null)
     {
+        public IReadOnlyList<ActionSoin> Actions => SoinsActions ?? Array.Empty<ActionSoin>();
+        public IReadOnlyDictionary<int, string> Formes => Variantes ?? new Dictionary<int, string>();
         public IReadOnlyList<string> Objets => Inventaire ?? Array.Empty<string>();
         public IReadOnlyDictionary<string, Port> Porte => Equipe ?? new Dictionary<string, Port>();
     }
@@ -96,11 +100,18 @@ public static class Groupe
                 Equipe = Bourse.FusionEquipe(new[] { avant.Porte, c.Porte }),
                 NiveauPaye = Math.Max(avant.NiveauPaye, c.NiveauPaye),
                 NiveauAcquis = Math.Max(avant.NiveauAcquis, c.NiveauAcquis),
+                SoinsBase = c.SoinsBase ?? avant.SoinsBase,
+                SoinsOrigine = c.SoinsBase is not null ? c.SoinsOrigine : avant.SoinsOrigine,
+                SoinsActions = avant.Actions.Concat(c.Actions).GroupBy(a => a.Id).Select(g => g.First())
+                    .OrderByDescending(a => a.T).Take(40).ToList(),
+                Variantes = FusionVariantes(new[] { avant.Formes, c.Formes }),
             };
             bool change = fusion.Xp != avant.Xp || fusion.XpTelephone != avant.XpTelephone || fusion.T != avant.T
                           || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
                           || fusion.Objets.Count != avant.Objets.Count || fusion.NiveauAcquis != avant.NiveauAcquis
-                          || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom;
+                          || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom
+                          || fusion.Actions.Count != avant.Actions.Count || fusion.Formes.Count != avant.Formes.Count
+                          || (fusion.SoinsBase?.T ?? 0) != (avant.SoinsBase?.T ?? 0);
             Autres[c.Appareil] = fusion;
             return change;
         }
@@ -114,16 +125,45 @@ public static class Groupe
 
     // ---- Messages
 
+    // Variantes d'évolution : la première décision l'emporte ; deux décisions différentes au même stade
+    // (deux PC en même temps) se départagent par l'ordre alphabétique, partout pareil.
+    public static Dictionary<int, string> FusionVariantes(IEnumerable<IReadOnlyDictionary<int, string>> toutes)
+    {
+        var r = new Dictionary<int, string>();
+        foreach (var v in toutes)
+            foreach (var (stade, forme) in v)
+                if (forme is "calin" or "espiegle" && (!r.TryGetValue(stade, out var avant) || string.CompareOrdinal(forme, avant) < 0))
+                    r[stade] = forme;
+        return r;
+    }
+
     public static Compteur Moi(Profil p, string appareil, string nom) => new(
         appareil, nom, p.Machine, p.Xp, p.XpTelephone, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
         p.Carnet.Where(kv => kv.Value > 0).Select(kv => kv.Key).OrderBy(x => x).ToList(),
         p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
         p.Bourse.PoGagnes, p.Bourse.PoDepenses, p.Bourse.PoDepTelephone,
         p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe), p.Evolution.NiveauPaye,
-        p.Evolution.NiveauAcquis);
+        p.Evolution.NiveauAcquis, p.Soins.Base, p.Soins.Origine, Soins.Recentes(p.Soins, 12), new Dictionary<int, string>(p.Evolution.Variantes));
 
-    public static string Json(Compteur c) => JsonSerializer.Serialize(new Dictionary<string, object>
+    // Un message ntfy reste sous 4 096 octets une fois chiffré : on retire des actions de soin récentes au besoin.
+    public static string Json(Compteur c)
     {
+        var actions = c.Actions.ToList();
+        while (true)
+        {
+            var json = JsonBrut(c with { SoinsActions = actions });
+            if (json.Length <= 2600 || actions.Count == 0) return json;
+            actions.RemoveAt(actions.Count - 1);
+        }
+    }
+
+    private static string JsonBrut(Compteur c) => JsonSerializer.Serialize(new Dictionary<string, object>
+    {
+        ["soins"] = c.SoinsBase is null ? new Dictionary<string, object>() : new Dictionary<string, object>
+        {
+            ["base"] = Soins.JsonEtat(c.SoinsBase), ["o"] = c.SoinsOrigine, ["a"] = c.Actions.Select(Soins.JsonAction).ToList(),
+        },
+        ["formes"] = c.Formes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
         ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = c.Objets, ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
@@ -155,8 +195,25 @@ public static class Groupe
                     double te = x.Value.TryGetProperty("t", out var tv2) && tv2.ValueKind == JsonValueKind.Number ? tv2.GetDouble() : 0;
                     if (id == "" || Boutique.Trouver(id)?.Slot == x.Name) equipe[x.Name] = new Port(id, te);
                 }
+            EtatSoins? soinsBase = null;
+            string origine = "";
+            var actions = new List<ActionSoin>();
+            if (r.TryGetProperty("soins", out var so) && so.ValueKind == JsonValueKind.Object)
+            {
+                if (so.TryGetProperty("base", out var sb)) soinsBase = Soins.LireEtat(sb);
+                if (so.TryGetProperty("o", out var sorig) && sorig.ValueKind == JsonValueKind.String) origine = sorig.GetString() ?? "";
+                if (so.TryGetProperty("a", out var sa)) actions = Soins.LireActions(sa, 40);
+                if (origine.Length > 64) origine = "";
+            }
+            var formes = new Dictionary<int, string>();
+            if (r.TryGetProperty("formes", out var fo) && fo.ValueKind == JsonValueKind.Object)
+                foreach (var x in fo.EnumerateObject())
+                    if (int.TryParse(x.Name, out var st) && st is >= 2 and <= 4 && x.Value.ValueKind == JsonValueKind.String
+                        && x.Value.GetString() is "calin" or "espiegle")
+                        formes[st] = x.Value.GetString()!;
             return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
-                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")));
+                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
+                soinsBase, origine, actions, formes);
         }
         catch (JsonException)
         {

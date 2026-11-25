@@ -57,6 +57,9 @@ public sealed class Evolution
     public int Migre { get; set; }
     // Plus haut niveau jamais atteint (ancienne courbe comprise) : le niveau affiché ne descend jamais dessous.
     public int NiveauAcquis { get; set; }
+    // Variante de chaque stade (2 à 4), choisie au passage d'après la qualité des soins : « calin » ou
+    // « espiegle ». Partagée dans le groupe ; la première décision l'emporte.
+    public Dictionary<int, string> Variantes { get; set; } = new();
 
     public int Affiche => StadeAffiche >= 1 && StadeAffiche <= StadeAtteint ? StadeAffiche : Math.Max(1, StadeAtteint);
 

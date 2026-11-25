@@ -1,0 +1,18 @@
+# en-cas : gâteau
+id: encas-gateau
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#f69d50 c=#ffd8b0 d=#f6f8fa e=#c4a77d f=#ffc89a
+images:
+.....aa.....
+....abca....
+..aaabbaaa..
+.adddddddda.
+adddddddddda
+adddddddddda
+aeeeeeeeeeea
+affffffffffa
+aeeeeeeeeeea
+aeeeeeeeeeea
+.aaaaaaaaaa.

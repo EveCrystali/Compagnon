@@ -1,0 +1,15 @@
+# en-cas : croquettes
+id: encas-croquettes
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#a86f3c c=#e8d5b0 d=#f6f8fa e=#ffffff
+images:
+......a..a..
+...a.abaaba.
+..ababcbbcba
+.abcbbbabba.
+aadbbcbbcbaa
+ddeeebeebedd
+dddddddddddd
+aaddddddddaa

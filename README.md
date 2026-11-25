@@ -96,6 +96,30 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
 
+## Soins
+
+Une couche légère et passive : Pilou reste d'abord un compagnon qu'on regarde. Trois besoins baissent
+lentement — **faim** (vide en un jour et demi environ), **propreté** (deux jours), **moral** (un jour
+un quart) — et rien ne s'affiche tant que tout va bien : ni jauge, ni bulle qui réclame.
+
+- Sous 30 %, une seule petite icône apparaît près de sa tête, de forme différente pour chaque besoin :
+  ◒ un bol (faim), ✦ une étincelle (propreté), ♥ un cœur (moral). **Un clic dessus la comble** :
+  nourrir prend le meilleur en-cas acheté (gâteau, soupe, pomme dorée ; ils remontent aussi un peu le
+  moral), sinon des croquettes gratuites ; laver, c'est deux secondes de mousse ; le moral, un câlin.
+- **♥ Prendre soin de Pilou** (clic droit, et sur l'Accueil du téléphone) comble tout d'un coup.
+  Les caresses et les petits jeux remontent aussi le moral.
+- Négligé, il a juste l'air **terne** et un peu endormi — aucune punition, rien de perdu. Bien soigné
+  (les trois besoins au-dessus de 70 %), il **rayonne** : XP des jeux et pièces des quêtes × 1,2.
+- Au passage d'un stade (2 à 4), la qualité des soins des derniers jours choisit une **variante** :
+  *câlin* (joues roses, petit cœur) ou *espiègle* (tache de rousseur en étoile, épi rebelle). Elle reste
+  acquise et se partage entre appareils.
+- Clic droit → *Soins* : l'état en chiffres (sur demande seulement), le **rythme** (doux, normal,
+  exigeant) et le mode **vacances** (tout est figé). Une quête « Prends soin de Pilou » peut tomber.
+- Partagé : chaque soin est une action datée avec un identifiant ; tous les appareils (dossier commun,
+  groupe, téléphone) font l'union des actions et calculent le même état, qui ne dépend que d'une base,
+  de ces actions et du temps passé. Les actions de plus de deux jours sont repliées dans la base, à une
+  heure ronde. `apps/PilouBureau/Soins.cs`.
+
 ## Activités
 
 Pilou devine ce que tu fais d'après la fenêtre au premier plan, et en tire une tenue :

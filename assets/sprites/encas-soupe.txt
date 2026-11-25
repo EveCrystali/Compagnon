@@ -1,0 +1,18 @@
+# en-cas : soupe chaude
+id: encas-soupe
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1f4f8a b=#c9d1d9 c=#e8d5b0 d=#4a8fdc e=#6cb6ff
+images:
+.....a......
+....aba.a...
+...aba.aba..
+....a.aba...
+..aaaaaaaa..
+aaccccccccaa
+dddddddddddd
+aeeeeeeeeeea
+aeeeeeeeeeea
+.aaeeeeeeaa.
+...aaaaaa...

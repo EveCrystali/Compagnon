@@ -34,6 +34,8 @@ public sealed class Profil
     public List<string> Succes { get; set; } = new();
     public List<DateTime> Reunions { get; set; } = new();
     public int Presentations { get; set; }
+    // Soins (faim, propreté, moral) : base et journal d'actions, partagés avec le groupe (Soins.cs).
+    public CarnetSoins Soins { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
