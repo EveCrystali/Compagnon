@@ -77,8 +77,9 @@ tasks.register('preparerRobolectric', Copy) {
 }
 
 dependencies {
-    // Même version que celle qu'attend Robolectric 4.14.1 pour sdk=34 (robolectric.properties).
+    // Versions qu'attend Robolectric 4.14.1 (sdk 34 de robolectric.properties, et 35, la cible de l'app).
     robolectricRuntime 'org.robolectric:android-all-instrumented:14-robolectric-10818077-i7'
+    robolectricRuntime 'org.robolectric:android-all-instrumented:15-robolectric-12650502-i7'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.json:json:20240303'
     testImplementation 'org.robolectric:robolectric:4.14.1'
