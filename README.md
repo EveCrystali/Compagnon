@@ -38,9 +38,10 @@ claude plugin install compagnon@pilou --scope user
 
 ## Sur Android
 
-`Pilou.apk` (dans la release) : notification permanente avec l'état des sessions, widget d'écran
-d'accueil, Pilou flottant par-dessus les applis, et l'**atelier** (pêcher, cuisiner, jouer, carnet,
-recettes, récompenses) dont les gains sont crédités au PC. Appairage par QR code depuis le PC (clic
+`Pilou.apk` (dans la release) : une vraie app à quatre onglets — **Accueil** (Pilou, niveau, état du
+PC, sessions), **Jouer** (le jeu de tir **Chasse aux bugs**, pêche, cuisine, petits jeux),
+**Collection** (carnet, recettes, récompenses, style) et **Réglages** — plus la notification
+permanente, le widget et Pilou flottant par-dessus les applis. Les gains des jeux sont crédités au PC. Appairage par QR code depuis le PC (clic
 droit → Intégrations → Android), échanges chiffrés de bout en bout. Détails et tableau de ce qui est
 sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
