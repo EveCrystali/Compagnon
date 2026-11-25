@@ -27,7 +27,7 @@ final class PageReglages extends Page {
     private final TextView statut, dernier, plantage;
     private final EditText champCode, champRelais;
     private final Switch bulle;
-    private final Button cacher, copierPlantage, effacerPlantage, autoriser;
+    private final Button cacher, ramener, copierPlantage, effacerPlantage, autoriser;
     private final PilouVue apercu;
     private final LinearLayout blocPlantage;
 
@@ -122,7 +122,16 @@ final class PageReglages extends Page {
             Veille.cacher(a, !cache);
             v.postDelayed(this::rafraichir, 300);
         });
-        actions.addView(cacher, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        LinearLayout.LayoutParams lc = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        lc.rightMargin = Ui.dp(a, 8);
+        actions.addView(cacher, lc);
+        // Ramener : Pilou réapparaît, replacé dans l'écran (s'il était perdu hors du bord).
+        ramener = Ui.bouton(a, "Ramener Pilou", false, v -> {
+            Veille.cacher(a, false);
+            Toast.makeText(a, "Pilou revient à l'écran.", Toast.LENGTH_SHORT).show();
+            v.postDelayed(this::rafraichir, 300);
+        });
+        actions.addView(ramener, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         c.addView(actions, Ui.large());
         corps.addView(c, Ui.large());
 
@@ -255,6 +264,7 @@ final class PageReglages extends Page {
         boolean cache = Veille.cache(app);
         cacher.setText(cache ? "Montrer Pilou maintenant" : "Cacher Pilou 10 min");
         cacher.setEnabled(Prefs.bulle(app));
+        ramener.setEnabled(Prefs.bulle(app) && Settings.canDrawOverlays(app));
         autoriser.setVisibility(app.notificationsPermises() ? View.GONE : View.VISIBLE);
         dernier.setText("Dernier message du relais : " + (recu == 0 ? "aucun" : "il y a " + Etat.duree(maintenant - recu)));
         String pl = Journal.dernier(app);
