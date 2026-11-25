@@ -28,6 +28,13 @@ public class LancementTest {
     }
 
     @Test
+    public void autresEcrans() {
+        Robolectric.buildActivity(ActiviteChasse.class).setup().pause().stop().destroy();
+        Robolectric.buildActivity(Atelier.class).setup().pause().stop().destroy();
+        Robolectric.buildActivity(Installation.class).setup().pause().stop().destroy();
+    }
+
+    @Test
     public void appNeuve() {
         parcourir();
     }
