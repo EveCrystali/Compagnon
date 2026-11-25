@@ -161,7 +161,7 @@ public sealed partial class FenetrePilou
         }
         else if (t < _mordA + FenetreMorsure)
         {
-            FinPeche(Butin.Tirer(_hasard, Niveau, seul: false), false, t);
+            FinPeche(Butin.Tirer(_hasard, Niveau, seul: false, canneDoree: Possede(PilouBureau.Boutique.CanneDoree)), false, t);
         }
     }
 
@@ -245,7 +245,7 @@ public sealed partial class FenetrePilou
             Canvas.SetTop(_alerte, _posBouchon.Y - 30 - ((int)(t / 120) % 2) * 4);
         }
         // Personne n'a ferré à temps : Pilou tente le coup tout seul.
-        if (t >= _mordA + FenetreMorsure) FinPeche(Butin.Tirer(_hasard, Niveau, seul: true), true, t);
+        if (t >= _mordA + FenetreMorsure) FinPeche(Butin.Tirer(_hasard, Niveau, seul: true, canneDoree: Possede(PilouBureau.Boutique.CanneDoree)), true, t);
         AnimerVolutes(t);
     }
 
@@ -312,7 +312,7 @@ public sealed partial class FenetrePilou
     private void Servir(double t)
     {
         _resultat = true;
-        var plat = Butin.Cuisiner(_hasard, Niveau, _profil.Stock, _profil.Plats, _remue);
+        var plat = Butin.Cuisiner(_hasard, Niveau, _profil.Stock, _profil.Plats, _remue, Possede(PilouBureau.Boutique.MarmiteCuivre));
         if (plat is null)
         {
             Arreter("");
@@ -407,11 +407,14 @@ public sealed partial class FenetrePilou
 
     private IEnumerable<object> MenusPeche()
     {
-        yield return Entree("Pêcher", () => Demarrer(Jeu.Peche, Maintenant));
+        var pecher = Entree(Acces.JeuOuvert("peche", Niveau) ? "Pêcher" : $"Pêcher — niveau {Acces.NiveauJeu("peche")}", () => Demarrer(Jeu.Peche, Maintenant));
+        pecher.IsEnabled = Acces.JeuOuvert("peche", Niveau);
+        yield return pecher;
         int ingredients = _profil.Stock.Where(kv => Butin.Trouver(kv.Key) is { Comestible: true }).Sum(kv => kv.Value);
         var cuisiner = Entree(ingredients > 0 ? $"Cuisiner ({ingredients} ingrédient{(ingredients > 1 ? "s" : "")})" : "Cuisiner (pêche d'abord)",
             () => Demarrer(Jeu.Cuisine, Maintenant));
-        cuisiner.IsEnabled = ingredients > 0;
+        cuisiner.IsEnabled = ingredients > 0 && Acces.JeuOuvert("cuisine", Niveau);
+        if (!Acces.JeuOuvert("cuisine", Niveau)) cuisiner.Header = $"Cuisiner — niveau {Acces.NiveauJeu("cuisine")}";
         yield return cuisiner;
 
         int vues = Butin.Prises.Count(p => _profil.Carnet.ContainsKey(p.Id));

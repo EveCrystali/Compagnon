@@ -39,9 +39,10 @@ final class PageJouer extends Page {
         record = Ui.texte(a, "", 13, p.bleu, true);
         record.setPadding(0, Ui.dp(a, 8), 0, Ui.dp(a, 12));
         infos.addView(record);
-        infos.addView(Ui.bouton(a, "Jouer", true, v -> a.startActivity(new Intent(a, ActiviteChasse.class))), Ui.large());
+        boutonChasse = Ui.bouton(a, "Jouer", true, v -> ouvrirChasse());
+        infos.addView(boutonChasse, Ui.large());
         vedette.addView(infos, Ui.large());
-        vedette.setOnClickListener(v -> a.startActivity(new Intent(a, ActiviteChasse.class)));
+        vedette.setOnClickListener(v -> ouvrirChasse());
         corps.addView(vedette, Ui.large(a, 6));
 
         corps.addView(Ui.titreSection(a, "L'atelier de Pilou"));
@@ -72,8 +73,14 @@ final class PageJouer extends Page {
             c.setBackground(Ui.touchable(a, Ui.arrondi(a, p.surface, 18, p.bord), 18));
             c.setOnClickListener(v -> {
                 if (jeu.isEmpty()) a.aller(Principale.COLLECTION, true);
+                else if (!Acces.jeuOuvert(jeu, niveau())) verrou(jeu);
                 else a.startActivity(new Intent(a, Atelier.class).putExtra(Atelier.EXTRA_JEU, jeu));
             });
+            if (!jeu.isEmpty()) {
+                TextView v = Ui.texte(a, "", 12, p.orange, true);
+                c.addView(v);
+                verrous.put(jeu, new View[]{c, v});
+            }
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
             if (i % 2 == 0) l.rightMargin = Ui.dp(a, 6);
             else l.leftMargin = Ui.dp(a, 6);
@@ -84,10 +91,32 @@ final class PageJouer extends Page {
         corps.addView(note);
     }
 
+    private final java.util.Map<String, View[]> verrous = new java.util.HashMap<>();
+    private android.widget.Button boutonChasse;
+
+    private int niveau() {
+        return Gains.niveau(app, Prefs.etat(app));
+    }
+
+    private void verrou(String jeu) {
+        android.widget.Toast.makeText(app, Acces.nomJeu(jeu) + " s'ouvre au niveau " + Acces.niveauJeu(jeu), android.widget.Toast.LENGTH_SHORT).show();
+    }
+
+    private void ouvrirChasse() {
+        if (!Acces.jeuOuvert("chasse", niveau())) verrou("chasse");
+        else app.startActivity(new Intent(app, ActiviteChasse.class));
+    }
+
     @Override
     void rafraichir() {
         Etat e = Prefs.etat(app);
-        int total = Gains.xp(app, e), n = Butin.niveau(total);
+        int total = Gains.xp(app, e), n = Gains.niveau(app, e);
+        for (java.util.Map.Entry<String, View[]> v : verrous.entrySet()) {
+            boolean ouvert = Acces.jeuOuvert(v.getKey(), n);
+            v.getValue()[0].setAlpha(ouvert ? 1f : 0.55f);
+            ((TextView) v.getValue()[1]).setText(ouvert ? "" : "◇ niveau " + Acces.niveauJeu(v.getKey()));
+        }
+        if (boutonChasse != null) boutonChasse.setText(Acces.jeuOuvert("chasse", n) ? "Jouer" : "Niveau " + Acces.niveauJeu("chasse"));
         resume.setText("Niveau " + n + " · " + total + " xp · ce que tu gagnes ici monte au PC");
         int meilleur = Prefs.meilleurChasse(app);
         record.setText(meilleur > 0 ? "Record : " + meilleur : "Pas encore de record");

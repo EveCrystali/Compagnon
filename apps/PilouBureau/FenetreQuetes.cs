@@ -129,10 +129,14 @@ public sealed partial class FenetrePilou
 
     internal int NiveauActuel => Niveau;
 
+    internal string AccessoireChoisi => _reglages.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : Recompenses.IdAccessoire(_reglages.Accessoire);
+
+    internal int Reserve(string id) => _profil.Bourse.Consommables.GetValueOrDefault(id);
+
     internal string? Acheter(string id)
     {
         var (solde, inventaire, _) = Bourse();
-        if (inventaire.Contains(id)) return "déjà dans l'inventaire";
+        if (inventaire.Contains(id) && PilouBureau.Boutique.Trouver(id)?.Slot != PilouBureau.Boutique.Consommable) return "déjà dans l'inventaire";
         var refus = PilouBureau.Boutique.Acheter(_profil.Bourse, id, Niveau, solde, DateOnly.FromDateTime(DateTime.Now));
         if (refus is not null) return refus;
         _profil.Ecrire(DossierPartage);
@@ -143,6 +147,14 @@ public sealed partial class FenetrePilou
 
     internal void Equiper(string slot, string id)
     {
+        // Accessoire historique : porté via les réglages (« selon la saison » reste possible).
+        if (slot == PilouBureau.Boutique.Accessoire)
+        {
+            var a = Enum.GetValues<Accessoire>().FirstOrDefault(x => Recompenses.IdAccessoire(x) == id);
+            _reglages.Accessoire = id == "" ? Accessoire.Aucun : a;
+            _reglages.Ecrire(_dossier);
+            return;
+        }
         // Un objet acheté sur un autre appareil du groupe est aussi à nous.
         if (id != "" && !_profil.Bourse.Inventaire.Contains(id) && Bourse().Inventaire.Contains(id)) _profil.Bourse.Inventaire.Add(id);
         if (!PilouBureau.Boutique.Equiper(_profil.Bourse, slot, id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
@@ -199,7 +211,7 @@ internal sealed class FenetreBoutique : Window
 
         Section("◆ Offres du jour");
         foreach (var a in PilouBureau.Boutique.OffresDuJour(jour)) Ligne(a, solde, inventaire, equipe, jour, niveau);
-        foreach (var slot in PilouBureau.Boutique.Slots)
+        foreach (var slot in PilouBureau.Boutique.Rayons)
         {
             var articles = PilouBureau.Boutique.Catalogue.Where(a => a.Slot == slot).ToList();
             Section($"{PilouBureau.Boutique.Signe(slot)} {PilouBureau.Boutique.NomSlot(slot)}");
@@ -212,14 +224,21 @@ internal sealed class FenetreBoutique : Window
 
     private void Ligne(Article a, int solde, List<string> inventaire, Dictionary<string, Port> equipe, DateOnly jour, int niveau)
     {
-        bool possede = inventaire.Contains(a.Id);
-        bool porte = equipe.TryGetValue(a.Slot, out var p) && p.Id == a.Id;
+        bool consommable = a.Slot == PilouBureau.Boutique.Consommable, bonus = a.Slot == PilouBureau.Boutique.Bonus;
+        bool possede = !consommable && inventaire.Contains(a.Id);
+        bool porte = a.Slot == PilouBureau.Boutique.Accessoire ? _pilou.AccessoireChoisi == a.Id
+            : equipe.TryGetValue(a.Slot, out var p) && p.Id == a.Id;
         bool enVente = PilouBureau.Boutique.EnVente(a, jour);
         int prix = PilouBureau.Boutique.Prix(a, jour);
         var rangee = new DockPanel { Margin = new Thickness(0, 2, 0, 2) };
         var bouton = new Button { MinWidth = 110, Padding = new Thickness(8, 3, 8, 3), Margin = new Thickness(8, 0, 0, 0) };
         DockPanel.SetDock(bouton, Dock.Right);
-        if (possede)
+        if (possede && bonus)
+        {
+            bouton.Content = "actif";
+            bouton.IsEnabled = false;
+        }
+        else if (possede)
         {
             bouton.Content = porte ? "Retirer" : "Porter";
             bouton.Click += (_, _) =>
@@ -246,7 +265,8 @@ internal sealed class FenetreBoutique : Window
             FontWeight = porte ? FontWeights.Bold : FontWeights.Normal,
             Foreground = a.Rarete >= Rarete.Epique ? Orange : a.Rarete == Rarete.Rare ? Bleu : Brushes.Black,
         });
-        var detail = possede ? (porte ? "  · porté" : "  · à toi")
+        var detail = possede ? (bonus ? "  · actif" : porte ? "  · porté" : "  · à toi")
+            : consommable ? $"  · en réserve : {_pilou.Reserve(a.Id)}"
             : prix < a.Prix ? $"  · promo -25 % ({a.Prix} po)" : "";
         texte.Inlines.Add(new System.Windows.Documents.Run(detail) { Foreground = Argent, FontSize = 11 });
         rangee.Children.Add(texte);

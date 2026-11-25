@@ -125,7 +125,7 @@ public class BoutiqueTests
         foreach (var id in ids) Assert.NotNull(Boutique.Trouver(id));
         Assert.Equal(Boutique.Catalogue.Count, Boutique.Catalogue.Select(a => a.Id).Distinct().Count());
         Assert.All(Boutique.Catalogue, a => Assert.InRange(a.Prix, 60, 600));
-        Assert.All(Boutique.Catalogue, a => Assert.Contains(a.Slot, Boutique.Slots));
+        Assert.All(Boutique.Catalogue, a => Assert.Contains(a.Slot, Boutique.Rayons));
     }
 
     [Fact]

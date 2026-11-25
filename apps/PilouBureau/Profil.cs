@@ -26,6 +26,8 @@ public sealed class Profil
     // Pièces d'or, inventaire et équipement (boutique), quêtes de cet appareil.
     public Bourse Bourse { get; set; } = new();
     public EtatQuetes Quetes { get; set; } = new();
+    // Stades d'évolution, niveaux déjà payés en po, migration des anciennes récompenses.
+    public Evolution Evolution { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
@@ -93,6 +95,10 @@ public sealed class Profil
         return autres;
     }
 
-    public static int Niveau(int xp) => (int)Math.Floor(Math.Sqrt(xp / 5.0)) + 1;
-    public static int XpPourNiveau(int niveau) => 5 * (niveau - 1) * (niveau - 1);
+    // Courbe : xp(n) = 25·(n−1)² (niveau 10 ≈ 2 000 xp, 25 ≈ 14 400, 40 ≈ 38 000, 50 ≈ 60 000).
+    // Personne ne perd un niveau : Evolution.NiveauAcquis garde le plus haut atteint (ancienne courbe comprise).
+    public static int Niveau(int xp) => (int)Math.Floor(Math.Sqrt(Math.Max(0, xp) / 25.0)) + 1;
+    public static int XpPourNiveau(int niveau) => 25 * (niveau - 1) * (niveau - 1);
+    // Ancienne courbe (xp = 5·(n−1)²), pour la migration seulement.
+    public static int NiveauAncien(int xp) => (int)Math.Floor(Math.Sqrt(Math.Max(0, xp) / 5.0)) + 1;
 }

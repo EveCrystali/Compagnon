@@ -68,6 +68,33 @@ public final class Etat {
     public String accessoire = "aucun";
     public final java.util.Set<String> carnet = new java.util.TreeSet<>(), plats = new java.util.TreeSet<>();
     public final List<String> recus = new ArrayList<>();
+    /** Boutique et quêtes (PC ≥ 0.9.10) : solde en po (-1 : inconnu), objets possédés, objets portés par
+     *  emplacement, offres du jour (la première en promo), série de jours, quêtes en cours. */
+    public int po = -1, serie;
+    /** Stade d'évolution affiché sur le PC (0 : inconnu, le téléphone le déduit du niveau). */
+    public int stade;
+    public final java.util.Set<String> objets = new java.util.TreeSet<>();
+    public final java.util.Map<String, String> porte = new java.util.TreeMap<>();
+    public final List<String> offres = new ArrayList<>();
+    public String promo = "";
+    public final List<Quete> quetes = new ArrayList<>();
+
+    public static final class Quete {
+        /** 0 jour, 1 semaine, 2 mois. */
+        public final int periode, fait, objectif, po;
+        public final String texte;
+        public final boolean reussie;
+
+        Quete(int periode, String texte, int fait, int objectif, int po, boolean reussie) {
+            this.periode = periode;
+            this.texte = texte;
+            this.fait = fait;
+            this.objectif = objectif;
+            this.po = po;
+            this.reussie = reussie;
+        }
+    }
+
     /** Appareils du groupe (PC ≥ 0.9.6) : nom, XP de chacun, dernière nouvelle ; le PC qui publie en tête. */
     public final List<Appareil> appareils = new ArrayList<>();
 
@@ -132,6 +159,27 @@ public final class Etat {
                 else e.recus.add(v);
             }
         }
+        e.po = r.optInt("po", -1);
+        e.stade = r.optInt("stade", 0);
+        e.serie = r.optInt("serie", 0);
+        e.promo = r.optString("promo", "");
+        JSONArray ob = r.optJSONArray("objets");
+        if (ob != null) for (int i = 0; i < ob.length(); i++) if (!ob.optString(i, "").isEmpty()) e.objets.add(ob.optString(i));
+        JSONObject po = r.optJSONObject("porte");
+        if (po != null)
+            for (java.util.Iterator<String> k = po.keys(); k.hasNext(); ) {
+                String slot = k.next();
+                if (!po.optString(slot, "").isEmpty()) e.porte.put(slot, po.optString(slot));
+            }
+        JSONArray of = r.optJSONArray("offres");
+        if (of != null) for (int i = 0; i < of.length(); i++) if (!of.optString(i, "").isEmpty()) e.offres.add(of.optString(i));
+        JSONArray qu = r.optJSONArray("quetes");
+        if (qu != null)
+            for (int i = 0; i < Math.min(12, qu.length()); i++) {
+                JSONArray q = qu.optJSONArray(i);
+                if (q == null || q.length() < 6) continue;
+                e.quetes.add(new Quete(q.optInt(0), q.optString(1), q.optInt(2), Math.max(1, q.optInt(3)), q.optInt(4), q.optInt(5) == 1));
+            }
         JSONArray ap = r.optJSONArray("appareils");
         if (ap != null)
             for (int i = 0; i < Math.min(10, ap.length()); i++) {

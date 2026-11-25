@@ -55,7 +55,8 @@ const marquer = () => {
   sale = true
 }
 
-const niveau = (points: number) => Math.floor(Math.sqrt(points / 5)) + 1
+// Même courbe que Pilou de bureau : xp(n) = 25·(n−1)².
+const niveau = (points: number) => Math.floor(Math.sqrt(Math.max(0, points) / 25)) + 1
 const borne = (n: number) => Math.max(0, Math.min(100, Math.round(n)))
 
 function heure(ms: number) {
@@ -500,8 +501,8 @@ export const register: Register = on => {
 
     const points = await read($, xp)
     const n = niveau(points)
-    const plancher = 5 * (n - 1) ** 2
-    const plafond = 5 * n ** 2
+    const plancher = 25 * (n - 1) ** 2
+    const plafond = 25 * n ** 2
     const progression = ((points - plancher) / Math.max(1, plafond - plancher)) * 100
     const en = await read($, energie)
     const liste = await read($, souvenirs)

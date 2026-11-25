@@ -9,6 +9,10 @@ public sealed class Pose
     public Expr Expr;
     // Objets de la boutique portés, par emplacement (tete, yeux, cou, dos, main, compagnon, effet, couleur → id).
     public IReadOnlyDictionary<string, string> Equipe = new Dictionary<string, string>();
+    // Stade d'évolution affiché (1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral) et, pendant une
+    // évolution, sa progression 0..1 (de Stade - 1 vers Stade) ; 0 hors évolution.
+    public int Stade = 2;
+    public double Evolution;
     public double T;            // horloge de l'animation (ms)
     public double Depuis;       // ms depuis le début de l'humeur passagère
     public int Regard;          // -1, 0, 1

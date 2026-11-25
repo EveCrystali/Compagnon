@@ -101,7 +101,7 @@ public sealed partial class FenetrePilou
         if (!Telephone.Valide(code) || _telEnCours || epoque < _telPause) return;
         var sessions = Telephone.Sessions(vivantes, epoque);
         var humeur = _exprCourante.ToString().ToLowerInvariant();
-        var accessoire = _reglages.Porte(DateTime.Now, Niveau).ToString().ToLowerInvariant();
+        var accessoire = _reglages.Porte(DateTime.Now, x => Possede(Recompenses.IdAccessoire(x))).ToString().ToLowerInvariant();
         // Les gains crédités et l'accessoire changent aussi ce que le téléphone doit savoir.
         var signature = Telephone.Signature(sessions, Niveau, humeur,
             $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}"
@@ -120,6 +120,7 @@ public sealed partial class FenetrePilou
         var (solde, inventaire, equipe) = Bourse();
         Quetes.Actualiser(_profil.Quetes, DateTime.Now, IdAppareil);
         foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) progression[k] = v;
+        progression["stade"] = StadeAffiche();
         // Appareils du groupe, pour la liste de l'app (nom, xp, vu il y a) ; ce PC en tête.
         progression["appareils"] = new[] { new Dictionary<string, object> { ["nom"] = Environment.MachineName, ["xp"] = _profil.Xp, ["t"] = epoque } }
             .Concat(GroupeMem.Compteurs.OrderByDescending(c => c.T)
@@ -137,6 +138,7 @@ public sealed partial class FenetrePilou
             leger.Remove("carnet");
             leger.Remove("plats");
             foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) leger[k] = v;
+            leger["stade"] = StadeAffiche();
             charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
                 _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
             corps = Telephone.Chiffrer(code, charge);

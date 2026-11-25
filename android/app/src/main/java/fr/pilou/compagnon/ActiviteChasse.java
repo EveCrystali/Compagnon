@@ -97,7 +97,7 @@ public final class ActiviteChasse extends Activity implements ChasseVue.Ecoute {
     private void finPartie() {
         Chasse p = vue.partie;
         int xp = p.xp();
-        if (xp > 0) Gains.jeu(this, xp);
+        if (xp > 0 || p.score > 0) Gains.chasse(this, xp, p.score);
         if (p.score > meilleur) {
             Prefs.de(this).edit().putInt("meilleurChasse", p.score).apply();
             // le record affiché pendant l'écran de fin reste l'ancien : « nouveau record » s'affiche

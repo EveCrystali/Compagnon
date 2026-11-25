@@ -11,7 +11,55 @@ public sealed record Port(string Id, double T);
 public static class Boutique
 {
     public const string Tete = "tete", Yeux = "yeux", Cou = "cou", Dos = "dos", Main = "main", Compagnon = "compagnon", Effet = "effet", Couleur = "couleur";
+    // Emplacements qui se portent (Bourse.Equipe) ; « accessoire » (le chapeau historique, porté via les réglages),
+    // « bonus » (actif dès qu'il est possédé) et « consommable » (s'achète plusieurs fois) sont à part.
     public static readonly string[] Slots = { Tete, Yeux, Cou, Dos, Main, Compagnon, Effet, Couleur };
+    public const string Accessoire = "accessoire", Bonus = "bonus", Consommable = "consommable";
+    public static readonly string[] Rayons = { Accessoire, Tete, Yeux, Cou, Dos, Main, Compagnon, Effet, Couleur, Bonus, Consommable };
+    public const string TraineeEtoiles = "trainee-etoiles", CanneDoree = "canne-doree", MarmiteCuivre = "marmite-cuivre", PierreCalme = "pierre-calme";
+
+    // Anciennes récompenses de niveau, devenues articles (niveau d'accès = ancien niveau ; prix selon ce niveau).
+    private static IEnumerable<Article> Anciens()
+    {
+        foreach (var a in new[] { PilouBureau.Accessoire.Feuille, PilouBureau.Accessoire.Noeud, PilouBureau.Accessoire.Casque,
+                     PilouBureau.Accessoire.Bonnet, PilouBureau.Accessoire.Lunettes, PilouBureau.Accessoire.Couronne,
+                     PilouBureau.Accessoire.ChapeauPeche, PilouBureau.Accessoire.Toque, PilouBureau.Accessoire.Tablier,
+                     PilouBureau.Accessoire.EtoileMer })
+        {
+            int n = Recompenses.Ancien(a);
+            yield return new Article(Recompenses.IdAccessoire(a), Nom(a), Accessoire, Math.Min(600, 60 + 15 * n), n, Rang(n), true);
+        }
+        foreach (var c in Enum.GetValues<PilouBureau.Couleur>().Where(c => c != PilouBureau.Couleur.Bleu))
+        {
+            int n = Recompenses.Ancien(c);
+            yield return new Article(Recompenses.IdCouleur(c), "Couleur " + Recompenses.NomCouleur(c).ToLowerInvariant(), Couleur,
+                Math.Min(600, 100 + 10 * n), n, Rang(n), true);
+        }
+        yield return new Article(TraineeEtoiles, "Traînée d'étoiles", Effet, 220, 9, Rarete.Rare, true);
+        yield return new Article(CanneDoree, "Canne dorée (plus de prises légendaires)", Bonus, 500, 30, Rarete.Legendaire, true);
+        yield return new Article(MarmiteCuivre, "Marmite en cuivre (moins de plats brûlés)", Bonus, 520, 35, Rarete.Legendaire, true);
+        yield return new Article(PierreCalme, "Pierre de calme (retient une évolution)", Consommable, 150, 9, Rarete.PeuCommun, true);
+    }
+
+    private static Rarete Rang(int niveau) => niveau switch
+    {
+        <= 3 => Rarete.Commun, <= 8 => Rarete.PeuCommun, <= 15 => Rarete.Rare, <= 30 => Rarete.Epique, _ => Rarete.Legendaire,
+    };
+
+    private static string Nom(PilouBureau.Accessoire a) => a switch
+    {
+        PilouBureau.Accessoire.Feuille => "Feuille d'automne",
+        PilouBureau.Accessoire.Noeud => "Nœud papillon",
+        PilouBureau.Accessoire.Casque => "Casque audio",
+        PilouBureau.Accessoire.Bonnet => "Bonnet de laine",
+        PilouBureau.Accessoire.Lunettes => "Lunettes de soleil",
+        PilouBureau.Accessoire.Couronne => "Couronne",
+        PilouBureau.Accessoire.ChapeauPeche => "Chapeau de pêcheur",
+        PilouBureau.Accessoire.Toque => "Toque de chef",
+        PilouBureau.Accessoire.Tablier => "Tablier",
+        PilouBureau.Accessoire.EtoileMer => "Étoile de mer",
+        _ => a.ToString(),
+    };
 
     public static readonly IReadOnlyList<Article> Catalogue = new Article[]
     {
@@ -50,19 +98,21 @@ public static class Boutique
         new("lavande", "Couleur lavande", Couleur, 200, 4, Rarete.PeuCommun),
         new("glacier", "Couleur glacier", Couleur, 220, 6, Rarete.Rare),
         new("corail-orange", "Couleur corail", Couleur, 250, 8, Rarete.Rare),
-    };
+    }.Concat(Anciens()).ToList();
 
     public static Article? Trouver(string id) => Catalogue.FirstOrDefault(a => a.Id == id);
 
     // Signe de l'emplacement (pas de couleur seule : un signe de forme, toujours).
     public static string Signe(string slot) => slot switch
     {
-        Tete => "▲", Yeux => "◉", Cou => "◡", Dos => "▼", Main => "✚", Compagnon => "♣", Effet => "✧", Couleur => "■", _ => "·",
+        Tete => "▲", Yeux => "◉", Cou => "◡", Dos => "▼", Main => "✚", Compagnon => "♣", Effet => "✧", Couleur => "■",
+        Accessoire => "◆", Bonus => "★", Consommable => "◇", _ => "·",
     };
 
     public static string NomSlot(string slot) => slot switch
     {
-        Tete => "Tête", Yeux => "Yeux", Cou => "Cou", Dos => "Dos", Main => "Main", Compagnon => "Compagnon", Effet => "Effet", Couleur => "Couleur", _ => slot,
+        Tete => "Tête", Yeux => "Yeux", Cou => "Cou", Dos => "Dos", Main => "Main", Compagnon => "Compagnon", Effet => "Effet", Couleur => "Couleur",
+        Accessoire => "Accessoires", Bonus => "Bonus", Consommable => "Consommables", _ => slot,
     };
 
     // ---- Offres du jour : 4 objets non permanents, tirés de la date ; le premier à -25 %.
@@ -94,14 +144,16 @@ public static class Boutique
     {
         var a = Trouver(id);
         if (a is null) return "objet inconnu";
-        if (b.Inventaire.Contains(id)) return "déjà dans l'inventaire";
+        bool consommable = a.Slot == Consommable;
+        if (!consommable && b.Inventaire.Contains(id)) return "déjà dans l'inventaire";
         if (niveau < a.NiveauMin) return $"niveau {a.NiveauMin} requis";
         if (!EnVente(a, jour)) return "pas en vente aujourd'hui";
         int prix = Prix(a, jour);
         if (solde < prix) return $"il manque {prix - solde} po";
         if (parTelephone) b.PoDepTelephone += prix;
         else b.PoDepenses += prix;
-        b.Inventaire.Add(id);
+        if (consommable) b.Consommables[id] = b.Consommables.GetValueOrDefault(id) + 1;
+        else b.Inventaire.Add(id);
         return null;
     }
 
@@ -128,6 +180,8 @@ public sealed class Bourse
     public int PoDepenses { get; set; }
     public int PoDepTelephone { get; set; }
     public List<string> Inventaire { get; set; } = new();
+    // Consommables achetés et pas encore utilisés (pierre de calme…), propres à cet appareil.
+    public Dictionary<string, int> Consommables { get; set; } = new();
     public Dictionary<string, Port> Equipe { get; set; } = new();
 
     // Fusion d'un autre appareil : union des objets, dernière écriture gagne par emplacement.

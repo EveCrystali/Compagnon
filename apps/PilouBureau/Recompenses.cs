@@ -5,7 +5,10 @@ public enum TypeRecompense { Accessoire, Couleur, Titre, Effet }
 
 public sealed record Recompense(int Niveau, TypeRecompense Type, string Nom, Accessoire? Accessoire = null, Couleur? Couleur = null);
 
-// Catalogue des récompenses, par niveau. Pour en ajouter : une ligne ici (et son dessin dans Scene).
+// Ce que l'ancien système donnait par niveau. Désormais les niveaux n'offrent plus que les titres
+// (honorifiques) : accessoires, couleurs et effets sont des articles de la boutique (Boutique.cs), au
+// niveau d'accès d'origine. Cette liste sert aux titres et à la migration (rien de ce qui était acquis
+// n'est perdu : Migration.Appliquer le verse dans l'inventaire).
 public static class Recompenses
 {
     public static readonly IReadOnlyList<Recompense> Toutes = new Recompense[]
@@ -53,11 +56,27 @@ public static class Recompenses
 
     public const int Maximum = 50;
 
-    public static int Requis(Accessoire a) => Toutes.FirstOrDefault(r => r.Accessoire == a)?.Niveau ?? 1;
-    public static int Requis(Couleur c) => Toutes.FirstOrDefault(r => r.Couleur == c)?.Niveau ?? 1;
-    public static int RequisTrainee => Toutes.First(r => r.Nom == "Traînée d'étoiles").Niveau;
-    public static int RequisCanneDoree => Toutes.First(r => r.Nom.StartsWith("Canne dorée")).Niveau;
-    public static int RequisMarmiteCuivre => Toutes.First(r => r.Nom.StartsWith("Marmite en cuivre")).Niveau;
+    // Identifiant de l'article de boutique qui remplace une ancienne récompense (null : un titre, ou le bleu de base).
+    public static string? IdArticle(Recompense r) => r.Type switch
+    {
+        TypeRecompense.Accessoire when r.Accessoire is { } a => IdAccessoire(a),
+        TypeRecompense.Couleur when r.Couleur is { } c && c != PilouBureau.Couleur.Bleu => IdCouleur(c),
+        TypeRecompense.Effet when r.Nom.StartsWith("Traînée") => Boutique.TraineeEtoiles,
+        TypeRecompense.Effet when r.Nom.StartsWith("Canne") => Boutique.CanneDoree,
+        TypeRecompense.Effet when r.Nom.StartsWith("Marmite") => Boutique.MarmiteCuivre,
+        _ => null,
+    };
+
+    public static string IdAccessoire(Accessoire a) => a.ToString().ToLowerInvariant();
+
+    public static string IdCouleur(Couleur c) => "couleur-" + c.ToString().ToLowerInvariant();
+
+    public static Couleur? CouleurDe(string id) =>
+        Enum.GetValues<Couleur>().Cast<Couleur?>().FirstOrDefault(c => IdCouleur(c!.Value) == id);
+
+    // Ancien niveau d'obtention (sert de niveau d'accès en boutique et au calcul du prix).
+    public static int Ancien(Accessoire a) => Toutes.FirstOrDefault(r => r.Accessoire == a)?.Niveau ?? 1;
+    public static int Ancien(Couleur c) => Toutes.FirstOrDefault(r => r.Couleur == c)?.Niveau ?? 1;
 
     public static string Titre(int niveau) =>
         Toutes.Where(r => r.Type == TypeRecompense.Titre && r.Niveau <= niveau).Select(r => r.Nom).LastOrDefault() ?? "Petit pixel";

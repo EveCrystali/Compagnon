@@ -23,7 +23,7 @@ public static class Groupe
         string Appareil, string Nom, string Machine, int Xp, int XpTelephone, double T,
         IReadOnlyList<string> Prises, IReadOnlyList<string> Plats,
         int PoGagnes = 0, int PoDepenses = 0, int PoDepTel = 0,
-        IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null)
+        IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null, int NiveauPaye = 0, int NiveauAcquis = 0)
     {
         public IReadOnlyList<string> Objets => Inventaire ?? Array.Empty<string>();
         public IReadOnlyDictionary<string, Port> Porte => Equipe ?? new Dictionary<string, Port>();
@@ -94,10 +94,12 @@ public static class Groupe
                 PoDepTel = Math.Max(avant.PoDepTel, c.PoDepTel),
                 Inventaire = avant.Objets.Union(c.Objets).OrderBy(x => x).ToList(),
                 Equipe = Bourse.FusionEquipe(new[] { avant.Porte, c.Porte }),
+                NiveauPaye = Math.Max(avant.NiveauPaye, c.NiveauPaye),
+                NiveauAcquis = Math.Max(avant.NiveauAcquis, c.NiveauAcquis),
             };
             bool change = fusion.Xp != avant.Xp || fusion.XpTelephone != avant.XpTelephone || fusion.T != avant.T
                           || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
-                          || fusion.Objets.Count != avant.Objets.Count
+                          || fusion.Objets.Count != avant.Objets.Count || fusion.NiveauAcquis != avant.NiveauAcquis
                           || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom;
             Autres[c.Appareil] = fusion;
             return change;
@@ -117,13 +119,14 @@ public static class Groupe
         p.Carnet.Where(kv => kv.Value > 0).Select(kv => kv.Key).OrderBy(x => x).ToList(),
         p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
         p.Bourse.PoGagnes, p.Bourse.PoDepenses, p.Bourse.PoDepTelephone,
-        p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe));
+        p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe), p.Evolution.NiveauPaye,
+        p.Evolution.NiveauAcquis);
 
     public static string Json(Compteur c) => JsonSerializer.Serialize(new Dictionary<string, object>
     {
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
-        ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = c.Objets,
+        ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = c.Objets, ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
         ["equipe"] = c.Porte.ToDictionary(kv => kv.Key, kv => new Dictionary<string, object> { ["id"] = kv.Value.Id, ["t"] = kv.Value.T }),
     });
 
@@ -153,7 +156,7 @@ public static class Groupe
                     if (id == "" || Boutique.Trouver(id)?.Slot == x.Name) equipe[x.Name] = new Port(id, te);
                 }
             return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
-                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe);
+                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")));
         }
         catch (JsonException)
         {
