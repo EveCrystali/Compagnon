@@ -23,6 +23,20 @@ Overlay : télécharger `PilouBureau.zip` de la dernière release et le décompr
 dotnet publish apps/PilouBureau -c Release -o "$env:USERPROFILE\.claude\compagnon\bureau"
 ```
 
+## Sans Claude, sur un autre PC
+
+L'overlay vit seul : il garde lui-même l'XP (profil `profil-<PC>.json`) et joue même quand Claude
+est fermé ou absent ; seule la bulle de statut des sessions a besoin du mod. Clic droit :
+- **Démarrer avec Windows** : il se lance à l'ouverture de session (clé Run de l'utilisateur) ;
+- **Partager l'XP entre PC…** : choisir un dossier commun (OneDrive, partage réseau). Chaque PC y
+  écrit son propre fichier, le total est la somme : les niveaux sont les mêmes partout.
+
+## Récompenses
+
+Catalogue par niveau dans `apps/PilouBureau/Recompenses.cs` (menu clic droit « Récompenses ») :
+accessoires, couleurs (bleu nuit 6, ambre 8, argent 10, aurore 12), titres, traînée d'étoiles (9).
+Il s'allonge à chaque version.
+
 ## Mettre à jour
 
 ```powershell

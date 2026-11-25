@@ -8,8 +8,8 @@ using System.Windows.Shapes;
 namespace PilouBureau;
 
 // Petites activités avec Pilou : deux ou trois clics, quelques secondes, jamais bloquantes.
-// Chaque gain s'affiche (« +10 xp ») et part au mod par ~/.claude/compagnon/bonus.txt
-// (total cumulé), qui l'ajoute à l'XP partagée. Les niveaux débloquent des accessoires.
+// Chaque gain s'affiche (« +10 xp ») et s'ajoute au profil de ce PC (Profil.cs), partagé entre PC
+// via le dossier de partage. Les niveaux débloquent les récompenses (Recompenses.cs).
 public sealed partial class FenetrePilou
 {
     private enum Jeu { Aucun, Etoile, Bulles, TapeCinq }
@@ -36,8 +36,10 @@ public sealed partial class FenetrePilou
     private readonly List<BulleSavon> _bullesJeu = new();
     private int _bullesEclatees;
     private readonly List<Flottant> _flottants = new();
-    private int _xpEnAttente;          // gagnée ici, pas encore revenue dans l'état publié
-    private int _dernierXp = -1, _dernierNiveau = -1;
+    private Profil _profil = new();
+    private int _xpTotal;              // tous les PC du dossier de partage
+    private int _dernierNiveau = -1;
+    private double _totalLu = -1e9;
     private bool _dortBureau;
 
     private static readonly Brush OrangeJeu = Geler(Color.FromRgb(0xf6, 0x9d, 0x50));
@@ -69,10 +71,14 @@ public sealed partial class FenetrePilou
     // Repères dans la fenêtre (unités avant mise à l'échelle) : sommet de la tête de Pilou.
     private double TeteX => _aGauche ? Scene.Largeur / 2 : LargeurBase - Scene.Largeur / 2;
     private double TeteY => HauteurBulle + Scene.Sol - 15 * Scene.PA;
-    private int Niveau => Math.Max(1, _suivi.Courant?.Niveau ?? 1);
+    private int Niveau => Profil.Niveau(_xpTotal);
+    private string DossierPartage => _reglages.Partage(_dossier);
 
     private void InitialiserJeux()
     {
+        _profil = Profil.Lire(DossierPartage);
+        _xpTotal = _profil.Total(DossierPartage);
+        _dernierNiveau = Niveau;
         Grid.SetRowSpan(_jeu, 2);
         _racine.Children.Add(_jeu);
     }
@@ -93,27 +99,55 @@ public sealed partial class FenetrePilou
 
     // ---- Niveaux et XP
 
-    // Appelé à chaque lecture : XP gagnée ailleurs (tour fini, commit, caresse) et montée de niveau.
+    // Appelé à chaque lecture : XP venue de Claude (tours finis, commits, caresses), XP des autres PC.
     private void SuivreXp()
     {
-        if (_suivi.Courant is not { } c) return;
-        if (_dernierXp >= 0 && c.Xp > _dernierXp)
+        if (_suivi.Courant is { } c)
         {
-            int gain = c.Xp - _dernierXp;
-            int deja = Math.Min(gain, _xpEnAttente);
-            _xpEnAttente -= deja;
-            if (gain - deja > 0) Flotter($"+{gain - deja} xp");
+            if (_profil.XpClaudeVue < 0)
+            {
+                // Premier passage : un profil neuf reprend l'XP déjà gagnée avec Claude.
+                if (_profil.Xp == 0) _profil.Xp = c.Xp;
+                _profil.XpClaudeVue = c.Xp;
+                _profil.Ecrire(DossierPartage);
+            }
+            else if (c.Xp > _profil.XpClaudeVue)
+            {
+                int gain = c.Xp - _profil.XpClaudeVue;
+                _profil.XpClaudeVue = c.Xp;
+                _profil.Xp += gain;
+                _profil.Ecrire(DossierPartage);
+                _xpTotal += gain;
+                Flotter($"+{gain} xp");
+            }
+            else if (c.Xp < _profil.XpClaudeVue - 50)
+            {
+                _profil.XpClaudeVue = c.Xp; // magasin du mod remis à zéro
+            }
         }
-        if (c.Xp > _dernierXp) _dernierXp = c.Xp;
-        if (_dernierNiveau > 0 && c.Niveau > _dernierNiveau)
+        if (Maintenant - _totalLu > 5000)
         {
-            var debloque = Enum.GetValues<Accessoire>().Where(a => Reglages.Requis(a) == c.Niveau).ToList();
-            Dire(debloque.Count > 0 ? $"niveau {c.Niveau} ! nouveau : {Nom(debloque[0]).ToLowerInvariant()}" : $"niveau {c.Niveau} !", 5000);
-            Flotter($"NIVEAU {c.Niveau}", 1.6);
+            _xpTotal = _profil.Total(DossierPartage);
+            _totalLu = Maintenant;
+        }
+        VerifierNiveau();
+        var nom = _suivi.Courant?.Nom ?? "Pilou";
+        int n = Niveau, suivant = Profil.XpPourNiveau(n + 1);
+        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}";
+    }
+
+    private void VerifierNiveau()
+    {
+        int n = Niveau;
+        if (_dernierNiveau > 0 && n > _dernierNiveau)
+        {
+            var gagne = Enumerable.Range(_dernierNiveau + 1, n - _dernierNiveau).SelectMany(Recompenses.Au).Select(r => r.Nom.ToLowerInvariant()).ToList();
+            Dire(gagne.Count > 0 ? $"niveau {n} ! nouveau : {string.Join(", ", gagne)}" : $"niveau {n} !", 5500);
+            Flotter($"NIVEAU {n}", 1.6, new Point(TeteX - 50, TeteY - 70));
             _salueJusque = Maintenant + 2500;
             _tSaut = Maintenant;
         }
-        if (c.Niveau > _dernierNiveau) _dernierNiveau = c.Niveau;
+        _dernierNiveau = n;
     }
 
     private static string Nom(Accessoire a) => a switch
@@ -130,19 +164,12 @@ public sealed partial class FenetrePilou
 
     private void Gagner(int xp, Point ou)
     {
-        _xpEnAttente += xp;
+        _profil.Xp += xp;
+        _profil.JeuxGagnes++;
+        _profil.Ecrire(DossierPartage);
+        _xpTotal += xp;
         Flotter($"+{xp} xp", 1, ou);
-        try
-        {
-            Directory.CreateDirectory(_dossier);
-            var chemin = System.IO.Path.Combine(_dossier, "bonus.txt");
-            int total = File.Exists(chemin) && int.TryParse(File.ReadAllText(chemin).Trim(), out var v) ? v : 0;
-            File.WriteAllText(chemin, (total + xp).ToString());
-        }
-        catch (IOException)
-        {
-            // le gain reste affiché, il sera perdu pour l'XP partagée
-        }
+        VerifierNiveau();
     }
 
     // « +10 xp » qui monte et s'efface au-dessus de la tête (ou d'un point donné).

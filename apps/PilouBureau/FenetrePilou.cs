@@ -222,13 +222,61 @@ public sealed partial class FenetrePilou : Window
             accessoires.Items.Add(m);
         }
         menu.Items.Add(accessoires);
+
+        var couleurs = new MenuItem { Header = "Couleur" };
+        foreach (var c in Enum.GetValues<Couleur>())
+        {
+            int requis = Recompenses.Requis(c);
+            var m = new MenuItem
+            {
+                Header = Niveau >= requis ? Recompenses.NomCouleur(c) : $"{Recompenses.NomCouleur(c)} — niveau {requis}",
+                IsCheckable = true,
+                IsChecked = _reglages.Couleur == c,
+                IsEnabled = Niveau >= requis,
+            };
+            m.Click += (_, _) =>
+            {
+                _reglages.Couleur = c;
+                _reglages.Ecrire(_dossier);
+            };
+            couleurs.Items.Add(m);
+        }
+        menu.Items.Add(couleurs);
+        if (Niveau >= Recompenses.RequisTrainee)
+            menu.Items.Add(Case("Traînée d'étoiles", _reglages.Trainee, v => _reglages.Trainee = v));
+
+        // Récompenses : tout le catalogue, ce qui est gagné et ce qui reste à gagner.
+        int n = Niveau;
+        var recompenses = new MenuItem { Header = $"Récompenses — niveau {n} · {_xpTotal}/{Profil.XpPourNiveau(n + 1)} xp · {Recompenses.Titre(n)}" };
+        foreach (var r in Recompenses.Toutes)
+        {
+            string type = r.Type switch { TypeRecompense.Accessoire => "accessoire", TypeRecompense.Couleur => "couleur", TypeRecompense.Titre => "titre", _ => "effet" };
+            recompenses.Items.Add(new MenuItem { Header = (n >= r.Niveau ? "✓  " : $"niv {r.Niveau}  ") + $"{r.Nom} ({type})", IsEnabled = n >= r.Niveau });
+        }
+        menu.Items.Add(recompenses);
         menu.Items.Add(Case("Se promène", _reglages.Promenade, v => _reglages.Promenade = v));
         menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
         menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
         menu.Items.Add(Entree("Jouer maintenant", () => Demarrer((Jeu)(1 + _hasard.Next(3)), Maintenant)));
         menu.Items.Add(new Separator());
+        menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
+        menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
         menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
+    }
+
+    // Dossier de partage (OneDrive commun à tes PC, partage réseau…) : chaque PC y dépose son profil.
+    private void ChoisirPartage()
+    {
+        var d = new Microsoft.Win32.OpenFolderDialog { Title = "Dossier où partager l'XP de Pilou entre tes PC" };
+        if (d.ShowDialog() != true) return;
+        _reglages.DossierPartage = d.FolderName;
+        _reglages.Ecrire(_dossier);
+        // Ce PC apporte son profil dans le nouveau dossier (il y garde son propre fichier).
+        _profil.Ecrire(DossierPartage);
+        _xpTotal = _profil.Total(DossierPartage);
+        Dire($"XP partagée : {_xpTotal} xp en tout", 3500);
     }
 
     private static MenuItem Entree(string texte, Action action)
@@ -287,7 +335,6 @@ public sealed partial class FenetrePilou : Window
             _attend = vivantes.Any(e => e.Attente != "");
             Transitions(vivantes);
             SuivreXp();
-            if (_suivi.Courant is { } c) _scene.ToolTip = $"{c.Nom} · niv {c.Niveau}";
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -601,6 +648,8 @@ public sealed partial class FenetrePilou : Window
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
             Accessoire = _reglages.Porte(DateTime.Now, Niveau),
+            Couleur = Niveau >= Recompenses.Requis(_reglages.Couleur) ? _reglages.Couleur : Couleur.Bleu,
+            Trainee = _reglages.Trainee && Niveau >= Recompenses.RequisTrainee,
             Etourdi = etourdi,
             Zoom = toque ? 1 + 0.38 * Math.Sin(Math.PI * Math.Min(1, phaseToque * 1.15)) : 1,
             Toque = toque && phaseToque > 0.2 ? (phaseToque - 0.2) / 0.8 : 0,

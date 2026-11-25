@@ -18,17 +18,14 @@ public sealed class Reglages
     public bool Promenade { get; set; } = true;
     public bool SuitSouris { get; set; } = true;
     public bool Jeux { get; set; } = true;
+    public Couleur Couleur { get; set; } = Couleur.Bleu;
+    public bool Trainee { get; set; } = true;
+    // Dossier où chaque PC dépose son profil d'XP (OneDrive commun, partage réseau…) ; vide = local.
+    public string DossierPartage { get; set; } = "";
 
-    // Niveau à atteindre pour porter chaque accessoire.
-    public static int Requis(Accessoire a) => a switch
-    {
-        Accessoire.Noeud => 2,
-        Accessoire.Casque => 3,
-        Accessoire.Bonnet => 4,
-        Accessoire.Lunettes => 5,
-        Accessoire.Couronne => 7,
-        _ => 1,
-    };
+    public static int Requis(Accessoire a) => Recompenses.Requis(a);
+
+    public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 

@@ -30,6 +30,8 @@ public sealed class Pose
     public bool Balle;
     public double BalleX;       // position de la balle depuis son centre (anciens pixels)
     public double BalleRot;     // rotation de la balle (radians)
+    public Couleur Couleur;
+    public bool Trainee;        // traînée d'étoiles quand il marche (récompense)
 }
 
 // Pilou en pixel art : une goutte bleue cernée, une antenne, une étincelle orange.
@@ -65,6 +67,14 @@ public sealed class Scene : FrameworkElement
 
     private static readonly Teinte Bleu = new(B("#1f4f8a"), B("#4a8fdc"), B("#6cb6ff"), B("#b4dbff"));
     private static readonly Teinte Orange = new(B("#8a4a1f"), B("#d9803a"), B("#f69d50"), B("#ffc89a"));
+    private static readonly Dictionary<Couleur, Teinte> Couleurs = new()
+    {
+        [Couleur.Bleu] = Bleu,
+        [Couleur.Nuit] = new(B("#0d2a4d"), B("#2a5ea8"), B("#3f7fd6"), B("#8fbaf0")),
+        [Couleur.Ambre] = new(B("#7a4210"), B("#c97a28"), B("#f2a94e"), B("#ffd59a")),
+        [Couleur.Argent] = new(B("#3b4654"), B("#8796a8"), B("#b8c4d2"), B("#e6ecf2")),
+        [Couleur.Aurore] = new(B("#3a2a7a"), B("#6a5acd"), B("#9b8cff"), B("#d2caff")),
+    };
     private static readonly Brush Encre = B("#1c2128");
     private static readonly Brush Blanc = B("#ffffff");
     private static readonly Brush Etincelle = B("#f69d50");
@@ -148,7 +158,8 @@ public sealed class Scene : FrameworkElement
     private void Dessiner(DrawingContext dc, Pose p)
     {
         var t = p.T;
-        var teinte = p.Expr == Expr.Inquiet ? Orange : Bleu;
+        // Inquiet : orange ; si Pilou est déjà ambre, il vire au bleu (le changement reste visible).
+        var teinte = p.Expr == Expr.Inquiet ? (p.Couleur == Couleur.Ambre ? Bleu : Orange) : Couleurs[p.Couleur];
         double periode = p.Expr switch { Expr.Dort => 4200, Expr.Concentre or Expr.Attente => 1600, _ => 2600 };
         double b = Math.Sin(2 * Math.PI * t / periode);
         // Grandeurs en anciens pixels, converties ensuite (× E).
@@ -286,6 +297,7 @@ public sealed class Scene : FrameworkElement
             Motif2(dc, new[,] { { 0, 0, 0, 1, 4 }, { 0, 0, 1, 1, 1 }, { 0, 1, 4, 1, 0 }, { 1, 4, 1, 0, 0 }, { 4, 0, 0, 0, 0 } }, 5 + dx, sommet - 2, Feuillage, Nervure);
 
         if (p.Course) Poussiere(dc, t, p.Regard);
+        if (p.Trainee && p.Marche) Trainee(dc, t, p.Regard);
         if (p.Balle) Balle(dc, p);
         if (p.Etourdi) Etoiles(dc, t, cx, sommet);
         if (p.Toque > 0) Ondes(dc, p.Toque);
@@ -526,6 +538,26 @@ public sealed class Scene : FrameworkElement
                 dc.Pop();
                 break;
             }
+        }
+    }
+
+    // Traînée d'étoiles (récompense) : des éclats orange et bleus qui restent derrière lui.
+    private static void Trainee(DrawingContext dc, double t, int sens)
+    {
+        int arriere = sens >= 0 ? -1 : 1;
+        for (int i = 0; i < 5; i++)
+        {
+            double phase = (t / 900.0 + i / 5.0) % 1.0;
+            int x = (int)Math.Round(C + arriere * (6 + phase * 10)), y = (int)Math.Round(24 - phase * 6 + (i % 2) * 2);
+            dc.PushOpacity(1 - phase);
+            var br = i % 2 == 0 ? Etincelle : Bleu.Clair;
+            dc.DrawRectangle(br, null, Case(x, y));
+            if (phase < 0.4)
+            {
+                dc.DrawRectangle(EtincelleClair, null, Case(x + 1, y));
+                dc.DrawRectangle(EtincelleClair, null, Case(x, y - 1));
+            }
+            dc.Pop();
         }
     }
 
