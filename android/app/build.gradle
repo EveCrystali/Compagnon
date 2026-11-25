@@ -37,6 +37,13 @@ android {
         }
     }
 
+    // Banque de sprites commune avec le PC (assets/ à la racine du dépôt), lue comme ressources Java.
+    sourceSets {
+        main {
+            resources.srcDirs += ['../../assets']
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

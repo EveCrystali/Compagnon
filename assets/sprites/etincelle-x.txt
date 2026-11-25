@@ -1,0 +1,14 @@
+id: etincelle-x
+slot: effet
+ancre: antenne
+decalage: -4 -8
+palette: a=#f69d50
+images:
+.a....a.
+..a..a..
+...aa...
+...aa...
+..a..a..
+.a....a.
+........
+........

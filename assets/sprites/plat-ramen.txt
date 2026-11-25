@@ -1,0 +1,24 @@
+id: plat-ramen
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#768390 b=#a86f3c c=#f6f8fa d=#ffc89a e=#0d2a4d f=#fff6cc g=#f5d76e h=#4a8fdc i=#6cb6ff
+images:
+.................abaaba.
+.................ababa..
+................abaaba..
+................ababa...
+...............abaaba...
+....aaaaaaaaaaaababa....
+..aaccccddccccebccbcaa..
+.acccfddddddgeebebgccca.
+accffgggddggffbefbfffcca
+accfffffffffffbfbffffcca
+.acccffffffffffffffccca.
+ahhhhhhhhhhhhhhhhhhhhhha
+.ahhhhhhhhhhhhhhhhhhhha.
+.aiiiiiiiiiiiiiiiiiiiia.
+..ahhhhhhhhhhhhhhhhhha..
+...ahhhhhhhhhhhhhhhha...
+....aahhhhhhhhhhhhaa....
+......aahhhhhhhhaa......

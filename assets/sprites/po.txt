@@ -1,0 +1,19 @@
+# pièce d'or (icône)
+id: po
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7a5a10 b=#f5d76e c=#c9a227 d=#fff6cc
+images:
+..aabbbbaa..
+.abbbbbbbba.
+abbcdccccbba
+abccbaabccba
+bbcbbaabbcbb
+bbcbbaabbcbb
+bbcbbaabbcbb
+bbcbbaabbcbb
+abccbaabccba
+abbccccccbba
+.abbbbbbbba.
+..aabbbbaa..

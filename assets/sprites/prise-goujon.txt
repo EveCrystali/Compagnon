@@ -1,0 +1,19 @@
+# prise de pêche
+id: prise-goujon
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1f4f8a b=#4a8fdc c=#ffffff d=#1c2128 e=#b4dbff
+images:
+......aaaaaaaa.......a.
+...aaabbbaaaaaaa....aba
+..abbbbbbbbbbbbbaa.abba
+.abbbbbbabbbbbbbbbabba.
+abbcdbbbbbbbabbbbbbbba.
+abbddbabbbbbbbbbbbbbba.
+abbbbbbbbbbbbbbbbbbbba.
+abbbbbbbbabbbbbbbbbbba.
+.aeeeeeeeeeeeeeeeeabba.
+..abeeeeeeeeeeeeaa.abba
+...aaabbbbbbbbaa....aba
+......aaaaaaaa.......a.

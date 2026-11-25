@@ -1,0 +1,17 @@
+id: tenue-dessin-beret
+slot: tete
+ancre: tete
+decalage: -13 -6
+coiffe: oui
+palette: a=#3a2a7a b=#6a5acd c=#9b8cff
+images:
+........aaaaaaaaaaaa..........
+.....aaabbbbbaabbbbbaaa.......
+...aabccccccccbbbbbbbbbaa.....
+.aabccccccccccccbbbbbbbbbaa...
+abbccccccccccccccbbbbbbbbbba..
+bbbbbbbbbbbbbbbbbbbbbbbbbbbba.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbba.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbba.
+bbbbbbbbbbbbbbbbbbbbbbbbbbbba.
+abbbbbbbbbbbbbbbbbbbbbbbbbba..

@@ -1,0 +1,10 @@
+# bouche, centrée sur l'axe de Pilou
+id: bouche-inquiet
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+..aaaa..
+.a....a.
+a......a

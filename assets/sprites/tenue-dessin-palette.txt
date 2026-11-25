@@ -1,0 +1,22 @@
+id: tenue-dessin-palette
+slot: main
+ancre: main
+decalage: -4 -8
+palette: a=#f69d50 b=#8a6e4b c=#7a4b26 d=#e8d5b0 e=#f5d76e f=#6cb6ff g=#f6f8fa h=#9b8cff
+images:
+..............aa....
+......bbbbbb..aac...
+...bbbddddddbbb.c...
+..bddddddddddddb.c..
+.bddddddddddddddbc..
+bddddddaaddeeddddbc.
+bddddddaaddeeddddbc.
+ddddffddddddddddddbc
+ddddffddddddddggddbc
+ddddddddddddddggddb.
+ddddddddddddbbddddb.
+bddddhhddddb..bddb..
+bddddhhddddb..bddb..
+.bddddddddddbbddb...
+..bddddddddddddb....
+...bbbddddddbbb.....

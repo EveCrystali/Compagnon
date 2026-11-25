@@ -1,0 +1,25 @@
+# prise de pêche
+id: prise-spirale
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#768390 b=#f6f8fa c=#c9d1d9 d=#ffc89a e=#f69d50
+images:
+....abbbbbbbcbbaa.
+...abbbbbbbbcbbbba
+..abbbaaaaaaaaabbb
+.abbba..aaaaa..abb
+.abba.aabcbbba..ab
+abba.abbbcbbbba.ab
+abba.abbbaaabbba.a
+accaabbbdda.abbba.
+bba.abbdddda.abba.
+bbbaabbddedbaabba.
+abbaabbbddbbaacca.
+abba.abbbbba.abba.
+.abba.abbba..abba.
+.abbaa.aaa.aabbba.
+.abbbbaaaaabbbba..
+..abbbbbcbbbbba...
+...aaabbcbbbaa....
+......aaaaaa......

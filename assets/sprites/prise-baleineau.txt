@@ -1,0 +1,26 @@
+# prise de pêche
+id: prise-baleineau
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a8fdc b=#ffffff c=#b4dbff d=#1c2128 e=#ffc89a f=#6cb6ff
+images:
+.....aa.abba......................
+....abbaaaa.......................
+.....aabba......................a.
+......abbaaaaaaaaaaa...........aca
+.....aabbcccccccccccaaa.......acca
+....acccccccccccccccccca.....acca.
+...acccccccccccccccccccca...accca.
+..acccccccccccccccccccccca.acccca.
+.accccccccccccccccccccccccacccca..
+acccccddccccccccccccccccccccccca..
+acccccddccccccccccccccccccccccca..
+accccccccccccccccccccccccccaccca..
+aceeeecccccccccccccccccccccaaccca.
+.aeeeecccccccccccccccccccca..acca.
+..abbbbbbbbbbbbbbbbbbbbbba....aca.
+...abbbbbbbbbbbbbbbbbbbba......aca
+....acbbbbfbbbfbbbfbbbca........a.
+.....aaaccccccccccccaaa...........
+........aaaaaaaaaaaa..............

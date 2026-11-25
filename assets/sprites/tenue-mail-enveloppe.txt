@@ -1,0 +1,17 @@
+id: tenue-mail-enveloppe
+slot: main
+ancre: main
+decalage: -3 -5
+palette: a=#c9d1d9 b=#f6f8fa c=#f69d50 d=#ffd8b0
+images:
+abbbbbbbbbbbbbba
+babbbbbbbbbbbbab
+bbaabbbbbbbbbabb
+bbbbabbbbbbaabbb
+bbbbbabbbbabbbbb
+bbbbbbccccbbbbbb
+bbbbbbccdcbbbbbb
+bbbbbbccccbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb

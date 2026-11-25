@@ -1,0 +1,50 @@
+id: bandeau-ninja
+slot: tete
+ancre: tete
+decalage: -22 2
+duree: 200
+palette: a=#1c2128 b=#2d333b c=#b8c4d2 d=#3b4654 e=#e6ecf2
+images:
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbaaa.....
+.....addddddddddddddceeecdddddddddddddbbbaaaa.
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbbbbbbbba
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbdbbbbba.
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbdddaaa..
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddda..
+.......................................addda..
+........................................ada...
+.........................................a....
+..............................................
+---
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbaa......
+.....addddddddddddddceeecdddddddddddddbbaaa...
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbbbbbbaa.
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbdbbbbbba
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbddabbba.
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaa..
+......................................adddda..
+.......................................addda..
+........................................ada...
+.........................................a....
+---
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbba.......
+.....addddddddddddddceeecdddddddddddddbaa.....
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbbbbaaa..
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbdbbbbba.
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbddbbbbba
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddabba.
+......................................adddaa..
+.......................................addda..
+........................................adda..
+.........................................aa...
+---
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbaa......
+.....addddddddddddddceeecdddddddddddddbbaaa...
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbbbbbbaa.
+.....abbbbbbbbbbbbbbceeecbbbbbbbbbbbbbdbbbbbba
+.....abbbbbbbbbbbbbbcccccbbbbbbbbbbbbbddabbba.
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddaa..
+......................................adddda..
+.......................................addda..
+........................................ada...
+.........................................a....

@@ -1,0 +1,13 @@
+id: acc-noeud
+slot: cou
+ancre: cou
+decalage: -8 -2
+palette: a=#f69d50 b=#8a4a1f c=#ffc89a d=#d9803a
+images:
+abbb......bbba
+aaaabbbbbbaaaa
+accaaddddaaacc
+aaaccddddaccaa
+aaaaaddddaaaaa
+aaaabbbbbbaaaa
+abbb......bbba

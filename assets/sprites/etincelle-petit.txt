@@ -1,0 +1,14 @@
+id: etincelle-petit
+slot: effet
+ancre: antenne
+decalage: -4 -8
+palette: a=#ffd8b0 b=#f69d50
+images:
+........
+.a....a.
+..a..a..
+...bb...
+...bb...
+..a..a..
+.a....a.
+........

@@ -1,0 +1,75 @@
+# ballon (tourne)
+id: ballon
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 90
+palette: a=#1f4f8a b=#f6f8fa c=#f69d50 d=#c9d1d9
+images:
+....aaaaaaaa....
+...abbbbbbbba...
+..abbbbbbbbbba..
+.abbbbbbbbbbbba.
+abbbbbbbbbbbbbba
+abbbbbbbbbbbbbba
+abbbbbbbbbbbbbba
+abbbbbbbbbbbbbba
+accccccccccccccc
+abbbbbbbbbbbbdda
+abbbbbbbbbbbddda
+abbbbbbbbbbdddda
+.abbbbbbbbdddda.
+..abbbbbbdddda..
+...abbbbdddda...
+....aaaaaaaa....
+---
+....aaaaaaaa....
+...abbbbbbbba...
+..abbbbbbbbbba..
+.abccbbbbbbbbba.
+abbbccbbbbbbbbba
+abbbbccbbbbbbbba
+abbbbbccbbbbbbba
+abbbbbbccbbbbbba
+abbbbbbbccbbbbda
+abbbbbbbbccbbdda
+abbbbbbbbbccddda
+abbbbbbbbbbccdda
+.abbbbbbbbddcca.
+..abbbbbbdddda..
+...abbbbdddda...
+....aaaaaaaa....
+---
+....aaaaaaaa....
+...abbbbccbba...
+..abbbbbccbbba..
+.abbbbbbccbbbba.
+abbbbbbbccbbbbba
+abbbbbbbccbbbbba
+abbbbbbbccbbbbba
+abbbbbbbccbbbbba
+abbbbbbbccbbbbda
+abbbbbbbccbbbdda
+abbbbbbbccbbddda
+abbbbbbbccbdddda
+.abbbbbbccdddda.
+..abbbbbccddda..
+...abbbbccdda...
+....aaaaaaaa....
+---
+....aaaaaaaa....
+...abbbbbbbba...
+..abbbbbbbbbba..
+.abbbbbbbbbbcca.
+abbbbbbbbbbccbba
+abbbbbbbbbccbbba
+abbbbbbbbccbbbba
+abbbbbbbccbbbbba
+abbbbbbcccbbbbda
+abbbbbccbbbbbdda
+abbbbccbbbbbddda
+abbbccbbbbbdddda
+.abccbbbbbdddda.
+..abbbbbbdddda..
+...abbbbdddda...
+....aaaaaaaa....

@@ -1,0 +1,29 @@
+# prise de pêche
+id: prise-pieuvre
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#3a2a7a b=#9b8cff c=#d2caff d=#ffffff e=#1c2128 f=#6a5acd
+images:
+.....aaaaaaaa.......
+....abbbbbbbba......
+...abbbbbbbbbba.....
+..abbccccbbbbbba....
+.abbccccccbbbbbba...
+abbbccccccbbbbbbba..
+abbbbccccbbbbbbbba..
+abbbbbbbbbbbbbbbba..
+abbbbdebbbbdebbbba..
+abbbbeebbbbeebbbba..
+abbbbbbbbbbbbbbbba..
+.abbbbbbaabbbbbba...
+..abbbbbbbbbbbba....
+.affbbbbffbbffbba...
+.affabbbfbbffaabba..
+..affbbffbbaffabba..
+..affbffabbaffaabba.
+..afbbffabbaaffaabba
+.affbbffabbaaffaabba
+affbbaffaabbaaffabba
+affbbaffaabbaaffbba.
+.aaaa.aa..aa..aaaa..

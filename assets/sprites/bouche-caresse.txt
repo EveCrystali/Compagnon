@@ -1,0 +1,9 @@
+# bouche, centrée sur l'axe de Pilou
+id: bouche-caresse
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+a..aa..a
+.aa..aa.

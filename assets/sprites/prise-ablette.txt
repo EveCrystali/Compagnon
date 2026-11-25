@@ -1,0 +1,17 @@
+# prise de pêche
+id: prise-ablette
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#3b4654 b=#768390 c=#adbac7 d=#ffffff e=#1c2128 f=#e6ecf2
+images:
+.....aaaaabbba.......a.
+...aaccccbbbbbaaa...aca
+.aaccccccccccccccaaaca.
+accdecccccccccccccccca.
+acceecccccccccccccccca.
+acccccccccccccccccccca.
+acffffffffffffffffccca.
+.aaffffffffffffffaaaca.
+...aacccffffccaaa...aca
+.....aaaaaaaaa.......a.

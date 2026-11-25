@@ -1,0 +1,16 @@
+# œil immense de la Gouttelette (stade 1)
+id: oeil-ouvert-g
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffffff
+images:
+..aaaa..
+.abbaaa.
+abbbaaaa
+abbaaaaa
+aaaaaaaa
+aaaaaaba
+aaaaabba
+.aaaaaa.
+..aaaa..

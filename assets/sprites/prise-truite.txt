@@ -1,0 +1,21 @@
+# prise de pêche
+id: prise-truite
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#3b4654 b=#b8c4d2 c=#ffffff d=#1c2128
+images:
+.......aaaaaaaaa.........a.
+....aaabbbbaaaaaaaa.....aba
+...abbbbbbbbbbbbbbbaa..abba
+..abbbbbbbbbbbbbbbbbbaabba.
+.abbbbbbbbabbbbbbbbbbbbbba.
+abbbcdbbbbbbbbabbbbbbbbbba.
+abbbddbbabbbbbbbbbbbbbbbba.
+abbbbbbbbbbbbbbbbbbbbbbbba.
+abbbbbbbbbbabbbbbbbbbbbbba.
+.acccccccccccccccccccbbbba.
+..acccccccccccccccccbaabba.
+...abcccccccccccccbaa..abba
+....aaabbbbbbbbbaaa.....aba
+.......aaaaaaaaa.........a.

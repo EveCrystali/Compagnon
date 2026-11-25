@@ -1,0 +1,22 @@
+id: tenue-video-popcorn
+slot: main
+ancre: main
+decalage: -4 -9
+palette: a=#8a4a1f b=#fff6cc c=#f5d76e d=#f69d50 e=#f6f8fa
+images:
+....abbbba....
+..aabbbbbbaa..
+.abbbbcbbbbba.
+abbbbbbbbcbbba
+abbbbbbbbbbbbb
+adbbbbbbbbbbbd
+addebbbbbbdbed
+addeeddeeddeed
+addeeddeeddead
+addeeddeeddead
+addeeddeeddead
+addeeddeeddead
+addeeddeeddead
+addeeddeeddaad
+adaeedeeedeaad
+adaeedeeedeaad

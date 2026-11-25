@@ -1,0 +1,14 @@
+# Tenues d'activité : identifiant (Pose.Tenue) -> sprites portés.
+code: tenue-code-lunettes tenue-code-clavier
+tableur: tenue-tableur-lunettes tenue-tableur-calculatrice
+jeu-mmo: tenue-mmo-epee tenue-mmo-bouclier
+jeu: tenue-jeu-casque tenue-jeu-manette
+musique: tenue-musique-ecouteurs tenue-musique-notes
+video: tenue-video-popcorn
+lecture: tenue-lecture-lunettes tenue-lecture-livre
+dessin: tenue-dessin-beret tenue-dessin-palette
+visio: tenue-visio-micro
+nuit: tenue-nuit-bonnet
+mail: tenue-mail-casquette tenue-mail-enveloppe
+texte: tenue-texte-plume
+diaporama: tenue-diaporama-pointeur

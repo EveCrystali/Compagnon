@@ -1,0 +1,19 @@
+# prise de pêche
+id: prise-cle
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#c97a28 c=#f2a94e
+images:
+...aaaaa..................
+..abbbbba.................
+.ababbbbba................
+abbbaaabbba...............
+abba...abbaaaaaaaaaaaaaaa.
+abba...abbbccccccccccccbba
+abba...abbbbabbbbbbbabbbba
+abba...abbbbbbbbbbbbbbbbba
+abbbaaabbbaaaaaaaaabbaabba
+.abbbbbaba........abbaabba
+..abbbbba.........abbaabba
+...aaaaa...........aa..aa.

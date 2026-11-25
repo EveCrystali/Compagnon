@@ -1,0 +1,14 @@
+# regard serein de Pilou Astral (stade 4)
+id: oeil-serein
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=@contour b=#1c2128 c=#ffffff
+images:
+......
+......
+aaaaaa
+bbbbbb
+bccbbb
+.bbbb.
+......

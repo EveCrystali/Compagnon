@@ -1,0 +1,17 @@
+# Teintes de Pilou : contour, ombre, base, clair. Les cinq dernières viennent de la boutique.
+bleu: #1f4f8a #4a8fdc #6cb6ff #b4dbff
+orange: #8a4a1f #d9803a #f69d50 #ffc89a
+nuit: #0d2a4d #2a5ea8 #3f7fd6 #8fbaf0
+ambre: #7a4210 #c97a28 #f2a94e #ffd59a
+argent: #3b4654 #8796a8 #b8c4d2 #e6ecf2
+aurore: #3a2a7a #6a5acd #9b8cff #d2caff
+lagon: #0f4a63 #2689b8 #3fb8e0 #a8e4f7
+braise: #6b2f0c #c45a1a #f07c2a #ffc08a
+nacre: #4d5566 #b9b4cf #e4def5 #ffffff
+abysse: #0a1230 #1b2a6b #2f45a8 #7f93e8
+comete: #5a4410 #c9a227 #f5d76e #fff6cc
+lavande: #3d2f63 #7a66c2 #a996f0 #e2d9ff
+corail-orange: #7a3414 #d0662e #ff9a5c #ffd2b3
+ardoise: #1f262e #4a5563 #6b7787 #a9b4c2
+sable: #6b5235 #b08f62 #dcc193 #f6ead2
+glacier: #24506b #6aa6c7 #a9d7ee #e8f7ff

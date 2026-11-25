@@ -1,0 +1,43 @@
+# pose | sha256 des pixels ARGB (gros-boutiste, ligne par ligne, 48 × 56)
+expr=repos t=0 | e3b385b30ebd868fbe7183029b069a54085aec6ceca1f87fc7990bd79c44cbdc
+expr=repos t=1300 cligne=1 | e8d4bac578ca92585537eb7ba568a2611d10bc4b252e181291aff4001325f2a4
+expr=concentre t=450 | c44faf6abef3073c0a89b794d442a08333c136b47fd8f970ece7d00be75a64e9
+expr=attente t=900 | e015a7760cdaf284f7eb0b5a321f756ffd29ea4f9916f8374a741ea10661d040
+expr=inquiet t=320 | cd0fe87878b85ed026800300e0892fc1310f25e619dda00275da005eb3acc272
+expr=fete t=250 | 5536bb03f303fa9fce8af348ff6456bc3643e60a6fb8c1aa2870fa4c9358759e
+expr=soulage t=700 | 2967d243687f5c0baa65f52feae5f3b3ca7511dc42af60de4ddf9cbc1ac101cd
+expr=grimace t=110 | a992913bb8e2dc2ecfe3e702170d08b247a0aec7db8543915be17d17c362a078
+expr=caresse t=800 | b5ece9cdc09a789b463896f0a09d4e78317cd238f309888f5836200b916d65da
+expr=dort t=2100 | ad97c65267317376603308dd10559a2cfde936bca4bc2a6dc4d454a6393fc6ab
+expr=repos t=500 etourdi=1 | 719903d04c715cb71890c5c06a3cb91ca5942fbbd8a2ef47018bbaf700775731
+expr=repos t=500 baille=1 | db3e9ae157f0632d402e3614f2ca411078f53f78b1b6f56e0ef9a696d20ba197
+expr=repos t=500 fatigue=1 | e0f2a18849fe817a7ada74a186af782ebe9cc2bf9c69ce66fa70075c9e69c05b
+expr=repos t=230 marche=1 regard=1 | 50027d966801d43c20754e504ee0dda931e2da3847f53e0c0fd6b4931dbd5230
+expr=repos t=90 marche=1 course=1 regard=-1 | 5a8ba4e9e3508b88f03cc0012d23f36cbdc30465537a2d765bab7658ef43e06c
+expr=repos t=0 saut=3 | dffb90715107346b051e31d2032c44178dd3d9f986eb6d0483d87ce8b7ec1d6e
+expr=repos t=0 assis=1 | 70a0533c24e5c6012f8fca240103bb82e4d54393da00be3cecab4d64eca7412d
+expr=repos t=300 suspendu=1 | 5e29a2084063cb4047ec5612db4608d0036860d352ec34e5e50f32ec3f873423
+expr=repos t=0 chute=0.6 | 734e839abb8b9280e7f1b17c1f249a5d4bd47c334fe340299206ac1c1c231420
+expr=repos t=0 regard=1 clin=1 regard_y=-1 | 0d3e638e2208ff313938b35942baec8b116ebb0d36428a42d27355320c1aa070
+expr=repos t=0 couleur=lavande | 0eec7c3739f2e7572c0e0df64f3e0d8df35ea02afd632ae6f81beafc21c57cd2
+expr=inquiet t=0 couleur=sable | da1ca4e02d535ea38574ca1491b3d78e2827dfd86ddc40bcf3c4a1abbc7eeac8
+expr=repos t=0 accessoire=bonnet | 0e7fb6fcf93aa815932ae5ec8a44297e69915e7180f4de327f99a1c85322aa5f
+expr=repos t=0 accessoire=couronne | 5281a4111b8a2a50d2db66a5699a9e091aa8b9bc5dab6faa5bd8f2b560b21533
+expr=repos t=0 accessoire=lunettes | 952ffb1b4271de33917e62d3cf3be7eb96ececa46adbbef39597c985953bcc86
+expr=repos t=400 tenue=code | 7f945a3b8b5b235d6f9b1268684023a31815fa73284bc04a2ea8f184ab76ac0d
+expr=repos t=400 tenue=musique | 1246b38fb9391e61f149a1cf20f6c8368658e11b2aa67fc6ec26698b114d7ac4
+expr=concentre t=400 tenue=jeu-mmo | c5c77345d950aa70f7048714037777e5a6bdfdab2a99f92e43252622284cddce
+expr=repos t=400 tenue=diaporama | a62bd35cf8329d9282b7533ccb9bd2bdcac4469243a40abe172f84a83f5ea203
+expr=repos t=300 objets=chapeau-sorcier,echarpe,petit-chat | 7977a269cebdaeb13f7a635753dfc2b93be2d511add7a83dad1f9509fe22293c
+expr=repos t=300 objets=cape,baguette,aura | 3b8476d520b2c6326216f525cda66620dac522dd824709261daac706577d6336
+expr=repos t=300 objets=inconnu,haut-de-forme | 6b1df142fdc8ee7ac1554de7708f5614f49261da2cc1243f0fdabe959313df18
+expr=repos t=300 stade=1 | a21be00fd3d1ce841147d6c8e2025a1b5582ad7d269c09ae7aeefd737b0192e9
+expr=fete t=300 stade=1 | 421cbefe0fc1c64dfb0145439acd1316c6a38409d8f81c8351c28d2c4b55f592
+expr=repos t=300 stade=3 | 352ec14ed598f2b06584cfeeb2eb2e9820ab89535352b3fb0ffb997215c06072
+expr=dort t=1300 stade=3 accessoire=bonnet | 6563cc1433bc4d9a298cd90280c30f6d62ab5c664417cd55cae7d13e626a94b7
+expr=repos t=300 stade=4 | 367f0d88b9714843b6349ba4daeaf4e86051a14c52acefa31922bc39bf024490
+expr=fete t=300 stade=4 tenue=code | cd1230638d1b2a83448361a446aa58dabf3097ccc082e119386103523909d8f5
+expr=repos t=0 stade=3 evolution=0.2 | 76d14596192b2535293131900807320b7072fdaae23d84140e2f02fddb1744b5
+expr=repos t=0 stade=3 evolution=0.5 | 76d14596192b2535293131900807320b7072fdaae23d84140e2f02fddb1744b5
+expr=repos t=0 stade=4 evolution=0.9 | b1e151cb400b5da0b1d74a4f6ea12c0b5b7f496fb40ac4501c57405a8b8e8699
+expr=repos t=600 reaction=sueur | bf677441b1c5bcff55ab3bf58f4a483a26e2142bbf246d0f6ae58f6cd890f50f

@@ -1,0 +1,23 @@
+# bulle à éclater
+id: bulle
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a8fdc b=#b4dbff c=#d8ecff d=#ffffff
+images:
+....aaaaaaaa....
+...abbbbbbbba...
+..abbccccccbba..
+.abbccccccccbba.
+abbddddccccccbba
+abcddddcccccccba
+abccccccccccccba
+abccccccccccccba
+abccccccccccccba
+abccccccccccccba
+abccccccccccccba
+abbccccccccdcbba
+.abbccccccccbba.
+..abbccccccbba..
+...abbbbbbbba...
+....aaaaaaaa....

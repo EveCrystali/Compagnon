@@ -1,0 +1,22 @@
+id: medaille
+slot: cou
+ancre: cou
+decalage: -6 -2
+palette: a=#1c2128 b=#6cb6ff c=#4a8fdc d=#f5d76e e=#c9a227 f=#fff6cc
+images:
+abbbbaacccca
+.abbbaaccca.
+.abbbbcccca.
+..abbbccca..
+..abbbccca..
+...abccca...
+...abccca...
+..adddddda..
+.addeeeedda.
+.adeeeeeeda.
+.adeeefeeda.
+.adeefffeda.
+.adeeefeeda.
+.addeeeedda.
+..adddddda..
+...aaaaaa...

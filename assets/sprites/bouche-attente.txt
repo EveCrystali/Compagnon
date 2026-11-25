@@ -1,0 +1,10 @@
+# bouche, centrée sur l'axe de Pilou
+id: bouche-attente
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+.aa.
+a..a
+.aa.

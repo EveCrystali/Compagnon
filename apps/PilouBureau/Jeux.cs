@@ -61,6 +61,12 @@ public sealed partial class FenetrePilou
     private static readonly Brush ContourBleu = Geler(Color.FromRgb(0x1f, 0x4f, 0x8a));
     private static readonly Brush Creme = Geler(Color.FromRgb(0xf6, 0xf8, 0xfa));
 
+    private static Pixels Cliquable(Pixels p)
+    {
+        p.Cursor = Cursors.Hand;
+        return p;
+    }
+
     private static Brush Geler(Color c)
     {
         var b = new SolidColorBrush(c);
@@ -240,7 +246,8 @@ public sealed partial class FenetrePilou
         switch (jeu)
         {
             case Jeu.Etoile:
-                _etoile = new Pixels(MotifEtoile, new Brush?[] { null, OrangeJeu, OrangeClair, Blanc }, ContourXp) { Cursor = Cursors.Hand };
+                _etoile = Pixels.Sprite("etoile", 2.2) ?? new Pixels(MotifEtoile, new Brush?[] { null, OrangeJeu, OrangeClair, Blanc }, ContourXp);
+                _etoile.Cursor = Cursors.Hand;
                 _etoilePos = new Point(Math.Clamp(TeteX + (_hasard.NextDouble() * 2 - 1) * 120, 16, LargeurBase - 40), 24 + _hasard.NextDouble() * 70);
                 _etoile.MouseLeftButtonDown += (_, e) =>
                 {
@@ -258,7 +265,7 @@ public sealed partial class FenetrePilou
                 {
                     var b = new BulleSavon
                     {
-                        Forme = new Pixels(MotifBulle, new Brush?[] { null, Creme, BulleFond, Blanc }, null) { Cursor = Cursors.Hand },
+                        Forme = Cliquable(Pixels.Sprite("bulle", 2.2) ?? new Pixels(MotifBulle, new Brush?[] { null, Creme, BulleFond, Blanc }, null)),
                         Nee = t + i * 450,
                         X0 = TeteX + (i - 1) * 34,
                         Phase = _hasard.NextDouble() * 6,
@@ -292,7 +299,8 @@ public sealed partial class FenetrePilou
                 DemarrerCuisine(t);
                 break;
             case Jeu.TapeCinq:
-                _main = new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu) { Cursor = Cursors.Hand };
+                _main = Pixels.Sprite("main", 2.2) ?? new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu);
+                _main.Cursor = Cursors.Hand;
                 _main.MouseLeftButtonDown += (_, e) =>
                 {
                     Gagner(10, new Point(TeteX - 18, TeteY - 30));
@@ -361,7 +369,8 @@ public sealed partial class FenetrePilou
                 // Alignée sur la grille de pixels ; elle scintille au lieu de tourner.
                 Canvas.SetLeft(_etoile, Math.Round((_etoilePos.X + Math.Sin(t / 400) * 6) / 4) * 4);
                 Canvas.SetTop(_etoile, Math.Round((_etoilePos.Y + Math.Cos(t / 520) * 4) / 4) * 4);
-                _etoile.Changer((int)(t / 220) % 2 == 0 ? MotifEtoile : MotifEtoile2);
+                if (Banque.Commune["etoile"] is not null) _etoile.Changer("etoile", t);
+                else _etoile.Changer((int)(t / 220) % 2 == 0 ? MotifEtoile : MotifEtoile2);
                 _etoile.Opacity = age > 7500 ? (9000 - age) / 1500 : 1;
                 break;
             case Jeu.Bulles:

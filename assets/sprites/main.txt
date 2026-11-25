@@ -1,0 +1,27 @@
+# tape m'en cinq
+id: main
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#ffd8b0 c=#ffc89a d=#f69d50 e=#6cb6ff
+images:
+...aaabcabcaaa....
+..abcaccaccabca...
+..accaccaccacca...
+..accaccaccacca...
+..accaccaccacca...
+..accaccaccacca...
+..accaccaccacca...
+..acccccccccccca..
+..acccccccccccca..
+..acccccccccccca.a
+..accccccccccccaac
+..accccccccccccacc
+..acccddddddccccca
+..acccccccccccccca
+..accccccccccccca.
+..accccccccccccca.
+..acccccccccccca..
+..acccccccccccca..
+..aeeeeeeeeeeeea..
+..aeeeeeeeeeeeea..

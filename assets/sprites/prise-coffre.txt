@@ -1,0 +1,24 @@
+# prise de pêche
+id: prise-coffre
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f2a94e c=#b4dbff d=#6cb6ff e=#3b4654 f=#f5d76e g=#c97a28 h=#fff6cc
+images:
+.......aaaaaaaa.......
+....aaabbbbbbbbaaa....
+...abbbbbbbbbbbbbca...
+..adbbbbbbbbbbbbbbba..
+.abbbbbbbbbbbbbbbbbba.
+abbbbbbbbbbbbbbbbbbbba
+aeeeeeeeeeeeeeeeeeeeea
+aeeeeeeeeffffeeeeeeeea
+aggggggggffffgggggggga
+aggggggggfaafgggggggga
+aggggggggfaafgggggggga
+aggggggggffffgghggggga
+agggggggggggggggggggga
+agggggggggggggggggggga
+aeeeeeeeeeeeeeeeeeeeea
+aeeeeeeeeeeeeeeeeeeeea
+.aaaaaaaaaaaaaaaaaaaa.
