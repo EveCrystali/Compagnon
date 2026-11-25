@@ -14,6 +14,11 @@ public sealed class Profil
     public int XpClaudeVue { get; set; } = -1;
     public int JeuxGagnes { get; set; }
     public int Caresses { get; set; }
+    // Pêche et cuisine : prises de chaque espèce (carnet), ingrédients en réserve, plats déjà faits.
+    public Dictionary<string, int> Carnet { get; set; } = new();
+    public Dictionary<string, int> Stock { get; set; } = new();
+    public List<string> Plats { get; set; } = new();
+    public int PlatsCuisines { get; set; }
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

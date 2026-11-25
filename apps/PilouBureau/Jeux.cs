@@ -12,7 +12,7 @@ namespace PilouBureau;
 // via le dossier de partage. Les niveaux débloquent les récompenses (Recompenses.cs).
 public sealed partial class FenetrePilou
 {
-    private enum Jeu { Aucun, Etoile, Bulles, TapeCinq }
+    private enum Jeu { Aucun, Etoile, Bulles, TapeCinq, Peche, Cuisine }
 
     private sealed class BulleSavon
     {
@@ -93,6 +93,19 @@ public sealed partial class FenetrePilou
             case "bulles": Demarrer(Jeu.Bulles, t - 1800); break;
             case "tape": Demarrer(Jeu.TapeCinq, t); break;
             case "etourdi": _etourdiJusque = t + 6000; Dire("ouh, la tête me tourne…", 5000); break;
+            case "peche": Demarrer(Jeu.Peche, t); break;
+            case "mord":
+                Demarrer(Jeu.Peche, t - 800);
+                _mordA = t + 250;
+                break;
+            case "prise":
+                Demarrer(Jeu.Peche, t);
+                FinPeche(Butin.Prises[^1], false, t);
+                break;
+            case "cuisine":
+                if (!Butin.PeutCuisiner(_profil.Stock)) _profil.Stock["goujon"] = 2;
+                Demarrer(Jeu.Cuisine, t - 3000);
+                break;
             case "niveau": Flotter("+10 xp"); Flotter("NIVEAU 5", 1.6, new Point(TeteX - 50, TeteY - 70)); Dire("niveau 5 ! nouveau : lunettes de soleil", 5000); break;
         }
     }
@@ -160,6 +173,10 @@ public sealed partial class FenetrePilou
         Accessoire.Feuille => "Feuille d'automne",
         Accessoire.Lunettes => "Lunettes de soleil",
         Accessoire.Couronne => "Couronne",
+        Accessoire.ChapeauPeche => "Chapeau de pêcheur",
+        Accessoire.Toque => "Toque de chef",
+        Accessoire.Tablier => "Tablier",
+        Accessoire.EtoileMer => "Étoile de mer",
         Accessoire.Aucun => "Aucun",
         _ => "Selon la saison",
     };
@@ -210,7 +227,8 @@ public sealed partial class FenetrePilou
         if (!_reglages.Jeux || _jeuEnCours != Jeu.Aucun || t < _prochainJeu) return;
         if (expr is not Expr.Repos || _dortBureau || _inactif > 60_000 || _geste == Geste.SauteSouris || _attrape) return;
         _prochainJeu = t + (8 + _hasard.NextDouble() * 8) * 60_000;
-        Demarrer((Jeu)(1 + _hasard.Next(3)), t);
+        // Une fois sur trois, une partie de pêche (tu es là : à toi de ferrer).
+        Demarrer(_hasard.NextDouble() < 0.33 ? Jeu.Peche : (Jeu)(1 + _hasard.Next(3)), t);
     }
 
     private void Demarrer(Jeu jeu, double t)
@@ -267,6 +285,12 @@ public sealed partial class FenetrePilou
                 }
                 Dire("pop les bulles !", 2400);
                 break;
+            case Jeu.Peche:
+                DemarrerPeche(t);
+                break;
+            case Jeu.Cuisine:
+                DemarrerCuisine(t);
+                break;
             case Jeu.TapeCinq:
                 _main = new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu) { Cursor = Cursors.Hand };
                 _main.MouseLeftButtonDown += (_, e) =>
@@ -291,6 +315,7 @@ public sealed partial class FenetrePilou
         _etoile = null;
         _main = null;
         _bullesJeu.Clear();
+        ArreterPeche();
         _jeuEnCours = Jeu.Aucun;
         if (mot != "") Dire(mot, 1800);
     }
@@ -357,6 +382,12 @@ public sealed partial class FenetrePilou
                 if (!restent && age > 1500) Arreter(_bullesEclatees > 0 ? "" : "plus de bulles…");
                 break;
             }
+            case Jeu.Peche:
+                AnimerPeche(t);
+                break;
+            case Jeu.Cuisine:
+                AnimerCuisine(t);
+                break;
             case Jeu.TapeCinq when _main is not null:
                 if (age > 4500)
                 {

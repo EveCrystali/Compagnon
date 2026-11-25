@@ -6,7 +6,7 @@ namespace PilouBureau;
 
 public enum ModeBulle { Detaillee, Compacte, Masquee }
 public enum ThemeBulle { Auto, Clair, Sombre }
-public enum Accessoire { Saison, Aucun, Bonnet, Casque, Noeud, Feuille, Lunettes, Couronne }
+public enum Accessoire { Saison, Aucun, Bonnet, Casque, Noeud, Feuille, Lunettes, Couronne, ChapeauPeche, Toque, Tablier, EtoileMer }
 
 // Options de Pilou, gardées dans ~/.claude/compagnon/reglages.json (choisies au clic droit).
 public sealed class Reglages
