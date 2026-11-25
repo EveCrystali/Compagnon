@@ -370,6 +370,7 @@ public sealed partial class FenetrePilou : Window
                 }
                 if (e.Attente != "" && avant.Attente == "")
                 {
+                    PublierSortie("⏳ Une IA t'attend", e.Claude ? "Claude Code" : "");
                     _alerteJusque = t + 5000;
                     _tSaut = t;
                     _dernierEvenement = t;

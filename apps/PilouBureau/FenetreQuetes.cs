@@ -38,6 +38,7 @@ public sealed partial class FenetrePilou
         var coffre = gains.FirstOrDefault(g => g.Coffre);
         var quete = gains.FirstOrDefault(g => !g.Coffre);
         Dire(coffre is not null ? $"✦ {coffre.Texte} !" : $"✦ quête réussie : {quete?.Texte}", 4200);
+        PublierSortie(coffre is not null ? $"✦ {coffre.Texte}" : "✦ Quête réussie", coffre is null ? quete?.Texte ?? "" : "");
         _salueJusque = Maintenant + 1800;
         _tSaut = Maintenant;
         VerifierNiveau();

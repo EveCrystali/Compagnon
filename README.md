@@ -66,8 +66,15 @@ d'autres : Claude Code, Codex, activités, statut Discord, webhook, téléphone,
 - **API locale** : `http://127.0.0.1:47821`, jeton obligatoire, refusée aux pages web et au réseau.
   Un script envoie `POST /evenements` (« build fini », « nouveau mail »), lit `GET /etat`. Exemples
   curl et PowerShell, et comment écrire un connecteur en un fichier : [docs/API.md](docs/API.md).
-- **Secrets** (jetons des futurs connecteurs) : chiffrés par Windows (DPAPI) dans `secrets.bin`,
+- **Secrets** (jetons des connecteurs) : chiffrés par Windows (DPAPI) dans `secrets.bin`,
   jamais en clair dans `reglages.json`.
+- **Services** (coupés tant que tu ne les coches pas, mode d'emploi pas à pas dans chaque carte et dans
+  [docs/CONNECTEURS.md](docs/CONNECTEURS.md)) : **Discord** par un bot à toi (mentions, salons
+  suivis, salon de sortie ; jamais de selfbot), **GitHub** (revues, commentaires, CI, PR fusionnées),
+  **Mail** IMAP (expéditeur et sujet seulement, Pilou facteur), **Agenda** ICS (rappel avant une
+  réunion, Pilou se cache pendant, quête « ponctuel »), **Spotify** (Pilou danse au tempo du morceau),
+  **Twitch** et **YouTube** (lives, nouvelles vidéos), **Home Assistant** (entités choisies). Les
+  5 dernières nouvelles s'affichent aussi sur l'Accueil de l'app Android (titre seul en option).
 
 ## Météo
 
@@ -129,7 +136,7 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
-- **Connecteurs…** : voir plus haut (météo, API locale) ;
+- **Connecteurs…** : voir plus haut (météo, services, API locale) ;
 - **Démarrer avec Windows**, se cacher 10 min, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
