@@ -7,7 +7,7 @@ import android.view.View;
 
 /** Pilou animé : respire, cligne, sautille quand il se passe quelque chose. */
 public final class PilouVue extends View {
-    private final float p;
+    private float p;
     private String expr = "dort", couleur = "bleu";
     private long prochainClin = 2500, finClin, debutSaut = -10_000;
     private boolean anime = true;
@@ -22,6 +22,14 @@ public final class PilouVue extends View {
             debutSaut = SystemClock.uptimeMillis();
         expr = expression;
         couleur = teinte;
+        invalidate();
+    }
+
+    /** Nouvelle taille de pixel : la vue se remesure. */
+    public void pixel(float nouveau) {
+        if (nouveau == p) return;
+        p = nouveau;
+        requestLayout();
         invalidate();
     }
 

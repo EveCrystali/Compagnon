@@ -39,7 +39,7 @@ public final class Principale extends Activity {
         int m = (int) (20 * d);
         pile.setPadding(m, m, m, m);
 
-        pilou = new PilouVue(this, 4 * d);
+        pilou = new PilouVue(this, 4 * d * Prefs.taille(this) / 1.6f);
         LinearLayout.LayoutParams centre = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         centre.gravity = Gravity.CENTER_HORIZONTAL;
         pile.addView(pilou, centre);
@@ -75,6 +75,8 @@ public final class Principale extends Activity {
             Veille.demarrer(this);
         });
         pile.addView(bulle);
+        pile.addView(note("Taille de Pilou flottant"));
+        pile.addView(curseurTaille());
         pile.addView(caseACocher("Me prévenir quand une IA attend", Prefs.alerteAttente(this),
                 oui -> Prefs.de(this).edit().putBoolean("alerteAttente", oui).apply()));
         pile.addView(caseACocher("Me prévenir quand une session finit", Prefs.alerteFin(this),
@@ -187,6 +189,34 @@ public final class Principale extends Activity {
         b.setAllCaps(false);
         b.setOnClickListener(action);
         return b;
+    }
+
+    // Curseur de 60 % à 250 % ; l'aperçu en haut de l'écran et le Pilou flottant suivent en direct.
+    private View curseurTaille() {
+        android.widget.SeekBar s = new android.widget.SeekBar(this);
+        int min = Math.round(Prefs.TAILLE_MIN * 100), max = Math.round(Prefs.TAILLE_MAX * 100);
+        s.setMax(max - min);
+        s.setProgress(Math.round(Prefs.taille(this) * 100) - min);
+        float d = getResources().getDisplayMetrics().density;
+        s.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(android.widget.SeekBar b, int v, boolean parLaPersonne) {
+                if (!parLaPersonne) return;
+                float t = (v + min) / 100f;
+                Prefs.de(Principale.this).edit().putFloat("taille", t).apply();
+                pilou.pixel(4 * d * t / 1.6f);
+                Veille.demarrer(Principale.this);
+            }
+
+            @Override
+            public void onStartTrackingTouch(android.widget.SeekBar b) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(android.widget.SeekBar b) {
+            }
+        });
+        return s;
     }
 
     interface Choix {

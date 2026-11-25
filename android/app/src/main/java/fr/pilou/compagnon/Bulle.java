@@ -39,7 +39,7 @@ final class Bulle {
         ctx = c;
         wm = c.getSystemService(WindowManager.class);
         d = c.getResources().getDisplayMetrics().density;
-        pilou = new PilouVue(c, 2.2f * d);
+        pilou = new PilouVue(c, 2.2f * d * Prefs.taille(c));
         panneau = new LinearLayout(c);
         panneau.setOrientation(LinearLayout.VERTICAL);
         int m = (int) (10 * d);
@@ -52,7 +52,7 @@ final class Bulle {
         panneau.setVisibility(View.GONE);
         racine = new LinearLayout(c);
         racine.setOrientation(LinearLayout.VERTICAL);
-        racine.setGravity(Gravity.CENTER_HORIZONTAL);
+        racine.setGravity(Gravity.START | Gravity.TOP);
         racine.addView(panneau);
         racine.addView(pilou);
 
@@ -65,6 +65,14 @@ final class Bulle {
         lp.y = Prefs.de(c).getInt("bulleY", (int) (c.getResources().getDisplayMetrics().heightPixels * 0.6));
         pilou.setOnTouchListener(new Glisser());
         panneau.setOnClickListener(v -> fermer());
+    }
+
+    /** Taille choisie dans l'app : appliquée tout de suite, Pilou reste à sa place. */
+    void reglerTaille() {
+        int[] ici = positionPilou();
+        pilou.pixel(2.2f * d * Prefs.taille(ctx));
+        pilou.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        ancrer(ici);
     }
 
     void montrer() {
@@ -88,8 +96,12 @@ final class Bulle {
     void maj(Etat e, long maintenant) {
         etat = e;
         pilou.montrer(e.expression(maintenant), e.couleur);
-        if (ouvert) remplir(maintenant);
         if (ouvert && SystemClock.uptimeMillis() > ouvertJusque && ouvertJusque > 0) fermer();
+        else if (ouvert) {
+            int[] ici = positionPilou();
+            remplir(maintenant);
+            ancrer(ici);
+        }
     }
 
     /** Une IA attend : il saute et montre la bulle quelques secondes. */
@@ -99,19 +111,60 @@ final class Bulle {
     }
 
     private void ouvrir(long ms) {
+        int[] ici = positionPilou();
         ouvert = true;
         ouvertJusque = ms > 0 ? SystemClock.uptimeMillis() + ms : 0;
         remplir(System.currentTimeMillis());
         panneau.setVisibility(View.VISIBLE);
+        ancrer(ici);
         if (ms > 0) h.postDelayed(() -> {
             if (ouvertJusque > 0 && SystemClock.uptimeMillis() >= ouvertJusque) fermer();
         }, ms + 50);
     }
 
     private void fermer() {
+        int[] ici = positionPilou();
         ouvert = false;
         ouvertJusque = 0;
         panneau.setVisibility(View.GONE);
+        ancrer(ici);
+    }
+
+    // Où est Pilou à l'écran (coin haut-gauche de son dessin), quelle que soit la bulle.
+    private int[] positionPilou() {
+        return new int[]{lp.x + pilou.getLeft(), lp.y + pilou.getTop()};
+    }
+
+    // La fenêtre se recale pour que Pilou reste exactement là où il était : la bulle s'ouvre au-dessus
+    // de lui (en dessous s'il est trop haut), alignée du côté de l'écran où il se trouve.
+    private void ancrer(int[] ici) {
+        int largeurEcran = ctx.getResources().getDisplayMetrics().widthPixels;
+        int lp0 = pilou.getMeasuredWidth();
+        if (!ouvert) {
+            racine.removeAllViews();
+            racine.addView(panneau);
+            racine.addView(pilou);
+            lp.x = ici[0];
+            lp.y = ici[1];
+        } else {
+            panneau.measure(View.MeasureSpec.makeMeasureSpec(largeurEcran, View.MeasureSpec.AT_MOST),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            int w = Math.max(panneau.getMeasuredWidth(), lp0), hp = panneau.getMeasuredHeight();
+            boolean droite = ici[0] + lp0 / 2 > largeurEcran / 2;
+            boolean dessus = ici[1] - hp >= 0;
+            racine.setGravity((droite ? Gravity.END : Gravity.START) | Gravity.TOP);
+            racine.removeAllViews();
+            if (dessus) {
+                racine.addView(panneau);
+                racine.addView(pilou);
+            } else {
+                racine.addView(pilou);
+                racine.addView(panneau);
+            }
+            lp.x = droite ? ici[0] + lp0 - w : ici[0];
+            lp.y = dessus ? ici[1] - hp : ici[1];
+        }
+        if (pose) wm.updateViewLayout(racine, lp);
     }
 
     private void remplir(long maintenant) {
@@ -158,9 +211,14 @@ final class Bulle {
                     h.postDelayed(longAppui, 700);
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    if (Math.hypot(e.getRawX() - x0, e.getRawY() - y0) > 12) {
+                    if (!bouge && Math.hypot(e.getRawX() - x0, e.getRawY() - y0) > 12) {
                         bouge = true;
                         h.removeCallbacks(longAppui);
+                        if (ouvert) {
+                            fermer();
+                            dx = lp.x - e.getRawX();
+                            dy = lp.y - e.getRawY();
+                        }
                     }
                     if (bouge) {
                         lp.x = (int) (e.getRawX() + dx);

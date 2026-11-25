@@ -10,7 +10,7 @@ le PC.
 |---|---|---|
 | 1. Notification permanente | « ❗ 1 t'attend · ◐ 2 en cours », les lignes en la dépliant, Pilou en icône | toujours là pendant l'écoute |
 | 2. Widget | Pilou, son niveau et les 4 sessions qui comptent | appui long sur l'écran d'accueil → Widgets → Pilou |
-| 3. Pilou flottant | Pilou par-dessus les autres applis ; toucher : la bulle ; glisser : le déplacer ; appui long : caché 10 min | case « Pilou flottant » (autorisation « Afficher par-dessus d'autres applis ») |
+| 3. Pilou flottant | Pilou par-dessus les autres applis ; toucher : la bulle (au-dessus de lui, ou en dessous s'il est en haut) ; glisser : le déplacer ; appui long : caché 10 min ; taille réglable dans l'app (60 à 250 %) | case « Pilou flottant » (autorisation « Afficher par-dessus d'autres applis ») |
 
 Alertes en plus : une notification sonore quand une IA attend ton autorisation ou te pose une
 question, une plus discrète quand une session finit (chacune se coupe dans l'app).
