@@ -45,7 +45,12 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            // Robolectric : le framework Android qu'il simule est résolu par Gradle (mis en cache par la CI)
+            // au lieu d'être téléchargé à chaque test depuis Maven Central (qui répond parfois 429).
             all {
+                dependsOn 'preparerRobolectric'
+                systemProperty 'robolectric.offline', 'true'
+                systemProperty 'robolectric.dependency.dir', layout.buildDirectory.dir('robolectric').get().asFile.absolutePath
                 testLogging {
                     events 'failed'
                     exceptionFormat 'full'
@@ -62,7 +67,18 @@ android {
     }
 }
 
+configurations {
+    robolectricRuntime
+}
+
+tasks.register('preparerRobolectric', Copy) {
+    from configurations.robolectricRuntime
+    into layout.buildDirectory.dir('robolectric')
+}
+
 dependencies {
+    // Même version que celle qu'attend Robolectric 4.14.1 pour sdk=34 (robolectric.properties).
+    robolectricRuntime 'org.robolectric:android-all-instrumented:14-robolectric-10818077-i7'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.json:json:20240303'
     testImplementation 'org.robolectric:robolectric:4.14.1'
