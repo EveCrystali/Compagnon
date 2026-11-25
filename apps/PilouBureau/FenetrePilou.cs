@@ -12,7 +12,7 @@ using System.Windows.Threading;
 namespace PilouBureau;
 
 // Fenêtre transparente toujours au premier plan : Pilou vit sur le bas de l'écran,
-// avec au-dessus de lui une bulle qui dit où en est chaque session Claude.
+// avec au-dessus de lui une bulle qui dit où en est chaque session (Claude, Codex, autres sources).
 // Seuls ses pixels et la bulle prennent la souris ; le reste laisse passer les clics.
 public sealed partial class FenetrePilou : Window
 {
@@ -45,7 +45,7 @@ public sealed partial class FenetrePilou : Window
     private readonly DispatcherTimer _image;
     private readonly DispatcherTimer _lecture;
     private readonly Dictionary<string, (bool EnTour, string Attente, double FinTour)> _vus = new();
-    // Ce qu'Antoine a déjà lu (clic sur la bulle ou sur Pilou) : session → signature de son état.
+    // Ce que la personne a déjà lu (clic sur la bulle ou sur Pilou) : session → signature de son état.
     private readonly Dictionary<string, string> _lus = new();
     private IReadOnlyList<EtatSession> _vivantes = Array.Empty<EtatSession>();
 
@@ -198,7 +198,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
             v => { _reglages.Taille = v; AppliquerTaille(); }));
-        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand Claude t'attend", ModeBulle.Masquee) },
+        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand on t'attend", ModeBulle.Masquee) },
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
@@ -261,6 +261,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(MenuIntegrations());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
         menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
@@ -335,6 +336,7 @@ public sealed partial class FenetrePilou : Window
             _attend = vivantes.Any(e => e.Attente != "");
             Transitions(vivantes);
             SuivreXp();
+            Integrer(vivantes, epoque);
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();

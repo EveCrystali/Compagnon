@@ -16,6 +16,24 @@ public static class Statut
     public const int MaxLignes = 6;
     private static readonly string[] Roue = { "◐", "◓", "◑", "◒" };
 
+    // Nom affiché d'une source : Claude, Codex, Cursor…
+    public static string Etiquette(string source) => source switch
+    {
+        "claude" => "Claude",
+        "codex" => "Codex",
+        "gemini" => "Gemini",
+        "copilot" => "Copilot",
+        "" => "?",
+        _ => char.ToUpperInvariant(source[0]) + source[1..],
+    };
+
+    // Libellé d'une session dans la bulle : les autres sources que Claude portent leur nom devant.
+    public static string Nom(EtatSession e)
+    {
+        var nom = e.Libelle == "" ? $"session {e.Session}" : e.Libelle;
+        return e.Claude ? nom : $"{Etiquette(e.Source)} · {nom}";
+    }
+
     public static string Duree(double ms)
     {
         var s = Math.Max(0, (int)(ms / 1000));
@@ -55,7 +73,7 @@ public static class Statut
         int repos = 0;
         foreach (var e in sessions)
         {
-            var nom = e.Libelle == "" ? $"session {e.Session}" : e.Libelle;
+            var nom = Nom(e);
             if (e.Attente == "permission")
                 attente.Add((e.DebutOutil, new("❗", nom, "attend ton autorisation", Ton.Attente)));
             else if (e.Attente == "question")

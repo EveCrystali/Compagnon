@@ -139,9 +139,9 @@ test("l'état est publié pour Pilou de bureau, une grimace comprise", async ($,
   on('fs.stat', () => ({ value: { kind: 'file', size: transcript.length, mtimeMs: 0, isLink: false } }))
   on('fs.read', () => ({ value: transcript }))
   await $.session.start({ cwd: '/', surface: 'desktop', isInteractive: true })
-  // Le moteur rend le chemin à la Windows.
-  const chemin = ['C:', 'Users', 'essai', '.claude', 'compagnon', 'etat-abcdef12.json'].join(String.fromCharCode(92))
-  expect(JSON.parse(ecrits[chemin] ?? '{}')).toMatchObject({ session: 'abcdef12', humeur: 'repos', bureau: true })
+  // Le moteur rend le chemin à sa façon (antislashs sous Windows, résolu ailleurs) : on cherche le fichier par son nom.
+  const chemin = Object.keys(ecrits).find(k => /[\\/]\.claude[\\/]compagnon[\\/]etat-abcdef12\.json$/.test(k)) ?? ''
+  expect(JSON.parse(ecrits[chemin] ?? '{}')).toMatchObject({ session: 'abcdef12', source: 'claude', humeur: 'repos', bureau: true })
 
   await $.tool.call({ tool: 'Bash', command: 'dotnet test' })
   await horloge.advance(500)

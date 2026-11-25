@@ -1,0 +1,38 @@
+name: Publier
+
+# Une étiquette v* (git tag v0.7.0 && git push --tags) fabrique PilouBureau.zip et la release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Tests
+        run: dotnet test apps/PilouBureau/tests
+      - name: Exécutable autonome (pas de .NET à installer)
+        run: >
+          dotnet publish apps/PilouBureau -c Release -r win-x64 --self-contained
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -o out
+      - name: Archive
+        shell: pwsh
+        run: Compress-Archive -Path out/* -DestinationPath PilouBureau.zip
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: PilouBureau.zip
+          generate_release_notes: true
+      - uses: actions/upload-artifact@v4
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        with:
+          name: PilouBureau
+          path: PilouBureau.zip

@@ -1,49 +1,72 @@
-# Pilou — compagnon pour Claude Code
+# Pilou — le compagnon de tes IA de code
 
-Un petit compagnon en pixel art qui vit sur le bas de l'écran, au premier plan, et suit toutes tes
-sessions Claude Code : une bulle dit lesquelles réfléchissent, lesquelles ont fini et lesquelles
-t'attendent. Il joue aussi (étoile filante, bulles, tape m'en cinq), gagne de l'XP et des niveaux.
+Une petite goutte d'encre bleue en pixels vit sur le bas de ton écran, au premier plan. Elle suit
+tes sessions **Claude Code** et **Codex** (et tout outil que tu y branches). Une bulle te dit
+lesquelles réfléchissent, lesquelles ont fini et lesquelles t'attendent. Elle joue aussi (étoile
+filante, bulles, tape m'en cinq), gagne de l'XP et des niveaux, et débloque accessoires, couleurs
+et titres.
 
-Deux morceaux :
-- `plugins/compagnon` : le mod Claude Code (état de chaque session, XP, widget de l'app) ;
-- `apps/PilouBureau` : l'overlay Windows (WPF, .NET 9) qui dessine Pilou par-dessus tout.
+```
+ ❗ Claude · refonte-auth     attend ton autorisation
+ ◐ Codex · mon-api            shell · 12 s
+ ✓ Claude · docs              fini · il y a 3 min
+```
 
-## Installer (Windows)
+## Installer (Windows 10/11)
+
+Dans PowerShell :
+
+```powershell
+irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/installer.ps1 | iex
+```
+
+Rien d'autre à installer (.NET est inclus). L'installateur pose l'overlay dans
+`%USERPROFILE%\.claude\compagnon\bureau\`, ajoute le mod si Claude Code est là, branche Codex s'il est
+là, et lance Pilou avec Windows. Le relancer met tout à jour. Options : `-SansCodex`, `-SansClaude`,
+`-SansDemarrage` (télécharger le script, puis `.\installer.ps1 -SansCodex`).
+
+À la main, si tu préfères :
 
 ```powershell
 claude plugin marketplace add EveCrystali/Compagnon
 claude plugin install compagnon@pilou --scope user
+# overlay : PilouBureau.zip de la dernière release, décompressé dans %USERPROFILE%\.claude\compagnon\bureau\
 ```
 
-Overlay : télécharger `PilouBureau.zip` de la dernière release et le décompresser dans
-`%USERPROFILE%\.claude\compagnon\bureau\` (le mod le lance au démarrage de chaque session). Il faut le
-.NET 9 Desktop Runtime. Ou le fabriquer depuis le dépôt :
+## Ce qu'il suit
 
-```powershell
-dotnet publish apps/PilouBureau -c Release -o "$env:USERPROFILE\.claude\compagnon\bureau"
-```
+| Source | Comment | Ce que dit la bulle |
+|---|---|---|
+| Claude Code (app, terminal) | le mod `compagnon` | titre de la session, outil en cours, autorisation, question, fini, erreur |
+| Codex (CLI, app, extension) | hooks dans `~/.codex/hooks.json`, posés par Pilou | `Codex · dossier`, outil, autorisation, fini |
+| tout le reste | `PilouBureau.exe --signal …` ou un fichier JSON | ce que l'outil signale |
 
-## Sans Claude, sur un autre PC
+Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
-L'overlay vit seul : il garde lui-même l'XP (profil `profil-<PC>.json`) et joue même quand Claude
-est fermé ou absent ; seule la bulle de statut des sessions a besoin du mod. Clic droit :
-- **Démarrer avec Windows** : il se lance à l'ouverture de session (clé Run de l'utilisateur) ;
-- **Partager l'XP entre PC…** : choisir un dossier commun (OneDrive, partage réseau). Chaque PC y
-  écrit son propre fichier, le total est la somme : les niveaux sont les mêmes partout.
+## Clic droit sur Pilou
 
-## Récompenses
+- **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;
+- **Récompenses** : tout le catalogue par niveau (`apps/PilouBureau/Recompenses.cs`) ;
+- **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
+  fichier, le total fait les niveaux ;
+- **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
+  travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
+  depuis 30 s ou a fini un long travail, si je suis loin du PC ;
+- **Démarrer avec Windows**, se cacher 10 min, quitter.
 
-Catalogue par niveau dans `apps/PilouBureau/Recompenses.cs` (menu clic droit « Récompenses ») :
-accessoires, couleurs (bleu nuit 6, ambre 8, argent 10, aurore 12), titres, traînée d'étoiles (9).
-Il s'allonge à chaque version.
+Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
 
 ## Mettre à jour
 
-```powershell
-claude plugin marketplace update pilou
-claude plugin update compagnon@pilou --scope user
-```
+Relancer la ligne d'installation. Ou : `claude plugin marketplace update pilou`, puis
+`claude plugin update compagnon@pilou --scope user` et `/reload-plugins`.
 
-puis `/reload-plugins` dans Claude Code ; pour l'overlay, la nouvelle release (ou `dotnet publish`).
+## Pour contribuer
 
-Détail des comportements et options : `plugins/compagnon/README.md`.
+- `plugins/compagnon` : le mod Claude Code (TypeScript) — tests : `claude plugin test plugins/compagnon` ;
+- `apps/PilouBureau` : l'overlay (WPF, .NET 9) — tests de la logique, sur tout OS :
+  `dotnet test apps/PilouBureau/tests` ; compiler depuis Linux ou macOS :
+  `dotnet build apps/PilouBureau -p:EnableWindowsTargeting=true` ;
+- une release : `git tag v0.7.0 && git push --tags` ; GitHub Actions fabrique `PilouBureau.zip`.
+
+Détail des comportements : [plugins/compagnon/README.md](plugins/compagnon/README.md).

@@ -8,6 +8,17 @@ public static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        // --signal <source> … : un autre logiciel (Codex, script…) signale un événement, puis on rend la main.
+        var iSignal = Array.IndexOf(args, "--signal");
+        if (iSignal >= 0)
+        {
+            var dossierSignal = args.FirstOrDefault(a => a.StartsWith("--dossier="))?["--dossier=".Length..] ?? Signal.Defaut();
+            return Signal.Principal(args[(iSignal + 1)..], dossierSignal);
+        }
+        // --brancher codex / --debrancher codex : pose ou retire les hooks de Pilou chez Codex.
+        if (args.Length >= 2 && args[0] is "--brancher" or "--debrancher")
+            return Integrations.Ligne(args[0] == "--brancher", args[1]);
+
         // Une seule instance : chaque session Claude tente de le lancer.
         bool rendu = args.Any(a => a.StartsWith("--instantane="));
         using var unique = new Mutex(true, rendu ? @"Local\PilouBureau-essai" : @"Local\PilouBureau", out var premier);
@@ -19,9 +30,7 @@ public static class Program
         var instantane = args.FirstOrDefault(a => a.StartsWith("--instantane="))?["--instantane=".Length..];
         var essai = args.FirstOrDefault(a => a.StartsWith("--essai="))?["--essai=".Length..];
         args = args.Where(a => a != "--devant" && !a.StartsWith("--instantane=") && !a.StartsWith("--essai=")).ToArray();
-        var dossier = args.Length > 0
-            ? args[0]
-            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".claude", "compagnon");
+        var dossier = args.Length > 0 ? args[0] : Signal.Defaut();
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var fenetre = new FenetrePilou(dossier, devant);
         fenetre.Show();

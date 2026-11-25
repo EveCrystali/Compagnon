@@ -23,6 +23,16 @@ public sealed class Reglages
     // Dossier où chaque PC dépose son profil d'XP (OneDrive commun, partage réseau…) ; vide = local.
     public string DossierPartage { get; set; } = "";
 
+    // Intégrations (menu « Intégrations »).
+    // Identifiant de l'application Discord « Pilou » (Developer Portal) : public, partagé par tous.
+    public const string DiscordAppParDefaut = "";
+    public bool DiscordStatut { get; set; }
+    public string DiscordApp { get; set; } = DiscordAppParDefaut;
+    public bool DiscordTitres { get; set; }
+    // Adresse où prévenir quand une IA attend ou a fini un long travail (webhook Discord, Slack, ntfy).
+    public string Webhook { get; set; } = "";
+    public bool WebhookSeulementAbsent { get; set; } = true;
+
     public static int Requis(Accessoire a) => Recompenses.Requis(a);
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;

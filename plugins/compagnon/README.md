@@ -5,6 +5,9 @@ Pilou, une petite goutte d'encre bleue à antenne, se promène par-dessus la fen
 la session. Le même compagnon suit toutes les sessions : nom, XP, énergie et souvenirs sont gardés
 dans le magasin du mod.
 
+Installation : `/plugin install compagnon --marketplace EveCrystali/Compagnon`, ou l'installateur
+du [README](../../README.md) (mod, overlay et Codex d'un coup).
+
 | Ce qui se passe | Ce qu'il fait | Signe de forme |
 |---|---|---|
 | rien | respire, cligne, regarde ailleurs, petit saut | yeux `● ●`, étincelle `✦` |
@@ -60,7 +63,7 @@ Tout est dessiné en pixels (grille 26 × 30, pixel de 4), objets des jeux et ch
 Au repos, Pilou se promène, s'assoit, bâille quand tout est calme depuis 3 min, saute, cligne de
 l'œil, et suit la souris du regard quand elle passe près de lui.
 
-Une session qui attend Antoine (autorisation, question) rend Pilou orange et inquiet, et il **court se
+Une session qui t'attend (autorisation, question) rend Pilou orange et inquiet, et il **court se
 placer sous la souris** (sur l'horizontale) et la suit, en sautillant une fois arrivé, jusqu'à la
 réponse ou au clic « lu ». Clic : caresse ; glisser : il change
 d'écran et retombe ; clic droit : caresser, se cacher 10 min, quitter. Libellé d'une session : le

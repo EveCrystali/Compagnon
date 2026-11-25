@@ -1,0 +1,19 @@
+name: Vérifier
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  overlay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Compiler l'overlay (cible Windows depuis Linux)
+        run: dotnet build apps/PilouBureau -c Release -p:EnableWindowsTargeting=true
+      - name: Tests (états, bulle, signaux, branchement Codex)
+        run: dotnet test apps/PilouBureau/tests
