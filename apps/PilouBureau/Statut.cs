@@ -8,7 +8,7 @@ public sealed record LigneStatut(string Signe, string Libelle, string Texte, Ton
 // Résumé d'une ligne pour la bulle compacte : « ◐ 2 en cours · ✓ 3 finies ».
 public sealed record Resume(int Attente, int Travail, int Fini, int Calme);
 
-// Ce que dit la bulle, session par session : d'abord ce qui attend Antoine, puis ce qui
+// Ce que dit la bulle, session par session : d'abord ce qui t'attend, puis ce qui
 // travaille, puis ce qui vient de finir. Chaque état a son signe (❗ ? ◐ ✓ ■ ✕), pas seulement une couleur.
 public static class Statut
 {

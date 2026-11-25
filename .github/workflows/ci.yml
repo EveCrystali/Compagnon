@@ -17,6 +17,17 @@ jobs:
         run: dotnet build apps/PilouBureau -c Release -p:EnableWindowsTargeting=true
       - name: Tests (états, bulle, signaux, branchement Codex)
         run: dotnet test apps/PilouBureau/tests
+      - name: Exécutable autonome pour Windows (à essayer sans release)
+        run: >
+          dotnet publish apps/PilouBureau -c Release -r win-x64 --self-contained -p:EnableWindowsTargeting=true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -o out
+      - run: cd out && zip -q ../PilouBureau.zip *
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PilouBureau-windows
+          path: |
+            PilouBureau.zip
+            installer.ps1
 
   android:
     runs-on: ubuntu-latest

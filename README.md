@@ -69,9 +69,17 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
 
-## Mettre à jour
+## Mises à jour
 
-Relancer la ligne d'installation. Ou : `claude plugin marketplace update pilou`, puis
+Rien à faire. Chaque fusion sur `main` publie une release (`v0.9.<n>`) avec `version.json`.
+- **PC** : une minute après le démarrage puis chaque jour, Pilou regarde la dernière release ; s'il y
+  a du neuf, il la télécharge, met aussi à jour le mod Claude, et se relance (« nouvelle version… »
+  dans sa bulle). Clic droit → *Version* : chercher maintenant, ou couper l'automatique.
+- **Téléphone** : une fois par jour, l'app vérifie ; une notification « Pilou 0.9.n est disponible »,
+  un appui, et Android demande de confirmer la mise à jour (la première fois, il faut autoriser Pilou
+  à installer des applis). Bouton « Chercher une mise à jour » dans l'app.
+
+À la main : relancer la ligne d'installation, ou `claude plugin marketplace update pilou` puis
 `claude plugin update compagnon@pilou --scope user` et `/reload-plugins`.
 
 ## Pour contribuer
@@ -81,6 +89,7 @@ Relancer la ligne d'installation. Ou : `claude plugin marketplace update pilou`,
   `dotnet test apps/PilouBureau/tests` ; compiler depuis Linux ou macOS :
   `dotnet build apps/PilouBureau -p:EnableWindowsTargeting=true` ;
 - `android/` : l'app Android (Java, sans bibliothèque) — construite par GitHub Actions ;
-- une release : `git tag v0.8.0 && git push --tags` ; GitHub Actions fabrique `PilouBureau.zip` et `Pilou.apk`.
+- une release : fusionner sur `main` (ou pousser une étiquette `v…`) ; GitHub Actions fabrique
+  `PilouBureau.zip`, `Pilou.apk`, `installer.ps1` et `version.json`.
 
 Détail des comportements : [plugins/compagnon/README.md](plugins/compagnon/README.md).

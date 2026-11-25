@@ -96,7 +96,7 @@ internal static class Natif
 
     [DllImport("user32.dll")] private static extern bool GetLastInputInfo(ref DerniereSaisie info);
 
-    // Temps depuis la dernière frappe ou le dernier mouvement de souris d'Antoine, en ms.
+    // Temps depuis la dernière frappe ou le dernier mouvement de souris, en ms.
     public static double InactifMs()
     {
         var info = new DerniereSaisie { Taille = (uint)Marshal.SizeOf<DerniereSaisie>() };
@@ -105,7 +105,7 @@ internal static class Natif
 
     public static (int X, int Y) Souris() => GetCursorPos(out var p) ? (p.X, p.Y) : (int.MinValue, int.MinValue);
 
-    // Met la fenêtre de Claude au premier plan (permis : c'est un clic d'Antoine sur Pilou).
+    // Met la fenêtre de Claude au premier plan (permis : c'est un clic de la personne sur Pilou).
     public static void Activer(IntPtr hwnd)
     {
         if (hwnd == IntPtr.Zero) return;
