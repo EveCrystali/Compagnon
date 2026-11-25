@@ -21,6 +21,9 @@ declare module 'claude-code' {
       finRaison: Shaped<string>
       attente: Shaped<string>
       debutOutil: Shaped<number>
+      // Commits et tests au vert de la session (quêtes de Pilou de bureau).
+      commits: Shaped<number>
+      tests: Shaped<number>
       // Recopie du magasin partagé ($.store), relue toutes les quelques secondes.
       nom: Shaped<string>
       xp: Shaped<number>

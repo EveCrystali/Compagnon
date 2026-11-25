@@ -36,6 +36,9 @@ const finRaison = atom({ plugin: 'compagnon', key: 'finRaison' } as const, '', {
 const attente = atom({ plugin: 'compagnon', key: 'attente' } as const, '', { shape: 'attente-1' })
 const debutOutil = atom({ plugin: 'compagnon', key: 'debutOutil' } as const, 0, { shape: 'debutOutil-1' })
 const QUESTIONS = new Set(['AskUserQuestion', 'ExitPlanMode'])
+// Commits et tests au vert de cette session : Pilou de bureau en tire ses quêtes.
+const commits = atom({ plugin: 'compagnon', key: 'commits' } as const, 0, { shape: 'commits-1' })
+const tests = atom({ plugin: 'compagnon', key: 'tests' } as const, 0, { shape: 'tests-1' })
 const souvenirs = atom({ plugin: 'compagnon', key: 'souvenirs' } as const, [] as string[], { shape: 'souvenirs-1' })
 
 const TEST = /\b(dotnet\s+test|npm\s+(run\s+)?test|pytest|jest|vitest|mstest|vstest|cargo\s+test|go\s+test|claude\s+plugin\s+test)\b/i
@@ -52,7 +55,8 @@ const marquer = () => {
   sale = true
 }
 
-const niveau = (points: number) => Math.floor(Math.sqrt(points / 5)) + 1
+// Même courbe que Pilou de bureau : xp(n) = 25·(n−1)².
+const niveau = (points: number) => Math.floor(Math.sqrt(Math.max(0, points) / 25)) + 1
 const borne = (n: number) => Math.max(0, Math.min(100, Math.round(n)))
 
 function heure(ms: number) {
@@ -142,6 +146,8 @@ async function publier($: EngineInterface) {
     attente: await read($, attente),
     debutOutil: await read($, debutOutil),
     xp: await read($, xp),
+    commits: await read($, commits),
+    tests: await read($, tests),
     bureau: (await $.store.get('bureau')) !== false,
   }
   await $.fs.write(`${dossierBureau}/etat-${idSession}.json`, JSON.stringify(etat))
@@ -430,9 +436,11 @@ export const register: Register = on => {
       } else if (r.deny === undefined && e.tool === 'Bash') {
         const cmd = e.command
         if (COMMIT.test(cmd)) {
+          await update($, commits, n => n + 1)
           await reagir($, 'fete')
           await vivre($, { xp: 5, energie: 4, souvenir: 'a fêté un commit' })
         } else if (TEST.test(cmd)) {
+          await update($, tests, n => n + 1)
           await reagir($, 'fete')
           await vivre($, { xp: 2, souvenir: 'tests au vert' })
         }
@@ -493,8 +501,8 @@ export const register: Register = on => {
 
     const points = await read($, xp)
     const n = niveau(points)
-    const plancher = 5 * (n - 1) ** 2
-    const plafond = 5 * n ** 2
+    const plancher = 25 * (n - 1) ** 2
+    const plafond = 25 * n ** 2
     const progression = ((points - plancher) / Math.max(1, plafond - plancher)) * 100
     const en = await read($, energie)
     const liste = await read($, souvenirs)

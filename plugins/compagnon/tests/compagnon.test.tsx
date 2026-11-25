@@ -101,7 +101,7 @@ test('sans message depuis 20 min il somnole, une caresse le réveille', async ($
 })
 
 test('le nom vient du magasin partagé et /compagnon nom le change', async ($, on) => {
-  const { magasin } = moteur(on, { nom: 'Brindille', xp: 45 })
+  const { magasin } = moteur(on, { nom: 'Brindille', xp: 225 }) // niveau 4 : xp(n) = 25·(n−1)²
   await $.session.start({ cwd: '/', surface: 'desktop', isInteractive: true })
 
   let ui = await $.ui.mount({ ...PANE, surface: 'desktop' })

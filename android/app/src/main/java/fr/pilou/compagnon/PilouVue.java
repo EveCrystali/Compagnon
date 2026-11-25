@@ -32,6 +32,16 @@ public final class PilouVue extends View {
         invalidate();
     }
 
+    /** Objets de la boutique portés (emplacement → id). Gardés pour le dessin, qui viendra les montrer. */
+    public final java.util.Map<String, String> equipe = new java.util.TreeMap<>();
+
+    public void equipe(java.util.Map<String, String> m) {
+        if (m.equals(equipe)) return;
+        equipe.clear();
+        equipe.putAll(m);
+        invalidate();
+    }
+
     /** Humeur passagère (caresse, fête, grimace) pendant ms millisecondes. */
     public void jouer(String humeur, long ms) {
         passager = humeur;

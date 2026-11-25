@@ -23,6 +23,7 @@ public final class Butin {
     public static final int PLAFOND_SEUL = RARE;
     /** Le bouchon plonge : il reste 1,2 s pour le toucher. */
     public static final long FENETRE_MORSURE = 1200;
+    /** Niveau d'accès en boutique de la canne dorée et de la marmite en cuivre (elles s'achètent désormais). */
     public static final int CANNE_DOREE = 30, MARMITE_CUIVRE = 35;
 
     public static final class Prise {
@@ -123,25 +124,33 @@ public final class Butin {
     }
 
     public static double poids(int r, int niveau) {
+        return poids(r, niveau, false);
+    }
+
+    public static double poids(int r, int niveau, boolean canneDoree) {
         switch (r) {
             case COMMUN: return 60;
             case PEU_COMMUN: return 26 + niveau * 0.3;
             case RARE: return 10 + niveau * 0.35;
             case EPIQUE: return 3 + niveau * 0.2;
-            default: return 0.6 + niveau * 0.06 + (niveau >= CANNE_DOREE ? 1.5 : 0);
+            default: return 0.6 + niveau * 0.06 + (canneDoree ? 1.5 : 0);
         }
     }
 
     /** Une prise, ou null (Pilou seul a raté son coup). */
     public static Prise tirer(Random hasard, int niveau, boolean seul) {
+        return tirer(hasard, niveau, seul, false);
+    }
+
+    public static Prise tirer(Random hasard, int niveau, boolean seul, boolean canneDoree) {
         if (seul && hasard.nextDouble() >= CHANCE_SEUL) return null;
         List<Prise> possibles = new ArrayList<>();
         for (Prise x : PRISES) if (x.niveauMin <= niveau && (!seul || x.rarete <= PLAFOND_SEUL)) possibles.add(x);
         double total = 0;
-        for (Prise x : possibles) total += poids(x.rarete, niveau);
+        for (Prise x : possibles) total += poids(x.rarete, niveau, canneDoree);
         double v = hasard.nextDouble() * total;
         for (Prise x : possibles) {
-            v -= poids(x.rarete, niveau);
+            v -= poids(x.rarete, niveau, canneDoree);
             if (v < 0) return x;
         }
         return possibles.get(possibles.size() - 1);
@@ -237,11 +246,19 @@ public final class Butin {
 
     /** Chance de rater (fumée noire) : 8 %, moins avec le niveau ; remuer la marmite l'annule. */
     public static double chanceRate(int niveau, boolean remue) {
-        return remue ? 0 : Math.max(0.02, 0.08 - (niveau >= MARMITE_CUIVRE ? 0.04 : 0) - niveau * 0.0005);
+        return chanceRate(niveau, remue, false);
+    }
+
+    public static double chanceRate(int niveau, boolean remue, boolean marmiteCuivre) {
+        return remue ? 0 : Math.max(0.02, 0.08 - (marmiteCuivre ? 0.04 : 0) - niveau * 0.0005);
     }
 
     /** Une recette du livre si le stock le permet (plutôt une pas encore faite), sinon un plat inventé. */
     public static Plat cuisiner(Random hasard, int niveau, Map<String, Integer> stock, Collection<String> connues, boolean remue) {
+        return cuisiner(hasard, niveau, stock, connues, remue, false);
+    }
+
+    public static Plat cuisiner(Random hasard, int niveau, Map<String, Integer> stock, Collection<String> connues, boolean remue, boolean marmiteCuivre) {
         if (!peutCuisiner(stock)) return null;
         List<Recette> possibles = new ArrayList<>();
         List<List<String>> pris = new ArrayList<>();
@@ -254,7 +271,7 @@ public final class Butin {
         }
         List<Integer> nouvelles = new ArrayList<>();
         for (int i = 0; i < possibles.size(); i++) if (!connues.contains(possibles.get(i).id)) nouvelles.add(i);
-        boolean rate = hasard.nextDouble() < chanceRate(niveau, remue);
+        boolean rate = hasard.nextDouble() < chanceRate(niveau, remue, marmiteCuivre);
         int choix = -1;
         if (!nouvelles.isEmpty() && hasard.nextDouble() < 0.75) choix = nouvelles.get(hasard.nextInt(nouvelles.size()));
         else if (!possibles.isEmpty() && hasard.nextDouble() < 0.5) choix = hasard.nextInt(possibles.size());
@@ -283,12 +300,13 @@ public final class Butin {
 
     // ---- Niveaux et récompenses (Profil.cs, Recompenses.cs)
 
+    /** Courbe : xp(n) = 25·(n−1)² (comme Profil.cs). Le niveau affiché ne descend jamais sous le niveau acquis (Gains.niveau). */
     public static int niveau(int xp) {
-        return (int) Math.floor(Math.sqrt(Math.max(0, xp) / 5.0)) + 1;
+        return (int) Math.floor(Math.sqrt(Math.max(0, xp) / 25.0)) + 1;
     }
 
     public static int xpPourNiveau(int niveau) {
-        return 5 * (niveau - 1) * (niveau - 1);
+        return 25 * (niveau - 1) * (niveau - 1);
     }
 
     /** Catalogue : niveau, type, nom. */

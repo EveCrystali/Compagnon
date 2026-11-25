@@ -204,18 +204,18 @@ public sealed partial class FenetrePilou : Window
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
-        var accessoires = new MenuItem { Header = $"Accessoire (niveau {Niveau})" };
+        var accessoires = new MenuItem { Header = "Accessoire" };
         foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
                      Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
                      Accessoire.Tablier, Accessoire.EtoileMer })
         {
-            int requis = Reglages.Requis(a);
+            bool possede = a is Accessoire.Saison or Accessoire.Aucun || Possede(Recompenses.IdAccessoire(a));
             var m = new MenuItem
             {
-                Header = Niveau >= requis ? Nom(a) : $"{Nom(a)} — niveau {requis}",
+                Header = possede ? Nom(a) : $"{Nom(a)} — boutique",
                 IsCheckable = true,
                 IsChecked = _reglages.Accessoire == a,
-                IsEnabled = Niveau >= requis,
+                IsEnabled = possede,
             };
             m.Click += (_, _) =>
             {
@@ -226,45 +226,37 @@ public sealed partial class FenetrePilou : Window
         }
         menu.Items.Add(accessoires);
 
+        // Couleur : celles qu'on possède (boutique) ; le bleu de base est toujours là.
         var couleurs = new MenuItem { Header = "Couleur" };
-        foreach (var c in Enum.GetValues<Couleur>())
+        var porteeCouleur = EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Couleur, "");
+        var bleu = new MenuItem { Header = "Bleu ciel", IsCheckable = true, IsChecked = porteeCouleur == "" };
+        bleu.Click += (_, _) => Equiper(PilouBureau.Boutique.Couleur, "");
+        couleurs.Items.Add(bleu);
+        foreach (var a in PilouBureau.Boutique.Catalogue.Where(a => a.Slot == PilouBureau.Boutique.Couleur && Possede(a.Id)))
         {
-            int requis = Recompenses.Requis(c);
-            var m = new MenuItem
-            {
-                Header = Niveau >= requis ? Recompenses.NomCouleur(c) : $"{Recompenses.NomCouleur(c)} — niveau {requis}",
-                IsCheckable = true,
-                IsChecked = _reglages.Couleur == c,
-                IsEnabled = Niveau >= requis,
-            };
-            m.Click += (_, _) =>
-            {
-                _reglages.Couleur = c;
-                _reglages.Ecrire(_dossier);
-            };
+            var m = new MenuItem { Header = a.Nom, IsCheckable = true, IsChecked = porteeCouleur == a.Id };
+            m.Click += (_, _) => Equiper(PilouBureau.Boutique.Couleur, a.Id);
             couleurs.Items.Add(m);
         }
+        couleurs.Items.Add(new Separator());
+        couleurs.Items.Add(Entree("D'autres couleurs à la boutique…", OuvrirBoutique));
         menu.Items.Add(couleurs);
-        if (Niveau >= Recompenses.RequisTrainee)
-            menu.Items.Add(Case("Traînée d'étoiles", _reglages.Trainee, v => _reglages.Trainee = v));
+        if (Possede(PilouBureau.Boutique.TraineeEtoiles))
+            menu.Items.Add(Case("Traînée d'étoiles", EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
+                v => Equiper(PilouBureau.Boutique.Effet, v ? PilouBureau.Boutique.TraineeEtoiles : "")));
 
-        // Récompenses : tout le catalogue, ce qui est gagné et ce qui reste à gagner.
-        int n = Niveau;
-        var recompenses = new MenuItem { Header = $"Récompenses — niveau {n} · {_xpTotal}/{Profil.XpPourNiveau(n + 1)} xp · {Recompenses.Titre(n)}" };
-        foreach (var r in Recompenses.Toutes)
-        {
-            string type = r.Type switch { TypeRecompense.Accessoire => "accessoire", TypeRecompense.Couleur => "couleur", TypeRecompense.Titre => "titre", _ => "effet" };
-            recompenses.Items.Add(new MenuItem { Header = (n >= r.Niveau ? "✓  " : $"niv {r.Niveau}  ") + $"{r.Nom} ({type})", IsEnabled = n >= r.Niveau });
-        }
-        menu.Items.Add(recompenses);
+        menu.Items.Add(MenuNiveaux());
+        menu.Items.Add(MenuEvolution());
         menu.Items.Add(Case("Se promène", _reglages.Promenade, v => _reglages.Promenade = v));
         menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
         menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
-        menu.Items.Add(Entree("Jouer maintenant", () => Demarrer((Jeu)(1 + _hasard.Next(3)), Maintenant)));
+        menu.Items.Add(Entree("Jouer maintenant", () => Demarrer(JeuAuHasard(), Maintenant)));
         foreach (var m in MenusPeche()) menu.Items.Add(m);
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(MenuQuetes());
+        menu.Items.Add(Entree("Boutique…", OuvrirBoutique));
         menu.Items.Add(MenuIntegrations());
         menu.Items.Add(MenuActivites());
         menu.Items.Add(MenuVersion());
@@ -343,6 +335,7 @@ public sealed partial class FenetrePilou : Window
             Transitions(vivantes);
             SuivreXp();
             Integrer(vivantes, epoque);
+            SuivreQuetes(vivantes);
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -367,6 +360,7 @@ public sealed partial class FenetrePilou : Window
             {
                 if (e.FinTour > avant.FinTour && !e.EnTour && e.FinRaison == "")
                 {
+                    Signaler("tour", 1);
                     _salueJusque = t + 1800;
                     _tSaut = t;
                     _dernierEvenement = t;
@@ -660,9 +654,12 @@ public sealed partial class FenetrePilou : Window
             Assis = _assis,
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
-            Accessoire = _reglages.Porte(DateTime.Now, Niveau),
-            Couleur = Niveau >= Recompenses.Requis(_reglages.Couleur) ? _reglages.Couleur : Couleur.Bleu,
-            Trainee = _reglages.Trainee && Niveau >= Recompenses.RequisTrainee,
+            Accessoire = _reglages.Porte(DateTime.Now, a => Possede(Recompenses.IdAccessoire(a))),
+            Equipe = EquipeCourant(),
+            Stade = StadeAffiche(),
+            Evolution = ProgresEvolution(t),
+            Couleur = Recompenses.CouleurDe(EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Couleur, "")) ?? Couleur.Bleu,
+            Trainee = EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
             Etourdi = etourdi,
             Zoom = toque ? 1 + 0.38 * Math.Sin(Math.PI * Math.Min(1, phaseToque * 1.15)) : 1,
             Toque = toque && phaseToque > 0.2 ? (phaseToque - 0.2) / 0.8 : 0,
@@ -922,6 +919,7 @@ public sealed partial class FenetrePilou : Window
 
     private void Caresser()
     {
+        Signaler("caresse", 1);
         _tCaresse = Maintenant;
         _geste = Geste.Rien;
         try

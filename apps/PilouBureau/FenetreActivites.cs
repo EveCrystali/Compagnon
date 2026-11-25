@@ -26,6 +26,7 @@ public sealed partial class FenetrePilou
     private bool _reunionComptee, _presentationComptee;
     private readonly Dictionary<string, double> _ditActivite = new();
     private double _secondesNonEcrites;
+    private readonly Dictionary<string, double> _secondesQuetes = new();
 
     private string CheminRegles => Path.Combine(_dossier, "activites.json");
 
@@ -116,6 +117,15 @@ public sealed partial class FenetrePilou
         {
             _profil.Activites[activite] = (_profil.Activites.TryGetValue(activite, out var v) ? v : 0) + (long)Math.Round(dt);
             _secondesNonEcrites += dt;
+            // Quêtes « Code pendant N min », « Joue N min »… : une minute signalée par minute passée.
+            var cle = activite == "jeu-mmo" ? "jeu" : activite;
+            _secondesQuetes[cle] = _secondesQuetes.GetValueOrDefault(cle) + dt;
+            if (_secondesQuetes[cle] >= 60)
+            {
+                int minutes = (int)(_secondesQuetes[cle] / 60);
+                _secondesQuetes[cle] -= minutes * 60;
+                Signaler("activite:" + cle, minutes);
+            }
         }
         // Série de code : coupée après 10 min sans code.
         if (activite == "code" && present)

@@ -11,7 +11,7 @@ public sealed record EtatSession(
     string Session, double T, string Humeur, int Rev, bool EnTour, string Outil, int OutilRev,
     bool Inquiet, bool Fatigue, string Nom, int Niveau, bool Bureau,
     string Libelle = "", double DebutTour = 0, double FinTour = 0, string FinRaison = "", string Attente = "", double DebutOutil = 0, int Xp = 0,
-    string Source = "claude", double Ttl = Suivi.Vivante)
+    string Source = "claude", double Ttl = Suivi.Vivante, int Commits = 0, int Tests = 0)
 {
     // Claude republie son état toutes les 30 s ; une autre source n'écrit qu'à ses événements
     // et donne elle-même sa durée de vie (ttl).
@@ -23,6 +23,7 @@ public sealed record EtatSession(
         ["enTour"] = EnTour, ["outil"] = Outil, ["outilRev"] = OutilRev, ["inquiet"] = Inquiet, ["fatigue"] = Fatigue,
         ["nom"] = Nom, ["niveau"] = Niveau, ["bureau"] = Bureau, ["libelle"] = Libelle, ["debutTour"] = DebutTour,
         ["finTour"] = FinTour, ["finRaison"] = FinRaison, ["attente"] = Attente, ["debutOutil"] = DebutOutil, ["xp"] = Xp,
+        ["commits"] = Commits, ["tests"] = Tests,
     });
 
     public static EtatSession? Lire(string json)
@@ -39,7 +40,7 @@ public sealed record EtatSession(
                 (int)N("outilRev"), B("inquiet"), B("fatigue"), S("nom", "Pilou"), Math.Max(1, (int)N("niveau")), B("bureau", true),
                 S("libelle"), N("debutTour"), N("finTour"), S("finRaison"), S("attente"), N("debutOutil"), (int)N("xp"),
                 S("source", "claude") is var src && src != "" ? src.ToLowerInvariant() : "claude",
-                N("ttl") is var ttl && ttl > 0 ? ttl : Vivante);
+                N("ttl") is var ttl && ttl > 0 ? ttl : Vivante, (int)N("commits"), (int)N("tests"));
         }
         catch (Exception e) when (e is JsonException or InvalidOperationException)
         {

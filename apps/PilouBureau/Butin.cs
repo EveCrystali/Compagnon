@@ -68,25 +68,25 @@ public static class Butin
     };
 
     // Poids des raretés : les rangs hauts gagnent du poids avec le niveau (et la canne dorée, niveau 30).
-    public static double Poids(Rarete r, int niveau) => r switch
+    public static double Poids(Rarete r, int niveau, bool canneDoree = false) => r switch
     {
         Rarete.Commun => 60,
         Rarete.PeuCommun => 26 + niveau * 0.3,
         Rarete.Rare => 10 + niveau * 0.35,
         Rarete.Epique => 3 + niveau * 0.2,
-        _ => 0.6 + niveau * 0.06 + (niveau >= Recompenses.RequisCanneDoree ? 1.5 : 0),
+        _ => 0.6 + niveau * 0.06 + (canneDoree ? 1.5 : 0),
     };
 
     // Une prise, ou rien (Pilou seul a raté son coup).
-    public static Prise? Tirer(Random hasard, int niveau, bool seul)
+    public static Prise? Tirer(Random hasard, int niveau, bool seul, bool canneDoree = false)
     {
         if (seul && hasard.NextDouble() >= ChanceSeul) return null;
         var possibles = Prises.Where(p => p.NiveauMin <= niveau && (!seul || p.Rarete <= PlafondSeul)).ToList();
-        double total = possibles.Sum(p => Poids(p.Rarete, niveau));
+        double total = possibles.Sum(p => Poids(p.Rarete, niveau, canneDoree));
         double x = hasard.NextDouble() * total;
         foreach (var p in possibles)
         {
-            x -= Poids(p.Rarete, niveau);
+            x -= Poids(p.Rarete, niveau, canneDoree);
             if (x < 0) return p;
         }
         return possibles[^1];
@@ -176,11 +176,12 @@ public static class Butin
         stock.Any(kv => kv.Value > 0 && Trouver(kv.Key) is { Comestible: true });
 
     // Chance de rater (fumée noire) : 8 %, moins avec le niveau ; remuer la marmite l'annule.
-    public static double ChanceRate(int niveau, bool remue) =>
-        remue ? 0 : Math.Max(0.02, 0.08 - (niveau >= Recompenses.RequisMarmiteCuivre ? 0.04 : 0) - niveau * 0.0005);
+    public static double ChanceRate(int niveau, bool remue, bool marmiteCuivre = false) =>
+        remue ? 0 : Math.Max(0.02, 0.08 - (marmiteCuivre ? 0.04 : 0) - niveau * 0.0005);
 
     // Une recette du livre si le stock le permet (plutôt une pas encore faite), sinon un plat inventé.
-    public static Plat? Cuisiner(Random hasard, int niveau, IReadOnlyDictionary<string, int> stock, ICollection<string> connues, bool remue = false)
+    public static Plat? Cuisiner(Random hasard, int niveau, IReadOnlyDictionary<string, int> stock, ICollection<string> connues, bool remue = false,
+        bool marmiteCuivre = false)
     {
         if (!PeutCuisiner(stock)) return null;
         var possibles = Recettes.Where(r => r.NiveauMin <= niveau)
@@ -188,7 +189,7 @@ public static class Butin
             .Where(x => x.Pris is not null)
             .ToList();
         var nouvelles = possibles.Where(x => !connues.Contains(x.Recette.Id)).ToList();
-        bool rate = hasard.NextDouble() < ChanceRate(niveau, remue);
+        bool rate = hasard.NextDouble() < ChanceRate(niveau, remue, marmiteCuivre);
 
         // Un plat du livre jamais fait : on le tente en priorité. Sinon, une fois sur deux, on invente.
         (Recette Recette, List<string>? Pris)? choisie =

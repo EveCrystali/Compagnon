@@ -171,8 +171,8 @@ public static class Signal
         EtatSession Finir(EtatSession x)
         {
             if (ev.Erreur) return Humeur(x, "grimace");
-            if (Commit.IsMatch(ev.Commande)) return Humeur(x, "fete", 5);
-            if (Tests.IsMatch(ev.Commande)) return Humeur(x, "fete", 2);
+            if (Commit.IsMatch(ev.Commande)) return Humeur(x, "fete", 5) with { Commits = x.Commits + 1 };
+            if (Tests.IsMatch(ev.Commande)) return Humeur(x, "fete", 2) with { Tests = x.Tests + 1 };
             return x;
         }
     }

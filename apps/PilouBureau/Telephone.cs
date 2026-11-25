@@ -142,7 +142,8 @@ public static class Telephone
     // Deuxième sujet, tiré du même code : le téléphone y publie, le PC y lit.
     public static string SujetRetour(string code) => "pilou-" + Convert.ToHexString(Hmac(code, "pilou-retour-v1")).ToLowerInvariant()[..24];
 
-    public sealed record Gain(string Id, int Xp, IReadOnlyDictionary<string, int> Prises, IReadOnlyList<string> Plats, int Caresses);
+    public sealed record Gain(string Id, int Xp, IReadOnlyDictionary<string, int> Prises, IReadOnlyList<string> Plats, int Caresses,
+        int Jeux = 0, int Chasse = 0, IReadOnlyList<string>? Achats = null, IReadOnlyDictionary<string, string>? Equipe = null, double T = 0);
 
     public static Gain? LireGain(string json)
     {
@@ -161,8 +162,18 @@ public static class Telephone
             if (r.TryGetProperty("plats", out var pl) && pl.ValueKind == JsonValueKind.Array)
                 foreach (var x in pl.EnumerateArray())
                     if (x.ValueKind == JsonValueKind.String && x.GetString() is { Length: > 0 and < 120 } nom) plats.Add(nom);
+            var achats = new List<string>();
+            if (r.TryGetProperty("achats", out var ac) && ac.ValueKind == JsonValueKind.Array)
+                foreach (var x in ac.EnumerateArray())
+                    if (x.ValueKind == JsonValueKind.String && Boutique.Trouver(x.GetString() ?? "") is not null) achats.Add(x.GetString()!);
+            var equipe = new Dictionary<string, string>();
+            if (r.TryGetProperty("equipe", out var eq) && eq.ValueKind == JsonValueKind.Object)
+                foreach (var x in eq.EnumerateObject())
+                    if (Boutique.Slots.Contains(x.Name) && x.Value.ValueKind == JsonValueKind.String) equipe[x.Name] = x.Value.GetString() ?? "";
+            double t = r.TryGetProperty("t", out var tv) && tv.ValueKind == JsonValueKind.Number ? tv.GetDouble() : 0;
             // Bornes : un message vient du téléphone appairé (chiffré), mais on reste prudent.
-            return new Gain(id.GetString()!, Math.Clamp(Entier("xp"), 0, 2000), prises, plats.Take(20).ToList(), Math.Clamp(Entier("caresses"), 0, 200));
+            return new Gain(id.GetString()!, Math.Clamp(Entier("xp"), 0, 2000), prises, plats.Take(20).ToList(), Math.Clamp(Entier("caresses"), 0, 200),
+                Math.Clamp(Entier("jeux"), 0, 100), Math.Clamp(Entier("chasse"), 0, 10_000_000), achats.Distinct().Take(10).ToList(), equipe, t);
         }
         catch (JsonException)
         {
@@ -195,19 +206,77 @@ public static class Telephone
     }
 
     // Crédite un gain une seule fois (par son identifiant) ; renvoie l'XP ajoutée (0 : déjà reçu).
-    public static int Crediter(Profil p, Gain g)
+    public static int Crediter(Profil p, Gain g) => Recevoir(p, g, new Contexte(DateTime.Now, "", 1, 0)).Xp;
+
+    // Ce que le PC sait au moment de créditer : l'heure locale et la graine (quêtes), le niveau et le solde
+    // du groupe (achats faits sur le téléphone).
+    public sealed record Contexte(DateTime Local, string Graine, int Niveau, int Solde);
+
+    public sealed record Resultat(int Xp, List<RecompenseQuete> Recompenses, List<string> Achetes, List<string> Refus);
+
+    public static Resultat Recevoir(Profil p, Gain g, Contexte ctx)
     {
-        if (p.Recus.Contains(g.Id)) return 0;
+        var r = new Resultat(0, new List<RecompenseQuete>(), new List<string>(), new List<string>());
+        if (p.Recus.Contains(g.Id)) return r;
         p.Recus.Add(g.Id);
         if (p.Recus.Count > 100) p.Recus.RemoveRange(0, p.Recus.Count - 100);
         p.XpTelephone += g.Xp; // à part : chaque PC du groupe crédite les mêmes gains (compté au maximum)
         p.Caresses += g.Caresses;
-        foreach (var (id, n) in g.Prises) p.Carnet[id] = p.Carnet.GetValueOrDefault(id) + n;
+        int rares = 0, nouveaux = 0;
+        foreach (var (id, n) in g.Prises)
+        {
+            p.Carnet[id] = p.Carnet.GetValueOrDefault(id) + n;
+            if (Butin.Trouver(id) is { } x && x.Rarete >= Rarete.Rare) rares += n;
+        }
         foreach (var plat in g.Plats)
         {
             p.PlatsCuisines++;
-            if (!p.Plats.Contains(plat)) p.Plats.Add(plat);
+            if (p.Plats.Contains(plat)) continue;
+            p.Plats.Add(plat);
+            nouveaux++;
         }
-        return g.Xp;
+
+        // Quêtes : ce que le téléphone a fait compte comme si c'était ici.
+        void S(string cle, int n) => r.Recompenses.AddRange(Quetes.Signaler(p.Quetes, cle, n, ctx.Local, ctx.Graine));
+        S("peche", g.Prises.Values.Sum());
+        S("peche:rare", rares);
+        S("cuisine", g.Plats.Count);
+        S("cuisine:nouveau", nouveaux);
+        S("caresse", g.Caresses);
+        S("jeu", g.Jeux);
+        S("chasse", g.Chasse);
+        var (po, xpQuetes) = Quetes.Appliquer(p, r.Recompenses);
+
+        // Boutique : achats et équipement faits sur le téléphone (le PC reste l'arbitre du solde).
+        int solde = ctx.Solde + po;
+        var jour = DateOnly.FromDateTime(ctx.Local);
+        foreach (var id in g.Achats ?? Array.Empty<string>())
+        {
+            var avant = p.Bourse.PoDepTelephone;
+            var refus = Boutique.Acheter(p.Bourse, id, ctx.Niveau, solde, jour, parTelephone: true);
+            if (refus is null)
+            {
+                solde -= p.Bourse.PoDepTelephone - avant;
+                r.Achetes.Add(id);
+            }
+            else if (!p.Bourse.Inventaire.Contains(id)) r.Refus.Add($"{Boutique.Trouver(id)?.Nom ?? id} : {refus}");
+        }
+        double t = g.T > 0 ? g.T : DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        foreach (var (slot, id) in g.Equipe ?? new Dictionary<string, string>())
+            Boutique.Equiper(p.Bourse, slot, id, t);
+        return r with { Xp = g.Xp + xpQuetes };
     }
+
+    // Boutique et quêtes, pour le téléphone (champs facultatifs, compacts : le message reste sous 4 096 octets).
+    public static Dictionary<string, object> EtatBoutique(int solde, IEnumerable<string> inventaire, IReadOnlyDictionary<string, Port> equipe,
+        EtatQuetes q, DateTime local) => new()
+    {
+        ["po"] = Math.Max(0, solde),
+        ["objets"] = inventaire.ToList(),
+        ["porte"] = PilouBureau.Boutique.Porte(equipe),
+        ["offres"] = PilouBureau.Boutique.OffresDuJour(DateOnly.FromDateTime(local)).Select(a => a.Id).ToList(),
+        ["promo"] = PilouBureau.Boutique.OffresDuJour(DateOnly.FromDateTime(local)).FirstOrDefault()?.Id ?? "",
+        ["serie"] = Quetes.Serie(q, local),
+        ["quetes"] = q.Liste.Select(x => new object[] { (int)x.Periode, x.Texte, x.Fait, x.Objectif, x.Po, x.Reussie ? 1 : 0 }).ToList(),
+    };
 }

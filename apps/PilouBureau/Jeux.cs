@@ -71,13 +71,20 @@ public sealed partial class FenetrePilou
     // Repères dans la fenêtre (unités avant mise à l'échelle) : sommet de la tête de Pilou.
     private double TeteX => _aGauche ? Scene.Largeur / 2 : LargeurBase - Scene.Largeur / 2;
     private double TeteY => HauteurBulle + Scene.Sol - 15 * Scene.PA;
-    private int Niveau => Profil.Niveau(_xpTotal);
+    // Courbe actuelle, jamais sous le plus haut niveau acquis (de cet appareil et du groupe).
+    private int Niveau => Acces.Niveau(_xpTotal, NiveauAcquisGroupe());
     private string DossierPartage => _reglages.Partage(_dossier);
 
     private void InitialiserJeux()
     {
         _profil = Profil.Lire(DossierPartage);
         _xpTotal = TotalXp();
+        // Anciennes récompenses gratuites → inventaire, niveau acquis (rien de ce qui était acquis n'est perdu).
+        if (_profil.Evolution.Migre < 1)
+        {
+            Migration.Appliquer(_profil, _xpTotal, _reglages);
+            _profil.Ecrire(DossierPartage);
+        }
         _dernierNiveau = Niveau;
         Grid.SetRowSpan(_jeu, 2);
         _racine.Children.Add(_jeu);
@@ -157,13 +164,20 @@ public sealed partial class FenetrePilou
         int n = Niveau;
         if (_dernierNiveau > 0 && n > _dernierNiveau)
         {
-            var gagne = Enumerable.Range(_dernierNiveau + 1, n - _dernierNiveau).SelectMany(Recompenses.Au).Select(r => r.Nom.ToLowerInvariant()).ToList();
-            Dire(gagne.Count > 0 ? $"niveau {n} ! nouveau : {string.Join(", ", gagne)}" : $"niveau {n} !", 5500);
+            var ouvert = Ouvertures(_dernierNiveau, n);
+            Dire(ouvert.Count > 0 ? $"niveau {n} ! accès : {string.Join(", ", ouvert)}" : $"niveau {n} !", 5500);
             Flotter($"NIVEAU {n}", 1.6, new Point(TeteX - 50, TeteY - 70));
             _salueJusque = Maintenant + 2500;
             _tSaut = Maintenant;
         }
         _dernierNiveau = n;
+        if (n > _profil.Evolution.NiveauAcquis && _profil.Evolution.Migre >= 1)
+        {
+            _profil.Evolution.NiveauAcquis = n;
+            _profil.Ecrire(DossierPartage);
+        }
+        PayerNiveaux(n);
+        VerifierEvolution(n);
     }
 
     private static string Nom(Accessoire a) => a switch
@@ -229,11 +243,28 @@ public sealed partial class FenetrePilou
         if (expr is not Expr.Repos || _dortBureau || _inactif > 60_000 || _geste == Geste.SauteSouris || _attrape) return;
         _prochainJeu = t + (8 + _hasard.NextDouble() * 8) * 60_000;
         // Une fois sur trois, une partie de pêche (tu es là : à toi de ferrer).
-        Demarrer(_hasard.NextDouble() < 0.33 ? Jeu.Peche : (Jeu)(1 + _hasard.Next(3)), t);
+        Demarrer(_hasard.NextDouble() < 0.33 && Acces.JeuOuvert("peche", Niveau) ? Jeu.Peche : JeuAuHasard(), t);
+    }
+
+    private static string IdJeu(Jeu j) => j switch
+    {
+        Jeu.Etoile => "etoile", Jeu.Bulles => "bulles", Jeu.TapeCinq => "tape", Jeu.Peche => "peche", Jeu.Cuisine => "cuisine", _ => "",
+    };
+
+    // Un jeu au hasard parmi ceux que le niveau ouvre (étoile, bulles, tape m'en cinq).
+    private Jeu JeuAuHasard()
+    {
+        var ouverts = new[] { Jeu.Etoile, Jeu.Bulles, Jeu.TapeCinq }.Where(j => Acces.JeuOuvert(IdJeu(j), Niveau)).ToList();
+        return ouverts.Count == 0 ? Jeu.Etoile : ouverts[_hasard.Next(ouverts.Count)];
     }
 
     private void Demarrer(Jeu jeu, double t)
     {
+        if (jeu != Jeu.Aucun && !Acces.JeuOuvert(IdJeu(jeu), Niveau))
+        {
+            Dire($"{Acces.Jeux.First(x => x.Id == IdJeu(jeu)).Nom} : niveau {Acces.NiveauJeu(IdJeu(jeu))}", 3000);
+            return;
+        }
         Arreter("");
         _jeuEnCours = jeu;
         _jeuDebut = t;
@@ -246,6 +277,7 @@ public sealed partial class FenetrePilou
                 _etoile.MouseLeftButtonDown += (_, e) =>
                 {
                     Gagner(10, _etoilePos);
+                    Signaler("jeu", 1);
                     Arreter("bien vu !");
                     _salueJusque = Maintenant + 1500;
                     e.Handled = true;
@@ -275,6 +307,7 @@ public sealed partial class FenetrePilou
                         if (_bullesEclatees == 3)
                         {
                             Gagner(5, new Point(TeteX - 30, TeteY - 40));
+                            Signaler("jeu", 1);
                             Arreter("toutes ! bonus");
                             _salueJusque = Maintenant + 1500;
                         }
@@ -297,6 +330,7 @@ public sealed partial class FenetrePilou
                 _main.MouseLeftButtonDown += (_, e) =>
                 {
                     Gagner(10, new Point(TeteX - 18, TeteY - 30));
+                    Signaler("jeu", 1);
                     Arreter("ouais !");
                     _salueJusque = Maintenant + 1800;
                     _tSaut = Maintenant;

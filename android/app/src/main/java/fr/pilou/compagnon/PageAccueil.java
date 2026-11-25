@@ -29,7 +29,9 @@ final class PageAccueil extends Page {
     private final PilouVue pilou;
     private final TextView coeur;
     private final LinearLayout sessions, groupe, guide, carteSessions;
-    private String empreinteSessions = "", empreinteGroupe = "";
+    private String empreinteSessions = "", empreinteGroupe = "", empreinteQuetes = "";
+    private TextView titreQuetes;
+    private LinearLayout quetes;
     private long derniereCaresse;
 
     PageAccueil(Principale a) {
@@ -95,6 +97,12 @@ final class PageAccueil extends Page {
         guide.addView(Ui.bouton(a, "Appairer avec mon PC", true, v -> a.aller(Principale.REGLAGES, true)), lg);
         corps.addView(guide, Ui.large(a, 14));
 
+        // Quêtes du jour (et de la semaine, du mois) : progrès, récompense en po, série.
+        titreQuetes = Ui.titreSection(a, "Quêtes");
+        corps.addView(titreQuetes);
+        quetes = Ui.carte(a);
+        corps.addView(quetes, Ui.large(a, 6));
+
         // Sessions.
         titreSessions = Ui.titreSection(a, "Sessions");
         corps.addView(titreSessions);
@@ -139,8 +147,10 @@ final class PageAccueil extends Page {
         nom.setText(e.nom);
         pilou.montrer(appaire ? e.expression(maintenant) : "dort", e.couleur);
         pilou.accessoire(e.accessoire);
+        pilou.equipe(Gains.porte(app, e));
 
-        int total = Gains.xp(app, e), n = Butin.niveau(total), bas = Butin.xpPourNiveau(n), haut = Butin.xpPourNiveau(n + 1);
+        // Niveau acquis gardé : si l'XP est sous son palier, la barre part du palier de la courbe.
+        int total = Gains.xp(app, e), n = Gains.niveau(app, e), bas = Butin.xpPourNiveau(Math.min(n, Butin.niveau(total))), haut = Butin.xpPourNiveau(n + 1);
         niveau.setText("Niveau " + n + " · " + Butin.titre(n));
         barre.part((total - bas) / (float) Math.max(1, haut - bas));
         int attente = Gains.enAttente(app);
@@ -163,8 +173,46 @@ final class PageAccueil extends Page {
         titreSessions.setVisibility(appaire ? View.VISIBLE : View.GONE);
         carteSessions.setVisibility(appaire ? View.VISIBLE : View.GONE);
         if (appaire) sessions(e, maintenant, p);
+        quetes(e, p);
         groupe(e, maintenant, p);
         mot.setText("« " + MOTS[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % MOTS.length] + " »");
+    }
+
+    private void quetes(Etat e, Ui.Palette p) {
+        boolean vide = e.quetes.isEmpty();
+        titreQuetes.setVisibility(vide ? View.GONE : View.VISIBLE);
+        quetes.setVisibility(vide ? View.GONE : View.VISIBLE);
+        StringBuilder emp = new StringBuilder().append(e.serie).append('|').append(Gains.solde(app, e));
+        for (Etat.Quete q : e.quetes) emp.append(q.texte).append(q.fait).append(q.reussie).append('|');
+        String nouvelle = emp.toString();
+        if (vide || nouvelle.equals(empreinteQuetes)) return;
+        empreinteQuetes = nouvelle;
+        quetes.removeAllViews();
+        titreQuetes.setText(("Quêtes · ◉ " + Gains.solde(app, e) + " po" + (e.serie > 0 ? " · série " + e.serie + " j" : "")).toUpperCase(java.util.Locale.FRENCH));
+        String[] signes = {"◔", "◑", "●"}, noms = {"du jour", "de la semaine", "du mois"};
+        int derniere = -1;
+        for (Etat.Quete q : e.quetes) {
+            if (q.periode != derniere) {
+                derniere = q.periode;
+                TextView sec = Ui.texte(app, signes[Math.max(0, Math.min(2, q.periode))] + "  " + noms[Math.max(0, Math.min(2, q.periode))], 12, p.doux, true);
+                sec.setPadding(0, quetes.getChildCount() == 0 ? 0 : Ui.dp(app, 10), 0, Ui.dp(app, 2));
+                quetes.addView(sec);
+            }
+            LinearLayout r = Ui.rangee(app);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            r.addView(Ui.pastille(app, q.reussie ? "✓" : "○", q.reussie ? p.bleu : p.argent));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            t.addView(Ui.texte(app, q.texte, 14, q.reussie ? p.doux : p.texte, !q.reussie));
+            Ui.Barre b = new Ui.Barre(app);
+            b.part(q.fait / (float) Math.max(1, q.objectif));
+            LinearLayout.LayoutParams lb = Ui.large();
+            lb.topMargin = Ui.dp(app, 4);
+            t.addView(b, lb);
+            t.addView(Ui.texte(app, q.fait + " / " + q.objectif + "   ·   +" + q.po + " po", 12, q.reussie ? p.bleu : p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            quetes.addView(r, Ui.large());
+        }
     }
 
     private void sessions(Etat e, long maintenant, Ui.Palette p) {

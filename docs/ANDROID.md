@@ -10,9 +10,9 @@ Une barre de navigation en bas, quatre onglets (thème clair ou sombre selon le 
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
-| **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. |
-| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, récompenses par niveau, style (accessoires et couleurs avec aperçu). |
+| **Accueil** | Pilou en grand (le toucher le caresse), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
+| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, articles de boutique), style (ce qu'on possède), **Boutique**. |
 | **Réglages** | Appairage, Pilou flottant (taille, cacher, ramener), notifications, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
 
 ### Chasse aux bugs
@@ -45,6 +45,20 @@ question, une plus discrète quand une session finit (chacune se coupe dans l'ap
 3. Viser le QR code avec l'appareil photo : l'app s'ouvre et s'appaire. Sinon, taper le code de 16
    caractères dans l'app.
 4. Dans l'app : autoriser les notifications, cocher « Pilou flottant » si tu le veux, ajouter le widget.
+
+## Quêtes, pièces d'or et boutique
+
+Le PC tire les quêtes (3 du jour, 3 de la semaine, 1 du mois) et tient le solde de pièces d'or (po) ;
+le téléphone les affiche (Accueil) et y contribue : pêche, cuisine, petits jeux, caresses et score de
+Chasse aux bugs partent avec les gains, chiffrés, et font avancer les quêtes du PC. La **Boutique**
+(Collection → Boutique) est gratuite : aucune vraie monnaie. *Acheter* envoie la demande au PC, qui
+vérifie le solde et le niveau puis l'applique ; en attendant, l'objet est « en route » et le solde
+affiché le déduit déjà. *Porter* se voit tout de suite et part au PC. Les objets ne sont pas encore
+dessinés : la boutique les montre par leur nom et un signe d'emplacement.
+
+Les niveaux ouvrent l'accès (jeux, objets, évolution : Gouttelette, Pilou, Pilou Nimbus, Pilou
+Astral) au lieu d'offrir des objets ; chaque niveau gagné rapporte des pièces d'or. Ce qui avait déjà
+été gagné avant cette version reste acquis.
 
 ## Mises à jour
 
@@ -120,9 +134,11 @@ fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que l
 | État des sessions (❗ ? ◐ ✓ ■ ✕) | bulle | notification, widget, Pilou flottant |
 | Humeurs (concentré, inquiet, fête, grimace, soulagé, endormi) | ✓ | ✓ (venues du PC ; fête et caresse aussi dans l'atelier) |
 | Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
-| Couleurs (10) | choix au clic droit | affichées (choisies sur le PC) |
-| Accessoires (11) | choix au clic droit | affichés (choisis sur le PC) |
-| Catalogue des récompenses | ✓ | ✓ onglet Collection |
+| Couleurs | achetées en boutique, portées au clic droit | achetées et portées dans la Boutique |
+| Accessoires (chapeaux historiques) | achetés en boutique, choisis au clic droit | achetés dans la Boutique (choisis sur le PC) |
+| Objets de boutique (tête, yeux, cou, dos, main, compagnon, effet) | ✓ Boutique… | ✓ Boutique (acheter, porter) |
+| Quêtes et pièces d'or | ✓ menu Quêtes | ✓ Accueil ; les parties du téléphone comptent |
+| Niveaux (accès), évolution | ✓ menus Niveau, Évolution | ✓ Collection → Niveaux ; jeux verrouillés « niveau N » |
 | Caresse | ✓ | ✓ toucher Pilou (app, atelier), créditée au PC |
 | Étoile filante, bulles, tape m'en cinq | ✓ | ✓ atelier |
 | Pêche, cuisine | ✓ | ✓ atelier |

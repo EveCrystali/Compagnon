@@ -132,8 +132,26 @@ public class ButinTests
     [InlineData(40000)]
     public void La_courbe_de_niveaux_ne_baisse_personne(int xp)
     {
-        int ancien = (int)Math.Floor(Math.Sqrt(xp / 5.0)) + 1;
-        Assert.True(Profil.Niveau(xp) >= ancien);
+        // Nouvelle courbe plus lente (25·(n−1)²) : le niveau acquis garde l'ancien niveau.
+        var p = new Profil();
+        Migration.Appliquer(p, xp);
+        Assert.Equal(Profil.NiveauAncien(xp), p.Evolution.NiveauAcquis);
+        Assert.True(Acces.Niveau(xp, p.Evolution.NiveauAcquis) >= Profil.NiveauAncien(xp));
+        Assert.True(Profil.Niveau(xp) <= Profil.NiveauAncien(xp));
+    }
+
+    [Fact]
+    public void Nouvelle_courbe_reperes()
+    {
+        Assert.Equal(1, Profil.Niveau(0));
+        Assert.Equal(1, Profil.Niveau(24));
+        Assert.Equal(2, Profil.Niveau(25));
+        Assert.Equal(2025, Profil.XpPourNiveau(10));
+        Assert.Equal(14400, Profil.XpPourNiveau(25));
+        Assert.Equal(38025, Profil.XpPourNiveau(40));
+        Assert.Equal(60025, Profil.XpPourNiveau(50));
+        Assert.Equal(7, Acces.Niveau(100, 7)); // niveau acquis gardé tant que l'XP ne le dépasse pas
+        Assert.Equal(12, Acces.Niveau(Profil.XpPourNiveau(12), 7));
     }
 
     [Fact]
@@ -142,9 +160,14 @@ public class ButinTests
         Assert.Equal(50, Recompenses.Toutes.Max(r => r.Niveau));
         Assert.Equal(50, Profil.Niveau(Profil.XpPourNiveau(50)));
         Assert.Equal("Pilou éternel", Recompenses.Titre(50));
-        Assert.Equal(9, Recompenses.RequisTrainee);
+        // Les anciennes récompenses sont devenues des articles de boutique, au niveau d'accès d'origine.
+        Assert.Equal(9, Boutique.Trouver(Boutique.TraineeEtoiles)!.NiveauMin);
         foreach (Accessoire a in Enum.GetValues<Accessoire>().Where(a => a is not Accessoire.Saison and not Accessoire.Aucun))
+        {
             Assert.Contains(Recompenses.Toutes, r => r.Accessoire == a);
-        foreach (Couleur c in Enum.GetValues<Couleur>()) Assert.Contains(Recompenses.Toutes, r => r.Couleur == c);
+            Assert.Equal(Recompenses.Ancien(a), Boutique.Trouver(Recompenses.IdAccessoire(a))!.NiveauMin);
+        }
+        foreach (Couleur c in Enum.GetValues<Couleur>().Where(c => c != Couleur.Bleu))
+            Assert.Equal(Recompenses.Ancien(c), Boutique.Trouver(Recompenses.IdCouleur(c))!.NiveauMin);
     }
 }

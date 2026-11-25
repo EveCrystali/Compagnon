@@ -90,6 +90,11 @@ public final class Atelier extends Activity implements Terrain.Ecoute {
     }
 
     private void lancer(String jeu) {
+        int n = Gains.niveau(this, Prefs.etat(this));
+        if (!Acces.jeuOuvert(jeu, n)) {
+            android.widget.Toast.makeText(this, Acces.nomJeu(jeu) + " : niveau " + Acces.niveauJeu(jeu), android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (jeu) {
             case "peche": terrain.pecher(); break;
             case "cuisine": terrain.cuisiner(); break;
@@ -121,13 +126,13 @@ public final class Atelier extends Activity implements Terrain.Ecoute {
 
     @Override
     public int niveau() {
-        return Butin.niveau(Gains.xp(this, Prefs.etat(this)));
+        return Gains.niveau(this, Prefs.etat(this));
     }
 
     @Override
     public void change() {
         Etat e = Prefs.etat(this);
-        int xp = Gains.xp(this, e), n = Butin.niveau(xp), attente = Gains.enAttente(this);
+        int xp = Gains.xp(this, e), n = Gains.niveau(this, e), attente = Gains.enAttente(this);
         entete.setText("Niveau " + n + " · " + Butin.titre(n) + " · " + xp + " / " + Butin.xpPourNiveau(n + 1) + " xp"
                 + (attente > 0 ? "  (+" + attente + " en route vers le PC)" : ""));
         terrain.tenue(e.couleur, e.accessoire);

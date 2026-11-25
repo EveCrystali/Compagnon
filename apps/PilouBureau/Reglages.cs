@@ -49,8 +49,6 @@ public sealed class Reglages
     public bool CacherVisio { get; set; } = true;
     public List<string> ActivitesCoupees { get; set; } = new();
 
-    public static int Requis(Accessoire a) => Recompenses.Requis(a);
-
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
@@ -82,8 +80,8 @@ public sealed class Reglages
         }
     }
 
-    // Accessoire réellement porté : « saison » choisit selon la date.
-    public Accessoire Porte(DateTime jour, int niveau)
+    // Accessoire réellement porté : « saison » choisit selon la date, parmi ce qui est possédé (boutique).
+    public Accessoire Porte(DateTime jour, Func<Accessoire, bool> possede)
     {
         var a = Accessoire != Accessoire.Saison ? Accessoire : jour.Month switch
         {
@@ -93,7 +91,7 @@ public sealed class Reglages
             6 or 7 or 8 => Accessoire.Lunettes,
             _ => Accessoire.Aucun,
         };
-        return niveau >= Requis(a) ? a : Accessoire.Aucun;
+        return a == Accessoire.Aucun || possede(a) ? a : Accessoire.Aucun;
     }
 
     public bool Sombre()
