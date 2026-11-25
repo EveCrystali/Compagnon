@@ -76,11 +76,18 @@ public final class Veille extends Service {
         principal.postDelayed(this::battre, 30_000);
         // Mise à jour de l'app : une minute après le démarrage, puis une fois par jour (MiseAJour décide).
         principal.postDelayed(this::verifierMise, 60_000);
+        principal.postDelayed(this::envoyerGains, 20_000);
     }
 
     private void verifierMise() {
         new Thread(() -> MiseAJour.peutEtre(this), "pilou-maj").start();
         principal.postDelayed(this::verifierMise, 3600_000L);
+    }
+
+    // Gains de l'atelier vers le PC : toutes les minutes, ce qui attend part (chiffré).
+    private void envoyerGains() {
+        new Thread(() -> Gains.envoyer(this), "pilou-gains").start();
+        principal.postDelayed(this::envoyerGains, 60_000);
     }
 
     @Override
@@ -182,6 +189,7 @@ public final class Veille extends Service {
 
     private void recevoir(Etat e) {
         etat = e;
+        Gains.accuser(this, e);
         afficher();
         prevenir();
     }
@@ -214,7 +222,7 @@ public final class Veille extends Service {
         String titre = etat.resume(maintenant);
         Notification.Builder b = new Notification.Builder(this, CANAL_STATUT)
                 .setSmallIcon(R.drawable.ic_stat_pilou)
-                .setLargeIcon(Dessin.image(etat.expression(maintenant), etat.couleur, 4))
+                .setLargeIcon(Dessin.image(etat.expression(maintenant), etat.couleur, etat.accessoire, 4))
                 .setContentTitle(titre)
                 .setContentText(lignes.isEmpty() ? etat.nom + " · niveau " + etat.niveau : lignes.get(0).toString())
                 .setStyle(style)

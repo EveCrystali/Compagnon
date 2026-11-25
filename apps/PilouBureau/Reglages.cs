@@ -35,6 +35,8 @@ public sealed class Reglages
     // Téléphone appairé (app Android) : code d'appairage et relais ntfy (ntfy.sh ou le sien).
     public string Telephone { get; set; } = "";
     public string Relais { get; set; } = PilouBureau.Telephone.RelaisParDefaut;
+    // Dernier message du téléphone lu sur le sujet retour (identifiant ntfy).
+    public string RetourDepuis { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
 

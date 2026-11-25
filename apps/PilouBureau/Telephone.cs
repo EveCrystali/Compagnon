@@ -93,12 +93,14 @@ public static class Telephone
 
     // Ce qui mérite un message : un changement d'état (l'outil en cours et les durées, non :
     // le téléphone les calcule lui-même, et le relais gratuit limite le nombre de messages).
-    public static string Signature(IReadOnlyList<SessionTel> sessions, int niveau, string humeur) =>
-        $"{niveau}|{humeur}|" + string.Join(";", sessions.Select(s => $"{s.Id}:{s.Etat}:{s.Depuis}"));
+    public static string Signature(IReadOnlyList<SessionTel> sessions, int niveau, string humeur, string extra = "") =>
+        $"{niveau}|{humeur}|{extra}|" + string.Join(";", sessions.Select(s => $"{s.Id}:{s.Etat}:{s.Depuis}"));
 
+    // plus : champs optionnels (xp, accessoire, carnet, plats, recus…) ; un ancien téléphone les ignore.
     public static string Charge(IReadOnlyList<SessionTel> sessions, double maintenant, string nom, int niveau, string titre,
-        string couleur, string humeur, int calmes) =>
-        JsonSerializer.Serialize(new Dictionary<string, object>
+        string couleur, string humeur, int calmes, IReadOnlyDictionary<string, object>? plus = null)
+    {
+        var d = new Dictionary<string, object>
         {
             ["v"] = 1,
             ["t"] = maintenant,
@@ -112,5 +114,95 @@ public static class Telephone
             {
                 ["id"] = s.Id, ["source"] = s.Source, ["libelle"] = s.Libelle, ["etat"] = s.Etat, ["depuis"] = s.Depuis, ["outil"] = s.Outil,
             }).ToList(),
-        });
+        };
+        if (plus is not null)
+            foreach (var (k, v) in plus) d[k] = v;
+        return JsonSerializer.Serialize(d);
+    }
+
+    // Ce que le PC dit de la progression au téléphone : XP, accessoire porté, carnet et livre de recettes,
+    // et les derniers gains du téléphone qu'il a crédités (le téléphone les retire de sa file d'attente).
+    public static Dictionary<string, object> Progression(Profil p, int xpTotal, string accessoire) => new()
+    {
+        ["xp"] = xpTotal,
+        ["accessoire"] = accessoire,
+        ["carnet"] = p.Carnet.Where(kv => kv.Value > 0).Select(kv => kv.Key).OrderBy(k => k).ToList(),
+        ["plats"] = p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
+        ["inventes"] = p.Plats.Count(x => x.StartsWith("inv:")),
+        ["recus"] = p.Recus.TakeLast(10).ToList(),
+    };
+
+    // ---- Retour : ce que le téléphone a gagné (atelier : pêche, cuisine, jeux, caresses)
+
+    // Deuxième sujet, tiré du même code : le téléphone y publie, le PC y lit.
+    public static string SujetRetour(string code) => "pilou-" + Convert.ToHexString(Hmac(code, "pilou-retour-v1")).ToLowerInvariant()[..24];
+
+    public sealed record Gain(string Id, int Xp, IReadOnlyDictionary<string, int> Prises, IReadOnlyList<string> Plats, int Caresses);
+
+    public static Gain? LireGain(string json)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            var r = doc.RootElement;
+            if (!r.TryGetProperty("id", out var id) || id.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(id.GetString())) return null;
+            int Entier(string k) => r.TryGetProperty(k, out var v) && v.ValueKind == JsonValueKind.Number && v.TryGetInt32(out var n) ? n : 0;
+            var prises = new Dictionary<string, int>();
+            if (r.TryGetProperty("prises", out var pr) && pr.ValueKind == JsonValueKind.Object)
+                foreach (var x in pr.EnumerateObject())
+                    if (x.Value.ValueKind == JsonValueKind.Number && x.Value.TryGetInt32(out var n) && n > 0 && Butin.Trouver(x.Name) is not null)
+                        prises[x.Name] = Math.Min(n, 50);
+            var plats = new List<string>();
+            if (r.TryGetProperty("plats", out var pl) && pl.ValueKind == JsonValueKind.Array)
+                foreach (var x in pl.EnumerateArray())
+                    if (x.ValueKind == JsonValueKind.String && x.GetString() is { Length: > 0 and < 120 } nom) plats.Add(nom);
+            // Bornes : un message vient du téléphone appairé (chiffré), mais on reste prudent.
+            return new Gain(id.GetString()!, Math.Clamp(Entier("xp"), 0, 2000), prises, plats.Take(20).ToList(), Math.Clamp(Entier("caresses"), 0, 200));
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    // Réponse de ntfy (une ligne JSON par événement) → gains déchiffrés, et identifiant du dernier message vu.
+    public static (List<Gain> Gains, string Dernier) LireRetours(string code, string texte)
+    {
+        var gains = new List<Gain>();
+        string dernier = "";
+        foreach (var ligne in texte.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(ligne);
+                var r = doc.RootElement;
+                if (r.TryGetProperty("event", out var ev) && ev.GetString() != "message") continue;
+                if (r.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String) dernier = id.GetString() ?? dernier;
+                if (!r.TryGetProperty("message", out var m) || m.ValueKind != JsonValueKind.String) continue;
+                if (LireGain(Dechiffrer(code, m.GetString() ?? "")) is { } g) gains.Add(g);
+            }
+            catch (Exception e) when (e is JsonException or FormatException or CryptographicException or ArgumentException)
+            {
+                // message illisible ou chiffré avec un autre code : ignoré
+            }
+        }
+        return (gains, dernier);
+    }
+
+    // Crédite un gain une seule fois (par son identifiant) ; renvoie l'XP ajoutée (0 : déjà reçu).
+    public static int Crediter(Profil p, Gain g)
+    {
+        if (p.Recus.Contains(g.Id)) return 0;
+        p.Recus.Add(g.Id);
+        if (p.Recus.Count > 100) p.Recus.RemoveRange(0, p.Recus.Count - 100);
+        p.Xp += g.Xp;
+        p.Caresses += g.Caresses;
+        foreach (var (id, n) in g.Prises) p.Carnet[id] = p.Carnet.GetValueOrDefault(id) + n;
+        foreach (var plat in g.Plats)
+        {
+            p.PlatsCuisines++;
+            if (!p.Plats.Contains(plat)) p.Plats.Add(plat);
+        }
+        return g.Xp;
+    }
 }

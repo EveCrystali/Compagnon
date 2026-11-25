@@ -19,6 +19,8 @@ public sealed class Profil
     public Dictionary<string, int> Stock { get; set; } = new();
     public List<string> Plats { get; set; } = new();
     public int PlatsCuisines { get; set; }
+    // Gains du téléphone déjà crédités (identifiants) : un message relu n'est jamais compté deux fois.
+    public List<string> Recus { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

@@ -35,6 +35,11 @@
         </activity>
 
         <activity
+            android:name=".Atelier"
+            android:exported="false"
+            android:label="Atelier de Pilou" />
+
+        <activity
             android:name=".Installation"
             android:exported="false"
             android:launchMode="singleTop" />
