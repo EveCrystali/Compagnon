@@ -1,6 +1,6 @@
 name: Publier
 
-# Une étiquette v* (git tag v0.7.0 && git push --tags) fabrique PilouBureau.zip et la release.
+# Une étiquette v* (git tag v0.8.0 && git push --tags) fabrique PilouBureau.zip, Pilou.apk et la release.
 on:
   push:
     tags: ['v*']
@@ -10,7 +10,27 @@ permissions:
   contents: write
 
 jobs:
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew --no-daemon testReleaseUnitTest assembleRelease
+      - run: cp app/build/outputs/apk/release/app-release.apk ../Pilou.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: Pilou.apk
+
   windows:
+    needs: android
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,13 +46,22 @@ jobs:
       - name: Archive
         shell: pwsh
         run: Compress-Archive -Path out/* -DestinationPath PilouBureau.zip
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
       - uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: PilouBureau.zip
+          files: |
+            PilouBureau.zip
+            Pilou.apk
+            installer.ps1
           generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
       - uses: actions/upload-artifact@v4
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         with:
           name: PilouBureau
-          path: PilouBureau.zip
+          path: |
+            PilouBureau.zip
+            Pilou.apk

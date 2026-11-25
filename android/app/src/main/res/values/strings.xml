@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pilou</string>
+    <string name="widget_desc">Pilou et l\'état de tes sessions Claude et Codex</string>
+</resources>

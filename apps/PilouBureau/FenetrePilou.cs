@@ -557,6 +557,7 @@ public sealed partial class FenetrePilou : Window
         _inactif = Natif.InactifMs();
         Observer(t);
         expr = Sommeil(expr, t);
+        _exprCourante = expr;
         ProposerJeu(t, expr);
 
         if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);

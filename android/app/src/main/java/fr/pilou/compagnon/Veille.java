@@ -1,0 +1,248 @@
+package fr.pilou.compagnon;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.provider.Settings;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Écoute le relais ntfy (flux JSON, une ligne par message), déchiffre l'état publié par le PC et le
+ * montre aux trois niveaux : notification permanente, widget, Pilou flottant.
+ */
+public final class Veille extends Service {
+    static final String CANAL_STATUT = "statut", CANAL_ATTENTE = "attente", CANAL_FIN = "fin";
+    private static final int NOTIF_STATUT = 1;
+
+    private final Handler principal = new Handler(Looper.getMainLooper());
+    private final Set<String> prevenus = new HashSet<>();
+    private volatile boolean actif;
+    private volatile HttpURLConnection connexion;
+    private Thread ecoute;
+    private Etat etat = Etat.vide();
+    private Bulle bulle;
+    private int image;
+    private String codeEcoute = "";
+
+    public static void demarrer(Context c) {
+        if (!Chiffre.valide(Prefs.code(c))) return;
+        c.startForegroundService(new Intent(c, Veille.class));
+    }
+
+    public static void arreter(Context c) {
+        c.stopService(new Intent(c, Veille.class));
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        NotificationManager nm = getSystemService(NotificationManager.class);
+        NotificationChannel statut = new NotificationChannel(CANAL_STATUT, "Statut des sessions", NotificationManager.IMPORTANCE_LOW);
+        statut.setShowBadge(false);
+        nm.createNotificationChannel(statut);
+        nm.createNotificationChannel(new NotificationChannel(CANAL_ATTENTE, "Une IA t'attend", NotificationManager.IMPORTANCE_HIGH));
+        nm.createNotificationChannel(new NotificationChannel(CANAL_FIN, "Une session a fini", NotificationManager.IMPORTANCE_DEFAULT));
+        etat = Prefs.etat(this);
+        // Les alertes déjà affichées avant un redémarrage ne repartent pas.
+        for (Etat.Session s : etat.sessions) prevenus.add(s.id + "|" + s.etat + "|" + s.depuis);
+        Notification n = statut(System.currentTimeMillis());
+        if (Build.VERSION.SDK_INT >= 34) startForeground(NOTIF_STATUT, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        else startForeground(NOTIF_STATUT, n);
+        principal.postDelayed(this::battre, 30_000);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String code = Prefs.code(this);
+        if (!Chiffre.valide(code)) {
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+        if (!code.equals(codeEcoute)) {
+            codeEcoute = code;
+            couper();
+            actif = true;
+            ecoute = new Thread(this::ecouter, "pilou-relais");
+            ecoute.start();
+        }
+        reglerBulle();
+        afficher();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        couper();
+        principal.removeCallbacksAndMessages(null);
+        if (bulle != null) bulle.cacher();
+        super.onDestroy();
+    }
+
+    private void couper() {
+        actif = false;
+        HttpURLConnection c = connexion;
+        if (c != null) c.disconnect();
+        if (ecoute != null) ecoute.interrupt();
+    }
+
+    private void reglerBulle() {
+        boolean veut = Prefs.bulle(this) && Settings.canDrawOverlays(this);
+        if (veut && bulle == null) {
+            bulle = new Bulle(this);
+            bulle.montrer();
+        } else if (!veut && bulle != null) {
+            bulle.cacher();
+            bulle = null;
+        }
+    }
+
+    // ---- Relais
+
+    private void ecouter() {
+        long attente = 2000;
+        while (actif) {
+            try {
+                String code = codeEcoute;
+                String depuis = Prefs.de(this).getString("dernierId", "");
+                URL url = new URL(Prefs.relais(this).replaceAll("/+$", "") + "/" + Chiffre.sujet(code) + "/json?since="
+                        + (depuis.isEmpty() ? "latest" : depuis));
+                HttpURLConnection c = (HttpURLConnection) url.openConnection();
+                connexion = c;
+                c.setConnectTimeout(15_000);
+                c.setReadTimeout(120_000); // ntfy envoie un « keepalive » toutes les 45 s
+                c.setRequestProperty("User-Agent", "pilou-android");
+                try (BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream(), StandardCharsets.UTF_8))) {
+                    attente = 2000;
+                    String ligne;
+                    while (actif && (ligne = r.readLine()) != null) {
+                        if (ligne.isEmpty()) continue;
+                        JSONObject ev = new JSONObject(ligne);
+                        if (!"message".equals(ev.optString("event"))) continue;
+                        String id = ev.optString("id");
+                        String message = ev.optString("message");
+                        long recu = System.currentTimeMillis();
+                        try {
+                            String json = Chiffre.dechiffrer(code, message);
+                            Etat e = Etat.lire(json, recu);
+                            Prefs.de(this).edit().putString("etat", json).putLong("recu", recu).putString("dernierId", id).apply();
+                            principal.post(() -> recevoir(e));
+                        } catch (Exception illisible) {
+                            // pas pour nous (autre code, message altéré) : ignoré
+                            Prefs.de(this).edit().putString("dernierId", id).apply();
+                        }
+                    }
+                } finally {
+                    c.disconnect();
+                }
+            } catch (Exception e) {
+                // hors ligne, relais indisponible : on réessaie, de plus en plus lentement
+            }
+            if (!actif) break;
+            try {
+                Thread.sleep(attente);
+            } catch (InterruptedException e) {
+                break;
+            }
+            attente = Math.min(60_000, attente * 2);
+        }
+    }
+
+    private void recevoir(Etat e) {
+        etat = e;
+        afficher();
+        prevenir();
+    }
+
+    // Toutes les 30 s : durées à jour, « le PC dort » s'il se tait.
+    private void battre() {
+        afficher();
+        principal.postDelayed(this::battre, 30_000);
+    }
+
+    private void afficher() {
+        long maintenant = System.currentTimeMillis();
+        image++;
+        getSystemService(NotificationManager.class).notify(NOTIF_STATUT, statut(maintenant));
+        Widget.maj(this, etat, maintenant);
+        if (bulle != null) bulle.maj(etat, maintenant);
+    }
+
+    // ---- Niveau 1 : notification permanente
+
+    private PendingIntent ouvrir() {
+        return PendingIntent.getActivity(this, 0, new Intent(this, Principale.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private Notification statut(long maintenant) {
+        List<Etat.Ligne> lignes = etat.lignes(maintenant, image);
+        Notification.InboxStyle style = new Notification.InboxStyle();
+        for (int i = 0; i < Math.min(6, lignes.size()); i++) style.addLine(lignes.get(i).toString());
+        String titre = etat.resume(maintenant);
+        Notification.Builder b = new Notification.Builder(this, CANAL_STATUT)
+                .setSmallIcon(R.drawable.ic_stat_pilou)
+                .setLargeIcon(Dessin.image(etat.expression(maintenant), etat.couleur, 4))
+                .setContentTitle(titre)
+                .setContentText(lignes.isEmpty() ? etat.nom + " · niveau " + etat.niveau : lignes.get(0).toString())
+                .setStyle(style)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+                .setContentIntent(ouvrir());
+        return b.build();
+    }
+
+    // Une IA attend, ou une session vient de finir : une alerte, une fois.
+    private void prevenir() {
+        long maintenant = System.currentTimeMillis();
+        NotificationManager nm = getSystemService(NotificationManager.class);
+        for (Etat.Session s : etat.sessions) {
+            String cle = s.id + "|" + s.etat + "|" + s.depuis;
+            if (prevenus.contains(cle)) continue;
+            String canal, texte;
+            if (s.attend() && Prefs.alerteAttente(this)) {
+                canal = CANAL_ATTENTE;
+                texte = s.etat.equals("question") ? "te pose une question" : "attend ton autorisation";
+                if (bulle != null) bulle.alerter();
+            } else if ((s.etat.equals("fini") || s.etat.equals("erreur")) && maintenant - s.depuis < 5 * 60_000L && Prefs.alerteFin(this)) {
+                canal = CANAL_FIN;
+                texte = s.etat.equals("fini") ? "a fini" : "s'est arrêtée sur une erreur";
+            } else {
+                prevenus.add(cle);
+                continue;
+            }
+            prevenus.add(cle);
+            nm.notify(cle.hashCode(), new Notification.Builder(this, canal)
+                    .setSmallIcon(R.drawable.ic_stat_pilou)
+                    .setContentTitle(s.nom())
+                    .setContentText(texte)
+                    .setAutoCancel(true)
+                    .setContentIntent(ouvrir())
+                    .build());
+        }
+    }
+}

@@ -32,6 +32,9 @@ public sealed class Reglages
     // Adresse où prévenir quand une IA attend ou a fini un long travail (webhook Discord, Slack, ntfy).
     public string Webhook { get; set; } = "";
     public bool WebhookSeulementAbsent { get; set; } = true;
+    // Téléphone appairé (app Android) : code d'appairage et relais ntfy (ntfy.sh ou le sien).
+    public string Telephone { get; set; } = "";
+    public string Relais { get; set; } = PilouBureau.Telephone.RelaisParDefaut;
 
     public static int Requis(Accessoire a) => Recompenses.Requis(a);
 

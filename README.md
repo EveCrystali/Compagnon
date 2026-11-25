@@ -20,7 +20,10 @@ Dans PowerShell :
 irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/installer.ps1 | iex
 ```
 
-Rien d'autre à installer (.NET est inclus). L'installateur pose l'overlay dans
+Rien d'autre à installer (.NET est inclus). Dépôt privé : télécharger `installer.ps1` et
+`PilouBureau.zip` depuis la page des releases (connecté à GitHub), les mettre dans le même dossier,
+puis clic droit sur `installer.ps1` → Exécuter avec PowerShell ; ou, avec `gh` connecté, lancer le
+script tel quel. L'installateur pose l'overlay dans
 `%USERPROFILE%\.claude\compagnon\bureau\`, ajoute le mod si Claude Code est là, branche Codex s'il est
 là, et lance Pilou avec Windows. Le relancer met tout à jour. Options : `-SansCodex`, `-SansClaude`,
 `-SansDemarrage` (télécharger le script, puis `.\installer.ps1 -SansCodex`).
@@ -32,6 +35,12 @@ claude plugin marketplace add EveCrystali/Compagnon
 claude plugin install compagnon@pilou --scope user
 # overlay : PilouBureau.zip de la dernière release, décompressé dans %USERPROFILE%\.claude\compagnon\bureau\
 ```
+
+## Sur Android
+
+`Pilou.apk` (dans la release) : notification permanente avec l'état des sessions, widget d'écran
+d'accueil, et Pilou flottant par-dessus les applis. Appairage par QR code depuis le PC (clic droit →
+Intégrations → Android), état chiffré de bout en bout. Détails : [docs/ANDROID.md](docs/ANDROID.md).
 
 ## Ce qu'il suit
 
@@ -67,6 +76,7 @@ Relancer la ligne d'installation. Ou : `claude plugin marketplace update pilou`,
 - `apps/PilouBureau` : l'overlay (WPF, .NET 9) — tests de la logique, sur tout OS :
   `dotnet test apps/PilouBureau/tests` ; compiler depuis Linux ou macOS :
   `dotnet build apps/PilouBureau -p:EnableWindowsTargeting=true` ;
-- une release : `git tag v0.7.0 && git push --tags` ; GitHub Actions fabrique `PilouBureau.zip`.
+- `android/` : l'app Android (Java, sans bibliothèque) — construite par GitHub Actions ;
+- une release : `git tag v0.8.0 && git push --tags` ; GitHub Actions fabrique `PilouBureau.zip` et `Pilou.apk`.
 
 Détail des comportements : [plugins/compagnon/README.md](plugins/compagnon/README.md).

@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +14,11 @@ public sealed partial class FenetrePilou
     private readonly PresenceDiscord _discord = new();
     private readonly Dictionary<string, string> _prevenu = new();
     private readonly Dictionary<string, int> _xpSources = new();
+    private static readonly HttpClient Relais = new() { Timeout = TimeSpan.FromSeconds(15) };
+    private Expr _exprCourante = Expr.Repos;
+    private string _telSignature = "", _telEnvoyee = "";
+    private double _telChange = -1e12, _telEnvoi = -1e12, _telPause = -1e12;
+    private bool _telEnCours;
 
     private MenuItem MenuIntegrations()
     {
@@ -43,8 +50,97 @@ public sealed partial class FenetrePilou
         }
 
         m.Items.Add(new Separator());
+        if (Telephone.Valide(_reglages.Telephone))
+        {
+            m.Items.Add(Entree("Android : appairé ✓ (revoir le code)", () => Appairage.Montrer(_reglages.Telephone, _reglages.Relais)));
+            m.Items.Add(Entree("Android : nouveau code (l'ancien téléphone décroche)", () => Appairer(true)));
+            m.Items.Add(Entree("Android : couper", () =>
+            {
+                _reglages.Telephone = "";
+                _reglages.Ecrire(_dossier);
+                Dire("le téléphone ne reçoit plus rien", 3000);
+            }));
+        }
+        else
+            m.Items.Add(Entree("Android : appairer mon téléphone…", () => Appairer(false)));
+        m.Items.Add(Entree($"Android : relais {_reglages.Relais}…", ChoisirRelais));
+
+        m.Items.Add(new Separator());
         m.Items.Add(Entree("Brancher un autre logiciel… (aide)", () => Ouvrir(AideBrancher)));
         return m;
+    }
+
+    private void Appairer(bool nouveau)
+    {
+        if (nouveau || !Telephone.Valide(_reglages.Telephone)) _reglages.Telephone = Telephone.NouveauCode();
+        _reglages.Ecrire(_dossier);
+        _telEnvoyee = ""; // le téléphone reçoit l'état dès qu'il écoute
+        Appairage.Montrer(_reglages.Telephone, _reglages.Relais);
+    }
+
+    private void ChoisirRelais()
+    {
+        var v = Saisie.Demander("Relais du téléphone",
+            "Serveur ntfy qui porte les messages (chiffrés) vers le téléphone. ntfy.sh est gratuit mais limite le nombre " +
+            "de messages par jour ; ton propre serveur ntfy n'a pas de limite. Le téléphone doit utiliser le même.",
+            _reglages.Relais);
+        if (v is null) return;
+        v = v.TrimEnd('/');
+        if (v == "") v = Telephone.RelaisParDefaut;
+        if (!Webhook.Valide(v))
+        {
+            Dire("adresse refusée : il faut une adresse https://", 4000);
+            return;
+        }
+        _reglages.Relais = v;
+        _reglages.Ecrire(_dossier);
+        _telEnvoyee = "";
+        if (Telephone.Valide(_reglages.Telephone)) Appairage.Montrer(_reglages.Telephone, v);
+    }
+
+    // État des sessions vers le téléphone : sur changement (regroupé sur 3 s), sinon toutes les 15 min.
+    private void PublierTelephone(IReadOnlyList<EtatSession> vivantes, double epoque)
+    {
+        var code = _reglages.Telephone;
+        if (!Telephone.Valide(code) || _telEnCours || epoque < _telPause) return;
+        var sessions = Telephone.Sessions(vivantes, epoque);
+        var humeur = _exprCourante.ToString().ToLowerInvariant();
+        var signature = Telephone.Signature(sessions, Niveau, humeur);
+        if (signature != _telSignature)
+        {
+            _telSignature = signature;
+            _telChange = epoque;
+        }
+        bool change = signature != _telEnvoyee && epoque - _telChange >= 3000;
+        bool battement = epoque - _telEnvoi >= 15 * 60_000;
+        if (!change && !battement) return;
+
+        var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
+            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count);
+        var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
+        var corps = Telephone.Chiffrer(code, charge);
+        _telEnCours = true;
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                using var r = await Relais.PostAsync(url, new StringContent(corps, Encoding.UTF8, "text/plain"));
+                if ((int)r.StatusCode == 429) _telPause = Epoque + 5 * 60_000; // limite du relais : on se tait 5 min
+                else if (r.IsSuccessStatusCode)
+                {
+                    _telEnvoyee = signature;
+                    _telEnvoi = Epoque;
+                }
+            }
+            catch (Exception e) when (e is HttpRequestException or TaskCanceledException)
+            {
+                _telPause = Epoque + 60_000; // hors ligne : on réessaie dans une minute
+            }
+            finally
+            {
+                _telEnCours = false;
+            }
+        });
     }
 
     private void ChoisirDiscord()
@@ -104,6 +200,7 @@ public sealed partial class FenetrePilou
         CrediterSources(vivantes);
         PublierDiscord(vivantes, epoque);
         Prevenir(vivantes, epoque);
+        PublierTelephone(vivantes, epoque);
     }
 
     // XP gagnée par les autres sources (tour fini, commit, tests) : écart depuis la dernière lecture.
