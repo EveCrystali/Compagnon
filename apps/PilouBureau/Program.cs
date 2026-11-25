@@ -20,7 +20,7 @@ public static class Program
             return Integrations.Ligne(args[0] == "--brancher", args[1]);
 
         // Une seule instance : chaque session Claude tente de le lancer.
-        bool rendu = args.Any(a => a.StartsWith("--instantane="));
+        bool rendu = args.Any(a => a.StartsWith("--instantane=") || a.StartsWith("--film="));
         // --apres-maj : lancé par l'ancienne version, qui est en train de quitter ; on attend sa place.
         bool apresMaj = args.Contains("--apres-maj");
         args = args.Where(a => a != "--apres-maj").ToArray();
@@ -44,7 +44,15 @@ public static class Program
         // --instantane=<png> : rend la fenêtre dans un PNG au bout de 2,5 s puis quitte (essai sans écran).
         var instantane = args.FirstOrDefault(a => a.StartsWith("--instantane="))?["--instantane=".Length..];
         var essai = args.FirstOrDefault(a => a.StartsWith("--essai="))?["--essai=".Length..];
-        args = args.Where(a => a != "--devant" && !a.StartsWith("--instantane=") && !a.StartsWith("--essai=")).ToArray();
+        // --film=<dossier> [--duree=6] [--ips=15] : enregistre la fenêtre de Pilou elle-même, image par image (PNG
+        // transparents), puis quitte. Seuls les pixels de Pilou et de sa bulle : jamais l'écran ni les autres fenêtres.
+        var film = args.FirstOrDefault(a => a.StartsWith("--film="))?["--film=".Length..];
+        double Nombre(string nom, double defaut) =>
+            double.TryParse(args.FirstOrDefault(a => a.StartsWith($"--{nom}="))?[(nom.Length + 3)..],
+                System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : defaut;
+        double duree = Math.Clamp(Nombre("duree", 6), 1, 30), ips = Math.Clamp(Nombre("ips", 15), 5, 30);
+        args = args.Where(a => a != "--devant" && !a.StartsWith("--instantane=") && !a.StartsWith("--essai=")
+            && !a.StartsWith("--film=") && !a.StartsWith("--duree=") && !a.StartsWith("--ips=")).ToArray();
         var dossier = args.Length > 0 ? args[0] : Signal.Defaut();
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var fenetre = new FenetrePilou(dossier, devant);
@@ -69,6 +77,29 @@ public static class Program
                 app.Shutdown();
             };
             minuteur.Start();
+        }
+        if (film is not null)
+        {
+            Directory.CreateDirectory(film);
+            int image = 0, total = (int)(duree * ips);
+            var debut = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
+            debut.Tick += (_, _) =>
+            {
+                debut.Stop();
+                var prise = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Render)
+                    { Interval = TimeSpan.FromMilliseconds(1000 / ips) };
+                prise.Tick += (_, _) =>
+                {
+                    fenetre.Instantane(Path.Combine(film, $"{image:0000}.png"));
+                    if (++image >= total)
+                    {
+                        prise.Stop();
+                        app.Shutdown();
+                    }
+                };
+                prise.Start();
+            };
+            debut.Start();
         }
         return app.Run();
     }
