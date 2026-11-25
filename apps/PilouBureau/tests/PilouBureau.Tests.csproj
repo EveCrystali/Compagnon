@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs" />
+    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs" />
   </ItemGroup>
 
   <ItemGroup>

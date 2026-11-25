@@ -21,8 +21,23 @@ public static class Program
 
         // Une seule instance : chaque session Claude tente de le lancer.
         bool rendu = args.Any(a => a.StartsWith("--instantane="));
+        // --apres-maj : lancé par l'ancienne version, qui est en train de quitter ; on attend sa place.
+        bool apresMaj = args.Contains("--apres-maj");
+        args = args.Where(a => a != "--apres-maj").ToArray();
         using var unique = new Mutex(true, rendu ? @"Local\PilouBureau-essai" : @"Local\PilouBureau", out var premier);
+        if (!premier && apresMaj)
+        {
+            try
+            {
+                premier = unique.WaitOne(15_000);
+            }
+            catch (AbandonedMutexException)
+            {
+                premier = true;
+            }
+        }
         if (!premier) return 0;
+        Mise.Nettoyer();
 
         // --devant : premier plan, sans rattachement à Claude (essai visuel).
         bool devant = args.Contains("--devant");

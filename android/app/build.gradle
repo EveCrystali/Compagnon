@@ -11,8 +11,9 @@ android {
         applicationId 'fr.pilou.compagnon'
         minSdk 26
         targetSdk 35
-        versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger())
-        versionName '0.8.0'
+        // La release fixe les deux (minutes depuis 2025 : toujours croissant) ; en local, on les calcule pareil.
+        versionCode((System.getenv('PILOU_VERSION_CODE') ?: ((System.currentTimeMillis().intdiv(1000) - 1735689600).intdiv(60)).toString()).toInteger())
+        versionName(System.getenv('PILOU_VERSION') ?: '0.9-dev')
     }
 
     // Clé de signature publique du dépôt (app installée à la main, hors Play Store) : chaque version

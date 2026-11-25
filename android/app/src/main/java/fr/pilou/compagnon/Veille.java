@@ -73,6 +73,13 @@ public final class Veille extends Service {
         if (Build.VERSION.SDK_INT >= 34) startForeground(NOTIF_STATUT, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
         else startForeground(NOTIF_STATUT, n);
         principal.postDelayed(this::battre, 30_000);
+        // Mise à jour de l'app : une minute après le démarrage, puis une fois par jour (MiseAJour décide).
+        principal.postDelayed(this::verifierMise, 60_000);
+    }
+
+    private void verifierMise() {
+        new Thread(() -> MiseAJour.peutEtre(this), "pilou-maj").start();
+        principal.postDelayed(this::verifierMise, 3600_000L);
     }
 
     @Override

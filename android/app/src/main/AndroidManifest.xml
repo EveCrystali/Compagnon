@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Mise à jour depuis la release GitHub (Android demande toujours la confirmation). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:allowBackup="true"
@@ -31,6 +33,15 @@
                 <data android:scheme="pilou" android:host="appairer" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Installation"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <receiver
+            android:name=".Installe"
+            android:exported="false" />
 
         <service
             android:name=".Veille"

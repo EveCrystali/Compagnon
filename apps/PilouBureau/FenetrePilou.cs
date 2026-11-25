@@ -173,6 +173,7 @@ public sealed partial class FenetrePilou : Window
             Lire();
             _lecture.Start();
             _image.Start();
+            DemarrerMises();
         };
     }
 
@@ -262,6 +263,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
         menu.Items.Add(MenuIntegrations());
+        menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
         menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
@@ -671,7 +673,7 @@ public sealed partial class FenetrePilou : Window
         Top = Math.Round(_yPieds - (HauteurBulle + Scene.Sol) * K);
     }
 
-    // Claude attend Antoine (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,
+    // Claude t'attend (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,
     // sur l'horizontale, et la suit tant que personne ne répond. Renvoie s'il court.
     private bool Courir(double t, double dt, double min, double max)
     {
@@ -838,7 +840,7 @@ public sealed partial class FenetrePilou : Window
         }
     }
 
-    // Antoine ne bouge plus depuis 3 min : Pilou saute s'accrocher au curseur par l'antenne.
+    // Plus personne ne bouge depuis 3 min : Pilou saute s'accrocher au curseur par l'antenne.
     private bool PreparerSaut(double t)
     {
         var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
@@ -865,7 +867,7 @@ public sealed partial class FenetrePilou : Window
             _yPieds = _sautDepart.Y + (_sautCible.Y - _sautDepart.Y) * a - Math.Sin(Math.PI * a) * haut;
             return;
         }
-        // Accroché : il gigote. Si la souris repart (Antoine est revenu) ou au bout de 2,6 s, il lâche.
+        // Accroché : il gigote. Si la souris repart (on est revenu) ou au bout de 2,6 s, il lâche.
         var pieds = new Point(_souris.X, _souris.Y + 21 * Scene.PA * K);
         bool bouge = (pieds - _sautCible).Length > 25;
         _x = _sautCible.X;

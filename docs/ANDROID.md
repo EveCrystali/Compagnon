@@ -24,6 +24,13 @@ question, une plus discrète quand une session finit (chacune se coupe dans l'ap
    caractères dans l'app.
 4. Dans l'app : autoriser les notifications, cocher « Pilou flottant » si tu le veux, ajouter le widget.
 
+## Mises à jour
+
+Une fois par jour, l'app lit `version.json` de la dernière release. Une version plus récente donne une
+notification ; la toucher télécharge `Pilou.apk` et ouvre la confirmation d'Android (« Mettre à
+jour »). La première fois, Android demande d'autoriser Pilou à installer des applis. Une app installée
+hors Play Store ne peut pas se mettre à jour sans cette confirmation.
+
 ## Comment ça passe du PC au téléphone
 
 ```

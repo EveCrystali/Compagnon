@@ -84,6 +84,8 @@ public final class Principale extends Activity {
         pile.addView(bouton("Autoriser les notifications", v -> demanderNotifications()));
         pile.addView(bouton("Autoriser Pilou par-dessus les applis",
                 v -> startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())))));
+        pile.addView(titre("Version " + versionInstallee()));
+        pile.addView(bouton("Chercher une mise à jour", v -> startActivity(new Intent(this, Installation.class))));
         pile.addView(bouton("Ne plus écouter le PC", v -> {
             Prefs.de(this).edit().putString("code", "").remove("etat").remove("dernierId").apply();
             Veille.arreter(this);
@@ -148,6 +150,14 @@ public final class Principale extends Activity {
         if (!Chiffre.valide(Prefs.code(this))) statut.setText("Pas encore appairé avec un PC.");
         else statut.setText(e.nom + " · niveau " + e.niveau + (e.titre.isEmpty() ? "" : " · " + e.titre) + "\n" + e.resume(maintenant));
         h.postDelayed(this::rafraichir, 5000);
+    }
+
+    private String versionInstallee() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "?";
+        }
     }
 
     private void demanderNotifications() {
