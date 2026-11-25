@@ -77,6 +77,7 @@ final class Bulle {
 
     void montrer() {
         if (pose) return;
+        borner();
         try {
             wm.addView(racine, lp);
             pose = true;
@@ -158,6 +159,7 @@ final class Bulle {
             lp.x = droite ? ici[0] + lp0 - w : ici[0];
             lp.y = dessus ? ici[1] - hp : ici[1];
         }
+        borner();
         if (pose) wm.updateViewLayout(racine, lp);
     }
 
@@ -250,10 +252,47 @@ final class Bulle {
 
     // Il se range contre le bord le plus proche.
     private void ranger() {
-        int largeur = ctx.getResources().getDisplayMetrics().widthPixels;
+        int largeur = ecran()[0];
         lp.x = lp.x + racine.getWidth() / 2 < largeur / 2 ? 0 : largeur - racine.getWidth();
-        lp.y = Math.max(0, lp.y);
+        borner();
         wm.updateViewLayout(racine, lp);
+        Prefs.de(ctx).edit().putInt("bulleX", lp.x).putInt("bulleY", lp.y).apply();
+    }
+
+    // Taille réelle de l'écran (rotation, barres comprises) en pixels.
+    private int[] ecran() {
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            android.graphics.Rect r = wm.getCurrentWindowMetrics().getBounds();
+            return new int[]{r.width(), r.height()};
+        }
+        android.util.DisplayMetrics m = ctx.getResources().getDisplayMetrics();
+        return new int[]{m.widthPixels, m.heightPixels};
+    }
+
+    // Pilou reste toujours entièrement visible : après une rotation, un changement de taille,
+    // une position enregistrée sur un autre écran, ou un glisser trop loin.
+    private void borner() {
+        int[] e = ecran();
+        int w = racine.getWidth() > 0 ? racine.getWidth() : pilou.getMeasuredWidth();
+        int hh = racine.getHeight() > 0 ? racine.getHeight() : pilou.getMeasuredHeight();
+        if (w <= 0 || hh <= 0) {
+            pilou.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            w = pilou.getMeasuredWidth();
+            hh = pilou.getMeasuredHeight();
+        }
+        lp.x = Math.max(0, Math.min(lp.x, e[0] - w));
+        lp.y = Math.max(0, Math.min(lp.y, e[1] - hh));
+    }
+
+    /** « Montrer Pilou » : le ramène bien en vue, en bas à droite. */
+    void ramener() {
+        int[] e = ecran();
+        pilou.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        if (ouvert) fermer();
+        lp.x = e[0] - pilou.getMeasuredWidth();
+        lp.y = (int) (e[1] * 0.65f);
+        borner();
+        if (pose) wm.updateViewLayout(racine, lp);
         Prefs.de(ctx).edit().putInt("bulleX", lp.x).putInt("bulleY", lp.y).apply();
     }
 }
