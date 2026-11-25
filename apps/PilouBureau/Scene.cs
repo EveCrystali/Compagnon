@@ -8,6 +8,12 @@ namespace PilouBureau;
 public sealed class Pose
 {
     public Expr Expr;
+    // Objets de la boutique portés, par emplacement (tete, yeux, cou, dos, main, compagnon, effet, couleur → id).
+    public IReadOnlyDictionary<string, string> Equipe = new Dictionary<string, string>();
+    // Stade d'évolution affiché (1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral) et, pendant une
+    // évolution, sa progression 0..1 (de Stade - 1 vers Stade) ; 0 hors évolution.
+    public int Stade = 2;
+    public double Evolution;
     public double T;            // horloge de l'animation (ms)
     public double Depuis;       // ms depuis le début de l'humeur passagère
     public int Regard;          // -1, 0, 1
@@ -33,12 +39,11 @@ public sealed class Pose
     public double BalleRot;     // rotation de la balle (radians)
     public Couleur Couleur;
     public bool Trainee;        // traînée d'étoiles quand il marche (récompense)
-    public string Tenue = "";   // tenue d'activité (assets/tenues.txt) ; vide : aucune
-    public string Reaction = ""; // « danse » (notes ♪ en plus du balancement) | « sueur » (gouttes)
-    public int Stade = 2;       // 1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral
-    public double Evolution;    // 0..1 : animation d'évolution vers Stade (0 ou 1 : aucune)
-    public IReadOnlyList<string> Objets = Array.Empty<string>(); // objets de boutique équipés
-    public string CouleurBoutique = ""; // teinte achetée en boutique (prioritaire sur Couleur si renseignée)
+    // Activité reconnue (Activites.Toutes : code, tableur, jeu-mmo, jeu, musique, video, lecture, dessin,
+    // visio, nuit, mail, texte, diaporama) : la tenue à dessiner ; "" = aucune.
+    public string Tenue = "";
+    // Petite réaction liée à l'activité : "danse" (musique), "sueur" (processeur chargé pendant le code), "".
+    public string Reaction = "";
 }
 
 // Pilou en pixel art, grille fine de 48 × 56 commune avec l'app Android (RenduPilou), affichée en pixels
@@ -122,13 +127,15 @@ public sealed class Scene : FrameworkElement
     // Ce que la Pose demande, traduit pour le rendu commun.
     public static Allure Allure(Pose p)
     {
-        var objets = p.Objets.ToList();
+        // Objets de boutique portés (un par emplacement) ; la couleur achetée remplace la couleur de niveau.
+        var objets = p.Equipe.Where(kv => kv.Key != Boutique.Couleur && kv.Value != "").Select(kv => kv.Value).ToList();
+        var couleurAchetee = p.Equipe.GetValueOrDefault(Boutique.Couleur, "");
         if (p.Reaction == "danse" && p.Tenue != "musique") objets.Add("tenue-musique-notes");
         return new Allure
         {
             Expr = p.Expr.ToString().ToLowerInvariant(),
             T = p.T,
-            Couleur = p.CouleurBoutique != "" ? p.CouleurBoutique : p.Couleur.ToString().ToLowerInvariant(),
+            Couleur = couleurAchetee != "" ? couleurAchetee : p.Couleur.ToString().ToLowerInvariant(),
             Accessoire = p.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : p.Accessoire.ToString().ToLowerInvariant(),
             Tenue = p.Tenue,
             Objets = objets,

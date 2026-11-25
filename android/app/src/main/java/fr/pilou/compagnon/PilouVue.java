@@ -38,6 +38,16 @@ public final class PilouVue extends View {
         invalidate();
     }
 
+    /** Objets de la boutique portés (emplacement → id). Gardés pour le dessin, qui viendra les montrer. */
+    public final java.util.Map<String, String> equipe = new java.util.TreeMap<>();
+
+    public void equipe(java.util.Map<String, String> m) {
+        if (m.equals(equipe)) return;
+        equipe.clear();
+        equipe.putAll(m);
+        invalidate();
+    }
+
     /** Humeur passagère (caresse, fête, grimace) pendant ms millisecondes. */
     public void jouer(String humeur, long ms) {
         passager = humeur;
@@ -105,7 +115,14 @@ public final class PilouVue extends View {
         RenduPilou.Allure a = Dessin.allure(e, t, couleur, accessoire, t < finClin, saut);
         a.stade = stade;
         a.tenue = tenue;
-        a.objets = objets;
+        // Objets de la boutique portés (un par emplacement) ; la couleur achetée remplace celle du niveau.
+        java.util.List<String> portes = new java.util.ArrayList<>(objets);
+        for (java.util.Map.Entry<String, String> en : equipe.entrySet()) {
+            if (en.getValue() == null || en.getValue().isEmpty()) continue;
+            if (en.getKey().equals("couleur")) a.couleur = en.getValue();
+            else portes.add(en.getValue());
+        }
+        a.objets = portes;
         if (debutEvolution >= 0) {
             double k = (t - debutEvolution) / (double) DUREE_EVOLUTION;
             if (k >= 1) debutEvolution = -1;

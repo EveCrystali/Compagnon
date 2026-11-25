@@ -22,6 +22,8 @@
     <!-- Banque de sprites commune avec l'app Android (assets/ à la racine du dépôt), embarquée dans l'exécutable. -->
     <EmbeddedResource Include="..\..\assets\sprites\*.txt" LogicalName="sprite:%(Filename)" />
     <EmbeddedResource Include="..\..\assets\*.txt" LogicalName="pilou:%(Filename)%(Extension)" />
+    <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
+    <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
   </ItemGroup>
 
   <ItemGroup>

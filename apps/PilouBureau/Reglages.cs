@@ -42,8 +42,12 @@ public sealed class Reglages
     public string RetourDepuis { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
-
-    public static int Requis(Accessoire a) => Recompenses.Requis(a);
+    // Activités : Pilou regarde la fenêtre au premier plan (rien ne sort du PC) ; discrétion ; activités coupées.
+    public bool Activites { get; set; } = true;
+    public bool CacherPleinEcran { get; set; } = true;
+    public bool CacherPresentation { get; set; } = true;
+    public bool CacherVisio { get; set; } = true;
+    public List<string> ActivitesCoupees { get; set; } = new();
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 
@@ -76,8 +80,8 @@ public sealed class Reglages
         }
     }
 
-    // Accessoire réellement porté : « saison » choisit selon la date.
-    public Accessoire Porte(DateTime jour, int niveau)
+    // Accessoire réellement porté : « saison » choisit selon la date, parmi ce qui est possédé (boutique).
+    public Accessoire Porte(DateTime jour, Func<Accessoire, bool> possede)
     {
         var a = Accessoire != Accessoire.Saison ? Accessoire : jour.Month switch
         {
@@ -87,7 +91,7 @@ public sealed class Reglages
             6 or 7 or 8 => Accessoire.Lunettes,
             _ => Accessoire.Aucun,
         };
-        return niveau >= Requis(a) ? a : Accessoire.Aucun;
+        return a == Accessoire.Aucun || possede(a) ? a : Accessoire.Aucun;
     }
 
     public bool Sombre()

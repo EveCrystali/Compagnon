@@ -61,8 +61,24 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 - **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
   (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
   plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
-- **Récompenses** : tout le catalogue jusqu'au niveau 50 (`apps/PilouBureau/Recompenses.cs`) : titres,
-  accessoires (chapeau de pêcheur, toque, tablier…), couleurs, canne dorée, marmite en cuivre ;
+- **Niveaux** : ils **ouvrent l'accès** — jeux (pêche niveau 2, tape m'en cinq 3, cuisine 4, Chasse aux
+  bugs 5), objets de la boutique (chacun a son niveau), stades d'évolution — et chaque niveau gagné
+  rapporte des pièces d'or (20 + 5 × niveau). Les titres restent liés au niveau (honorifiques).
+  Courbe : xp(n) = 25·(n−1)² (niveau 10 ≈ 2 000 xp, 25 ≈ 14 400, 50 ≈ 60 000) ; le niveau déjà
+  atteint est gardé (« niveau acquis », partagé entre appareils), on ne redescend jamais.
+  `apps/PilouBureau/Progression.cs` ;
+- **Évolution** : Pilou grandit — Gouttelette (niveaux 1–9), Pilou (10–24), Pilou Nimbus (25–39), Pilou
+  Astral (40+), noms provisoires. L'évolution se joue au premier lancement après le palier ; une
+  *pierre de calme* (boutique) la retient ; *Forme affichée* choisit parmi les stades atteints ;
+- **Quêtes** : 3 du jour (minuit), 3 de la semaine (lundi), 1 du mois, tirées pour chaque appareil
+  (pêche, cuisine, jeux, caresses, présence, et, une fois vus : tours Claude/Codex, commits, tests,
+  score de Chasse aux bugs, activités). Elles rapportent des **pièces d'or (po)** et un peu d'XP ; les
+  trois du jour ouvrent un coffre, les jours d'affilée font une série. `apps/PilouBureau/Quetes.cs` ;
+- **Boutique…** (gratuite, aucune vraie monnaie) : offres du jour (4 objets, un en promo), chapeaux,
+  lunettes, écharpe, cape, objets à la main, compagnons, effets, couleurs, et les anciennes récompenses
+  (accessoires, couleurs, traînée, canne dorée, marmite en cuivre). Rien de ce qui était déjà gagné
+  n'est perdu : à la mise à jour, tout ce que le niveau avait débloqué passe dans l'inventaire.
+  Pièces, objets et tenue sont partagés dans le groupe d'appareils. `apps/PilouBureau/Boutique.cs` ;
 - **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
   fichier, le total fait les niveaux ;
 - **Intégrations → Partager l'XP entre mes appareils** (sans dossier commun : PC perso et PC de
@@ -79,6 +95,23 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 - **Démarrer avec Windows**, se cacher 10 min, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
+
+## Activités
+
+Pilou devine ce que tu fais d'après la fenêtre au premier plan, et en tire une tenue :
+code, tableur, jeu (jeu de rôle en ligne à part), musique (il danse au rythme du son), vidéo,
+lecture, dessin, visio, mail, écriture, diaporama, et la nuit après 23 h. Le temps passé fait monter
+des **métiers** (Codeur, As du tableur, Joueur, Mélomane… de Novice à Légende) et débloque des
+**succès** (Marathon : 4 h de code d'affilée, Noctambule, Visio-man, Explorateur…), avec de l'XP.
+
+- **Discret** : il se cache tout seul en plein écran (jeu, vidéo), en présentation et en visio
+  (caméra ou micro actifs), et revient ensuite. Une IA qui t'attend le garde visible, sauf en présentation.
+- **Vie privée** : tout se passe sur le PC. Le titre de la fenêtre sert à reconnaître l'activité puis
+  est oublié ; seuls des compteurs (« 3 h de tableur ») sont gardés. Clic droit → *Métiers et succès →
+  Activités : réglages* : tout couper, ou activité par activité.
+- **Tes logiciels** : *Ajouter mes logiciels…* ouvre `%USERPROFILE%\.claude\compagnon\activites.json`
+  (programme, titre ou chemin → activité ; relu sans redémarrer). Règles par défaut :
+  `apps/PilouBureau/activites.json`.
 
 ## Mises à jour
 

@@ -17,6 +17,10 @@ import java.util.Random;
  * taper dans la main, caresser Pilou. Les gains partent vers le PC par Gains.
  */
 public final class Terrain extends View {
+    private boolean possede(String id) {
+        return Gains.possede(getContext(), id);
+    }
+
     public interface Ecoute {
         void message(String texte);
 
@@ -151,7 +155,7 @@ public final class Terrain extends View {
 
     private void finCuisine() {
         Etat e = Prefs.etat(getContext());
-        plat = Butin.cuisiner(hasard, ecoute.niveau(), Gains.stock(getContext()), Gains.plats(getContext(), e), remue);
+        plat = Butin.cuisiner(hasard, ecoute.niveau(), Gains.stock(getContext()), Gains.plats(getContext(), e), remue, possede(Boutique.MARMITE_CUIVRE));
         mode = Mode.PLAT;
         debut = t();
         if (plat == null) {
@@ -188,7 +192,7 @@ public final class Terrain extends View {
                 if (pres(x, y, BX + 1, BY, 9)) finPeche(null, false);
                 return true;
             case MORD:
-                if (pres(x, y, BX + 1, BY + 2, 10)) finPeche(Butin.tirer(hasard, ecoute.niveau(), false), false);
+                if (pres(x, y, BX + 1, BY + 2, 10)) finPeche(Butin.tirer(hasard, ecoute.niveau(), false, possede(Boutique.CANNE_DOREE)), false);
                 return true;
             case CUISINE:
                 if (x >= MX - 3 && x <= MX + 16 && y >= MY - 6 && y <= MY + 12 && !remue) {
@@ -460,7 +464,7 @@ public final class Terrain extends View {
                 if (t >= mordA) mode = Mode.MORD;
                 break;
             case MORD:
-                if (t >= mordA + Butin.FENETRE_MORSURE) finPeche(Butin.tirer(hasard, ecoute.niveau(), true), true);
+                if (t >= mordA + Butin.FENETRE_MORSURE) finPeche(Butin.tirer(hasard, ecoute.niveau(), true, possede(Boutique.CANNE_DOREE)), true);
                 break;
             case PRISE:
             case PLAT:

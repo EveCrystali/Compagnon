@@ -25,8 +25,10 @@ public class ButinTest {
         assertEquals("Pilou éternel", Butin.titre(50));
         assertEquals("Apprenti", Butin.titre(4));
         assertEquals(1, Butin.niveau(0));
-        assertEquals(2, Butin.niveau(5));
-        assertEquals(5, Butin.xpPourNiveau(2));
+        assertEquals(1, Butin.niveau(24));
+        assertEquals(2, Butin.niveau(25));
+        assertEquals(25, Butin.xpPourNiveau(2));
+        assertEquals(60025, Butin.xpPourNiveau(50));
     }
 
     @Test

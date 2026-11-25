@@ -21,6 +21,7 @@ public class LancementTest {
         assertNotNull(a);
         for (int i = 0; i < 4; i++) {
             a.page(i);
+            if (i == Principale.COLLECTION) for (int k = 0; k <= PageCollection.BOUTIQUE; k++) ((PageCollection) a.page(i)).choisir(k);
             Intent onglet = new Intent(RuntimeEnvironment.getApplication(), Principale.class).putExtra(Principale.EXTRA_ONGLET, i);
             Robolectric.buildActivity(Principale.class, onglet).setup().pause().stop().destroy();
         }
@@ -45,7 +46,9 @@ public class LancementTest {
         long t = System.currentTimeMillis();
         String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":7,\"titre\":\"x\",\"couleur\":\"bleu\",\"humeur\":\"repos\",\"calmes\":1,"
                 + "\"sessions\":[{\"id\":\"a\",\"source\":\"claude\",\"libelle\":\"api\",\"etat\":\"travail\",\"depuis\":" + (t - 5000) + ",\"outil\":\"Bash\"}],"
-                + "\"xp\":300,\"accessoire\":\"feuille\",\"carnet\":[\"truite\"],\"plats\":[],\"recus\":[]}";
+                + "\"xp\":300,\"accessoire\":\"feuille\",\"carnet\":[\"truite\"],\"plats\":[],\"recus\":[],"
+                + "\"po\":240,\"objets\":[\"echarpe\"],\"porte\":{\"cou\":\"echarpe\"},\"offres\":[\"cape\",\"monocle\",\"aura\",\"parapluie\"],"
+                + "\"promo\":\"cape\",\"serie\":2,\"quetes\":[[0,\"Pêche 3 prises\",1,3,30,0],[1,\"Cuisine 5 plats\",5,5,120,1]]}";
         Prefs.de(ctx).edit()
                 .putString("code", "ABCDEFGHJKMNPQRS")
                 .putString("relais", "https://ntfy.sh")

@@ -55,7 +55,28 @@ public final class Gains {
         return b.toString();
     }
 
+    interface Modif {
+        void sur(JSONObject g) throws JSONException;
+    }
+
     // Un gain s'ajoute au dernier pas encore envoyé (moins de messages), sinon ouvre une nouvelle entrée.
+    private static synchronized void modifier(Context c, Modif m) {
+        try {
+            JSONArray f = file(c);
+            JSONObject g = f.length() > 0 && f.getJSONObject(f.length() - 1).optLong("envoye", 0) == 0 ? f.getJSONObject(f.length() - 1) : null;
+            if (g == null) {
+                g = new JSONObject().put("v", 1).put("id", nouvelId()).put("xp", 0).put("prises", new JSONObject())
+                        .put("plats", new JSONArray()).put("caresses", 0).put("cree", System.currentTimeMillis()).put("envoye", 0);
+                f.put(g);
+            }
+            m.sur(g);
+            g.put("t", System.currentTimeMillis());
+            p(c).edit().putString("gains", f.toString()).apply();
+        } catch (JSONException e) {
+            // file illisible : le gain est perdu, rien ne casse
+        }
+    }
+
     private static synchronized void ajouter(Context c, int xp, String prise, String plat, int caresses) {
         try {
             JSONArray f = file(c);
@@ -65,6 +86,7 @@ public final class Gains {
                         .put("plats", new JSONArray()).put("caresses", 0).put("cree", System.currentTimeMillis()).put("envoye", 0);
                 f.put(g);
             }
+            g.put("t", System.currentTimeMillis());
             g.put("xp", g.optInt("xp") + xp);
             g.put("caresses", g.optInt("caresses") + caresses);
             if (prise != null) {
@@ -111,8 +133,90 @@ public final class Gains {
         ajouter(c, pl.xp, null, pl.rate ? null : pl.id, 0);
     }
 
+    /** Un petit jeu gagné (atelier) : de l'XP, et une partie pour les quêtes. */
     public static void jeu(Context c, int xp) {
-        ajouter(c, xp, null, null, 0);
+        modifier(c, g -> {
+            g.put("xp", g.optInt("xp") + xp);
+            g.put("jeux", g.optInt("jeux") + 1);
+        });
+    }
+
+    /** Une partie de Chasse aux bugs : XP, une partie, et le meilleur score (quêtes « atteins N points »). */
+    public static void chasse(Context c, int xp, int score) {
+        modifier(c, g -> {
+            g.put("xp", g.optInt("xp") + xp);
+            g.put("jeux", g.optInt("jeux") + 1);
+            g.put("chasse", Math.max(g.optInt("chasse"), score));
+        });
+    }
+
+    /** Achat demandé à la boutique : le PC vérifie le solde et l'applique (il reste l'arbitre). */
+    public static void acheter(Context c, String id) {
+        modifier(c, g -> {
+            JSONArray a = g.optJSONArray("achats");
+            if (a == null) g.put("achats", a = new JSONArray());
+            for (int i = 0; i < a.length(); i++) if (id.equals(a.optString(i))) return;
+            a.put(id);
+        });
+    }
+
+    /** Porter (ou retirer, id vide) : montré tout de suite ici, transmis au PC. */
+    public static void equiper(Context c, String slot, String id) {
+        modifier(c, g -> {
+            JSONObject e = g.optJSONObject("equipe");
+            if (e == null) g.put("equipe", e = new JSONObject());
+            e.put(slot, id);
+        });
+        JSONObject local = objet(c, "equipeLocal");
+        try {
+            local.put(slot, new JSONObject().put("id", id).put("t", System.currentTimeMillis()));
+        } catch (JSONException ignore) {
+            return;
+        }
+        p(c).edit().putString("equipeLocal", local.toString()).apply();
+    }
+
+    /** Achats partis mais pas encore confirmés par le PC (ils ne sont pas encore dans ses objets). */
+    public static Set<String> achatsEnAttente(Context c, Etat e) {
+        Set<String> s = new TreeSet<>();
+        JSONArray f = file(c);
+        for (int i = 0; i < f.length(); i++) {
+            JSONObject g = f.optJSONObject(i);
+            JSONArray a = g == null ? null : g.optJSONArray("achats");
+            if (a == null) continue;
+            for (int k = 0; k < a.length(); k++) if (!e.objets.contains(a.optString(k))) s.add(a.optString(k));
+        }
+        return s;
+    }
+
+    /** Objet possédé (selon le PC). */
+    public static boolean possede(Context c, String id) {
+        return Prefs.etat(c).objets.contains(id);
+    }
+
+    /** Solde affiché : celui du PC, moins les achats en route. */
+    public static int solde(Context c, Etat e) {
+        int s = Math.max(0, e.po);
+        for (String id : achatsEnAttente(c, e)) {
+            Boutique.Article a = Boutique.trouver(id);
+            if (a != null) s -= Boutique.prix(a, e.promo);
+        }
+        return Math.max(0, s);
+    }
+
+    /** Ce que Pilou porte : l'état du PC, recouvert par les choix récents du téléphone (moins de 10 min). */
+    public static java.util.Map<String, String> porte(Context c, Etat e) {
+        java.util.Map<String, String> m = new java.util.TreeMap<>(e.porte);
+        JSONObject local = objet(c, "equipeLocal");
+        long maintenant = System.currentTimeMillis();
+        for (Iterator<String> i = local.keys(); i.hasNext(); ) {
+            String slot = i.next();
+            JSONObject o = local.optJSONObject(slot);
+            if (o == null || maintenant - o.optLong("t") > 10 * 60_000L) continue;
+            if (o.optString("id").isEmpty()) m.remove(slot);
+            else m.put(slot, o.optString("id"));
+        }
+        return m;
     }
 
     public static void caresse(Context c) {
@@ -159,6 +263,11 @@ public final class Gains {
         int xp = 0;
         for (int i = 0; i < f.length(); i++) xp += f.optJSONObject(i) == null ? 0 : f.optJSONObject(i).optInt("xp");
         return xp;
+    }
+
+    /** Niveau affiché : celui du PC (qui garde le niveau acquis), ou la courbe si l'XP en attente le dépasse. */
+    public static int niveau(Context c, Etat e) {
+        return Math.max(e.niveau, Butin.niveau(xp(c, e)));
     }
 
     /** XP connue : celle du PC (s'il la donne) plus ce qui n'est pas encore crédité. */

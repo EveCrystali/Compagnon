@@ -50,6 +50,19 @@ survol) ou seulement quand Claude attend · thème de la bulle (Windows / clair 
 en oct.–nov., bonnet en décembre, casque en janv.–févr.) · se promène · suit la souris du regard.
 Clic sur la bulle : met Claude au premier plan et range la bulle (« lu ») ; clic sur Pilou : caresse et « lu ». La bulle revient au prochain changement ; le survol remontre tout.
 
+**Activités** (`Activites.cs`, `Sondes.cs`, `Metiers.cs`, règles `activites.json`) : toutes les 2 s,
+Pilou lit la fenêtre au premier plan (programme, titre, chemin), l'état plein écran de Windows
+(`SHQueryUserNotificationState`), les sessions audio (Core Audio : qui joue du son, et à quel niveau),
+la caméra et le micro (registre `CapabilityAccessManager`), la charge du processeur et l'heure.
+- Activité reconnue et stable 20 s → tenue (`Pose.Tenue`) : `code`, `tableur`, `jeu-mmo`, `jeu`,
+  `musique`, `video`, `lecture`, `dessin`, `visio`, `nuit`, `mail`, `texte`, `diaporama`. Réactions
+  (`Pose.Reaction`) : il danse sur la musique, transpire quand le processeur est à fond pendant le code,
+  a sommeil la nuit ; une phrase à l'arrivée dans une activité (au plus toutes les 30 min).
+- Discrétion : caché en plein écran, en présentation (même si une IA attend) et en visio ; réglable.
+- Métiers (10, paliers 1 / 5 / 15 / 40 / 100 / 250 h) et 17 succès, XP à la clé ; compteurs dans
+  `profil-<PC>.json` (locaux à chaque PC), envoyés au téléphone (`metiers`, `succes`).
+- Les titres de fenêtres ne sont ni écrits ni envoyés. Interrupteur général et une case par activité.
+
 **Jeux et vie** :
 - tu ne touches plus à rien depuis 3 min : il saute s'accrocher au curseur par l'antenne et gigote ; 10 min : il s'endort (premier geste = réveil, « bien dormi ! ») ;
 - Claude t'attend et tu ne bouges plus depuis 45 s : il se colle à l'écran et toque (« TOC ») ;
