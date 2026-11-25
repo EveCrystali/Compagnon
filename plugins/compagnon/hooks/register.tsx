@@ -256,6 +256,10 @@ async function propsCreature($: EngineInterface) {
   }
 }
 
+// Un message qui dit de quoi parle la session : au moins 3 mots et 15 caractères, pas une commande.
+export const parlant = (texte: string) =>
+  texte.length >= 15 && texte.split(' ').filter(m => m !== '').length >= 3 && !texte.startsWith('/')
+
 const jauge = (v: number, n = 10) => '▰'.repeat(Math.round((v / 100) * n)) + '▱'.repeat(n - Math.round((v / 100) * n))
 
 export const register: Register = on => {
@@ -343,9 +347,10 @@ export const register: Register = on => {
   on('prompt.submit', async ($, e, next) => {
     await discret(async () => {
       dernierMessage = await $.clock.now()
+      // Libellé de secours (sans titre d'app) : un premier message parlant, pas « oui » ou « continue ».
       if ((await read($, libelle)) === '') {
         const court = e.text.replace(/\s+/g, ' ').trim()
-        if (court !== '') await update($, libelle, () => (court.length > 34 ? `${court.slice(0, 33)}…` : court))
+        if (parlant(court)) await update($, libelle, () => (court.length > 34 ? `${court.slice(0, 33)}…` : court))
       }
       if ((await read($, humeur)) === 'dort') {
         await reagir($, 'soulage')

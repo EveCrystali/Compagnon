@@ -92,6 +92,9 @@ public final class Veille extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent == null ? null : intent.getAction();
+        if (ACTION_CACHER.equals(action)) Prefs.de(this).edit().putLong("cacheJusque", System.currentTimeMillis() + 10 * 60_000L).apply();
+        else if (ACTION_MONTRER.equals(action)) Prefs.de(this).edit().remove("cacheJusque").apply();
         String code = Prefs.code(this);
         if (!Chiffre.valide(code)) {
             stopSelf();
@@ -124,8 +127,14 @@ public final class Veille extends Service {
         if (ecoute != null) ecoute.interrupt();
     }
 
+    static final String ACTION_CACHER = "fr.pilou.compagnon.CACHER", ACTION_MONTRER = "fr.pilou.compagnon.MONTRER";
+
+    private boolean cache() {
+        return System.currentTimeMillis() < Prefs.de(this).getLong("cacheJusque", 0);
+    }
+
     private void reglerBulle() {
-        boolean veut = Prefs.bulle(this) && Settings.canDrawOverlays(this);
+        boolean veut = Prefs.bulle(this) && Settings.canDrawOverlays(this) && !cache();
         if (veut && bulle != null) bulle.reglerTaille();
         if (veut && bulle == null) {
             bulle = new Bulle(this);
@@ -160,9 +169,18 @@ public final class Veille extends Service {
                         if (!"message".equals(ev.optString("event"))) continue;
                         String id = ev.optString("id");
                         String message = ev.optString("message");
+                        // Message trop long pour ntfy (> 4 096 octets) : il arrive en pièce jointe, à télécharger.
+                        JSONObject pj = ev.optJSONObject("attachment");
+                        if (pj != null && !pj.optString("url").isEmpty()) {
+                            try {
+                                message = MiseAJour.telecharger(pj.optString("url"));
+                            } catch (Exception perdu) {
+                                // pièce jointe expirée : le prochain message suffira
+                            }
+                        }
                         long recu = System.currentTimeMillis();
                         try {
-                            String json = Chiffre.dechiffrer(code, message);
+                            String json = completer(Chiffre.dechiffrer(code, message));
                             Etat e = Etat.lire(json, recu);
                             Prefs.de(this).edit().putString("etat", json).putLong("recu", recu).putString("dernierId", id).apply();
                             principal.post(() -> recevoir(e));
@@ -187,6 +205,25 @@ public final class Veille extends Service {
         }
     }
 
+    // Un message allégé (sans carnet ni recettes) garde les listes du message précédent.
+    private String completer(String json) {
+        try {
+            JSONObject n = new JSONObject(json);
+            String avant = Prefs.de(this).getString("etat", "");
+            if (avant.isEmpty()) return json;
+            JSONObject a = new JSONObject(avant);
+            boolean change = false;
+            for (String cle : new String[]{"carnet", "plats"})
+                if (!n.has(cle) && a.has(cle)) {
+                    n.put(cle, a.get(cle));
+                    change = true;
+                }
+            return change ? n.toString() : json;
+        } catch (org.json.JSONException e) {
+            return json;
+        }
+    }
+
     private void recevoir(Etat e) {
         etat = e;
         Gains.accuser(this, e);
@@ -196,6 +233,7 @@ public final class Veille extends Service {
 
     // Toutes les 30 s : durées à jour, « le PC dort » s'il se tait.
     private void battre() {
+        reglerBulle();
         afficher();
         principal.postDelayed(this::battre, 30_000);
     }
@@ -230,6 +268,14 @@ public final class Veille extends Service {
                 .setOnlyAlertOnce(true)
                 .setShowWhen(false)
                 .setContentIntent(ouvrir());
+        // Pilou flottant : le cacher 10 min ou le rappeler, depuis la notification.
+        if (Prefs.bulle(this) && Settings.canDrawOverlays(this)) {
+            boolean cache = cache();
+            Intent i = new Intent(this, Veille.class).setAction(cache ? ACTION_MONTRER : ACTION_CACHER);
+            b.addAction(new Notification.Action.Builder(null, cache ? "Montrer Pilou" : "Cacher Pilou 10 min",
+                    PendingIntent.getForegroundService(this, cache ? 11 : 10, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT)).build());
+            if (cache) b.setSubText("Pilou caché");
+        }
         return b.build();
     }
 
