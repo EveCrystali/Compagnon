@@ -55,7 +55,11 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 ## Clic droit sur Pilou
 
 - **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;
-- **Récompenses** : tout le catalogue par niveau (`apps/PilouBureau/Recompenses.cs`) ;
+- **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
+  (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
+  plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
+- **Récompenses** : tout le catalogue jusqu'au niveau 50 (`apps/PilouBureau/Recompenses.cs`) : titres,
+  accessoires (chapeau de pêcheur, toque, tablier…), couleurs, canne dorée, marmite en cuivre ;
 - **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
   fichier, le total fait les niveaux ;
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au

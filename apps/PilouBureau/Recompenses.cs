@@ -1,6 +1,6 @@
 namespace PilouBureau;
 
-public enum Couleur { Bleu, Nuit, Ambre, Argent, Aurore }
+public enum Couleur { Bleu, Nuit, Ambre, Argent, Aurore, Lagon, Braise, Nacre, Abysse, Comete }
 public enum TypeRecompense { Accessoire, Couleur, Titre, Effet }
 
 public sealed record Recompense(int Niveau, TypeRecompense Type, string Nom, Accessoire? Accessoire = null, Couleur? Couleur = null);
@@ -27,11 +27,37 @@ public static class Recompenses
         new(10, TypeRecompense.Couleur, "Argent", Couleur: PilouBureau.Couleur.Argent),
         new(12, TypeRecompense.Titre, "Légende du bureau"),
         new(12, TypeRecompense.Couleur, "Aurore", Couleur: PilouBureau.Couleur.Aurore),
+        // Pêche et cuisine (niveaux 13 à 50).
+        new(13, TypeRecompense.Titre, "Pêcheur du dimanche"),
+        new(14, TypeRecompense.Accessoire, "Chapeau de pêcheur", Accessoire.ChapeauPeche),
+        new(16, TypeRecompense.Titre, "Marmiton"),
+        new(18, TypeRecompense.Accessoire, "Toque de chef", Accessoire.Toque),
+        new(20, TypeRecompense.Titre, "Pêcheur aguerri"),
+        new(20, TypeRecompense.Couleur, "Lagon", Couleur: PilouBureau.Couleur.Lagon),
+        new(22, TypeRecompense.Accessoire, "Tablier", Accessoire.Tablier),
+        new(24, TypeRecompense.Titre, "Chef de pixels"),
+        new(26, TypeRecompense.Couleur, "Braise", Couleur: PilouBureau.Couleur.Braise),
+        new(27, TypeRecompense.Accessoire, "Étoile de mer", Accessoire.EtoileMer),
+        new(28, TypeRecompense.Titre, "Dompteur d'anguilles"),
+        new(30, TypeRecompense.Effet, "Canne dorée (plus de prises légendaires)"),
+        new(32, TypeRecompense.Titre, "Grand cuisinier"),
+        new(32, TypeRecompense.Couleur, "Nacre", Couleur: PilouBureau.Couleur.Nacre),
+        new(35, TypeRecompense.Effet, "Marmite en cuivre (moins de plats brûlés)"),
+        new(36, TypeRecompense.Titre, "Maître des marées"),
+        new(40, TypeRecompense.Titre, "Étoile des abysses"),
+        new(40, TypeRecompense.Couleur, "Abysse", Couleur: PilouBureau.Couleur.Abysse),
+        new(45, TypeRecompense.Titre, "Légende des lacs"),
+        new(50, TypeRecompense.Titre, "Pilou éternel"),
+        new(50, TypeRecompense.Couleur, "Comète", Couleur: PilouBureau.Couleur.Comete),
     };
+
+    public const int Maximum = 50;
 
     public static int Requis(Accessoire a) => Toutes.FirstOrDefault(r => r.Accessoire == a)?.Niveau ?? 1;
     public static int Requis(Couleur c) => Toutes.FirstOrDefault(r => r.Couleur == c)?.Niveau ?? 1;
-    public static int RequisTrainee => Toutes.First(r => r.Type == TypeRecompense.Effet).Niveau;
+    public static int RequisTrainee => Toutes.First(r => r.Nom == "Traînée d'étoiles").Niveau;
+    public static int RequisCanneDoree => Toutes.First(r => r.Nom.StartsWith("Canne dorée")).Niveau;
+    public static int RequisMarmiteCuivre => Toutes.First(r => r.Nom.StartsWith("Marmite en cuivre")).Niveau;
 
     public static string Titre(int niveau) =>
         Toutes.Where(r => r.Type == TypeRecompense.Titre && r.Niveau <= niveau).Select(r => r.Nom).LastOrDefault() ?? "Petit pixel";
