@@ -1,0 +1,19 @@
+# Défense du bureau : bonus bouclier (rond bleu)
+id: defense-bonus-bouclier
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1f4f8a b=#b4dbff c=#4a8fdc d=#ffffff
+images:
+....aaaa....
+..aabbbbaa..
+.abbbccbbba.
+.abcdccccba.
+abbdbbbbcbba
+abccbbbbccba
+abccbbbbccba
+abbcbbbbcbba
+.abccccccba.
+.abbbccbbba.
+..aabbbbaa..
+....aaaa....

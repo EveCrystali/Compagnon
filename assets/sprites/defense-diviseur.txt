@@ -1,0 +1,37 @@
+# Défense du bureau : bug qui se divise (18 × 14)
+id: defense-diviseur
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 260
+palette: a=#3a2a7a b=#6a5acd c=#9b8cff d=#f6f8fa e=#d2caff f=#ffffff g=#1c2128
+images:
+..a.............a.
+...a...........a..
+...a...........a..
+...babbb..cccca...
+..bcccbbbdeeeccc..
+.bccffcbceeffeccc.
+.bccfgcbcdefgeccc.
+bbbcccbccceeeccccc
+.bbbbbbbcdccccccc.
+.bbbbbbbccccccccc.
+..bbbbbbbdcccccc..
+...bbbbb..ccccc...
+..a.a.a....a.a.a..
+..aa..a....a..aa..
+---
+..a.............a.
+...a...........a..
+...a...........a..
+..bbabbb..ccccac..
+.bccccbbbdeeeeccc.
+bbccffbbcceffecccc
+bbccfgbbcdefgecccc
+bbccccbbcceeeecccc
+bbbbbbbbcdcccccccc
+bbbbbbbbcccccccccc
+.bbbbbbbbdccccccc.
+..bbbbbb..cccccc..
+..a.a.a....a.a.a..
+.a..aa......aa..a.

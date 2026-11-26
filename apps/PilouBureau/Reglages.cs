@@ -77,6 +77,10 @@ public sealed class Reglages
     public ModeApps NotifsMode { get; set; } = ModeApps.Toutes;
     public List<string> NotifsApps { get; set; } = new();
     public bool NotifsMasquer { get; set; }
+    // Défense du bureau : largeur de la bande (part de l'écran, centrée) ; flashs réduits (ni clignotement,
+    // ni secousse, ni voile clair).
+    public double DefenseLargeur { get; set; } = 1.0;
+    public bool DefenseFlashsReduits { get; set; }
 
     public ReglagesNotifs FiltreDesNotifs() => new(NotifsWindows, NotifsMode, NotifsApps, NotifsMasquer);
 

@@ -39,6 +39,8 @@ public sealed class Profil
     public int Captures { get; set; }
     // Soins (faim, propreté, moral) : base et journal d'actions, partagés avec le groupe (Soins.cs).
     public CarnetSoins Soins { get; set; } = new();
+    // Défense du bureau : record, plus haute vague, gains du jour (plafonds), propres à ce PC.
+    public EtatDefense Defense { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

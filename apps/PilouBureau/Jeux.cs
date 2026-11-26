@@ -217,6 +217,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
         // --essai=clavier, photo, notif, notif:masque : les petits gestes sans conditions réelles.
         if (nom is "clavier" or "photo" or "notif" or "notif:masque") EssaiGeste(nom);
+        // --essai=defense : une partie de Défense du bureau où Pilou joue seul (captures).
+        if (nom == "defense") LancerDefense(demo: true);
         // --essai=meteo:pluie, meteo:pluie:parapluie, meteo:neige, meteo:chaleur, meteo:orage…
         if (nom.StartsWith("meteo:"))
         {

@@ -1,0 +1,19 @@
+# Défense du bureau : bonus ralenti (losange violet)
+id: defense-bonus-ralenti
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#3a2a7a b=#d2caff c=#6a5acd d=#f6f8fa
+images:
+.....aa.....
+....abaa....
+...abbbaa...
+..acccccca..
+.abbcddcbaa.
+abbbbccbbbaa
+abbbbccbbbaa
+.abbcddcbaa.
+..acccccca..
+...abbbaa...
+....abaa....
+.....aa.....
