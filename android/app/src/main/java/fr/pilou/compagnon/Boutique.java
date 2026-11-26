@@ -10,13 +10,13 @@ import java.util.List;
  * Les objets ne sont pas encore dessinés : la boutique les montre par leur nom et un signe d'emplacement.
  */
 public final class Boutique {
-    public static final String TETE = "tete", YEUX = "yeux", COU = "cou", DOS = "dos", MAIN = "main", COMPAGNON = "compagnon",
+    public static final String TETE = "tete", YEUX = "yeux", COU = "cou", DOS = "dos", MAIN = "main", PIEDS = "pieds", COMPAGNON = "compagnon",
             EFFET = "effet", COULEUR = "couleur";
-    public static final String[] SLOTS = {TETE, YEUX, COU, DOS, MAIN, COMPAGNON, EFFET, COULEUR};
+    public static final String[] SLOTS = {TETE, YEUX, COU, DOS, MAIN, PIEDS, COMPAGNON, EFFET, COULEUR};
     /** « accessoire » : le chapeau historique (choisi sur le PC) ; « bonus » : actif dès qu'il est possédé ;
      *  « consommable » : s'achète plusieurs fois. */
     public static final String ACCESSOIRE = "accessoire", BONUS = "bonus", CONSOMMABLE = "consommable";
-    public static final String[] RAYONS = {ACCESSOIRE, TETE, YEUX, COU, DOS, MAIN, COMPAGNON, EFFET, COULEUR, BONUS, CONSOMMABLE};
+    public static final String[] RAYONS = {ACCESSOIRE, TETE, YEUX, COU, DOS, MAIN, PIEDS, COMPAGNON, EFFET, COULEUR, BONUS, CONSOMMABLE};
     public static final String TRAINEE_ETOILES = "trainee-etoiles", CANNE_DOREE = "canne-doree", MARMITE_CUIVRE = "marmite-cuivre",
             PIERRE_CALME = "pierre-calme";
 
@@ -58,6 +58,12 @@ public final class Boutique {
         l.add(new Article("parapluie", "Parapluie", MAIN, 110, 2, Butin.PEU_COMMUN, false));
         l.add(new Article("ballon-helium", "Ballon", MAIN, 130, 3, Butin.PEU_COMMUN, false));
         l.add(new Article("baguette", "Baguette magique", MAIN, 340, 11, Butin.EPIQUE, false));
+        // Météo : ce qui protège de la pluie, du froid et de la chaleur (Meteo.java).
+        l.add(new Article("impermeable", "Imperméable", DOS, 180, 3, Butin.PEU_COMMUN, false));
+        l.add(new Article("bottes-pluie", "Bottes de pluie", PIEDS, 90, 2, Butin.COMMUN, false));
+        l.add(new Article("moufles", "Moufles", MAIN, 80, 2, Butin.COMMUN, false));
+        l.add(new Article("eventail", "Éventail", MAIN, 100, 3, Butin.PEU_COMMUN, false));
+        l.add(new Article("parapluie-etoile", "Parapluie étoilé", MAIN, 420, 14, Butin.EPIQUE, false));
         l.add(new Article("petit-poisson-bocal", "Poisson en bocal", COMPAGNON, 240, 5, Butin.RARE, false));
         l.add(new Article("petit-chat", "Petit chat", COMPAGNON, 520, 12, Butin.LEGENDAIRE, false));
         l.add(new Article("trainee-coeurs", "Traînée de cœurs", EFFET, 300, 6, Butin.RARE, false));
@@ -120,6 +126,7 @@ public final class Boutique {
             case COU: return "◡";
             case DOS: return "▼";
             case MAIN: return "✚";
+            case PIEDS: return "▬";
             case COMPAGNON: return "♣";
             case EFFET: return "✧";
             case COULEUR: return "■";
@@ -137,6 +144,7 @@ public final class Boutique {
             case COU: return "Cou";
             case DOS: return "Dos";
             case MAIN: return "Main";
+            case PIEDS: return "Pieds";
             case COMPAGNON: return "Compagnon";
             case EFFET: return "Effet";
             case COULEUR: return "Couleur";

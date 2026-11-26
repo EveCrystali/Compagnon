@@ -1,0 +1,15 @@
+# Bottes de pluie
+id: bottes-pluie
+slot: pieds
+ancre: pieds
+decalage: -13 -5
+palette: a=#1f4f8a b=#b4dbff c=#4a8fdc d=#6cb6ff e=#1c2128
+images:
+abbbbbbbba....abbbbbbbba..
+acddccccca....acddccccca..
+acddccccca....acddccccca..
+acddccccca....acddccccca..
+acddccccca....acddccccca..
+acccccccca....acccccccca..
+eeeeeeeeea....aeeeeeeeeea.
+aaaaaaaaa......aaaaaaaaa..

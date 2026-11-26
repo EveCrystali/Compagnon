@@ -45,16 +45,6 @@ public final class ChasseDessin {
     private ChasseDessin() {
     }
 
-    static final String[] ID_BUGS = {"bug-scarabee", "bug-araignee", "bug-ver"};
-
-    /** Sprite HD de la banque (deux fois plus fin que les unités du jeu), ou false s'il manque. */
-    static boolean hd(Dessin.Peintre pe, String id, float x, float y, float p, long t) {
-        Sprites.Sprite s = Sprites.banque().get(id);
-        if (s == null) return false;
-        Sprites.dessiner(pe, s, x, y, p, t, false);
-        return true;
-    }
-
     public static void dessiner(Dessin.Peintre pe, Chasse c, float ox, float oy, float k, long t, int meilleur) {
         // Fond : nuit et étoiles qui défilent.
         pe.rect(ox, oy, ox + Chasse.W * k, oy + Chasse.H * k, NUIT);
@@ -87,15 +77,13 @@ public final class ChasseDessin {
             int corps = b.type == 0 ? ORANGE : b.type == 1 ? BLEU : ARGENT;
             int reflet = b.type == 0 ? ORANGE_CLAIR : b.type == 1 ? BLEU_CLAIR : BLANC;
             float dy = (float) Math.sin(t / 260.0 + b.col) * 0.8f;
-            if (!hd(pe, ID_BUGS[b.type], ox + b.x * k, oy + (b.y + dy) * k, k / 2, t + b.col * 150L))
-                Police.motif(pe, BUGS[b.type][image], ox + b.x * k, oy + (b.y + dy) * k, k, new int[]{0, corps, ENCRE, reflet});
+            Police.motif(pe, BUGS[b.type][image], ox + b.x * k, oy + (b.y + dy) * k, k, new int[]{0, corps, ENCRE, reflet});
         }
         // Le Bug de prod.
         if (c.boss != null) {
             Chasse.Boss b = c.boss;
             boolean eclair = (t / 120) % 2 == 0 && b.pv < b.pvMax / 3;
-            if (eclair || !hd(pe, "bug-prod", ox + b.x * k, oy + b.y * k, k, t))
-                Police.motif(pe, BOSS, ox + b.x * k, oy + b.y * k, 2 * k, new int[]{0, eclair ? ORANGE_CLAIR : ORANGE, ENCRE, BLANC, BRUN});
+            Police.motif(pe, BOSS, ox + b.x * k, oy + b.y * k, 2 * k, new int[]{0, eclair ? ORANGE_CLAIR : ORANGE, ENCRE, BLANC, BRUN});
             // Barre de vie : contour argent, remplissage orange.
             float l = 60, x0 = (Chasse.W - l) / 2, y0 = 18;
             pe.rect(ox + (x0 - 1) * k, oy + (y0 - 1) * k, ox + (x0 + l + 1) * k, oy + (y0 + 4) * k, ARGENT);
@@ -117,9 +105,8 @@ public final class ChasseDessin {
         }
         // Bonus.
         for (Chasse.Bonus b : c.bonus)
-            if (!hd(pe, b.cafe ? "bonus-cafe" : "bonus-tests", ox + b.x * k, oy + b.y * k, k / 2, t))
-                Police.motif(pe, b.cafe ? CAFE : TESTS, ox + b.x * k, oy + b.y * k, k,
-                        b.cafe ? new int[]{0, ORANGE, ARGENT, ORANGE_CLAIR} : new int[]{0, BLEU, 0, 0});
+            Police.motif(pe, b.cafe ? CAFE : TESTS, ox + b.x * k, oy + b.y * k, k,
+                    b.cafe ? new int[]{0, ORANGE, ARGENT, ORANGE_CLAIR} : new int[]{0, BLEU, 0, 0});
         // Éclats.
         for (Chasse.Eclat e : c.eclats)
             pe.rect(ox + e.x * k, oy + e.y * k, ox + (e.x + 1) * k, oy + (e.y + 1) * k, e.couleur);
@@ -166,9 +153,8 @@ public final class ChasseDessin {
                 Police.centre(pe, "CHASSE", cx, oy + 52 * k, 3 * k, ORANGE, ENCRE);
                 Police.centre(pe, "AUX BUGS", cx, oy + 72 * k, 3 * k, BLEU, ENCRE);
                 for (int i = 0; i < 3; i++)
-                    if (!hd(pe, ID_BUGS[i], ox + (40 + i * 16) * k, oy + 96 * k, k / 2, t))
-                        Police.motif(pe, BUGS[i][image], ox + (40 + i * 16) * k, oy + 96 * k, k,
-                                new int[]{0, i == 0 ? ORANGE : i == 1 ? BLEU : ARGENT, ENCRE, BLANC});
+                    Police.motif(pe, BUGS[i][image], ox + (40 + i * 16) * k, oy + 96 * k, k,
+                            new int[]{0, i == 0 ? ORANGE : i == 1 ? BLEU : ARGENT, ENCRE, BLANC});
                 Police.centre(pe, "30   20   10", cx, oy + 106 * k, k, GRIS, 0);
                 Police.centre(pe, "GLISSE POUR BOUGER", cx, oy + 122 * k, k, BLANC, 0);
                 Police.centre(pe, "PILOU TIRE TOUT SEUL", cx, oy + 129 * k, k, BLANC, 0);

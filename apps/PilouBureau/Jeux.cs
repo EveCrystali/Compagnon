@@ -117,6 +117,13 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("tenue:")) _essaiTenue = nom[6..];
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
+        // --essai=meteo:pluie, meteo:pluie:parapluie, meteo:neige, meteo:chaleur, meteo:orage…
+        if (nom.StartsWith("meteo:"))
+        {
+            var parts = nom[6..].Split(':');
+            _essaiMeteo = parts[0];
+            if (parts.Length > 1) _essaiObjet = parts[1];
+        }
         if (nom == "evolution")
         {
             _essaiStade = 0;

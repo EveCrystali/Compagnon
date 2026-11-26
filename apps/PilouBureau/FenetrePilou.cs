@@ -175,6 +175,7 @@ public sealed partial class FenetrePilou : Window
             _image.Start();
             DemarrerMises();
             DemarrerActivites();
+            DemarrerConnecteurs();
         };
     }
 
@@ -260,6 +261,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(MenuQuetes());
         menu.Items.Add(Entree("Boutique…", OuvrirBoutique));
         menu.Items.Add(MenuIntegrations());
+        menu.Items.Add(MenuConnecteurs());
         menu.Items.Add(MenuActivites());
         menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
@@ -337,6 +339,7 @@ public sealed partial class FenetrePilou : Window
             Transitions(vivantes);
             SuivreXp();
             Integrer(vivantes, epoque);
+            BattreConnecteurs(vivantes, epoque);
             SuivreQuetes(vivantes);
             SuivreSoins();
             if (Maintenant - _themeLu > 5000)
@@ -370,6 +373,7 @@ public sealed partial class FenetrePilou : Window
                 }
                 if (e.Attente != "" && avant.Attente == "")
                 {
+                    PublierSortie("⏳ Une IA t'attend", e.Claude ? "Claude Code" : "");
                     _alerteJusque = t + 5000;
                     _tSaut = t;
                     _dernierEvenement = t;
@@ -639,8 +643,12 @@ public sealed partial class FenetrePilou : Window
         else if (t - _tSaut < 600) saut = Math.Sin(Math.PI * (t - _tSaut) / 600) * 2;
         if (_attrape) saut = 0;
 
+        // Météo vécue : gouttes, flocons, soleil ; mouillé ou gelé sans l'équipement, il frissonne et grimace.
+        var meteo = EffetMeteoCourant(t);
+        if (meteo.Inconfort is "mouille" or "froid" && montre == Expr.Repos && (int)(t / 6000) % 3 == 0) montre = Expr.Grimace;
         _scene.Pose = new Pose
         {
+            Meteo = meteo.Sprites,
             Expr = montre,
             T = t,
             Depuis = ronron ? t - _survolSceneDebut : expr == Expr.Caresse ? t - _tCaresse : depuis,
@@ -655,7 +663,7 @@ public sealed partial class FenetrePilou : Window
             Tremble = suspendu > 0 ? Math.Sin(t / 70.0) * 0.5
                 : etourdi ? Math.Sin(t / 120.0) * 0.4
                 : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6)
-                : Balancement(t),
+                : Balancement(t) + meteo.Tremble,
             Chute = Math.Max(0, 1 - (t - _atterri) / 220),
             Assis = _assis,
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
@@ -674,7 +682,7 @@ public sealed partial class FenetrePilou : Window
             BalleX = _balleX,
             BalleRot = _balleRot,
             Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
-            Reaction = ReactionAffichee,
+            Reaction = ReactionAffichee != "" ? ReactionAffichee : meteo.Reaction,
             Soins = objetsSoins,
             Teinte = teinteSoins,
         };

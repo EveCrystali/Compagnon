@@ -55,6 +55,50 @@ sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+## Connecteurs
+
+Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
+interrupteur, un état signé (● actif, ◌ à configurer, ✕ erreur, ○ coupé), ses réglages, son dernier
+événement ; un journal garde les 50 derniers. Le mod Claude n'est plus qu'un connecteur parmi
+d'autres : Claude Code, Codex, activités, statut Discord, webhook, téléphone, groupe d'appareils
+(inchangés, simplement réunis), et la **météo**.
+
+- **API locale** : `http://127.0.0.1:47821`, jeton obligatoire, refusée aux pages web et au réseau.
+  Un script envoie `POST /evenements` (« build fini », « nouveau mail »), lit `GET /etat`. Exemples
+  curl et PowerShell, et comment écrire un connecteur en un fichier : [docs/API.md](docs/API.md).
+- **Secrets** (jetons des connecteurs) : chiffrés par Windows (DPAPI) dans `secrets.bin`,
+  jamais en clair dans `reglages.json`.
+- **Services** (coupés tant que tu ne les coches pas, mode d'emploi pas à pas dans chaque carte et dans
+  [docs/CONNECTEURS.md](docs/CONNECTEURS.md)) : **Discord** par un bot à toi (mentions, salons
+  suivis, salon de sortie ; jamais de selfbot), **GitHub** (revues, commentaires, CI, PR fusionnées),
+  **Mail** IMAP (expéditeur et sujet seulement, Pilou facteur), **Agenda** ICS (rappel avant une
+  réunion, Pilou se cache pendant, quête « ponctuel »), **Spotify** (Pilou danse au tempo du morceau),
+  **Twitch** et **YouTube** (lives, nouvelles vidéos), **Home Assistant** (entités choisies). Les
+  5 dernières nouvelles s'affichent aussi sur l'Accueil de l'app Android (titre seul en option).
+
+## Météo
+
+Connecteur **Météo** (coupé tant qu'aucune ville n'est choisie) : taper sa ville, *Chercher la
+ville* ; Pilou relève le temps toutes les 15 minutes chez [Open-Meteo](https://open-meteo.com/)
+(gratuit, sans compte). Dégagé ☀, nuageux ☁, pluie et averses ☂, orage ⚡, neige ❄, brouillard ≋,
+vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
+
+- **Sous la pluie**, sans parapluie ni imperméable, Pilou est trempé : gouttes, flaque, frissons,
+  grimaces et bulles râleuses (« personne n'a pensé au parapluie ? »). Avec, il reste au sec, content,
+  et une quête bonus du jour « reste au sec » rapporte des po. Le parapluie s'invite dans les offres
+  de la boutique les jours de pluie.
+- **Neige et froid** : sans bonnet, écharpe ou moufles, il grelotte sous le givre. **Canicule** :
+  sans lunettes ni éventail, il sue. **Orage** : éclairs. **Vent** : il tangue. **Brouillard** : voile.
+- **Objets** à acheter : imperméable (dos), bottes de pluie (nouvel emplacement *pieds*), moufles,
+  éventail, parapluie étoilé (niveau 14), en plus du parapluie, de l'écharpe et du bonnet.
+- **Téléphone** : carte météo sur l'Accueil ; Pilou y est mouillé (ou au sec) comme sur le PC, dans
+  l'app, le widget et Pilou flottant.
+- **Vie privée** : seule la ville choisie (puis ses coordonnées) part chez Open-Meteo ; aucune
+  localisation automatique. Hors ligne, Pilou garde le dernier relevé. Réglage *Phrases* pour faire
+  taire ses plaintes.
+- Essayer sans attendre la pluie : `PilouBureau.exe --essai=meteo:pluie` (ou `meteo:pluie:parapluie`,
+  `meteo:neige`, `meteo:chaleur`, `meteo:orage`).
+
 ## Clic droit sur Pilou
 
 - **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;
@@ -92,6 +136,7 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
+- **Connecteurs…** : voir plus haut (météo, services, API locale) ;
 - **Démarrer avec Windows**, se cacher 10 min, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
@@ -140,7 +185,7 @@ des **métiers** (Codeur, As du tableur, Joueur, Mélomane… de Novice à Lége
 ## Mises à jour
 
 Rien à faire. Chaque fusion sur `main` publie une release (`v0.9.<n>`) avec `version.json`.
-- **PC** : une minute après le démarrage puis chaque jour, Pilou regarde la dernière release ; s'il y
+- **PC** : une minute après le démarrage puis toutes les 2 h, Pilou regarde la dernière release ; s'il y
   a du neuf, il la télécharge, met aussi à jour le mod Claude, et se relance (« nouvelle version… »
   dans sa bulle). Clic droit → *Version* : chercher maintenant, ou couper l'automatique.
 - **Téléphone** : une fois par jour, l'app vérifie ; une notification « Pilou 0.9.n est disponible »,

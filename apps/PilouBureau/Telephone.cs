@@ -98,6 +98,16 @@ public static class Telephone
     public static string Signature(IReadOnlyList<SessionTel> sessions, int niveau, string humeur, string extra = "") =>
         $"{niveau}|{humeur}|{extra}|" + string.Join(";", sessions.Select(s => $"{s.Id}:{s.Etat}:{s.Depuis}"));
 
+    // « Nouvelles » de l'app : les derniers événements des connecteurs (titre seul si le contenu est masqué).
+    public static List<Dictionary<string, object>> Annonces(IEnumerable<EvenementPilou> evenements, bool masquer) =>
+        evenements.Take(Registre.TailleAnnonces).Select(e => new Dictionary<string, object>
+        {
+            ["source"] = e.Source,
+            ["titre"] = e.Titre,
+            ["texte"] = masquer ? "" : e.Texte,
+            ["t"] = e.T,
+        }).ToList();
+
     // plus : champs optionnels (xp, accessoire, carnet, plats, recus…) ; un ancien téléphone les ignore.
     public static string Charge(IReadOnlyList<SessionTel> sessions, double maintenant, string nom, int niveau, string titre,
         string couleur, string humeur, int calmes, IReadOnlyDictionary<string, object>? plus = null)

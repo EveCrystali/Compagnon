@@ -93,6 +93,7 @@ public sealed partial class FenetrePilou
         _profil.Ecrire(DossierPartage);
         ChoisirVariante(_evolutionCible);
         Dire($"✦ Pilou est devenu {Acces.NomStade(_evolutionCible)} !", 5000);
+        PublierSortie($"✦ {NomPilou} est devenu {Acces.NomStade(_evolutionCible)}", "");
         Flotter(Acces.NomStade(_evolutionCible).ToUpperInvariant(), 1.6, new Point(TeteX - 60, TeteY - 70));
         _salueJusque = t + 2500;
         _tSaut = t;

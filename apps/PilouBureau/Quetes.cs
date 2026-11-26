@@ -27,6 +27,8 @@ public sealed class Quete
     public int Po { get; set; }
     public int Xp { get; set; }
     public bool Reussie { get; set; }
+    // Quête bonus (météo) : ajoutée en cours de journée, elle ne compte pas pour le coffre du jour.
+    public bool Bonus { get; set; }
 }
 
 public sealed class EtatQuetes
@@ -60,7 +62,8 @@ public static class Quetes
         new("caresse", "Caresse Pilou {0} fois", Mesure.Somme, [3, 6], [], [], true),
         new("soin", "Prends soin de Pilou {0} fois", Mesure.Somme, [], [2, 4], [], true),
         new("presence", "Passe {0} min avec Pilou", Mesure.Somme, [60, 180], [600, 1200], [2400, 3600], true, 30),
-        new("chasse", "Atteins {0} points à Chasse aux bugs", Mesure.Max, [800, 2000], [3000, 6000], [], false, 100),
+        new("agenda:ponctuel", "Sois à l'heure à {0} réunion{s}", Mesure.Somme, [1, 2], [3, 6], [], false),
+        new("chasse","Atteins {0} points à Chasse aux bugs", Mesure.Max, [800, 2000], [3000, 6000], [], false, 100),
         new("activite:code", "Code pendant {0} min", Mesure.Somme, [30, 120], [300, 600], [1500, 2400], false, 15),
         new("activite:tableur", "Travaille {0} min sur un tableur", Mesure.Somme, [20, 60], [120, 300], [], false, 10),
         new("activite:musique", "Écoute {0} min de musique", Mesure.Somme, [30, 90], [240, 480], [], false, 15),
@@ -174,7 +177,7 @@ public static class Quetes
             gains.Add(new RecompenseQuete(q.Texte, q.Po, q.Xp, false));
         }
         var jour = CleJour(local);
-        var quotidiennes = e.Liste.Where(q => q.Periode == Periode.Jour).ToList();
+        var quotidiennes = e.Liste.Where(q => q.Periode == Periode.Jour && !q.Bonus).ToList();
         if (gains.Count > 0 && quotidiennes.Count > 0 && quotidiennes.All(q => q.Reussie) && e.CoffreJour != jour)
         {
             e.CoffreJour = jour;
@@ -184,6 +187,25 @@ public static class Quetes
             gains.Add(new RecompenseQuete($"Coffre du jour · série de {e.Serie} jour{(e.Serie > 1 ? "s" : "")}", po, 10, true));
         }
         return gains;
+    }
+
+    // Quête météo bonus : proposée une fois par jour quand le temps s'y prête (pluie, froid, canicule).
+    // Renvoie la quête ajoutée, ou null (déjà là, ou temps sans quête).
+    public static Quete? AjouterMeteo(EtatQuetes e, string etat, DateTime local, string graine)
+    {
+        Actualiser(e, local, graine);
+        if (Meteo.Quete(etat) is not { } m) return null;
+        var jour = CleJour(local);
+        var id = $"{jour}:{m.Cle}";
+        if (e.Liste.Any(q => q.Id == id)) return null;
+        var q = new Quete
+        {
+            Id = id, Cle = m.Cle, Texte = m.Texte, Periode = Periode.Jour, Objectif = m.Objectif, Po = m.Po, Xp = Math.Max(2, m.Po / 5),
+            Bonus = true,
+        };
+        e.Liste.Add(q);
+        e.Liste = e.Liste.OrderBy(x => x.Periode).ToList();
+        return q;
     }
 
     // Crédite les récompenses au profil de cet appareil : po gagnées, XP. Renvoie les totaux.

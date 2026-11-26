@@ -19,6 +19,7 @@ public final class PilouVue extends View {
     private long debutEvolution = -1;
     private java.util.List<String> objetsSoins = java.util.Collections.emptyList();
     private String teinteSoins = "";
+    private String meteo = "";
     /** Durée de l'animation d'évolution (silhouette qui alterne, puis éclat). */
     public static final long DUREE_EVOLUTION = 2600;
 
@@ -93,6 +94,18 @@ public final class PilouVue extends View {
         invalidate();
     }
 
+    /** Météo du PC (Meteo.PLUIE…, "" : rien) : gouttes, Pilou mouillé s'il n'a pas de parapluie, etc. */
+    public void meteo(String etat) {
+        etat = etat == null ? "" : etat;
+        if (etat.equals(meteo)) return;
+        meteo = etat;
+        invalidate();
+    }
+
+    public String meteo() {
+        return meteo;
+    }
+
     /** Joue l'évolution vers le stade donné. */
     public void evoluer(int versStade) {
         stade = versStade;
@@ -137,6 +150,7 @@ public final class PilouVue extends View {
         portes.addAll(objetsSoins);
         if (!teinteSoins.isEmpty()) a.couleur = teinteSoins;
         a.objets = portes;
+        Meteo.appliquer(a, meteo, t);
         if (debutEvolution >= 0) {
             double k = (t - debutEvolution) / (double) DUREE_EVOLUTION;
             if (k >= 1) debutEvolution = -1;

@@ -9,13 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Soins.cs" />
+    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Meteo.cs;../Connecteurs.cs;../ApiLocale.cs;../Connecteurs/*.cs;../Soins.cs" />
     <EmbeddedResource Include="../activites.json" LogicalName="PilouBureau.activites.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
 

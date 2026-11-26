@@ -48,6 +48,8 @@ public sealed class Reglages
     public bool CacherPresentation { get; set; } = true;
     public bool CacherVisio { get; set; } = true;
     public List<string> ActivitesCoupees { get; set; } = new();
+    // Connecteurs (météo, API locale…) : activés, réglages non secrets. Les secrets sont dans secrets.bin (DPAPI).
+    public ReglagesConnecteurs Connecteurs { get; set; } = new();
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 

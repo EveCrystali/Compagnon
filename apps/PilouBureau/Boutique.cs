@@ -10,12 +10,12 @@ public sealed record Port(string Id, double T);
 
 public static class Boutique
 {
-    public const string Tete = "tete", Yeux = "yeux", Cou = "cou", Dos = "dos", Main = "main", Compagnon = "compagnon", Effet = "effet", Couleur = "couleur";
+    public const string Tete = "tete", Yeux = "yeux", Cou = "cou", Dos = "dos", Main = "main", Pieds = "pieds", Compagnon = "compagnon", Effet = "effet", Couleur = "couleur";
     // Emplacements qui se portent (Bourse.Equipe) ; « accessoire » (le chapeau historique, porté via les réglages),
     // « bonus » (actif dès qu'il est possédé) et « consommable » (s'achète plusieurs fois) sont à part.
-    public static readonly string[] Slots = { Tete, Yeux, Cou, Dos, Main, Compagnon, Effet, Couleur };
+    public static readonly string[] Slots = { Tete, Yeux, Cou, Dos, Main, Pieds, Compagnon, Effet, Couleur };
     public const string Accessoire = "accessoire", Bonus = "bonus", Consommable = "consommable";
-    public static readonly string[] Rayons = { Accessoire, Tete, Yeux, Cou, Dos, Main, Compagnon, Effet, Couleur, Bonus, Consommable };
+    public static readonly string[] Rayons = { Accessoire, Tete, Yeux, Cou, Dos, Main, Pieds, Compagnon, Effet, Couleur, Bonus, Consommable };
     public const string TraineeEtoiles = "trainee-etoiles", CanneDoree = "canne-doree", MarmiteCuivre = "marmite-cuivre", PierreCalme = "pierre-calme";
 
     // Anciennes récompenses de niveau, devenues articles (niveau d'accès = ancien niveau ; prix selon ce niveau).
@@ -89,6 +89,12 @@ public static class Boutique
         new("parapluie", "Parapluie", Main, 110, 2, Rarete.PeuCommun),
         new("ballon-helium", "Ballon", Main, 130, 3, Rarete.PeuCommun),
         new("baguette", "Baguette magique", Main, 340, 11, Rarete.Epique),
+        // Météo : ce qui protège de la pluie, du froid et de la chaleur (Meteo.ContrePluie…)
+        new("impermeable", "Imperméable", Dos, 180, 3, Rarete.PeuCommun),
+        new("bottes-pluie", "Bottes de pluie", Pieds, 90, 2, Rarete.Commun),
+        new("moufles", "Moufles", Main, 80, 2, Rarete.Commun),
+        new("eventail", "Éventail", Main, 100, 3, Rarete.PeuCommun),
+        new("parapluie-etoile", "Parapluie étoilé", Main, 420, 14, Rarete.Epique),
         // Compagnons
         new("petit-poisson-bocal", "Poisson en bocal", Compagnon, 240, 5, Rarete.Rare),
         new("petit-chat", "Petit chat", Compagnon, 520, 12, Rarete.Legendaire),
@@ -109,19 +115,33 @@ public static class Boutique
     // Signe de l'emplacement (pas de couleur seule : un signe de forme, toujours).
     public static string Signe(string slot) => slot switch
     {
-        Tete => "▲", Yeux => "◉", Cou => "◡", Dos => "▼", Main => "✚", Compagnon => "♣", Effet => "✧", Couleur => "■",
+        Tete => "▲", Yeux => "◉", Cou => "◡", Dos => "▼", Main => "✚", Pieds => "▬", Compagnon => "♣", Effet => "✧", Couleur => "■",
         Accessoire => "◆", Bonus => "★", Consommable => "◇", _ => "·",
     };
 
     public static string NomSlot(string slot) => slot switch
     {
-        Tete => "Tête", Yeux => "Yeux", Cou => "Cou", Dos => "Dos", Main => "Main", Compagnon => "Compagnon", Effet => "Effet", Couleur => "Couleur",
+        Tete => "Tête", Yeux => "Yeux", Cou => "Cou", Dos => "Dos", Main => "Main", Pieds => "Pieds", Compagnon => "Compagnon", Effet => "Effet", Couleur => "Couleur",
         Accessoire => "Accessoires", Bonus => "Bonus", Consommable => "Consommables", _ => slot,
     };
 
     // ---- Offres du jour : 4 objets non permanents, tirés de la date ; le premier à -25 %.
+    // Offre météo : quand il pleut (Meteo.Courante), le parapluie s'invite dans les offres s'il n'y est pas.
+
+    public static Func<bool> Pluie = () => Meteo.Courante is { } m && Meteo.Pluvieux(m.Etat);
 
     public static IReadOnlyList<Article> OffresDuJour(DateOnly jour)
+    {
+        var offres = OffresTirees(jour).ToList();
+        if (Pluie() && offres.All(o => o.Id != "parapluie") && Trouver("parapluie") is { } p)
+        {
+            if (offres.Count >= 4) offres.RemoveAt(offres.Count - 1);
+            offres.Add(p);
+        }
+        return offres;
+    }
+
+    private static IReadOnlyList<Article> OffresTirees(DateOnly jour)
     {
         var tirage = new Hasard(Hasard.Graine($"boutique|{jour:yyyy-MM-dd}"));
         var pool = Catalogue.Where(a => !a.Permanent).ToList();
