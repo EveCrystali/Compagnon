@@ -1,0 +1,40 @@
+# Visière de pilote
+id: visiere-pilote
+slot: yeux
+ancre: yeux
+decalage: -17 -3
+duree: 260
+palette: a=#b8c4d2 b=#0d2a4d c=#4a8fdc d=#b4dbff e=#ffffff f=#1c2128
+images:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbccccccccdeccccccccccccccccccccbb
+fbbccccccdeccccccccccccccccccccbbf
+fbbcccccdecccccccccccccccccccccbbf
+fbbcccccdecccccccccccccccccccccbbf
+.fbbcccdecccccccccccccccccccccbbf.
+.fbbbbdebbbbbbbbbbbbbbbbbbbbbbbbf.
+..ffffffffffffffffffffffffffffff..
+---
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbcccccccccccccccccdecccccccccccbb
+fbbcccccccccccccccdecccccccccccbbf
+fbbccccccccccccccdeccccccccccccbbf
+fbbccccccccccccccdeccccccccccccbbf
+.fbbccccccccccccdeccccccccccccbbf.
+.fbbbbbbbbbbbbbdebbbbbbbbbbbbbbbf.
+..ffffffffffffffffffffffffffffff..
+---
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbccccccccccccccccccccccccccdeccbb
+fbbccccccccccccccccccccccccdeccbbf
+fbbcccccccccccccccccccccccdecccbbf
+fbbcccccccccccccccccccccccdecccbbf
+.fbbcccccccccccccccccccccdecccbbf.
+.fbbbbbbbbbbbbbbbbbbbbbbdebbbbbbf.
+..ffffffffffffffffffffffffffffff..

@@ -1,0 +1,32 @@
+# Sac à dos
+id: sac-a-dos
+slot: dos
+ancre: cou
+decalage: -20 -14
+couche: derriere
+palette: a=#1c2128 b=#8a4a1f c=#d9803a d=#f69d50 e=#f5d76e
+images:
+............................abbbbbbbbbbb
+............................abbbbbbbbbbb
+............................accccccccccc
+............................acdddddddddc
+............................acdddddddddc
+............................acdddddddddc
+............................acdddddddddc
+............................acdddddddddc
+............................acdddddddddc
+............................accccccccccc
+............................accccccccccc
+............................accccccccccc
+............................acbbbbbbbbbc
+............................acbcccccccbc
+............................acbcceeeccbc
+............................acbcccccccbc
+............................acbcccccccbc
+............................acbcccccccbc
+............................acbbbbbbbbbc
+............................accccccccccc
+............................accccccccccc
+............................accccccccccc
+.............................aaaaaaaaaaa
+........................................

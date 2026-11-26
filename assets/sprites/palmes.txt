@@ -1,0 +1,15 @@
+# Palmes
+id: palmes
+slot: pieds
+ancre: pieds
+decalage: -18 -3
+palette: a=#1c2128 b=#4a8fdc c=#1f4f8a
+images:
+...abbbbbbbbba........abbbbbbbbba...
+..abbbcbbcbbcba......abbbcbbcbbcba..
+..abbcbbbcbbcba......abbcbbbcbbcba..
+.abbbcbbbcbbcbba....abbbcbbbcbbcbba.
+abbbcbbbcbbbbcbba..abbbcbbbcbbbbcbba
+abbbcbbbcbbbbcbba..abbbcbbbcbbbbcbba
+bbbcbbbbcbbbbcbbbaabbbcbbbbcbbbbcbbb
+aaaaaaaaaaaaaaaaa..aaaaaaaaaaaaaaaaa

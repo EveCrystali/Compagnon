@@ -1,0 +1,40 @@
+# Carapace
+id: carapace
+slot: dos
+ancre: corps
+decalage: -23 -24
+couche: derriere
+palette: a=#4a2e17 b=#8a6e4b c=#c4a77d d=#e8d5b0
+images:
+..................aaaaaaaaaa..................
+..............aaaabbbbbbbbbbaaaa..............
+............aabbbbbbbbbbbbbbbbbbaa............
+..........aabbbbbbbbbbbbbbbbbbbbbbaa..........
+.........abbbbbbbbccccccccccbbbbbbbba.........
+.......aabbbbbbccccccbbbbccccccbbbbbbaa.......
+......abbbbbbccccccbbddddbbccccccbbbbbba......
+.....abbbbbcccccccbbddddddbbcccccccbbbbba.....
+....abbbbbccccccccbddddddddbccccccccbbbbba....
+....abbbbcccccccccbddddddddbcccccccccbbbba....
+...abbbbccccccccccbbddddddbbccccccccccbbbba...
+..abbbbccccccccccccbbddddbbccccccccccccbbbba..
+.abbbbccccbbbbcccccccbbbbcccccccbbbbccccbbbba.
+.abbbcccbbddddbbccccccccccccccbbddddbbcccbbba.
+.abbbccbbddddddbbccccccccccccbbddddddbbccbbba.
+abbbcccbddddddddbccccccccccccbddddddddbcccbbba
+abbbcccbddddddddbccccccccccccbddddddddbcccbbba
+abbbcccbbddddddbbccccccccccccbbddddddbbcccbbba
+bbbcccccbbddddbbccccccccccccccbbddddbbcccccbbb
+bbbcccccccbbbbccccccccccccccccccbbbbcccccccbbb
+bbbccccccccccccccccccccccccccccccccccccccccbbb
+bbbccccccccccccbbbbccccccccbbbbccccccccccccbbb
+bbbccccccccccbbddddbbccccbbddddbbccccccccccbbb
+bbbcccccccccbbddddddbbccbbddddddbbcccccccccbbb
+bbbcccccccccbddddddddbccbddddddddbcccccccccbbb
+bbbcccccccccbddddddddbccbddddddddbcccccccccbbb
+abbbccccccccbbddddddbbccbbddddddbbccccccccbbba
+abbbcccccccccbbddddbbccccbbddddbbcccccccccbbba
+abbbcccccccccccbbbbccccccccbbbbcccccccccccbbba
+.abbbccccccccccccccccccccccccccccccccccccbbba.
+.abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..

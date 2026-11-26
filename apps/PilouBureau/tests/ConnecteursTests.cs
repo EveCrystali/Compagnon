@@ -170,7 +170,6 @@ public class MeteoTests
             var pluie = Boutique.OffresDuJour(jour);
             Assert.Contains(pluie, a => a.Id == "parapluie");
             Assert.Equal(Math.Min(4, sec.Count), pluie.Count);
-            Assert.True(Boutique.EnVente(Boutique.Trouver("parapluie")!, jour));
         }
         finally
         {

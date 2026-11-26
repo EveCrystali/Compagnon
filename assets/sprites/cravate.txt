@@ -1,0 +1,29 @@
+# Cravate
+id: cravate
+slot: cou
+ancre: cou
+decalage: -5 -1
+palette: a=#1c2128 b=#1f4f8a c=#f69d50
+images:
+.abbbbbba.
+..abbbba..
+..abbbba..
+...abba...
+...abba...
+...abba.aa
+..abbbaacc
+..abbcccaa
+.aaccbba..
+accbbbbaaa
+.aabbbbacc
+.abbbcccaa
+.abccbbba.
+accbbbbbaa
+.abbbbbbcc
+.abbbcccaa
+abbccbbba.
+accbbbbbba
+abbbbbbbcc
+.abbbcccaa
+.aaccbba..
+accabba...

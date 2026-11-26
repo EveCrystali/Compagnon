@@ -140,6 +140,30 @@ def main():
     cases = [(pilou(objets=[o], t=300), o) for o in ("impermeable", "bottes-pluie", "moufles", "eventail", "parapluie-etoile")]
     planche(cases, 5, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-meteo.png"))
 
+    # Boutique rétro : nouveaux objets par rayon, portés au stade 2 et sur les autres stades.
+    nouveaux = ["beret", "bonnet-pompon", "casque-chantier", "sombrero", "chapeau-cowboy", "oreilles-chat",
+                "couronne-laurier", "antenne-neon", "lunettes-3d", "visiere-pilote", "lunettes-coeur", "bandana",
+                "noeud-pois", "cravate", "collier-perles", "sac-a-dos", "carapace", "ailes-papillon", "jetpack", "sucette",
+                "epee-mousse", "lanterne", "guitare", "canne-or", "baskets", "palmes", "patins", "oiseau", "petit-robot",
+                "fantome", "mini-dragon", "bulles-savon", "confettis", "trainee-prisme", "aura-feu"]
+    cases = [(pilou(objets=[o], t=300), o) for o in nouveaux]
+    cases += [(pilou(couleur=c), c) for c in ("pervenche", "mandarine", "miel", "prune", "acier", "peche")]
+    planche(cases, 7, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-retro.png"))
+    cases = []
+    for st in (1, 3, 4):
+        for o in ("sombrero", "antenne-neon", "jetpack", "guitare", "ailes-papillon", "mini-dragon", "lunettes-coeur"):
+            cases.append((pilou(stade=st, objets=[o], t=300), "%d %s" % (st, o)))
+    cases += [(pilou(objets=["chapeau-cowboy", "bandana", "baskets"], fatigue=True), "négligé"),
+              (pilou(objets=["oreilles-chat", "noeud-pois"], couleur="terne"), "terne")]
+    planche(cases, 7, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-retro-stades.png"))
+    cases = []
+    for f in ("fond-nuit", "fond-foret", "fond-plage", "fond-arcade", "fond-espace"):
+        im = sprite_image(B[f], 4)
+        p = grille_image(rendu.rendre(rendu.Pose(objets=["bonnet-pompon"] if f == "fond-nuit" else []), B, T, TEN), 3)
+        im.alpha_composite(p, ((im.width - p.width) // 2, im.height - p.height - 4))
+        cases.append((im, f))
+    planche(cases, 5, (64 * 4 + 12, 48 * 4 + 24), FOND, os.path.join(dossier, "boutique-decors.png"))
+
     jeux = ["etoile", "bulle", "main", "ballon", "canne", "bouchon", "eclaboussure", "bug-scarabee", "bug-araignee", "bug-ver",
             "bug-prod", "bonus-cafe", "bonus-tests", "vie", "po", "po-tourne", "coffre-quete", "parchemin-quete"]
     cases = []

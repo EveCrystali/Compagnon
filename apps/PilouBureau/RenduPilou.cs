@@ -32,7 +32,7 @@ public static class RenduPilou
         GoutteClaire = 0xffb4dbff, Blanc = 0xffffffff;
     private static readonly uint[] Eclat = { 0xffffd8b0, 0xfffff6cc, 0xffb4dbff };
     private static readonly string[] Ordre = { "dos", "cou", "visage", "yeux", "tete", "main", "compagnon", "effet", "objet" };
-    private static readonly HashSet<string> Chaudes = new() { "ambre", "braise", "comete", "corail-orange", "sable" };
+    private static readonly HashSet<string> Chaudes = new() { "ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche" };
     private static readonly uint[] BleuDefaut = { 0xff1f4f8a, 0xff4a8fdc, 0xff6cb6ff, 0xffb4dbff };
     private static readonly uint[] OrangeDefaut = { 0xff8a4a1f, 0xffd9803a, 0xfff69d50, 0xffffc89a };
 
