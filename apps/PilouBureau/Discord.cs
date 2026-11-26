@@ -58,7 +58,8 @@ public sealed class PresenceDiscord : IDisposable
                             details,
                             state = etat,
                             timestamps = new { start = _debut },
-                            assets = new { large_image = "pilou", large_text = "Pilou, compagnon de code" },
+                            assets = new { large_image = "pilou", large_text = "Pilou, petit compagnon de bureau" },
+                            buttons = new[] { new { label = "Adopter Pilou", url = "https://github.com/EveCrystali/Compagnon" } },
                         },
                     },
                 });

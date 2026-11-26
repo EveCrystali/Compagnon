@@ -28,9 +28,15 @@ public sealed class Reglages
 
     // Intégrations (menu « Intégrations »).
     // Identifiant de l'application Discord « Pilou » (Developer Portal) : public, partagé par tous.
-    public const string DiscordAppParDefaut = "";
+    // Vide dans les réglages = celle-ci : le statut s'active d'une case, sans passer par le Developer Portal.
+    public const string DiscordAppParDefaut = "1575620409070592051";
     public bool DiscordStatut { get; set; }
-    public string DiscordApp { get; set; } = DiscordAppParDefaut;
+    private string _discordApp = "";
+    public string DiscordApp
+    {
+        get => string.IsNullOrWhiteSpace(_discordApp) ? DiscordAppParDefaut : _discordApp;
+        set => _discordApp = value ?? "";
+    }
     public bool DiscordTitres { get; set; }
     // Adresse où prévenir quand une IA attend ou a fini un long travail (webhook Discord, Slack, ntfy).
     public string Webhook { get; set; } = "";
