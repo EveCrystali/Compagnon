@@ -91,11 +91,13 @@ public sealed partial class FenetrePilou : Window
     private bool _sombre;
     private double _themeLu = -1e9;
 
-    public FenetrePilou(string dossier, bool devant = false)
+    public FenetrePilou(string dossier, bool devant = false, bool demo = false)
     {
         _dossier = dossier;
         _devant = devant;
+        _demo = demo;
         _reglages = Reglages.Lire(dossier);
+        if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         WindowStyle = WindowStyle.None;
         AllowsTransparency = true;
         Background = Brushes.Transparent;
@@ -600,6 +602,7 @@ public sealed partial class FenetrePilou : Window
 
     private void PlacerAuDepart()
     {
+        if (PlacerSurDemande()) return; // --ecran= / --placer= (FenetreVisite.cs)
         var claude = Natif.TrouverClaude();
         if (claude != IntPtr.Zero && Natif.Cadre(claude) is { } c)
         {
@@ -689,7 +692,7 @@ public sealed partial class FenetrePilou : Window
             _x = Math.Clamp(_x, min, max);
             // Au clavier ou l'appareil photo en main, il reste sur place.
             if (GesteEnCours) _geste = Geste.Rien;
-            marche = Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && !GesteEnCours && Gestes(expr, fatigue, t, dt, min, max));
+            marche = MarcheVisite(dt, min, max) || Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && !GesteEnCours && Gestes(expr, fatigue, t, dt, min, max));
         }
 
         // Assis : on s'y pose et on s'en relève en douceur.

@@ -179,7 +179,7 @@ public sealed partial class FenetrePilou
 
     private void InitialiserJeux()
     {
-        _profil = Profil.Lire(DossierPartage);
+        _profil = _demo ? Tournage.ProfilDemo(Epoque) : Profil.Lire(DossierPartage);
         _xpTotal = TotalXp();
         // Anciennes récompenses gratuites → inventaire, niveau acquis (rien de ce qui était acquis n'est perdu).
         if (_profil.Evolution.Migre < 1)

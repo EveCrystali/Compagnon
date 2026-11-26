@@ -68,6 +68,8 @@ sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+Idées gardées pour plus tard (petits jeux, notifications, vidéo) : [docs/IDEES.md](docs/IDEES.md).
+
 ## Connecteurs
 
 Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
@@ -135,6 +137,14 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
 - **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
   (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
   plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
+- **Jouer → Défense du bureau** (niveau 5, aussi depuis l'icône près de l'horloge ; jamais tout seul) : une
+  bande de l'écran au-dessus de la barre des tâches devient un jeu de tir. Pilou, en bas, suit la souris (ou
+  ← → / Q D) et tire au clic ou à Espace ; les bugs de Chasse aux bugs arrivent en formation (blindés,
+  diviseurs, moucherons, un Bug de prod toutes les 5 vagues), des fenêtres et des post-it servent d'abris,
+  des bonus tombent (tir double, bouclier, ralenti). Échap, clic droit ou ✕ pour quitter ; pause si une
+  autre appli passe en plein écran. Réglages : largeur de la bande, *réduire les flashs*. Gains bornés
+  (30 xp et 10 po par partie au plus, 120 xp et 30 po par jour), record, quête « jeu », succès Pare-feu,
+  Rempart (vague 10), Gardien. `--essai=defense` : Pilou joue seul. `apps/PilouBureau/Defense.cs` ;
 - **Niveaux** : ils **ouvrent l'accès** — jeux (pêche niveau 2, tape m'en cinq 3, cuisine 4, Chasse aux
   bugs 5), rangées de la boutique (paliers 1, 5, 10, 15, 20, 30, 40, 50), stades d'évolution — et chaque niveau gagné
   rapporte des pièces d'or (20 + 5 × niveau). Les titres restent liés au niveau (honorifiques).
@@ -265,6 +275,26 @@ Dans le **Gestionnaire des tâches**, il s'appelle **Pilou** (avec son icône), 
 (onglet *Détails* : `PilouBureau.exe`) : *Fin de tâche*, puis menu Démarrer → Pilou. Il n'est pas rangé
 dans *Applications* : Windows n'y met que les programmes qui ont une fenêtre dans la barre des tâches, et
 Pilou reste volontairement discret (ni barre des tâches, ni Alt+Tab).
+
+## Tourner une vidéo de ton écran
+
+Pour une vidéo de présentation avec de vraies images : `outils/tourner-ecran-gauche.ps1` filme **ton écran
+de gauche** (et lui seul) pendant qu'un Pilou de démonstration y joue une visite guidée d'environ 1 min 30 :
+promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la boutique, la fenêtre Amis, le
+clavier, la photo, une visite chez Léo, la pluie, deux petits jeux, l'évolution, le menu de l'icône près de
+l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions et le rayon Ensembles). Ferme d'abord
+tout ce qui est personnel sur cet écran, puis, dans PowerShell :
+
+```powershell
+irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/outils/tourner-ecran-gauche.ps1 -OutFile "$env:TEMP\tourner-ecran-gauche.ps1"
+powershell -ExecutionPolicy Bypass -File "$env:TEMP\tourner-ecran-gauche.ps1"
+```
+
+Le script montre l'écran choisi et demande confirmation, installe ffmpeg au besoin (winget), filme, remet ton
+Pilou habituel et pose `pilou-ecran-gauche.zip` sur le Bureau (la vidéo et `chronologie.json` : l'instant de
+chaque étape, si elle a été jouée, la version de Pilou). Le Pilou de démo ne lit que des sessions, un profil et
+des amis **fictifs**, en mémoire : ton XP, tes po, tes objets, tes amis et tes réglages ne sont ni lus ni
+modifiés. Ne touche pas à la souris pendant le tournage (elle bouge toute seule) ; Échap pour arrêter.
 
 ## Pour contribuer
 
