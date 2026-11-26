@@ -67,6 +67,102 @@ public sealed partial class FenetrePilou
         return p;
     }
 
+    // ---- Zones de clic des jeux
+    // Une fenêtre WPF transparente (AllowsTransparency) laisse passer les clics sur ses pixels entièrement
+    // transparents : seuls les pixels dessinés d'un sprite les recevaient (un clic entre deux doigts de la main
+    // passait au bureau). Chaque cible a donc, dessous, un capteur presque invisible (alpha 1/255) qui la déborde
+    // de Clics.MargeCible ; il réagit à l'appui (MouseDown), comme la cible elle-même.
+    private static readonly Brush Capte = Geler(Color.FromArgb(1, 0, 0, 0));
+    private readonly List<(FrameworkElement Cible, Rectangle Capteur)> _capteurs = new();
+    private Pixels? _indice;
+    private FrameworkElement? _indiceSur;
+
+    private void Cibler(FrameworkElement cible, Action action)
+    {
+        cible.Cursor = Cursors.Hand;
+        cible.MouseLeftButtonDown += (_, e) =>
+        {
+            action();
+            e.Handled = true;
+        };
+        var capteur = new Rectangle { Fill = Capte, Cursor = Cursors.Hand, Visibility = Visibility.Collapsed, ContextMenu = _scene.ContextMenu };
+        capteur.MouseLeftButtonDown += (_, e) =>
+        {
+            if (cible.Visibility == Visibility.Visible && _jeu.Children.Contains(cible)) action();
+            e.Handled = true;
+        };
+        _jeu.Children.Insert(0, capteur); // sous les éléments du jeu (et au-dessus de Pilou)
+        _capteurs.Add((cible, capteur));
+    }
+
+    private static bool Place(FrameworkElement e) => !double.IsNaN(Canvas.GetLeft(e)) && !double.IsNaN(Canvas.GetTop(e));
+
+    private void SuivreCapteurs()
+    {
+        foreach (var (cible, capteur) in _capteurs)
+        {
+            if (!_jeu.Children.Contains(cible) || cible.Visibility != Visibility.Visible || !Place(cible))
+            {
+                capteur.Visibility = Visibility.Collapsed;
+                continue;
+            }
+            var z = new Clics.Zone(Canvas.GetLeft(cible), Canvas.GetTop(cible), cible.Width, cible.Height).Elargie(Clics.MargeCible);
+            Canvas.SetLeft(capteur, z.X);
+            Canvas.SetTop(capteur, z.Y);
+            capteur.Width = z.Largeur;
+            capteur.Height = z.Hauteur;
+            capteur.Visibility = Visibility.Visible;
+        }
+        // Indice : un petit ▼ pixel qui clignote au-dessus de ce qu'il faut cliquer (fixe si les animations sont coupées).
+        if (_indiceSur is { } c && _jeu.Children.Contains(c) && c.Visibility == Visibility.Visible && Place(c))
+        {
+            _indice ??= new Pixels(Pixels.Texte("▼"), new Brush?[] { null, OrangeJeu }, ContourXp, 2) { IsHitTestVisible = false };
+            if (!_jeu.Children.Contains(_indice)) _jeu.Children.Add(_indice);
+            int phase = Bandeau.Anime ? (int)(Maintenant / 300) % 2 : 0;
+            Canvas.SetLeft(_indice, Math.Round(Canvas.GetLeft(c) + c.Width / 2 - _indice.Width / 2));
+            Canvas.SetTop(_indice, Math.Round(Canvas.GetTop(c) - _indice.Height - 2 - phase * 4));
+        }
+        else if (_indice is not null) _jeu.Children.Remove(_indice);
+    }
+
+    private void OterCapteurs()
+    {
+        foreach (var (_, capteur) in _capteurs) _jeu.Children.Remove(capteur);
+        _capteurs.Clear();
+        if (_indice is not null) _jeu.Children.Remove(_indice);
+        _indiceSur = null;
+    }
+
+    // Clic court sur Pilou pendant un jeu (appui à tAppui) : tape m'en cinq, ferrer, remuer. Renvoie s'il a servi.
+    private bool ClicJeuSurPilou(double tAppui)
+    {
+        if (!Clics.ClicSurPilouCompte(IdJeu(_jeuEnCours))) return false;
+        switch (_jeuEnCours)
+        {
+            case Jeu.TapeCinq when _main is not null:
+                TapeReussi();
+                return true;
+            case Jeu.Peche when _bouchon is not null && !_resultat:
+                ClicBouchon(tAppui);
+                return true;
+            case Jeu.Cuisine when _marmite is not null && !_resultat:
+                Remuer();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private void TapeReussi()
+    {
+        if (_main is null) return;
+        Gagner(10, new Point(TeteX - 18, TeteY - 30));
+        Signaler("jeu", 1);
+        Arreter("ouais !");
+        _salueJusque = Maintenant + 1800;
+        _tSaut = Maintenant;
+    }
+
     private static Brush Geler(Color c)
     {
         var b = new SolidColorBrush(c);
@@ -341,18 +437,18 @@ public sealed partial class FenetrePilou
         {
             case Jeu.Etoile:
                 _etoile = Pixels.Sprite("etoile", 2.2) ?? new Pixels(MotifEtoile, new Brush?[] { null, OrangeJeu, OrangeClair, Blanc }, ContourXp);
-                _etoile.Cursor = Cursors.Hand;
                 _etoilePos = new Point(Math.Clamp(TeteX + (_hasard.NextDouble() * 2 - 1) * 120, 16, LargeurBase - 40), 24 + _hasard.NextDouble() * 70);
-                _etoile.MouseLeftButtonDown += (_, e) =>
+                _jeu.Children.Add(_etoile);
+                Cibler(_etoile, () =>
                 {
+                    if (_etoile is null) return;
                     Gagner(10, _etoilePos);
                     Signaler("jeu", 1);
                     Arreter("bien vu !");
                     _salueJusque = Maintenant + 1500;
-                    e.Handled = true;
-                };
-                _jeu.Children.Add(_etoile);
-                Dire("une étoile filante ! attrape-la", 2600);
+                });
+                _indiceSur = _etoile;
+                Dire("une étoile filante ! clique dessus", 2600);
                 break;
             case Jeu.Bulles:
                 _bullesEclatees = 0;
@@ -365,9 +461,12 @@ public sealed partial class FenetrePilou
                         X0 = TeteX + (i - 1) * 34,
                         Phase = _hasard.NextDouble() * 6,
                     };
-                    b.Forme.MouseLeftButtonDown += (_, e) =>
+                    b.Forme.Visibility = Visibility.Hidden;
+                    _bullesJeu.Add(b);
+                    _jeu.Children.Add(b.Forme);
+                    Cibler(b.Forme, () =>
                     {
-                        if (b.Eclatee) return;
+                        if (b.Eclatee || _jeuEnCours != Jeu.Bulles) return;
                         b.Eclatee = true;
                         _bullesEclatees++;
                         var ou = new Point(Canvas.GetLeft(b.Forme), Canvas.GetTop(b.Forme));
@@ -380,13 +479,9 @@ public sealed partial class FenetrePilou
                             Arreter("toutes ! bonus");
                             _salueJusque = Maintenant + 1500;
                         }
-                        e.Handled = true;
-                    };
-                    b.Forme.Visibility = Visibility.Hidden;
-                    _bullesJeu.Add(b);
-                    _jeu.Children.Add(b.Forme);
+                    });
                 }
-                Dire("pop les bulles !", 2400);
+                Dire("pop les bulles ! clique dessus", 2400);
                 break;
             case Jeu.Peche:
                 DemarrerPeche(t);
@@ -396,18 +491,10 @@ public sealed partial class FenetrePilou
                 break;
             case Jeu.TapeCinq:
                 _main = Pixels.Sprite("main", 2.2) ?? new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu);
-                _main.Cursor = Cursors.Hand;
-                _main.MouseLeftButtonDown += (_, e) =>
-                {
-                    Gagner(10, new Point(TeteX - 18, TeteY - 30));
-                    Signaler("jeu", 1);
-                    Arreter("ouais !");
-                    _salueJusque = Maintenant + 1800;
-                    _tSaut = Maintenant;
-                    e.Handled = true;
-                };
                 _jeu.Children.Add(_main);
-                Dire("tape m'en cinq !", 2600);
+                Cibler(_main, TapeReussi);
+                _indiceSur = _main;
+                Dire("tape m'en cinq ! clique sur la main (ou sur moi)", 3000);
                 break;
         }
     }
@@ -420,6 +507,7 @@ public sealed partial class FenetrePilou
         _etoile = null;
         _main = null;
         _bullesJeu.Clear();
+        OterCapteurs();
         ArreterPeche();
         _jeuEnCours = Jeu.Aucun;
         if (mot != "") Dire(mot, 1800);
@@ -458,7 +546,7 @@ public sealed partial class FenetrePilou
         switch (_jeuEnCours)
         {
             case Jeu.Etoile when _etoile is not null:
-                if (age > 9000)
+                if (age > Clics.DureeEtoile)
                 {
                     Arreter("trop tard, elle est partie…");
                     break;
@@ -468,7 +556,8 @@ public sealed partial class FenetrePilou
                 Canvas.SetTop(_etoile, Math.Round((_etoilePos.Y + Math.Cos(t / 520) * 4) / 4) * 4);
                 if (Banque.Commune["etoile"] is not null) _etoile.Changer("etoile", t);
                 else _etoile.Changer((int)(t / 220) % 2 == 0 ? MotifEtoile : MotifEtoile2);
-                _etoile.Opacity = age > 7500 ? (9000 - age) / 1500 : 1;
+                // Elle pâlit sur la fin, sans disparaître : on la voit encore pour cliquer.
+                _etoile.Opacity = age > Clics.DureeEtoile - 1500 ? Math.Max(0.4, (Clics.DureeEtoile - age) / 1500) : 1;
                 break;
             case Jeu.Bulles:
             {
@@ -478,7 +567,7 @@ public sealed partial class FenetrePilou
                     if (b.Eclatee) continue;
                     double vie = t - b.Nee;
                     if (vie < 0) continue;
-                    double y = TeteY - 10 - vie / 1000 * 22;
+                    double y = TeteY - 10 - vie / 1000 * Clics.VitesseBulles;
                     if (y < -30) { b.Eclatee = true; _jeu.Children.Remove(b.Forme); continue; }
                     restent = true;
                     b.Forme.Visibility = Visibility.Visible;
@@ -495,7 +584,7 @@ public sealed partial class FenetrePilou
                 AnimerCuisine(t);
                 break;
             case Jeu.TapeCinq when _main is not null:
-                if (age > 4500)
+                if (age > Clics.DureeTapeCinq)
                 {
                     Arreter("bon… plus tard");
                     break;
@@ -508,6 +597,8 @@ public sealed partial class FenetrePilou
                 if ((int)(age / 900) != (int)((age - 33) / 900)) _tSaut = t;
                 break;
         }
+
+        if (_jeuEnCours != Jeu.Aucun) SuivreCapteurs();
 
         for (int i = _flottants.Count - 1; i >= 0; i--)
         {

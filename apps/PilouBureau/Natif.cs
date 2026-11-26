@@ -136,4 +136,49 @@ internal static class Natif
         var ex = GetWindowLongPtr(nous, GwlExStyle).ToInt64();
         SetWindowLongPtr(nous, GwlExStyle, new IntPtr(ex | WsExToolWindow | WsExNoActivate));
     }
+
+    // ---- Menu clic droit d'une fenêtre qui ne s'active pas (MenuRetro.cs, MenuDiscret)
+
+    private const int VkLButton = 0x01, VkRButton = 0x02, VkMButton = 0x04;
+
+    private delegate bool RappelFenetre(IntPtr hwnd, IntPtr param);
+
+    [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] private static extern short GetAsyncKeyState(int touche);
+    [DllImport("user32.dll")] private static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint processus);
+    [DllImport("user32.dll")] private static extern bool EnumThreadWindows(uint thread, RappelFenetre rappel, IntPtr param);
+    [DllImport("kernel32.dll")] private static extern uint GetCurrentThreadId();
+
+    public static IntPtr AuPremierPlan() => GetForegroundWindow();
+
+    public static bool DeNotreProcessus(IntPtr hwnd)
+    {
+        if (hwnd == IntPtr.Zero) return false;
+        GetWindowThreadProcessId(hwnd, out var pid);
+        return pid == (uint)Environment.ProcessId;
+    }
+
+    public static void MettreDevant(IntPtr hwnd)
+    {
+        if (hwnd != IntPtr.Zero) SetForegroundWindow(hwnd);
+    }
+
+    // Un bouton de souris (gauche, droit ou du milieu) est-il enfoncé en ce moment ?
+    public static bool BoutonEnfonce() =>
+        (GetAsyncKeyState(VkLButton) & 0x8000) != 0 || (GetAsyncKeyState(VkRButton) & 0x8000) != 0
+        || (GetAsyncKeyState(VkMButton) & 0x8000) != 0;
+
+    // Bornes (pixels d'écran) des popups WPF ouverts de ce fil : le menu, ses sous-menus, une info-bulle.
+    public static List<Clics.Zone> FenetresPopup()
+    {
+        var zones = new List<Clics.Zone>();
+        EnumThreadWindows(GetCurrentThreadId(), (h, _) =>
+        {
+            if (IsWindowVisible(h) && GetWindowRect(h, out var r)
+                && System.Windows.Interop.HwndSource.FromHwnd(h)?.RootVisual?.GetType().Name == "PopupRoot")
+                zones.Add(new Clics.Zone(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top));
+            return true;
+        }, IntPtr.Zero);
+        return zones;
+    }
 }

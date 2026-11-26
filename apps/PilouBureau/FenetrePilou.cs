@@ -65,6 +65,7 @@ public sealed partial class FenetrePilou : Window
     private double _dernierEvenement;
     private double _cacheJusque;
     private Point? _appui;
+    private double _appuiT;
     private bool _attrape;
     private Vector _prise;
     private double _dernierT;
@@ -151,8 +152,15 @@ public sealed partial class FenetrePilou : Window
         Peindre();
 
         var menu = new ContextMenu();
-        menu.Opened += (_, _) => Remplir(menu);
+        menu.Opened += (_, _) =>
+        {
+            MenuRetro.Habiller(menu, _sombre || BulleSombre);
+            Remplir(menu);
+        };
+        MenuRetro.Habiller(menu, _sombre || BulleSombre);
         Remplir(menu);
+        // Fenêtre qui ne s'active pas : sans aide, le menu ne se fermait pas au clic ailleurs (MenuRetro.cs).
+        _ = new MenuDiscret(menu, this);
         _scene.ContextMenu = menu;
         _bulle.ContextMenu = menu;
 
@@ -1025,6 +1033,7 @@ public sealed partial class FenetrePilou : Window
             return;
         }
         _appui = PointToScreen(e.GetPosition(this));
+        _appuiT = Maintenant;
         var souris = VersWpf.Transform(_appui.Value);
         _prise = new Vector(souris.X - _x, souris.Y - _yPieds);
         _scene.CaptureMouse();
@@ -1035,9 +1044,10 @@ public sealed partial class FenetrePilou : Window
     {
         if (_appui is not { } depart) return;
         var ecran = PointToScreen(e.GetPosition(this));
-        if (!_attrape && (ecran - depart).Length > 5) _attrape = true;
-        if (!_attrape) return;
         var dip = VersWpf.Transform(ecran);
+        // Un clic dont la main tremble un peu reste un clic (caresse, coup de jeu) : seuil en unités WPF (Clics.EstGlisser).
+        if (!_attrape && Clics.EstGlisser((dip - VersWpf.Transform(depart)).Length, Maintenant - _appuiT)) _attrape = true;
+        if (!_attrape) return;
         _x = dip.X - _prise.X;
         _yPieds = dip.Y - _prise.Y;
         _auSol = false;
@@ -1056,7 +1066,8 @@ public sealed partial class FenetrePilou : Window
         }
         if (!_attrape && _appui is not null)
         {
-            Caresser();
+            // Pendant tape m'en cinq, la pêche ou la cuisine, un clic sur Pilou joue (jugé à l'instant de l'appui).
+            if (!ClicJeuSurPilou(_appuiT)) Caresser();
             ToutLu();
         }
         if (_attrape)

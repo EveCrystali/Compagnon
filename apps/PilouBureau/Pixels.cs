@@ -141,6 +141,8 @@ public sealed class Pixels : FrameworkElement
         ['.'] = new[] { "0", "0", "0", "0", "1" },
         ['/'] = new[] { "001", "001", "010", "100", "100" },
         [' '] = new[] { "0", "0", "0", "0", "0" },
+        // Indice des jeux : « clique ici ».
+        ['▼'] = new[] { "11111", "11111", "01110", "00100", "00000" },
     };
 
     public static int[,] Texte(string texte)

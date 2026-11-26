@@ -1,0 +1,142 @@
+<!-- Menu clic droit de Pilou, style boutique rétro : cadre pixel double et biseauté, coins carrés,
+     police monospace, survol en surbrillance (orange de nuit, bleu de jour) avec un petit curseur ► en pixels,
+     séparateurs en pointillés, coche ✓ en pixels. Les couleurs viennent du code (MenuRetro.cs, clés « Menu… »)
+     selon le thème de Pilou : jamais d'opposition rouge / vert. -->
+<ResourceDictionary x:Class="PilouBureau.MenuRetro"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ► en pixels de 2 (3 × 5) et ✓ en pixels de 2 (7 × 5). -->
+    <Geometry x:Key="MenuFlecheForme">M0,0 h2 v2 h-2 z M0,2 h4 v2 h-4 z M0,4 h6 v2 h-6 z M0,6 h4 v2 h-4 z M0,8 h2 v2 h-2 z</Geometry>
+    <Geometry x:Key="MenuCocheForme">M10,0 h4 v2 h-4 z M8,2 h4 v2 h-4 z M0,4 h4 v2 h-4 z M6,4 h4 v2 h-4 z M2,6 h6 v2 h-6 z M4,8 h2 v2 h-2 z</Geometry>
+
+    <FontFamily x:Key="MenuPolice">Consolas, Segoe UI Symbol, Segoe UI Emoji, Segoe UI</FontFamily>
+
+    <!-- Séparateur : une ligne de pointillés (2 px allumé, 2 px éteint). -->
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Canvas Height="2" Margin="8,4,8,4" ClipToBounds="True" SnapsToDevicePixels="True">
+                        <Line X1="0" Y1="1" X2="4000" Y2="1" StrokeThickness="2" StrokeDashArray="1 1"
+                              Stroke="{DynamicResource MenuPointilles}" SnapsToDevicePixels="True" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Cadre commun au menu et aux sous-menus : 2 px d'ombre, 2 px de couleur, puis un biseau clair / sombre. -->
+    <ControlTemplate x:Key="MenuCadre" TargetType="{x:Type ContentControl}">
+        <Border Background="{DynamicResource MenuBordExt}" Padding="2" SnapsToDevicePixels="True">
+            <Border Background="{DynamicResource MenuBordMilieu}" Padding="2">
+                <Border BorderBrush="{DynamicResource MenuBiseauClair}" BorderThickness="2,2,0,0">
+                    <Border BorderBrush="{DynamicResource MenuBiseauSombre}" BorderThickness="0,0,2,2"
+                            Background="{DynamicResource MenuFond}" Padding="2,3,2,3">
+                        <ContentPresenter />
+                    </Border>
+                </Border>
+            </Border>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{DynamicResource MenuTexte}" />
+        <Setter Property="FontFamily" Value="{StaticResource MenuPolice}" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border x:Name="Fond" Background="Transparent" Padding="5,3,8,3" MinHeight="22">
+                            <DockPanel LastChildFill="True">
+                                <Path x:Name="Curseur" DockPanel.Dock="Left" Width="6" Height="10" Margin="0,0,5,0"
+                                      VerticalAlignment="Center" Data="{StaticResource MenuFlecheForme}"
+                                      Fill="{TemplateBinding Foreground}" Visibility="Hidden" />
+                                <Grid DockPanel.Dock="Left" Width="18" Margin="0,0,5,0" VerticalAlignment="Center">
+                                    <ContentPresenter x:Name="Icone" ContentSource="Icon" HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center" />
+                                    <Border x:Name="Case" Width="10" Height="10" BorderThickness="2"
+                                            BorderBrush="{DynamicResource MenuPale}" HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" Visibility="Collapsed" />
+                                    <Path x:Name="Coche" Width="14" Height="10" Data="{StaticResource MenuCocheForme}"
+                                          Fill="{DynamicResource MenuCoche}" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" Visibility="Collapsed" />
+                                </Grid>
+                                <Path x:Name="Fleche" DockPanel.Dock="Right" Width="6" Height="10" Margin="12,0,0,0"
+                                      VerticalAlignment="Center" Data="{StaticResource MenuFlecheForme}"
+                                      Fill="{TemplateBinding Foreground}" Visibility="Collapsed" />
+                                <ContentPresenter x:Name="Entete" ContentSource="Header" RecognizesAccessKey="True"
+                                                  VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+                        <Popup x:Name="PART_Popup" Placement="Right" HorizontalOffset="-2" VerticalOffset="-9"
+                               AllowsTransparency="False" Focusable="False" PopupAnimation="None"
+                               IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ContentControl Template="{StaticResource MenuCadre}" Focusable="False">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                              CanContentScroll="True" Focusable="False">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                    KeyboardNavigation.TabNavigation="Cycle" />
+                                </ScrollViewer>
+                            </ContentControl>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Role" Value="SubmenuHeader">
+                            <Setter TargetName="Fleche" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="TopLevelHeader">
+                            <Setter TargetName="Fleche" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsCheckable" Value="True">
+                            <Setter TargetName="Case" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Case" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Coche" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Fond" Property="Background" Value="{DynamicResource MenuSurvolFond}" />
+                            <Setter Property="Foreground" Value="{DynamicResource MenuSurvolTexte}" />
+                            <Setter TargetName="Curseur" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Coche" Property="Fill" Value="{DynamicResource MenuSurvolTexte}" />
+                            <Setter TargetName="Case" Property="BorderBrush" Value="{DynamicResource MenuSurvolTexte}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource MenuEteint}" />
+                            <Setter TargetName="Fond" Property="Background" Value="Transparent" />
+                            <Setter TargetName="Curseur" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="Coche" Property="Fill" Value="{DynamicResource MenuEteint}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MenuRetroStyle" TargetType="{x:Type ContextMenu}">
+        <Setter Property="HasDropShadow" Value="False" />
+        <Setter Property="Foreground" Value="{DynamicResource MenuTexte}" />
+        <Setter Property="FontFamily" Value="{StaticResource MenuPolice}" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <ContentControl Template="{StaticResource MenuCadre}" Focusable="False">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                      CanContentScroll="True" Focusable="False">
+                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle"
+                                            KeyboardNavigation.TabNavigation="Cycle" />
+                        </ScrollViewer>
+                    </ContentControl>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
