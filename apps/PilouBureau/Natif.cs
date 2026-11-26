@@ -204,4 +204,31 @@ internal static class Natif
         }, IntPtr.Zero);
         return zones;
     }
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetClassNameW(IntPtr hwnd, System.Text.StringBuilder nom, int taille);
+
+    // Visite guidée : le menu natif ouvert par ce fil (menu de l'icône près de l'horloge, classe « #32768 »), en
+    // pixels d'écran ; null s'il n'est pas ouvert.
+    public static CadreEcran? MenuNatif()
+    {
+        CadreEcran? trouve = null;
+        EnumThreadWindows(GetCurrentThreadId(), (h, _) =>
+        {
+            var nom = new System.Text.StringBuilder(16);
+            if (IsWindowVisible(h) && GetClassNameW(h, nom, nom.Capacity) > 0 && nom.ToString() == "#32768" && GetWindowRect(h, out var r))
+            {
+                var c = CadreEcran.DeBords(r.Left, r.Top, r.Right, r.Bottom);
+                trouve = trouve is { } t ? t.Union(c) : c;
+            }
+            return true;
+        }, IntPtr.Zero);
+        return trouve;
+    }
+
+    // Cadre d'une fenêtre en pixels d'écran (visible, sans l'ombre) ; null si elle n'est pas affichée.
+    public static CadreEcran? CadreFenetre(IntPtr hwnd)
+    {
+        if (!Valide(hwnd) || IsIconic(hwnd) || Cadre(hwnd) is not { } r) return null;
+        return CadreEcran.DeBords(r.Left, r.Top, r.Right, r.Bottom);
+    }
 }

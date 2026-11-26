@@ -70,17 +70,22 @@ public class TournageTests
     }
 
     [Fact]
-    public void LeDerouleDureEntreUneEtUneMinuteEtDemie()
+    public void LeDerouleTientEntreUneMinuteEtDemieEtDeuxMinutesSansTempsMort()
     {
-        Assert.InRange(Tournage.DureeDeBase, 60, 100);
-        Assert.InRange(Tournage.Duree, Tournage.DureeDeBase, 140);
+        // Tout joué : 90 à 120 s ; sans les scènes récentes : au moins une minute.
+        Assert.InRange(Tournage.Duree, 90, 120);
+        Assert.InRange(Tournage.DureeDeBase, 60, Tournage.Duree);
         var noms = Tournage.Etapes.Select(e => e.Nom).ToList();
         Assert.Equal(noms.Count, noms.Distinct().Count());
         foreach (var n in new[] { "menu", "boutique", "amis", "icone", "clavier", "photo", "visite-jeu", "meteo", "etoile", "tape", "evolution" })
             Assert.Contains(n, noms);
-        Assert.All(Tournage.Etapes, e => Assert.InRange(e.Secondes, 3, 15));
-        Assert.Equal(14, Tournage.DureeDe("menu"));
+        // Des étapes courtes et enchaînées : 2,5 à 4 s, jusqu'à 8 s quand il y a plusieurs choses à montrer.
+        Assert.All(Tournage.Etapes, e => Assert.InRange(e.Secondes, 2.5, 8));
+        Assert.True(Tournage.Etapes.Count(e => e.Secondes > 4) <= 6);
+        Assert.Equal(8, Tournage.DureeDe("menu"));
         Assert.Equal(0, Tournage.DureeDe("inconnue"));
+        // L'évolution laisse finir son animation (4,2 s).
+        Assert.True(Tournage.DureeDe("evolution") >= 4.2);
     }
 
     [Fact]
@@ -146,7 +151,8 @@ public class TournageTests
         Assert.False(r.DiscordStatut);
         Assert.False(r.CacherPleinEcran);
         Assert.True(r.IconeNotification);
-        Assert.Equal(ModeBulle.Detaillee, r.Bulle);
+        // Bulle courte : ce que Pilou dit et l'IA qui attend, pas le détail des sessions.
+        Assert.Equal(ModeBulle.Masquee, r.Bulle);
     }
 
     [Fact]

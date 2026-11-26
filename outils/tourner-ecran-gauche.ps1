@@ -1,24 +1,28 @@
 ﻿# Tourne la vidéo de présentation de Pilou sur ton VRAI écran de GAUCHE, tout seul, et prépare un zip à envoyer.
 #   powershell -ExecutionPolicy Bypass -File .\tourner-ecran-gauche.ps1
-#   (options : -Ffmpeg C:\chemin\ffmpeg.exe · -Exe C:\chemin\PilouBureau.exe · -Ips 30 · -Oui pour ne pas demander)
+#   (options : -Ffmpeg C:\chemin\ffmpeg.exe · -Exe C:\chemin\PilouBureau.exe · -Ips 30 · -Oui pour ne pas demander
+#    · -SansDecor pour filmer ton vrai bureau derrière Pilou au lieu du décor fictif)
 #
 # Ce que fait le script, dans l'ordre :
 #   1. trouve l'écran le plus à gauche (pixels physiques, mise à l'échelle comprise), te le montre (cadre
 #      « ÉCRAN FILMÉ » quelques secondes) et te demande de confirmer : c'est lui, et lui seul, qui est filmé ;
 #   2. vérifie ffmpeg (sinon l'installe avec winget : Gyan.FFmpeg) et filme cet écran (gdigrab, 30 i/s, souris
 #      visible, H.264, sans son) en arrière-plan ;
-#   3. remplace pour un moment ton Pilou par un Pilou de démonstration posé en bas de cet écran, qui joue une
-#      visite guidée de 1 min 30 à 2 min : promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus,
-#      la boutique, la fenêtre Amis, le clavier, la photo, une visite chez Léo, la pluie, deux petits jeux,
-#      l'évolution, puis (si ta version les a) la Défense du bureau, les Expéditions et le rayon Ensembles,
-#      et enfin le menu de l'icône près de l'horloge. La souris bouge toute seule : n'y touche pas ;
-#   4. arrête le film, relance ton Pilou habituel et crée pilou-ecran-gauche.zip sur le Bureau
-#      (la vidéo + chronologie.json : l'instant de chaque étape, pour le montage).
+#   3. réduit cette fenêtre PowerShell, puis remplace pour un moment ton Pilou par un Pilou de démonstration, en
+#      grand, posé en bas de cet écran devant un DÉCOR de tournage (un faux bureau : fond dégradé, fausses fenêtres,
+#      fausse barre des tâches avec horloge et icône de Pilou) qui cache tout ce qui est à toi. Il joue une visite
+#      guidée d'environ 1 min 35 : promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la
+#      boutique, la fenêtre Amis, le clavier, la photo, une visite chez Léo, la pluie, deux petits jeux,
+#      l'évolution, puis (si ta version les a) le rayon Ensembles, la Défense du bureau et les Expéditions, et
+#      enfin le menu de l'icône près de l'horloge. La souris bouge toute seule : n'y touche pas ;
+#   4. attend la fin réelle de la visite (signal de fin), arrête le film, rouvre cette fenêtre, relance ton Pilou
+#      habituel et crée pilou-ecran-gauche.zip sur le Bureau : la vidéo + chronologie.json (pour chaque étape, son
+#      début et sa fin, et les rectangles à cadrer au montage) + erreurs.txt si quelque chose a raté.
 # Rien de personnel : le Pilou de démo lit trois sessions FICTIVES (« api », « site », « docs ») dans un dossier
 # temporaire, avec un profil, des amis (Léo, Maya, Sam, Noé) et un code ami fictifs, en mémoire. Ton profil
 # (XP, po, objets), tes amis, tes connecteurs et tes réglages ne sont ni lus ni modifiés. Aucun réseau.
-# Mais l'écran, lui, est filmé tel quel : ferme d'abord tout ce qui est personnel dessus (et mets « Ne pas
-# déranger » pour que les notifications ne s'y affichent pas). Arrêter en cours de route : Échap ou Ctrl+C ici.
+# Le décor cache l'écran filmé, mais mets quand même « Ne pas déranger » (une notification Windows passerait
+# devant). Arrêter en cours de route : Alt+Tab vers cette fenêtre, puis Échap (ou Ctrl+C).
 # Il faut une version de Pilou qui connaît --visite-guidee (menu de Pilou → Version → Chercher une mise à jour).
 # Les scènes plus récentes (Défense du bureau, Expéditions, rayon Ensembles de la boutique) sont jouées si la
 # version installée les a, sautées sinon : chronologie.json dit pour chaque étape « jouee » vrai ou faux,
@@ -27,7 +31,8 @@ param(
     [string]$Ffmpeg = '',
     [string]$Exe = '',
     [int]$Ips = 30,
-    [switch]$Oui
+    [switch]$Oui,
+    [switch]$SansDecor
 )
 $ErrorActionPreference = 'Stop'
 
@@ -35,10 +40,16 @@ $ErrorActionPreference = 'Stop'
 Add-Type -TypeDefinition @'
 using System;
 using System.Runtime.InteropServices;
-public static class PilouTournage
+public static class PilouTournageV2
 {
     [DllImport("shcore.dll")] public static extern int SetProcessDpiAwareness(int valeur);
     [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
+    // Cette fenêtre PowerShell (console classique ou Terminal) : réduite pendant le film, rouverte après.
+    [DllImport("kernel32.dll")] public static extern IntPtr GetConsoleWindow();
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr fenetre, int commande);
+    [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr fenetre);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr fenetre);
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct DEVMODE
@@ -64,7 +75,7 @@ public static class PilouTournage
     }
 }
 '@
-try { [void][PilouTournage]::SetProcessDpiAwareness(2) } catch { try { [void][PilouTournage]::SetProcessDPIAware() } catch { } }
+try { [void][PilouTournageV2]::SetProcessDpiAwareness(2) } catch { try { [void][PilouTournageV2]::SetProcessDPIAware() } catch { } }
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -73,7 +84,7 @@ if (-not (Test-Path $Exe)) { throw "PilouBureau.exe introuvable ($Exe) : install
 
 # ---- 1. L'écran le plus à gauche
 $ecrans = @(foreach ($s in [System.Windows.Forms.Screen]::AllScreens) {
-    $p = [PilouTournage]::Physique($s.DeviceName)
+    $p = [PilouTournageV2]::Physique($s.DeviceName)
     if ($null -eq $p) { $p = @($s.Bounds.X, $s.Bounds.Y, $s.Bounds.Width, $s.Bounds.Height) }
     [pscustomobject]@{ Nom = $s.DeviceName; X = [int]$p[0]; Y = [int]$p[1]; Largeur = [int]$p[2]; Hauteur = [int]$p[3]
                        Principal = $s.Primary; Forms = $s }
@@ -109,13 +120,21 @@ $cadre.Close(); $cadre.Dispose()
 
 Write-Host ''
 Write-Host 'Avant de continuer :' -ForegroundColor Yellow
-Write-Host '  - ferme ou déplace sur un autre écran TOUT ce qui est personnel sur cet écran (mails, messages, documents…) ;'
-Write-Host '  - déplace aussi cette fenêtre PowerShell sur un autre écran ;'
+if ($SansDecor) {
+    Write-Host '  - ferme ou déplace sur un autre écran TOUT ce qui est personnel sur cet écran (mails, messages, documents…) ;'
+}
+else {
+    Write-Host '  - un décor de bureau FICTIF couvrira cet écran pendant le film (tes icônes et ta barre des tâches n''y seront pas) ;'
+}
+Write-Host '  - cette fenêtre PowerShell sera réduite pendant le film, puis rouverte ;'
 Write-Host '  - active « Ne pas déranger » (les notifications Windows apparaîtraient dans la vidéo).'
 if (-not $Oui) {
-    $r = Read-Host "C'est bien cet écran qui sera filmé (1 min 30 à 2 min). On y va ? (O/N)"
+    $r = Read-Host "C'est bien cet écran qui sera filmé (environ 1 min 45). On y va ? (O/N)"
     if ($r -notmatch '^\s*[oOyY]') { Write-Host 'Rien n''a été filmé.'; return }
 }
+# La fenêtre où tu viens de répondre (console classique ou Terminal Windows) : réduite pendant le film.
+$fenetresConsole = @(@([PilouTournageV2]::GetConsoleWindow(), [PilouTournageV2]::GetForegroundWindow()) |
+    Where-Object { $_ -ne [IntPtr]::Zero } | Select-Object -Unique)
 
 # ---- 2. ffmpeg
 function TrouverFfmpeg {
@@ -182,14 +201,31 @@ foreach ($s in $sessions) {
 
 $video = Join-Path $racine 'pilou-ecran-gauche.mp4'
 $brute = Join-Path $racine 'chronologie-brute.json'
+$lignes = Join-Path $racine 'chronologie-brute.jsonl'
+$erreurs = Join-Path $racine 'erreurs.txt'
 $finale = Join-Path $racine 'chronologie.json'
 $avant = @(Get-Process PilouBureau -ErrorAction SilentlyContinue).Count -gt 0
 $ff = $null
 $visite = $null
-$fini = $false
+$arrete = $false
+$depasse = $false
+$codeSortie = $null
+$reduites = @()
+# Durée prévue par cet exe (scènes qu'il sait jouer), plus une marge large : on attend la vraie fin, pas une montre.
+$prevue = 130.0
+if ($disponibles.PSObject.Properties['duree_s']) { $prevue = [double]$disponibles.duree_s }
+$attente = [math]::Max(240, [math]::Ceiling($prevue) + 120)
+
+# La visite est-elle allée au bout ? (l'overlay écrit « complete » dans sa chronologie, au fil de l'eau)
+function VisiteComplete {
+    if (-not (Test-Path $brute)) { return $false }
+    try { return [bool](([System.IO.File]::ReadAllText($brute) | ConvertFrom-Json).complete) } catch { return $false }
+}
+
 try {
     Write-Host ''
-    Write-Host 'Tournage dans 5 secondes : ne touche plus ni à la souris ni au clavier. (Échap ici pour arrêter.)' -ForegroundColor Cyan
+    Write-Host 'Tournage dans 5 secondes : ne touche plus ni à la souris ni au clavier.' -ForegroundColor Cyan
+    Write-Host '(Pour arrêter : Alt+Tab vers cette fenêtre, puis Échap.)'
     Start-Sleep -Seconds 5
 
     # ---- 2 bis. Le film : cet écran seulement, souris visible, sans son ; arrêt propre par « q ».
@@ -204,37 +240,56 @@ try {
     $info.CreateNoWindow = $true
     $ff = [System.Diagnostics.Process]::Start($info)
     $debutVideo = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
-    Start-Sleep -Seconds 2
+    Start-Sleep -Seconds 1
     if ($ff.HasExited) { throw "ffmpeg s'est arrêté tout de suite (code $($ff.ExitCode)) : rien n'est filmé." }
     Write-Host '● Enregistrement en cours…' -ForegroundColor Cyan
 
-    # ---- 3 et 4. Le Pilou de démo prend la place du tien (--redemarrer), en bas de l'écran de gauche, et joue la visite.
-    $arguments = @('--redemarrer', ('"--visite-guidee={0}"' -f $brute), '--ecran=gauche', ('"{0}"' -f $demo))
+    # Cette fenêtre PowerShell se range (elle revient à la fin) : elle n'apparaît pas dans la vidéo.
+    foreach ($f in $fenetresConsole) {
+        if ([PilouTournageV2]::IsWindowVisible($f) -and -not [PilouTournageV2]::IsIconic($f)) {
+            [void][PilouTournageV2]::ShowWindow($f, 6)   # SW_MINIMIZE
+            $reduites += $f
+        }
+    }
+
+    # ---- 3 et 4. Le Pilou de démo prend la place du tien (--redemarrer), en bas de l'écran de gauche, devant son
+    # décor, et joue la visite. On attend sa vraie fin : il quitte de lui-même après avoir écrit « complete ».
+    $arguments = @('--redemarrer', ('"--visite-guidee={0}"' -f $brute), '--ecran=gauche')
+    if ($SansDecor) { $arguments += '--sans-decor' }
+    $arguments += ('"{0}"' -f $demo)
     $visite = Start-Process -FilePath $Exe -ArgumentList $arguments -PassThru
-    $limite = (Get-Date).AddSeconds(240)
-    $arrete = $false
+    $null = $visite.Handle   # sans lui, Windows PowerShell 5.1 perd le code de sortie
+    $limite = (Get-Date).AddSeconds($attente)
+    $finVue = $null
     while (-not $visite.HasExited -and (Get-Date) -lt $limite) {
-        Start-Sleep -Milliseconds 400
+        Start-Sleep -Milliseconds 500
         try {
             while ([Console]::KeyAvailable) { if ([Console]::ReadKey($true).Key -eq 'Escape') { $arrete = $true } }
         } catch { }
         if ($arrete) { break }
+        # Signal de fin écrit mais l'overlay traîne à quitter : on lui laisse 10 s.
+        if ($null -eq $finVue -and (VisiteComplete)) { $finVue = Get-Date }
+        if ($null -ne $finVue -and ((Get-Date) - $finVue).TotalSeconds -gt 10) { break }
     }
-    if (-not $visite.HasExited) {
+    if ($visite.HasExited) { try { $codeSortie = $visite.ExitCode } catch { } }
+    else {
         try { $visite.Kill() } catch { }
         if ($arrete) { Write-Host 'Arrêté à ta demande.' -ForegroundColor Yellow }
-        else { Write-Host 'La visite guidée a dépassé le temps prévu : arrêtée.' -ForegroundColor Yellow }
+        elseif ($null -eq $finVue) {
+            $depasse = $true
+            Write-Host ("La visite guidée n'a pas fini en {0} s : arrêtée." -f $attente) -ForegroundColor Yellow
+        }
     }
     Start-Sleep -Seconds 1
-    $fini = -not $arrete
 }
 finally {
-    # Fin du film (« q » : ffmpeg termine proprement le fichier), puis ton Pilou revient, comme avant.
+    # Fin du film (« q » : ffmpeg termine proprement le fichier), puis ton Pilou et cette fenêtre reviennent.
     if ($ff -and -not $ff.HasExited) {
         try { $ff.StandardInput.Write('q'); $ff.StandardInput.Flush() } catch { }
         if (-not $ff.WaitForExit(20000)) { try { $ff.Kill() } catch { } }
     }
     if ($visite -and -not $visite.HasExited) { try { $visite.Kill() } catch { } }
+    foreach ($f in $reduites) { [void][PilouTournageV2]::ShowWindow($f, 9) }   # SW_RESTORE
     if ($avant -and -not (Get-Process PilouBureau -ErrorAction SilentlyContinue)) {
         Start-Sleep -Milliseconds 500
         Start-Process -FilePath $Exe
@@ -248,39 +303,80 @@ if (-not (Test-Path $video) -or (Get-Item $video).Length -lt 10000) {
     throw "La vidéo n'a pas été enregistrée."
 }
 
-# ---- 5. Chronologie pour le montage : instant de chaque étape, en secondes depuis le début de la vidéo.
-$etapes = @()
-if (Test-Path $brute) {
-    $lu = [System.IO.File]::ReadAllText($brute) | ConvertFrom-Json
+# ---- 5. Chronologie pour le montage, en secondes depuis le début de la vidéo et en pixels de la vidéo : chaque
+# étape (début, fin, jouée ou non) et ses rectangles d'intérêt successifs (zone : ce qui compte à l'image ; zoom :
+# le cadre 16:9 qui la contient, pour un zoom ou un panoramique en 1920 × 1080).
+function Secondes($t) { if ($null -eq $t) { return $null } return [math]::Round(([double]$t - $debutVideo) / 1000.0, 2) }
+function Rectangle($z) {
+    if ($null -eq $z) { return $null }
+    return [pscustomobject]@{ x = [int]$z.x - $ecran.X; y = [int]$z.y - $ecran.Y; largeur = [int]$z.largeur; hauteur = [int]$z.hauteur }
+}
+$lu = $null
+if (Test-Path $brute) { try { $lu = [System.IO.File]::ReadAllText($brute) | ConvertFrom-Json } catch { $lu = $null } }
+$complete = $false
+$erreursOverlay = @()
+if ($null -ne $lu) {
+    $complete = [bool]$lu.complete
     $etapes = @(foreach ($e in $lu.etapes) {
-        [pscustomobject]@{ etape = $e.etape; jouee = [bool]$e.jouee; debut_s = [math]::Round(([double]$e.t - $debutVideo) / 1000.0, 1)
-                           t_unix_ms = [int64]$e.t }
+        $cadres = @(foreach ($c in $e.cadres) {
+            [pscustomobject]@{ quoi = [string]$c.quoi; debut_s = (Secondes $c.debut); fin_s = (Secondes $c.fin)
+                               zone = (Rectangle $c.zone); zoom = (Rectangle $c.zoom) }
+        })
+        [pscustomobject]@{ etape = [string]$e.etape; jouee = [bool]$e.jouee; debut_s = (Secondes $e.t); fin_s = (Secondes $e.fin)
+                           t_unix_ms = [int64]$e.t; cadres = $cadres }
     })
+    $erreursOverlay = @(foreach ($x in $lu.erreurs) { [pscustomobject]@{ etape = [string]$x.etape; t_s = (Secondes $x.t); message = [string]$x.message } })
 }
 else {
-    Write-Host 'Pas de chronologie (visite interrompue ?) : la vidéo est quand même dans le zip.' -ForegroundColor Yellow
+    Write-Host 'Pas de chronologie (la visite n''a pas démarré ?) : la vidéo est quand même dans le zip.' -ForegroundColor Yellow
     # Au moins ce qui était prévu, et ce que cette version sait jouer.
     $etapes = @(foreach ($e in $disponibles.etapes) { [pscustomobject]@{ etape = $e.etape; jouee = $false; prevue = [bool]$e.jouee } })
+}
+# Fin anormale : ce que le script sait, en tête d'erreurs.txt (l'overlay y a déjà noté ses propres erreurs).
+$anormale = (-not $complete) -and (-not $arrete)
+if ($anormale) {
+    $derniere = @($etapes | Where-Object { $_.jouee } | Select-Object -Last 1)
+    $nomDerniere = 'aucune'
+    if ($derniere.Count -gt 0) { $nomDerniere = $derniere[0].etape }
+    $raison = 'l''overlay s''est arrêté avant la fin'
+    if ($depasse) { $raison = "la visite n'a pas fini en $attente s (arrêtée)" }
+    $resumeErreur = @(
+        ('Fin anormale de la visite guidée : {0}.' -f $raison),
+        ('Pilou {0} · dernière étape commencée : {1} · code de sortie : {2}' -f $disponibles.version, $nomDerniere, $codeSortie),
+        ''
+    ) -join [Environment]::NewLine
+    $deja = ''
+    if (Test-Path $erreurs) { $deja = [System.IO.File]::ReadAllText($erreurs) }
+    if (-not $deja) { $deja = '(aucune erreur notée par Pilou : arrêt brutal, ou version sans journal d''erreurs)' + [Environment]::NewLine }
+    [System.IO.File]::WriteAllText($erreurs, $resumeErreur + $deja, $utf8)
+    Write-Host ('La visite s''est arrêtée avant la fin ({0}) : erreurs.txt est dans le zip.' -f $nomDerniere) -ForegroundColor Yellow
 }
 $resume = [pscustomobject]@{
     video = 'pilou-ecran-gauche.mp4'
     version_pilou = [string]$disponibles.version
-    complete = $fini
+    complete = $complete
+    arretee_a_la_main = $arrete
+    decor = -not $SansDecor
     ecran = [pscustomobject]@{ x = $ecran.X; y = $ecran.Y; largeur = $ecran.Largeur; hauteur = $ecran.Hauteur; echelle_pourcent = $echelle; ecrans = $ecrans.Count }
     images_par_seconde = $Ips
     debut_video_unix_ms = $debutVideo
-    note = 'debut_s : secondes depuis le début de la vidéo (à une demi-seconde près : démarrage de ffmpeg).'
+    note = ('debut_s, fin_s : secondes depuis le début de la vidéo (à une demi-seconde près : démarrage de ffmpeg). ' +
+            'cadres : rectangles successifs de chaque étape, en pixels de la vidéo ; zone = ce qui compte, zoom = cadre 16:9 qui la contient.')
     etapes = $etapes
+    erreurs = $erreursOverlay
     # Pour un carton « Bientôt : … » au montage : ce que cette version n'a pas pu montrer.
     a_venir = @($etapes | Where-Object { -not $_.jouee -and $_.etape -notlike 'erreur*' } | ForEach-Object { $_.etape })
     essais_disponibles = @($disponibles.essais)
     rayons_boutique = @($disponibles.rayons)
 }
-[System.IO.File]::WriteAllText($finale, ($resume | ConvertTo-Json -Depth 5), $utf8)
+[System.IO.File]::WriteAllText($finale, ($resume | ConvertTo-Json -Depth 8), $utf8)
 
 $zip = Join-Path ([Environment]::GetFolderPath('Desktop')) 'pilou-ecran-gauche.zip'
 if (Test-Path $zip) { Remove-Item $zip -Force }
-Compress-Archive -Path $video, $finale -DestinationPath $zip
+$contenu = @($video, $finale)
+if (Test-Path $erreurs) { $contenu += $erreurs }
+if ($anormale -and (Test-Path $lignes)) { $contenu += $lignes }   # le journal brut, ligne par ligne, pour comprendre
+Compress-Archive -Path $contenu -DestinationPath $zip
 Remove-Item -Recurse -Force $racine -ErrorAction SilentlyContinue
 $mo = [math]::Round((Get-Item $zip).Length / 1MB, 1)
 Write-Host ''

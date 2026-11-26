@@ -394,6 +394,7 @@ public sealed partial class FenetrePilou
         {
             _fenetreExp = new FenetreExpeditions(this);
             _fenetreExp.Closed += (_, _) => _fenetreExp = null;
+            if (_demo) PoserPresDePilou(_fenetreExp); // visite guidée : à côté de Pilou (FenetreVisite.cs)
             _fenetreExp.Show();
         }
         catch (InvalidOperationException)

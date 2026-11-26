@@ -532,7 +532,7 @@ public sealed partial class FenetrePilou : Window
         // Une fois par jour chacune, sans couper une saisie ni suivre de trop près une autre réaction.
         void Une(string cle, bool quand, string texte)
         {
-            if (!quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
+            if (_demo || !quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
             _dit.Add($"{cle}-{jour}");
             Dosage.Noter(Maintenant);
             Dire(texte, 6000);
@@ -601,6 +601,7 @@ public sealed partial class FenetrePilou : Window
     {
         var p = VersEcran.Transform(new Point(x, y));
         var r = Natif.ZoneTravail((int)p.X, (int)p.Y);
+        SolDuDecor(ref r, (int)p.X, (int)p.Y); // tournage : la fausse barre des tâches (FenetreVisite.cs)
         var m = VersWpf;
         return new Rect(m.Transform(new Point(r.Left, r.Top)), m.Transform(new Point(r.Right, r.Bottom)));
     }

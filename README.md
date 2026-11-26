@@ -302,11 +302,13 @@ Pilou reste volontairement discret (ni barre des tâches, ni Alt+Tab).
 ## Tourner une vidéo de ton écran
 
 Pour une vidéo de présentation avec de vraies images : `outils/tourner-ecran-gauche.ps1` filme **ton écran
-de gauche** (et lui seul) pendant qu'un Pilou de démonstration y joue une visite guidée d'environ 1 min 30 :
+de gauche** (et lui seul) pendant qu'un Pilou de démonstration, en grand, devant un **décor de bureau fictif**
+(fond dégradé, fausses fenêtres, fausse barre des tâches : rien de ton bureau n'apparaît), y joue une visite
+guidée d'environ 1 min 35 :
 promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la boutique, la fenêtre Amis, le
 clavier, la photo, une visite chez Léo, la pluie, deux petits jeux, l'évolution, le menu de l'icône près de
-l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions et le rayon Ensembles). Ferme d'abord
-tout ce qui est personnel sur cet écran, puis, dans PowerShell :
+l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions et le rayon Ensembles). Active « Ne pas
+déranger », puis, dans PowerShell (option `-SansDecor` pour filmer ton vrai bureau) :
 
 ```powershell
 irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/outils/tourner-ecran-gauche.ps1 -OutFile "$env:TEMP\tourner-ecran-gauche.ps1"
@@ -314,10 +316,12 @@ powershell -ExecutionPolicy Bypass -File "$env:TEMP\tourner-ecran-gauche.ps1"
 ```
 
 Le script montre l'écran choisi et demande confirmation, installe ffmpeg au besoin (winget), filme, remet ton
-Pilou habituel et pose `pilou-ecran-gauche.zip` sur le Bureau (la vidéo et `chronologie.json` : l'instant de
-chaque étape, si elle a été jouée, la version de Pilou). Le Pilou de démo ne lit que des sessions, un profil et
-des amis **fictifs**, en mémoire : ton XP, tes po, tes objets, tes amis et tes réglages ne sont ni lus ni
-modifiés. Ne touche pas à la souris pendant le tournage (elle bouge toute seule) ; Échap pour arrêter.
+Pilou habituel et pose `pilou-ecran-gauche.zip` sur le Bureau (la vidéo et `chronologie.json` : début et fin de
+chaque étape, si elle a été jouée, les rectangles à cadrer au montage, la version de Pilou ; `erreurs.txt` si
+quelque chose a raté). La fenêtre PowerShell est réduite pendant le film. Le Pilou de démo ne lit que des
+sessions, un profil et des amis **fictifs**, en mémoire : ton XP, tes po, tes objets, tes amis et tes réglages ne sont ni lus ni
+modifiés. Ne touche pas à la souris pendant le tournage (elle bouge toute seule) ; pour arrêter : Alt+Tab vers
+PowerShell, puis Échap.
 
 ## Pour contribuer
 

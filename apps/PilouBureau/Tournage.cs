@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.IO;
 using System.Text.Json;
 
 namespace PilouBureau;
@@ -13,12 +14,31 @@ public sealed record CadreEcran(int X, int Y, int Largeur, int Hauteur)
 {
     public int Droite => X + Largeur;
     public int Bas => Y + Hauteur;
+    public bool Vide => Largeur <= 0 || Hauteur <= 0;
+    public long Aire => Vide ? 0 : (long)Largeur * Hauteur;
+
+    public static CadreEcran DeBords(int gauche, int haut, int droite, int bas) => new(gauche, haut, droite - gauche, bas - haut);
+
+    // Le plus petit cadre qui contient les deux (un cadre vide ne compte pas).
+    public CadreEcran Union(CadreEcran o) =>
+        Vide ? o : o.Vide ? this : DeBords(Math.Min(X, o.X), Math.Min(Y, o.Y), Math.Max(Droite, o.Droite), Math.Max(Bas, o.Bas));
+
+    public CadreEcran Inter(CadreEcran o)
+    {
+        int g = Math.Max(X, o.X), h = Math.Max(Y, o.Y), d = Math.Min(Droite, o.Droite), b = Math.Min(Bas, o.Bas);
+        return d > g && b > h ? DeBords(g, h, d, b) : new CadreEcran(g, h, 0, 0);
+    }
+
+    public CadreEcran Elargi(int marge) => DeBords(X - marge, Y - marge, Droite + marge, Bas + marge);
+
+    public bool Contient(CadreEcran o) => !o.Vide && o.X >= X && o.Y >= Y && o.Droite <= Droite && o.Bas <= Bas;
 }
 
 // --visite-guidee[=<chronologie.json>] : joue la visite guidée puis quitte (mode démo, en mémoire).
 // --ecran=gauche|droite|principal : pose Pilou en bas de cet écran pour cette session (réglages inchangés).
 // --placer=x,y : pose Pilou sur l'écran de ce point (pixels physiques), en bas, pour cette session.
-public sealed record OptionsTournage(bool Visite, string? Chronologie, string? Ecran, (int X, int Y)? Placer)
+// --sans-decor : visite guidée sans le décor de tournage (le vrai bureau reste visible derrière Pilou).
+public sealed record OptionsTournage(bool Visite, string? Chronologie, string? Ecran, (int X, int Y)? Placer, bool SansDecor = false)
 {
     public static readonly OptionsTournage Aucune = new(false, null, null, null);
 
@@ -28,7 +48,7 @@ public sealed record OptionsTournage(bool Visite, string? Chronologie, string? E
     // Une valeur invalide est ignorée (Pilou démarre comme d'habitude), mais l'option est quand même retirée.
     public static (OptionsTournage Options, string[] Reste) Analyser(IEnumerable<string> args)
     {
-        bool visite = false;
+        bool visite = false, sansDecor = false;
         string? chronologie = null, ecran = null;
         (int, int)? placer = null;
         var reste = new List<string>();
@@ -47,9 +67,10 @@ public sealed record OptionsTournage(bool Visite, string? Chronologie, string? E
                 ecran = Ecrans.Contains(e) ? e : null;
             }
             else if (a.StartsWith("--placer=", StringComparison.Ordinal)) placer = Point(a["--placer=".Length..]);
+            else if (a == "--sans-decor") sansDecor = true;
             else reste.Add(a);
         }
-        return (new OptionsTournage(visite, chronologie, ecran, placer), reste.ToArray());
+        return (new OptionsTournage(visite, chronologie, ecran, placer, sansDecor), reste.ToArray());
     }
 
     private static (int, int)? Point(string s)
@@ -63,6 +84,17 @@ public sealed record OptionsTournage(bool Visite, string? Chronologie, string? E
 }
 
 public sealed record Moment(string Etape, long T, bool Jouee = true);
+
+// Un rectangle d'intérêt pour le montage (pixels d'écran) : ce qu'il montre (« pilou », « pilou+menu+sous-menu »,
+// « pilou+fenetre »…), de quand à quand (ms Unix), et le cadre 16:9 qui le contient (zoom/panoramique du monteur).
+public sealed record Cadrage(string Etape, string Quoi, CadreEcran Zone, CadreEcran Zoom, long Debut, long Fin);
+
+// Une fenêtre posée (unités WPF) ; sans WPF pour être testable.
+public readonly record struct Place(double X, double Y, double Largeur, double Hauteur)
+{
+    public double Droite => X + Largeur;
+    public double Bas => Y + Hauteur;
+}
 
 // Une étape de la visite guidée : son nom, sa durée, la scène --essai= qu'elle joue (s'il y en a une) et si elle
 // dépend d'une fonction que l'exe n'a peut-être pas encore (sautée sans elle).
@@ -99,35 +131,36 @@ public static class Tournage
             .Select(x => x.i).DefaultIfEmpty(PlusAGauche(ecrans)).First(),
     };
 
-    // Le déroulé de la visite guidée (secondes) : ~1 min 30 de base, avec des pauses qui se lisent. Les étapes
-    // « optionnelles » montrent des scènes qui n'existent peut-être pas encore dans cet exe : jouées si l'exe les
-    // connaît (EssaiConnu, RayonEnsembles), sautées sinon (sans temps mort), et notées jouee: false pour le montage.
-    // Elles viennent vers la fin, après les menus et la boutique.
+    // Le déroulé de la visite guidée (secondes) : ~1 min 35 en tout, des étapes courtes et enchaînées (2,5 à 4 s ;
+    // un peu plus quand il y a plusieurs choses à voir : menu et sous-menus, boutique, Défense, jeu avec Léo).
+    // Les étapes « optionnelles » montrent des scènes qui n'existent peut-être pas encore dans cet exe : jouées si
+    // l'exe les connaît (EssaiConnu, RayonEnsembles), sautées sinon (sans temps mort), et notées jouee: false pour
+    // le montage. Elles viennent vers la fin, après les menus et la boutique.
     public static readonly IReadOnlyList<EtapeVisite> Etapes = new EtapeVisite[]
     {
-        new("accueil", 3),                     // Pilou au repos, il dit bonjour
-        new("promenade", 4),                   // il fait quelques pas
-        new("attente", 5),                     // une IA t'attend : il court sous la souris
-        new("menu", 14),                       // le vrai menu clic droit rétro : survol, Couleur, Ce qu'il porte, Intégrations, Quêtes
-        new("boutique", 10),                   // la boutique : Vitrine, puis le rayon Tête, essai d'un objet
-        new("amis", 6),                        // la fenêtre Amis (amis fictifs, code fictif)
-        new("clavier", 5, "clavier"),          // il tape avec toi
-        new("photo", 4, "photo"),              // capture d'écran : il prend la photo
-        new("visite-depart", 5, "visite:depart"),
-        new("visite-retour", 4, "visite:retour"),
-        new("visite-jeu", 8, "visite:jeu"),    // Léo vient jouer chez lui
-        new("meteo", 5, "meteo:pluie:parapluie"),
-        new("etoile", 4, "etoile"),            // petit jeu : attrape l'étoile
-        new("tape", 4, "tape"),                // petit jeu : tape m'en cinq
-        new("evolution", 6, "evolution"),
-        new("boutique-ensembles", 7, null, true),           // boutique : rayon Ensembles et compteur de collection
-        new("defense", 9, "defense", true),                 // Défense du bureau : Pilou joue seul
-        new("expedition-depart", 5, "expedition:depart", true),
-        new("expedition-retour", 5, "expedition:retour", true),
-        new("expedition-defaite", 5, "expedition:defaite", true),
-        new("expedition-journal", 5, "expedition:journal", true),
-        new("icone", 4),                       // le menu de l'icône près de l'horloge
-        new("fin", 3),                         // au revoir
+        new("accueil", 2.5),                   // Pilou au repos, il dit bonjour
+        new("promenade", 3),                   // il fait quelques pas
+        new("attente", 4),                     // une IA t'attend : il court sous la souris
+        new("menu", 8),                        // le vrai menu clic droit rétro : survol, sous-menus Couleur et Intégrations
+        new("boutique", 6.5),                  // la boutique : Vitrine, puis le rayon Tête, essai d'un objet
+        new("amis", 3.5),                      // la fenêtre Amis (amis fictifs, code fictif)
+        new("clavier", 3.5, "clavier"),        // il tape avec toi
+        new("photo", 3, "photo"),              // capture d'écran : il prend la photo
+        new("visite-depart", 3.5, "visite:depart"),
+        new("visite-retour", 3.5, "visite:retour"),
+        new("visite-jeu", 6, "visite:jeu"),    // Léo vient jouer chez lui
+        new("meteo", 3.5, "meteo:pluie:parapluie"),
+        new("etoile", 3.5, "etoile"),          // petit jeu : attrape l'étoile
+        new("tape", 3, "tape"),                // petit jeu : tape m'en cinq
+        new("evolution", 5, "evolution"),      // l'animation dure 4,2 s
+        new("boutique-ensembles", 4, null, true),           // boutique : rayon Ensembles et compteur de collection
+        new("defense", 7, "defense", true),                 // Défense du bureau : Pilou joue seul
+        new("expedition-depart", 3.5, "expedition:depart", true),
+        new("expedition-retour", 4, "expedition:retour", true),
+        new("expedition-defaite", 3.5, "expedition:defaite", true),
+        new("expedition-journal", 4, "expedition:journal", true),
+        new("icone", 3.5),                     // le menu de l'icône près de l'horloge
+        new("fin", 2.5),                       // au revoir
     };
 
     // Durée si tout est joué, et sans les étapes optionnelles.
@@ -182,6 +215,8 @@ public static class Tournage
             essais = EssaisConnus.Concat(FamillesConnues.Select(f => f + "*")).ToList(),
             rayons = Boutique.Rayons.ToList(),
             ensembles = RayonEnsembles(),
+            // Durée de la visite avec ce que cet exe sait jouer : le script attend jusque-là (plus une marge).
+            duree_s = Planifier(Disponible).Where(x => x.Jouee).Sum(x => x.Etape.Secondes),
             etapes = Etapes.Select(e => new { etape = e.Nom, jouee = Disponible(e) }).ToList(),
         }, new JsonSerializerOptions { WriteIndented = true });
 
@@ -247,8 +282,9 @@ public static class Tournage
     // pas de petit jeu au hasard, aucun crochet clavier ni lecture des notifications, l'icône près de l'horloge.
     public static void Regler(Reglages r)
     {
-        r.Taille = 1.3;
-        r.Bulle = ModeBulle.Detaillee;
+        r.Taille = 1.3; // remplacée, une fois l'écran connu, par TailleTournage (en mémoire seulement)
+        // Bulle courte : ce que Pilou dit et l'IA qui attend ; le détail des sessions encombrait l'image.
+        r.Bulle = ModeBulle.Masquee;
         r.Promenade = true;
         r.SuitSouris = true;
         r.Jeux = false;
@@ -271,6 +307,40 @@ public static class Tournage
         r.BoutiqueOffresVues = "";
     }
 
+    // Taille de Pilou pendant le tournage, d'après la hauteur de la zone de travail (unités WPF) : ×2 environ sur un
+    // écran de 1440 (2,6 au lieu de 1,3), pour que le montage puisse zoomer sans flou. En mémoire seulement.
+    public static double TailleTournage(double hauteurZone) =>
+        double.IsFinite(hauteurZone) && hauteurZone > 0 ? Math.Clamp(Math.Round(hauteurZone / 540, 1), 1.3, 3.0) : 1.3;
+
+    // Une fenêtre (boutique, amis, expéditions…) posée à côté de Pilou, en bas de l'écran : à sa gauche s'il y a la
+    // place (sinon à sa droite), son bas un peu au-dessus du sol. Pilou et la fenêtre forment un bloc compact dans le
+    // tiers bas/milieu, que le montage cadre en 16:9. Trop grande : réduite à la zone.
+    public static Place PoserPres(Place zone, double pilouX, double demiPilou, double largeur, double hauteur, double marge = 24)
+    {
+        double l = Math.Min(largeur, zone.Largeur * 0.9), h = Math.Min(hauteur, zone.Hauteur * 0.8);
+        double gauche = pilouX - demiPilou - marge - l, droite = pilouX + demiPilou + marge;
+        double x = gauche >= zone.X + marge ? gauche
+            : droite + l <= zone.Droite - marge ? droite
+            : Math.Clamp(pilouX - l / 2, zone.X + marge, Math.Max(zone.X + marge, zone.Droite - marge - l));
+        double y = Math.Max(zone.Y + marge, zone.Bas - marge - h);
+        return new Place(x, y, l, h);
+    }
+
+    // Le cadre 16:9 du monteur autour d'une zone d'intérêt : la zone plus une marge, jamais plus étroit qu'un tiers de
+    // l'écran (sinon le zoom serait flou), centré sur elle et poussé dans l'écran.
+    public static CadreEcran Zoom169(CadreEcran zone, CadreEcran ecran, int marge = 48)
+    {
+        if (zone.Vide || ecran.Vide) return ecran;
+        double min = Math.Max(640, ecran.Largeur / 3.0);
+        double l = Math.Max(Math.Max(zone.Largeur + 2.0 * marge, (zone.Hauteur + 2.0 * marge) * 16 / 9), min);
+        l = Math.Min(l, ecran.Largeur);
+        double h = Math.Min(l * 9 / 16, ecran.Hauteur);
+        l = Math.Min(l, h * 16 / 9);
+        double cx = zone.X + zone.Largeur / 2.0, cy = zone.Y + zone.Hauteur / 2.0;
+        double x = Math.Clamp(cx - l / 2, ecran.X, ecran.Droite - l), y = Math.Clamp(cy - h / 2, ecran.Y, ecran.Bas - h);
+        return new CadreEcran((int)Math.Round(x), (int)Math.Round(y), (int)Math.Round(l), (int)Math.Round(h));
+    }
+
     // Chronologie pour le montage : version de Pilou, chaque étape, son instant (ms Unix) et si elle a été jouée.
     public static string Chronologie(IEnumerable<Moment> moments, string version = "") =>
         JsonSerializer.Serialize(new
@@ -278,4 +348,223 @@ public static class Tournage
             version,
             etapes = moments.Select(m => new { etape = m.Etape, t = m.T, jouee = m.Jouee }).ToList(),
         }, new JsonSerializerOptions { WriteIndented = true });
+}
+
+// Suit la zone d'intérêt de l'étape en cours, observée quelques fois par seconde, et la découpe en cadrages
+// successifs : un nouveau dès que ce qu'on montre change (un sous-menu s'ouvre, une fenêtre se ferme) ou bouge
+// nettement (Pilou se promène). Une petite variation agrandit le cadrage en cours au lieu d'en ouvrir un autre.
+public sealed class Cadreur
+{
+    public const int Tolerance = 64;
+    private readonly CadreEcran _ecran;
+    private string _etape = "", _quoi = "";
+    private CadreEcran _zone = new(0, 0, 0, 0);
+    private long _debut;
+    private bool _ouvert;
+
+    public Cadreur(CadreEcran ecran) => _ecran = ecran;
+
+    // Renvoie le cadrage qui vient de se terminer, s'il y en a un.
+    public Cadrage? Observer(string etape, string quoi, CadreEcran zone, long t)
+    {
+        zone = zone.Inter(_ecran);
+        if (zone.Vide) return Fermer(t);
+        if (_ouvert && etape == _etape && quoi == _quoi && _zone.Elargi(Tolerance).Contient(zone) && zone.Aire * 2 >= _zone.Aire)
+        {
+            _zone = _zone.Union(zone);
+            return null;
+        }
+        var ferme = Fermer(t);
+        (_etape, _quoi, _zone, _debut, _ouvert) = (etape, quoi, zone, t, true);
+        return ferme;
+    }
+
+    public Cadrage? Fermer(long t)
+    {
+        if (!_ouvert) return null;
+        _ouvert = false;
+        return new Cadrage(_etape, _quoi, _zone, Tournage.Zoom169(_zone, _ecran), _debut, Math.Max(_debut, t));
+    }
+}
+
+// Journal de la visite guidée, écrit au fil de l'eau : chaque événement (étape, cadrage, erreur, fin) s'ajoute à
+// <chronologie>.jsonl, une ligne JSON par événement, et la chronologie complète (<chronologie>) est réécrite à chaque
+// fois (fichier temporaire puis remplacement). Si l'overlay s'arrête net, le script de tournage a quand même tout
+// ce qui a été joué. Les erreurs vont aussi, en clair, dans erreurs.txt à côté (le script le met dans le zip).
+// Sans chemin : tout reste en mémoire.
+public sealed class JournalVisite
+{
+    private readonly string? _instantane, _lignes, _erreurs;
+    private readonly string _version;
+    private readonly CadreEcran? _ecran;
+    private readonly Func<long> _horloge;
+    private readonly List<Moment> _moments = new();
+    private readonly List<Cadrage> _cadres = new();
+    private readonly List<(long T, string Etape, string Message)> _fautes = new();
+    private readonly Dictionary<string, int> _repetitions = new();
+    private readonly object _verrou = new();
+    private long? _fin;
+
+    public const int RepetitionsMax = 3;
+
+    private static readonly JsonSerializerOptions Lisible = new() { WriteIndented = true };
+
+    public JournalVisite(string? chronologie, string version, CadreEcran? ecran, Func<long> horloge)
+    {
+        _version = version;
+        _ecran = ecran;
+        _horloge = horloge;
+        if (string.IsNullOrWhiteSpace(chronologie)) return;
+        _instantane = chronologie;
+        _lignes = Path.ChangeExtension(chronologie, ".jsonl");
+        _erreurs = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(chronologie)) ?? ".", "erreurs.txt");
+    }
+
+    public string? CheminLignes => _lignes;
+    public string? CheminErreurs => _erreurs;
+    public string EtapeCourante { get; private set; } = "";
+    public bool Fini => _fin is not null;
+
+    public IReadOnlyList<Moment> Moments
+    {
+        get { lock (_verrou) return _moments.ToList(); }
+    }
+
+    public IReadOnlyList<Cadrage> Cadres
+    {
+        get { lock (_verrou) return _cadres.ToList(); }
+    }
+
+    public IReadOnlyList<(long T, string Etape, string Message)> Erreurs
+    {
+        get { lock (_verrou) return _fautes.ToList(); }
+    }
+
+    public void Etape(string nom, bool jouee = true)
+    {
+        long t = _horloge();
+        lock (_verrou)
+        {
+            _moments.Add(new Moment(nom, t, jouee));
+            if (jouee) EtapeCourante = nom;
+        }
+        Ecrire(new { type = "etape", etape = nom, t, jouee });
+    }
+
+    public void Cadre(Cadrage? c)
+    {
+        if (c is null) return;
+        lock (_verrou) _cadres.Add(c);
+        Ecrire(new { type = "cadre", etape = c.Etape, quoi = c.Quoi, debut = c.Debut, fin = c.Fin, zone = Zone(c.Zone), zoom = Zone(c.Zoom) });
+    }
+
+    public void Erreur(string etape, Exception e) => Erreur(etape, $"{e.GetType().Name} : {e.Message}", e.ToString());
+
+    public void Erreur(string etape, string message, string? detail = null)
+    {
+        long t = _horloge();
+        lock (_verrou)
+        {
+            // La même erreur qui revient à chaque image (30 fois par seconde) : notée trois fois, pas plus.
+            var cle = etape + "|" + message;
+            int deja = _repetitions.GetValueOrDefault(cle);
+            _repetitions[cle] = deja + 1;
+            if (deja >= RepetitionsMax) return;
+            _fautes.Add((t, etape, message));
+        }
+        Ecrire(new { type = "erreur", etape, t, message });
+        if (_erreurs is null) return;
+        try
+        {
+            var heure = DateTimeOffset.FromUnixTimeMilliseconds(t).ToLocalTime().ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            lock (_verrou)
+                File.AppendAllText(_erreurs, $"[{heure}] étape « {etape} » : {message}{Environment.NewLine}"
+                                             + (detail is null ? "" : detail + Environment.NewLine));
+        }
+        catch (Exception x) when (x is IOException or UnauthorizedAccessException)
+        {
+            // pas de fichier d'erreurs : elles restent dans la chronologie
+        }
+    }
+
+    // Joue une action ; si elle échoue, l'erreur est notée et la visite continue (faux : elle a échoué).
+    public bool Executer(string etape, Action action)
+    {
+        try
+        {
+            action();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Erreur(etape, e);
+            return false;
+        }
+    }
+
+    // Le signal de fin : le script sait que la visite est allée au bout.
+    public void Terminer()
+    {
+        long t;
+        lock (_verrou)
+        {
+            if (_fin is not null) return;
+            _fin = t = _horloge();
+        }
+        Ecrire(new { type = "fin", t });
+    }
+
+    private static object Zone(CadreEcran z) => new { x = z.X, y = z.Y, largeur = z.Largeur, hauteur = z.Hauteur };
+
+    // La chronologie complète : chaque étape (début, fin, jouée), ses cadrages, les erreurs, et si la visite est finie.
+    public string Json()
+    {
+        lock (_verrou)
+        {
+            long? FinDe(int i)
+            {
+                for (int j = i + 1; j < _moments.Count; j++)
+                    if (_moments[j].T > _moments[i].T || _moments[j].Jouee) return _moments[j].T;
+                return _fin ?? _cadres.Where(c => c.Etape == _moments[i].Etape).Select(c => (long?)c.Fin).Max();
+            }
+            return JsonSerializer.Serialize(new
+            {
+                version = _version,
+                complete = _fin is not null,
+                fin = _fin,
+                ecran = _ecran is { } e ? Zone(e) : null,
+                etapes = _moments.Select((m, i) => new
+                {
+                    etape = m.Etape,
+                    t = m.T,
+                    fin = m.Jouee ? FinDe(i) : m.T,
+                    jouee = m.Jouee,
+                    cadres = m.Jouee
+                        ? _cadres.Where(c => c.Etape == m.Etape)
+                            .Select(c => (object)new { quoi = c.Quoi, debut = c.Debut, fin = c.Fin, zone = Zone(c.Zone), zoom = Zone(c.Zoom) }).ToList()
+                        : new List<object>(),
+                }).ToList(),
+                erreurs = _fautes.Select(f => new { t = f.T, etape = f.Etape, message = f.Message }).ToList(),
+            }, Lisible);
+        }
+    }
+
+    private void Ecrire(object ligne)
+    {
+        if (_lignes is null || _instantane is null) return;
+        try
+        {
+            lock (_verrou)
+            {
+                File.AppendAllText(_lignes, JsonSerializer.Serialize(ligne) + "\n");
+                var provisoire = _instantane + ".tmp";
+                File.WriteAllText(provisoire, Json());
+                File.Move(provisoire, _instantane, true);
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            // disque plein, dossier effacé : la vidéo reste bonne, la chronologie sera incomplète
+        }
+    }
 }
