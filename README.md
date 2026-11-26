@@ -1,10 +1,21 @@
-# Pilou — le compagnon de tes IA de code
+# Pilou — ton petit compagnon de bureau
 
-Une petite goutte d'encre bleue en pixels vit sur le bas de ton écran, au premier plan. Elle suit
-tes sessions **Claude Code** et **Codex** (et tout outil que tu y branches). Une bulle te dit
-lesquelles réfléchissent, lesquelles ont fini et lesquelles t'attendent. Elle joue aussi (étoile
-filante, bulles, tape m'en cinq), gagne de l'XP et des niveaux, et débloque accessoires, couleurs
-et titres.
+<p align="center">
+  <img src="docs/promo/pilou-promo.gif" alt="Pilou en action : il suit tes applis, joue, évolue et rend visite à tes amis" width="640">
+</p>
+
+<p align="center">
+  <a href="docs/promo/pilou-promo.mp4?raw=1"><b>▶ Télécharger la vidéo (720p, son)</b></a> ·
+  <a href="docs/promo/pilou-promo-vertical.mp4?raw=1">format téléphone</a> ·
+  <a href="https://github.com/EveCrystali/Compagnon/releases/latest">dernière version</a>
+</p>
+
+Une petite goutte d'encre bleue en pixels vit au premier plan de ton écran, sans prendre de place.
+Elle te suit, reconnaît ce que tu fais (jeux, bureautique, musique, visio, tes IA de code
+**Claude Code** et **Codex**…), évolue avec toi au fil des niveaux, se personnalise dans une
+boutique rétro et va même **rendre visite à tes amis**. Une bulle te dit quelles sessions
+réfléchissent, ont fini ou t'attendent. Gratuit, sur Windows et Android, avec une progression
+partagée entre PC et téléphone.
 
 ```
  ❗ Claude · refonte-auth     attend ton autorisation
