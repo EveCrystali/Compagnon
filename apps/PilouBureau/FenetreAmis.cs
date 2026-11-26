@@ -41,6 +41,12 @@ public sealed partial class FenetrePilou
 
     private CarnetAmis ChargerAmis()
     {
+        // Tournage : amis fictifs et code fictif, en mémoire ; rien ne part sur le relais.
+        if (_demo)
+        {
+            _essaiAmis = true;
+            return Tournage.CarnetDemo(Epoque);
+        }
         var c = CarnetAmis.Lire(_dossier);
         var coffre = new CoffreDpapi(Path.Combine(_dossier, "amis"));
         c.Moi.Privee = coffre.Lire("cle-privee") ?? "";

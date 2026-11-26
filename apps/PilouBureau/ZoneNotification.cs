@@ -189,6 +189,20 @@ internal sealed class ZoneNotification : IDisposable
         }
     }
 
+    // Visite guidée (FenetreVisite.cs) : le même menu, ouvert sans clic, refermé par FermerMenu.
+    public void MontrerMenu(int x, int y) => Menu(x, y);
+
+    public static void FermerMenu() => EndMenu();
+
+    // Où est l'icône (pixels de ce processus) ; null si elle n'est pas posée ou introuvable.
+    public (int X, int Y)? PositionIcone()
+    {
+        if (!_posee) return null;
+        var id = new IdentifiantIcone { Taille = Marshal.SizeOf<IdentifiantIcone>(), Fenetre = _source.Handle, Id = 1 };
+        if (Shell_NotifyIconGetRect(ref id, out var r) != 0) return null;
+        return ((r.Left + r.Right) / 2, (r.Top + r.Bottom) / 2);
+    }
+
     public void Dispose()
     {
         Retirer();
@@ -227,7 +241,18 @@ internal sealed class ZoneNotification : IDisposable
         public IntPtr IconeInfo;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct IdentifiantIcone
+    {
+        public int Taille;
+        public IntPtr Fenetre;
+        public int Id;
+        public Guid Guid;
+    }
+
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)] private static extern bool Shell_NotifyIconW(int message, ref NotifyIconData donnees);
+    [DllImport("shell32.dll")] private static extern int Shell_NotifyIconGetRect(ref IdentifiantIcone id, out Natif.Rect cadre);
+    [DllImport("user32.dll")] private static extern bool EndMenu();
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int RegisterWindowMessageW(string nom);
     [DllImport("user32.dll")] private static extern bool ChangeWindowMessageFilterEx(IntPtr hwnd, int message, int action, IntPtr info);
     [DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);

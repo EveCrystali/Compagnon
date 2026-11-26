@@ -83,6 +83,29 @@ internal static class Natif
         return GetMonitorInfo(m, ref info) ? info.Travail : new Rect { Left = 0, Top = 0, Right = 1920, Bottom = 1080 };
     }
 
+    private delegate bool RappelEcran(IntPtr ecran, IntPtr dc, ref Rect cadre, IntPtr param);
+
+    [DllImport("user32.dll")] private static extern bool EnumDisplayMonitors(IntPtr dc, IntPtr clip, RappelEcran rappel, IntPtr param);
+
+    // Tous les écrans (cadre entier, en pixels de ce processus), dans l'ordre de Windows.
+    public static List<CadreEcran> Ecrans()
+    {
+        var liste = new List<CadreEcran>();
+        EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, (IntPtr m, IntPtr _, ref Rect _, IntPtr _) =>
+        {
+            var info = new InfoEcran { Taille = Marshal.SizeOf<InfoEcran>() };
+            if (GetMonitorInfo(m, ref info))
+                liste.Add(new CadreEcran(info.Ecran.Left, info.Ecran.Top, info.Ecran.Right - info.Ecran.Left, info.Ecran.Bottom - info.Ecran.Top));
+            return true;
+        }, IntPtr.Zero);
+        return liste;
+    }
+
+    [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
+
+    // Visite guidée : la souris glisse d'elle-même sur les entrées du menu.
+    public static void PlacerSouris(int x, int y) => SetCursorPos(x, y);
+
     [DllImport("user32.dll")] private static extern bool GetCursorPos(out Point32 pt);
     [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hwnd);
     [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hwnd, int cmd);
