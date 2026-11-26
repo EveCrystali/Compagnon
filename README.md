@@ -161,9 +161,15 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
 - **🛒 Boutique** (en tête du menu, gratuite, aucune vraie monnaie) : une boutique rétro rangée par
   **rayons** (Tête, Yeux, Cou, Dos, Main, Pieds, Compagnons, Effets, Couleurs, Décors, Bulles, Spéciaux),
   chaque rayon en **rangées de niveau** (1, 5, 10, 15, 20, 30, 40, 50) : le niveau ouvre la rangée, les
-  pièces d'or achètent. Plus de 100 articles (chapeaux, lunettes, sac à dos, ailes, jetpack, guitare,
-  compagnons, auras, teintes, décors, cadres de bulle…), une vitrine d'offres du jour (une à -25 %), une
-  cabine d'essayage (*Essayer / Acheter / Porter*). Le menu affiche « Boutique (N nouveautés) », un petit
+  pièces d'or achètent. 245 articles à collectionner (chapeaux, lunettes, sac à dos, ailes, jetpack, guitare,
+  compagnons, auras, teintes, décors, cadres de bulle, **titres affichés**…) en six raretés (· commun, ◇ peu
+  commun, ◆ rare, ✦ épique, ★ légendaire, ✺ mythique : un signe et une couleur), **dix ensembles** (Explorateur,
+  Pâtissier, Astronome, Pirate des mers de café, Jardinier, Rétro-arcade, Hiver douillet, Plage, Nuit des
+  frissons, Fêtes de l'hiver : porté en entier, un effet en plus ; complet, un titre), des articles **de saison**
+  (⌛ jours restants ; hors saison, ils reviennent l'année suivante) et **de passage** (✧ trois jours par mois en
+  vitrine), un **compteur de collection** dont les paliers offrent titres et cadres. Tout avoir demande des mois
+  (environ un an de jeu régulier) ; un petit achat reste possible tous les jours ou deux. Vitrine d'offres du
+  jour (une à -25 %, la même sur le PC et le téléphone), cabine d'essayage (*Essayer / Acheter / Porter*). Le menu affiche « Boutique (N nouveautés) », un petit
   sac apparaît près de Pilou quand une rangée s'ouvre ou qu'une offre attend, et le passage d'un palier
   ouvre « Rangées débloquées → Voir en boutique ». Un **bandeau** niveau / XP / po est en tête du menu,
   de la boutique et de l'info-bulle de Pilou. Rien de ce qui était déjà gagné n'est perdu ; pièces, objets

@@ -1,0 +1,17 @@
+# Masque de sommeil
+id: masque-sommeil
+slot: yeux
+ancre: yeux
+decalage: -16 -1
+palette: a=#3a2a7a b=#d2caff c=#9b8cff
+images:
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+acccccccccccccccccccccccccccccca
+acccccccccccccccccccccccccccccca
+accccacccccacccccccccacccccacca.
+.accccacccacccccccccccacccaccca.
+.acccccaaacccccccccccccaaacccca.
+.acccaccaccacccacccccaccaccacca.
+..aaaaaacccccca.acccccccaaaaaa..
+........aaaaaa...aaaaaaa........

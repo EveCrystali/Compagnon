@@ -1,0 +1,59 @@
+# Petit crabe
+id: petit-crabe
+slot: compagnon
+ancre: cote
+decalage: -1 -11
+duree: 180
+palette: a=#8a4a1f b=#f69d50 c=#1c2128 d=#ffd8b0 e=#d9803a
+images:
+.aa..............aa.
+abba............abba
+bbaba..........abbab
+bbbba.aaaaaaaa.abbbb
+abba.abbcbbbcba.abba
+.aa.abddddddbbba.aa.
+...abbddddddbbbba...
+...abbbbbbbbbbbba...
+....abbbbbbbbbba....
+....aebbebbbebaea...
+...aeaaeaaaaaeaaea..
+...aeaaea...aeaaea..
+---
+..aa..............aa
+.abba............abb
+abbaba..........abba
+abbbba.aaaaaaaa.abbb
+.abba.abbcbbbcba.abb
+..aa.abddddddbbba.aa
+....abbddddddbbbba..
+....abbbbbbbbbbbba..
+.....abbbbbbbbbba...
+.....aebbebbbebaea..
+....aeaaeaaaaaeaaea.
+....aeaaea...aeaaea.
+---
+.aa..............aa.
+abba............abba
+bbaba..........abbab
+bbbba.aaaaaaaa.abbbb
+abba.abbcbbbcba.abba
+.aa.abddddddbbba.aa.
+...abbddddddbbbba...
+...abbbbbbbbbbbba...
+....abbbbbbbbbba....
+....aebbebbbebaea...
+...aeaaeaaaaaeaaea..
+...aeaaea...aeaaea..
+---
+aa..............aa..
+bba............abba.
+baba..........abbaba
+bbba.aaaaaaaa.abbbba
+bba.abbcbbbcba.abba.
+aa.abddddddbbba.aa..
+..abbddddddbbbba....
+..abbbbbbbbbbbba....
+...abbbbbbbbbba.....
+...aebbebbbebaea....
+..aeaaeaaaaaeaaea...
+..aeaaea...aeaaea...

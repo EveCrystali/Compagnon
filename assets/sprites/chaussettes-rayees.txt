@@ -1,0 +1,18 @@
+# Chaussettes rayées
+id: chaussettes-rayees
+slot: pieds
+ancre: pieds
+decalage: -14 -7
+palette: a=#8a4a1f b=#f69d50 c=#f6f8fa d=#d9803a
+images:
+.abbbbbbbba.....abbbbbbbba..
+.acccccccca.....acccccccca..
+.acccccccca.....acccccccca..
+.abbbbbbbba.....abbbbbbbba..
+.acccccccca.....acccccccca..
+.accccccccca....accccccccca.
+.abbbbbbbbcca...abbbbbbbbcca
+.accccccccccca..accccccccccc
+.aaaaacccccca...aaaaacccccca
+adddddddddddda.adddddddddddd
+.aaaaaaaaaaaa...aaaaaaaaaaaa

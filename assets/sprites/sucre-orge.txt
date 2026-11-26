@@ -1,0 +1,35 @@
+# Sucre d'orge (ensemble Fêtes de l'hiver)
+id: sucre-orge
+slot: main
+ancre: main
+decalage: -9 -23
+palette: a=#8a4a1f b=#f6f8fa c=#f69d50
+images:
+..aaaaaa....
+.abccbbca...
+abccbbccba..
+accaaaabba..
+acba..abca..
+.aa....acba.
+.......abba.
+.......abca.
+.......acca.
+.......acba.
+.......abba.
+.......abca.
+.......acca.
+.......acba.
+.......abba.
+.......abca.
+.......acca.
+.......acba.
+.......abba.
+.......abca.
+.......acca.
+.......acba.
+.......abba.
+.......abca.
+.......acca.
+.......acba.
+.......abba.
+........aa..

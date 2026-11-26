@@ -1,0 +1,13 @@
+# Tongs (ensemble Plage)
+id: tongs
+slot: pieds
+ancre: pieds
+decalage: -15 -3
+palette: a=#1c2128 b=#4a8fdc c=#f69d50 d=#8a4a1f
+images:
+.....aabaa...........aabaa....
+....abbabba.........abbabba...
+aaaabaaaaabaaa..aaaabaaaaabaaa
+cccbcccccccbccaacccbcccccccbcc
+ccccccccccccccaacccccccccccccc
+ddddddddddddddaadddddddddddddd

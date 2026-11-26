@@ -65,7 +65,8 @@ public class ButinTests
         var saveurs = Butin.Prises.Where(p => p.Comestible).Select(p => p.Saveur).ToHashSet();
         // Chaque recette est faisable avec des prises qui existent.
         foreach (var r in Butin.Recettes) Assert.All(r.Saveurs, s => Assert.Contains(s, saveurs));
-        foreach (Rarete r in Enum.GetValues<Rarete>()) Assert.Contains(Butin.Prises, p => p.Rarete == r);
+        // Le mythique n'existe qu'en boutique : chaque autre rareté a ses prises.
+        foreach (Rarete r in Enum.GetValues<Rarete>().Where(r => r != Rarete.Mythique)) Assert.Contains(Butin.Prises, p => p.Rarete == r);
     }
 
     [Fact]

@@ -12,7 +12,9 @@ namespace PilouBureau;
 // Boutique rétro (gratuite, aucune vraie monnaie) : bandeau niveau / XP / po, enseigne néon, onglets
 // pixel par rayon, étagères par rangée de niveau, aperçu à gauche (essayer, acheter, porter).
 // Chaque état d'un objet a un signe de forme, pas seulement une couleur :
-//   cadenas + « NIV 15 » (fermé), ◉ (achetable), ◌ + « manque N » (trop cher), ✓ (à toi), ★ (porté).
+//   cadenas + « NIV 15 » (fermé), ◉ (achetable), ◌ + « manque N » (trop cher), ✓ (à toi), ★ (porté),
+//   ⌛ (saison : jours restants, ou « revient en … »), ✧ (de passage en vitrine). Rareté : un liseré de couleur
+//   et son signe (· ◇ ◆ ✦ ★ ✺). Onglet « Ensembles » : progression 3/6, bonus porté ; compteur de collection.
 internal sealed class FenetreBoutique : Window
 {
     private const string Vitrine = "vitrine";
@@ -27,6 +29,8 @@ internal sealed class FenetreBoutique : Window
     private readonly TextBlock _nom = Texte(15, Bandeau.ArgentClair, gras: true);
     private readonly TextBlock _detail = Texte(11.5, Bandeau.Argent);
     private readonly TextBlock _message = Texte(11.5, Bandeau.Violet);
+    private readonly TextBlock _collection = Texte(11.5, Bandeau.ArgentClair, gras: true);
+    private readonly StackPanel _jaugeCollection = new() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
     private readonly Button _essayer = Bouton("Essayer"), _acheter = Bouton("Acheter"), _porter = Bouton("Porter");
     private readonly DispatcherTimer _horloge = new() { Interval = TimeSpan.FromMilliseconds(140) };
     private readonly List<Pixels> _pieces = new();
@@ -93,6 +97,10 @@ internal sealed class FenetreBoutique : Window
         var tete = new StackPanel { Margin = new Thickness(0, 4, 0, 8) };
         tete.Children.Add(_enseigne);
         tete.Children.Add(sousTitre);
+        _collection.HorizontalAlignment = HorizontalAlignment.Center;
+        _collection.Margin = new Thickness(0, 4, 0, 2);
+        tete.Children.Add(_collection);
+        tete.Children.Add(_jaugeCollection);
         Grid.SetRow(tete, 1);
         racine.Children.Add(tete);
 
@@ -186,7 +194,7 @@ internal sealed class FenetreBoutique : Window
         {
             T = _t, Stade = _pilou.StadePilou,
             Couleur = Teinte(porte.GetValueOrDefault(Boutique.Couleur, "")) is { Length: > 0 } c ? c : _pilou.CouleurDeBase,
-            Objets = porte.Where(kv => Boutique.SurPilou(kv.Key)).Select(kv => kv.Value).ToList(),
+            Objets = porte.Where(kv => Boutique.SurPilou(kv.Key)).Select(kv => kv.Value).Concat(Boutique.BonusPortes(porte)).ToList(),
             Accessoire = essai is { Slot: Boutique.Accessoire } && _essai ? essai.Id : _pilou.AccessoireChoisi,
             Expr = essai is not null && _essai ? "fete" : "repos",
         };
@@ -245,21 +253,54 @@ internal sealed class FenetreBoutique : Window
         bool consommable = a.Slot == Boutique.Consommable, bonus = a.Slot == Boutique.Bonus;
         bool possede = !consommable && inventaire.Contains(a.Id);
         bool porteIci = EstPorte(a, equipe);
-        _nom.Text = $"{Butin.Signe(a.Rarete)} {a.Nom}";
-        string etat = !Boutique.Ouvert(a, niveau) ? $"🔒 rangée fermée : niveau {a.NiveauMin} (encore {Math.Max(0, Profil.XpPourNiveau(a.NiveauMin) - _pilou.XpTotal)} xp)"
+        if (a.Recompense) possede = Boutique.PeutPorter(inventaire, a.Slot, a.Id);
+        bool dispo = Boutique.Disponible(a, Jour);
+        _nom.Text = $"{Boutique.SigneRarete(a.Rarete)} {a.Nom}";
+        string etat = a.Recompense ? (possede ? (porteIci ? "★ porté" : "✓ gagné") : $"▣ à gagner : {CommentGagner(a)}")
+            : !Boutique.Ouvert(a, niveau) ? $"🔒 rangée fermée : niveau {a.NiveauMin} (encore {Math.Max(0, Profil.XpPourNiveau(a.NiveauMin) - _pilou.XpTotal)} xp)"
             : porteIci ? "★ porté" : possede ? (bonus ? "✓ actif" : "✓ à toi")
+            : !dispo ? Indispo(a)
             : solde >= prix ? $"◉ {prix} po{(prix < a.Prix ? $" (au lieu de {a.Prix})" : "")}"
             : $"◌ {prix} po · il manque {prix - solde} po";
-        _detail.Text = $"{Boutique.Signe(a.Slot)} {Boutique.NomSlot(Boutique.RayonDe(a.Slot))} · {Butin.NomRarete(a.Rarete)} · rangée niveau {a.NiveauMin}\n{etat}"
+        _detail.Text = $"{Boutique.Signe(a.Slot)} {Boutique.NomSlot(Boutique.RayonDe(a.Slot))} · {Boutique.NomRarete(a.Rarete)}"
+            + (a.Recompense ? "" : $" · rangée niveau {a.NiveauMin}") + $"\n{etat}" + Precisions(a, inventaire)
             + (consommable ? $"\nEn réserve : {_pilou.Reserve(a.Id)}" : "");
         bool essayable = Boutique.Slots.Contains(a.Slot) || a.Slot == Boutique.Accessoire;
         _essayer.Visibility = essayable ? Visibility.Visible : Visibility.Collapsed;
         _essayer.Content = _essai ? "Enlever l'essai" : "Essayer";
-        _acheter.Visibility = possede ? Visibility.Collapsed : Visibility.Visible;
-        _acheter.Content = $"Acheter · {prix} po";
-        _acheter.IsEnabled = Boutique.Ouvert(a, niveau) && solde >= prix;
+        _acheter.Visibility = possede || a.Recompense ? Visibility.Collapsed : Visibility.Visible;
+        _acheter.Content = dispo ? $"Acheter · {prix} po" : a.Passage ? "✧ pas en vitrine" : "⌛ hors saison";
+        _acheter.IsEnabled = Boutique.Ouvert(a, niveau) && solde >= prix && dispo;
         _porter.Visibility = possede && !bonus ? Visibility.Visible : Visibility.Collapsed;
         _porter.Content = porteIci ? "Retirer" : "Porter";
+    }
+
+    // « ⌛ hors saison · revient le 1er déc. (hiver) » ; « ✧ de passage seulement · prochain passage le 14 déc. ».
+    private static string Indispo(Article a)
+    {
+        if (a.Saison != "" && !Boutique.EnSaison(a.Saison, Jour))
+            return $"⌛ hors saison · revient {(Boutique.Retour(a.Saison, Jour) is { } r ? "le " + Date(r) : "")} ({Boutique.NomSaison(a.Saison)})";
+        return $"✧ de passage seulement{(Boutique.ProchainPassage(a, Jour) is { } d ? " · prochain passage le " + Date(d) : "")}";
+    }
+
+    private static string Date(DateOnly d) => d.ToString("d MMM", new System.Globalization.CultureInfo("fr-FR"));
+
+    // Saison, passage, ensemble : une ligne de plus sous l'état.
+    private static string Precisions(Article a, List<string> inventaire)
+    {
+        var l = new List<string>();
+        if (a.Saison != "" && Boutique.EnSaison(a.Saison, Jour)) l.Add($"⌛ {Boutique.NomSaison(a.Saison)} : encore {Boutique.JoursRestants(a.Saison, Jour)} j");
+        if (Boutique.DePassage(a, Jour)) l.Add($"✧ de passage en vitrine : encore {Boutique.PassageRestant(a, Jour)} j");
+        foreach (var e in Boutique.Ensembles.Where(e => e.Pieces.Contains(a.Id)))
+            l.Add($"{e.Signe} ensemble {e.Nom} : {Boutique.Possedes(e, inventaire)}/{e.Pieces.Count}");
+        return l.Count == 0 ? "" : "\n" + string.Join(" · ", l);
+    }
+
+    private static string CommentGagner(Article a)
+    {
+        if (Boutique.EnsembleDe(a.Ensemble) is { } e) return $"compléter l'ensemble {e.Nom}";
+        var p = Boutique.PaliersCollection.FirstOrDefault(x => x.Id == a.Id);
+        return p is null ? "?" : p.Nombre == 0 ? "toute la collection" : $"{p.Nombre} objets en collection";
     }
 
     private static UIElement BulleEssai(StyleBulle st)
@@ -286,15 +327,76 @@ internal sealed class FenetreBoutique : Window
     {
         var (solde, inventaire, equipe) = _pilou.EtatBourse();
         int niveau = _pilou.NiveauActuel;
-        _bandeau.Mettre(niveau, _pilou.XpTotal, solde, Recompenses.Titre(niveau), Bandeau.ProchaineRangee(niveau, _pilou.XpTotal));
+        _bandeau.Mettre(niveau, _pilou.XpTotal, solde, _pilou.TitreAffiche(niveau), Bandeau.ProchaineRangee(niveau, _pilou.XpTotal));
         _pieces.Clear();
         Onglets(niveau, inventaire);
         _etageres.Children.Clear();
+        Collection(inventaire);
         if (_rayon == Vitrine) RemplirVitrine(niveau, solde, inventaire, equipe);
+        else if (_rayon == Boutique.RayonEnsembles) RemplirEnsembles(niveau, solde, inventaire, equipe);
         else
+        {
+            // Titres et cadres gagnés (ensembles, collection) : en tête de leur rayon.
+            var gagnables = Boutique.Trophees.Where(t => t.Slot == _rayon).ToList();
+            if (gagnables.Count > 0)
+            {
+                Entete(_rayon == Boutique.Titre ? "TITRES À GAGNER" : "CADRES DE COLLECTION",
+                    $"{gagnables.Count(t => Boutique.PeutPorter(inventaire, t.Slot, t.Id))}/{gagnables.Count} gagnés · ensembles complets et paliers de collection",
+                    AToi, null);
+                Etagere(gagnables.Select(a => Tuile(a, niveau, solde, inventaire, equipe, null)));
+            }
             foreach (var (palier, articles) in Boutique.Rangees(_rayon))
                 Rangee(palier, articles, niveau, solde, inventaire, equipe);
+        }
         MontrerApercu();
+    }
+
+    // « Collection 37/249 » et une jauge en cases ; le prochain palier et ce qu'il offre.
+    private void Collection(List<string> inventaire)
+    {
+        int n = Boutique.Collection(inventaire), total = Boutique.TotalCollection;
+        var p = Boutique.ProchainPalierCollection(n);
+        _collection.Text = $"❖ Collection {n}/{total}" + (p is null ? " · tout est à toi !" : $" · à {Boutique.Seuil(p)} : {p.Nom}");
+        _jaugeCollection.Children.Clear();
+        const int cases = 30;
+        int pleines = total == 0 ? 0 : n * cases / total;
+        for (int i = 0; i < cases; i++)
+            _jaugeCollection.Children.Add(new Border
+            {
+                Width = 9, Height = 6, Margin = new Thickness(0, 0, 2, 0), Background = i < pleines ? AToi : Case,
+                BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(i < pleines ? 0 : 1),
+            });
+    }
+
+    // Onglet Ensembles : chaque ensemble, sa progression (3/6), son bonus ; porter d'un coup ce qu'on en a.
+    private void RemplirEnsembles(int niveau, int solde, List<string> inventaire, Dictionary<string, Port> equipe)
+    {
+        var porte = Boutique.Porte(equipe);
+        foreach (var e in Boutique.Ensembles)
+        {
+            int a = Boutique.Possedes(e, inventaire);
+            bool complet = a == e.Pieces.Count, actif = Boutique.PorteEnEntier(e, porte);
+            var saison = e.Pieces.Select(Boutique.Trouver).FirstOrDefault(x => x is { Saison.Length: > 0 })?.Saison ?? "";
+            string sous = $"{a}/{e.Pieces.Count} · " + (actif ? "★ bonus actif" : complet ? $"✓ complet : titre {e.Titre} gagné" : $"complet : titre {e.Titre} + effet")
+                + (saison == "" ? "" : Boutique.EnSaison(saison, Jour) ? $" · ⌛ {Boutique.NomSaison(saison)} : encore {Boutique.JoursRestants(saison, Jour)} j"
+                    : $" · ⌛ {Boutique.NomSaison(saison)}");
+            Entete($"{e.Signe} {e.Nom.ToUpperInvariant()}", sous, actif ? Porte : complet ? AToi : Achetable, null);
+            if (a > 0 && !actif)
+            {
+                var tout = Bouton($"Porter les {a} pièces");
+                tout.Margin = new Thickness(0, 0, 0, 6);
+                tout.HorizontalAlignment = HorizontalAlignment.Left;
+                tout.Click += (_, _) =>
+                {
+                    foreach (var id in e.Pieces.Where(inventaire.Contains))
+                        if (Boutique.Trouver(id) is { } x) _pilou.Equiper(x.Slot, id);
+                    _message.Text = $"★ Pilou porte l'ensemble {e.Nom} ({a}/{e.Pieces.Count})";
+                    Remplir();
+                };
+                _etageres.Children.Add(tout);
+            }
+            Etagere(e.Pieces.Select(Boutique.Trouver).OfType<Article>().Select(x => Tuile(x, niveau, solde, inventaire, equipe, null)));
+        }
     }
 
     private void Onglets(int niveau, List<string> inventaire)
@@ -341,6 +443,19 @@ internal sealed class FenetreBoutique : Window
         var offres = Boutique.OffresDuJour(Jour);
         Entete("OFFRES DU JOUR", "la première à -25 % · elles changent chaque jour", Achetable, null);
         Etagere(offres.Select((a, i) => Tuile(a, niveau, solde, inventaire, equipe, i == 0 ? "-25 %" : Boutique.Pluie() && a.Id == "parapluie" ? "PLUIE" : null)));
+        var passages = Boutique.Passages(Jour);
+        if (passages.Count > 0)
+        {
+            Entete("DE PASSAGE", "rares : quelques jours par mois seulement, ne les laisse pas filer", Gel("#f5d76e"), null);
+            Etagere(passages.Select(a => Tuile(a, niveau, solde, inventaire, equipe, $"✧ {Boutique.PassageRestant(a, Jour)} J")));
+        }
+        var saison = Boutique.Catalogue.Where(a => a.Saison != "" && Boutique.EnSaison(a.Saison, Jour) && !inventaire.Contains(a.Id))
+            .OrderBy(a => Boutique.JoursRestants(a.Saison, Jour)).ThenBy(a => a.Prix).Take(8).ToList();
+        if (saison.Count > 0)
+        {
+            Entete("DE SAISON", "ils repartent à la fin de leur saison (⌛ jours restants)", Achetable, null);
+            Etagere(saison.Select(a => Tuile(a, niveau, solde, inventaire, equipe, null)));
+        }
         var neufs = Boutique.Debloques(_vuAvant, niveau).Where(a => !inventaire.Contains(a.Id)).ToList();
         if (_vuAvant > 0 && neufs.Count > 0)
         {
@@ -357,7 +472,7 @@ internal sealed class FenetreBoutique : Window
         }
         // À ta portée : ce qui est ouvert, pas encore à toi, et que tes po peuvent payer.
         var portee = Boutique.Catalogue.Where(a => Boutique.Ouvert(a, niveau) && !inventaire.Contains(a.Id) && a.Slot != Boutique.Consommable
-            && Boutique.Prix(a, Jour) <= solde).OrderByDescending(a => a.Prix).Take(8).ToList();
+            && Boutique.Disponible(a, Jour) && Boutique.Prix(a, Jour) <= solde).OrderByDescending(a => a.Prix).Take(8).ToList();
         if (portee.Count > 0)
         {
             Entete("À TA PORTÉE", "ouvert et dans tes moyens", AToi, null);
@@ -434,6 +549,18 @@ internal sealed class FenetreBoutique : Window
                     Foreground = ferme ? Ferme : st.Sombre ? Gel("#e6ecf2") : Gel("#1c2128"),
                 },
             };
+        if (a.Slot == Boutique.Titre)
+            return new Border
+            {
+                Width = 92, Height = 40, BorderBrush = ferme ? Ferme : Gel(Boutique.CouleurRarete(a.Rarete)), BorderThickness = new Thickness(2),
+                Background = Gel("#151a2e"), Padding = new Thickness(3),
+                Child = new TextBlock
+                {
+                    Text = a.Nom, FontSize = 10.5, FontStyle = FontStyles.Italic, TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center, FontFamily = new FontFamily("Segoe UI"),
+                    Foreground = ferme ? Bandeau.Argent : Bandeau.ArgentClair,
+                },
+            };
         if (Boutique.RayonDe(a.Slot) == Boutique.Speciaux && a.Slot != Boutique.Accessoire)
             return Apercu.Sprite(Icone(a.Id), 0, ferme) is { } ic ? Apercu.Vue(ic, Math.Min(4, 48.0 / Math.Max(ic.PixelWidth, ic.PixelHeight)))
                 : new TextBlock { Text = Boutique.Signe(a.Slot), FontSize = 28, Foreground = Bandeau.Argent };
@@ -453,17 +580,21 @@ internal sealed class FenetreBoutique : Window
     private UIElement Tuile(Article a, int niveau, int solde, List<string> inventaire, Dictionary<string, Port> equipe, string? ruban)
     {
         bool consommable = a.Slot == Boutique.Consommable;
-        bool ouvert = Boutique.Ouvert(a, niveau);
-        bool possede = !consommable && inventaire.Contains(a.Id);
+        bool possede = a.Recompense ? Boutique.PeutPorter(inventaire, a.Slot, a.Id) : !consommable && inventaire.Contains(a.Id);
+        bool ouvert = a.Recompense ? possede : Boutique.Ouvert(a, niveau);
         bool porte = possede && (a.Slot == Boutique.Accessoire ? _pilou.AccessoireChoisi == a.Id : EstPorte(a, equipe));
+        bool dispo = Boutique.Disponible(a, Jour);
         int prix = Boutique.Prix(a, Jour);
         bool choisi = _choisi?.Id == a.Id;
         // État → bord et signe (forme + couleur, jamais la couleur seule).
         var (bord, epaisseur, signe) = !ouvert ? (Ferme, 2.0, "")
             : porte ? (Porte, 3.0, "★")
             : possede ? (AToi, 2.0, "✓")
+            : !dispo ? (Ferme, 2.0, a.Passage ? "✧" : "⌛")
             : solde >= prix ? (Achetable, 2.0, "◉")
             : (TropCher, 2.0, "◌");
+        // Saison en cours : ruban « ⌛ 12 J » (sauf si un autre ruban est déjà là).
+        if (ruban is null && !possede && a.Saison != "" && Boutique.EnSaison(a.Saison, Jour)) ruban = $"⌛ {Boutique.JoursRestants(a.Saison, Jour)} J";
 
         var pile = new StackPanel { Width = 104 };
         var haut = new Grid { Height = 88 };
@@ -488,6 +619,15 @@ internal sealed class FenetreBoutique : Window
                 VerticalAlignment = VerticalAlignment.Top,
                 Child = new TextBlock { Text = ruban, FontSize = 10, FontWeight = FontWeights.Bold, Foreground = Bandeau.Encre, FontFamily = new FontFamily("Consolas") },
             });
+        // Rareté : son signe, dans sa couleur, en bas à gauche ; le signe de l'ensemble à côté.
+        var ens = Boutique.Ensembles.FirstOrDefault(e => e.Pieces.Contains(a.Id));
+        haut.Children.Add(new TextBlock
+        {
+            Text = Boutique.SigneRarete(a.Rarete) + (ens is null ? "" : " " + ens.Signe), FontSize = 13, FontWeight = FontWeights.Bold,
+            Foreground = Gel(Boutique.CouleurRarete(a.Rarete)), Margin = new Thickness(5, 0, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Bottom,
+        });
+        pile.Children.Add(new Border { Height = 3, Background = Gel(Boutique.CouleurRarete(a.Rarete)), Margin = new Thickness(6, 0, 6, 2) });
         pile.Children.Add(haut);
         var nom = Texte(10.5, ouvert ? Bandeau.ArgentClair : Bandeau.Argent);
         nom.Text = a.Nom;
@@ -496,14 +636,15 @@ internal sealed class FenetreBoutique : Window
         nom.TextWrapping = TextWrapping.NoWrap;
         nom.Margin = new Thickness(4, 0, 4, 2);
         pile.Children.Add(nom);
-        pile.Children.Add(Etiquette(a, ouvert, possede, porte, consommable, prix, solde, bord));
+        pile.Children.Add(Etiquette(a, ouvert, possede, porte, consommable, prix, solde, bord, dispo));
 
         var tuile = new Border
         {
             Child = pile, Background = choisi ? CaseSurvol : Case, BorderBrush = choisi ? Bandeau.ArgentClair : bord,
             BorderThickness = new Thickness(choisi ? 3 : epaisseur), Margin = new Thickness(0, 0, 8, 6), Padding = new Thickness(0, 2, 0, 4),
             Cursor = Cursors.Hand, SnapsToDevicePixels = true,
-            ToolTip = $"{a.Nom} — {Butin.NomRarete(a.Rarete)}" + (!ouvert ? $" · rangée du niveau {a.NiveauMin}" : ""),
+            ToolTip = $"{a.Nom} — {Boutique.NomRarete(a.Rarete)}" + (ens is null ? "" : $" · ensemble {ens.Nom}")
+                + (a.Recompense ? "" : !ouvert ? $" · rangée du niveau {a.NiveauMin}" : !dispo ? " · " + Indispo(a) : ""),
         };
         tuile.MouseEnter += (_, _) => { if (!choisi) tuile.Background = CaseSurvol; };
         tuile.MouseLeave += (_, _) => { if (!choisi) tuile.Background = Case; };
@@ -518,7 +659,7 @@ internal sealed class FenetreBoutique : Window
     }
 
     // Étiquette de prix : pièce qui tourne + prix ; ou cadenas « NIV 15 », « ✓ à toi », « ★ porté ».
-    private UIElement Etiquette(Article a, bool ouvert, bool possede, bool porte, bool consommable, int prix, int solde, Brush bord)
+    private UIElement Etiquette(Article a, bool ouvert, bool possede, bool porte, bool consommable, int prix, int solde, Brush bord, bool dispo)
     {
         var ligne = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
         var fond = new Border
@@ -531,7 +672,8 @@ internal sealed class FenetreBoutique : Window
             Text = s, Foreground = c, FontSize = 11, FontWeight = FontWeights.Bold, FontFamily = new FontFamily("Consolas"),
             VerticalAlignment = VerticalAlignment.Center,
         };
-        if (!ouvert)
+        if (a.Recompense && !possede) ligne.Children.Add(T("▣ à gagner", Bandeau.Argent));
+        else if (!ouvert)
         {
             if (Pixels.Sprite("cadenas", 1) is { } c)
             {
@@ -541,7 +683,10 @@ internal sealed class FenetreBoutique : Window
             ligne.Children.Add(T($"NIV {a.NiveauMin}", Bandeau.Argent));
         }
         else if (porte) ligne.Children.Add(T("★ porté", Porte));
-        else if (possede) ligne.Children.Add(T("✓ à toi", AToi));
+        else if (possede) ligne.Children.Add(T(a.Recompense ? "✓ gagné" : "✓ à toi", AToi));
+        else if (!dispo)
+            ligne.Children.Add(T(a.Passage ? (Boutique.ProchainPassage(a, Jour) is { } d ? $"✧ {Date(d)}" : "✧ vitrine")
+                : $"⌛ {Boutique.NomSaison(a.Saison)}", Bandeau.Argent));
         else
         {
             if (_imagesPiece.Count > 0)

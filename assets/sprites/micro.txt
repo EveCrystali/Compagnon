@@ -1,0 +1,29 @@
+# Micro
+id: micro
+slot: main
+ancre: main
+decalage: -5 -16
+palette: a=#1c2128 b=#b8c4d2 c=#768390 d=#6a5acd e=#2d333b
+images:
+..abbbbaa.
+.accccccca
+abbbbbbbba
+abccccccca
+abbbbbbbba
+abccccccca
+.abbbbbba.
+.accccccca
+..addddaa.
+..adddda..
+..aeeeea..
+..aeeeea..
+..aeeeea..
+..aeeeea..
+..aeeeea..
+..aeeea...
+...aeea...
+...aeea...
+...aeea...
+...aeea...
+...aeea...
+....aa....

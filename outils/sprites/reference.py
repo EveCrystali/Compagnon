@@ -65,6 +65,12 @@ POSES = [
     "expr=fete t=200 marche=1 regard=1 objets=baluchon,epee-bois",
     "expr=grimace t=500 regard=-1 objets=baluchon,pansement",
     "expr=repos t=300 stade=3 objets=torche,bouclier-couvercle,casque-passoire,slime-apprivoise",
+    # Boutique garnie : un ensemble complet et son bonus, teintes chaudes, objets animés sur les autres stades.
+    "expr=fete t=420 objets=chapeau-explorateur,jumelles,foulard-explorateur,sac-explorateur,boussole,bottines,bonus-explorateur",
+    "expr=inquiet t=0 couleur=cuivre objets=plaid,chocolat-chaud",
+    "expr=repos t=660 stade=4 couleur=nebuleuse objets=cape-chauve-souris,coiffe-courge,chauve-souris,bonus-frissons",
+    "expr=repos t=250 stade=1 objets=ailes-libellule,lunettes-kaleido,orbite-lunes,bottes-nuage",
+    "expr=concentre t=900 stade=3 objets=tricorne-moka,bandeau-oeil,sabre-cuillere,perroquet-caramel,aurore-boreale",
 ]
 
 

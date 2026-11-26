@@ -1,0 +1,67 @@
+# Escargot (ensemble Jardinier)
+id: escargot
+slot: compagnon
+ancre: cote
+decalage: -1 -13
+duree: 420
+palette: a=#3a2a7a b=#6a5acd c=#1c2128 d=#c9d1d9 e=#d2caff f=#f6f8fa
+images:
+......aaaa.....a...a
+....aabbbbaa..aca.ac
+...abbbbbbbba.ada.ad
+..abbbbbbbbbbaada.ad
+..abbbebebbbba.adada
+.abbbbbbbbebbbafdada
+.abbbebbbbbbbbffffa.
+.abbbbebebbebbffffa.
+.abebbbeebbbbbffffa.
+.aabbbbbbbebbaffffa.
+affbbebbbbbbbfffffa.
+afffbbbbebbbffffffa.
+afffffbbbbffffffffa.
+.aaaaaaaaaaaaaaaaa..
+---
+......aaaa......a...
+....aabbbbaa...aca..
+...abbbbbbbba..ada..
+..abbbbbbbbbba.ada.a
+..abbbebebbbba..adad
+.abbbbbbbbebbbaafdad
+.abbbebbbbbbbbaffffa
+.abbbbebebbebbaffffa
+.abebbbeebbbbbaffffa
+.aabbbbbbbebbaaffffa
+affbbebbbbbbbffffffa
+afffbbbbebbbfffffffa
+afffffbbbbfffffffffa
+.aaaaaaaaaaaaaaaaaa.
+---
+......aaaa.....a...a
+....aabbbbaa..aca.ac
+...abbbbbbbba.ada.ad
+..abbbbbbbbbbaada.ad
+..abbbebebbbba.adada
+.abbbbbbbbebbbafdada
+.abbbebbbbbbbbffffa.
+.abbbbebebbebbffffa.
+.abebbbeebbbbbffffa.
+.aabbbbbbbebbaffffa.
+affbbebbbbbbbfffffa.
+afffbbbbebbbffffffa.
+afffffbbbbffffffffa.
+.aaaaaaaaaaaaaaaaa..
+---
+......aaaa......a...
+....aabbbbaa...aca..
+...abbbbbbbba..ada..
+..abbbbbbbbbba.ada.a
+..abbbebebbbba..adad
+.abbbbbbbbebbbaafdad
+.abbbebbbbbbbbaffffa
+.abbbbebebbebbaffffa
+.abebbbeebbbbbaffffa
+.aabbbbbbbebbaaffffa
+affbbebbbbbbbffffffa
+afffbbbbebbbfffffffa
+afffffbbbbfffffffffa
+.aaaaaaaaaaaaaaaaaa.

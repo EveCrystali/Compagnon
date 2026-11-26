@@ -147,6 +147,8 @@ public sealed class Scene : FrameworkElement
         // Anciennes couleurs de niveau (« couleur-ambre ») : la teinte porte le nom sans préfixe.
         if (couleurAchetee.StartsWith("couleur-")) couleurAchetee = couleurAchetee["couleur-".Length..];
         if (p.Reaction == "danse" && p.Tenue != "musique") objets.Add("tenue-musique-notes");
+        // Ensembles portés en entier : leur effet bonus.
+        objets.AddRange(Boutique.BonusPortes(p.Equipe));
         objets.AddRange(p.Soins);
         objets.AddRange(p.Meteo);
         // Pendant un geste, la tenue garde ses lunettes et chapeaux ; ce qu'elle tient en main laisse la place.

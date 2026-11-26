@@ -1,0 +1,38 @@
+# Hotte de légumes (ensemble Jardinier)
+id: panier-dos
+slot: dos
+ancre: cou
+decalage: -22 -18
+couche: derriere
+palette: a=#1c2128 b=#3fb8e0 c=#2689b8 d=#f69d50 e=#a86f3c f=#7a4b26 g=#4a2e17
+images:
+...............................a...abaaca...
+..............................aba.acbaca..a.
+...............................abaacabba.aca
+...............................abacaadabaaca
+................................abcaadabaca.
+................................adaaadaabca.
+................................adaccccada..
+................................adccccccda..
+...............................addccccccda..
+...............................adddccccddda.
+..............................aeeeeeeeeeeeea
+..............................aefgffgffgfffa
+..............................aeegeegeegeeea
+..............................aeegeegeegeeea
+..............................aefgffgffgfffa
+...............................aegeegeegeea.
+...............................aegeegeegeea.
+...............................afgffgffgfffa
+...............................aegeegeegeea.
+...............................aegeegeegeea.
+...............................afgffgffgfffa
+...............................aegeegeegeea.
+...............................aegeegeegeea.
+...............................afgffgffgfffa
+................................ageegeegeaa.
+................................ageegeegeaa.
+...............................afgffgffgfffa
+................................ageegeegeaa.
+................................ageegeegea..
+.................................aaaaaaaa...

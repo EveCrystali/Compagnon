@@ -119,7 +119,7 @@ internal sealed class FenetreExpeditions : Window
         int energie = Jauge.Affiche(e.Energie), niveau = _pilou.NiveauExpedition;
         var cle = $"{energie}|{niveau}|{e.Courante?.Id}|{e.Dernier?.Id}|{e.Arme}|{e.Talisman}|{e.Fragments}|{e.Trophees.Count}|{(long)(t / 60_000)}"
                   + $"|{_pilou.ObjetsPossedes.Count}|{_pilou.OccupationExpedition}|{Expeditions.Restantes(e, DateTime.Now, autres)}";
-        _bandeau.Mettre(niveau, _pilou.XpTotal, _pilou.SoldeExpedition, Recompenses.Titre(niveau));
+        _bandeau.Mettre(niveau, _pilou.XpTotal, _pilou.SoldeExpedition, _pilou.TitreAffiche(niveau));
         if (cle == _cle) return;
         _cle = cle;
         int reste = Expeditions.Restantes(e, DateTime.Now, autres);

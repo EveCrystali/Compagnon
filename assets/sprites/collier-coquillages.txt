@@ -1,0 +1,17 @@
+# Collier de coquillages (ensemble Plage)
+id: collier-coquillages
+slot: cou
+ancre: cou
+decalage: -15 -1
+palette: a=#f6f8fa b=#8a6e4b c=#ffc89a d=#b4dbff e=#ff9ec7 f=#d9803a
+images:
+aaaab....................baaaa
+aaccb....................baaaa
+bccccbb................bbccaab
+bcccdddb.bb...bb...bb.bddccccb
+.bbbddddbaabbbeebbbaabddddbbb.
+...bdddbaaaacccfccaaaabdddb...
+....bbb.baaabccfcbaaab.bbb....
+.........bbb.bcfb.bbb.........
+..............bfb.............
+...............b..............

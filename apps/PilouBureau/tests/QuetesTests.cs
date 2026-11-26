@@ -124,7 +124,8 @@ public class BoutiqueTests
         };
         foreach (var id in ids) Assert.NotNull(Boutique.Trouver(id));
         Assert.Equal(Boutique.Catalogue.Count, Boutique.Catalogue.Select(a => a.Id).Distinct().Count());
-        Assert.All(Boutique.Catalogue, a => Assert.InRange(a.Prix, 60, 1500));
+        // Des petits achats (titres, chaussettes : 30 po) aux mythiques (2 200 po au plus).
+        Assert.All(Boutique.Catalogue, a => Assert.InRange(a.Prix, 30, 2200));
         Assert.All(Boutique.Catalogue, a => Assert.Contains(Boutique.RayonDe(a.Slot), Boutique.Rayons));
         // Chaque article est rangé dans une rangée de palier (1, 5, 10, 15, 20, 30, 40, 50).
         Assert.All(Boutique.Catalogue, a => Assert.Contains(a.NiveauMin, Boutique.Paliers));
@@ -168,7 +169,7 @@ public class BoutiqueTests
         // Tous les articles portables ont un dessin (ou une teinte, ou un style de bulle).
         foreach (var a in Boutique.Catalogue.Where(a => Boutique.Slots.Contains(a.Slot)))
             Assert.True(B.Value[a.Id] is not null || B.Value.Teintes.ContainsKey(a.Id) || Boutique.Style(a.Id) is not null
-                || Recompenses.CouleurDe(a.Id) is not null || a.Id == Boutique.TraineeEtoiles, a.Id);
+                || Recompenses.CouleurDe(a.Id) is not null || a.Id == Boutique.TraineeEtoiles || a.Slot == Boutique.Titre, a.Id);
         Assert.All(Boutique.Rayons, r => Assert.NotEmpty(Boutique.Rangees(r)));
     }
 

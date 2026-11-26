@@ -116,11 +116,11 @@ public final class Butin {
 
     /** Signe de forme de chaque rareté (et un cadre différent au dessin), pas seulement une couleur. */
     public static String signe(int r) {
-        return new String[]{"·", "◇", "◆", "✦", "★"}[r];
+        return new String[]{"·", "◇", "◆", "✦", "★", "✺"}[r];
     }
 
     public static String nomRarete(int r) {
-        return new String[]{"commun", "peu commun", "rare", "épique", "légendaire"}[r];
+        return new String[]{"commun", "peu commun", "rare", "épique", "légendaire", "mythique"}[r];
     }
 
     public static double poids(int r, int niveau) {

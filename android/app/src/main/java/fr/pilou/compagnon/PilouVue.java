@@ -148,6 +148,8 @@ public final class PilouVue extends View {
             if (en.getKey().equals(Boutique.COULEUR)) a.couleur = Vitrine.teinte(en.getValue());
             else if (Boutique.surPilou(en.getKey())) portes.add(en.getValue());
         }
+        // Ensembles portés en entier : leur effet bonus.
+        portes.addAll(Boutique.bonusPortes(equipe));
         portes.addAll(objetsSoins);
         bouder(a, portes, e, t);
         a.objets = portes;

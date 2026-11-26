@@ -1,0 +1,51 @@
+# Bottes-nuages
+id: bottes-nuage
+slot: pieds
+ancre: pieds
+decalage: -18 -5
+duree: 240
+palette: a=#4a8fdc b=#fff6cc c=#ffffff d=#b4dbff
+images:
+....................................
+...a................................
+..aba...aa................aa........
+.aaaaaaaccaaaaaaa..aaaaaaaccaaaaaaa.
+adddddcccccddddddaadddddcccccdddddda
+addddccccccddddddaaddddccccccdddddda
+adddcccccccddddddaadddcccccccdddddda
+addddccccccddddddaaddddccccccdddddda
+.aaaaaccccccaaaaa..aaaaaccccccaaaaa.
+......aaccaa............aaccaa......
+---
+.................................a..
+................................aba.
+......aaaaaa............aaaaaa.abbba
+..aaaaccccccaaaa....aaaaccccccaaaba.
+.adddcccccccdddda..adddcccccccdddda.
+addddccccccddddddaaddddccccccdddddda
+dddddcccccdddddddddddddcccccdddddddd
+addddccccccddddddaaddddccccccdddddda
+.addddccccccdddda..addddccccccdddda.
+..aaaaaaaaaaaaaa....aaaaaaaaaaaaaa..
+---
+................aabaa...............
+...............abbcbba..............
+........aa......aabaa.....aa........
+.aaaaaaaccaaaaaaaabaaaaaaaccaaaaaaa.
+adddddcccccddddddaadddddcccccdddddda
+addddccccccddddddaaddddccccccdddddda
+adddcccccccddddddaadddcccccccdddddda
+addddccccccddddddaaddddccccccdddddda
+.aaaaaccccccaaaaa..aaaaaccccccaaaaa.
+......aaccaa............aaccaa......
+---
+..........a.........................
+.........aba........................
+......aaaaaa............aaaaaa......
+..aaaaccccccaaaa....aaaaccccccaaaa..
+.adddcccccccdddda..adddcccccccdddda.
+addddccccccddddddaaddddccccccdddddda
+dddddcccccdddddddddddddcccccdddddddd
+addddccccccddddddaaddddccccccdddddda
+.addddccccccdddda..addddccccccdddda.
+..aaaaaaaaaaaaaa....aaaaaaaaaaaaaa..

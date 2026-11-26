@@ -1,0 +1,75 @@
+# Macaron vivant (ensemble Pâtissier)
+id: macaron
+slot: compagnon
+ancre: cote
+decalage: -1 -15
+duree: 220
+palette: a=#3a2a7a b=#d2caff c=#ffffff d=#f6f8fa e=#1c2128 f=#ff9ec7
+images:
+................
+................
+...aaaaaaaaaa...
+..abbbbbbbbbba..
+.abbccccbbbbbba.
+abbbccccbbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+acccccccccccccca
+adddbbbbbbbbddda
+adbbbbebbbebbbda
+abbbbbbbfbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+..aabbbbbbbbaa..
+....aaaaaaaa....
+---
+...aaaaaaaaaa...
+..abbbbbbbbbba..
+.abbccccbbbbbba.
+abbbccccbbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+acccccccccccccca
+adddbbbbbbbbddda
+adbbbbebbbebbbda
+abbbbbbbfbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+..aabbbbbbbbaa..
+....aaaaaaaa....
+................
+................
+---
+..abbbbbbbbbba..
+.abbccccbbbbbba.
+abbbccccbbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+acccccccccccccca
+adddbbbbbbbbddda
+adbbbbebbbebbbda
+abbbbbbbfbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+..aabbbbbbbbaa..
+....aaaaaaaa....
+................
+................
+................
+---
+................
+...aaaaaaaaaa...
+..abbbbbbbbbba..
+.abbccccbbbbbba.
+abbbccccbbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+acccccccccccccca
+adddbbbbbbbbddda
+adbbbbebbbebbbda
+abbbbbbbfbbbbbba
+abbbbbbbbbbbbbba
+.abbbbbbbbbbbba.
+..aabbbbbbbbaa..
+....aaaaaaaa....
+................

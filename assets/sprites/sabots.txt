@@ -1,0 +1,16 @@
+# Sabots
+id: sabots
+slot: pieds
+ancre: pieds
+decalage: -15 -5
+palette: a=#4a2e17 b=#c4a77d c=#e8d5b0 d=#7a4b26
+images:
+....aaaaaa..........aaaaaa....
+..aabbbbbbaa......aabbbbbbaa..
+.accccccbbbba....accccccbbbba.
+abccccccbbbbba..abccccccbbbbba
+bbbaabbbbbbbbbaabbbaabbbbbbbbb
+bbbaabbbbbbbbbaabbbaabbbbbbbbb
+abbbbbbbbbbbba..abbbbbbbbbbbba
+adddddddddddda..adddddddddddda
+adddddddddddda..adddddddddddda

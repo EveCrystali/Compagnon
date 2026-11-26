@@ -293,7 +293,9 @@ public static class Telephone
         EtatQuetes q, DateTime local) => new()
     {
         ["po"] = Math.Max(0, solde),
-        ["objets"] = inventaire.ToList(),
+        // Articles numérotés en bits (« garde ») : l'inventaire d'un collectionneur tient dans le message.
+        ["objets"] = PilouBureau.Boutique.HorsGarde(inventaire),
+        ["garde"] = PilouBureau.Boutique.Garde(inventaire),
         ["porte"] = PilouBureau.Boutique.Porte(equipe),
         ["offres"] = PilouBureau.Boutique.OffresDuJour(DateOnly.FromDateTime(local)).Select(a => a.Id).ToList(),
         ["promo"] = PilouBureau.Boutique.OffresDuJour(DateOnly.FromDateTime(local)).FirstOrDefault()?.Id ?? "",

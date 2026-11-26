@@ -1,0 +1,19 @@
+# Bottes de jardin (ensemble Jardinier)
+id: bottes-jardin
+slot: pieds
+ancre: pieds
+decalage: -15 -9
+palette: a=#1c2128 b=#c9a227 c=#f5d76e d=#fff6cc e=#7a5a10
+images:
+.abbbbbbbba......abbbbbbbba...
+.acddccccca......acddccccca...
+.acddccccca......acddccccca...
+.acddccccca......acddccccca...
+.acddccccca......acddccccca...
+.acddcccccaaa....acddcccccaaa.
+.acddcccccccca...acddcccccccca
+.acddcccccccca...acddcccccccca
+.accccccccccca...accccccccccca
+.aaaaaacccccca...aaaaaacccccca
+aeeeeeeeeeeeeea.aeeeeeeeeeeeee
+aeeeeeeeeeeeeea.aeeeeeeeeeeeee

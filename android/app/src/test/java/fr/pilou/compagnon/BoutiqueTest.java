@@ -26,7 +26,7 @@ public class BoutiqueTest {
         Set<String> ids = new HashSet<>();
         for (Boutique.Article a : Boutique.CATALOGUE) {
             assertTrue(a.id, ids.add(a.id));
-            assertTrue(a.id, a.prix >= 60 && a.prix <= 1500);
+            assertTrue(a.id, a.prix >= 30 && a.prix <= 2200); // titres à 30 po … mythiques
             assertTrue(a.id, Arrays.asList(Boutique.RAYONS).contains(Boutique.rayonDe(a.slot)));
             boolean palier = false;
             for (int p : Boutique.PALIERS) palier |= p == a.niveauMin;
@@ -102,7 +102,7 @@ public class BoutiqueTest {
         }
         // Tous les articles portables : un dessin, une teinte ou un cadre.
         for (Boutique.Article a : Boutique.CATALOGUE) {
-            if (!Arrays.asList(Boutique.SLOTS).contains(a.slot)) continue;
+            if (!Arrays.asList(Boutique.SLOTS).contains(a.slot) || a.slot.equals(Boutique.TITRE)) continue;
             String t = Vitrine.teinte(a.id);
             assertTrue(a.id, Sprites.banque().get(a.id) != null || Sprites.banque().teintes.get(t) != null || Boutique.style(a.id) != null
                     || a.id.equals(Boutique.TRAINEE_ETOILES));

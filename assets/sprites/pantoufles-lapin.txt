@@ -1,0 +1,20 @@
+# Pantoufles lapin
+id: pantoufles-lapin
+slot: pieds
+ancre: pieds
+decalage: -16 -9
+palette: a=#768390 b=#f6f8fa c=#ff9ec7 d=#1c2128
+images:
+..abba.abba........abba.abba....
+..abba.abba........abba.abba....
+.abccbabccba......abccbabccba...
+.abccbabccba......abccbabccba...
+.abccbabccba......abccbabccba...
+..abbbbbbbaaa......abbbbbbbaaa..
+.abbbbbbbbbbba....abbbbbbbbbbba.
+abbbbbbbbbbbbba..abbbbbbbbbbbbba
+abbbbbbbbbbdbba..abbbbbbbbbbdbba
+abbbbbbbbbbbbca..abbbbbbbbbbbbca
+abbbbbbbbbbbbba..abbbbbbbbbbbbba
+.abbbbbbbbbbba....abbbbbbbbbbba.
+..aaabbbbbaaa......aaabbbbbaaa..

@@ -1,0 +1,162 @@
+# Boutique garnie (outils/sprites/garde_robe.py) : lu par Boutique.cs et Boutique.java.
+# article|n°|id|nom|emplacement|prix|niveau|rareté 0-5|saison|ensemble|passage
+# ensemble|id|nom|signe|bonus|titre|pièces…
+# palier|nombre (0 : tout)|id|emplacement|nom
+article|1|chapeau-explorateur|Casque d'explorateur|tete|90|1|1||explorateur|0
+article|2|jumelles|Jumelles|yeux|70|1|0||explorateur|0
+article|3|foulard-explorateur|Foulard d'explorateur|cou|50|1|0||explorateur|0
+article|4|sac-explorateur|Sac d'expédition|dos|140|5|1||explorateur|0
+article|5|boussole|Boussole|main|110|5|1||explorateur|0
+article|6|bottines|Bottines de marche|pieds|140|10|2||explorateur|0
+article|7|toque-myrtille|Toque à la myrtille|tete|100|1|1||patissier|0
+article|8|foulard-vichy|Foulard vichy|cou|60|1|0||patissier|0
+article|9|fouet|Fouet|main|60|1|0||patissier|0
+article|10|chaussons-creme|Chaussons crème|pieds|90|5|1||patissier|0
+article|11|macaron|Macaron vivant|compagnon|230|10|2||patissier|0
+article|12|fond-patisserie|Décor pâtisserie|fond|250|15|3||patissier|0
+article|13|bonnet-lune|Bonnet lune|tete|140|5|1||astronome|0
+article|14|lunettes-etoiles|Lunettes étoiles|yeux|140|10|2||astronome|0
+article|15|telescope|Lunette astronomique|main|230|15|2||astronome|0
+article|16|cape-constellation|Cape constellation|dos|290|20|3||astronome|0
+article|17|mini-planete|Mini-planète|compagnon|390|30|3||astronome|0
+article|18|fond-observatoire|Décor observatoire|fond|660|30|4||astronome|0
+article|19|bandeau-oeil|Bandeau d'œil|yeux|70|5|0||pirate|0
+article|20|mariniere|Col marin|cou|100|5|1||pirate|0
+article|21|tricorne-moka|Tricorne moka|tete|170|10|2||pirate|0
+article|22|sabre-cuillere|Sabre-cuillère|main|180|10|2||pirate|0
+article|23|perroquet-caramel|Perroquet caramel|compagnon|330|20|3||pirate|0
+article|24|fond-mer-cafe|Décor mer de café|fond|430|30|3||pirate|0
+article|25|chapeau-paille|Chapeau de paille|tete|60|1|0||jardinier|0
+article|26|bottes-jardin|Bottes de jardin|pieds|70|1|0||jardinier|0
+article|27|arrosoir|Arrosoir|main|80|1|1||jardinier|0
+article|28|panier-dos|Hotte de légumes|dos|140|5|1||jardinier|0
+article|29|escargot|Escargot|compagnon|180|10|2||jardinier|0
+article|30|fond-potager|Décor potager|fond|200|10|2||jardinier|0
+article|31|jeton-arcade|Jeton d'arcade|cou|80|5|1||arcade|0
+article|32|casquette-pixel|Casquette pixel|tete|120|5|1||arcade|0
+article|33|lunettes-pixel|Lunettes pixel|yeux|130|10|2||arcade|0
+article|34|manette|Manette|main|200|15|2||arcade|0
+article|35|cube-pixel|Cube pixel|compagnon|310|20|3||arcade|0
+article|36|chocolat-chaud|Chocolat chaud|main|60|1|0|hiver|hiver|0
+article|37|echarpe-tricot|Grande écharpe tricotée|cou|90|1|1|hiver|hiver|0
+article|38|bonnet-oreillettes|Bonnet à oreillettes|tete|100|1|1|hiver|hiver|0
+article|39|chaussons-moumoute|Chaussons moumoute|pieds|130|5|1|hiver|hiver|0
+article|40|plaid|Plaid|dos|140|5|2|hiver|hiver|0
+article|41|bonhomme-neige|Petit bonhomme de neige|compagnon|290|15|3|hiver|hiver|0
+article|42|tongs|Tongs|pieds|40|1|0|ete|plage|0
+article|43|pelle-seau|Seau et pelle|main|50|1|0|ete|plage|0
+article|44|lunettes-plage|Lunettes de plage|yeux|60|1|0|ete|plage|0
+article|45|chapeau-plage|Chapeau de plage|tete|100|1|1|ete|plage|0
+article|46|collier-coquillages|Collier de coquillages|cou|110|5|1|ete|plage|0
+article|47|masque-loup|Loup de bal|yeux|140|5|1|frissons|frissons|0
+article|48|coiffe-courge|Coiffe courge|tete|140|5|2|frissons|frissons|0
+article|49|lanterne-courge|Lanterne-courge|main|160|5|2|frissons|frissons|0
+article|50|cape-chauve-souris|Cape chauve-souris|dos|260|10|3|frissons|frissons|0
+article|51|chauve-souris|Chauve-souris|compagnon|320|15|3|frissons|frissons|0
+article|52|fond-frissons|Décor nuit des frissons|fond|400|20|3|frissons|frissons|0
+article|53|sucre-orge|Sucre d'orge|main|50|1|0|fetes|fetes|0
+article|54|bonnet-lutin|Bonnet de lutin|tete|110|1|1|fetes|fetes|0
+article|55|guirlande|Guirlande lumineuse|cou|130|5|2|fetes|fetes|0
+article|56|hotte-cadeaux|Hotte de cadeaux|dos|240|10|3|fetes|fetes|0
+article|57|renne|Petit renne|compagnon|370|20|3|fetes|fetes|0
+article|58|fond-fetes|Décor village en fête|fond|630|30|4|fetes|fetes|0
+article|59|bandeau-eponge|Bandeau éponge|tete|30|1|0|||0
+article|60|chapeau-melon|Chapeau melon|tete|100|5|1|||0
+article|61|chapeau-champi|Chapeau champignon|tete|160|10|2|||0
+article|62|nid-oiseau|Nid d'oiseau|tete|310|20|3|||1
+article|63|couronne-cristal|Couronne de cristal|tete|1620|50|5|||1
+article|64|masque-sommeil|Masque de sommeil|yeux|40|1|0|||0
+article|65|lunettes-loupe|Lunettes-loupes|yeux|80|5|1|||0
+article|66|lunettes-ski|Masque de ski|yeux|130|10|2|hiver||0
+article|67|lunettes-kaleido|Lunettes kaléidoscope|yeux|400|30|3|||1
+article|68|clochette|Clochette|cou|40|1|0|||0
+article|69|pendentif-goutte|Pendentif goutte|cou|120|5|1|||0
+article|70|noeud-geant|Nœud géant|cou|170|15|2|||0
+article|71|collier-comete|Collier comète|cou|740|40|4|||0
+article|72|cartable|Cartable|dos|70|1|1|||0
+article|73|cerf-volant|Cerf-volant|dos|190|10|2|printemps||0
+article|74|ailes-libellule|Ailes de libellule|dos|630|30|4|||1
+article|75|ailes-nuage|Ailes de nuage|dos|980|40|4|||0
+article|76|loupe|Loupe|main|40|1|0|||0
+article|77|souffleur-bulles|Souffleur de bulles|main|50|1|0|||0
+article|78|pinceau|Pinceau|main|70|1|0|||0
+article|79|livre|Livre ouvert|main|90|5|1|||0
+article|80|lampe-poche|Lampe de poche|main|100|5|1|||0
+article|81|fourchette-geante|Fourchette géante|main|140|10|2|||0
+article|82|ombrelle|Ombrelle|main|140|10|2|printemps||0
+article|83|micro|Micro|main|220|15|2|||0
+article|84|chaussettes-rayees|Chaussettes rayées|pieds|30|1|0|||0
+article|85|sabots|Sabots|pieds|70|1|0|||0
+article|86|pantoufles-lapin|Pantoufles lapin|pieds|140|10|2|||0
+article|87|rollers|Rollers|pieds|250|20|3|||0
+article|88|bottes-nuage|Bottes-nuages|pieds|770|40|4|||0
+article|89|luciole|Luciole|compagnon|130|5|2|ete||0
+article|90|petit-crabe|Petit crabe|compagnon|160|5|2|ete||0
+article|91|herisson|Hérisson|compagnon|200|10|2|automne||0
+article|92|tortue|Tortue|compagnon|240|15|3|||0
+article|93|mini-goutte|Gouttinette|compagnon|360|20|3|||0
+article|94|meduse|Méduse céleste|compagnon|800|30|4|||1
+article|95|phenix|Phénix de braise|compagnon|1870|50|5|||1
+article|96|etincelles|Étincelles|effet|80|1|0|||0
+article|97|pluie-petales|Pluie de pétales|effet|170|5|2|printemps||0
+article|98|feuilles-tourbillon|Tourbillon de feuilles|effet|170|5|2|automne||0
+article|99|cercle-glyphes|Cercle de glyphes|effet|440|30|3|||1
+article|100|aurore-boreale|Aurore boréale|effet|910|40|4|||0
+article|101|orbite-lunes|Orbite de lunes|effet|1780|50|5|||1
+article|102|turquoise|Couleur turquoise|couleur|140|1|1|||0
+article|103|caramel|Couleur caramel|couleur|180|5|1|||0
+article|104|givre|Couleur givre|couleur|160|5|2|hiver||0
+article|105|potiron|Couleur potiron|couleur|160|5|2|frissons||0
+article|106|lilas|Couleur lilas|couleur|170|10|2|printemps||0
+article|107|cuivre|Couleur cuivre|couleur|240|20|3|||0
+article|108|minuit|Couleur minuit|couleur|310|30|3|||0
+article|109|opale|Couleur opale|couleur|800|40|4|||0
+article|110|nebuleuse|Couleur nébuleuse|couleur|1700|50|5|||1
+article|111|fond-montagne|Décor montagne|fond|180|5|1|||0
+article|112|fond-bibliotheque|Décor bibliothèque|fond|190|10|2|||0
+article|113|fond-ville|Décor ville la nuit|fond|240|15|2|||0
+article|114|fond-cerisiers|Décor cerisiers|fond|260|10|3|printemps||0
+article|115|fond-automne|Décor sous-bois d'automne|fond|260|10|3|automne||0
+article|116|fond-aurore|Décor aurore|fond|880|40|4|||1
+article|117|bulle-bois|Bulle en bois|bulle|70|1|0|||0
+article|118|bulle-lagon|Bulle lagon|bulle|100|1|1|||0
+article|119|bulle-parchemin|Bulle parchemin|bulle|140|5|1|||0
+article|120|bulle-givre|Bulle de givre|bulle|140|5|2|hiver||0
+article|121|bulle-guirlande|Bulle guirlande|bulle|160|5|2|fetes||0
+article|122|bulle-ronde|Bulle toute ronde|bulle|130|10|2|||0
+article|123|bulle-encre|Bulle d'encre|bulle|180|15|2|||0
+article|124|bulle-ambre|Bulle d'ambre|bulle|240|20|3|||0
+article|125|bulle-cristal|Bulle de cristal|bulle|660|40|4|||1
+article|126|titre-reveur|« Rêveur »|titre|30|1|0|||0
+article|127|titre-gourmand|« Gourmand »|titre|30|1|0|||0
+article|128|titre-curieux|« Petit curieux »|titre|40|1|0|||0
+article|129|titre-siesteur|« Siesteur pro »|titre|40|1|0|||0
+article|130|titre-pecheur|« Pêcheur du dimanche »|titre|50|1|0|||0
+article|131|titre-codeur|« Codeur nocturne »|titre|50|1|0|||0
+article|132|titre-cafe|« Accro au café »|titre|60|1|0|||0
+article|133|titre-matinal|« Lève-tôt »|titre|80|5|1|||0
+article|134|titre-zen|« Zen absolu »|titre|100|5|1|||0
+article|135|titre-flocon|« Flocon de neige »|titre|100|1|1|hiver||0
+article|136|titre-frissons|« Âme frissonnante »|titre|130|1|1|frissons||0
+article|137|titre-artiste|« Artiste incompris »|titre|120|10|1|||0
+article|138|titre-aventurier|« Aventurier du clavier »|titre|160|15|2|||0
+article|139|titre-sage|« Sage des nuages »|titre|260|30|3|||0
+article|140|titre-legende|« Légende vivante »|titre|770|50|4|||0
+ensemble|explorateur|Explorateur|⌖|bonus-explorateur|« Grand explorateur »|chapeau-explorateur|jumelles|foulard-explorateur|sac-explorateur|boussole|bottines
+ensemble|patissier|Pâtissier|◒|bonus-patissier|« Maître pâtissier »|toque-myrtille|foulard-vichy|fouet|chaussons-creme|macaron|fond-patisserie
+ensemble|astronome|Astronome|☾|bonus-astronome|« Liseur d'étoiles »|bonnet-lune|lunettes-etoiles|telescope|cape-constellation|mini-planete|fond-observatoire
+ensemble|pirate|Pirate des mers de café|⚓|bonus-pirate|« Capitaine Moka »|tricorne-moka|bandeau-oeil|mariniere|sabre-cuillere|perroquet-caramel|fond-mer-cafe
+ensemble|jardinier|Jardinier|❀|bonus-jardinier|« Jardinier émérite »|chapeau-paille|arrosoir|panier-dos|bottes-jardin|escargot|fond-potager
+ensemble|arcade|Rétro-arcade|▣|bonus-arcade|« Champion 8 bits »|casquette-pixel|lunettes-pixel|jeton-arcade|manette|cube-pixel|fond-arcade
+ensemble|hiver|Hiver douillet|❄|bonus-hiver|« Douillet de l'hiver »|bonnet-oreillettes|echarpe-tricot|chocolat-chaud|plaid|chaussons-moumoute|bonhomme-neige
+ensemble|plage|Plage|☼|bonus-plage|« Roi du sable »|chapeau-plage|lunettes-plage|collier-coquillages|pelle-seau|tongs|fond-plage
+ensemble|frissons|Nuit des frissons|☽|bonus-frissons|« Frissonnant »|coiffe-courge|masque-loup|cape-chauve-souris|lanterne-courge|chauve-souris|fond-frissons
+ensemble|fetes|Fêtes de l'hiver|✶|bonus-fetes|« Lutin des fêtes »|bonnet-lutin|guirlande|sucre-orge|hotte-cadeaux|renne|fond-fetes
+palier|10|titre-col-herbe|titre|« Collectionneur en herbe »
+palier|25|cadre-bronze|bulle|Cadre bronze
+palier|50|titre-col-connaisseur|titre|« Fin connaisseur »
+palier|80|cadre-argent|bulle|Cadre argent
+palier|120|titre-col-grand|titre|« Grand collectionneur »
+palier|160|cadre-or|bulle|Cadre or
+palier|200|titre-col-musee|titre|« Conservateur du musée »
+palier|0|cadre-prisme|bulle|Cadre prisme

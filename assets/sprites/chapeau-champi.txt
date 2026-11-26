@@ -1,0 +1,23 @@
+# Chapeau champignon (violet à pois crème)
+id: chapeau-champi
+slot: tete
+ancre: tete
+decalage: -19 -12
+coiffe: oui
+palette: a=#1c2128 b=#6a5acd c=#f6f8fa d=#3a2a7a
+images:
+..............aaaaaaaaaa..............
+..........aaaabbbccccbbbaaaa..........
+........aabbbbbbbccccbbbbbbbaa........
+......aabbbbbbbbccccccbbbbbbbbaa......
+.....abbbbbbbbbbbccccbbbbbbbbbbba.....
+...aabbbccccbbbbbccccbbbbbccccbbbaa...
+..abbbbbccccbbbbbbbbbbbbbbccccbbbbba..
+..abbbbbccccbbbbbbbbbbbbbbccccbbbbba..
+.abbbbbbccccbbbbbbbbbbbbbbccccbbbbbba.
+abbbbbbbbbbbbccbbbbbbbbccbbbbbbbbbbbba
+abbbbbbbbbbbbccbbbbbbbbccbbbbbbbbbbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
+adddddddddddddddddddddddddddddddddddda
+.aaddddddddddddddddddddddddddddddddaa.

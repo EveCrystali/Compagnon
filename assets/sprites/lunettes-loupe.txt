@@ -1,0 +1,20 @@
+# Lunettes-loupes
+id: lunettes-loupe
+slot: yeux
+ancre: yeux
+decalage: -16 -3
+palette: a=#1c2128 b=#2d333b c=#ffffff
+images:
+....aaaaaaaa........aaaaaaaa....
+...abbbbbbbba......abbbbbbbba...
+..abbccccccbba....abbccccccbba..
+.abbccccccccbba..abbccccccccbba.
+.abcccccaacccbaaaabcccccaacccba.
+.abccccccaaccbbbbbbccccccaaccba.
+abbcccacaaaccbbaabbcccacaaaccbba
+.abcccaaaaaccba..abcccaaaaaccba.
+.abcccaaaaaccba..abcccaaaaaccba.
+.abbcccaaaccbba..abbcccaaaccbba.
+..abbccccccbba....abbccccccbba..
+...abbbbbbbba......abbbbbbbba...
+....aaaaaaaa........aaaaaaaa....

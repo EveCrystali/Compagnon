@@ -1,0 +1,38 @@
+# Hotte de cadeaux (ensemble Fêtes de l'hiver)
+id: hotte-cadeaux
+slot: dos
+ancre: cou
+decalage: -23 -16
+couche: derriere
+palette: a=#1c2128 b=#fff6cc c=#6cb6ff d=#f5d76e e=#9b8cff f=#f69d50 g=#d2caff h=#8a6e4b i=#c4a77d j=#e8d5b0
+images:
+...............................aaaabbbbba.....
+..............................acccdeebeea.....
+..............................acccdeebeeaaaa..
+..............................acccdccfffgfffa.
+..............................acccdccfffgfffa.
+..............................addddddfffgfffa.
+..............................acccdccggggggga.
+..............................acccdccfffgfffa.
+..............................acccdccfffgfffa.
+...............................ahhhhhhhhhhhha.
+...............................ahhhhhhhhhhhha.
+................................aijjjjiiiiia..
+...............................aijjjjjjiiiiia.
+..............................aiijjjjjjiiiiiia
+..............................aijjjjjjjjiiiiia
+..............................aijjjjjjjjiiiiia
+.............................aiijjjjjjjjiiiiii
+.............................aiijjjjjjjjiiiiii
+.............................aiiijjjjjjiiiiiii
+.............................aiiijjjjjjiiiiiii
+.............................aiiiijjjjiiiiiiii
+.............................aiiiiiiiiiiiiiiii
+..............................aiiiiiiiiiiiiiia
+..............................aiiiiiiiiiiiiiia
+..............................aiiiiiiiiiiiiiia
+...............................aiiiiiiiiiiiia.
+................................aiiiiiiiiiia..
+.................................aiiiiiiiia...
+..................................aaiiiiaa....
+....................................aaaa......

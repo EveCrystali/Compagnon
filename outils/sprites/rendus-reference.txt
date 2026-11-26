@@ -54,3 +54,8 @@ expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close | ea43086844a18f4904
 expr=fete t=200 marche=1 regard=1 objets=baluchon,epee-bois | 040dde878979db75845a54c0568f922ab2386dbcaa3c4ca1ea413aafdd83df8f
 expr=grimace t=500 regard=-1 objets=baluchon,pansement | d4469f1b8f78debb479d1c4f9128ec7a3a1249efa07b0c980937d17a9adf0e6c
 expr=repos t=300 stade=3 objets=torche,bouclier-couvercle,casque-passoire,slime-apprivoise | 284268862e4144a1a4290693737e9f973a306439ea27d5f336dbdd52848d74f4
+expr=fete t=420 objets=chapeau-explorateur,jumelles,foulard-explorateur,sac-explorateur,boussole,bottines,bonus-explorateur | 9619605755ab6387b9fa286958c5fff1791231f6e0d3c4d6cbcf6be60cb373d3
+expr=inquiet t=0 couleur=cuivre objets=plaid,chocolat-chaud | cb6ccd59fcde1d43ec2050957b02c71d90ee3f09b5d2cb5ebd74d95c76e48053
+expr=repos t=660 stade=4 couleur=nebuleuse objets=cape-chauve-souris,coiffe-courge,chauve-souris,bonus-frissons | 866a4daf96fc5e0df27b6f0ad83d34e461189a6a76065580d2fcd4549bba201b
+expr=repos t=250 stade=1 objets=ailes-libellule,lunettes-kaleido,orbite-lunes,bottes-nuage | 5d045d028a6d0e5942abc10fc27c4fc2042cb5d25f02956f6e4b156aa98db52f
+expr=concentre t=900 stade=3 objets=tricorne-moka,bandeau-oeil,sabre-cuillere,perroquet-caramel,aurore-boreale | d82088f3d9141ae272d2b85ee8c41ab96a5375ac3c0cd07fcbbf5ee14b8251d6
