@@ -68,6 +68,8 @@ sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+Idées gardées pour plus tard (petits jeux, notifications, vidéo) : [docs/IDEES.md](docs/IDEES.md).
+
 ## Connecteurs
 
 Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
