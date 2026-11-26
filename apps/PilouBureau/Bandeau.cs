@@ -13,7 +13,7 @@ internal sealed class Bandeau : Border
 {
     public static readonly Brush Nuit = Gel("#151a2e"), Nuit2 = Gel("#1f2540"), Bord = Gel("#6a5acd"), Argent = Gel("#adbac7"),
         ArgentClair = Gel("#e6ecf2"), BleuXp = Gel("#6cb6ff"), BleuSombre = Gel("#2d333b"), OrangePo = Gel("#f69d50"),
-        Violet = Gel("#9b8cff"), Encre = Gel("#1c2128");
+        Violet = Gel("#9b8cff"), Encre = Gel("#1c2128"), BleuClair = Gel("#b4dbff");
 
     private readonly ContentControl _niveau = new();
     private readonly TextBlock _titre = new() { Foreground = Argent, FontSize = 11, FontFamily = new FontFamily("Segoe UI") };
@@ -32,6 +32,7 @@ internal sealed class Bandeau : Border
     };
     private readonly DispatcherTimer? _horloge;
     private double _t;
+    private string _cle = "";
 
     private static Brush Gel(string hex)
     {
@@ -89,6 +90,10 @@ internal sealed class Bandeau : Border
     // Niveau n, XP totale, solde, titre ; suite : « Prochaine rangée : … » (vide : rien).
     public void Mettre(int niveau, int xp, int po, string titre, string suite = "")
     {
+        // L'info-bulle se remet à jour souvent : rien à refaire si rien n'a changé.
+        var cle = $"{niveau}|{xp}|{po}|{titre}|{suite}";
+        if (cle == _cle) return;
+        _cle = cle;
         _niveau.Content = Pastille(niveau);
         _titre.Text = titre;
         int de = Profil.XpPourNiveau(niveau), a = Profil.XpPourNiveau(niveau + 1);
@@ -101,7 +106,7 @@ internal sealed class Bandeau : Border
             {
                 Width = 7, Height = 8, Margin = new Thickness(0, 0, 1, 0),
                 Background = i < pleines ? BleuXp : BleuSombre,
-                BorderBrush = i < pleines ? Gel("#b4dbff") : Encre, BorderThickness = new Thickness(0, 1, 0, 0),
+                BorderBrush = i < pleines ? BleuClair : Encre, BorderThickness = new Thickness(0, 1, 0, 0),
             });
         _xp.Text = $"{Math.Max(0, xp - de)} / {a - de} xp · encore {Math.Max(0, a - xp)} xp avant le niveau {niveau + 1}";
         _po.Text = $"{po} po";

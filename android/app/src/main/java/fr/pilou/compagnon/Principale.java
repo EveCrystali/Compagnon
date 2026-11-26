@@ -253,8 +253,11 @@ public final class Principale extends Activity {
         Vitrine.Pixel sous = new Vitrine.Pixel(this, "RANGÉES DÉBLOQUÉES", 2, Vitrine.VIOLET, Vitrine.ENCRE, false);
         sous.setPadding(0, Ui.dp(this, 10), 0, 0);
         c.addView(sous);
+        // Signe et nom insécables : une ligne ne coupe jamais « ▲ Tête » en deux ; au-delà de six rayons, « +N ».
         StringBuilder noms = new StringBuilder();
-        for (String r : rayons) noms.append(noms.length() > 0 ? "   " : "").append(Boutique.signe(r)).append(' ').append(Boutique.nomSlot(r));
+        for (int i = 0; i < Math.min(6, rayons.size()); i++)
+            noms.append(i > 0 ? "   " : "").append(Boutique.signe(rayons.get(i))).append('\u00a0').append(Boutique.nomSlot(rayons.get(i)));
+        if (rayons.size() > 6) noms.append("   +").append(rayons.size() - 6);
         TextView t = Ui.texte(this, noms, 14, Vitrine.ARGENT_CLAIR, true);
         t.setGravity(Gravity.CENTER);
         t.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 6));

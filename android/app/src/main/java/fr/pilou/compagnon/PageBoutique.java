@@ -109,14 +109,19 @@ final class PageBoutique extends Page {
         cabine.addView(message, Ui.large());
         corps.addView(cabine, Ui.large(a, 12));
 
-        // Onglets des rayons (défilement horizontal), puis les étagères.
+        // Rayonnage : onglets des rayons (défilement horizontal) puis étagères, toujours sur fond nuit (arcade),
+        // quel que soit le thème du téléphone : les titres pixel gardent leur contraste.
+        LinearLayout rayonnage = Ui.pile(a);
+        rayonnage.setBackground(cadre(a, Vitrine.NUIT, Vitrine.NUIT3, 2));
+        rayonnage.setPadding(Ui.dp(a, 10), Ui.dp(a, 10), Ui.dp(a, 10), Ui.dp(a, 6));
         HorizontalScrollView bande = new HorizontalScrollView(a);
         bande.setHorizontalScrollBarEnabled(false);
         onglets = Ui.rangee(a);
         bande.addView(onglets);
-        corps.addView(bande, Ui.large(a, 4));
+        rayonnage.addView(bande, Ui.large(a, 4));
         etageres = Ui.pile(a);
-        corps.addView(etageres, Ui.large());
+        rayonnage.addView(etageres, Ui.large());
+        corps.addView(rayonnage, Ui.large());
     }
 
     private static GradientDrawable cadre(Context c, int fond, int bord, float ep) {
@@ -196,7 +201,7 @@ final class PageBoutique extends Page {
         etageres.removeAllViews();
         if (e.po < 0) {
             TextView t = Ui.texte(app, "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC). En attendant, on peut regarder.",
-                    13, Ui.p(app).doux, false);
+                    13, Vitrine.ARGENT, false);
             t.setPadding(Ui.dp(app, 4), Ui.dp(app, 10), 0, Ui.dp(app, 4));
             etageres.addView(t, Ui.large());
         }
@@ -381,7 +386,7 @@ final class PageBoutique extends Page {
         Vitrine.Pixel t = new Vitrine.Pixel(app, titre, 2.2f, couleur, Vitrine.ENCRE, false);
         r.addView(t);
         l.addView(r);
-        TextView s = Ui.texte(app, sous, 12, Ui.p(app).doux, false);
+        TextView s = Ui.texte(app, sous, 12, Vitrine.ARGENT, false);
         s.setPadding(0, Ui.dp(app, 4), 0, 0);
         l.addView(s);
         if (flash && Vitrine.anime(app)) {
