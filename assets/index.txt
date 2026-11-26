@@ -19,6 +19,7 @@ badge-boutique
 baguette
 ballon
 ballon-helium
+baluchon
 bandana
 bandeau-ninja
 baskets
@@ -59,6 +60,7 @@ casquette
 chapeau-cowboy
 chapeau-pirate
 chapeau-sorcier
+coeurs-amitie
 coffre-quete
 collier-perles
 confettis
@@ -133,6 +135,7 @@ oeil-spirale
 oiseau
 oreilles-chat
 palmes
+pancarte
 parapluie
 parapluie-etoile
 parchemin-quete
@@ -212,6 +215,7 @@ tenue-visio-micro
 trainee-coeurs
 trainee-notes
 trainee-prisme
+valise
 vapeur
 variante-calin-2
 variante-calin-2-tete

@@ -121,6 +121,35 @@ public final class Etat {
     /** Appareils du groupe (PC ≥ 0.9.6) : nom, XP de chacun, dernière nouvelle ; le PC qui publie en tête. */
     public final List<Appareil> appareils = new ArrayList<>();
 
+    /** Amis du Pilou du PC (lecture seule : on les ajoute sur le PC) et visite en cours (« parti chez Léo · retour vers 14 h 20 »). */
+    public final List<Ami> amis = new ArrayList<>();
+    public String visite = "";
+
+    public static final class Ami {
+        public final String nom;
+        public final int niveau, stade;
+        public final long t;
+        public final boolean actif;
+
+        Ami(String nom, int niveau, int stade, long t, boolean actif) {
+            this.nom = nom;
+            this.niveau = niveau;
+            this.stade = stade;
+            this.t = t;
+            this.actif = actif;
+        }
+
+        public boolean enLigne(long maintenant) {
+            return actif && t > 0 && maintenant - t < 25 * 60_000L;
+        }
+
+        public String texte(long maintenant) {
+            String nomStade = stade == 1 ? "Gouttelette" : stade == 3 ? "Nimbus" : stade == 4 ? "Astral" : "Pilou";
+            String vu = !actif ? "en attente" : t <= 0 ? "jamais vu" : enLigne(maintenant) ? "en ligne" : "vu il y a " + duree(maintenant - t);
+            return "niveau " + niveau + " · " + nomStade + " · " + vu;
+        }
+    }
+
     public static final class Appareil {
         public final String nom;
         public final int xp;
@@ -232,6 +261,16 @@ public final class Etat {
                 if (o == null || o.optString("nom").isEmpty()) continue;
                 e.appareils.add(new Appareil(o.optString("nom"), o.optInt("xp", 0), o.optLong("t", 0) + decalage));
             }
+        JSONArray am = r.optJSONArray("amis");
+        if (am != null)
+            for (int i = 0; i < Math.min(30, am.length()); i++) {
+                JSONObject o = am.optJSONObject(i);
+                if (o == null || o.optString("nom").isEmpty()) continue;
+                long ta = o.optLong("t", 0);
+                e.amis.add(new Ami(o.optString("nom"), Math.max(1, o.optInt("niveau", 1)), Math.max(1, Math.min(4, o.optInt("stade", 2))),
+                        ta > 0 ? ta + decalage : 0, o.optBoolean("actif", true)));
+            }
+        e.visite = r.optString("visite", "");
         return e;
     }
 

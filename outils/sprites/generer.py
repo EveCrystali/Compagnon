@@ -13,6 +13,7 @@ import shutil
 from toile import Toile, ecrire, SORTIE, TOUS
 import boutique_sprites
 import meteo_sprites
+import visites_sprites
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1788,5 +1789,6 @@ if __name__ == "__main__":
     meteo_sprites.effets()
     meteo_sprites.objets()
     boutique_sprites.objets()
+    visites_sprites.tout()
     tables()
     print(len(TOUS), "sprites dans", SORTIE)

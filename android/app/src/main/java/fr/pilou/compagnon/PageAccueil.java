@@ -474,10 +474,13 @@ final class PageAccueil extends Page {
     private void groupe(Etat e, long maintenant, Ui.Palette p) {
         StringBuilder emp = new StringBuilder();
         for (Etat.Appareil a : e.appareils) emp.append(a.texte(maintenant)).append('|');
+        for (Etat.Ami a : e.amis) emp.append(a.nom).append(a.texte(maintenant)).append('|');
+        emp.append(e.visite);
         String nouvelle = emp.toString();
         if (nouvelle.equals(empreinteGroupe)) return;
         empreinteGroupe = nouvelle;
         groupe.removeAllViews();
+        amis(e, maintenant, p);
         if (e.appareils.isEmpty()) return;
         groupe.addView(Ui.titreSection(app, "Appareils du groupe" + (e.xp >= 0 ? " · " + e.xp + " xp" : "")));
         LinearLayout c = Ui.carte(app);
@@ -491,6 +494,38 @@ final class PageAccueil extends Page {
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
             t.addView(Ui.texte(app, a.nom, 15, p.texte, true));
             t.addView(Ui.texte(app, a.xp + " xp · " + (a.t <= 0 ? "jamais vu" : "vu il y a " + Etat.duree(maintenant - a.t)), 13, p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            c.addView(r, Ui.large());
+        }
+        groupe.addView(c, Ui.large(app, 6));
+    }
+
+    // Amis du Pilou (ajoutés sur le PC) : en ligne, niveau, stade ; et la visite en cours, s'il est parti.
+    private void amis(Etat e, long maintenant, Ui.Palette p) {
+        if (e.amis.isEmpty() && e.visite.isEmpty()) return;
+        groupe.addView(Ui.titreSection(app, "Amis de " + e.nom));
+        LinearLayout c = Ui.carte(app);
+        if (!e.visite.isEmpty()) {
+            LinearLayout r = Ui.rangee(app);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            r.addView(Ui.pastille(app, "➜", p.orange));
+            TextView t = Ui.texte(app, e.visite, 14, p.orange, true);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            c.addView(r, Ui.large());
+        }
+        for (int i = 0; i < e.amis.size(); i++) {
+            Etat.Ami a = e.amis.get(i);
+            if (i > 0 || !e.visite.isEmpty()) c.addView(Ui.separateur(app));
+            LinearLayout r = Ui.rangee(app);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            // En ligne : cœur plein bleu ; ailleurs : cercle vide gris (la forme dit l'état autant que la couleur).
+            boolean la = a.enLigne(maintenant);
+            r.addView(Ui.pastille(app, la ? "♥" : "○", la ? p.bleu : p.argent));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            t.addView(Ui.texte(app, a.nom, 15, p.texte, true));
+            t.addView(Ui.texte(app, a.texte(maintenant), 13, p.doux, false));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             c.addView(r, Ui.large());
         }

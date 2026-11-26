@@ -50,6 +50,9 @@ public sealed class Pose
     public bool Boude, Dos;
     // Effets météo dessinés sur Pilou (sprites « meteo-… » : pluie, mouillé, neige, givre, soleil…).
     public IReadOnlyList<string> Meteo = Array.Empty<string>();
+    // Parti en visite chez un ami : la pancarte remplace Pilou ; deux lignes écrites dessus (« chez Léo »,
+    // « ↩ 14 h 20 »). "" : Pilou est là.
+    public string Pancarte = "";
 }
 
 // Pilou en pixel art, grille fine de 48 × 56 commune avec l'app Android (RenduPilou), affichée en pixels
@@ -160,11 +163,68 @@ public sealed class Scene : FrameworkElement
     protected override void OnRender(DrawingContext dc)
     {
         var p = Pose;
+        if (p.Pancarte != "")
+        {
+            _zoom = 1;
+            DessinerPancarte(dc, p);
+            return;
+        }
         _zoom = p.Zoom;
         // Collé à l'écran : tout grossit, à partir des pieds.
         dc.PushTransform(new ScaleTransform(p.Zoom, p.Zoom, MargeX + C * P, Sol));
         Dessiner(dc, p);
         dc.Pop();
+    }
+
+    // Pancarte « parti chez… » plantée au sol à la place de Pilou, posée sur la même grille (elle prend
+    // la souris comme lui : un clic rappelle Pilou), puis le texte écrit sur le papier.
+    private void DessinerPancarte(DrawingContext dc, Pose p)
+    {
+        var s = Banque.Commune["pancarte"];
+        var pixels = new uint[RenduPilou.W * RenduPilou.H];
+        int gx0 = 0, gy0 = 0, w = 0;
+        if (s is not null)
+        {
+            var g = Banque.Grille(s, p.T);
+            int h = g.GetLength(0);
+            w = g.GetLength(1);
+            gx0 = (RenduPilou.W - w) / 2;
+            gy0 = Math.Max(0, (int)Math.Round((Sol - MargeY) / PX) - h);
+            for (int y = 0; y < h && gy0 + y < RenduPilou.H; y++)
+            for (int x = 0; x < w && gx0 + x < RenduPilou.W; x++)
+                pixels[(gy0 + y) * RenduPilou.W + gx0 + x] = g[y, x];
+        }
+        _pixels = pixels;
+        Image(dc, pixels);
+        var lignes = p.Pancarte.Split('\n');
+        double dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+        double cx = MargeX + (gx0 + w / 2.0) * PX, y0 = MargeY + (gy0 + 4) * PX;
+        for (int i = 0; i < lignes.Length && i < 2; i++)
+        {
+            var ft = new FormattedText(lignes[i], System.Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal),
+                i == 0 ? 11 : 10.5, i == 0 ? Encre : Bleu1, dpi)
+            { MaxTextWidth = 36 * PX, Trimming = TextTrimming.CharacterEllipsis, TextAlignment = TextAlignment.Center };
+            dc.DrawText(ft, new Point(cx - 18 * PX, y0 + i * 15));
+        }
+    }
+
+    private static readonly Brush Bleu1 = B("#1f4f8a");
+
+    private static void Image(DrawingContext dc, uint[] pixels)
+    {
+        var bgra = new byte[pixels.Length * 4];
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            uint c = pixels[i];
+            bgra[i * 4] = (byte)c;
+            bgra[i * 4 + 1] = (byte)(c >> 8);
+            bgra[i * 4 + 2] = (byte)(c >> 16);
+            bgra[i * 4 + 3] = (byte)(c >> 24);
+        }
+        var image = BitmapSource.Create(RenduPilou.W, RenduPilou.H, 96, 96, PixelFormats.Bgra32, null, bgra, RenduPilou.W * 4);
+        image.Freeze();
+        dc.DrawImage(image, new Rect(MargeX, MargeY, RenduPilou.W * PX, RenduPilou.H * PX));
     }
 
     private void Dessiner(DrawingContext dc, Pose p)
