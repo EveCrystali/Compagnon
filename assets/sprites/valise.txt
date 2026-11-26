@@ -1,0 +1,25 @@
+# Valise (retour de visite)
+id: valise
+slot: main
+ancre: main
+decalage: -9 -2
+palette: a=#1c2128 b=#6cb6ff c=#ffc89a d=#f69d50 e=#4a8fdc f=#f6f8fa g=#768390 h=#1f4f8a
+images:
+......aaaaaaaa......
+......aaaaaaaa......
+.aaaaaaaaaaaaaaaaaa.
+abbbbbbbcddbbbbbbbba
+abbbbbbbcddbbbbbbbba
+aeeeeeeecddeeeeeeeea
+aeeeeeeecddeeeeeeeea
+aeeeeeeecddeeffffeea
+aeeeeeeecddeegfffeea
+aeeeeeeecddeeffffeea
+aeeeeeeecddeeeeeeeea
+aeeeeeeecddeeeeeeeea
+aeeeeeeecddeeeeeeeea
+aeeeeeeecddeeeeeeeea
+ahhhhhhhcddhhhhhhhha
+ahhhhhhhcddhhhhhhhha
+.aaaaaaaaaaaaaaaaaa.
+....................

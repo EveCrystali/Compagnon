@@ -50,6 +50,13 @@ public sealed class Reglages
     public List<string> ActivitesCoupees { get; set; } = new();
     // Connecteurs (météo, API locale…) : activés, réglages non secrets. Les secrets sont dans secrets.bin (DPAPI).
     public ReglagesConnecteurs Connecteurs { get; set; } = new();
+    // Amis (docs/AMIS.md) : recevoir des visites, partir en visite, raconter ses anecdotes ; heures calmes
+    // (aucune visite, ni reçue ni rendue) de CalmeDebut à CalmeFin, heures locales ; égales : jamais calme.
+    public bool AccepterVisites { get; set; } = true;
+    public bool PartirEnVisite { get; set; } = true;
+    public bool PartagerAnecdotes { get; set; } = true;
+    public int CalmeDebut { get; set; } = 22;
+    public int CalmeFin { get; set; } = 8;
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 

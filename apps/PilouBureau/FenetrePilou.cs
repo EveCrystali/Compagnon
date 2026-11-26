@@ -259,6 +259,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
         menu.Items.Add(MenuQuetes());
+        foreach (var m in MenusAmis()) menu.Items.Add(m);
         menu.Items.Add(Entree("Boutique…", OuvrirBoutique));
         menu.Items.Add(MenuIntegrations());
         menu.Items.Add(MenuConnecteurs());
@@ -436,6 +437,8 @@ public sealed partial class FenetrePilou : Window
         if (_survol && toutes.Count == 0)
             _lignes.Children.Add(Discret(vivantes.Count == 0 ? "aucune session ouverte" : "rien en cours"));
 
+        // Parti chez un ami : une ligne dit où il est et quand il revient ; les sessions restent au-dessous.
+        if (LigneVisite() is { Length: > 0 } visite) _lignes.Children.Insert(Maintenant < _messageJusque ? 1 : 0, Discret(visite));
         bool visible = _lignes.Children.Count > 0;
         _pileBulle.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         Peindre();
@@ -554,6 +557,7 @@ public sealed partial class FenetrePilou : Window
         if (t < _cacheJusque || _discret)
         {
             if (IsVisible) Hide();
+            if (_invite is { IsVisible: true }) _invite.Hide();
             return;
         }
         if (!IsVisible) Show();
@@ -569,8 +573,12 @@ public sealed partial class FenetrePilou : Window
         var (objetsSoins, teinteSoins) = PoseSoins(stadePose, t);
         if (teinteSoins == "terne") fatigue = true;
         _exprCourante = expr;
-        ProposerJeu(t, expr);
-        OccuperSeul(t, expr);
+        // En visite (chez un ami, ou un ami chez lui), pas de petit jeu ni d'occupation tout seul.
+        if (!_visites.Occupe)
+        {
+            ProposerJeu(t, expr);
+            OccuperSeul(t, expr);
+        }
 
         if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);
         double sol = _zone.Bottom;
@@ -601,6 +609,11 @@ public sealed partial class FenetrePilou : Window
                 }
                 _atterri = t;
             }
+        }
+        else if (VisiteBouge(dt, out var enRoute))
+        {
+            _yPieds = sol;
+            marche = enRoute;
         }
         else
         {
@@ -686,7 +699,9 @@ public sealed partial class FenetrePilou : Window
             Soins = objetsSoins,
             Teinte = teinteSoins,
         };
+        HabillerVisite(_scene.Pose, t);
         _scene.InvalidateVisual();
+        AnimerInvite(t);
         AnimerJeux(t);
         AnimerSoins(t);
         if (t < _alerteJusque) Peindre();
@@ -955,6 +970,13 @@ public sealed partial class FenetrePilou : Window
 
     private void Appui(object sender, MouseButtonEventArgs e)
     {
+        // Parti en visite : la pancarte ne se déplace pas ; un clic dessus rappelle Pilou.
+        if (_visites.Sortie is not null)
+        {
+            _appuiPancarte = true;
+            e.Handled = true;
+            return;
+        }
         _appui = PointToScreen(e.GetPosition(this));
         var souris = VersWpf.Transform(_appui.Value);
         _prise = new Vector(souris.X - _x, souris.Y - _yPieds);
@@ -978,6 +1000,13 @@ public sealed partial class FenetrePilou : Window
     private void Relache(object sender, MouseButtonEventArgs e)
     {
         _scene.ReleaseMouseCapture();
+        if (_appuiPancarte)
+        {
+            _appuiPancarte = false;
+            Rappeler();
+            e.Handled = true;
+            return;
+        }
         if (!_attrape && _appui is not null)
         {
             Caresser();

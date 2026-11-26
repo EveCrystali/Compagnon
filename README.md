@@ -136,6 +136,13 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
+- **Amis…** : un code ami (`PILOU-XXXX-XXXX-XXXX`, distinct du code de groupe) à échanger avec
+  quelqu'un ; amis actifs quand chacun a ajouté l'autre. Quand il s'ennuie (deux fois par jour au
+  plus), ou sur *Aller voir*, Pilou prend son baluchon et va **rendre visite** à un ami en ligne :
+  une pancarte « chez Léo · ↩ 14 h 20 » le remplace (clic : le rappeler), il raconte sa vie là-bas,
+  joue avec l'autre Pilou et revient au bout de 5 à 10 min avec un petit cadeau. Ne partagés que
+  son allure, son niveau et quelques anecdotes (cochable) ; tout est chiffré. Voir
+  [docs/AMIS.md](docs/AMIS.md) ;
 - **Connecteurs…** : voir plus haut (météo, services, API locale) ;
 - **Démarrer avec Windows**, se cacher 10 min, quitter.
 

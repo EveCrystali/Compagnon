@@ -109,7 +109,8 @@ public sealed partial class FenetrePilou
             + $"|{string.Join(",", _profil.Quetes.Liste.Select(q => q.Fait))}|{Quetes.CleJour(DateTime.Now)}"
             + $"|{_profil.Soins.Actions.Count}|{_profil.Soins.Base?.T}|{_profil.Evolution.Variantes.Count}"
             + $"|{Meteo.Courante?.Etat}|{Math.Round(Meteo.Courante?.Releve.Temperature ?? 0)}"
-            + $"|{(_reglages.Connecteurs.AnnoncesTelephone ? _registre?.Annonces().FirstOrDefault()?.T : 0)}");
+            + $"|{(_reglages.Connecteurs.AnnoncesTelephone ? _registre?.Annonces().FirstOrDefault()?.T : 0)}"
+            + $"|{SignatureAmis()}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -133,6 +134,9 @@ public sealed partial class FenetrePilou
             .Concat(GroupeMem.Compteurs.OrderByDescending(c => c.T)
                 .Select(c => new Dictionary<string, object> { ["nom"] = c.Nom, ["xp"] = c.Xp, ["t"] = c.T }))
             .Take(10).ToList();
+        // Amis (lecture seule sur le téléphone) et visite en cours.
+        if (AmisPourTelephone() is { Count: > 0 } amis) progression["amis"] = amis;
+        if (VisitePourTelephone() is { Length: > 0 } visite) progression["visite"] = visite;
         var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
             _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
@@ -302,6 +306,7 @@ public sealed partial class FenetrePilou
         RecevoirTelephone(epoque);
         PublierGroupe(epoque);
         LireGroupe(epoque);
+        SuivreAmis(epoque);
     }
 
     // XP gagnée par les autres sources (tour fini, commit, tests) : écart depuis la dernière lecture.

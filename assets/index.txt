@@ -15,6 +15,7 @@ aureole
 baguette
 ballon
 ballon-helium
+baluchon
 bandeau-ninja
 bonus-cafe
 bonus-tests
@@ -40,6 +41,7 @@ cape
 casquette
 chapeau-pirate
 chapeau-sorcier
+coeurs-amitie
 coffre-quete
 cornes-viking
 couronne-fleurs
@@ -91,6 +93,7 @@ oeil-ouvert
 oeil-ouvert-g
 oeil-serein
 oeil-spirale
+pancarte
 parapluie
 parapluie-etoile
 parchemin-quete
@@ -163,6 +166,7 @@ tenue-video-popcorn
 tenue-visio-micro
 trainee-coeurs
 trainee-notes
+valise
 vapeur
 variante-calin-2
 variante-calin-2-tete
