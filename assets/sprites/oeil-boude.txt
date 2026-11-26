@@ -1,0 +1,14 @@
+# œil gauche (le droit est son miroir), 6 × 7
+id: oeil-boude
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=@ombre c=@contour d=#ffffff
+images:
+aa....
+.aaa..
+...aaa
+bbbbbb
+cccccc
+aaddaa
+.aaaa.

@@ -204,6 +204,7 @@ public sealed partial class FenetrePilou
 
     private void GagnerActivite(int xp)
     {
+        xp = BonusSoins(xp);
         _profil.Xp += xp;
         _profil.Ecrire(DossierPartage);
         _xpTotal += xp;

@@ -52,6 +52,9 @@ POSES = [
     "expr=repos t=0 stade=3 evolution=0.5",
     "expr=repos t=0 stade=4 evolution=0.9",
     "expr=repos t=600 reaction=sueur",
+    "expr=repos t=840 boude=1 objets=boude-nuage",
+    "expr=repos t=840 stade=3 boude=1 cligne=1 objets=boude-nuage,boude-bras",
+    "expr=repos t=840 stade=1 boude=1 dos=1 objets=boude-eclaircie,variante-calin-2,lunettes-rondes",
 ]
 
 
@@ -63,7 +66,7 @@ def pose(ligne):
             kw[k] = v
         elif k == "objets":
             kw[k] = v.split(",")
-        elif k in ("cligne", "clin", "marche", "course", "baille", "etourdi", "fatigue", "salue"):
+        elif k in ("cligne", "clin", "marche", "course", "baille", "etourdi", "fatigue", "salue", "boude", "dos"):
             kw[k] = v == "1"
         elif k in ("regard", "regard_y", "stade"):
             kw[k] = int(v)

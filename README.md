@@ -158,13 +158,19 @@ un quart) — et rien ne s'affiche tant que tout va bien : ni jauge, ni bulle qu
   moral), sinon des croquettes gratuites ; laver, c'est deux secondes de mousse ; le moral, un câlin.
 - **♥ Prendre soin de Pilou** (clic droit, et sur l'Accueil du téléphone) comble tout d'un coup.
   Les caresses et les petits jeux remontent aussi le moral.
-- Négligé, il a juste l'air **terne** et un peu endormi — aucune punition, rien de perdu. Bien soigné
-  (les trois besoins au-dessus de 70 %), il **rayonne** : XP des jeux et pièces des quêtes × 1,2.
+- Le même rythme pour tout le monde : il n'y a pas de mode de difficulté.
+- Négligé (un besoin sous 20 % depuis six heures, ou deux à la fois), il **boude** ☁ : moue et sourcils
+  froncés, petit nuage gris qui bruine, bras croisés s'il en a (Nimbus), le dos tourné de temps en temps,
+  il traîne les pieds et lâche un « hmpf » de loin en loin. Tant qu'il boude, **tous ses gains d'XP et de
+  po sont à × 0,6** (« Pilou boude : gains ×0,6 » dans l'infobulle et le menu *Soins*). Une fois soigné,
+  il se laisse amadouer une demi-heure (le nuage s'éclaircit, la moue va et vient), puis se déride.
+  C'est tout : ni maladie, ni fugue, rien de perdu. Bien soigné (les trois besoins au-dessus de 70 %),
+  il **rayonne** : gains × 1,2.
 - Au passage d'un stade (2 à 4), la qualité des soins des derniers jours choisit une **variante** :
   *câlin* (joues roses, petit cœur) ou *espiègle* (tache de rousseur en étoile, épi rebelle). Elle reste
   acquise et se partage entre appareils.
-- Clic droit → *Soins* : l'état en chiffres (sur demande seulement), le **rythme** (doux, normal,
-  exigeant) et le mode **vacances** (tout est figé). Une quête « Prends soin de Pilou » peut tomber.
+- Clic droit → *Soins* : l'état en chiffres (sur demande seulement) et le mode **vacances** (tout est
+  figé, il ne boude pas). Une quête « Prends soin de Pilou » peut tomber.
 - Partagé : chaque soin est une action datée avec un identifiant ; tous les appareils (dossier commun,
   groupe, téléphone) font l'union des actions et calculent le même état, qui ne dépend que d'une base,
   de ces actions et du temps passé. Les actions de plus de deux jours sont repliées dans la base, à une

@@ -29,11 +29,9 @@ public sealed partial class FenetrePilou
     private void Recompenser(IReadOnlyList<RecompenseQuete> gains)
     {
         if (gains.Count == 0) return;
-        var (po, xp) = Quetes.Appliquer(_profil, gains);
-        // Pilou rayonnant (bien soigné) : po × 1,2.
-        int bonus = BonusSoins(po) - po;
-        _profil.Bourse.PoGagnes += bonus;
-        po += bonus;
+        // Soins : po et XP × 0,6 s'il boude, × 1,2 s'il rayonne (ajustés avant d'être crédités : le compteur
+        // de po gagnées ne fait que monter).
+        var (po, xp) = Quetes.Appliquer(_profil, gains.Select(g => g with { Po = BonusSoins(g.Po), Xp = BonusSoins(g.Xp) }));
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
         _xpTotal = TotalXp();

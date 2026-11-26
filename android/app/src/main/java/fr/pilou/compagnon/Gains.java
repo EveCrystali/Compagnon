@@ -102,20 +102,29 @@ public final class Gains {
 
     // ---- Ce qui arrive dans l'atelier
 
-    public static void prise(Context c, Butin.Prise x, int xp) {
+    /** L'XP d'un jeu du téléphone selon les soins (comme sur le PC) : × 0,6 s'il boude, × 1,2 s'il rayonne. */
+    static int ajuste(Context c, int xp) {
+        return Soins.bonus(xp, soins(c, Prefs.etat(c), System.currentTimeMillis()));
+    }
+
+    /** Une prise : au carnet, au stock si elle se mange, et l'XP (ajustée, renvoyée). */
+    public static int prise(Context c, Butin.Prise x, int xpBrute) {
+        int xp = ajuste(c, xpBrute);
         JSONObject carnet = objet(c, "carnetLocal");
         JSONObject stock = objet(c, "stock");
         try {
             carnet.put(x.id, carnet.optInt(x.id) + 1);
             if (x.comestible()) stock.put(x.id, stock.optInt(x.id) + 1);
         } catch (JSONException e) {
-            return;
+            return 0;
         }
         p(c).edit().putString("carnetLocal", carnet.toString()).putString("stock", stock.toString()).apply();
         ajouter(c, xp, x.id, null, 0);
+        return xp;
     }
 
-    public static void plat(Context c, Butin.Plat pl) {
+    /** Un plat cuisiné : les ingrédients sortent du stock ; renvoie l'XP ajustée. */
+    public static int plat(Context c, Butin.Plat pl) {
         JSONObject stock = objet(c, "stock");
         try {
             for (String id : pl.utilises) stock.put(id, Math.max(0, stock.optInt(id) - 1));
@@ -127,22 +136,27 @@ public final class Gains {
                 p(c).edit().putString("platsLocal", plats.toString()).apply();
             }
         } catch (JSONException e) {
-            return;
+            return 0;
         }
         p(c).edit().putString("stock", stock.toString()).apply();
-        ajouter(c, pl.xp, null, pl.rate ? null : pl.id, 0);
+        int xp = ajuste(c, pl.xp);
+        ajouter(c, xp, null, pl.rate ? null : pl.id, 0);
+        return xp;
     }
 
-    /** Un petit jeu gagné (atelier) : de l'XP, et une partie pour les quêtes. */
-    public static void jeu(Context c, int xp) {
+    /** Un petit jeu gagné (atelier) : de l'XP (ajustée, renvoyée), et une partie pour les quêtes. */
+    public static int jeu(Context c, int xpBrute) {
+        int xp = ajuste(c, xpBrute);
         modifier(c, g -> {
             g.put("xp", g.optInt("xp") + xp);
             g.put("jeux", g.optInt("jeux") + 1);
         });
+        return xp;
     }
 
-    /** Une partie de Chasse aux bugs : XP, une partie, et le meilleur score (quêtes « atteins N points »). */
-    public static void chasse(Context c, int xp, int score) {
+    /** Une partie de Chasse aux bugs : XP (ajustée), une partie, et le meilleur score (quêtes « atteins N points »). */
+    public static void chasse(Context c, int xpBrute, int score) {
+        int xp = ajuste(c, xpBrute);
         modifier(c, g -> {
             g.put("xp", g.optInt("xp") + xp);
             g.put("jeux", g.optInt("jeux") + 1);
@@ -223,7 +237,7 @@ public final class Gains {
         ajouter(c, 1, null, null, 1);
     }
 
-    /** Un soin fait sur le téléphone (nourrir, laver, calin, soin, rythme, vacances) : il part au PC. */
+    /** Un soin fait sur le téléphone (nourrir, laver, calin, soin, vacances) : il part au PC. */
     public static void soin(Context c, String type, String objet) {
         Soins.Action a = new Soins.Action(nouvelId(), type, System.currentTimeMillis(), objet);
         modifier(c, g -> {

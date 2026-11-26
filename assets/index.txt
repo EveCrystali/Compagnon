@@ -29,6 +29,7 @@ bonus-tests
 bottes-pluie
 bouche-attente
 bouche-baille
+bouche-boude
 bouche-caresse
 bouche-concentre
 bouche-dort
@@ -38,6 +39,9 @@ bouche-inquiet
 bouche-repos
 bouche-soulage
 bouchon
+boude-bras
+boude-eclaircie
+boude-nuage
 bug-araignee
 bug-prod
 bug-scarabee
@@ -111,6 +115,7 @@ mini-dragon
 monocle
 moufles
 mousse
+oeil-boude
 noeud-pois
 oeil-cligne
 oeil-concentre

@@ -170,7 +170,7 @@ public sealed partial class FenetrePilou
             }
             else if (c.Xp > _profil.XpClaudeVue)
             {
-                int gain = c.Xp - _profil.XpClaudeVue;
+                int gain = BonusSoins(c.Xp - _profil.XpClaudeVue); // il boude : × 0,6 ; il rayonne : × 1,2
                 _profil.XpClaudeVue = c.Xp;
                 _profil.Xp += gain;
                 _profil.Ecrire(DossierPartage);
@@ -203,7 +203,7 @@ public sealed partial class FenetrePilou
             _scene.ToolTip = _infoBulle;
         }
         _infoBandeau!.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchaineRangee(n, _xpTotal));
-        _infoTexte!.Text = $"{nom} · {_xpTotal}/{suivant} xp{activite}";
+        _infoTexte!.Text = $"{nom} · {_xpTotal}/{suivant} xp{activite}{HumeurSoins()}";
     }
 
     private ToolTip? _infoBulle;

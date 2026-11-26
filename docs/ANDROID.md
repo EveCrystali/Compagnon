@@ -69,16 +69,17 @@ Astral) au lieu d'offrir des objets ; chaque niveau gagné rapporte des pièces 
 
 ## Soins
 
-Le PC envoie l'état des soins calculé à son heure (faim, propreté, moral, rythme, vacances) et les
+Le PC envoie l'état des soins calculé à son heure (faim, propreté, moral, vacances, bouderie) et les
 variantes d'évolution ; le téléphone y ajoute les soins qu'il a faits et que le PC n'a pas encore
 comptés. Sur l'Accueil, une petite icône (◒ faim, ✦ propreté, ♥ moral) n'apparaît près de Pilou que si
 un besoin passe sous 30 % : un toucher la comble ; **♥ Prendre soin de Pilou** comble tout. Les soins
 partent avec les gains (actions datées, identifiant unique) et le PC les verse au journal commun.
-Pilou terne quand il est négligé, rayonnant quand il est bien soigné, variante câlin ou espiègle :
-le téléphone les dessine comme le PC.
+Pilou boudeur quand il est négligé (moue, nuage gris, bras croisés du Nimbus, dos tourné parfois ;
+« ☁ Pilou boude : gains ×0,6 » sous la barre d'XP, et l'XP des jeux du téléphone × 0,6), rayonnant quand
+il est bien soigné (× 1,2), variante câlin ou espiègle : le téléphone les dessine comme le PC.
 
-Réglages → *Soins* : rythme (doux, normal, exigeant), vacances (tout est figé) et « Me prévenir s'il a
-besoin de moi » — **désactivé par défaut**, une notification par jour au plus.
+Réglages → *Soins* : vacances (tout est figé) et « Me prévenir s'il a besoin de moi » — **désactivé par
+défaut**, une notification par jour au plus. Pas de mode de difficulté : le même rythme pour tous.
 
 ## Mises à jour
 

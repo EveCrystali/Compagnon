@@ -588,8 +588,7 @@ public sealed partial class FenetrePilou : Window
         Observer(t);
         expr = Sommeil(expr, t);
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
-        var (objetsSoins, teinteSoins) = PoseSoins(stadePose, t);
-        if (teinteSoins == "terne") fatigue = true;
+        var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
         ProposerJeu(t, expr);
         OccuperSeul(t, expr);
@@ -706,7 +705,9 @@ public sealed partial class FenetrePilou : Window
             Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
             Reaction = ReactionAffichee != "" ? ReactionAffichee : meteo.Reaction,
             Soins = objetsSoins,
-            Teinte = teinteSoins,
+            // Il boude : moue et sourcils au repos ; dos tourné seulement immobile, au repos et sans jeu en cours.
+            Boude = boude && montre == Expr.Repos,
+            Dos = dosTourne && montre == Expr.Repos && !marche && _jeuEnCours == Jeu.Aucun && !_attrape,
         };
         _scene.InvalidateVisual();
         AnimerJeux(t);
@@ -773,7 +774,7 @@ public sealed partial class FenetrePilou : Window
                     return false;
                 }
                 _sens = Math.Sign(ecart);
-                double vitesse = fatigue ? 26 : 40;
+                double vitesse = fatigue || _boudeur ? 26 : 40; // fatigué ou boudeur : il traîne les pieds
                 _x += _sens * Math.Min(Math.Abs(ecart), vitesse * dt * K);
                 return true;
             }

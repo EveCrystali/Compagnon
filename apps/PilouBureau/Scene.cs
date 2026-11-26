@@ -44,10 +44,10 @@ public sealed class Pose
     public string Tenue = "";
     // Petite réaction liée à l'activité : "danse" (musique), "sueur" (processeur chargé pendant le code), "".
     public string Reaction = "";
-    // Soins : sprites en plus (variante d'évolution, rayonnement, mousse de la toilette) et teinte imposée
-    // (« terne » quand il est négligé ; "" : la sienne).
+    // Soins : sprites en plus (variante d'évolution, rayonnement, mousse de la toilette, bouderie) ; il boude
+    // (moue, sourcils froncés) ; il tourne le dos (ni visage, ni lunettes).
     public IReadOnlyList<string> Soins = Array.Empty<string>();
-    public string Teinte = "";
+    public bool Boude, Dos;
     // Effets météo dessinés sur Pilou (sprites « meteo-… » : pluie, mouillé, neige, givre, soleil…).
     public IReadOnlyList<string> Meteo = Array.Empty<string>();
 }
@@ -145,12 +145,12 @@ public sealed class Scene : FrameworkElement
         {
             Expr = p.Expr.ToString().ToLowerInvariant(),
             T = p.T,
-            Couleur = p.Teinte != "" ? p.Teinte : couleurAchetee != "" ? couleurAchetee : p.Couleur.ToString().ToLowerInvariant(),
+            Couleur = couleurAchetee != "" ? couleurAchetee : p.Couleur.ToString().ToLowerInvariant(),
             Accessoire = p.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : p.Accessoire.ToString().ToLowerInvariant(),
             Tenue = p.Tenue,
             Objets = objets,
             Cligne = p.Cligne, Clin = p.Clin, Marche = p.Marche, Course = p.Course, Baille = p.Baille, Etourdi = p.Etourdi,
-            Fatigue = p.Fatigue, Salue = p.Salue,
+            Fatigue = p.Fatigue, Salue = p.Salue, Boude = p.Boude, Dos = p.Dos,
             Regard = p.Regard, RegardY = p.RegardY,
             Saut = p.Saut, Chute = p.Chute, Assis = p.Assis, Suspendu = p.Suspendu, Tremble = p.Tremble,
             Stade = p.Stade, Evolution = p.Evolution, Reaction = p.Reaction,

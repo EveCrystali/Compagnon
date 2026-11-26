@@ -41,3 +41,6 @@ expr=repos t=0 stade=3 evolution=0.2 | 76d14596192b2535293131900807320b7072fdaae
 expr=repos t=0 stade=3 evolution=0.5 | 76d14596192b2535293131900807320b7072fdaae23d84140e2f02fddb1744b5
 expr=repos t=0 stade=4 evolution=0.9 | b1e151cb400b5da0b1d74a4f6ea12c0b5b7f496fb40ac4501c57405a8b8e8699
 expr=repos t=600 reaction=sueur | bf677441b1c5bcff55ab3bf58f4a483a26e2142bbf246d0f6ae58f6cd890f50f
+expr=repos t=840 boude=1 objets=boude-nuage | ce96dd13d5f339e0acaccd74d0da0f158d57a6547254bbc29cc24564d42b4301
+expr=repos t=840 stade=3 boude=1 cligne=1 objets=boude-nuage,boude-bras | 6dae183a1fc767dcca31a320417d4299eb07552a5c72347caea3b002c58fafa7
+expr=repos t=840 stade=1 boude=1 dos=1 objets=boude-eclaircie,variante-calin-2,lunettes-rondes | edc806054cdbe03a278194f7c2d37e97e4918250ea1603faec876a34901b0483

@@ -42,6 +42,8 @@ public class RenduPilouTest {
                 case "baille": a.baille = v.equals("1"); break;
                 case "etourdi": a.etourdi = v.equals("1"); break;
                 case "fatigue": a.fatigue = v.equals("1"); break;
+                case "boude": a.boude = v.equals("1"); break;
+                case "dos": a.dos = v.equals("1"); break;
                 case "regard": a.regard = Integer.parseInt(v); break;
                 case "regard_y": a.regardY = Integer.parseInt(v); break;
                 case "stade": a.stade = Integer.parseInt(v); break;

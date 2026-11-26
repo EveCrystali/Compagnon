@@ -39,6 +39,8 @@ public class RenduTests
                 case "baille": a.Baille = v == "1"; break;
                 case "etourdi": a.Etourdi = v == "1"; break;
                 case "fatigue": a.Fatigue = v == "1"; break;
+                case "boude": a.Boude = v == "1"; break;
+                case "dos": a.Dos = v == "1"; break;
                 case "regard": a.Regard = int.Parse(v); break;
                 case "regard_y": a.RegardY = int.Parse(v); break;
                 case "stade": a.Stade = int.Parse(v); break;
