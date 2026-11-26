@@ -17,6 +17,8 @@ jobs:
         run: dotnet build apps/PilouBureau -c Release -p:EnableWindowsTargeting=true
       - name: Variante « lecteur de notifications » (identité de package, docs/NOTIFICATIONS.md)
         run: dotnet build apps/PilouBureau -c Release -p:EnableWindowsTargeting=true -p:IdentitePackage=true
+      - name: installer.ps1 sans BOM (sinon « irm … | iex » casse)
+        run: "! head -c 3 installer.ps1 | od -An -tx1 | grep -q 'ef bb bf'"
       - name: Tests (états, bulle, signaux, branchement Codex)
         run: dotnet test apps/PilouBureau/tests
       - name: Exécutable autonome pour Windows (à essayer sans release)

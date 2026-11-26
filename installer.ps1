@@ -1,4 +1,5 @@
-﻿# Installe (ou met à jour) Pilou en une ligne, dans PowerShell :
+# Installe (ou met à jour) Pilou en une ligne, dans PowerShell :
+# (fichier SANS BOM : avec « irm … | iex », un BOM devient du texte et casse la première ligne et param())
 #   irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/installer.ps1 | iex
 # Ce qu'il fait, et rien d'autre :
 #   1. pose PilouBureau.zip (posé à côté du script, sinon téléchargé : gh si présent, sinon GitHub) dans
@@ -19,7 +20,7 @@ $depot = 'EveCrystali/Compagnon'
 $dossier = Join-Path $env:USERPROFILE '.claude\compagnon\bureau'
 $exe = Join-Path $dossier 'PilouBureau.exe'
 
-Write-Host '✦ Pilou arrive…' -ForegroundColor Cyan
+Write-Host '* Pilou arrive...' -ForegroundColor Cyan
 
 # 1. L'overlay : zip donné, zip posé à côté du script (téléchargé depuis la release), gh, ou GitHub.
 $voisin = if ($PSScriptRoot) { Join-Path $PSScriptRoot 'PilouBureau.zip' } else { '' }
@@ -44,7 +45,7 @@ Start-Sleep -Milliseconds 400
 New-Item -ItemType Directory -Force $dossier | Out-Null
 Expand-Archive $tmp -DestinationPath $dossier -Force
 Remove-Item $tmp
-Write-Host "  overlay $version → $dossier"
+Write-Host "  overlay $version -> $dossier"
 
 # 2. Le mod Claude Code
 if (-not $SansClaude -and (Get-Command claude -ErrorAction SilentlyContinue)) {
@@ -64,4 +65,4 @@ if (-not $SansDemarrage) {
     Set-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name PilouBureau -Value "`"$exe`""
 }
 Start-Process $exe
-Write-Host '✦ Pilou est là, en bas de l''écran. Clic droit sur lui pour les réglages et les intégrations.' -ForegroundColor Cyan
+Write-Host '* Pilou est là, en bas de l''écran. Clic droit sur lui pour les réglages et les intégrations.' -ForegroundColor Cyan
