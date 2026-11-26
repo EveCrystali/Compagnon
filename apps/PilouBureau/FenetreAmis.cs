@@ -222,16 +222,16 @@ public sealed partial class FenetrePilou
         _fenetreAmis?.Remplir();
     }
 
-    // Pilou s'ennuie (rien en cours, personne au clavier depuis une minute) : une chance sur quinze par
+    // Pilou s'ennuie (rien en cours, personne au clavier depuis deux minutes) : une chance sur vingt par
     // minute de partir chez un ami en ligne, deux fois par jour au plus.
     private void EnvieDeVisite(double epoque)
     {
         if (epoque - _envieVue < 60_000) return;
         _envieVue = epoque;
         Visites.Actualiser(MesAmis.Jour, DateTime.Now);
-        if (_hasard.NextDouble() > 1 / 15.0) return;
+        if (_hasard.NextDouble() > 1 / 20.0) return;
         bool calme = !_vivantes.Any(e => e.EnTour || e.Attente != "") && _jeuEnCours == Jeu.Aucun && !_dortBureau && !_attrape
-                     && _inactif > 60_000;
+                     && _inactif > 120_000;
         if (_visites.Envie(MesAmis.Amis, MesAmis.Jour, _reglages.PartirEnVisite, calme, _discret, HeureCalme, epoque, _hasard) is { } ami)
             Partir(ami, true);
     }

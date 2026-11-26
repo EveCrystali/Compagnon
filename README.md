@@ -10,7 +10,9 @@
   <a href="https://github.com/EveCrystali/Compagnon/releases/latest">dernière version</a>
 </p>
 
-Une petite goutte d'encre bleue en pixels vit au premier plan de ton écran, sans prendre de place.
+Une petite goutte d'encre bleue en pixels vit au premier plan de ton écran, sans prendre de place ni te
+déranger : ses petites réactions ne partent pas à chaque fois, jamais pendant que tu tapes, et il bouge moins
+quand tu travailles ; ce qui compte (une IA qui t'attend, « ✓ fini ») passe toujours.
 Elle te suit, reconnaît ce que tu fais (jeux, bureautique, musique, visio, tes IA de code
 **Claude Code** et **Codex**…), évolue avec toi au fil des niveaux, se personnalise dans une
 boutique rétro et va même **rendre visite à tes amis**. Une bulle te dit quelles sessions
@@ -99,7 +101,9 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
   et une quête bonus du jour « reste au sec » rapporte des po. Le parapluie s'invite dans les offres
   de la boutique les jours de pluie.
 - **Neige et froid** : sans bonnet, écharpe ou moufles, il grelotte sous le givre. **Canicule** :
-  sans lunettes ni éventail, il sue. **Orage** : éclairs. **Vent** : il tangue. **Brouillard** : voile.
+  sans lunettes ni éventail, il sue. **Orage** : un éclair pâle de loin en loin. **Vent** : il tangue.
+  **Brouillard** : voile. Les effets restent discrets : quelques gouttes ou flocons translucides, autour de Pilou
+  seulement.
 - **Objets** à acheter : imperméable (dos), bottes de pluie (nouvel emplacement *pieds*), moufles,
   éventail, parapluie étoilé (niveau 14), en plus du parapluie, de l'écharpe et du bonnet.
 - **Téléphone** : carte météo sur l'Accueil ; Pilou y est mouillé (ou au sec) comme sur le PC, dans
@@ -114,11 +118,11 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
 
 Clic droit → **Clavier, photo, notifications** (trois cases) :
 
-- **Tu tapes en rafale** : pouf de fumée, Pilou tourne sur lui-même et réapparaît assis devant un mini clavier ;
-  il tape avec toi, puis range tout après quelques secondes de calme. Le crochet clavier ne fait que **compter**
-  les frappes, jamais lesquelles.
-- **Tu fais une capture d'écran** (Impr. écran, Win+Maj+S, Win+Impr. écran) : il sort son appareil, flash,
-  « CLIC ! », un polaroïd tombe. L'image n'est jamais lue.
+- **Tu tapes en rafale** : pouf de fumée, Pilou tourne lentement sur lui-même et réapparaît assis devant un mini
+  clavier ; il tape avec toi, puis range tout après quelques secondes de calme, et se repose 10 min avant la
+  séance suivante. Le crochet clavier ne fait que **compter** les frappes, jamais lesquelles.
+- **Tu fais une capture d'écran** (Impr. écran, Win+Maj+S, Win+Impr. écran) : il sort son appareil, petit flash
+  pâle, « CLIC ! », un polaroïd tombe (une photo toutes les 2 min au plus). L'image n'est jamais lue.
 - **Notifications Windows dans sa bulle** (coupé par défaut ; filtre d'applis, mode « 1 message de X ») : prêt
   côté Pilou, mais Windows réserve cette lecture aux applis qui ont une identité de package, que Pilou n'a pas
   encore. Ce qui marche, ce qui manque et la vie privée : [docs/NOTIFICATIONS.md](docs/NOTIFICATIONS.md).

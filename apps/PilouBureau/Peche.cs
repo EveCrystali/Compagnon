@@ -424,13 +424,15 @@ public sealed partial class FenetrePilou
 
     // ---- Pilou s'occupe seul quand tu t'éloignes un moment (pas assez pour qu'il dorme).
 
-    private double _prochainSolo = 6 * 60_000;
+    private double _prochainSolo = 10 * 60_000;
 
     private void OccuperSeul(double t, Expr expr)
     {
         if (!_reglages.Jeux || _jeuEnCours != Jeu.Aucun || t < _prochainSolo || _dortBureau || _attrape) return;
         if (expr is not Expr.Repos || _inactif is < 90_000 or > 9 * 60_000 || _geste == Geste.SauteSouris) return;
-        _prochainSolo = t + (4 + _hasard.NextDouble() * 5) * 60_000;
+        // Toutes les 7 à 16 min environ (4 à 9 avant).
+        _prochainSolo = t + (4 + _hasard.NextDouble() * 5) * Vivacite.EspacementJeux * 60_000;
+        Dosage.Noter(t);
         Demarrer(Butin.PeutCuisiner(_profil.Stock) && _hasard.NextDouble() < 0.35 ? Jeu.Cuisine : Jeu.Peche, t);
     }
 

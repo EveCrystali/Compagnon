@@ -99,14 +99,15 @@ public sealed partial class FenetrePilou
             if (_tenue != "" && (!_ditActivite.TryGetValue(_tenue, out var dit) || t - dit > 30 * 60_000))
             {
                 _ditActivite[_tenue] = t;
-                if (!_discret) Dire(Activites.Accueil(_tenue), 3500);
+                // Pas à chaque changement d'appli : une fois sur deux environ, et jamais en pleine saisie.
+                if (!_discret) DireSpontane(Activites.Accueil(_tenue), 3500);
             }
         }
         // Processeur à fond pendant le code : il transpire (et le dit, de temps en temps).
         if (_tenue == "code" && _cpu > 0.8 && (!_ditActivite.TryGetValue("sueur", out var s) || t - s > 15 * 60_000))
         {
             _ditActivite["sueur"] = t;
-            if (!_discret) Dire("ça chauffe !", 3000);
+            if (!_discret) DireSpontane("ça chauffe !", 3000);
         }
 
         Compter(c, activite, dt);
@@ -238,7 +239,9 @@ public sealed partial class FenetrePilou
     private double Balancement(double t)
     {
         if (ReactionAffichee != "danse") return 0;
-        double ampleur = Math.Max(_crete > 0 ? Math.Min(1, _crete * 2.5) : 0, ConnecteurSpotify.Lecture is not null ? 0.6 : 0) * 0.8;
+        // Ampleur modeste, plus encore quand tu travailles (frappe ou souris récente, appli de travail).
+        double ampleur = Math.Max(_crete > 0 ? Math.Min(1, _crete * 2.5) : 0, ConnecteurSpotify.Lecture is not null ? 0.6 : 0)
+                         * (AuTravail ? 0.45 : 0.6);
         return ConnecteurSpotify.Lecture is { Tempo: > 30 and < 260 } l
             ? Math.Sin(t * Math.PI * l.Tempo / 60_000.0) * ampleur
             : Math.Sin(t / 220.0) * ampleur;

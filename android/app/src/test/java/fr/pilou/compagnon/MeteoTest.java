@@ -52,6 +52,22 @@ public class MeteoTest {
     }
 
     @Test
+    public void eclairRareEtGrimaceDeLoinEnLoin() {
+        // Comme le PC (Meteo.cs) : 280 ms d'éclair toutes les 12 s, la pluie tout le temps.
+        int vus = 0, n = 0;
+        for (long t = 0; t < 120_000; t += 20, n++)
+            if (Meteo.effet(Meteo.ORAGE, Collections.<String>emptyList(), t).sprites.contains("meteo-eclair")) vus++;
+        assertTrue(vus / (double) n < 0.03);
+        assertTrue(vus > 0);
+        assertFalse(Meteo.effet(Meteo.ORAGE, Collections.<String>emptyList(), 5000).sprites.contains("meteo-eclair"));
+        assertTrue(Meteo.effet(Meteo.ORAGE, Collections.<String>emptyList(), 5000).sprites.contains("meteo-averse"));
+        // Grimace 6 s sur 30 : à 6 s, il ne grimace plus.
+        RenduPilou.Allure a = new RenduPilou.Allure();
+        Meteo.appliquer(a, Meteo.PLUIE, 6000);
+        assertEquals("repos", a.expr);
+    }
+
+    @Test
     public void appliqueeALAllure() {
         RenduPilou.Allure a = new RenduPilou.Allure();
         a.objets = Arrays.asList("casquette");

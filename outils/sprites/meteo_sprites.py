@@ -1,8 +1,13 @@
 """Sprites météo de Pilou (effets sur la grille 48 × 56) et objets de boutique liés à la météo.
 
 Appelé par generer.py. Effets : posés sur l'ancre « corps » (centre du corps, ≈ (24, 37) au stade 2), ils
-couvrent toute la grille ; la pluie et la neige tombent AUTOUR de Pilou (bandeau du haut, colonnes des
-côtés), et seul « meteo-mouille » les fait tomber sur lui quand il n'a pas de parapluie.
+restent dans la grille de Pilou (jamais plein écran) ; la pluie et la neige tombent AUTOUR de lui (bandeau
+du haut, colonnes proches des côtés), et seul « meteo-mouille » les fait tomber sur lui quand il n'a pas de
+parapluie.
+
+Discrétion : particules clairsemées (environ deux fois moins qu'avant), translucides (elles laissent voir ce qui
+est derrière et ne prennent pas la souris), zone resserrée autour de Pilou ; l'éclair est pâle, et le code
+(Meteo.cs, Meteo.java) ne le montre que 280 ms toutes les 12 s.
 """
 import math
 
@@ -29,20 +34,29 @@ def T(w, h):
     return Toile(w, h)
 
 
+# Teintes translucides des particules (ARGB en #rrggbbaa) : présentes, jamais criardes.
+PLUIE, PLUIE_C = "#6cb6ff80", "#b4dbff70"
+FLOCON, FLOCON_C = "#ffffffa0", "#e6ecf260"
+VENT, VENT_C = "#adbac770", "#e6ecf260"
+ECLAIR, ECLAIR_C = "#fff6cc90", "#f5d76e70"
+
+
 def autour(x, y):
-    """Zone où la pluie tombe sans toucher Pilou ni son parapluie : le ciel (haut) et les côtés."""
-    return y < 9 or x < 7 or x > 41
+    """Zone où la pluie tombe sans toucher Pilou ni son parapluie : le ciel juste au-dessus de lui et deux
+    colonnes proches de ses flancs (ni les bords de la grille, ni sous ses pieds)."""
+    if y < 9:
+        return 4 <= x <= 43
+    return (2 <= x < 7 or 41 < x <= 45) and y < 52
 
 
-def goutte(t, x, y, longueur=3):
+def goutte(t, x, y, longueur=2):
     for k in range(longueur):
-        t.p(x, y + k, B3 if k < longueur - 1 else B4)
+        t.p(x, y + k, PLUIE if k < longueur - 1 else PLUIE_C)
 
 
 def effets():
-    # ---- Pluie : gouttes qui tombent dans le ciel et sur les côtés (4 images, 110 ms).
-    graines = [(3, 2), (11, 6), (19, 1), (28, 4), (36, 0), (44, 5), (2, 14), (45, 18), (4, 27), (43, 31), (1, 40),
-               (46, 44), (5, 49), (42, 52), (24, 3), (32, 7), (15, 4), (40, 9)]
+    # ---- Pluie : quelques gouttes fines au-dessus de lui et sur ses côtés (4 images, 130 ms).
+    graines = [(11, 6), (28, 4), (36, 0), (4, 27), (43, 31), (5, 41), (19, 1), (42, 12), (24, 3), (3, 14), (44, 45), (32, 7)]
     images = []
     for k in range(4):
         t = T(48, 56)
@@ -52,67 +66,62 @@ def effets():
                 if autour(x, y) and autour(x, y + 2):
                     goutte(t, x, y)
         images.append(t)
-    ecrire("meteo-pluie", images, slot="effet", ancre="corps", point=CORPS, duree=110,
+    ecrire("meteo-pluie", images, slot="effet", ancre="corps", point=CORPS, duree=130,
            commentaire="Pluie autour de Pilou (ciel et côtés)")
 
-    # ---- Averse (et orage) : deux fois plus de gouttes, en biais.
+    # ---- Averse (et orage) : un peu plus de gouttes que la pluie, en biais.
     images = []
     for k in range(4):
         t = T(48, 56)
         for (x0, y0) in graines + [(x + 3, (y + 9) % 56) for x, y in graines]:
-            for rep in range(0, 56, 14):
+            for rep in range(0, 56, 15):
                 y = (y0 + rep + k * 7) % 56
                 x = x0 - (y // 8)
                 if 0 <= x < 48 and autour(x, y) and autour(x - 1, y + 2):
-                    t.p(x, y, B3)
-                    t.p(x - 1, y + 1, B3)
-                    t.p(x - 1, y + 2, B4)
+                    t.p(x, y, PLUIE)
+                    t.p(x - 1, y + 1, PLUIE)
+                    t.p(x - 1, y + 2, PLUIE_C)
         images.append(t)
-    ecrire("meteo-averse", images, slot="effet", ancre="corps", point=CORPS, duree=90,
-           commentaire="Averse : pluie dense, en biais")
+    ecrire("meteo-averse", images, slot="effet", ancre="corps", point=CORPS, duree=110,
+           commentaire="Averse : pluie en biais, plus fournie que la pluie")
 
-    # ---- Éclair : un zigzag jaune dans le ciel, visible une image sur six.
+    # ---- Éclair : un fin zigzag pâle dans le ciel (le code ne le montre que 280 ms toutes les 12 s).
     images = []
-    for k in range(6):
+    for k in range(2):
         t = T(48, 56)
-        if k in (0, 1):
-            pts = [(8, 0), (5, 4), (8, 4), (4, 9), (7, 9), (3, 15)]
-            for (a, b), (c, d) in zip(pts, pts[1:]):
-                t.ligne(a, b, c, d, J4 if k == 0 else J3)
-                t.ligne(a + 1, b, c + 1, d, J3)
+        pts = [(8, 1), (6, 4), (8, 4), (5, 8), (7, 8), (5, 12)]
+        for (a, b), (c, d) in zip(pts, pts[1:]):
+            t.ligne(a, b, c, d, ECLAIR if k == 0 else ECLAIR_C)
         images.append(t)
     ecrire("meteo-eclair", images, slot="effet", ancre="corps", point=CORPS, duree=140,
-           commentaire="Éclair d'orage (une image sur six)")
+           commentaire="Éclair d'orage, pâle et bref")
 
     # ---- Mouillé : gouttes qui lui tombent dessus et ruissellent, flaque à ses pieds.
     images = []
     for k in range(4):
         t = T(48, 56)
-        # gouttes qui tombent sur la tête (dans la zone protégée par le parapluie)
-        for i, x in enumerate((12, 20, 27, 35)):
-            y = (k * 4 + i * 5) % 16
+        # deux gouttes qui tombent sur la tête (dans la zone protégée par le parapluie)
+        for i, x in enumerate((16, 31)):
+            y = (k * 4 + i * 7) % 16
             goutte(t, x, y + 2)
-        # ruissellement sur les flancs et gouttelettes collées au corps
-        for i, (x, y) in enumerate(((10, 30), (38, 32), (12, 40), (36, 42), (17, 27), (31, 28))):
+        # ruissellement discret sur les flancs
+        for i, (x, y) in enumerate(((10, 30), (38, 32), (12, 40))):
             dy = (k + i) % 4
             t.p(x, y + dy, B4)
             t.p(x, y + dy + 1, BLANC if (k + i) % 2 else B4)
         # goutte au bout de l'antenne
         t.p(24 + (k % 2), 15 + k, B4)
-        # flaque sous ses pieds, qui ondule
-        r = 15 + (k % 2)
-        t.ell(24, 54.5, r, 1.8, B2)
-        t.ell(24, 54.5, r - 3, 1.0, B3)
-        for x in range(24 - r + 2, 24 + r - 2, 5):
-            t.p(x + k % 3, 54, B4)
+        # petite flaque translucide sous ses pieds, qui ondule à peine
+        r = 12 + (k % 2)
+        t.ell(24, 54.5, r, 1.6, "#4a8fdc80")
+        t.ell(24, 54.5, r - 3, 0.9, "#6cb6ff70")
         images.append(t)
     ecrire("meteo-mouille", images, slot="effet", ancre="corps", point=CORPS, duree=160,
            commentaire="Pilou mouillé : gouttes sur lui, ruissellement, flaque")
 
     # ---- Neige : flocons qui descendent lentement autour de lui.
     images = []
-    flocons = [(4, 3, True), (13, 7, False), (22, 2, False), (33, 5, True), (43, 1, False), (2, 18, False), (45, 22, True),
-               (5, 33, True), (44, 38, False), (3, 47, False), (43, 50, True), (29, 8, False), (17, 1, True)]
+    flocons = [(13, 7, False), (33, 5, True), (5, 22, False), (43, 24, True), (4, 36, True), (43, 42, False), (22, 2, False)]
     for k in range(4):
         t = T(48, 56)
         for (x, y0, gros) in flocons:
@@ -120,11 +129,11 @@ def effets():
             xx = x + (1 if (k + y0) % 4 == 0 else 0)
             if autour(xx, y):
                 if gros:
-                    t.p(xx, y, BLANC)
+                    t.p(xx, y, FLOCON)
                     for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                        t.p(xx + a, y + b, ARGENT_C)
+                        t.p(xx + a, y + b, FLOCON_C)
                 else:
-                    t.p(xx, y, BLANC)
+                    t.p(xx, y, FLOCON)
         images.append(t)
     ecrire("meteo-neige", images, slot="effet", ancre="corps", point=CORPS, duree=260,
            commentaire="Neige autour de Pilou")
@@ -167,14 +176,14 @@ def effets():
         t = T(48, 56)
         def libre(x, y):
             return not (7 <= x <= 41 and 19 <= y <= 51) and not (20 <= x <= 28 and y < 19)
-        for i, (y, l) in enumerate(((3, 12), (8, 9), (13, 11), (17, 7), (24, 6), (31, 6), (39, 6), (46, 5), (53, 12))):
+        for i, (y, l) in enumerate(((5, 10), (13, 9), (24, 6), (39, 6), (50, 8))):
             x = (i * 13 + k * 11) % 48
             for j in range(l):
                 if 0 <= x + j < 48 and libre(x + j, y):
-                    t.p(x + j, y, ARGENT_C if j >= l - 3 else GRIS_C)
+                    t.p(x + j, y, VENT_C if j >= l - 3 else VENT)
         fx, fy = (k * 15 + 4) % 48, 10 + k * 2
-        t.rect(fx, fy, 2, 1, O3)
-        t.p(fx + 1, fy + 1, O2)
+        t.rect(fx, fy, 2, 1, "#f69d50a0")
+        t.p(fx + 1, fy + 1, "#d9803aa0")
         images.append(t)
     ecrire("meteo-vent", images, slot="effet", ancre="corps", point=CORPS, duree=150,
            commentaire="Vent fort : traits et feuille emportée")
@@ -183,9 +192,9 @@ def effets():
     images = []
     for k in range(2):
         t = T(48, 56)
-        for (y, x0, l, c) in ((4, 2, 18, "#c9d1d966"), (9, 26, 20, "#c9d1d955"), (15, 0, 10, "#adbac766"),
-                              (28, 40, 8, "#adbac766"), (36, 0, 9, "#adbac766"), (47, 3, 42, "#c9d1d977"),
-                              (50, 0, 48, "#c9d1d999"), (53, 2, 44, "#e6ecf2aa")):
+        for (y, x0, l, c) in ((4, 2, 18, "#c9d1d940"), (15, 0, 10, "#adbac740"),
+                              (36, 0, 9, "#adbac740"), (47, 3, 42, "#c9d1d948"),
+                              (50, 0, 48, "#c9d1d960"), (53, 2, 44, "#e6ecf270")):
             xs = (x0 + k * 3) % 48
             for j in range(l):
                 x = (xs + j) % 48

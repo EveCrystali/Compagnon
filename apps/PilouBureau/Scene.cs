@@ -191,13 +191,13 @@ public sealed class Scene : FrameworkElement
         if (p.Bruit != "") TextePixel(dc, p.Bruit, MargeX + 6 * P, MargeY - 2 * P, 3, Blanc, Encre);
     }
 
-    // Flash de l'appareil photo : un cadre blanc translucide autour de Pilou, bref (200 ms) et jamais plein
-    // écran ni opaque, pour ne pas éblouir.
+    // Flash de l'appareil photo : un cadre blanc fin et translucide autour de Pilou, bref (150 ms) et jamais
+    // plein écran ni opaque, pour ne pas éblouir ni attirer l'œil pendant le travail.
     private static void Flash(DrawingContext dc, double force)
     {
-        double ep = 2 * P;
+        double ep = P;
         var r = new Rect(MargeX - 3 * P, MargeY - 2 * P, W * P + 6 * P, H * P + 4 * P);
-        dc.PushOpacity(Math.Clamp(force, 0, 1) * 0.7);
+        dc.PushOpacity(Math.Clamp(force, 0, 1) * 0.35);
         dc.DrawRectangle(null, new Pen(Blanc, ep), r);
         dc.Pop();
     }

@@ -22,8 +22,8 @@ public class GestesTests
     public void RafaleSeulementAuDelaDuSeuilDansLaFenetre()
     {
         var c = new CompteurFrappes();
-        for (int i = 0; i < CompteurFrappes.Seuil - 1; i++) c.Frappe(i * 300);
-        double t = (CompteurFrappes.Seuil - 2) * 300;
+        for (int i = 0; i < CompteurFrappes.Seuil - 1; i++) c.Frappe(i * 200);
+        double t = (CompteurFrappes.Seuil - 2) * 200;
         Assert.False(c.Rafale(t));
         c.Frappe(t + 100);
         Assert.True(c.Rafale(t + 100));
@@ -109,7 +109,7 @@ public class GestesTests
     {
         var s = new SceneClavier();
         s.Avancer(0, true, 0, true);
-        var vus = Enumerable.Range(0, 6).Select(i => s.Dessin(i * 90 + 10)).ToList();
+        var vus = Enumerable.Range(0, 4).Select(i => s.Dessin(i * SceneClavier.PasTour + 10)).ToList();
         Assert.Contains(vus, d => d.Dos);
         Assert.Contains(vus, d => d.Regard == 1);
         Assert.Contains(vus, d => d.Regard == -1);

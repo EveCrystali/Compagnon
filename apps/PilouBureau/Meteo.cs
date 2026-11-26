@@ -130,6 +130,14 @@ public static class Meteo
 
     // ---- Effets sur Pilou
 
+    // Discrétion (mêmes valeurs dans Meteo.java) : un éclair bref toutes les 12 s (au lieu d'un tiers du temps),
+    // une grimace 6 s sur 30 quand il subit. Les sprites (assets/sprites/meteo-*.txt) sont clairsemés et pâles.
+    public const double PeriodeEclair = 12_000, DureeEclair = 280;
+    public const double PeriodeGrimace = 6000;
+    public const int CycleGrimace = 5;
+
+    public static bool EclairVisible(double t) => ((t % PeriodeEclair) + PeriodeEclair) % PeriodeEclair < DureeEclair;
+
     // portes : ids portés (objets de boutique et accessoire sous la forme « acc-<nom> »).
     public static EffetMeteo Effet(string? etat, IEnumerable<string> portes, double t = 0)
     {
@@ -145,7 +153,7 @@ public static class Meteo
             {
                 bool sec = A(ContrePluie);
                 var s = new List<string> { etat == Averse || etat == Orage ? "meteo-averse" : "meteo-pluie" };
-                if (etat == Orage) s.Add("meteo-eclair");
+                if (etat == Orage && EclairVisible(t)) s.Add("meteo-eclair");
                 if (!sec) s.Add("meteo-mouille");
                 return new EffetMeteo(s, sec, sec ? "" : "mouille", sec ? 0 : frisson, "");
             }

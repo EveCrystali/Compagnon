@@ -183,7 +183,7 @@ public sealed partial class FenetrePilou
         if (h == 1 && Maintenant >= _prochainHmpf)
         {
             _prochainHmpf = Maintenant + (8 + _hasard.NextDouble() * 7) * 60_000;
-            if (!_discret && _jeuEnCours == Jeu.Aucun) Dire(Hmpf[_hasard.Next(Hmpf.Length)], 2400);
+            if (!_discret && _jeuEnCours == Jeu.Aucun) DireSpontane(Hmpf[_hasard.Next(Hmpf.Length)], 2400);
         }
     }
 

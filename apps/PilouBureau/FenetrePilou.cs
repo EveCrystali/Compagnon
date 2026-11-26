@@ -485,9 +485,13 @@ public sealed partial class FenetrePilou : Window
     {
         var n = DateTime.Now;
         string jour = n.ToString("yyyyMMdd");
+        // Une fois par jour chacune, sans couper une saisie ni suivre de trop près une autre réaction.
         void Une(string cle, bool quand, string texte)
         {
-            if (quand && _dit.Add($"{cle}-{jour}")) Dire(texte, 6000);
+            if (!quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
+            _dit.Add($"{cle}-{jour}");
+            Dosage.Noter(Maintenant);
+            Dire(texte, 6000);
         }
         Une("midi", n.Hour == 12 && n.Minute < 20, "bon appétit !");
         Une("weekend", n.DayOfWeek == DayOfWeek.Friday && n.Hour >= 17, "bon week-end !");
@@ -687,7 +691,8 @@ public sealed partial class FenetrePilou : Window
 
         // Météo vécue : gouttes, flocons, soleil ; mouillé ou gelé sans l'équipement, il frissonne et grimace.
         var meteo = EffetMeteoCourant(t);
-        if (meteo.Inconfort is "mouille" or "froid" && montre == Expr.Repos && (int)(t / 6000) % 3 == 0) montre = Expr.Grimace;
+        // Une grimace 6 s sur 30 (au lieu de 6 sur 18), comme sur le téléphone (Meteo.java).
+        if (meteo.Inconfort is "mouille" or "froid" && montre == Expr.Repos && (int)(t / Meteo.PeriodeGrimace) % Meteo.CycleGrimace == 0) montre = Expr.Grimace;
         _scene.Pose = new Pose
         {
             Meteo = meteo.Sprites,
@@ -780,9 +785,13 @@ public sealed partial class FenetrePilou : Window
     }
 
     // Petite vie au repos : marcher, s'asseoir, bâiller, ne rien faire. Renvoie s'il marche.
+    // Pendant que tu travailles (Vivacite.AuTravail), il bouge moins : pauses deux fois plus longues, petits pas
+    // plus lents et plus courts, pas de ballon ni de sautillement ; il préfère rester assis.
     private bool Gestes(Expr expr, bool fatigue, double t, double dt, double min, double max)
     {
         bool calme = expr is Expr.Repos;
+        bool travail = AuTravail;
+        double pause = travail ? 2 : 1.3;
         bool assisPermis = expr is Expr.Repos or Expr.Concentre or Expr.Attente;
         if (!assisPermis || (_geste is Geste.Marche or Geste.Baille or Geste.Ballon && !calme)) _geste = Geste.Rien;
 
@@ -794,11 +803,11 @@ public sealed partial class FenetrePilou : Window
                 if (Math.Abs(ecart) < 2)
                 {
                     _geste = Geste.Rien;
-                    _pauseJusque = t + 2500 + _hasard.NextDouble() * 6000;
+                    _pauseJusque = t + (2500 + _hasard.NextDouble() * 6000) * pause;
                     return false;
                 }
                 _sens = Math.Sign(ecart);
-                double vitesse = fatigue || _boudeur ? 26 : 40; // fatigué ou boudeur : il traîne les pieds
+                double vitesse = (fatigue || _boudeur ? 26 : 40) * (travail ? 0.75 : 1); // fatigué ou boudeur : il traîne les pieds
                 _x += _sens * Math.Min(Math.Abs(ecart), vitesse * dt * K);
                 return true;
             }
@@ -807,7 +816,7 @@ public sealed partial class FenetrePilou : Window
                 if (t >= _gesteFin)
                 {
                     _geste = Geste.Rien;
-                    _pauseJusque = t + 3000 + _hasard.NextDouble() * 4000;
+                    _pauseJusque = t + (3000 + _hasard.NextDouble() * 4000) * pause;
                     return false;
                 }
                 double ecart = _cible - _x;
@@ -829,7 +838,7 @@ public sealed partial class FenetrePilou : Window
             }
             case Geste.Assis or Geste.Baille when t >= _gesteFin:
                 _geste = Geste.Rien;
-                _pauseJusque = t + 2000 + _hasard.NextDouble() * 5000;
+                _pauseJusque = t + (2000 + _hasard.NextDouble() * 5000) * pause;
                 return false;
             case Geste.Rien when t >= _pauseJusque && calme:
             {
@@ -837,7 +846,7 @@ public sealed partial class FenetrePilou : Window
                 double tirage = _hasard.NextDouble();
                 if (_inactif > 180_000 && _hasard.NextDouble() < 0.35 && PreparerSaut(t))
                     return false;
-                if (_reglages.Promenade && ennui > 60_000 && _hasard.NextDouble() < 0.12)
+                if (_reglages.Promenade && !travail && ennui > 60_000 && _hasard.NextDouble() < 0.12)
                 {
                     _geste = Geste.Ballon;
                     _gesteFin = t + 9000 + _hasard.NextDouble() * 8000;
@@ -850,7 +859,7 @@ public sealed partial class FenetrePilou : Window
                     _geste = Geste.Baille;
                     _gesteFin = t + 1700;
                 }
-                else if (tirage < 0.40)
+                else if (tirage < (travail ? 0.55 : 0.40))
                 {
                     _geste = Geste.Assis;
                     _gesteFin = t + 6000 + _hasard.NextDouble() * 12000;
@@ -858,12 +867,12 @@ public sealed partial class FenetrePilou : Window
                 else if (tirage < 0.88 && _reglages.Promenade)
                 {
                     _geste = Geste.Marche;
-                    _cible = Math.Clamp(_x + (_hasard.NextDouble() * 2 - 1) * 240 * K, min, max);
+                    _cible = Math.Clamp(_x + (_hasard.NextDouble() * 2 - 1) * (travail ? 120 : 240) * K, min, max);
                 }
                 else
                 {
-                    _tSaut = t;
-                    _pauseJusque = t + 3000 + _hasard.NextDouble() * 5000;
+                    if (!travail) _tSaut = t; // un petit sautillement, seulement quand tu ne travailles pas
+                    _pauseJusque = t + (3000 + _hasard.NextDouble() * 5000) * pause;
                 }
                 return false;
             }
@@ -891,10 +900,15 @@ public sealed partial class FenetrePilou : Window
         if (_trace.Count < 8) chemin = 0;
         double dx = _souris.X - _x, dy = _souris.Y - (_yPieds - 10 * Scene.PA * K);
         bool pres = Math.Abs(dx) < 380 && Math.Abs(dy) < 380;
+        // Souris secouée près de lui : la tête lui tourne, mais pas à chaque fois (souvent, c'est juste du travail).
         if (pres && chemin > 1700 && t > _etourdiJusque + 3000 && _geste != Geste.SauteSouris && !_attrape)
         {
-            _etourdiJusque = t + 2800;
-            Dire("ouh, la tête me tourne…", 2800);
+            if (Dosage.Tenter(t, EnSaisie))
+            {
+                _etourdiJusque = t + 2800;
+                Dire("ouh, la tête me tourne…", 2800);
+            }
+            else _etourdiJusque = t; // occasion manquée : pas de nouveau tirage avant 3 s
         }
         if (_scene.IsMouseOver && !_attrape)
         {
