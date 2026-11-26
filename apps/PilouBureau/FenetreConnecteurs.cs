@@ -169,13 +169,16 @@ public sealed partial class FenetrePilou
         }
         bool commenter = _registre?.Trouver("meteo") is { } c && _registre.Contexte(c).Lire("phrases") != "non";
         if (!commenter && _essaiMeteo == "") return;
-        // Nouvel état : un mot tout de suite ; ensuite, s'il subit, il râle toutes les 4 à 9 min.
+        // Nouvel état : un mot (s'il ne vient pas de parler, et pas en pleine saisie) ; ensuite, s'il subit, il
+        // râle de loin en loin (8 à 15 min, une fois sur deux environ).
         if (_meteoVue != etat || (effet.Inconfort != "" && Maintenant >= _prochainePlainte))
         {
+            bool nouveau = _meteoVue != etat;
             _meteoVue = etat;
-            _prochainePlainte = Maintenant + 240_000 + _hasard.NextDouble() * 300_000;
+            _prochainePlainte = Maintenant + 480_000 + _hasard.NextDouble() * 420_000;
             var phrase = Meteo.Phrase(etat, effet, _hasard.Next());
-            if (phrase != "") Dire(phrase, 4500);
+            if (phrase != "" && _essaiMeteo != "" && nouveau) Dire(phrase, 4500); // essai : tout de suite
+            else if (phrase != "") DireSpontane(phrase, 4500);
         }
     }
 

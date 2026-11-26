@@ -109,6 +109,14 @@ public final class Meteo {
         return false;
     }
 
+    /** Discrétion (mêmes valeurs que Meteo.cs) : un éclair bref toutes les 12 s, une grimace 6 s sur 30. */
+    static final long PERIODE_ECLAIR = 12_000, DUREE_ECLAIR = 280, PERIODE_GRIMACE = 6000;
+    static final int CYCLE_GRIMACE = 5;
+
+    static boolean eclairVisible(double t) {
+        return ((t % PERIODE_ECLAIR) + PERIODE_ECLAIR) % PERIODE_ECLAIR < DUREE_ECLAIR;
+    }
+
     /** portes : objets de boutique portés, et l'accessoire sous la forme « acc-&lt;nom&gt; ». t en millisecondes. */
     public static Effet effet(String etat, Collection<String> portes, double t) {
         if (etat == null || etat.isEmpty()) return Effet.AUCUN;
@@ -120,7 +128,7 @@ public final class Meteo {
                 boolean sec = un(CONTRE_PLUIE, portes);
                 List<String> s = new ArrayList<>();
                 s.add(etat.equals(PLUIE) ? "meteo-pluie" : "meteo-averse");
-                if (etat.equals(ORAGE)) s.add("meteo-eclair");
+                if (etat.equals(ORAGE) && eclairVisible(t)) s.add("meteo-eclair");
                 if (!sec) s.add("meteo-mouille");
                 return new Effet(s, sec, sec ? "" : "mouille", sec ? 0 : frisson, "");
             }
@@ -160,7 +168,7 @@ public final class Meteo {
         a.objets = objets;
         a.tremble += m.tremble;
         if (a.reaction == null || a.reaction.isEmpty()) a.reaction = m.reaction;
-        if (m.grognon() && "repos".equals(a.expr) && (t / 6000) % 3 == 0) a.expr = "grimace";
+        if (m.grognon() && "repos".equals(a.expr) && (t / PERIODE_GRIMACE) % CYCLE_GRIMACE == 0) a.expr = "grimace";
         return m;
     }
 

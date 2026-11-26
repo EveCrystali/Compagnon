@@ -23,6 +23,22 @@ public sealed partial class FenetrePilou
 
     private bool GesteEnCours => _clavier.Active || _photo.Active(Maintenant);
 
+    // Dosage commun des réactions cosmétiques (Vivacite.cs) ; jamais pour les signaux utiles.
+    private Retenue? _retenueCree;
+    private Retenue Dosage => _retenueCree ??= new Retenue(_hasard);
+
+    // Tu tapes en ce moment (au-delà de l'animation clavier, aucune autre réaction ne part).
+    private bool EnSaisie => Vivacite.EnSaisie(_frappes.Silence(Maintenant), _crochet is not null, _inactif);
+
+    // Tu travailles (frappe ou souris récente, appli de travail au premier plan) : il bouge moins.
+    private bool AuTravail => Vivacite.AuTravail(_inactif, _activite);
+
+    // Une petite phrase spontanée : seulement si la retenue le permet (pas à chaque fois, pas en pleine saisie).
+    private void DireSpontane(string texte, double ms)
+    {
+        if (Dosage.Tenter(Maintenant, EnSaisie)) Dire(texte, ms);
+    }
+
     private void DemarrerGestes()
     {
         AppliquerGestes();
@@ -97,11 +113,10 @@ public sealed partial class FenetrePilou
         if (source != SourceCapture.Essai && !_reglages.GestePhoto) return;
         if (!_doublon.Accepter(t)) return;               // écho de la même capture
         if (!GestePermis || _clavier.Active) return;     // pas de photo au milieu d'autre chose
-        if (_photo.Declencher(t))
-        {
-            _profil.Captures++;
-            _profil.Ecrire(DossierPartage);
-        }
+        // La capture compte (succès « photographe ») même quand l'appareil se repose (une photo par 2 min).
+        _profil.Captures++;
+        _profil.Ecrire(DossierPartage);
+        if (_photo.Declencher(t)) Dosage.Noter(t);
     }
 
     private void RecevoirNotif(NotifRecue n)
@@ -131,6 +146,7 @@ public sealed partial class FenetrePilou
         {
             _profil.SeancesClavier++;
             _profil.Ecrire(DossierPartage);
+            Dosage.Noter(t);
             if (_dit.Add("clavier-" + DateTime.Now.ToString("yyyyMMdd"))) Dire("tap tap tap… je tape avec toi !", 3000);
         }
         var d = _clavier.Active ? _clavier.Dessin(t) : _photo.Dessin(t);
@@ -151,8 +167,8 @@ public sealed partial class FenetrePilou
             p.Bruit = d.Bruit;
             return;
         }
-        // Notification : il lève la tête et brandit l'enveloppe les premières secondes.
-        if (_notifs.Courante(t) is { } n && _notifs.Age(t) < 3500 && GestePermis)
+        // Notification : il lève la tête et brandit l'enveloppe les deux premières secondes et demie.
+        if (_notifs.Courante(t) is { } n && _notifs.Age(t) < 2500 && GestePermis)
         {
             p.Gestes = new[] { n.Masquee ? "enveloppe-close" : "enveloppe-notif" };
             p.RegardY = -1;
@@ -255,6 +271,7 @@ public sealed partial class FenetrePilou
             case "clavier":
                 _essaiFrappesJusque = t + 6000;
                 _prochaineFrappeEssai = t;
+                _clavier.OublierRepos();
                 for (int i = 0; i < CompteurFrappes.Seuil; i++) _frappes.Frappe(t);
                 break;
             case "photo":

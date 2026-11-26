@@ -29,7 +29,7 @@ public sealed partial class FenetrePilou
 
     private readonly Canvas _jeu = new();
     private Jeu _jeuEnCours = Jeu.Aucun;
-    private double _jeuDebut, _prochainJeu = 4 * 60_000;
+    private double _jeuDebut, _prochainJeu = 7 * 60_000;
     private Pixels? _etoile;
     private Point _etoilePos;
     private Pixels? _main;
@@ -301,7 +301,15 @@ public sealed partial class FenetrePilou
     {
         if (!_reglages.Jeux || _jeuEnCours != Jeu.Aucun || t < _prochainJeu) return;
         if (expr is not Expr.Repos || _dortBureau || _inactif > 60_000 || _geste == Geste.SauteSouris || _attrape) return;
-        _prochainJeu = t + (8 + _hasard.NextDouble() * 8) * 60_000;
+        // Pas en pleine saisie ni juste après une autre réaction : il repasse une minute plus tard.
+        if (!Dosage.Libre(t, EnSaisie))
+        {
+            _prochainJeu = t + 60_000;
+            return;
+        }
+        Dosage.Noter(t);
+        // Toutes les 14 à 28 min environ (8 à 16 avant), pour ne pas te sortir de ton travail trop souvent.
+        _prochainJeu = t + (8 + _hasard.NextDouble() * 8) * Vivacite.EspacementJeux * 60_000;
         // Une fois sur trois, une partie de pêche (tu es là : à toi de ferrer).
         Demarrer(_hasard.NextDouble() < 0.33 && Acces.JeuOuvert("peche", Niveau) ? Jeu.Peche : JeuAuHasard(), t);
     }

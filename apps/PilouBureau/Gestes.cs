@@ -9,7 +9,7 @@ namespace PilouBureau;
 public sealed class CompteurFrappes
 {
     public const double Fenetre = 5000;   // ms
-    public const int Seuil = 15;          // frappes dans la fenêtre pour parler de rafale
+    public const int Seuil = 20;          // frappes dans la fenêtre pour parler de rafale (4 par seconde)
 
     private readonly Queue<double> _instants = new();
 
@@ -52,12 +52,20 @@ public sealed record DessinGeste(IReadOnlyList<string> Objets, int Regard = 0, b
 
 // Pilou au clavier : un tour sur lui-même dans un pouf de fumée, il réapparaît assis devant un mini clavier
 // et tape tant que tu tapes ; après quelques secondes de silence, pouf inverse et il se relève.
+// Pas à chaque rafale : après une séance, il se repose 10 min avant de revenir au clavier.
 public sealed class SceneClavier
 {
-    public const double DureeEntree = 1000, DureeSortie = 800, SilenceSortie = 9000;
+    public const double DureeEntree = 1300, DureeSortie = 800, SilenceSortie = 9000;
+    public const double ReposApres = 10 * 60_000;
+    // Une image du tour sur lui-même (ms) : un tour lent, sans tourbillon.
+    public const double PasTour = 130;
 
     public EtapeClavier Etape { get; private set; } = EtapeClavier.Aucune;
     private double _debut;
+    private double _libreA = double.NegativeInfinity;
+
+    // Essai (--essai=clavier) : la séance part tout de suite, repos ou pas.
+    public void OublierRepos() => _libreA = double.NegativeInfinity;
 
     public bool Active => Etape != EtapeClavier.Aucune;
 
@@ -68,7 +76,7 @@ public sealed class SceneClavier
         switch (Etape)
         {
             case EtapeClavier.Aucune:
-                if (permis && rafale)
+                if (permis && rafale && t >= _libreA)
                 {
                     Etape = EtapeClavier.Entree;
                     _debut = t;
@@ -87,7 +95,11 @@ public sealed class SceneClavier
                 if (!permis || silence >= SilenceSortie) Sortir(t);
                 break;
             case EtapeClavier.Sortie:
-                if (t - _debut >= DureeSortie) Etape = EtapeClavier.Aucune;
+                if (t - _debut >= DureeSortie)
+                {
+                    Etape = EtapeClavier.Aucune;
+                    _libreA = t + ReposApres;
+                }
                 break;
         }
         return false;
@@ -99,8 +111,8 @@ public sealed class SceneClavier
         _debut = t;
     }
 
-    // Tour sur lui-même : face, profil droit, dos, profil gauche, toutes les 90 ms.
-    private static (int Regard, bool Dos) Tour(double ms) => ((int)(ms / 90) % 4) switch
+    // Tour sur lui-même : face, profil droit, dos, profil gauche, une image toutes les 130 ms.
+    private static (int Regard, bool Dos) Tour(double ms) => ((int)(ms / PasTour) % 4) switch
     {
         0 => (1, false),
         1 => (0, true),
@@ -160,17 +172,18 @@ public sealed class AntiDoublon
 }
 
 // Pilou photographe : il sort son appareil, flash (cadre blanc bref), « clic ! », un polaroïd tombe, il range.
+// Au plus une photo toutes les 2 min : les captures en série ne relancent pas la scène.
 public sealed class ScenePhoto
 {
-    public const double Duree = 3000;
+    public const double Duree = 3000, Repos = 120_000, DureeFlash = 150;
     private double _debut = double.NegativeInfinity;
 
     public bool Active(double t) => t - _debut < Duree;
 
-    // Renvoie vrai si la scène démarre (pas déjà en cours).
+    // Renvoie vrai si la scène démarre (ni en cours, ni dans les 2 min qui suivent la précédente).
     public bool Declencher(double t)
     {
-        if (Active(t)) return false;
+        if (t - _debut < Repos) return false;
         _debut = t;
         return true;
     }
@@ -183,10 +196,10 @@ public sealed class ScenePhoto
         if (ms < 0 || ms >= Duree) return DessinGeste.Rien;
         string[] Avec(params string[] o) => o;
         if (ms < 450) return new DessinGeste(Avec("appareil-photo"), Concentre: true);
-        if (ms < 650)
+        if (ms < 450 + DureeFlash)
         {
-            // Flash : monte vite, retombe en 200 ms ; jamais plein blanc (Scene le dessine en cadre, atténué).
-            double f = 1 - (ms - 450) / 200;
+            // Flash : retombe en 150 ms ; jamais plein blanc (Scene le dessine en cadre fin, très atténué).
+            double f = 1 - (ms - 450) / DureeFlash;
             return new DessinGeste(Avec("appareil-photo", "photo-flash"), Concentre: true, Flash: f, Bruit: "CLIC !");
         }
         if (ms < 1150) return new DessinGeste(Avec("appareil-photo", "polaroid-1"), Bruit: "CLIC !");
