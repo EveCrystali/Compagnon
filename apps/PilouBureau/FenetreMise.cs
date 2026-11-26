@@ -56,11 +56,7 @@ public sealed partial class FenetrePilou
                 return;
             }
             await Task.Run(Mise.MettreAJourMod);
-            var info = new ProcessStartInfo(exe) { UseShellExecute = true };
-            info.ArgumentList.Add("--apres-maj");
-            if (_dossier != Signal.Defaut()) info.ArgumentList.Add(_dossier);
-            Process.Start(info);
-            Application.Current.Shutdown();
+            if (!Relancer(exe) && demande) Dire("mise à jour posée : redémarre-moi (menu Démarrer → Pilou)", 5000);
         }
         catch (Exception e) when (e is IOException or System.ComponentModel.Win32Exception or InvalidOperationException)
         {

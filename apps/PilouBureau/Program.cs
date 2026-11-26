@@ -8,35 +8,27 @@ public static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        var lancement = Lancement.Analyser(args);
         // --signal <source> … : un autre logiciel (Codex, script…) signale un événement, puis on rend la main.
-        var iSignal = Array.IndexOf(args, "--signal");
-        if (iSignal >= 0)
+        if (lancement.Mode == ModeLancement.Signal)
         {
+            var iSignal = Array.IndexOf(args, "--signal");
             var dossierSignal = args.FirstOrDefault(a => a.StartsWith("--dossier="))?["--dossier=".Length..] ?? Signal.Defaut();
             return Signal.Principal(args[(iSignal + 1)..], dossierSignal);
         }
         // --brancher codex / --debrancher codex : pose ou retire les hooks de Pilou chez Codex.
-        if (args.Length >= 2 && args[0] is "--brancher" or "--debrancher")
+        if (lancement.Mode == ModeLancement.Brancher)
             return Integrations.Ligne(args[0] == "--brancher", args[1]);
 
-        // Une seule instance : chaque session Claude tente de le lancer.
-        bool rendu = args.Any(a => a.StartsWith("--instantane=") || a.StartsWith("--film="));
-        // --apres-maj : lancé par l'ancienne version, qui est en train de quitter ; on attend sa place.
-        bool apresMaj = args.Contains("--apres-maj");
-        args = args.Where(a => a != "--apres-maj").ToArray();
-        using var unique = new Mutex(true, rendu ? @"Local\PilouBureau-essai" : @"Local\PilouBureau", out var premier);
-        if (!premier && apresMaj)
-        {
-            try
-            {
-                premier = unique.WaitOne(15_000);
-            }
-            catch (AbandonedMutexException)
-            {
-                premier = true;
-            }
-        }
-        if (!premier) return 0;
+        // Une seule instance : chaque session Claude tente de le lancer. Relancer l'exe montre le Pilou qui tourne
+        // (et remplace un Pilou figé) ; --redemarrer arrête proprement celui qui tourne et prend sa place ;
+        // --apres-maj : lancé par l'ancienne version, qui est en train de quitter, on attend sa place (Instance.cs).
+        // Les essais (--instantane, --film, --essai) ont leur propre verrou : ils tournent à côté, sans rien toucher.
+        bool principal = lancement.Mode == ModeLancement.Principal;
+        args = Lancement.Reste(args);
+        using var autre = new AutreInstanceWindows(principal ? @"Local\PilouBureau" : @"Local\PilouBureau-essai");
+        var issue = principal ? Instance.Decider(lancement, autre) : autre.Prendre() ? Issue.Demarrer : Issue.Rendre;
+        if (issue == Issue.Rendre) return 0;
         Mise.Nettoyer();
 
         // --devant : premier plan, sans rattachement à Claude (essai visuel).
@@ -57,6 +49,8 @@ public static class Program
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var fenetre = new FenetrePilou(dossier, devant);
         fenetre.Show();
+        // Icône près de l'horloge et fenêtre relais (les autres lancements nous joignent par elle) : Pilou habituel seulement.
+        if (principal) fenetre.BrancherRelais();
         if (essai is not null)
         {
             var declic = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(900) };

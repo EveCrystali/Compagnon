@@ -16,5 +16,8 @@ format : `docs/BRANCHER.md`.
 | `FenetrePilou.cs`, `FenetreIntegrations.cs`, `Jeux.cs`, `Scene.cs`, `Pixels.cs` | fenêtre, dessin, jeux |
 | `Gestes.cs`, `Notifications.cs` | Pilou au clavier, appareil photo, filtre et file des notifications (sans WPF, testés) |
 | `Crochets.cs`, `SourceNotifsWindows.cs`, `FenetreGestes.cs` | crochet clavier (compte seulement), presse-papiers et dossier Captures, lecteur de notifications, menu et bulle (`docs/NOTIFICATIONS.md`) |
+| `Instance.cs`, `InstanceWindows.cs` | instance unique : relancer l'exe ramène Pilou (ou remplace un Pilou figé), `--redemarrer`, `--apres-maj` ; les essais (`--essai`, `--film`, `--instantane`) tournent à côté |
+| `ZoneNotification.cs`, `MenuNotification.cs`, `FenetreRelais.cs` | icône près de l'horloge (Shell_NotifyIcon, menu natif), fenêtre relais, « Redémarrer Pilou » |
+| `Icone.cs`, `pilou.ico` | icône tirée du rendu de Pilou (16 à 48 px) ; régénérer : `PILOU_ICONE=ecrire dotnet test --filter Icone` |
 | `identite/` | package d'identité optionnel (`-p:IdentitePackage=true`), non utilisé par défaut |
 | `tests/` | tests xunit de la logique sans WPF |

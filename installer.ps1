@@ -6,8 +6,9 @@
 #      %USERPROFILE%\.claude\compagnon\bureau ;
 #   2. si Claude Code est installé : ajoute le mod « compagnon » ;
 #   3. si Codex est installé : pose les hooks de Pilou dans ~/.codex/hooks.json (les tiens restent) ;
-#   4. le lance au démarrage de Windows et le démarre tout de suite.
-# Désinstaller : clic droit sur Pilou → Intégrations → Codex : débrancher, puis supprimer le dossier bureau.
+#   4. le lance au démarrage de Windows, pose le raccourci "Pilou" du menu Demarrer, et le démarre tout de suite.
+# Désinstaller : clic droit sur Pilou → Intégrations → Codex : débrancher, puis supprimer le dossier bureau
+# et le raccourci %APPDATA%\Microsoft\Windows\Start Menu\Programs\Pilou.lnk.
 param(
     [string]$Zip = '',
     [switch]$SansDemarrage,
@@ -64,5 +65,19 @@ if (-not $SansCodex -and ((Get-Command codex -ErrorAction SilentlyContinue) -or 
 if (-not $SansDemarrage) {
     Set-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name PilouBureau -Value "`"$exe`""
 }
+# Raccourci "Pilou" du menu Demarrer : relance Pilou (ou le ramene s'il tourne deja), meme si son menu ne
+# s'ouvre plus. Refait a chaque installation (idempotent).
+$raccourci = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Pilou.lnk'
+try {
+    $lien = (New-Object -ComObject WScript.Shell).CreateShortcut($raccourci)
+    $lien.TargetPath = $exe
+    $lien.WorkingDirectory = $dossier
+    $lien.IconLocation = "$exe,0"
+    $lien.Description = 'Pilou, compagnon de bureau : le relancer ou le ramener'
+    $lien.Save()
+    Write-Host '  menu Demarrer -> Pilou'
+}
+catch { Write-Host "  (raccourci du menu Demarrer impossible : $($_.Exception.Message))" }
 Start-Process $exe
 Write-Host '* Pilou est là, en bas de l''écran. Clic droit sur lui pour les réglages et les intégrations.' -ForegroundColor Cyan
+Write-Host '  S''il ne repond plus : son icone pres de l''horloge, ou menu Demarrer -> Pilou.'

@@ -45,6 +45,8 @@ public sealed class Reglages
     public string RetourDepuis { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
+    // Icône près de l'horloge (zone de notification) : la porte de secours si l'overlay ne répond plus.
+    public bool IconeNotification { get; set; } = true;
     // Activités : Pilou regarde la fenêtre au premier plan (rien ne sort du PC) ; discrétion ; activités coupées.
     public bool Activites { get; set; } = true;
     public bool CacherPleinEcran { get; set; } = true;
