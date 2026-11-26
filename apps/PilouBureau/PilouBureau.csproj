@@ -9,7 +9,11 @@
     <RootNamespace>PilouBureau</RootNamespace>
     <AssemblyName>PilouBureau</AssemblyName>
     <Version>0.8.0</Version>
-    <Product>Pilou de bureau</Product>
+    <!-- Le Gestionnaire des tâches affiche la description du fichier (AssemblyTitle) et l'icône de l'exe. -->
+    <AssemblyTitle>Pilou</AssemblyTitle>
+    <Product>Pilou</Product>
+    <Company>Pilou</Company>
+    <ApplicationIcon>pilou.ico</ApplicationIcon>
     <Description>Pilou, compagnon de tes IA de code (Claude, Codex…), sur le bas de l'écran.</Description>
     <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
   </PropertyGroup>
@@ -34,6 +38,8 @@
     <EmbeddedResource Include="..\..\assets\*.txt" LogicalName="pilou:%(Filename)%(Extension)" />
     <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
     <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
+    <!-- Icône de Pilou (16 à 48 px), tirée de son rendu (Icone.cs) : zone de notification. -->
+    <EmbeddedResource Include="pilou.ico" LogicalName="pilou:icone.ico" />
   </ItemGroup>
 
   <ItemGroup>

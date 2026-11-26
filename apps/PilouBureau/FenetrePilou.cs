@@ -286,6 +286,11 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
+        menu.Items.Add(Case("Icône près de l'horloge", _reglages.IconeNotification, v =>
+        {
+            _reglages.IconeNotification = v;
+            if (_zoneNotif is not null) _zoneNotif.IconeVisible = v;
+        }));
         menu.Items.Add(MenuQuetes());
         foreach (var m in MenusAmis()) menu.Items.Add(m);
         menu.Items.Add(MenuIntegrations());
@@ -295,6 +300,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
+        menu.Items.Add(Entree("Redémarrer Pilou", Redemarrer));
         menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
     }
 
@@ -594,7 +600,7 @@ public sealed partial class FenetrePilou : Window
         if (_nous == IntPtr.Zero) return;
         if (!_zoneConnue) PlacerAuDepart();
         // Caché : à la demande (10 min), ou par discrétion (plein écran, présentation, visio — Activites.Discretion).
-        if (t < _cacheJusque || _discret)
+        if (t < _cacheJusque || (_discret && t >= _ramenePlusQueDiscretJusque))
         {
             if (IsVisible) Hide();
             if (_invite is { IsVisible: true }) _invite.Hide();

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Meteo.cs;../Connecteurs.cs;../ApiLocale.cs;../Connecteurs/*.cs;../Soins.cs;../Amis.cs;../Gestes.cs;../Notifications.cs;../Vivacite.cs;../Clics.cs" />
+    <Compile Include="../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Meteo.cs;../Connecteurs.cs;../ApiLocale.cs;../Connecteurs/*.cs;../Soins.cs;../Amis.cs;../Gestes.cs;../Notifications.cs;../Vivacite.cs;../Clics.cs;../Icone.cs;../Instance.cs;../MenuNotification.cs" />
     <EmbeddedResource Include="../activites.json" LogicalName="PilouBureau.activites.json" />
   </ItemGroup>
 

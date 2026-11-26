@@ -179,7 +179,7 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   son allure, son niveau et quelques anecdotes (cochable) ; tout est chiffré. Voir
   [docs/AMIS.md](docs/AMIS.md) ;
 - **Connecteurs…** : voir plus haut (météo, services, API locale) ;
-- **Démarrer avec Windows**, se cacher 10 min, quitter.
+- **Démarrer avec Windows**, icône près de l'horloge, se cacher 10 min, redémarrer, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.
 
@@ -242,6 +242,29 @@ Rien à faire. Chaque fusion sur `main` publie une release (`v0.9.<n>`) avec `ve
 
 À la main : relancer la ligne d'installation, ou `claude plugin marketplace update pilou` puis
 `claude plugin update compagnon@pilou --scope user` et `/reload-plugins`.
+
+## Si Pilou ne répond plus
+
+Le menu clic droit ne s'ouvre plus, Pilou a disparu ou semble figé ? Trois portes de secours, qui ne
+passent pas par lui :
+
+- **L'icône de Pilou près de l'horloge** (zone de notification ; derrière la flèche ^ si Windows l'y a
+  rangée) : clic gauche, il revient (même caché ou parti hors de l'écran) ; clic droit, un petit menu
+  *Afficher / ramener Pilou · Ouvrir le menu de Pilou · Chercher une mise à jour · Redémarrer Pilou ·
+  Quitter Pilou*. On peut la masquer (clic droit sur Pilou → *Icône près de l'horloge*).
+- **Menu Démarrer → Pilou** (raccourci posé par l'installateur). S'il tourne déjà, ça ne crée pas un
+  deuxième Pilou : le premier se montre ; s'il ne répond plus du tout, il est remplacé par un neuf.
+  En ligne de commande : `PilouBureau.exe --redemarrer` l'arrête proprement et le relance.
+- **Réinstaller** (garde l'XP, les réglages et la boutique), dans PowerShell :
+
+  ```powershell
+  iex ((irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/installer.ps1).TrimStart([char]0xFEFF))
+  ```
+
+Dans le **Gestionnaire des tâches**, il s'appelle **Pilou** (avec son icône), dans *Processus en arrière-plan*
+(onglet *Détails* : `PilouBureau.exe`) : *Fin de tâche*, puis menu Démarrer → Pilou. Il n'est pas rangé
+dans *Applications* : Windows n'y met que les programmes qui ont une fenêtre dans la barre des tâches, et
+Pilou reste volontairement discret (ni barre des tâches, ni Alt+Tab).
 
 ## Pour contribuer
 
