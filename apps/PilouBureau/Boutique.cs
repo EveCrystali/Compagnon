@@ -74,6 +74,9 @@ public static class Boutique
         yield return new Article("pomme", "Pomme dorée (+ moral)", Consommable, 60, 1, Rarete.Commun, true);
         yield return new Article("soupe", "Soupe chaude (+ moral)", Consommable, 80, 1, Rarete.PeuCommun, true);
         yield return new Article("gateau", "Gâteau (+ moral)", Consommable, 120, 1, Rarete.PeuCommun, true);
+        // En-cas de route (expéditions) : ils rendent de l'énergie ⚡ (Jauge.Repas), jamais de quoi gagner des po.
+        yield return new Article("galette-route", "Galette de route (+15 ⚡)", Consommable, 60, 1, Rarete.Commun, true);
+        yield return new Article("jus-etoile", "Jus d'étoile (+30 ⚡)", Consommable, 110, 5, Rarete.PeuCommun, true);
     }
 
     private static Rarete Rang(int niveau) => niveau switch
@@ -195,7 +198,8 @@ public static class Boutique
         new("bulle-nuages", "Bulle nuage", Bulle, 400, 20, Rarete.Epique),
     }.Concat(Anciens()).ToList();
 
-    public static Article? Trouver(string id) => Catalogue.FirstOrDefault(a => a.Id == id);
+    // Le butin des expéditions (Expeditions.Exclusifs) se porte comme un article, mais ne se vend pas.
+    public static Article? Trouver(string id) => Catalogue.FirstOrDefault(a => a.Id == id) ?? Expeditions.Exclusif(id);
 
     public static StyleBulle? Style(string id) => id switch
     {
@@ -261,6 +265,7 @@ public static class Boutique
     {
         var a = Trouver(id);
         if (a is null) return "objet inconnu";
+        if (Expeditions.EstExclusif(id)) return "introuvable en boutique : butin d'expédition";
         bool consommable = a.Slot == Consommable;
         if (!consommable && b.Inventaire.Contains(id)) return "déjà dans l'inventaire";
         if (!Ouvert(a, niveau)) return $"niveau {a.NiveauMin} requis";

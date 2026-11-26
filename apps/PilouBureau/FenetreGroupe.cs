@@ -59,7 +59,8 @@ public sealed partial class FenetrePilou
         var b = _profil.Bourse;
         var signature = $"{_profil.Xp}|{_profil.XpTelephone}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{NomPilou}"
                         + $"|{b.PoGagnes}|{b.PoDepenses}|{b.PoDepTelephone}|{b.Inventaire.Count}|{string.Join(",", b.Equipe.Select(kv => kv.Key + kv.Value.Id))}"
-                        + $"|{_profil.Evolution.NiveauAcquis}|{_profil.Evolution.NiveauPaye}";
+                        + $"|{_profil.Evolution.NiveauAcquis}|{_profil.Evolution.NiveauPaye}"
+                        + $"|{_profil.Expedition.Jour}|{_profil.Expedition.Nombre}|{_profil.Expedition.Libre}";
         if (signature != _grSignature)
         {
             _grSignature = signature;

@@ -63,6 +63,10 @@ public static class Quetes
         new("soin", "Prends soin de Pilou {0} fois", Mesure.Somme, [], [2, 4], [], true),
         // Après une première visite chez un ami (Amis) : pas de quête de visite pour qui n'a pas d'amis.
         new("visite", "Rends visite à un ami ({0} fois)", Mesure.Somme, [1, 1], [2, 4], [], false),
+        // Après une première expédition (Expeditions) : « butin rare » = éclat de cristal, objet exclusif ou trophée.
+        new("expedition", "Termine {0} expédition{s}", Mesure.Somme, [1, 2], [4, 8], [20, 30], false),
+        new("expedition:boss", "Bats {0} boss en expédition", Mesure.Somme, [], [1, 2], [4, 6], false),
+        new("expedition:rare", "Rapporte {0} butin{s} rare{s} d'expédition", Mesure.Somme, [], [1, 2], [4, 6], false),
         new("presence", "Passe {0} min avec Pilou", Mesure.Somme, [60, 180], [600, 1200], [2400, 3600], true, 30),
         new("agenda:ponctuel", "Sois à l'heure à {0} réunion{s}", Mesure.Somme, [1, 2], [3, 6], [], false),
         new("chasse","Atteins {0} points à Chasse aux bugs", Mesure.Max, [800, 2000], [3000, 6000], [], false, 100),

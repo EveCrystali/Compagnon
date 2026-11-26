@@ -70,6 +70,7 @@ public sealed partial class FenetrePilou
                 var repas = ChoisirRepas();
                 FaireSoin("nourrir", repas);
                 Manger(repas);
+                EnergieRepas(repas);
                 break;
             case Soins.Proprete:
                 FaireSoin("laver");
@@ -90,7 +91,11 @@ public sealed partial class FenetrePilou
         var e = SoinsMaintenant();
         string repas = e.Faim < 80 ? ChoisirRepas() : "";
         FaireSoin("soin", repas);
-        if (repas != "") Manger(repas);
+        if (repas != "")
+        {
+            Manger(repas);
+            EnergieRepas(repas);
+        }
         if (e.Proprete < 80) _toiletteJusque = Maintenant + 2000;
         _tCaresse = Maintenant;
         Dire("♥ Pilou est aux petits soins", 2500);
@@ -100,7 +105,7 @@ public sealed partial class FenetrePilou
     private void Manger(string repas)
     {
         if (_repas is not null) _jeu.Children.Remove(_repas);
-        _repas = Pixels.Sprite("encas-" + repas);
+        _repas = Pixels.Sprite("encas-" + repas) ?? Pixels.Sprite(repas); // en-cas de route : leur propre dessin
         if (_repas is null) return;
         _repas.IsHitTestVisible = false;
         _repas.RenderTransformOrigin = new Point(0.5, 0.5);

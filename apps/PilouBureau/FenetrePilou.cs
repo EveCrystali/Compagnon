@@ -306,6 +306,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
         menu.Items.Add(Entree("Jouer maintenant", () => Demarrer(JeuAuHasard(), Maintenant)));
         foreach (var m in MenusPeche()) menu.Items.Add(m);
+        menu.Items.Add(MenuExpedition());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
@@ -400,6 +401,7 @@ public sealed partial class FenetrePilou : Window
             BattreConnecteurs(vivantes, epoque);
             SuivreQuetes(vivantes);
             SuivreSoins();
+            SuivreExpedition();
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -425,6 +427,7 @@ public sealed partial class FenetrePilou : Window
                 if (e.FinTour > avant.FinTour && !e.EnTour && e.FinRaison == "")
                 {
                     Signaler("tour", 1);
+                    EnergieTour();
                     _salueJusque = t + 1800;
                     _tSaut = t;
                     _dernierEvenement = t;
@@ -502,6 +505,8 @@ public sealed partial class FenetrePilou : Window
 
         // Parti chez un ami : une ligne dit où il est et quand il revient ; les sessions restent au-dessous.
         if (LigneVisite() is { Length: > 0 } visite) _lignes.Children.Insert(Maintenant < _messageJusque ? 1 : 0, Discret(visite));
+        // En expédition : pareil, une ligne (où, retour vers…), les sessions restent au-dessous.
+        if (LigneExpedition() is { Length: > 0 } exp) _lignes.Children.Insert(Maintenant < _messageJusque ? 1 : 0, Discret(exp));
         // Notification Windows (désactivé par défaut) : tout en haut, quelques secondes.
         if (BlocNotif() is { } notif) _lignes.Children.Insert(0, notif);
         bool visible = _lignes.Children.Count > 0;
@@ -641,8 +646,8 @@ public sealed partial class FenetrePilou : Window
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
-        // En visite (chez un ami, ou un ami chez lui), pas de petit jeu ni d'occupation tout seul.
-        if (!_visites.Occupe)
+        // En visite (chez un ami, ou un ami chez lui) ou en expédition, pas de petit jeu ni d'occupation tout seul.
+        if (!_visites.Occupe && !EnExpedition)
         {
             ProposerJeu(t, expr);
             OccuperSeul(t, expr);
@@ -678,7 +683,7 @@ public sealed partial class FenetrePilou : Window
                 _atterri = t;
             }
         }
-        else if (VisiteBouge(dt, out var enRoute))
+        else if (VisiteBouge(dt, out var enRoute) || ExpeditionBouge(dt, out enRoute))
         {
             _yPieds = sol;
             marche = enRoute;
@@ -773,12 +778,14 @@ public sealed partial class FenetrePilou : Window
             Dos = dosTourne && montre == Expr.Repos && !marche && _jeuEnCours == Jeu.Aucun && !_attrape,
         };
         HabillerVisite(_scene.Pose, t);
+        HabillerExpedition(_scene.Pose, t);
         HabillerGestes(_scene.Pose, t);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
         AnimerSoins(t);
         AnimerBoutique(t);
+        AnimerExpedition(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = _x < (_zone.Left + _zone.Right) / 2;
@@ -1061,6 +1068,13 @@ public sealed partial class FenetrePilou : Window
             e.Handled = true;
             return;
         }
+        // En expédition : la pancarte ne bouge pas non plus ; un clic montre où il est.
+        if (EnExpedition)
+        {
+            _expAppui = true;
+            e.Handled = true;
+            return;
+        }
         _appui = PointToScreen(e.GetPosition(this));
         _appuiT = Maintenant;
         var souris = VersWpf.Transform(_appui.Value);
@@ -1090,6 +1104,13 @@ public sealed partial class FenetrePilou : Window
         {
             _appuiPancarte = false;
             Rappeler();
+            e.Handled = true;
+            return;
+        }
+        if (_expAppui)
+        {
+            _expAppui = false;
+            if (ExpeditionAbsent) OuvrirExpeditions(false);
             e.Handled = true;
             return;
         }

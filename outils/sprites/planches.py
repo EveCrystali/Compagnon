@@ -172,6 +172,28 @@ def main():
         cases.append((im, f))
     planche(cases, 5, (64 * 4 + 12, 48 * 4 + 24), FOND, os.path.join(dossier, "boutique-decors.png"))
 
+    # Expéditions : butin, créatures, coffres, trophées, énergie, en-cas ; Pilou équipé, au départ, cabossé.
+    icones = ["epee-bois", "bouclier-couvercle", "torche", "casque-passoire", "slime-apprivoise", "carte-tresor",
+              "coffre-expedition", "coffre-expedition-ouvert", "eclat-cristal", "eclair-energie", "galette-route", "jus-etoile",
+              "pansement", "crea-bug-geant", "crea-slime-cache", "crea-spectre-404", "crea-golem-tickets",
+              "crea-hydre-dependances", "crea-gargouille-latence", "trophee-bug-geant", "trophee-slime-cache",
+              "trophee-golem-tickets", "trophee-hydre-dependances", "trophee-gargouille-latence"]
+    cases = [(sprite_image(B[k], 6, k2), k + ("" if k2 == 0 else " (2)")) for k in icones for k2 in ((0, 1) if k.startswith("crea-") else (0,))]
+    planche(cases, 6, (30 * 6 + 10, 30 * 6 + 22), FOND, os.path.join(dossier, "expedition.png"))
+    cases = [(pilou(objets=["baluchon", "epee-bois"], expr="fete", marche=True, t=200), "depart"),
+             (pilou(objets=["baluchon", "epee-bois"], expr="fete", regard=-1, t=500), "retour victoire"),
+             (pilou(objets=["baluchon", "pansement"], expr="grimace", regard=-1, t=500), "retour defaite"),
+             (pilou(objets=["pansement"], expr="repos", t=0), "cabosse"),
+             (pilou(objets=["torche", "bouclier-couvercle", "casque-passoire", "slime-apprivoise"], t=300), "tout le butin"),
+             (pilou(objets=["torche"], t=120), "torche"),
+             (pilou(objets=["casque-passoire"], t=0), "passoire"),
+             (pilou(objets=["bouclier-couvercle"], t=0), "couvercle"),
+             (pilou(objets=["slime-apprivoise"], t=440), "slime"),
+             (pilou(stade=1, objets=["casque-passoire", "torche"], t=0), "1 passoire"),
+             (pilou(stade=3, objets=["bouclier-couvercle", "epee-bois", "baluchon"], t=0), "3 depart"),
+             (pilou(stade=4, objets=["pansement"], expr="grimace", t=0), "4 cabosse")]
+    planche(cases, 6, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "expedition-pilou.png"))
+
     jeux = ["etoile", "bulle", "main", "ballon", "canne", "bouchon", "eclaboussure", "bug-scarabee", "bug-araignee", "bug-ver",
             "bug-prod", "bonus-cafe", "bonus-tests", "vie", "po", "po-tourne", "coffre-quete", "parchemin-quete"]
     cases = []

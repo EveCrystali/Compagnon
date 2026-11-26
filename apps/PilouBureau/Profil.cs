@@ -39,6 +39,8 @@ public sealed class Profil
     public int Captures { get; set; }
     // Soins (faim, propreté, moral) : base et journal d'actions, partagés avec le groupe (Soins.cs).
     public CarnetSoins Soins { get; set; } = new();
+    // Expéditions (Expeditions.cs) : énergie ⚡, expédition en cours, dernier journal, collection. Propres à cet appareil.
+    public EtatExpedition Expedition { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };

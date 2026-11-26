@@ -1,0 +1,23 @@
+# Carte au trésor (butin d'expédition, talisman)
+id: carte-tresor
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#c4a77d c=#e8d5b0 d=#1f4f8a e=#d9803a f=#4a8fdc
+images:
+aaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbb
+bbcccdccccccccccccccbb
+bbccdcdcccccccceccecbb
+bbcccdcccccccccceeccbb
+bbbcccccccccccfceecbbb
+bbbcccccccccccceccebbb
+bbbccccccccfcfcccccbbb
+bbbccccccfcccccccccbbb
+bbbccccccccccccccccbbb
+bbbcccfcfccccccccccbbb
+bbccfcccccccccccccccbb
+bbccccccccccccccccccbb
+bbccccccccccccccccccbb
+bbbbbbbbbbbbbbbbbbbbbb
+aaaaaaaaaaaaaaaaaaaaaa

@@ -1,0 +1,24 @@
+# Coffre d'expédition ouvert
+id: coffre-expedition-ouvert
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#a86f3c c=#4a2e17 d=#6cb6ff e=#fff6cc f=#b4dbff g=#f5d76e h=#b8c4d2 i=#7a4b26
+images:
+....aaaaaaaaaa....
+...abbbbbbbbbba...
+..abcccccccccca...
+..abccccccccccba..
+..abccccccccccba..
+.abbcccccccccdba..
+.abbbbbbebbbdfdba.
+..aaaagagagaadaa..
+..aaagaaaaagagaa..
+.acchcccccccchcca.
+.aiihiiiiiiiihiia.
+.aiihiiiiiiiihiia.
+.aiihiiiiiiiihiia.
+.aiihiiiiiiiihiia.
+.aiihiiiiiiiihiia.
+.aiihiiiiiiiihiia.
+..aaaaaaaaaaaaaa..

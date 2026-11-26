@@ -1,0 +1,37 @@
+# Coffre d'expédition (fermé : un journal à lire)
+id: coffre-expedition
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 700
+palette: a=#1c2128 b=#a86f3c c=#b8c4d2 d=#f5d76e e=#4a2e17 f=#7a4b26 g=#7a5a10 h=#ffffff i=#fff6cc
+images:
+.aaaaaaaaaaaaaa.
+abbcbbbbbbbbcbba
+abbcbbbbbbbbcbba
+abbcbbbbbbbbcbba
+abbcbbbddbbbcbba
+aeeceeeddeeeceea
+affcfffgdfffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+.aaaaaaaaaaaaaa.
+---
+.aaaaaaaaaaaaaa.
+abbcbbbbbbbbcbba
+abbcbbbbbhbbcbba
+abbcbbbbbbbbcbba
+abbcbbbiibbbcbba
+aeeceeeiieeeceea
+affcfffgifffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+affcffffffffcffa
+.aaaaaaaaaaaaaa.
