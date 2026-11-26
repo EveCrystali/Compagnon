@@ -1,0 +1,19 @@
+# Icône : marmite en cuivre
+id: marmite-cuivre
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f69d50 c=#8a4a1f d=#d9803a e=#ffc89a
+images:
+................
+................
+.aaaaaaaaaaaaaa.
+abbbbbbbbbbbbbba
+ccbbbbbbbbbbbbcc
+ccddddddddddddcc
+addeedddddddddda
+addeedddddddddda
+.adeeddddddddda.
+.adddddddddddda.
+..aaddddddddaa..
+....aaaaaaaa....

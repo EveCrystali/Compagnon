@@ -53,6 +53,15 @@ Ordre de dessin : couche arrière, ombre, corps, visage, antenne, puis dos, cou,
 main, compagnon, effet. Les bottes de pluie (emplacement de boutique `pieds`) se posent sur l'ancre
 `pieds`.
 
+Boutique rétro (`outils/sprites/boutique_sprites.py`) : une cinquantaine d'objets répartis par emplacement
+(`tete`, `yeux`, `cou`, `dos` — souvent `couche: derriere` —, `main`, `pieds`, `compagnon` sur l'ancre `cote`,
+`effet`), six teintes (`pervenche`, `mandarine`, `miel`, `prune`, `acier`, `peche` ; les trois chaudes rejoignent
+`CHAUDES`), les décors `fond-nuit`, `fond-foret`, `fond-plage`, `fond-arcade`, `fond-espace` (scènes 64 × 48,
+`ancre: aucun`, dessinées derrière Pilou par l'app et l'aperçu de la boutique, jamais sur lui) et des icônes
+d'interface (`cadenas`, `badge-boutique`, `pierre-calme`, `canne-doree`, `marmite-cuivre`). Les cadres de bulle
+ne sont pas des sprites : `Boutique.Style` (PC) et `Boutique.style` (téléphone). Planches : `boutique-retro.png`,
+`boutique-retro-stades.png` (stades 1, 3, 4, négligé, terne), `boutique-decors.png`.
+
 Météo (`outils/sprites/meteo_sprites.py`) : `meteo-pluie`, `meteo-averse`, `meteo-eclair`,
 `meteo-neige`, `meteo-brouillard`, `meteo-vent`, `meteo-soleil` (plein cadre, animés) et
 `meteo-mouille`, `meteo-givre` (sur Pilou) ; les objets `impermeable`, `bottes-pluie`, `moufles`,

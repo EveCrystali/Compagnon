@@ -1,0 +1,17 @@
+# Collier de perles
+id: collier-perles
+slot: cou
+ancre: cou
+decalage: -15 -2
+palette: a=#e6ecf2 b=#ffffff c=#768390 d=#f6f8fa
+images:
+aabac....................caaba
+aabac....................caaaa
+caabacc................ccaaaac
+caaaabaccc.cc.cc.cc.cccabaaaac
+.caaaaaabacbacaacabcabaaaaaac.
+..ccaaaaaaaaaddddaaaaaaaaacc..
+....cccaaaaaaddddaaaaaaccc....
+.......ccccacddddcacccc.......
+...........ccddddcc...........
+.............cccc.............

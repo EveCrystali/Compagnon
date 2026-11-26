@@ -1,0 +1,39 @@
+# Icône : du nouveau en boutique
+id: badge-boutique
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 500
+palette: a=#1c2128 b=#8a4a1f c=#d9803a d=#f69d50 e=#fff6cc f=#ffffff
+images:
+.....aaaa.....
+....abbbba....
+...abaaaaba...
+.aaabaaaabaaa.
+acccbccccbccca
+acccbccccbccca
+addddbbbbdddda
+adddddeeddddda
+adddddeeddddda
+adddeeeeeeddda
+addddeeeedddda
+addddeeeedddda
+addddeddedddda
+adddddddddddda
+adddddddddddda
+---
+.....aaaa.....
+....abbbba....
+...abaaaaba...
+.aaabaaaabaaa.
+acccbccccbccca
+acccbccccbccca
+addddbbbbdddda
+adddddffddddda
+adddddffddddda
+adddffffffddda
+addddffffdddda
+addddffffdddda
+addddfddfdddda
+adddddddddddda
+adddddddddddda

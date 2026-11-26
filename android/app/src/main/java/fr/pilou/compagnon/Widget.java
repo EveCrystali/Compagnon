@@ -25,7 +25,7 @@ public final class Widget extends AppWidgetProvider {
         RenduPilou.Allure a = Dessin.allure(etat.expression(maintenant), 0, etat.couleur, etat.accessoire, false, 0);
         java.util.List<String> portes = new java.util.ArrayList<>();
         for (java.util.Map.Entry<String, String> en : etat.porte.entrySet())
-            if (!en.getKey().equals(Boutique.COULEUR)) portes.add(en.getValue());
+            if (Boutique.surPilou(en.getKey())) portes.add(en.getValue());
         a.objets = portes;
         Meteo.appliquer(a, etat.etatMeteo(maintenant), 0);
         v.setImageViewBitmap(R.id.pilou, Dessin.image(a, 3));

@@ -1,0 +1,18 @@
+# Patins
+id: patins
+slot: pieds
+ancre: pieds
+decalage: -15 -6
+palette: a=#1c2128 b=#ffd8b0 c=#f69d50 d=#d9803a e=#768390 f=#e6ecf2
+images:
+.abbbbbbbba......abbbbbbbba...
+.acccccccca......acccccccca...
+.acccccccca......acccccccca...
+.acccccccca......acccccccca...
+.acccccccca......acccccccca...
+.accccccccaaa....accccccccaaa.
+.addddddddddda...addddddddddda
+.addddddddddda...addddddddddda
+.aaeaaaaaaeaaa...aaeaaaaaaeaaa
+afffffffffffffa.afffffffffffff
+.aaaaaaaaaaaaa...aaaaaaaaaaaaa

@@ -1,0 +1,18 @@
+# Lunettes cœur
+id: lunettes-coeur
+slot: yeux
+ancre: yeux
+decalage: -15 -2
+palette: a=#8a4a1f b=#ff9ec7 c=#ffffff d=#d9803a
+images:
+.abbbbaabbbba....abbbbaabbbba.
+abbbbbbbbbbbba..abbbbbbbbbbbba
+abbccbbbbbbbbaaaabbccbbbbbbbba
+bbbbbbbbbbbbbddddbbbbbbbbbbbbb
+abbbbbbbbbbbbaaaabbbbbbbbbbbba
+abbbbbbbbbbbba..abbbbbbbbbbbba
+.abbbbbbbbbba....abbbbbbbbbba.
+..aabbbbbbaa......aabbbbbbaa..
+....abbbba..........abbbba....
+.....abba............abba.....
+......aa..............aa......

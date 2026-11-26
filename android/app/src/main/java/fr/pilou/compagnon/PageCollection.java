@@ -16,8 +16,8 @@ import java.util.Set;
 
 /** Collection : carnet de pêche, livre de recettes, récompenses, style (accessoires et couleurs). */
 final class PageCollection extends Page {
-    private static final String[] ONGLETS = {"Carnet", "Recettes", "Niveaux", "Style", "Boutique"};
-    static final int BOUTIQUE = 4;
+    private static final String[] ONGLETS = {"Carnet", "Recettes", "Niveaux", "Style"};
+    static final int NIVEAUX = 2, STYLE = 3;
     static final Map<String, String> ACCESSOIRES = new HashMap<>(), COULEURS = new HashMap<>();
 
     static {
@@ -83,7 +83,6 @@ final class PageCollection extends Page {
             case 1: recettes(e, n, plats); break;
             case 2: recompenses(n); break;
             case 3: style(e, n); break;
-            case BOUTIQUE: boutique(e, n); break;
             default: carnet(n, carnet);
         }
         contenu.setAlpha(0);
@@ -245,13 +244,14 @@ final class PageCollection extends Page {
         contenu.addView(tete, Ui.large(app, 12));
         int nbArticles = 0;
         for (Boutique.Article a : Boutique.CATALOGUE) if (a.niveauMin <= n) nbArticles++;
+        prochaineRangee(e, n);
         java.util.List<String[]> lignes = new java.util.ArrayList<>();
         for (Object[] j : Acces.JEUX) lignes.add(new String[]{String.valueOf(j[2]), (String) j[1], "jeu"});
         for (Object[] s : Acces.STADES) if ((Integer) s[0] > 1) lignes.add(new String[]{String.valueOf(s[2]), (String) s[1], "évolution"});
         for (String[] r : Butin.RECOMPENSES) if (r[1].equals("titre")) lignes.add(new String[]{r[0], r[2], "titre"});
         lignes.sort((x, y) -> Integer.compare(Integer.parseInt(x[0]), Integer.parseInt(y[0])));
         LinearLayout liste = Ui.carte(app);
-        liste.addView(Ui.texte(app, "◆ Boutique : " + nbArticles + " / " + Boutique.CATALOGUE.size() + " articles accessibles", 14, p.texte, true));
+        liste.addView(Ui.texte(app, "◆ Boutique : " + nbArticles + " / " + Boutique.CATALOGUE.size() + " articles dans les rangées ouvertes", 14, p.texte, true));
         for (String[] r : lignes) {
             int niv = Integer.parseInt(r[0]);
             boolean ok = niv <= n;
@@ -273,91 +273,37 @@ final class PageCollection extends Page {
 
     // ---- Style
 
-    // ---- Boutique (gratuite) : po gagnées en quêtes ; le PC vérifie et applique les achats.
-
-    private void boutique(Etat e, int n) {
-        Ui.Palette p = Ui.p(app);
-        int solde = Gains.solde(app, e);
-        java.util.Set<String> attente = Gains.achatsEnAttente(app, e);
-        java.util.Map<String, String> porte = Gains.porte(app, e);
-        LinearLayout tete = Ui.carte(app);
-        tete.addView(Ui.texte(app, e.po < 0 ? "◉ — po" : "◉ " + solde + " po", 22, p.orange, true));
-        String sous = e.po < 0 ? "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC)."
-                : "Les pièces d'or se gagnent en quêtes. Tout est gratuit : aucune vraie monnaie.";
-        if (!attente.isEmpty()) sous += "\n" + attente.size() + " achat" + (attente.size() > 1 ? "s" : "") + " en route vers le PC…";
-        TextView t = Ui.texte(app, sous, 13, p.doux, false);
-        t.setPadding(0, Ui.dp(app, 6), 0, 0);
-        tete.addView(t);
-        contenu.addView(tete, Ui.large(app, 6));
-        if (e.po < 0) return;
-        if (!e.offres.isEmpty()) {
-            contenu.addView(Ui.titreSection(app, "◆ Offres du jour"));
-            LinearLayout c = Ui.carte(app);
-            for (String id : e.offres) {
-                Boutique.Article a = Boutique.trouver(id);
-                if (a != null) article(c, a, e, n, solde, attente, porte);
-            }
-            contenu.addView(c, Ui.large(app, 6));
-        }
-        for (String slot : Boutique.RAYONS) {
-            contenu.addView(Ui.titreSection(app, Boutique.signe(slot) + " " + Boutique.nomSlot(slot)));
-            LinearLayout c = Ui.carte(app);
-            for (Boutique.Article a : Boutique.CATALOGUE) if (a.slot.equals(slot)) article(c, a, e, n, solde, attente, porte);
-            contenu.addView(c, Ui.large(app, 6));
-        }
-    }
-
-    private void article(LinearLayout carte, Boutique.Article a, Etat e, int n, int solde, java.util.Set<String> attente, java.util.Map<String, String> porte) {
-        Ui.Palette p = Ui.p(app);
-        if (carte.getChildCount() > 0) carte.addView(Ui.separateur(app));
-        boolean consommable = a.slot.equals(Boutique.CONSOMMABLE);
-        boolean possede = !consommable && e.objets.contains(a.id);
-        boolean surPc = a.slot.equals(Boutique.ACCESSOIRE), bonus = a.slot.equals(Boutique.BONUS);
-        boolean enRoute = attente.contains(a.id);
-        boolean porteIci = a.id.equals(porte.get(a.slot));
+    // Prochaine rangée de la boutique : niveau, XP qui manque, aperçu des objets (en silhouette), « Voir en boutique ».
+    private void prochaineRangee(Etat e, int n) {
+        int palier = Boutique.prochainPalier(n);
+        if (palier == 0) return;
+        int xp = Gains.xp(app, e);
+        LinearLayout c = Ui.carte(app);
+        c.setBackground(Ui.arrondi(app, Vitrine.NUIT, 18, Vitrine.VIOLET_FONCE));
+        c.addView(new Vitrine.Pixel(app, "PROCHAINE RANGÉE", 2, Vitrine.VIOLET, Vitrine.ENCRE, false));
+        java.util.List<String> rayons = Boutique.rayonsDuPalier(palier);
+        StringBuilder noms = new StringBuilder();
+        for (String r : rayons) noms.append(noms.length() > 0 ? ", " : "").append(Boutique.nomSlot(r));
+        TextView t = Ui.texte(app, noms + " — niveau " + palier + " (encore " + Math.max(0, Butin.xpPourNiveau(palier) - xp) + " xp)", 14,
+                Vitrine.ARGENT_CLAIR, true);
+        t.setPadding(0, Ui.dp(app, 8), 0, Ui.dp(app, 6));
+        c.addView(t, Ui.large());
         LinearLayout r = Ui.rangee(app);
-        r.setPadding(0, Ui.dp(app, 6), 0, Ui.dp(app, 6));
-        LinearLayout txt = Ui.pile(app);
-        int couleur = a.rarete >= Butin.EPIQUE ? p.orange : a.rarete == Butin.RARE ? p.bleu : p.texte;
-        txt.addView(Ui.texte(app, Butin.signe(a.rarete) + "  " + a.nom, 15, couleur, porteIci));
-        int prix = Boutique.prix(a, e.promo);
-        String detail = possede ? (bonus ? "actif" : surPc ? "à toi · se porte depuis le PC" : porteIci ? "porté" : "à toi")
-                : enRoute ? "achat en route…" : prix + " po" + (prix < a.prix ? "  · promo -25 %" : "")
-                + (a.niveauMin > 1 ? "  · niveau " + a.niveauMin : "");
-        txt.addView(Ui.texte(app, Boutique.signe(a.slot) + " " + Boutique.nomSlot(a.slot) + " · " + detail, 12, p.doux, false));
-        r.addView(txt, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-        android.widget.Button b;
-        if (possede && (bonus || surPc)) {
-            b = Ui.bouton(app, bonus ? "actif" : "à toi", false, v -> {
-            });
-            b.setEnabled(false);
-        } else if (possede) {
-            b = Ui.bouton(app, porteIci ? "Retirer" : "Porter", !porteIci, v -> {
-                Gains.equiper(app, a.slot, porteIci ? "" : a.id);
-                envoyer();
-                empreinte = "";
-                rafraichir();
-            });
-        } else {
-            String refus = enRoute && !consommable ? "en route" : Boutique.refus(a, n, solde, e.offres, e.promo, false);
-            b = Ui.bouton(app, refus == null ? "Acheter" : refus, refus == null, v -> {
-                Gains.acheter(app, a.id);
-                envoyer();
-                empreinte = "";
-                rafraichir();
-            });
-            b.setEnabled(refus == null);
-            if (refus != null) b.setAlpha(0.55f);
+        float d = app.getResources().getDisplayMetrics().density;
+        int k = 0;
+        for (Boutique.Article a : Boutique.CATALOGUE) {
+            if (a.niveauMin != palier || !Boutique.surPilou(a.slot) || k >= 4) continue;
+            ImageView im = new ImageView(app);
+            im.setImageBitmap(Vitrine.pilou(Vitrine.allure(a, 0), 1.1f * d, true));
+            im.setContentDescription(a.nom + ", rangée du niveau " + palier);
+            r.addView(im, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            k++;
         }
-        b.setTextSize(13);
-        b.setMinHeight(Ui.dp(app, 38));
-        r.addView(b);
-        carte.addView(r, Ui.large());
-    }
-
-    private void envoyer() {
-        android.content.Context c = app.getApplicationContext();
-        new Thread(() -> Gains.envoyer(c), "pilou-boutique").start();
+        c.addView(r, Ui.large());
+        LinearLayout.LayoutParams lb = Ui.large();
+        lb.topMargin = Ui.dp(app, 10);
+        c.addView(Ui.bouton(app, "Voir en boutique", true, v -> app.allerBoutique(rayons.isEmpty() ? PageBoutique.VITRINE : rayons.get(0))), lb);
+        contenu.addView(c, Ui.large(app, 12));
     }
 
     private void style(Etat e, int n) {

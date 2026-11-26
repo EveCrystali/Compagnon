@@ -1,0 +1,17 @@
+# Icône : pierre de calme
+id: pierre-calme
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3b4654 c=#768390 d=#b4dbff
+images:
+....aaaaaa....
+..aabbbbbbaa..
+.accccccccbba.
+accccdcdcdcbba
+bcccdccccccbbb
+bcccdcddcccdbb
+bbccccccccbbbb
+abbbbbbbbbbbba
+.abbbbbbbbbba.
+..aabbbbbbaa..

@@ -160,14 +160,14 @@ public class ButinTests
         Assert.Equal(50, Recompenses.Toutes.Max(r => r.Niveau));
         Assert.Equal(50, Profil.Niveau(Profil.XpPourNiveau(50)));
         Assert.Equal("Pilou éternel", Recompenses.Titre(50));
-        // Les anciennes récompenses sont devenues des articles de boutique, au niveau d'accès d'origine.
-        Assert.Equal(9, Boutique.Trouver(Boutique.TraineeEtoiles)!.NiveauMin);
+        // Les anciennes récompenses sont devenues des articles de boutique, dans la rangée du palier de leur ancien niveau.
+        Assert.Equal(5, Boutique.Trouver(Boutique.TraineeEtoiles)!.NiveauMin);
         foreach (Accessoire a in Enum.GetValues<Accessoire>().Where(a => a is not Accessoire.Saison and not Accessoire.Aucun))
         {
             Assert.Contains(Recompenses.Toutes, r => r.Accessoire == a);
-            Assert.Equal(Recompenses.Ancien(a), Boutique.Trouver(Recompenses.IdAccessoire(a))!.NiveauMin);
+            Assert.Equal(Boutique.Palier(Recompenses.Ancien(a)), Boutique.Trouver(Recompenses.IdAccessoire(a))!.NiveauMin);
         }
         foreach (Couleur c in Enum.GetValues<Couleur>().Where(c => c != Couleur.Bleu))
-            Assert.Equal(Recompenses.Ancien(c), Boutique.Trouver(Recompenses.IdCouleur(c))!.NiveauMin);
+            Assert.Equal(Boutique.Palier(Recompenses.Ancien(c)), Boutique.Trouver(Recompenses.IdCouleur(c))!.NiveauMin);
     }
 }

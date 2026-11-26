@@ -1,0 +1,92 @@
+# Antenne néon
+id: antenne-neon
+slot: tete
+ancre: tete
+decalage: -13 -18
+coiffe: oui
+duree: 180
+palette: a=#fff6cc b=#1c2128 c=#6cb6ff d=#9b8cff e=#ffffff f=#b8c4d2 g=#2d333b h=#b4dbff i=#d2caff
+images:
+abbcbb...........b..bbdbba
+bcccccb.b.......babbdddddb
+cccccccbab.......bbddddddd
+cceccccbb.........bddedddd
+cccccccb..........bddddddd
+cccccccb..........bddddddd
+bcccccb............bdddddb
+.bbcbb..............bbdfb.
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+.bbbbbfbbbbbbbbbbbbbfbbbb.
+bgggggfgggggggggggggfggggb
+bggggggggggggggggggggggggb
+bggggggggggggggggggggggggb
+---
+.bbdbb..............bbcbb.
+bdddddb............bcccccb
+dddddddb..........bccccccc
+ddeddddb..........bccecccc
+dddddddb..........bccccccc
+dddddddb..........bccccccc
+bdddddb............bcccccb
+.bbdbb..............bbcfb.
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+.bbbbbfbbbbbbbbbbbbbfbbbb.
+bgggggfgggggggggggggfggggb
+bggggggggggggggggggggggggb
+bggggggggggggggggggggggggb
+---
+abbhbb...........b..bbibba
+bhhhhhb.b.......babbiiiiib
+hhhhhhhbab.......bbiiiiiii
+hhehhhhbb.........biieiiii
+hhhhhhhb..........biiiiiii
+hhhhhhhb..........biiiiiii
+bhhhhhb............biiiiib
+.bbhbb..............bbifb.
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+.bbbbbfbbbbbbbbbbbbbfbbbb.
+bgggggfgggggggggggggfggggb
+bggggggggggggggggggggggggb
+bggggggggggggggggggggggggb
+---
+.bbibb..............bbhbb.
+biiiiib............bhhhhhb
+iiiiiiib..........bhhhhhhh
+iieiiiib..........bhhehhhh
+iiiiiiib..........bhhhhhhh
+iiiiiiib..........bhhhhhhh
+biiiiib............bhhhhhb
+.bbibb..............bbhfb.
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+...bfb...............bfb..
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+....bfb.............bfb...
+.bbbbbfbbbbbbbbbbbbbfbbbb.
+bgggggfgggggggggggggfggggb
+bggggggggggggggggggggggggb
+bggggggggggggggggggggggggb
