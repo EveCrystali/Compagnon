@@ -157,6 +157,7 @@ public sealed partial class FenetrePilou
             if (tel > 0) appareils.Items.Add(new MenuItem { Header = $"Téléphone · {tel} xp (atelier)", IsEnabled = false });
             appareils.Items.Add(new MenuItem { Header = $"Total : {_xpTotal} xp · niveau {Niveau}", IsEnabled = false });
             m.Items.Add(appareils);
+            m.Items.Add(Entree("Rejoindre un autre groupe… (code de mon autre PC ou du téléphone)", Rejoindre));
             m.Items.Add(Entree("Groupe : nouveau code (les autres appareils décrochent)", () => Appairer(true)));
             m.Items.Add(Entree("Quitter le groupe", () =>
             {
