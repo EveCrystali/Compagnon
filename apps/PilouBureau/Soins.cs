@@ -3,11 +3,12 @@ using System.Text.Json;
 
 namespace PilouBureau;
 
-// Soins de Pilou : une couche légère et passive par-dessus le reste. Trois besoins qui baissent lentement
-// (faim, propreté, moral) ; rien ne s'affiche tant que tout va bien ; sous le seuil, une petite icône près
-// de Pilou, et un clic la comble. Aucune punition : au pire, négligé, Pilou a l'air terne. Bien soigné
-// (les trois au-dessus de 70), il rayonne (XP et po × 1,2) ; la qualité des soins des derniers jours choisit
-// la variante de ses prochains stades d'évolution.
+// Soins de Pilou : une couche légère et passive par-dessus le reste. Trois besoins qui baissent lentement,
+// au même rythme pour tout le monde (faim, propreté, moral) ; rien ne s'affiche tant que tout va bien ; sous
+// le seuil, une petite icône près de Pilou, et un clic la comble. Négligé, Pilou boude : il est ronchon et
+// ses gains d'XP et de po sont réduits (× 0,6) pendant un temps — c'est tout. Bien soigné (les trois
+// au-dessus de 70), il rayonne (× 1,2) ; la qualité des soins des derniers jours choisit la variante de ses
+// prochains stades d'évolution.
 //
 // Temps réel, même appareils éteints : l'état est une fonction pure d'une base (état connu à un instant),
 // d'un journal d'actions horodatées (identifiant unique, fusionné par union entre appareils, comme les
@@ -20,8 +21,12 @@ public sealed class EtatSoins
     // Moyenne glissante (≈ 3 jours) de la moyenne des trois besoins : la qualité des soins.
     public double Score { get; set; } = 80;
     public double T { get; set; }
-    public string Rythme { get; set; } = Soins.Normal;
     public bool Vacances { get; set; }
+    // Bouderie : temps passé avec au moins un besoin sous 20 % (ms, remis à zéro quand plus aucun ne l'est),
+    // s'il boude, et jusqu'à quand il se laisse amadouer après les soins (0 : il boude encore pour de bon).
+    public double Neglige { get; set; }
+    public bool Boude { get; set; }
+    public double FinBouderie { get; set; }
 
     public EtatSoins Copie() => (EtatSoins)MemberwiseClone();
 }
@@ -41,11 +46,13 @@ public sealed class CarnetSoins
 
 public static class Soins
 {
-    public const string Doux = "doux", Normal = "normal", Exigeant = "exigeant";
     public const string Faim = "faim", Proprete = "proprete", Moral = "moral";
-    public const double Seuil = 30, SeuilTerne = 10, SeuilRayonnant = 70;
+    public const double Seuil = 30, SeuilRayonnant = 70;
     private const double Heure = 3600_000, Jour = 24 * Heure;
-    // Heures pour vider un besoin plein, au rythme normal.
+    // Bouderie : un besoin sous 20 % depuis 6 h, ou deux à la fois ; une fois soigné, il traîne encore 30 min.
+    public const double SeuilBouderie = 20, AvantBouderie = 6 * Heure, Rancune = 30 * 60_000;
+    public const double MalusBouderie = 0.6, BonusRayonnant = 1.2;
+    // Heures pour vider un besoin plein (le même rythme pour tous).
     public const double HeuresFaim = 36, HeuresProprete = 48, HeuresMoral = 30;
     private const double TauScore = 3 * Jour;
     public const double Garder = 2 * Jour; // au-delà, les actions sont repliées dans la base
@@ -57,8 +64,6 @@ public static class Soins
     {
         ("gateau", 15), ("soupe", 10), ("pomme", 5), ("croquettes", 0),
     };
-
-    public static double Facteur(string rythme) => rythme switch { Doux => 0.6, Exigeant => 1.6, _ => 1.0 };
 
     public static EtatSoins Neuf(double t) => new() { T = t };
 
@@ -89,14 +94,28 @@ public static class Soins
             double dt = Math.Min(Heure, jusqua - e.T);
             if (!e.Vacances)
             {
-                double f = Facteur(e.Rythme) * dt / Heure * 100;
+                double f = dt / Heure * 100;
                 e.Faim = Math.Max(0, e.Faim - f / HeuresFaim);
                 e.Proprete = Math.Max(0, e.Proprete - f / HeuresProprete);
                 e.Moral = Math.Max(0, e.Moral - f / HeuresMoral);
                 double moyenne = (e.Faim + e.Proprete + e.Moral) / 3;
                 e.Score += (moyenne - e.Score) * (1 - Math.Exp(-dt / TauScore));
+                // Bouderie : on regarde à la fin de chaque tranche (≤ 1 h).
+                int bas = Bas(e);
+                e.Neglige = bas > 0 ? e.Neglige + dt : 0;
+                if (bas >= 2 || (bas >= 1 && e.Neglige >= AvantBouderie))
+                {
+                    e.Boude = true;
+                    e.FinBouderie = 0;
+                }
             }
             e.T += dt;
+            // Amadoué : la rancune passée, il ne boude plus.
+            if (e.Boude && e.FinBouderie > 0 && e.T >= e.FinBouderie)
+            {
+                e.Boude = false;
+                e.FinBouderie = 0;
+            }
         }
     }
 
@@ -123,14 +142,17 @@ public static class Soins
             case "jouer":
                 e.Moral = Math.Min(100, e.Moral + 15);
                 break;
-            case "rythme":
-                if (a.Objet is Doux or Normal or Exigeant) e.Rythme = a.Objet;
-                break;
             case "vacances":
                 e.Vacances = a.Objet == "1";
                 break;
+            // « rythme » (ancien réglage de difficulté) : ignoré, tout le monde a le même rythme.
         }
+        // Soigné pendant qu'il boude : plus aucun besoin bas → il se laisse amadouer, mais garde 30 min de rancune.
+        if (Bas(e) == 0) e.Neglige = 0;
+        if (e.Boude && e.FinBouderie == 0 && Bas(e) == 0) e.FinBouderie = e.T + Rancune;
     }
+
+    private static int Bas(EtatSoins e) => Besoins.Count(b => Valeur(e, b) < SeuilBouderie);
 
     public static int BonusEnCas(string objet) =>
         objet.StartsWith("plat", StringComparison.Ordinal) ? 15 : EnCas.FirstOrDefault(x => x.Id == objet).Moral;
@@ -145,11 +167,21 @@ public static class Soins
 
     public static bool Rayonnant(EtatSoins e) => !e.Vacances && e.Faim > SeuilRayonnant && e.Proprete > SeuilRayonnant && e.Moral > SeuilRayonnant;
 
-    // Négligé : deux besoins presque vides. Pilou a juste l'air terne (aucune autre conséquence).
-    public static bool Terne(EtatSoins e) => !e.Vacances && Besoins.Count(b => Valeur(e, b) < SeuilTerne) >= 2;
+    // Il boude (ronchon, gains réduits) ; « amadoué » : soigné, mais il boude encore un peu.
+    public static bool Boudeur(EtatSoins e) => !e.Vacances && e.Boude;
 
-    // Bonus d'XP et de pièces quand il rayonne.
-    public static int Bonus(int gain, EtatSoins e) => Rayonnant(e) && gain > 0 ? (int)Math.Round(gain * 1.2) : gain;
+    public static bool Amadoue(EtatSoins e) => Boudeur(e) && e.FinBouderie > 0;
+
+    // Multiplicateur des gains d'XP et de po : × 0,6 s'il boude, × 1,2 s'il rayonne, sinon × 1.
+    public static double Multiplicateur(EtatSoins e) => Boudeur(e) ? MalusBouderie : Rayonnant(e) ? BonusRayonnant : 1;
+
+    // Un gain ajusté (arrondi ; un gain positif rapporte toujours au moins 1).
+    public static int Bonus(int gain, EtatSoins e)
+    {
+        if (gain <= 0) return gain;
+        double m = Multiplicateur(e);
+        return m == 1 ? gain : Math.Max(1, (int)Math.Floor(gain * m + 0.5)); // même arrondi que Java
+    }
 
     // Variante d'un stade (2 à 4), choisie au passage du stade d'après la qualité des soins.
     public static string Variante(double score) => score >= 60 ? "calin" : "espiegle";
@@ -227,7 +259,8 @@ public static class Soins
     public static Dictionary<string, object> JsonEtat(EtatSoins e) => new()
     {
         ["f"] = Math.Round(e.Faim, 3), ["p"] = Math.Round(e.Proprete, 3), ["m"] = Math.Round(e.Moral, 3),
-        ["s"] = Math.Round(e.Score, 3), ["t"] = e.T, ["r"] = e.Rythme, ["v"] = e.Vacances ? 1 : 0,
+        ["s"] = Math.Round(e.Score, 3), ["t"] = e.T, ["v"] = e.Vacances ? 1 : 0,
+        ["n"] = Math.Round(e.Neglige), ["b"] = e.Boude ? 1 : 0, ["fb"] = e.FinBouderie,
     };
 
     public static object JsonAction(ActionSoin a) => a.Objet == ""
@@ -239,13 +272,13 @@ public static class Soins
         if (r.ValueKind != JsonValueKind.Object) return null;
         double N(string k, double d) => r.TryGetProperty(k, out var v) && v.ValueKind == JsonValueKind.Number ? v.GetDouble() : d;
         double T(string k) => Math.Clamp(N(k, 100), 0, 100);
-        var rythme = r.TryGetProperty("r", out var rv) && rv.ValueKind == JsonValueKind.String ? rv.GetString() ?? Normal : Normal;
         var t = N("t", 0);
         if (t <= 0) return null;
         return new EtatSoins
         {
             Faim = T("f"), Proprete = T("p"), Moral = T("m"), Score = Math.Clamp(N("s", 80), 0, 100), T = t,
-            Rythme = rythme is Doux or Exigeant ? rythme : Normal, Vacances = N("v", 0) == 1,
+            Vacances = N("v", 0) == 1,
+            Neglige = Math.Max(0, N("n", 0)), Boude = N("b", 0) == 1, FinBouderie = Math.Max(0, N("fb", 0)),
         };
     }
 

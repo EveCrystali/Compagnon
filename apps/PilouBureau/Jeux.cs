@@ -106,7 +106,7 @@ public sealed partial class FenetrePilou
         if (_essaiObjet == "") return equipe;
         var d = new Dictionary<string, string>(equipe);
         var slot = Banque.Commune[_essaiObjet]?.Slot ?? "objet";
-        d[_essaiObjet is "lavande" or "corail-orange" or "ardoise" or "sable" or "glacier" ? PilouBureau.Boutique.Couleur : slot] = _essaiObjet;
+        d[PilouBureau.Boutique.Trouver(_essaiObjet)?.Slot is { } s && !PilouBureau.Boutique.SurPilou(s) ? s : slot] = _essaiObjet;
         return d;
     }
 
@@ -172,7 +172,7 @@ public sealed partial class FenetrePilou
             }
             else if (c.Xp > _profil.XpClaudeVue)
             {
-                int gain = c.Xp - _profil.XpClaudeVue;
+                int gain = BonusSoins(c.Xp - _profil.XpClaudeVue); // il boude : × 0,6 ; il rayonne : × 1,2
                 _profil.XpClaudeVue = c.Xp;
                 _profil.Xp += gain;
                 _profil.Ecrire(DossierPartage);
@@ -193,8 +193,24 @@ public sealed partial class FenetrePilou
         var nom = _suivi.Courant?.Nom ?? "Pilou";
         int n = Niveau, suivant = Profil.XpPourNiveau(n + 1);
         var activite = TenueAffichee == "" ? "" : $" · {Activites.Signe(TenueAffichee)} {Activites.Nom(TenueAffichee)}";
-        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}{activite}";
+        // Info-bulle de Pilou : le bandeau (niveau, XP, po, prochaine rangée), puis son nom et son activité.
+        if (_infoBulle is null)
+        {
+            _infoBandeau = new Bandeau(compact: true);
+            _infoTexte = new TextBlock { Margin = new Thickness(2, 4, 2, 0), FontSize = 11.5 };
+            var pile = new StackPanel();
+            pile.Children.Add(_infoBandeau);
+            pile.Children.Add(_infoTexte);
+            _infoBulle = new ToolTip { Content = pile, Padding = new Thickness(4) };
+            _scene.ToolTip = _infoBulle;
+        }
+        _infoBandeau!.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchaineRangee(n, _xpTotal));
+        _infoTexte!.Text = $"{nom} · {_xpTotal}/{suivant} xp{activite}{HumeurSoins()}";
     }
+
+    private ToolTip? _infoBulle;
+    private Bandeau? _infoBandeau;
+    private TextBlock? _infoTexte;
 
     private void VerifierNiveau()
     {
@@ -203,6 +219,9 @@ public sealed partial class FenetrePilou
         {
             var ouvert = Ouvertures(_dernierNiveau, n);
             Dire(ouvert.Count > 0 ? $"niveau {n} ! accès : {string.Join(", ", ouvert)}" : $"niveau {n} !", 5500);
+            // Nouvelles rangées en boutique : une petite fenêtre « Voir en boutique ».
+            if (PilouBureau.Boutique.Debloques(_dernierNiveau, n).Count > 0) MontrerRangees(_dernierNiveau, n);
+            _nouveautesLu = -1e12;
             Flotter($"NIVEAU {n}", 1.6, new Point(TeteX - 50, TeteY - 70));
             _salueJusque = Maintenant + 2500;
             _tSaut = Maintenant;

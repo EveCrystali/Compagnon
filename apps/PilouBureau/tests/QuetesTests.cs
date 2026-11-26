@@ -124,8 +124,94 @@ public class BoutiqueTests
         };
         foreach (var id in ids) Assert.NotNull(Boutique.Trouver(id));
         Assert.Equal(Boutique.Catalogue.Count, Boutique.Catalogue.Select(a => a.Id).Distinct().Count());
-        Assert.All(Boutique.Catalogue, a => Assert.InRange(a.Prix, 60, 600));
-        Assert.All(Boutique.Catalogue, a => Assert.Contains(a.Slot, Boutique.Rayons));
+        Assert.All(Boutique.Catalogue, a => Assert.InRange(a.Prix, 60, 1500));
+        Assert.All(Boutique.Catalogue, a => Assert.Contains(Boutique.RayonDe(a.Slot), Boutique.Rayons));
+        // Chaque article est rangé dans une rangée de palier (1, 5, 10, 15, 20, 30, 40, 50).
+        Assert.All(Boutique.Catalogue, a => Assert.Contains(a.NiveauMin, Boutique.Paliers));
+    }
+
+    // Boutique rétro : les nouveaux objets, dans tous les rayons, tous dessinés (ou stylés pour les bulles).
+    public static readonly string[] Nouveaux =
+    {
+        "beret", "bonnet-pompon", "casque-chantier", "sombrero", "chapeau-cowboy", "oreilles-chat", "couronne-laurier", "antenne-neon",
+        "lunettes-3d", "visiere-pilote", "lunettes-coeur", "bandana", "noeud-pois", "cravate", "collier-perles", "sac-a-dos", "carapace",
+        "ailes-papillon", "jetpack", "sucette", "epee-mousse", "lanterne", "guitare", "canne-or", "baskets", "palmes", "patins", "oiseau",
+        "petit-robot", "fantome", "mini-dragon", "bulles-savon", "confettis", "trainee-prisme", "aura-feu", "pervenche", "mandarine", "miel",
+        "prune", "acier", "peche", "fond-nuit", "fond-foret", "fond-plage", "fond-arcade", "fond-espace", "bulle-doree", "bulle-nuit",
+        "bulle-pixel", "bulle-nuages",
+    };
+
+    private static readonly Lazy<Banque> B = new(() =>
+    {
+        var d = new DirectoryInfo(AppContext.BaseDirectory);
+        while (d is not null && !File.Exists(Path.Combine(d.FullName, "assets", "index.txt"))) d = d.Parent;
+        return Banque.DepuisDossier(Path.Combine(d!.FullName, "assets"));
+    });
+
+    [Fact]
+    public void Nouveaux_objets_au_catalogue_et_tous_dessines()
+    {
+        Assert.True(Nouveaux.Length >= 40);
+        foreach (var id in Nouveaux)
+        {
+            var a = Boutique.Trouver(id);
+            Assert.NotNull(a);
+            if (a!.Slot == Boutique.Couleur) Assert.True(B.Value.Teintes.ContainsKey(id), id);
+            else if (a.Slot == Boutique.Bulle) Assert.NotNull(Boutique.Style(id));
+            else
+            {
+                Assert.NotNull(B.Value[id]);
+                // Un décor ne se pose pas sur Pilou ; un objet porté, si, à son emplacement.
+                if (a.Slot != Boutique.Fond) Assert.Equal(a.Slot, B.Value[id]!.Slot);
+            }
+        }
+        // Tous les articles portables ont un dessin (ou une teinte, ou un style de bulle).
+        foreach (var a in Boutique.Catalogue.Where(a => Boutique.Slots.Contains(a.Slot)))
+            Assert.True(B.Value[a.Id] is not null || B.Value.Teintes.ContainsKey(a.Id) || Boutique.Style(a.Id) is not null
+                || Recompenses.CouleurDe(a.Id) is not null || a.Id == Boutique.TraineeEtoiles, a.Id);
+        Assert.All(Boutique.Rayons, r => Assert.NotEmpty(Boutique.Rangees(r)));
+    }
+
+    [Fact]
+    public void Les_niveaux_ouvrent_des_rangees()
+    {
+        Assert.Equal(1, Boutique.Palier(0));
+        Assert.Equal(1, Boutique.Palier(4));
+        Assert.Equal(5, Boutique.Palier(5));
+        Assert.Equal(15, Boutique.Palier(19));
+        Assert.Equal(50, Boutique.Palier(99));
+        Assert.Equal(5, Boutique.ProchainPalier(1));
+        Assert.Equal(30, Boutique.ProchainPalier(20));
+        Assert.Equal(0, Boutique.ProchainPalier(50));
+        // Chaque palier ouvre au moins une rangée quelque part.
+        Assert.All(Boutique.Paliers, p => Assert.NotEmpty(Boutique.RayonsDuPalier(p)));
+        // Rangées d'un rayon triées par palier.
+        var dos = Boutique.Rangees(Boutique.Dos);
+        Assert.Equal(dos.Select(r => r.Palier).OrderBy(x => x), dos.Select(r => r.Palier));
+        Assert.Contains(dos, r => r.Palier == 15 && r.Articles.Any(a => a.Id == "carapace"));
+        // Passer du niveau 14 au 15 débloque la rangée 15, et seulement elle.
+        var neufs = Boutique.Debloques(14, 15);
+        Assert.NotEmpty(neufs);
+        Assert.All(neufs, a => Assert.Equal(15, a.NiveauMin));
+        Assert.Empty(Boutique.Debloques(15, 19));
+        // Spéciaux : accessoires, bonus, consommables ; décor et bulle ne se dessinent pas sur Pilou.
+        Assert.Equal(Boutique.Speciaux, Boutique.RayonDe(Boutique.Bonus));
+        Assert.False(Boutique.SurPilou(Boutique.Fond));
+        Assert.False(Boutique.SurPilou(Boutique.Bulle));
+        Assert.True(Boutique.SurPilou(Boutique.Dos));
+    }
+
+    [Fact]
+    public void Rangee_ouverte_tout_s_achete_avec_des_po()
+    {
+        var b = new Bourse();
+        Assert.Equal("niveau 15 requis", Boutique.Acheter(b, "carapace", 14, 10_000, Jour));
+        Assert.Null(Boutique.Acheter(b, "carapace", 15, 10_000, Jour));
+        Assert.Equal(Boutique.Prix(Boutique.Trouver("carapace")!, Jour), b.PoDepenses);
+        Assert.Contains("il manque", Boutique.Acheter(b, "jetpack", 50, 100, Jour));
+        Assert.Null(Boutique.Acheter(b, "fond-nuit", 1, 1000, Jour));
+        Assert.True(Boutique.Equiper(b, Boutique.Fond, "fond-nuit", 1));
+        Assert.False(Boutique.Equiper(b, Boutique.Bulle, "fond-nuit", 2));
     }
 
     [Fact]
@@ -151,8 +237,9 @@ public class BoutiqueTests
         Assert.Null(Boutique.Acheter(b, "echarpe", 5, 100, Jour));
         Assert.Equal(70, b.PoDepenses);
         Assert.Equal("déjà dans l'inventaire", Boutique.Acheter(b, "echarpe", 5, 100, Jour));
-        var horsVente = Boutique.Catalogue.First(x => !x.Permanent && Boutique.OffresDuJour(Jour).All(o => o.Id != x.Id));
-        Assert.Equal("pas en vente aujourd'hui", Boutique.Acheter(b, horsVente.Id, 50, 10_000, Jour));
+        // Plus d'objet « pas en vente aujourd'hui » : hors des offres, l'article s'achète au prix normal.
+        var horsOffre = Boutique.Catalogue.First(x => !x.Permanent && x.NiveauMin == 1 && Boutique.OffresDuJour(Jour).All(o => o.Id != x.Id));
+        Assert.Null(Boutique.Acheter(b, horsOffre.Id, 1, 10_000, Jour));
     }
 
     [Fact]

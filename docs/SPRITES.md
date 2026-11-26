@@ -53,6 +53,15 @@ Ordre de dessin : couche arrière, ombre, corps, visage, antenne, puis dos, cou,
 main, compagnon, effet. Les bottes de pluie (emplacement de boutique `pieds`) se posent sur l'ancre
 `pieds`.
 
+Boutique rétro (`outils/sprites/boutique_sprites.py`) : une cinquantaine d'objets répartis par emplacement
+(`tete`, `yeux`, `cou`, `dos` — souvent `couche: derriere` —, `main`, `pieds`, `compagnon` sur l'ancre `cote`,
+`effet`), six teintes (`pervenche`, `mandarine`, `miel`, `prune`, `acier`, `peche` ; les trois chaudes rejoignent
+`CHAUDES`), les décors `fond-nuit`, `fond-foret`, `fond-plage`, `fond-arcade`, `fond-espace` (scènes 64 × 48,
+`ancre: aucun`, dessinées derrière Pilou par l'app et l'aperçu de la boutique, jamais sur lui) et des icônes
+d'interface (`cadenas`, `badge-boutique`, `pierre-calme`, `canne-doree`, `marmite-cuivre`). Les cadres de bulle
+ne sont pas des sprites : `Boutique.Style` (PC) et `Boutique.style` (téléphone). Planches : `boutique-retro.png`,
+`boutique-retro-stades.png` (stades 1, 3, 4, négligé, terne), `boutique-decors.png`.
+
 Météo (`outils/sprites/meteo_sprites.py`) : `meteo-pluie`, `meteo-averse`, `meteo-eclair`,
 `meteo-neige`, `meteo-brouillard`, `meteo-vent`, `meteo-soleil` (plein cadre, animés) et
 `meteo-mouille`, `meteo-givre` (sur Pilou) ; les objets `impermeable`, `bottes-pluie`, `moufles`,
@@ -79,9 +88,12 @@ Palette : bleus, oranges, argent, violets, jaunes, sables, neutres ; jamais d'op
 et chaque rareté ou état garde aussi un signe de forme. Un identifiant inconnu est ignoré sans erreur.
 
 Sur le PC : `PilouBureau.exe --instantane=<png> --essai=tenue:code` (ou `objet:cape`, `stade:3`,
-`evolution`, `soins:faim|proprete|moral|terne|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
+`evolution`, `soins:faim|proprete|moral|boude|amadoue|dos|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
 une image.
 
 Soins : icônes de besoin `soin-faim`, `soin-proprete`, `soin-moral` ; en-cas `encas-*` ; `mousse`
 (toilette) et `rayonnant` (effets animés, 4 images) ; variantes `variante-calin-<stade>` et
-`variante-espiegle-<stade>` (visage), avec `-tete` ; teinte `terne` (Pilou négligé).
+`variante-espiegle-<stade>` (visage), avec `-tete`. Bouderie : `oeil-boude` et `bouche-boude` (choisis
+par le rendu quand l'allure dit `Boude` au repos), `boude-nuage` (nuage gris qui bruine),
+`boude-eclaircie` (amadoué : un soleil pointe), `boude-bras` (bras croisés du Nimbus) ; `Dos` : ni
+visage ni sprites `visage`/`yeux`. Planche de contrôle : `bouderie.png`.

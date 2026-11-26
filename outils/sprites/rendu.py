@@ -124,6 +124,7 @@ class Pose:
         self.objets = []
         self.cligne = self.clin = self.marche = self.course = self.baille = self.etourdi = False
         self.fatigue = self.salue = False
+        self.boude = self.dos = False   # il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage)
         self.regard = self.regard_y = 0
         self.saut = self.chute = self.assis = self.suspendu = self.tremble = 0.0
         self.stade = 2         # 1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral
@@ -136,7 +137,7 @@ SPARK = {"concentre": "etincelle-roue", "attente": "etincelle-roue", "grimace": 
          "inquiet": "etincelle-alerte", "caresse": "etincelle-coeur"}
 OEIL = {"concentre": "concentre", "attente": "haut", "grimace": "grimace", "fete": "heureux", "caresse": "heureux",
         "soulage": "content", "dort": "dort", "inquiet": "inquiet"}
-CHAUDES = {"ambre", "braise", "comete", "corail-orange", "sable"}
+CHAUDES = {"ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche"}
 
 # Échelle du corps par stade (largeur, hauteur) : Gouttelette, Pilou, Nimbus, Astral.
 STADE_X = {1: 0.72, 2: 1.0, 3: 1.1, 4: 0.9}
@@ -235,7 +236,7 @@ def rendre_stade(p, B, T, TEN):
         ids.append("acc-" + p.accessoire)
     ids += TEN.get(p.tenue, []) if p.tenue else []
     ids += p.objets
-    portes = [B[i] for i in ids if i in B]
+    portes = [B[i] for i in ids if i in B and not (p.dos and B[i].slot in ("visage", "yeux"))]
     coiffe = any(s.coiffe for s in portes)
 
     pied = int(round(sol))
@@ -355,8 +356,9 @@ def rendre_stade(p, B, T, TEN):
                 a = math.radians(200 + k * 22) if sgn < 0 else math.radians(-20 - k * 22)
                 px(int(round(cx + sgn * rx * 0.55 + math.cos(a) * 3)), int(round(cy - ry * 0.55 + math.sin(a) * 2)), te[3])
 
-    # Visage.
-    nom = "spirale" if p.etourdi else OEIL.get(p.expr, "fatigue" if p.fatigue else "ouvert")
+    # Visage (aucun s'il tourne le dos).
+    moue = p.boude and p.expr == "repos"
+    nom = "spirale" if p.etourdi else OEIL.get(p.expr, "boude" if moue else "fatigue" if p.fatigue else "ouvert")
     if p.baille:
         nom = "dort"
     if st == 4 and nom == "ouvert":
@@ -364,7 +366,9 @@ def rendre_stade(p, B, T, TEN):
     peut = p.expr in ("repos", "inquiet", "attente") and not p.etourdi
     og = "cligne" if peut and p.cligne else nom
     od = "cligne" if peut and (p.cligne or p.clin) else nom
-    if st == 1 and og == "ouvert" and "oeil-ouvert-g" in B:
+    if p.dos:
+        pass  # vu de dos : ni yeux, ni bouche, ni joues
+    elif st == 1 and og == "ouvert" and "oeil-ouvert-g" in B:
         poser(B["oeil-ouvert-g"], False, C - 10 + dxf, ey - 1)
         if od == "ouvert":
             poser(B["oeil-ouvert-g"], True, C + 2 + dxf, ey - 1)
@@ -376,10 +380,10 @@ def rendre_stade(p, B, T, TEN):
             poser(B["oeil-" + og], False, C - 10 + ecart + dxf, ey)
         if "oeil-" + od in B:
             poser(B["oeil-" + od], True, C + 4 - ecart + dxf, ey)
-    bo = B.get("bouche-baille" if p.baille else "bouche-" + p.expr) or B.get("bouche-repos")
+    bo = None if p.dos else B.get("bouche-baille" if p.baille else "bouche-boude" if moue else "bouche-" + p.expr) or B.get("bouche-repos")
     if bo:
         poser(bo, False, C - bo.w // 2 + dxf, ey + 9)
-    if p.expr in ("fete", "caresse"):
+    if p.expr in ("fete", "caresse") and not p.dos:
         joue = int(round(rx)) - 1
         for x0 in (C - joue + dxf, C + joue - 3 + dxf):
             for i in range(3):

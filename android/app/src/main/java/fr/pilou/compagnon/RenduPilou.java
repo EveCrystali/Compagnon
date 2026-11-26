@@ -18,7 +18,7 @@ public final class RenduPilou {
             GOUTTE = 0xff1f4f8a, GOUTTE_CLAIRE = 0xffb4dbff, BLANC = 0xffffffff;
     private static final int[] ECLAT = {0xffffd8b0, 0xfffff6cc, 0xffb4dbff};
     private static final List<String> ORDRE = Arrays.asList("dos", "cou", "visage", "yeux", "tete", "main", "compagnon", "effet", "objet");
-    private static final Set<String> CHAUDES = new HashSet<>(Arrays.asList("ambre", "braise", "comete", "corail-orange", "sable"));
+    private static final Set<String> CHAUDES = new HashSet<>(Arrays.asList("ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche"));
     private static final int[] BLEU = {0xff1f4f8a, 0xff4a8fdc, 0xff6cb6ff, 0xffb4dbff};
     private static final int[] ORANGE = {0xff8a4a1f, 0xffd9803a, 0xfff69d50, 0xffffc89a};
     private static final int[][] CROIX = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -29,6 +29,8 @@ public final class RenduPilou {
         public double t, saut, chute, assis, suspendu, tremble, evolution;
         public List<String> objets = Collections.emptyList();
         public boolean cligne, clin, marche, course, baille, etourdi, fatigue, salue;
+        /** Il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage). */
+        public boolean boude, dos;
         public int regard, regardY, stade = 2;
 
         public Allure copie() {
@@ -220,7 +222,7 @@ public final class RenduPilou {
         boolean coiffe = false;
         for (String id : ids) {
             Sprites.Sprite s = b.get(id);
-            if (s == null) continue;
+            if (s == null || (a.dos && (s.slot.equals("visage") || s.slot.equals("yeux")))) continue;
             portes.add(s);
             coiffe |= s.coiffe;
         }
@@ -329,16 +331,19 @@ public final class RenduPilou {
                     to.px(rond(cx + sg * rx * 0.55 + Math.cos(an) * 3), rond(cy - ry * 0.55 + Math.sin(an) * 2), te[3]);
                 }
 
-        // Visage.
+        // Visage (aucun s'il tourne le dos).
+        boolean moue = a.boude && a.expr.equals("repos");
         String n0 = nomOeil(a.expr);
-        String nom = a.etourdi ? "spirale" : !n0.isEmpty() ? n0 : a.fatigue ? "fatigue" : "ouvert";
+        String nom = a.etourdi ? "spirale" : !n0.isEmpty() ? n0 : moue ? "boude" : a.fatigue ? "fatigue" : "ouvert";
         if (a.baille) nom = "dort";
         if (st == 4 && nom.equals("ouvert")) nom = "serein";
         boolean peut = (a.expr.equals("repos") || a.expr.equals("inquiet") || a.expr.equals("attente")) && !a.etourdi;
         String og = peut && a.cligne ? "cligne" : nom;
         String od = peut && (a.cligne || a.clin) ? "cligne" : nom;
         Sprites.Sprite grand = b.get("oeil-ouvert-g");
-        if (st == 1 && og.equals("ouvert") && grand != null) {
+        if (a.dos) {
+            // vu de dos : ni yeux, ni bouche, ni joues
+        } else if (st == 1 && og.equals("ouvert") && grand != null) {
             to.poser(grand, false, C - 10 + dxf, ey - 1, null);
             if (od.equals("ouvert")) to.poser(grand, true, C + 2 + dxf, ey - 1, null);
             else if (b.get("oeil-" + od) != null) to.poser(b.get("oeil-" + od), true, C + 3 + dxf, ey, null);
@@ -347,10 +352,10 @@ public final class RenduPilou {
             if (b.get("oeil-" + og) != null) to.poser(b.get("oeil-" + og), false, C - 10 + ecart + dxf, ey, null);
             if (b.get("oeil-" + od) != null) to.poser(b.get("oeil-" + od), true, C + 4 - ecart + dxf, ey, null);
         }
-        Sprites.Sprite bo = b.get(a.baille ? "bouche-baille" : "bouche-" + a.expr);
-        if (bo == null) bo = b.get("bouche-repos");
+        Sprites.Sprite bo = a.dos ? null : b.get(a.baille ? "bouche-baille" : moue ? "bouche-boude" : "bouche-" + a.expr);
+        if (bo == null && !a.dos) bo = b.get("bouche-repos");
         if (bo != null) to.poser(bo, false, C - bo.w() / 2 + dxf, ey + 9, null);
-        if (a.expr.equals("fete") || a.expr.equals("caresse")) {
+        if (!a.dos && (a.expr.equals("fete") || a.expr.equals("caresse"))) {
             int joue = rond(rx) - 1;
             for (int jx : new int[]{C - joue + dxf, C + joue - 3 + dxf})
                 for (int i = 0; i < 3; i++)

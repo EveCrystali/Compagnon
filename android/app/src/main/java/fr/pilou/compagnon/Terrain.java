@@ -146,8 +146,7 @@ public final class Terrain extends View {
             return;
         }
         boolean nouvelle = !Gains.carnet(getContext(), Prefs.etat(getContext())).contains(x.id);
-        int xp = Butin.xpPrise(x, nouvelle);
-        Gains.prise(getContext(), x, xp);
+        int xp = Gains.prise(getContext(), x, Butin.xpPrise(x, nouvelle));
         ecoute.message(Butin.nomPrise(x) + "  +" + xp + " xp" + (nouvelle ? "  · nouveau !" : "") + (seul ? "  (Pilou, tout seul)" : ""));
         humeur("fete", 2500);
         ecoute.change();
@@ -162,19 +161,19 @@ public final class Terrain extends View {
             mode = Mode.REPOS;
             return;
         }
-        Gains.plat(getContext(), plat);
+        int xp = Gains.plat(getContext(), plat);
         if (plat.rate) {
-            ecoute.message("Oups, " + plat.nom + " a brûlé…  +1 xp");
+            ecoute.message("Oups, " + plat.nom + " a brûlé…  +" + xp + " xp");
             humeur("grimace", 2000);
         } else {
-            ecoute.message(plat.nom + "  +" + plat.xp + " xp" + (plat.decouverte ? "  · nouvelle recette !" : ""));
+            ecoute.message(plat.nom + "  +" + xp + " xp" + (plat.decouverte ? "  · nouvelle recette !" : ""));
             humeur("fete", 2500);
         }
         ecoute.change();
     }
 
-    private void gagner(int xp, String texte) {
-        Gains.jeu(getContext(), xp);
+    private void gagner(int xpBrute, String texte) {
+        int xp = Gains.jeu(getContext(), xpBrute);
         ecoute.message(texte + "  +" + xp + " xp");
         humeur("fete", 2000);
         ecoute.change();

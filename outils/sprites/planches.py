@@ -116,6 +116,14 @@ def main():
         e = min(0.99, 0.02 + i * 0.085)
         cases.append((pilou(stade=3, evolution=e, t=i * 120), "%.2f" % e))
     planche(cases, 6, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "evolution.png"))
+    # Soins : il boude (moue, sourcils, nuage gris, bras croisés du Nimbus), dos tourné, amadoué.
+    cases = []
+    for st in (1, 2, 3, 4):
+        bras = ["boude-bras"] if st == 3 else []
+        cases += [(pilou(stade=st, boude=True, objets=["boude-nuage"] + bras, t=840), "%d boude" % st),
+                  (pilou(stade=st, boude=True, dos=True, objets=["boude-nuage"], t=840), "%d dos" % st),
+                  (pilou(stade=st, boude=True, objets=["boude-eclaircie"], t=840), "%d amadoue" % st)]
+    planche(cases, 6, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "bouderie.png"))
     cases = [(pilou(reaction="sueur", t=200), "sueur"), (pilou(tenue="musique", t=500), "danse : notes")]
     planche(cases, 2, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "reactions.png"))
 
@@ -139,6 +147,30 @@ def main():
         planche(cases, 4, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, nom))
     cases = [(pilou(objets=[o], t=300), o) for o in ("impermeable", "bottes-pluie", "moufles", "eventail", "parapluie-etoile")]
     planche(cases, 5, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-meteo.png"))
+
+    # Boutique rétro : nouveaux objets par rayon, portés au stade 2 et sur les autres stades.
+    nouveaux = ["beret", "bonnet-pompon", "casque-chantier", "sombrero", "chapeau-cowboy", "oreilles-chat",
+                "couronne-laurier", "antenne-neon", "lunettes-3d", "visiere-pilote", "lunettes-coeur", "bandana",
+                "noeud-pois", "cravate", "collier-perles", "sac-a-dos", "carapace", "ailes-papillon", "jetpack", "sucette",
+                "epee-mousse", "lanterne", "guitare", "canne-or", "baskets", "palmes", "patins", "oiseau", "petit-robot",
+                "fantome", "mini-dragon", "bulles-savon", "confettis", "trainee-prisme", "aura-feu"]
+    cases = [(pilou(objets=[o], t=300), o) for o in nouveaux]
+    cases += [(pilou(couleur=c), c) for c in ("pervenche", "mandarine", "miel", "prune", "acier", "peche")]
+    planche(cases, 7, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-retro.png"))
+    cases = []
+    for st in (1, 3, 4):
+        for o in ("sombrero", "antenne-neon", "jetpack", "guitare", "ailes-papillon", "mini-dragon", "lunettes-coeur"):
+            cases.append((pilou(stade=st, objets=[o], t=300), "%d %s" % (st, o)))
+    cases += [(pilou(objets=["chapeau-cowboy", "bandana", "baskets"], fatigue=True), "négligé"),
+              (pilou(objets=["oreilles-chat", "noeud-pois"], couleur="terne"), "terne")]
+    planche(cases, 7, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-retro-stades.png"))
+    cases = []
+    for f in ("fond-nuit", "fond-foret", "fond-plage", "fond-arcade", "fond-espace"):
+        im = sprite_image(B[f], 4)
+        p = grille_image(rendu.rendre(rendu.Pose(objets=["bonnet-pompon"] if f == "fond-nuit" else []), B, T, TEN), 3)
+        im.alpha_composite(p, ((im.width - p.width) // 2, im.height - p.height - 4))
+        cases.append((im, f))
+    planche(cases, 5, (64 * 4 + 12, 48 * 4 + 24), FOND, os.path.join(dossier, "boutique-decors.png"))
 
     jeux = ["etoile", "bulle", "main", "ballon", "canne", "bouchon", "eclaboussure", "bug-scarabee", "bug-araignee", "bug-ver",
             "bug-prod", "bonus-cafe", "bonus-tests", "vie", "po", "po-tourne", "coffre-quete", "parchemin-quete"]

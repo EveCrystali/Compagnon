@@ -10,6 +10,7 @@ public sealed class Allure
     public string Tenue = "";                // tenue d'activité (assets/tenues.txt)
     public IReadOnlyList<string> Objets = Array.Empty<string>(); // objets de boutique équipés
     public bool Cligne, Clin, Marche, Course, Baille, Etourdi, Fatigue, Salue;
+    public bool Boude, Dos;                  // il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage)
     public int Regard, RegardY;              // -1, 0, 1
     public double Saut, Chute, Assis, Suspendu, Tremble; // en « anciens pixels » (grille 26 × 30)
     public int Stade = 2;                    // 1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral
@@ -32,7 +33,7 @@ public static class RenduPilou
         GoutteClaire = 0xffb4dbff, Blanc = 0xffffffff;
     private static readonly uint[] Eclat = { 0xffffd8b0, 0xfffff6cc, 0xffb4dbff };
     private static readonly string[] Ordre = { "dos", "cou", "visage", "yeux", "tete", "main", "compagnon", "effet", "objet" };
-    private static readonly HashSet<string> Chaudes = new() { "ambre", "braise", "comete", "corail-orange", "sable" };
+    private static readonly HashSet<string> Chaudes = new() { "ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche" };
     private static readonly uint[] BleuDefaut = { 0xff1f4f8a, 0xff4a8fdc, 0xff6cb6ff, 0xffb4dbff };
     private static readonly uint[] OrangeDefaut = { 0xff8a4a1f, 0xffd9803a, 0xfff69d50, 0xffffc89a };
 
@@ -148,7 +149,7 @@ public static class RenduPilou
         if (a.Accessoire != "") ids.Add("acc-" + a.Accessoire);
         if (a.Tenue != "" && b.Tenues.TryGetValue(a.Tenue, out var tenue)) ids.AddRange(tenue);
         ids.AddRange(a.Objets);
-        var portes = ids.Select(i => b[i]).Where(s => s is not null).Select(s => s!).ToList();
+        var portes = ids.Select(i => b[i]).Where(s => s is not null && !(a.Dos && s.Slot is "visage" or "yeux")).Select(s => s!).ToList();
         bool coiffe = portes.Any(s => s.Coiffe);
 
         int pied = (int)Math.Round(sol, MidpointRounding.ToEven);
@@ -300,28 +301,29 @@ public static class RenduPilou
                     Px(Rond(cx + sg * rx * 0.55 + Math.Cos(an) * 3), Rond(cy - ry * 0.55 + Math.Sin(an) * 2), te[3]);
                 }
 
-        // Visage.
-        string nom = a.Etourdi ? "spirale" : NomOeil(a.Expr) is { Length: > 0 } n0 ? n0 : a.Fatigue ? "fatigue" : "ouvert";
+        // Visage (aucun s'il tourne le dos).
+        bool moue = a.Boude && a.Expr == "repos";
+        string nom = a.Etourdi ? "spirale" : NomOeil(a.Expr) is { Length: > 0 } n0 ? n0 : moue ? "boude" : a.Fatigue ? "fatigue" : "ouvert";
         if (a.Baille) nom = "dort";
         if (st == 4 && nom == "ouvert") nom = "serein";
         bool peut = a.Expr is "repos" or "inquiet" or "attente" && !a.Etourdi;
         string og = peut && a.Cligne ? "cligne" : nom;
         string od = peut && (a.Cligne || a.Clin) ? "cligne" : nom;
-        if (st == 1 && og == "ouvert" && b["oeil-ouvert-g"] is { } grand)
+        if (!a.Dos && st == 1 && og == "ouvert" && b["oeil-ouvert-g"] is { } grand)
         {
             Poser(grand, false, C - 10 + dxf, ey - 1);
             if (od == "ouvert") Poser(grand, true, C + 2 + dxf, ey - 1);
             else if (b["oeil-" + od] is { } so) Poser(so, true, C + 3 + dxf, ey);
         }
-        else
+        else if (!a.Dos)
         {
             int ecart = st == 1 ? 1 : 0;
             if (b["oeil-" + og] is { } sg) Poser(sg, false, C - 10 + ecart + dxf, ey);
             if (b["oeil-" + od] is { } sd) Poser(sd, true, C + 4 - ecart + dxf, ey);
         }
-        var bo = b[a.Baille ? "bouche-baille" : "bouche-" + a.Expr] ?? b["bouche-repos"];
+        var bo = a.Dos ? null : b[a.Baille ? "bouche-baille" : moue ? "bouche-boude" : "bouche-" + a.Expr] ?? b["bouche-repos"];
         if (bo is not null) Poser(bo, false, C - bo.W / 2 + dxf, ey + 9);
-        if (a.Expr is "fete" or "caresse")
+        if (a.Expr is "fete" or "caresse" && !a.Dos)
         {
             int joue = Rond(rx) - 1;
             foreach (int jx in new[] { C - joue + dxf, C + joue - 3 + dxf })

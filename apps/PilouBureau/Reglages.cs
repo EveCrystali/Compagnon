@@ -20,6 +20,9 @@ public sealed class Reglages
     public bool Jeux { get; set; } = true;
     public Couleur Couleur { get; set; } = Couleur.Bleu;
     public bool Trainee { get; set; } = true;
+    // Boutique : niveau à la dernière visite (rangées « débloquées ! ») et jour des offres déjà vues.
+    public int BoutiqueVue { get; set; }
+    public string BoutiqueOffresVues { get; set; } = "";
     // Dossier où chaque PC dépose son profil d'XP (OneDrive commun, partage réseau…) ; vide = local.
     public string DossierPartage { get; set; } = "";
 

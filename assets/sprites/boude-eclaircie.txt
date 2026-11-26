@@ -1,0 +1,59 @@
+# il se laisse amadouer : le nuage s'éclaircit, un soleil pointe
+id: boude-eclaircie
+slot: effet
+ancre: tete
+decalage: 11 -17
+duree: 500
+palette: a=#768390 b=#f69d50 c=#f5d76e d=#fff6cc e=#c9d1d9 f=#f6f8fa
+images:
+.......aba.a.
+......acccaba
+.....acddcca.
+....aacddcca.
+.aaaeeeeecca.
+aeeefffeecca.
+aeeeeeeeeeea.
+aeeeeeeeeeeea
+aeeeeeeeeeea.
+.aaaaaaaaaa..
+.............
+.............
+---
+.....a.aaa...
+....abaccca..
+.....acddcca.
+....aacddccaa
+.aaaeeeeeccab
+aeeefffeeccaa
+aeeeeeeeeeea.
+aeeeeeeeeeeea
+aeeeeeeeeeea.
+.aaaaaaaaaa..
+.............
+.............
+---
+.......aba.a.
+......acccaba
+.....acddcca.
+....aacddcca.
+.aaaeeeeecca.
+aeeefffeecca.
+aeeeeeeeeeea.
+aeeeeeeeeeeea
+aeeeeeeeeeea.
+.aaaaaaaaaa..
+.............
+.............
+---
+.....a.aaa...
+....abaccca..
+.....acddcca.
+....aacddccaa
+.aaaeeeeeccab
+aeeefffeeccaa
+aeeeeeeeeeea.
+aeeeeeeeeeeea
+aeeeeeeeeeea.
+.aaaaaaaaaa..
+.............
+.............

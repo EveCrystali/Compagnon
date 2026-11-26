@@ -75,7 +75,7 @@ public class MeteoTest {
     public void objetsMeteoEnBoutique() {
         assertEquals(Boutique.PIEDS, Boutique.trouver("bottes-pluie").slot);
         assertEquals(Boutique.DOS, Boutique.trouver("impermeable").slot);
-        assertEquals(14, Boutique.trouver("parapluie-etoile").niveauMin);
+        assertEquals(10, Boutique.trouver("parapluie-etoile").niveauMin); // rangée du palier 10
         assertTrue(Arrays.asList(Boutique.SLOTS).contains(Boutique.PIEDS));
         assertEquals("Pieds", Boutique.nomSlot(Boutique.PIEDS));
     }

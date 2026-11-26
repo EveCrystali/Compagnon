@@ -105,6 +105,33 @@ public sealed partial class FenetrePilou
 
     // ---- Menus
 
+    // Bandeau en tête du menu de Pilou : niveau, XP, po, prochaine rangée ; un clic ouvre la boutique.
+    private MenuItem BandeauMenu()
+    {
+        int n = Niveau;
+        var b = new Bandeau(compact: true);
+        b.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchaineRangee(n, _xpTotal));
+        var m = new MenuItem { Header = b, ToolTip = "Ouvrir la boutique" };
+        m.Click += (_, _) => OuvrirBoutique();
+        return m;
+    }
+
+    // Niveau gagné avec de nouvelles rangées : petite fenêtre « Rangées débloquées » près de Pilou.
+    private void MontrerRangees(int avant, int apres)
+    {
+        try
+        {
+            var f = new FenetreRangees(avant, apres, rayon => OuvrirBoutique(rayon));
+            f.Left = Math.Max(0, Left + (_aGauche ? Width - 40 : -f.Width + 40));
+            f.Top = Math.Max(0, Top + HauteurBulle * K - 60);
+            f.Show();
+        }
+        catch (InvalidOperationException)
+        {
+            // Fenêtre principale en cours de fermeture : on n'insiste pas.
+        }
+    }
+
     private MenuItem MenuNiveaux()
     {
         int n = Niveau;
@@ -120,7 +147,10 @@ public sealed partial class FenetrePilou
         foreach (var s in Acces.Stades)
             m.Items.Add(new MenuItem { Header = (n >= s.Niveau ? "✓  " : $"niv {s.Niveau}  ") + s.Nom, IsEnabled = n >= s.Niveau });
         int ouverts = PilouBureau.Boutique.Catalogue.Count(a => a.NiveauMin <= n);
-        m.Items.Add(new MenuItem { Header = $"Boutique : {ouverts}/{PilouBureau.Boutique.Catalogue.Count} articles accessibles", IsEnabled = false });
+        m.Items.Add(new MenuItem { Header = $"Boutique : {ouverts}/{PilouBureau.Boutique.Catalogue.Count} articles dans les rangées ouvertes", IsEnabled = false });
+        int prochain = PilouBureau.Boutique.ProchainPalier(n);
+        if (prochain > 0)
+            m.Items.Add(Entree(Bandeau.ProchaineRangee(n, _xpTotal), () => OuvrirBoutique(PilouBureau.Boutique.RayonsDuPalier(prochain)[0])));
         var titres = new MenuItem { Header = "Titres" };
         foreach (var t in Recompenses.Toutes.Where(r => r.Type == TypeRecompense.Titre))
             titres.Items.Add(new MenuItem { Header = (n >= t.Niveau ? "✓  " : $"niv {t.Niveau}  ") + t.Nom, IsEnabled = n >= t.Niveau });

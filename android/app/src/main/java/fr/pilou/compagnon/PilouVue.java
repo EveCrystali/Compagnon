@@ -18,7 +18,9 @@ public final class PilouVue extends View {
     private java.util.List<String> objets = java.util.Collections.emptyList();
     private long debutEvolution = -1;
     private java.util.List<String> objetsSoins = java.util.Collections.emptyList();
-    private String teinteSoins = "";
+    private int humeurSoins = CONTENT;
+    /** Humeur des soins : content, il boude, il se laisse amadouer. */
+    static final int CONTENT = 0, BOUDE = 1, AMADOUE = 2;
     private String meteo = "";
     /** Durée de l'animation d'évolution (silhouette qui alterne, puis éclat). */
     public static final long DUREE_EVOLUTION = 2600;
@@ -84,13 +86,12 @@ public final class PilouVue extends View {
         invalidate();
     }
 
-    /** Soins : sprites en plus (variante, rayonnement, mousse) et teinte imposée (« terne » ; "" : la sienne). */
-    public void soins(java.util.List<String> o, String teinte) {
+    /** Soins : sprites en plus (variante, rayonnement, mousse) et humeur (CONTENT, BOUDE, AMADOUE). */
+    public void soins(java.util.List<String> o, int humeur) {
         java.util.List<String> l = o == null ? java.util.Collections.<String>emptyList() : o;
-        String t = teinte == null ? "" : teinte;
-        if (l.equals(objetsSoins) && t.equals(teinteSoins)) return;
+        if (l.equals(objetsSoins) && humeur == humeurSoins) return;
         objetsSoins = l;
-        teinteSoins = t;
+        humeurSoins = humeur;
         invalidate();
     }
 
@@ -144,11 +145,11 @@ public final class PilouVue extends View {
         java.util.List<String> portes = new java.util.ArrayList<>(objets);
         for (java.util.Map.Entry<String, String> en : equipe.entrySet()) {
             if (en.getValue() == null || en.getValue().isEmpty()) continue;
-            if (en.getKey().equals("couleur")) a.couleur = en.getValue();
-            else portes.add(en.getValue());
+            if (en.getKey().equals(Boutique.COULEUR)) a.couleur = Vitrine.teinte(en.getValue());
+            else if (Boutique.surPilou(en.getKey())) portes.add(en.getValue());
         }
         portes.addAll(objetsSoins);
-        if (!teinteSoins.isEmpty()) a.couleur = teinteSoins;
+        bouder(a, portes, e, t);
         a.objets = portes;
         Meteo.appliquer(a, meteo, t);
         if (debutEvolution >= 0) {
@@ -158,5 +159,21 @@ public final class PilouVue extends View {
         }
         Dessin.dessiner(cv, 0, 0, p, a);
         if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
+    }
+
+    /** Il boude (comme sur le PC) : moue et sourcils au repos, nuage gris, bras croisés du Nimbus, dos tourné
+     *  6 s sur 47 ; amadoué, une éclaircie, et la moue qui va et vient. */
+    private void bouder(RenduPilou.Allure a, java.util.List<String> portes, String e, long t) {
+        boolean repos = e.equals("repos");
+        if (humeurSoins == AMADOUE) {
+            portes.add("boude-eclaircie");
+            a.boude = repos && t % 9000 < 6000;
+        } else if (humeurSoins == BOUDE) {
+            boolean dos = repos && t % 47_000 > 41_000;
+            portes.add("boude-nuage");
+            if (stade == 3 && !dos) portes.add("boude-bras");
+            a.boude = repos;
+            a.dos = dos;
+        }
     }
 }

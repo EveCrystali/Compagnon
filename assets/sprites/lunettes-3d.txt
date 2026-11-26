@@ -1,0 +1,17 @@
+# Lunettes 3D
+id: lunettes-3d
+slot: yeux
+ancre: yeux
+decalage: -15 -2
+palette: a=#f6f8fa b=#6cb6ff c=#f69d50 d=#b4dbff e=#1c2128 f=#ffd8b0
+images:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbaaaacccccccccccaa
+aabdddbbbbbbbeeeecfffcccccccaa
+aabbbbbbbbbbbeeeecccccccccccaa
+aabbbbbbbbbbbaaaacccccccccccaa
+aabbbbbbbbbbbaaaacccccccccccaa
+aabbbbbbbbbbbaaaacccccccccccaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

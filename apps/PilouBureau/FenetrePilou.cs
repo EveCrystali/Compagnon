@@ -189,13 +189,31 @@ public sealed partial class FenetrePilou : Window
     private double K => _reglages.Taille;
     private double Maintenant => _chrono.Elapsed.TotalMilliseconds;
     private static double Epoque => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-    private Palette Couleurs => _sombre ? Sombre : Claire;
+    private Palette Couleurs => _sombre || BulleSombre ? Sombre : Claire;
+
+    // La bulle de nuit (boutique) impose le texte clair du thème sombre.
+    private bool BulleSombre => PilouBureau.Boutique.Style(EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Bulle, ""))?.Sombre == true;
+
+    private static readonly Dictionary<string, Brush> _pinceaux = new();
+
+    private static Brush Pinceau(string hex)
+    {
+        if (_pinceaux.TryGetValue(hex, out var b)) return b;
+        var br = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+        br.Freeze();
+        return _pinceaux[hex] = br;
+    }
 
     // ---- Options (clic droit)
 
     private void Remplir(ContextMenu menu)
     {
         menu.Items.Clear();
+        // En tête : le bandeau (niveau, XP, po) et la boutique, mise en avant.
+        menu.Items.Add(BandeauMenu());
+        int neufs = NouveautesBoutique();
+        menu.Items.Add(Entree(neufs > 0 ? $"🛒 Boutique ({neufs} nouveauté{(neufs > 1 ? "s" : "")})" : "🛒 Boutique", OuvrirBoutique));
+        menu.Items.Add(new Separator());
         menu.Items.Add(Entree("♥ Caresser", Caresser));
         menu.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
         menu.Items.Add(MenuSoins());
@@ -242,7 +260,7 @@ public sealed partial class FenetrePilou : Window
             couleurs.Items.Add(m);
         }
         couleurs.Items.Add(new Separator());
-        couleurs.Items.Add(Entree("D'autres couleurs à la boutique…", OuvrirBoutique));
+        couleurs.Items.Add(Entree("D'autres couleurs à la boutique…", () => OuvrirBoutique(PilouBureau.Boutique.Couleur)));
         menu.Items.Add(couleurs);
         if (Possede(PilouBureau.Boutique.TraineeEtoiles))
             menu.Items.Add(Case("Traînée d'étoiles", EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
@@ -260,7 +278,6 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
         menu.Items.Add(MenuQuetes());
         foreach (var m in MenusAmis()) menu.Items.Add(m);
-        menu.Items.Add(Entree("Boutique…", OuvrirBoutique));
         menu.Items.Add(MenuIntegrations());
         menu.Items.Add(MenuConnecteurs());
         menu.Items.Add(MenuActivites());
@@ -390,10 +407,15 @@ public sealed partial class FenetrePilou : Window
         var c = Couleurs;
         bool alerte = Maintenant < _alerteJusque;
         var bord = alerte && (int)(Maintenant / 250) % 2 == 0 ? c.Orange : alerte ? c.Bleu : c.Bord;
-        _bulle.Background = c.Fond;
+        // Cadre de bulle acheté en boutique : bord, épaisseur, arrondi (et fond nuit pour la bulle de nuit).
+        var style = PilouBureau.Boutique.Style(EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Bulle, ""));
+        var fond = style?.Fond is { } f ? Pinceau(f) : c.Fond;
+        if (style is not null && !alerte) bord = Pinceau(style.Bord);
+        _bulle.Background = fond;
         _bulle.BorderBrush = bord;
-        _bulle.BorderThickness = new Thickness(3);
-        _queue.Palette = new Brush?[] { null, bord, c.Fond };
+        _bulle.BorderThickness = new Thickness(style?.Epaisseur ?? 3);
+        _bulle.CornerRadius = new CornerRadius(style?.Rayon ?? 0);
+        _queue.Palette = new Brush?[] { null, bord, fond };
     }
 
     // Ce qui change quand il se passe quelque chose de nouveau dans la session (l'outil en cours, non).
@@ -570,8 +592,7 @@ public sealed partial class FenetrePilou : Window
         Observer(t);
         expr = Sommeil(expr, t);
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
-        var (objetsSoins, teinteSoins) = PoseSoins(stadePose, t);
-        if (teinteSoins == "terne") fatigue = true;
+        var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
         // En visite (chez un ami, ou un ami chez lui), pas de petit jeu ni d'occupation tout seul.
         if (!_visites.Occupe)
@@ -697,13 +718,16 @@ public sealed partial class FenetrePilou : Window
             Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
             Reaction = ReactionAffichee != "" ? ReactionAffichee : meteo.Reaction,
             Soins = objetsSoins,
-            Teinte = teinteSoins,
+            // Il boude : moue et sourcils au repos ; dos tourné seulement immobile, au repos et sans jeu en cours.
+            Boude = boude && montre == Expr.Repos,
+            Dos = dosTourne && montre == Expr.Repos && !marche && _jeuEnCours == Jeu.Aucun && !_attrape,
         };
         HabillerVisite(_scene.Pose, t);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
         AnimerSoins(t);
+        AnimerBoutique(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = _x < (_zone.Left + _zone.Right) / 2;
@@ -765,7 +789,7 @@ public sealed partial class FenetrePilou : Window
                     return false;
                 }
                 _sens = Math.Sign(ecart);
-                double vitesse = fatigue ? 26 : 40;
+                double vitesse = fatigue || _boudeur ? 26 : 40; // fatigué ou boudeur : il traîne les pieds
                 _x += _sens * Math.Min(Math.Abs(ecart), vitesse * dt * K);
                 return true;
             }
