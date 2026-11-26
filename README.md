@@ -116,7 +116,7 @@ des **métiers** (Codeur, As du tableur, Joueur, Mélomane… de Novice à Lége
 ## Mises à jour
 
 Rien à faire. Chaque fusion sur `main` publie une release (`v0.9.<n>`) avec `version.json`.
-- **PC** : une minute après le démarrage puis chaque jour, Pilou regarde la dernière release ; s'il y
+- **PC** : une minute après le démarrage puis toutes les 2 h, Pilou regarde la dernière release ; s'il y
   a du neuf, il la télécharge, met aussi à jour le mod Claude, et se relance (« nouvelle version… »
   dans sa bulle). Clic droit → *Version* : chercher maintenant, ou couper l'automatique.
 - **Téléphone** : une fois par jour, l'app vérifie ; une notification « Pilou 0.9.n est disponible »,

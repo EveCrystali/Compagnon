@@ -6,7 +6,7 @@ using System.Windows.Threading;
 
 namespace PilouBureau;
 
-// Mise à jour de Pilou lui-même : une minute après le démarrage, puis toutes les 24 h.
+// Mise à jour de Pilou lui-même : une minute après le démarrage, puis toutes les 2 h.
 public sealed partial class FenetrePilou
 {
     private DispatcherTimer? _mise;
@@ -22,7 +22,7 @@ public sealed partial class FenetrePilou
         _mise = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
         _mise.Tick += (_, _) =>
         {
-            _mise.Interval = TimeSpan.FromHours(24);
+            _mise.Interval = TimeSpan.FromHours(2);
             if (_reglages.MiseAJourAuto && Installee) _ = MettreAJour(false);
         };
         _mise.Start();
