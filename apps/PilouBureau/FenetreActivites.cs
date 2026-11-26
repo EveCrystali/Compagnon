@@ -84,8 +84,12 @@ public sealed partial class FenetrePilou
         // Discrétion d'abord : jamais devant un jeu, une présentation ou une visio.
         var options = new Activites.OptionsDiscretion(_reglages.CacherPleinEcran, _reglages.CacherPresentation, _reglages.CacherVisio);
         (_discret, _raisonDiscret) = Activites.Discretion(c, options, _attend);
+        // Connecteur Agenda : une réunion en cours vaut une visio (même sans appli de visio au premier plan).
+        if (!_discret && _reglages.CacherVisio && !_attend && ConnecteurAgenda.EnReunion) (_discret, _raisonDiscret) = (true, "reunion");
 
         var activite = Activites.Detecter(c, _regles);
+        // Connecteur Spotify : un morceau qui joue, c'est de la musique, même fenêtre fermée.
+        if (activite == "" && ConnecteurSpotify.Lecture is { EnCours: true }) activite = "musique";
         if (_reglages.ActivitesCoupees.Contains(activite)) activite = "";
         _activite = activite;
         _crete = activite == "musique" ? Activites.Crete(c, _regles) : 0;
@@ -209,17 +213,34 @@ public sealed partial class FenetrePilou
 
     // ---- Ce que la scène reçoit (appelé à chaque image)
 
-    private string TenueAffichee => _reglages.Activites ? _tenue : "";
+    // Une tenue prêtée quelques secondes par un connecteur (casquette de facteur pour un mail…).
+    private string _tenuePretee = "";
+    private double _tenuePreteeJusque = -1e12;
+
+    internal void PreterTenue(string tenue, double ms)
+    {
+        _tenuePretee = tenue;
+        _tenuePreteeJusque = Maintenant + ms;
+    }
+
+    private string TenueAffichee => !_reglages.Activites ? "" : Maintenant < _tenuePreteeJusque ? _tenuePretee : _tenue;
 
     private string ReactionAffichee =>
         !_reglages.Activites ? ""
-        : _tenue == "musique" && _crete > Activites.SeuilSon ? "danse"
+        : _tenue == "musique" && (_crete > Activites.SeuilSon || ConnecteurSpotify.Lecture is { EnCours: true }) ? "danse"
         : _tenue == "code" && _cpu > 0.8 ? "sueur"
         : "";
 
-    // Musique : il se balance au rythme du niveau sonore.
-    private double Balancement(double t) =>
-        ReactionAffichee == "danse" ? Math.Sin(t / 220.0) * Math.Min(1, _crete * 2.5) * 0.8 : 0;
+    // Musique : il se balance au rythme du niveau sonore ; au vrai tempo du morceau si Spotify le donne
+    // (un aller-retour toutes les deux pulsations).
+    private double Balancement(double t)
+    {
+        if (ReactionAffichee != "danse") return 0;
+        double ampleur = Math.Max(_crete > 0 ? Math.Min(1, _crete * 2.5) : 0, ConnecteurSpotify.Lecture is not null ? 0.6 : 0) * 0.8;
+        return ConnecteurSpotify.Lecture is { Tempo: > 30 and < 260 } l
+            ? Math.Sin(t * Math.PI * l.Tempo / 60_000.0) * ampleur
+            : Math.Sin(t / 220.0) * ampleur;
+    }
 
     // ---- Menu
 
@@ -232,6 +253,7 @@ public sealed partial class FenetrePilou
         {
             "presentation" => " · caché (présentation)",
             "visio" => " · caché (visio)",
+            "reunion" => " · caché (réunion à l'agenda)",
             _ => " · caché (plein écran)",
         };
         m.Items.Add(new MenuItem { Header = titre, IsEnabled = false });

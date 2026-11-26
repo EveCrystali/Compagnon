@@ -20,6 +20,16 @@ public sealed partial class FenetrePilou
         _registre = new Registre(_reglages.Connecteurs, new CoffreDpapi(_dossier), () => _reglages.Ecrire(_dossier));
         foreach (var c in ConnecteursIntegres()) _registre.Ajouter(c);
         _registre.Ajouter(new ConnecteurMeteo());
+        // Deuxième vague : désactivés tant que tu ne les coches pas.
+        _registre.Ajouter(new ConnecteurDiscordBot());
+        _registre.Ajouter(new ConnecteurGitHub());
+        _registre.Ajouter(new ConnecteurMail());
+        _registre.Ajouter(new ConnecteurAgenda());
+        _registre.Ajouter(new ConnecteurSpotify());
+        _registre.Ajouter(new ConnecteurTwitch());
+        _registre.Ajouter(new ConnecteurYouTube());
+        _registre.Ajouter(new ConnecteurHomeAssistant());
+        ConnecteurAgenda.Inactivite = Natif.InactifMs;
         _registre.Evenement += e => Dispatcher.BeginInvoke(() => Recevoir(e));
         RelancerApi();
     }
@@ -83,9 +93,21 @@ public sealed partial class FenetrePilou
         });
     }
 
+    // Ce que Pilou vit lui-même (une IA attend, quête réussie, évolution), vers les sorties que tu as activées.
+    internal void PublierSortie(string titre, string texte) =>
+        _registre?.Publier(new EvenementPilou("pilou", "notification", titre, texte));
+
     // Un événement d'un connecteur ou de l'API locale.
     private void Recevoir(EvenementPilou e)
     {
+        // Ce qu'un connecteur demande en plus de la bulle : une quête, une tenue prêtée, une fête.
+        if (e.Donnee("quete") != "") Signaler(e.Donnee("quete"), 1);
+        if (e.Donnee("tenue") != "") PreterTenue(e.Donnee("tenue"), 10_000);
+        if (e.Donnee("humeur") == "fete")
+        {
+            _salueJusque = Maintenant + 2500;
+            _tSaut = Maintenant;
+        }
         switch (e.Type)
         {
             case "session":
@@ -213,6 +235,7 @@ internal sealed class FenetreDesConnecteurs : Window
             "Les jetons et mots de passe sont chiffrés sur ce PC (jamais dans reglages.json).", 12, Argent));
         foreach (var c in _r.Liste) Carte(c);
         Api();
+        Nouvelles();
         Journal();
     }
 
@@ -251,13 +274,20 @@ internal sealed class FenetreDesConnecteurs : Window
         titre.Children.Add(nom);
         pile.Children.Add(titre);
         pile.Children.Add(Texte(c.Description, 11, Argent));
+        if (c.Aide != "")
+            pile.Children.Add(new Expander
+            {
+                Header = Texte("Comment l'activer ?", 11, Bleu),
+                Content = Texte(c.Aide, 11),
+                Margin = new Thickness(0, 4, 0, 0),
+            });
         var ligneEtat = NomEtat(etat);
         if (etat == EtatConnecteur.AConfigurer && c.Manque(ctx) is { } manque) ligneEtat += " : " + manque;
         if (etat == EtatConnecteur.Erreur && _r.Erreur(c.Id) is { } err) ligneEtat += " : " + err;
         if (_r.Dernier(c.Id) is { } d) ligneEtat += $"   · dernier : {d.Titre}";
         pile.Children.Add(Texte(ligneEtat, 11, etat == EtatConnecteur.Erreur ? Orange : etat == EtatConnecteur.Actif ? Bleu : Argent));
 
-        foreach (var reg in c.Reglages) pile.Children.Add(Reglage(ctx, reg));
+        foreach (var reg in c.Reglages.Where(r => r.Visible)) pile.Children.Add(Reglage(ctx, reg));
         if (c.Actions.Count > 0)
         {
             var actions = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
@@ -329,6 +359,31 @@ internal sealed class FenetreDesConnecteurs : Window
                 break;
         }
         return ligne;
+    }
+
+    // Carte « Nouvelles » de l'app Android : les 5 derniers événements des connecteurs, par le relais chiffré.
+    private void Nouvelles()
+    {
+        var reglages = _pilou.ReglagesDesConnecteurs;
+        _corps.Children.Add(Texte("Téléphone : nouvelles", 14, null, true));
+        _corps.Children.Add(Texte("Les 5 derniers messages et notifications des connecteurs, sur l'accueil de l'app " +
+            "(par le relais chiffré de bout en bout).", 11, Argent));
+        var rangee = new WrapPanel { Margin = new Thickness(0, 6, 0, 14) };
+        var envoyer = new CheckBox { Content = "Envoyer au téléphone", IsChecked = reglages.AnnoncesTelephone, Margin = new Thickness(0, 0, 12, 0) };
+        var masquer = new CheckBox { Content = "Titre seulement (sans le contenu)", IsChecked = reglages.AnnoncesSansContenu };
+        envoyer.Click += (_, _) =>
+        {
+            reglages.AnnoncesTelephone = envoyer.IsChecked == true;
+            _pilou.SauverReglages();
+        };
+        masquer.Click += (_, _) =>
+        {
+            reglages.AnnoncesSansContenu = masquer.IsChecked == true;
+            _pilou.SauverReglages();
+        };
+        rangee.Children.Add(envoyer);
+        rangee.Children.Add(masquer);
+        _corps.Children.Add(rangee);
     }
 
     private void Api()

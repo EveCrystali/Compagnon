@@ -99,6 +99,21 @@ public final class Etat {
         }
     }
 
+    /** Nouvelles des connecteurs du PC (champ absent sur un ancien PC) : les 5 derniers messages et notifications, plus récent en tête. */
+    public final List<Annonce> annonces = new ArrayList<>();
+
+    public static final class Annonce {
+        public final String source, titre, texte;
+        public final long t;
+
+        Annonce(String source, String titre, String texte, long t) {
+            this.source = source;
+            this.titre = titre;
+            this.texte = texte;
+            this.t = t;
+        }
+    }
+
     /** Appareils du groupe (PC ≥ 0.9.6) : nom, XP de chacun, dernière nouvelle ; le PC qui publie en tête. */
     public final List<Appareil> appareils = new ArrayList<>();
 
@@ -185,6 +200,14 @@ public final class Etat {
                 e.quetes.add(new Quete(q.optInt(0), q.optString(1), q.optInt(2), Math.max(1, q.optInt(3)), q.optInt(4), q.optInt(5) == 1));
             }
         e.meteo = Meteo.lire(r.optJSONObject("meteo"));
+        JSONArray an = r.optJSONArray("annonces");
+        if (an != null)
+            for (int i = 0; i < Math.min(5, an.length()); i++) {
+                JSONObject o = an.optJSONObject(i);
+                if (o == null || o.optString("titre").isEmpty()) continue;
+                long ta = o.optLong("t", 0);
+                e.annonces.add(new Annonce(o.optString("source"), o.optString("titre"), o.optString("texte"), ta > 0 ? ta + decalage : 0));
+            }
         JSONArray ap = r.optJSONArray("appareils");
         if (ap != null)
             for (int i = 0; i < Math.min(10, ap.length()); i++) {

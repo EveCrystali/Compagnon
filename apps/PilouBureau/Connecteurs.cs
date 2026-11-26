@@ -84,8 +84,9 @@ public enum TypeReglage { Texte, Secret, Liste, Case }
 
 // Un réglage déclaré par un connecteur ; la fenêtre Connecteurs le dessine selon son type.
 // Secret : stocké chiffré (DPAPI, compte Windows courant), jamais dans reglages.json, affiché masqué.
+// Visible = false : valeur interne du connecteur (jeton OAuth, curseur de lecture…), gardée mais pas montrée.
 public sealed record ReglageConnecteur(string Cle, string Nom, TypeReglage Type, string Aide = "", string Defaut = "",
-    IReadOnlyList<string>? Choix = null);
+    IReadOnlyList<string>? Choix = null, bool Visible = true);
 
 // Une action proposée par un connecteur (bouton dans la fenêtre Connecteurs) ; renvoie un message court.
 public sealed record ActionConnecteur(string Nom, Func<ContexteConnecteur, CancellationToken, Task<string>> Faire);
@@ -108,6 +109,14 @@ public abstract class Connecteur
     public virtual IReadOnlyList<ReglageConnecteur> Reglages => Array.Empty<ReglageConnecteur>();
     public virtual IReadOnlyList<ActionConnecteur> Actions => Array.Empty<ActionConnecteur>();
     public virtual bool ActifParDefaut => false;
+
+    // Pas à pas pour l'activer (créer une application développeur, un jeton…), montré dans la fenêtre Connecteurs.
+    public virtual string Aide => "";
+
+    // Sortie : le connecteur reçoit aussi les événements de Pilou (une IA attend, quête réussie, évolution).
+    public virtual bool Sortie => false;
+
+    public virtual Task Sortir(ContexteConnecteur ctx, EvenementPilou e, CancellationToken ct) => Task.CompletedTask;
 
     // Prêt à démarrer ? Sinon, pourquoi (« choisis une ville »…) : l'interrupteur reste grisé.
     public virtual string? Manque(ContexteConnecteur ctx) => null;
@@ -230,6 +239,9 @@ public sealed class ReglagesConnecteurs
     public bool Api { get; set; } = true;
     public int PortApi { get; set; } = ApiLocale.PortParDefaut;
     public string JetonApi { get; set; } = "";
+    // Téléphone : carte « Nouvelles » (5 derniers événements), avec ou sans leur contenu.
+    public bool AnnoncesTelephone { get; set; } = true;
+    public bool AnnoncesSansContenu { get; set; }
 }
 
 public sealed record LigneJournal(DateTime T, string Connecteur, string Texte);
@@ -247,6 +259,8 @@ public sealed class Registre
     private readonly Dictionary<string, string> _erreurs = new();
     private readonly Dictionary<string, EvenementPilou> _derniers = new();
     private readonly LinkedList<LigneJournal> _journal = new();
+    private readonly LinkedList<EvenementPilou> _annonces = new();
+    public const int TailleAnnonces = 5;
     private readonly object _verrou = new();
 
     public ICoffre Secrets { get; }
@@ -350,9 +364,47 @@ public sealed class Registre
     // Tout événement passe ici : journal, dernier par source, puis l'abonné (la fenêtre).
     public void Recevoir(EvenementPilou e)
     {
-        lock (_verrou) _derniers[e.Source] = e;
+        if (e.T == 0) e = e with { T = new DateTimeOffset(Horloge()).ToUnixTimeMilliseconds() };
+        lock (_verrou)
+        {
+            _derniers[e.Source] = e;
+            // Nouvelles pour le téléphone : messages et notifications des connecteurs (pas la météo, déjà à part).
+            if (e.Type is "message" or "notification" && e.Source != "meteo")
+            {
+                _annonces.AddFirst(e);
+                while (_annonces.Count > TailleAnnonces) _annonces.RemoveLast();
+            }
+        }
         Noter(e.Source, $"{e.Type} · {e.Titre}{(e.Texte == "" ? "" : " — " + e.Texte)}");
         Evenement?.Invoke(e);
+    }
+
+    public IReadOnlyList<EvenementPilou> Annonces()
+    {
+        lock (_verrou) return _annonces.ToList();
+    }
+
+    // Un événement de Pilou lui-même vers les connecteurs qui ont une sortie (salon Discord…). En tâche de
+    // fond ; une sortie en panne est notée au journal sans rien bloquer.
+    public void Publier(EvenementPilou e)
+    {
+        e = e with { T = e.T > 0 ? e.T : Epoque() };
+        foreach (var c in _liste)
+        {
+            if (!c.Sortie || !Actif(c) || c.Manque(Contexte(c)) is not null) continue;
+            var ctx = Contexte(c);
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await c.Sortir(ctx, e, CancellationToken.None);
+                }
+                catch (Exception x)
+                {
+                    Noter(c.Id, "sortie : " + (x is HttpRequestException ? "service injoignable" : x.Message));
+                }
+            });
+        }
     }
 
     // Appelé régulièrement (toutes les secondes ou plus) : lance les relevés dus, garde les écoutes en vie.
