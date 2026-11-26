@@ -272,6 +272,29 @@ public sealed partial class FenetrePilou : Window
         couleurs.Items.Add(new Separator());
         couleurs.Items.Add(Entree("D'autres couleurs à la boutique…", () => OuvrirBoutique(PilouBureau.Boutique.Couleur)));
         menu.Items.Add(couleurs);
+        // Ce qu'il porte : un clic retire l'objet (parapluie compris), sans passer par la boutique.
+        var portes = EquipeCourant()
+            .Where(kv => kv.Value != "" && PilouBureau.Boutique.SurPilou(kv.Key) && kv.Key != PilouBureau.Boutique.Effet)
+            .OrderBy(kv => kv.Key).ToList();
+        if (portes.Count > 0)
+        {
+            var garde = new MenuItem { Header = $"Ce qu'il porte ({portes.Count})" };
+            foreach (var (slot, id) in portes)
+            {
+                var nom = PilouBureau.Boutique.Trouver(id)?.Nom ?? id;
+                garde.Items.Add(Entree($"✕ Retirer : {nom}", () => { Equiper(slot, ""); Dire($"{nom} rangé", 2500); }));
+            }
+            if (portes.Count > 1)
+            {
+                garde.Items.Add(new Separator());
+                garde.Items.Add(Entree("✕ Tout retirer", () =>
+                {
+                    foreach (var (slot, _) in portes) Equiper(slot, "");
+                    Dire("tout est rangé", 2500);
+                }));
+            }
+            menu.Items.Add(garde);
+        }
         if (Possede(PilouBureau.Boutique.TraineeEtoiles))
             menu.Items.Add(Case("Traînée d'étoiles", EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
                 v => Equiper(PilouBureau.Boutique.Effet, v ? PilouBureau.Boutique.TraineeEtoiles : "")));
