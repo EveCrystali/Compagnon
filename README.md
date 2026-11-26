@@ -55,6 +55,43 @@ sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+## Connecteurs
+
+Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
+interrupteur, un état signé (● actif, ◌ à configurer, ✕ erreur, ○ coupé), ses réglages, son dernier
+événement ; un journal garde les 50 derniers. Le mod Claude n'est plus qu'un connecteur parmi
+d'autres : Claude Code, Codex, activités, statut Discord, webhook, téléphone, groupe d'appareils
+(inchangés, simplement réunis), et la **météo**.
+
+- **API locale** : `http://127.0.0.1:47821`, jeton obligatoire, refusée aux pages web et au réseau.
+  Un script envoie `POST /evenements` (« build fini », « nouveau mail »), lit `GET /etat`. Exemples
+  curl et PowerShell, et comment écrire un connecteur en un fichier : [docs/API.md](docs/API.md).
+- **Secrets** (jetons des futurs connecteurs) : chiffrés par Windows (DPAPI) dans `secrets.bin`,
+  jamais en clair dans `reglages.json`.
+
+## Météo
+
+Connecteur **Météo** (coupé tant qu'aucune ville n'est choisie) : taper sa ville, *Chercher la
+ville* ; Pilou relève le temps toutes les 15 minutes chez [Open-Meteo](https://open-meteo.com/)
+(gratuit, sans compte). Dégagé ☀, nuageux ☁, pluie et averses ☂, orage ⚡, neige ❄, brouillard ≋,
+vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
+
+- **Sous la pluie**, sans parapluie ni imperméable, Pilou est trempé : gouttes, flaque, frissons,
+  grimaces et bulles râleuses (« personne n'a pensé au parapluie ? »). Avec, il reste au sec, content,
+  et une quête bonus du jour « reste au sec » rapporte des po. Le parapluie s'invite dans les offres
+  de la boutique les jours de pluie.
+- **Neige et froid** : sans bonnet, écharpe ou moufles, il grelotte sous le givre. **Canicule** :
+  sans lunettes ni éventail, il sue. **Orage** : éclairs. **Vent** : il tangue. **Brouillard** : voile.
+- **Objets** à acheter : imperméable (dos), bottes de pluie (nouvel emplacement *pieds*), moufles,
+  éventail, parapluie étoilé (niveau 14), en plus du parapluie, de l'écharpe et du bonnet.
+- **Téléphone** : carte météo sur l'Accueil ; Pilou y est mouillé (ou au sec) comme sur le PC, dans
+  l'app, le widget et Pilou flottant.
+- **Vie privée** : seule la ville choisie (puis ses coordonnées) part chez Open-Meteo ; aucune
+  localisation automatique. Hors ligne, Pilou garde le dernier relevé. Réglage *Phrases* pour faire
+  taire ses plaintes.
+- Essayer sans attendre la pluie : `PilouBureau.exe --essai=meteo:pluie` (ou `meteo:pluie:parapluie`,
+  `meteo:neige`, `meteo:chaleur`, `meteo:orage`).
+
 ## Clic droit sur Pilou
 
 - **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;
@@ -92,6 +129,7 @@ Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCH
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
+- **Connecteurs…** : voir plus haut (météo, API locale) ;
 - **Démarrer avec Windows**, se cacher 10 min, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.

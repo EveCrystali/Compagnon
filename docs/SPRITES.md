@@ -50,7 +50,15 @@ Calculées à chaque image d'après le corps (elles suivent la respiration, les 
 `antenne` (pointe de l'antenne).
 
 Ordre de dessin : couche arrière, ombre, corps, visage, antenne, puis dos, cou, visage, yeux, tête,
-main, compagnon, effet.
+main, compagnon, effet. Les bottes de pluie (emplacement de boutique `pieds`) se posent sur l'ancre
+`pieds`.
+
+Météo (`outils/sprites/meteo_sprites.py`) : `meteo-pluie`, `meteo-averse`, `meteo-eclair`,
+`meteo-neige`, `meteo-brouillard`, `meteo-vent`, `meteo-soleil` (plein cadre, animés) et
+`meteo-mouille`, `meteo-givre` (sur Pilou) ; les objets `impermeable`, `bottes-pluie`, `moufles`,
+`eventail`, `parapluie-etoile`. `Meteo.Effet` (PC) et `Meteo.effet` (téléphone) choisissent lesquels
+ajouter selon le temps et ce que Pilou porte. Planches : `python3 outils/sprites/planches.py`
+(`meteo.png`, `meteo-2.png`, `boutique-meteo.png`).
 
 ## Stades d'évolution
 

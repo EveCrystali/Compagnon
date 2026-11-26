@@ -1,0 +1,19 @@
+# Moufles
+id: moufles
+slot: main
+ancre: main
+decalage: -4 -6
+palette: a=#8a4a1f b=#f69d50 c=#ffc89a d=#d9803a e=#f6f8fa f=#c9d1d9 g=#768390
+images:
+...aaaaaa...
+..abbbbbba..
+.abbbbbbbba.
+.abbbbbbbba.
+abcbcbcbcbca
+bbbbbbbbbbaa
+bbbdbdbdbdad
+abbbbbbbbbaa
+.aabbbbbba..
+.aeeeeeeeea.
+.affffffffa.
+..aaaagaaa..

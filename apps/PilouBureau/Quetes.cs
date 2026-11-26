@@ -27,6 +27,8 @@ public sealed class Quete
     public int Po { get; set; }
     public int Xp { get; set; }
     public bool Reussie { get; set; }
+    // Quête bonus (météo) : ajoutée en cours de journée, elle ne compte pas pour le coffre du jour.
+    public bool Bonus { get; set; }
 }
 
 public sealed class EtatQuetes
@@ -173,7 +175,7 @@ public static class Quetes
             gains.Add(new RecompenseQuete(q.Texte, q.Po, q.Xp, false));
         }
         var jour = CleJour(local);
-        var quotidiennes = e.Liste.Where(q => q.Periode == Periode.Jour).ToList();
+        var quotidiennes = e.Liste.Where(q => q.Periode == Periode.Jour && !q.Bonus).ToList();
         if (gains.Count > 0 && quotidiennes.Count > 0 && quotidiennes.All(q => q.Reussie) && e.CoffreJour != jour)
         {
             e.CoffreJour = jour;
@@ -183,6 +185,25 @@ public static class Quetes
             gains.Add(new RecompenseQuete($"Coffre du jour · série de {e.Serie} jour{(e.Serie > 1 ? "s" : "")}", po, 10, true));
         }
         return gains;
+    }
+
+    // Quête météo bonus : proposée une fois par jour quand le temps s'y prête (pluie, froid, canicule).
+    // Renvoie la quête ajoutée, ou null (déjà là, ou temps sans quête).
+    public static Quete? AjouterMeteo(EtatQuetes e, string etat, DateTime local, string graine)
+    {
+        Actualiser(e, local, graine);
+        if (Meteo.Quete(etat) is not { } m) return null;
+        var jour = CleJour(local);
+        var id = $"{jour}:{m.Cle}";
+        if (e.Liste.Any(q => q.Id == id)) return null;
+        var q = new Quete
+        {
+            Id = id, Cle = m.Cle, Texte = m.Texte, Periode = Periode.Jour, Objectif = m.Objectif, Po = m.Po, Xp = Math.Max(2, m.Po / 5),
+            Bonus = true,
+        };
+        e.Liste.Add(q);
+        e.Liste = e.Liste.OrderBy(x => x.Periode).ToList();
+        return q;
     }
 
     // Crédite les récompenses au profil de cet appareil : po gagnées, XP. Renvoie les totaux.

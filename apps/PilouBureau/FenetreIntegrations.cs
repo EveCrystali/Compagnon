@@ -106,7 +106,8 @@ public sealed partial class FenetrePilou
         var signature = Telephone.Signature(sessions, Niveau, humeur,
             $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}"
             + $"|{Bourse().Solde}|{string.Join(",", Bourse().Inventaire)}|{string.Join(",", EquipeCourant().Values)}"
-            + $"|{string.Join(",", _profil.Quetes.Liste.Select(q => q.Fait))}|{Quetes.CleJour(DateTime.Now)}");
+            + $"|{string.Join(",", _profil.Quetes.Liste.Select(q => q.Fait))}|{Quetes.CleJour(DateTime.Now)}"
+            + $"|{Meteo.Courante?.Etat}|{Math.Round(Meteo.Courante?.Releve.Temperature ?? 0)}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -121,6 +122,8 @@ public sealed partial class FenetrePilou
         Quetes.Actualiser(_profil.Quetes, DateTime.Now, IdAppareil);
         foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) progression[k] = v;
         progression["stade"] = StadeAffiche();
+        if (Meteo.Courante is { } meteo && _registre?.Trouver("meteo") is { } cm && _registre.Actif(cm))
+            progression["meteo"] = Meteo.PourTelephone(meteo);
         // Appareils du groupe, pour la liste de l'app (nom, xp, vu il y a) ; ce PC en tête.
         progression["appareils"] = new[] { new Dictionary<string, object> { ["nom"] = Environment.MachineName, ["xp"] = _profil.Xp, ["t"] = epoque } }
             .Concat(GroupeMem.Compteurs.OrderByDescending(c => c.T)

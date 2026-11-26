@@ -119,6 +119,27 @@ def main():
     cases = [(pilou(reaction="sueur", t=200), "sueur"), (pilou(tenue="musique", t=500), "danse : notes")]
     planche(cases, 2, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "reactions.png"))
 
+    # Météo : ce que Pilou vit selon le temps et ce qu'il porte (mêmes règles que Meteo.Effet).
+    meteo = [
+        ("pluie, sans rien", dict(objets=["meteo-pluie", "meteo-mouille"], expr="grimace", tremble=0.35)),
+        ("pluie + parapluie", dict(objets=["parapluie", "meteo-pluie"], expr="soulage")),
+        ("averse + impermeable", dict(objets=["impermeable", "bottes-pluie", "meteo-averse"])),
+        ("orage, sans rien", dict(objets=["meteo-averse", "meteo-eclair", "meteo-mouille"], expr="grimace", tremble=-0.35)),
+        ("orage + parapluie etoile", dict(objets=["parapluie-etoile", "meteo-averse", "meteo-eclair"])),
+        ("neige, sans rien", dict(objets=["meteo-neige", "meteo-givre"], expr="grimace", tremble=0.3)),
+        ("neige + echarpe, moufles", dict(objets=["echarpe", "moufles", "meteo-neige"], expr="soulage")),
+        ("canicule, sans rien", dict(objets=["meteo-soleil"], reaction="sueur")),
+        ("canicule + eventail", dict(objets=["eventail", "meteo-soleil"], accessoire="lunettes")),
+        ("vent fort", dict(objets=["meteo-vent"])),
+        ("brouillard", dict(objets=["meteo-brouillard"])),
+        ("Nimbus sous la pluie", dict(stade=3, objets=["parapluie", "meteo-pluie"])),
+    ]
+    for t0, nom in ((0, "meteo.png"), (330, "meteo-2.png")):
+        cases = [(pilou(t=t0, **kw), titre) for titre, kw in meteo]
+        planche(cases, 4, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, nom))
+    cases = [(pilou(objets=[o], t=300), o) for o in ("impermeable", "bottes-pluie", "moufles", "eventail", "parapluie-etoile")]
+    planche(cases, 5, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "boutique-meteo.png"))
+
     jeux = ["etoile", "bulle", "main", "ballon", "canne", "bouchon", "eclaboussure", "bug-scarabee", "bug-araignee", "bug-ver",
             "bug-prod", "bonus-cafe", "bonus-tests", "vie", "po", "po-tourne", "coffre-quete", "parchemin-quete"]
     cases = []
