@@ -118,6 +118,8 @@ public sealed partial class FenetrePilou
     {
         if (dt <= 0) return;
         bool present = c.InactifMs < 120_000 || activite is "video" or "musique" or "visio";
+        // Énergie des expéditions : le temps passé dans une appli de travail, la personne présente (jamais les frappes).
+        EnergieTravail(activite, c.InactifMs < 120_000 && c.Ecran != Activites.Ecran.Verrouille, dt);
         if (activite != "" && activite != "nuit" && present && c.Ecran != Activites.Ecran.Verrouille)
         {
             _profil.Activites[activite] = (_profil.Activites.TryGetValue(activite, out var v) ? v : 0) + (long)Math.Round(dt);

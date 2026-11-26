@@ -51,3 +51,6 @@ expr=concentre t=0 objets=appareil-photo,photo-flash | 5a694c92567b1cc0fc6f4f9c2
 expr=fete t=0 stade=1 objets=polaroid-3 | e19218953d9058e5c1c3dd179cf23ac02f83a5545e8538f7e856a4322526c49e
 expr=attente t=320 regard_y=-1 objets=enveloppe-notif | 19ca1e7fcab36bf5fd5290748b58132493e25f3662e1e38eeeafedf71c9bd50f
 expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close | ea43086844a18f4904b2d81fb36537784169ed60ce3cff18eb21a6d2ec704713
+expr=fete t=200 marche=1 regard=1 objets=baluchon,epee-bois | 040dde878979db75845a54c0568f922ab2386dbcaa3c4ca1ea413aafdd83df8f
+expr=grimace t=500 regard=-1 objets=baluchon,pansement | d4469f1b8f78debb479d1c4f9128ec7a3a1249efa07b0c980937d17a9adf0e6c
+expr=repos t=300 stade=3 objets=torche,bouclier-couvercle,casque-passoire,slime-apprivoise | 284268862e4144a1a4290693737e9f973a306439ea27d5f336dbdd52848d74f4

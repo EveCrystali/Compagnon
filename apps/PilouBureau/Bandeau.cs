@@ -8,7 +8,8 @@ namespace PilouBureau;
 
 // Bandeau de progression, le même partout (boutique, menu de Pilou, info-bulle) : niveau, barre d'XP en
 // pixels, pièces d'or avec une pièce qui tourne, titre ; et, s'il y en a une, la prochaine rangée de boutique.
-// Couleurs : bleu (XP), orange (po), argent, violet ; jamais d'opposition rouge / vert.
+// Couleurs : bleu (XP), orange (po), argent, violet ; jamais d'opposition rouge / vert. L'énergie des expéditions
+// (⚡, Expeditions.cs) s'affiche sous les po dès que Pilou la donne (Bandeau.Energie), sans rien changer aux appelants.
 internal sealed class Bandeau : Border
 {
     public static readonly Brush Nuit = Gel("#151a2e"), Nuit2 = Gel("#1f2540"), Bord = Gel("#6a5acd"), Argent = Gel("#adbac7"),
@@ -30,7 +31,16 @@ internal sealed class Bandeau : Border
         Foreground = Violet, FontSize = 11, FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
         Margin = new Thickness(0, 4, 0, 0),
     };
+    private readonly TextBlock _energie = new()
+    {
+        Foreground = Gel("#f5d76e"), FontSize = 12, FontWeight = FontWeights.Bold, FontFamily = new FontFamily("Consolas"),
+        HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 2, 0, 0), Visibility = Visibility.Collapsed,
+        ToolTip = "Énergie des expéditions : elle remonte en travaillant, en mangeant, et un peu toute seule",
+    };
     private readonly DispatcherTimer? _horloge;
+
+    // Énergie des expéditions (0 à 100), fournie par Pilou ; null : pas d'énergie affichée.
+    public static Func<int>? Energie;
     private double _t;
     private string _cle = "";
 
@@ -64,11 +74,14 @@ internal sealed class Bandeau : Border
         milieu.Children.Add(_xp);
         Grid.SetColumn(milieu, 1);
         grille.Children.Add(milieu);
-        var po = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(14, 0, 0, 0) };
+        var po = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
         if (_piece is not null) po.Children.Add(_piece);
         po.Children.Add(_po);
-        Grid.SetColumn(po, 2);
-        grille.Children.Add(po);
+        var droite = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(14, 0, 0, 0) };
+        droite.Children.Add(po);
+        droite.Children.Add(_energie);
+        Grid.SetColumn(droite, 2);
+        grille.Children.Add(droite);
         var pile = new StackPanel();
         pile.Children.Add(grille);
         pile.Children.Add(_suite);
@@ -91,7 +104,8 @@ internal sealed class Bandeau : Border
     public void Mettre(int niveau, int xp, int po, string titre, string suite = "")
     {
         // L'info-bulle se remet à jour souvent : rien à refaire si rien n'a changé.
-        var cle = $"{niveau}|{xp}|{po}|{titre}|{suite}";
+        int? energie = Energie?.Invoke();
+        var cle = $"{niveau}|{xp}|{po}|{titre}|{suite}|{energie}";
         if (cle == _cle) return;
         _cle = cle;
         _niveau.Content = Pastille(niveau);
@@ -110,6 +124,8 @@ internal sealed class Bandeau : Border
             });
         _xp.Text = $"{Math.Max(0, xp - de)} / {a - de} xp · encore {Math.Max(0, a - xp)} xp avant le niveau {niveau + 1}";
         _po.Text = $"{po} po";
+        _energie.Text = energie is { } en ? $"⚡ {en}/100" : "";
+        _energie.Visibility = energie is null ? Visibility.Collapsed : Visibility.Visible;
         _suite.Text = suite;
         _suite.Visibility = suite == "" ? Visibility.Collapsed : Visibility.Visible;
     }

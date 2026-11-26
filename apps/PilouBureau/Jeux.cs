@@ -188,6 +188,8 @@ public sealed partial class FenetrePilou
             _profil.Ecrire(DossierPartage);
         }
         _dernierNiveau = Niveau;
+        // L'énergie des expéditions s'affiche dans tous les bandeaux (menu, boutique, info-bulle).
+        Bandeau.Energie = () => Jauge.Affiche(Exp.Energie);
         Grid.SetRowSpan(_jeu, 2);
         _racine.Children.Add(_jeu);
     }
@@ -215,6 +217,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
+        // --essai=expedition:depart|absent|retour|defaite|journal : une expédition sans attendre (rien n'est écrit).
+        if (nom.StartsWith("expedition:")) EssaiExpedition(nom[11..]);
         // --essai=clavier, photo, notif, notif:masque : les petits gestes sans conditions réelles.
         if (nom is "clavier" or "photo" or "notif" or "notif:masque") EssaiGeste(nom);
         // --essai=defense : une partie de Défense du bureau où Pilou joue seul (captures).
@@ -426,6 +430,12 @@ public sealed partial class FenetrePilou
 
     private void Demarrer(Jeu jeu, double t)
     {
+        // Pas de petit jeu pendant une expédition (Pilou n'est pas là).
+        if (jeu != Jeu.Aucun && EnExpedition)
+        {
+            Dire("Pilou est en expédition : on jouera à son retour", 3000);
+            return;
+        }
         if (jeu != Jeu.Aucun && !Acces.JeuOuvert(IdJeu(jeu), Niveau))
         {
             Dire($"{Acces.Jeux.First(x => x.Id == IdJeu(jeu)).Nom} : niveau {Acces.NiveauJeu(IdJeu(jeu))}", 3000);

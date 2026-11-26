@@ -1,0 +1,25 @@
+# Bouclier-couvercle (butin d'expédition)
+id: bouclier-couvercle
+slot: dos
+ancre: main-g
+decalage: -12 -9
+palette: a=#1c2128 b=#768390 c=#b8c4d2 d=#e6ecf2 e=#f69d50 f=#ffd8b0
+images:
+....aaabbaaa....
+...abbbbbbbba...
+..abbccccccbba..
+.abbcdddccccbba.
+.abcdddddccccba.
+abcdddddddccccba
+abcdddddddccccba
+abcdddeeeeccccba
+bbccddefeeccccbb
+bbcccdeeeeccccbb
+abcccceeeeccccba
+abccccccccccccba
+abccccccccccbcba
+.abccccccccbcba.
+.abbccccccccbba.
+..abbccccccbba..
+...abbbbbbbba...
+....aaabbaaa....

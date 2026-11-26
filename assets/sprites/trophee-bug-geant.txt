@@ -1,0 +1,27 @@
+# Trophée de boss : bug-geant
+id: trophee-bug-geant
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#c9a227 c=#fff6cc d=#7a5a10 e=#f5d76e f=#3b4654 g=#57606a
+images:
+..aaaaaaaaaaaaaa..
+.abbbbbbbbbbbbbba.
+.abbbbbbbbbbbbbba.
+abbaacaaaaaaaaabba
+baabaaadadadaabaab
+babbeeeedddeebbbab
+babbeeedddddebbbab
+babbeeeedddeebbbab
+abbbeeedeeedbbbbba
+.aabeeeeeeeebbbaa.
+...abbeeeebbbba...
+....abbbbbbbba....
+.....aabbbbaa.....
+......abbbba......
+....aaabbbbaaa....
+...adddddddddda...
+...adddddddddda...
+..affffffffffffa..
+..afggggggggggfa..
+..affffffffffffa..
