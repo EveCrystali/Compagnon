@@ -199,4 +199,25 @@ public class GestesTests
         while (d is not null && !File.Exists(Path.Combine(d.FullName, "assets", "index.txt"))) d = d.Parent;
         return d!.FullName;
     }
+
+    [Fact]
+    public void SceneClavierSArreteMemeSiOnTapeSansFin()
+    {
+        var s = new SceneClavier();
+        Assert.True(s.Avancer(0, true, 0, true));
+        s.Avancer(SceneClavier.DureeEntree, true, 0, true);
+        Assert.Equal(EtapeClavier.Tape, s.Etape);
+        double t = SceneClavier.DureeEntree;
+        // frappe continue : le silence reste nul, mais la séance est bornée
+        while (t + 500 < SceneClavier.DureeEntree + SceneClavier.DureeMax) { t += 500; s.Avancer(t, true, 0, true); }
+        Assert.Equal(EtapeClavier.Tape, s.Etape);
+        t = SceneClavier.DureeEntree + SceneClavier.DureeMax;
+        s.Avancer(t, true, 0, true);
+        Assert.Equal(EtapeClavier.Sortie, s.Etape);
+        s.Avancer(t + SceneClavier.DureeSortie, true, 0, true);
+        Assert.Equal(EtapeClavier.Aucune, s.Etape);
+        // repos : la rafale suivante ne le ramène pas tout de suite
+        Assert.False(s.Avancer(t + SceneClavier.DureeSortie + 60_000, true, 0, true));
+        Assert.True(s.Avancer(t + SceneClavier.DureeSortie + SceneClavier.ReposApres + 1, true, 0, true));
+    }
 }
