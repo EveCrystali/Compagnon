@@ -9,6 +9,8 @@ public enum ChoixNotification
     MiseAJour = 3,
     Redemarrer = 4,
     Quitter = 5,
+    Expedition = 6,
+    Defense = 7,
 }
 
 public static class MenuNotification
@@ -20,6 +22,8 @@ public static class MenuNotification
     {
         (ChoixNotification.Afficher, "Afficher / ramener Pilou"),
         (ChoixNotification.OuvrirMenu, "Ouvrir le menu de Pilou"),
+        (ChoixNotification.Expedition, "Partir en expédition…"),
+        (ChoixNotification.Defense, "Jouer à Défense du bureau"),
         (null, ""),
         (ChoixNotification.MiseAJour, "Chercher une mise à jour"),
         (ChoixNotification.Redemarrer, "Redémarrer Pilou"),

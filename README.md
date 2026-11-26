@@ -137,6 +137,14 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
 - **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
   (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
   plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
+- **Jouer → Défense du bureau** (niveau 5, aussi depuis l'icône près de l'horloge ; jamais tout seul) : une
+  bande de l'écran au-dessus de la barre des tâches devient un jeu de tir. Pilou, en bas, suit la souris (ou
+  ← → / Q D) et tire au clic ou à Espace ; les bugs de Chasse aux bugs arrivent en formation (blindés,
+  diviseurs, moucherons, un Bug de prod toutes les 5 vagues), des fenêtres et des post-it servent d'abris,
+  des bonus tombent (tir double, bouclier, ralenti). Échap, clic droit ou ✕ pour quitter ; pause si une
+  autre appli passe en plein écran. Réglages : largeur de la bande, *réduire les flashs*. Gains bornés
+  (30 xp et 10 po par partie au plus, 120 xp et 30 po par jour), record, quête « jeu », succès Pare-feu,
+  Rempart (vague 10), Gardien. `--essai=defense` : Pilou joue seul. `apps/PilouBureau/Defense.cs` ;
 - **Niveaux** : ils **ouvrent l'accès** — jeux (pêche niveau 2, tape m'en cinq 3, cuisine 4, Chasse aux
   bugs 5), rangées de la boutique (paliers 1, 5, 10, 15, 20, 30, 40, 50), stades d'évolution — et chaque niveau gagné
   rapporte des pièces d'or (20 + 5 × niveau). Les titres restent liés au niveau (honorifiques).
@@ -220,6 +228,23 @@ un quart) — et rien ne s'affiche tant que tout va bien : ni jauge, ni bulle qu
   groupe, téléphone) font l'union des actions et calculent le même état, qui ne dépend que d'une base,
   de ces actions et du temps passé. Les actions de plus de deux jours sont repliées dans la base, à une
   heure ronde. `apps/PilouBureau/Soins.cs`.
+
+## Expéditions
+
+Clic droit → **⚔ Partir en expédition…** (ou l'icône près de l'horloge) : un clic sur un lieu — Caverne des
+câbles, Forêt des onglets, Tour du tampon, Marais des mises à jour, Citadelle du nuage, ouverts par le niveau — et
+Pilou part seul, baluchon et épée en bois ; une pancarte « en expédition · ↩ 15 h 40 » le remplace (les sessions
+restent dans la bulle). L'aventure se résout toute seule (combats contre des bugs géants, slimes de cache, golems
+de tickets…, pièges, coffres, boss) : il rentre avec quelques po et un peu d'XP, parfois un butin introuvable en
+boutique ou un trophée, parfois bredouille et cabossé. Un petit coffre près de lui ouvre le journal.
+
+- **Énergie ⚡** (bandeau du menu et de la boutique, téléphone) : chaque départ en coûte ; elle remonte un peu
+  toute seule (jusqu'à 50), **surtout en travaillant** (temps dans une appli de travail, IA qui finit, quête
+  réussie) et en mangeant (plats cuisinés, en-cas de route de la boutique). Pilou boudeur : deux fois moins vite.
+- **Mesuré** : 30 min de repos entre deux, trois par jour pour tout le groupe, pas pendant une visite ; en
+  moyenne une journée rapporte de l'ordre d'une ou deux parties de pêche.
+- Équipement léger (un outil, un talisman), téléphone en lecture, trois quêtes. Détails, chiffres d'équilibre et
+  `--essai=expedition:depart|retour|defaite|journal` : [docs/EXPEDITIONS.md](docs/EXPEDITIONS.md).
 
 ## Activités
 

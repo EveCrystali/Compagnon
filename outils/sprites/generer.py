@@ -15,6 +15,8 @@ import boutique_sprites
 import meteo_sprites
 import visites_sprites
 import gestes_sprites
+import expedition_sprites
+import defense_sprites
 import garde_robe
 
 # ---- Couleurs
@@ -1796,5 +1798,7 @@ if __name__ == "__main__":
     garde_robe.objets()
     visites_sprites.tout()
     gestes_sprites.tout()
+    expedition_sprites.tout()
+    defense_sprites.tout()
     tables()
     print(len(TOUS), "sprites dans", SORTIE)

@@ -1,0 +1,49 @@
+# Créature : spectre 404
+id: crea-spectre-404
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 380
+palette: a=#3a2a7a b=#9b8cff c=#0d2a4d
+images:
+....aabbbbbbaa....
+...abbbbbbbbbba...
+..abbbbbbbbbbbba..
+.abbbccbbbbccbbba.
+.abbbccbbbbccbbba.
+abbbbccbbbbccbbbba
+abbbbccbbbbccbbbba
+abbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbba
+abbababaaabababbba
+abbababababababbba
+abbaaabababaaabbba
+abbbbabababbbabbba
+abbbbabaaabbbabbba
+abbbbbbbbbbbbbbbba
+bbbbbbbbbbbbbbbbba
+bbbbbbbbbbbbbbbba.
+abbaabbaabbaabba..
+.aa..aa..aa..aa...
+---
+....aabbbbbbaa....
+...abbbbbbbbbba...
+..abbbbbbbbbbbba..
+.abbbccbbbbccbbba.
+.abbbccbbbbccbbba.
+abbbbccbbbbccbbbba
+abbbbccbbbbccbbbba
+abbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbba
+abbababaaabababbba
+abbababababababbba
+abbaaabababaaabbba
+abbbbabababbbabbba
+abbbbabaaabbbabbba
+abbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbbb
+.abbbbbbbbbbbbbbbb
+..abbaabbaabbaabba
+...aa..aa..aa..aa.

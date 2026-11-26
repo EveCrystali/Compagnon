@@ -103,7 +103,7 @@ ARTICLES = [
     (70, "noeud-geant", "Nœud géant", "cou", 170, 15, R, "", "", False),
     (71, "collier-comete", "Collier comète", "cou", 740, 40, L, "", "", False),
     # ---- Dos
-    (72, "bouclier-couvercle", "Bouclier-couvercle", "dos", 70, 1, PC, "", "", False),
+    (72, "cartable", "Cartable", "dos", 70, 1, PC, "", "", False),
     (73, "cerf-volant", "Cerf-volant", "dos", 190, 10, R, "printemps", "", False),
     (74, "ailes-libellule", "Ailes de libellule", "dos", 630, 30, L, "", "", True),
     (75, "ailes-nuage", "Ailes de nuage", "dos", 980, 40, L, "", "", False),

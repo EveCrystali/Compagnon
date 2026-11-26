@@ -110,7 +110,7 @@ public sealed partial class FenetrePilou
             + $"|{_profil.Soins.Actions.Count}|{_profil.Soins.Base?.T}|{_profil.Evolution.Variantes.Count}"
             + $"|{Meteo.Courante?.Etat}|{Math.Round(Meteo.Courante?.Releve.Temperature ?? 0)}"
             + $"|{(_reglages.Connecteurs.AnnoncesTelephone ? _registre?.Annonces().FirstOrDefault()?.T : 0)}"
-            + $"|{SignatureAmis()}");
+            + $"|{SignatureAmis()}|{Exp.Courante?.Id}|{Exp.Dernier?.Id}|{Jauge.Affiche(Exp.Energie) / 5}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -137,6 +137,9 @@ public sealed partial class FenetrePilou
         // Amis (lecture seule sur le téléphone) et visite en cours.
         if (AmisPourTelephone() is { Count: > 0 } amis) progression["amis"] = amis;
         if (VisitePourTelephone() is { Length: > 0 } visite) progression["visite"] = visite;
+        // Expédition (lecture seule sur le téléphone) : énergie, en route ou pas, dernier journal.
+        var expedition = Expeditions.PourTelephone(Exp, epoque, DateTime.Now, AutresExpeditions());
+        progression["expedition"] = expedition;
         var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
             _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
@@ -150,6 +153,7 @@ public sealed partial class FenetrePilou
             leger.Remove("plats");
             foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) leger[k] = v;
             leger["stade"] = StadeAffiche();
+            leger["expedition"] = expedition;
             charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
                 _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
             corps = Telephone.Chiffrer(code, charge);

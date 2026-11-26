@@ -62,6 +62,9 @@ POSES = [
     "expr=fete t=0 stade=1 objets=polaroid-3",
     "expr=attente t=320 regard_y=-1 objets=enveloppe-notif",
     "expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close",
+    "expr=fete t=200 marche=1 regard=1 objets=baluchon,epee-bois",
+    "expr=grimace t=500 regard=-1 objets=baluchon,pansement",
+    "expr=repos t=300 stade=3 objets=torche,bouclier-couvercle,casque-passoire,slime-apprivoise",
     # Boutique garnie : un ensemble complet et son bonus, teintes chaudes, objets animés sur les autres stades.
     "expr=fete t=420 objets=chapeau-explorateur,jumelles,foulard-explorateur,sac-explorateur,boussole,bottines,bonus-explorateur",
     "expr=inquiet t=0 couleur=cuivre objets=plaid,chocolat-chaud",

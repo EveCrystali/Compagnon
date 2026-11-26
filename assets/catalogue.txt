@@ -73,7 +73,7 @@ article|68|clochette|Clochette|cou|40|1|0|||0
 article|69|pendentif-goutte|Pendentif goutte|cou|120|5|1|||0
 article|70|noeud-geant|Nœud géant|cou|170|15|2|||0
 article|71|collier-comete|Collier comète|cou|740|40|4|||0
-article|72|bouclier-couvercle|Bouclier-couvercle|dos|70|1|1|||0
+article|72|cartable|Cartable|dos|70|1|1|||0
 article|73|cerf-volant|Cerf-volant|dos|190|10|2|printemps||0
 article|74|ailes-libellule|Ailes de libellule|dos|630|30|4|||1
 article|75|ailes-nuage|Ailes de nuage|dos|980|40|4|||0

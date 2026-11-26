@@ -112,3 +112,14 @@ Soins : icônes de besoin `soin-faim`, `soin-proprete`, `soin-moral` ; en-cas `e
 par le rendu quand l'allure dit `Boude` au repos), `boude-nuage` (nuage gris qui bruine),
 `boude-eclaircie` (amadoué : un soleil pointe), `boude-bras` (bras croisés du Nimbus) ; `Dos` : ni
 visage ni sprites `visage`/`yeux`. Planche de contrôle : `bouderie.png`.
+
+Expéditions (`outils/sprites/expedition_sprites.py`, [EXPEDITIONS.md](EXPEDITIONS.md)) : `epee-bois` (dans le dos,
+`couche: derriere`, ancre `corps`), le butin exclusif porté `torche` (main), `bouclier-couvercle` (flanc gauche,
+ancre `main-g`), `casque-passoire` (tête), `slime-apprivoise` (compagnon) et l'icône `carte-tresor` ;
+`pansement` (ancre `tete`, après une défaite) ; icônes `coffre-expedition` (badge du journal) et
+`coffre-expedition-ouvert`, `eclat-cristal`, `eclair-energie`, `galette-route`, `jus-etoile` (en-cas de route,
+aussi croqués par `Manger`) ; créatures `crea-<id>` (deux images : bug géant, slime de cache, spectre 404, golem de
+tickets, hydre des dépendances, gargouille de latence) et trophées `trophee-<boss>` (même coupe, un emblème gravé
+différent par boss). Le départ réutilise `baluchon`, l'absence la `pancarte`. Rien de neuf dans le rendu commun :
+trois poses de `rendus-reference.txt` les vérifient sur le PC et le téléphone. Planches : `expedition.png`,
+`expedition-pilou.png`.

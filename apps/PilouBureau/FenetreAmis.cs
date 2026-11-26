@@ -70,7 +70,8 @@ public sealed partial class FenetrePilou
 
     private bool HeureCalme => Amis.Calme(DateTime.Now.Hour, _reglages.CalmeDebut, _reglages.CalmeFin);
 
-    private PorteAmi PorteOuverte => new(_reglages.AccepterVisites, _discret, HeureCalme);
+    // En expédition, Pilou n'est pas là pour recevoir (l'ami lit « ne reçoit pas en ce moment »).
+    private PorteAmi PorteOuverte => new(_reglages.AccepterVisites && !EnExpedition, _discret, HeureCalme);
 
     // Ce que mes amis voient de Pilou : allure, niveau, et (si coché) quelques faits ; rien d'autre.
     private Vitrine MaVitrine()
@@ -87,7 +88,7 @@ public sealed partial class FenetrePilou
             Equipe = EquipeCourant().Where(kv => kv.Value != "").ToDictionary(kv => kv.Key, kv => kv.Value),
             Faits = _reglages.PartagerAnecdotes ? Amis.FaitsDe(_profil, Meteo.Courante?.Etat ?? "") : null,
             Accepte = _reglages.AccepterVisites && !HeureCalme,
-            Libre = !_discret && !_visites.Occupe,
+            Libre = !_discret && !_visites.Occupe && !EnExpedition,
         };
     }
 
@@ -235,7 +236,7 @@ public sealed partial class FenetrePilou
         if (epoque - _envieVue < 60_000) return;
         _envieVue = epoque;
         Visites.Actualiser(MesAmis.Jour, DateTime.Now);
-        if (_hasard.NextDouble() > 1 / 20.0) return;
+        if (_hasard.NextDouble() > 1 / 20.0 || EnExpedition) return;
         bool calme = !_vivantes.Any(e => e.EnTour || e.Attente != "") && _jeuEnCours == Jeu.Aucun && !_dortBureau && !_attrape
                      && _inactif > 120_000;
         if (_visites.Envie(MesAmis.Amis, MesAmis.Jour, _reglages.PartirEnVisite, calme, _discret, HeureCalme, epoque, _hasard) is { } ami)
@@ -244,6 +245,12 @@ public sealed partial class FenetrePilou
 
     internal void Partir(Ami ami, bool spontanee)
     {
+        // Pas de visite pendant une expédition (ni l'inverse : Expeditions.Refus).
+        if (EnExpedition)
+        {
+            if (!spontanee) Dire("Pilou est en expédition : la visite attendra son retour", 3500);
+            return;
+        }
         if (_jeuEnCours != Jeu.Aucun) Arreter("");
         Visites.Actualiser(MesAmis.Jour, DateTime.Now);
         Appliquer(_visites.Partir(ami, MesAmis.Moi.Code, MaVitrine(), Epoque, Visites.Duree(_hasard), spontanee, MesAmis.Jour));

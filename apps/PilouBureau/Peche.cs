@@ -356,6 +356,7 @@ public sealed partial class FenetrePilou
         foreach (var id in plat.Utilises)
             if (_profil.Stock.TryGetValue(id, out var n)) _profil.Stock[id] = Math.Max(0, n - 1);
         _profil.PlatsCuisines++;
+        EnergieRepas(plat.Rate ? "plat-rate" : plat.Inventee ? "plat-invente" : "plat"); // un bon plat donne de l'énergie
         _resultatJusque = t + 3400;
         if (_feu is not null) _feu.Visibility = Visibility.Hidden;
         if (plat.Rate)

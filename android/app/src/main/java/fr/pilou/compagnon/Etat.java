@@ -125,6 +125,72 @@ public final class Etat {
     public final List<Ami> amis = new ArrayList<>();
     public String visite = "";
 
+    /** Expéditions du Pilou du PC (lecture seule, Expeditions.PourTelephone), null sur un ancien PC. */
+    public Expedition expedition;
+
+    public static final class Expedition {
+        /** « en » (parti), « repos » (il souffle), « pret ». */
+        public String etat = "pret", lieu = "", issue = "", dernier = "";
+        public int energie = -1, reste;
+        public long retour, libre, t;
+        public final List<String> journal = new ArrayList<>();
+
+        public boolean enRoute() {
+            return etat.equals("en");
+        }
+
+        /** Signe de forme de la dernière issue : ★ victoire, ◐ à moitié, ✕ défaite, ↩ rappelé. */
+        public String signe() {
+            switch (issue) {
+                case "victoire": return "★";
+                case "partielle": return "◐";
+                case "defaite": return "✕";
+                default: return "↩";
+            }
+        }
+
+        public String nomIssue() {
+            switch (issue) {
+                case "victoire": return "victoire";
+                case "partielle": return "à moitié";
+                case "defaite": return "défaite";
+                default: return "rappelé";
+            }
+        }
+
+        /** « en expédition · Caverne des câbles · retour vers 15 h 40 », « se repose encore 12 min », « prêt à partir ». */
+        public String ligne(long maintenant) {
+            if (enRoute()) return "en expédition · " + lieu + " · retour vers " + heure(retour);
+            if (reste <= 0) return "trois expéditions aujourd'hui : il repart demain";
+            if (etat.equals("repos") && libre > maintenant) return "se repose encore " + duree(libre - maintenant);
+            return "prêt à partir (depuis le PC) · " + reste + " expédition" + (reste > 1 ? "s" : "") + " possible" + (reste > 1 ? "s" : "") + " aujourd'hui";
+        }
+
+        public static String heure(long ms) {
+            java.util.Calendar c = java.util.Calendar.getInstance();
+            c.setTimeInMillis(ms);
+            return c.get(java.util.Calendar.HOUR_OF_DAY) + " h " + String.format(java.util.Locale.ROOT, "%02d", c.get(java.util.Calendar.MINUTE));
+        }
+
+        static Expedition lire(JSONObject o, long decalage) {
+            if (o == null) return null;
+            Expedition x = new Expedition();
+            x.etat = o.optString("etat", "pret");
+            x.lieu = o.optString("lieu", "");
+            x.energie = Math.max(-1, Math.min(100, o.optInt("energie", -1)));
+            x.reste = Math.max(0, o.optInt("reste", 0));
+            long retour = o.optLong("retour", 0), libre = o.optLong("libre", 0), t = o.optLong("t", 0);
+            x.retour = retour > 0 ? retour + decalage : 0;
+            x.libre = libre > 0 ? libre + decalage : 0;
+            x.t = t > 0 ? t + decalage : 0;
+            x.issue = o.optString("issue", "");
+            x.dernier = o.optString("dernier", "");
+            JSONArray j = o.optJSONArray("journal");
+            if (j != null) for (int i = 0; i < Math.min(9, j.length()); i++) if (!j.optString(i, "").isEmpty()) x.journal.add(j.optString(i));
+            return x;
+        }
+    }
+
     public static final class Ami {
         public final String nom;
         public final int niveau, stade;
@@ -273,6 +339,7 @@ public final class Etat {
                         ta > 0 ? ta + decalage : 0, o.optBoolean("actif", true)));
             }
         e.visite = r.optString("visite", "");
+        e.expedition = Expedition.lire(r.optJSONObject("expedition"), decalage);
         return e;
     }
 

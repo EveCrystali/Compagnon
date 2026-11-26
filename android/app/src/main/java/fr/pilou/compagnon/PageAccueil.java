@@ -48,6 +48,9 @@ final class PageAccueil extends Page {
     private String decorVu = "";
     private final LinearLayout carteVitrine;
     private String empreinteVitrine = "";
+    // Expédition (lecture seule : elle se lance sur le PC) : en route ou pas, énergie, dernier journal.
+    private final LinearLayout carteExpedition;
+    private String empreinteExpedition = "";
 
     PageAccueil(Principale a) {
         super(a);
@@ -104,6 +107,10 @@ final class PageAccueil extends Page {
         le.gravity = Gravity.CENTER_HORIZONTAL;
         heros.addView(etatPc, le);
         corps.addView(heros, Ui.large(a, 14));
+
+        carteExpedition = Ui.carte(a);
+        carteExpedition.setVisibility(View.GONE);
+        corps.addView(carteExpedition, Ui.large(a, 14));
 
         // Vitrine : l'offre du jour et la prochaine rangée ; un toucher ouvre la boutique.
         carteVitrine = Ui.carte(a);
@@ -275,7 +282,9 @@ final class PageAccueil extends Page {
         int attente = Gains.enAttente(app);
         String humeur = Soins.amadoue(s) ? "\n☁  Pilou se laisse amadouer : gains ×0,6"
                 : Soins.boudeur(s) ? "\n☁  Pilou boude : gains ×0,6" : "";
-        xp.setText(total + " / " + haut + " xp" + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
+        String energie = e.expedition != null && e.expedition.energie >= 0 ? "   ·   ⚡ " + e.expedition.energie : "";
+        xp.setText(total + " / " + haut + " xp" + energie + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
+        expedition(e, appaire, maintenant, p);
 
         if (!appaire) {
             etatPc.setText("◌  pas encore appairé");
@@ -297,6 +306,32 @@ final class PageAccueil extends Page {
         quetes(e, p);
         groupe(e, maintenant, p);
         mot.setText("« " + MOTS[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % MOTS.length] + " »");
+    }
+
+    // Expédition du Pilou du PC : une carte seulement quand il y a quelque chose à dire.
+    private void expedition(Etat e, boolean appaire, long maintenant, Ui.Palette p) {
+        Etat.Expedition x = appaire ? e.expedition : null;
+        boolean vide = x == null || (!x.enRoute() && x.journal.isEmpty());
+        carteExpedition.setVisibility(vide ? View.GONE : View.VISIBLE);
+        if (vide) return;
+        String emp = x.etat + x.lieu + x.retour + x.energie + x.reste + x.t + (maintenant / 60_000) + x.journal.size();
+        if (emp.equals(empreinteExpedition)) return;
+        empreinteExpedition = emp;
+        carteExpedition.removeAllViews();
+        carteExpedition.addView(Ui.texte(app, "⚔  Expédition" + (x.energie >= 0 ? "   ·   ⚡ " + x.energie + "/100" : ""), 17, p.texte, true), Ui.large());
+        TextView etat = Ui.texte(app, x.ligne(maintenant), 14, x.enRoute() ? p.orange : p.doux, x.enRoute());
+        etat.setPadding(0, Ui.dp(app, 4), 0, 0);
+        carteExpedition.addView(etat, Ui.large());
+        if (x.journal.isEmpty()) return;
+        TextView titre = Ui.texte(app, x.signe() + "  Dernière : " + x.dernier + " · " + x.nomIssue()
+                + (x.t > 0 ? " · " + Etat.Expedition.heure(x.t) : ""), 14, p.texte, true);
+        titre.setPadding(0, Ui.dp(app, 10), 0, Ui.dp(app, 2));
+        carteExpedition.addView(titre, Ui.large());
+        for (String l : x.journal) {
+            TextView t = Ui.texte(app, l, 13, p.doux, false);
+            t.setPadding(0, Ui.dp(app, 2), 0, 0);
+            carteExpedition.addView(t, Ui.large());
+        }
     }
 
     // Décor de la boutique derrière Pilou (scène aux coins nets, image pixel sans lissage).

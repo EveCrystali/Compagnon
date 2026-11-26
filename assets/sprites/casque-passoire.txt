@@ -1,0 +1,21 @@
+# Casque-passoire (butin d'expédition)
+id: casque-passoire
+slot: tete
+ancre: tete
+decalage: -12 -9
+coiffe: oui
+palette: a=#1c2128 b=#b8c4d2 c=#e6ecf2 d=#768390 e=#57606a
+images:
+..........................
+........aaaaaaaa..........
+......aabbbbbbbbaa........
+.....abbbbbbbbbbbba.......
+....abbcdccccdbbbbba......
+...abbccccccccbbdbbba.....
+..abbccccccccccbbbbbbaaaaa
+..abccccccdcccccbbbdbaeeee
+.abbccccccccccdcbbbbbbeeee
+.abbbbdbbbbbbbbbbbbbbbaaaa
+aabbbbbbbbbdbbbbbbdbbbaa..
+dddddddddddddddddddddddda.
+dddddddddddddddddddddddda.

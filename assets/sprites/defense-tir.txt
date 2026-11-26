@@ -1,0 +1,23 @@
+# Défense du bureau : tir des bugs (losange violet)
+id: defense-tir
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 120
+palette: a=#3a2a7a b=#9b8cff c=#d2caff d=#ffffff
+images:
+...a...
+..aba..
+.abcba.
+abcdcba
+.abcba.
+..aba..
+...a...
+---
+...a...
+...b...
+..aca..
+abcdcba
+..aca..
+...b...
+...a...

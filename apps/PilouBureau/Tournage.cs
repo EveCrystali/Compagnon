@@ -141,8 +141,9 @@ public static class Tournage
     public static readonly IReadOnlyList<string> EssaisConnus = new[]
     {
         "etoile", "bulles", "tape", "etourdi", "peche", "mord", "prise", "cuisine", "niveau", "evolution",
-        "clavier", "photo", "notif", "notif:masque",
+        "clavier", "photo", "notif", "notif:masque", "defense",
         "visite:depart", "visite:arrivee", "visite:jeu", "visite:retour",
+        "expedition:depart", "expedition:retour", "expedition:defaite", "expedition:journal",
     };
 
     // Familles à paramètre (--essai=stade:3, tenue:code, objet:cape, soins:faim, meteo:pluie:parapluie).

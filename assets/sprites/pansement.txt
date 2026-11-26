@@ -1,0 +1,18 @@
+# Pansement (rentré cabossé d'expédition)
+id: pansement
+slot: effet
+ancre: tete
+decalage: -11 -4
+palette: a=#8a6e4b b=#e8d5b0 c=#c4a77d d=#f6f8fa
+images:
+.aa.....aa.
+abba...abba
+abcba.abcba
+.abbbabbba.
+..abdddba..
+...adcda...
+..abdddba..
+.abbbabbba.
+abbba.abbba
+bbba...abbb
+bba.....abb

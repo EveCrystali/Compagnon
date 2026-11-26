@@ -25,7 +25,8 @@ public static class Groupe
         int PoGagnes = 0, int PoDepenses = 0, int PoDepTel = 0,
         IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null, int NiveauPaye = 0, int NiveauAcquis = 0,
         EtatSoins? SoinsBase = null, string SoinsOrigine = "", IReadOnlyList<ActionSoin>? SoinsActions = null,
-        IReadOnlyDictionary<int, string>? Variantes = null)
+        IReadOnlyDictionary<int, string>? Variantes = null,
+        string ExpJour = "", int ExpNombre = 0, double ExpLibre = 0)
     {
         public IReadOnlyList<ActionSoin> Actions => SoinsActions ?? Array.Empty<ActionSoin>();
         public IReadOnlyDictionary<int, string> Formes => Variantes ?? new Dictionary<int, string>();
@@ -105,13 +106,19 @@ public static class Groupe
                 SoinsActions = avant.Actions.Concat(c.Actions).GroupBy(a => a.Id).Select(g => g.First())
                     .OrderByDescending(a => a.T).Take(40).ToList(),
                 Variantes = FusionVariantes(new[] { avant.Formes, c.Formes }),
+                // Expéditions : départs du jour le plus récent (au maximum), fin de repos la plus tardive.
+                ExpJour = string.CompareOrdinal(c.ExpJour, avant.ExpJour) > 0 ? c.ExpJour : avant.ExpJour,
+                ExpNombre = c.ExpJour == avant.ExpJour ? Math.Max(c.ExpNombre, avant.ExpNombre)
+                    : string.CompareOrdinal(c.ExpJour, avant.ExpJour) > 0 ? c.ExpNombre : avant.ExpNombre,
+                ExpLibre = Math.Max(avant.ExpLibre, c.ExpLibre),
             };
             bool change = fusion.Xp != avant.Xp || fusion.XpTelephone != avant.XpTelephone || fusion.T != avant.T
                           || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
                           || fusion.Objets.Count != avant.Objets.Count || fusion.NiveauAcquis != avant.NiveauAcquis
                           || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom
                           || fusion.Actions.Count != avant.Actions.Count || fusion.Formes.Count != avant.Formes.Count
-                          || (fusion.SoinsBase?.T ?? 0) != (avant.SoinsBase?.T ?? 0);
+                          || (fusion.SoinsBase?.T ?? 0) != (avant.SoinsBase?.T ?? 0)
+                          || fusion.ExpJour != avant.ExpJour || fusion.ExpNombre != avant.ExpNombre || fusion.ExpLibre != avant.ExpLibre;
             Autres[c.Appareil] = fusion;
             return change;
         }
@@ -143,7 +150,8 @@ public static class Groupe
         p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
         p.Bourse.PoGagnes, p.Bourse.PoDepenses, p.Bourse.PoDepTelephone,
         p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe), p.Evolution.NiveauPaye,
-        p.Evolution.NiveauAcquis, p.Soins.Base, p.Soins.Origine, Soins.Recentes(p.Soins, 12), new Dictionary<int, string>(p.Evolution.Variantes));
+        p.Evolution.NiveauAcquis, p.Soins.Base, p.Soins.Origine, Soins.Recentes(p.Soins, 12), new Dictionary<int, string>(p.Evolution.Variantes),
+        p.Expedition.Jour, p.Expedition.Nombre, p.Expedition.Libre);
 
     // Un message ntfy reste sous 4 096 octets une fois chiffré : on retire des actions de soin récentes au besoin.
     public static string Json(Compteur c)
@@ -163,6 +171,7 @@ public static class Groupe
         {
             ["base"] = Soins.JsonEtat(c.SoinsBase), ["o"] = c.SoinsOrigine, ["a"] = c.Actions.Select(Soins.JsonAction).ToList(),
         },
+        ["exp"] = new Dictionary<string, object> { ["j"] = c.ExpJour, ["n"] = c.ExpNombre, ["l"] = c.ExpLibre },
         ["formes"] = c.Formes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
@@ -211,10 +220,19 @@ public static class Groupe
                     if (int.TryParse(x.Name, out var st) && st is >= 2 and <= 4 && x.Value.ValueKind == JsonValueKind.String
                         && x.Value.GetString() is "calin" or "espiegle")
                         formes[st] = x.Value.GetString()!;
+            string expJour = "";
+            int expNombre = 0;
+            double expLibre = 0;
+            if (r.TryGetProperty("exp", out var ex) && ex.ValueKind == JsonValueKind.Object)
+            {
+                if (ex.TryGetProperty("j", out var ej) && ej.ValueKind == JsonValueKind.String && ej.GetString() is { Length: <= 10 } jour) expJour = jour;
+                if (ex.TryGetProperty("n", out var en) && en.ValueKind == JsonValueKind.Number && en.TryGetInt32(out var nb)) expNombre = Math.Clamp(nb, 0, 10);
+                if (ex.TryGetProperty("l", out var el) && el.ValueKind == JsonValueKind.Number) expLibre = Math.Max(0, el.GetDouble());
+            }
             return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
                 N("po"), N("poDep"), N("poDepTel"), L("objets", 300).Concat(Boutique.Deplier(S("garde"))).Distinct()
                     .Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
-                soinsBase, origine, actions, formes);
+                soinsBase, origine, actions, formes, expJour, expNombre, expLibre);
         }
         catch (JsonException)
         {

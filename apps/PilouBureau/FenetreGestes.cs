@@ -105,7 +105,7 @@ public sealed partial class FenetrePilou
 
     // Pilou peut-il se lancer dans un geste ? Jamais caché (plein écran, jeu, visio), en visite, pendant un
     // mini-jeu, quand une IA t'attend, ni quand on le tient par la souris.
-    private bool GestePermis => !_discret && !_visites.Occupe && _jeuEnCours == Jeu.Aucun && !_attend && !_attrape && _auSol;
+    private bool GestePermis => !_discret && !_visites.Occupe && !EnExpedition && _jeuEnCours == Jeu.Aucun && !_attend && !_attrape && _auSol;
 
     private void Capture(SourceCapture source)
     {

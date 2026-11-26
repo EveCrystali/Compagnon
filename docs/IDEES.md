@@ -14,6 +14,12 @@ existant), et aucune couleur ne s'oppose en rouge contre vert : chaque état a a
 | Rythme musical | Quand de la musique joue (Spotify ou Core Audio), des notes tombent et il faut cliquer en mesure. | Repose sur la détection audio existante. |
 | Course d'escargots | Pari de quelques po sur une course tirée au sort ; Pilou commente l'arrivée. | Gains plafonnés par jour. |
 | Memory de la boutique | Retourner des paires de cartes illustrées par les objets de la boutique. | Fait aussi découvrir le catalogue. |
+| Tri du bureau | Des fichiers tombent ; Pilou les range dans le bon dossier selon leur couleur et leur forme. | Formes distinctes, pas seulement des couleurs. |
+| Casse-icônes | Pilou rebondit sur une raquette et casse des icônes-briques. | Variante du ping-pong. |
+| Le fil des notifications | Des bulles montent ; on ne clique que celles qui portent le symbole demandé. | Symboles, jamais de vrai contenu. |
+| Pilou funambule | On déplace une fenêtre pour lui faire un pont au-dessus du vide. | Ne bouge que des fenêtres du jeu. |
+| Pêche au curseur | Le curseur devient un hameçon qu'on remonte au bon moment. | Prolonge la pêche existante. |
+| Pluie de pixels | Après une capture d'écran, Pilou attrape des pixels qui remplissent sa collection de teintes. | Ne lit jamais l'image capturée. |
 
 ## Notifications et téléphone
 

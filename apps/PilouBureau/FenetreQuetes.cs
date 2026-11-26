@@ -32,6 +32,7 @@ public sealed partial class FenetrePilou
         // Soins : po et XP × 0,6 s'il boude, × 1,2 s'il rayonne (ajustés avant d'être crédités : le compteur
         // de po gagnées ne fait que monter).
         var (po, xp) = Quetes.Appliquer(_profil, gains.Select(g => g with { Po = BonusSoins(g.Po), Xp = BonusSoins(g.Xp) }));
+        EnergieQuete(gains.Count(g => !g.Coffre)); // bien travailler recharge l'énergie des expéditions
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
         _xpTotal = TotalXp();

@@ -708,15 +708,18 @@ def _():
     dos("hotte-cadeaux", t, (23, 16), commentaire="Hotte de cadeaux (ensemble Fêtes de l'hiver)")
 
 
-@dessin("bouclier-couvercle")
+@dessin("cartable")
 def _():
     t = T(42, 20)
-    t.ell(6, 11, 6, 8.5, ARGENT)
-    t.ell(5, 9, 3.5, 5, ARGENT_C)
-    t.anneau(6, 11, 6, 8.5, GRIS, ep=1)
-    t.rect(0, 10, 2, 3, ARDOISE)
+    t.rect(0, 4, 11, 14, O2)
+    t.rect(0, 4, 11, 7, O3)
+    t.rect(1, 5, 9, 1, O5)
+    t.rect(4, 9, 3, 3, J3)
+    t.p(5, 10, J1)
+    t.anneau(5.5, 4, 3.5, 3, BR2, ep=1)
+    t.rect(0, 17, 11, 1, O1)
     t.contour(ENCRE)
-    dos("bouclier-couvercle", t, (21, 8), commentaire="Bouclier-couvercle (sur le dos)")
+    dos("cartable", t, (21, 8), commentaire="Cartable (sur le dos)")
 
 
 @dessin("cerf-volant")

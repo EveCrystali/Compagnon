@@ -41,6 +41,9 @@ public sealed partial class FenetrePilou
             case ChoixNotification.OuvrirMenu:
                 OuvrirMenuDepuisIcone();
                 break;
+            case ChoixNotification.Expedition:
+                OuvrirExpeditions(false);
+                break;
             case ChoixNotification.MiseAJour:
                 Ramener(true);
                 _ = MettreAJour(true);
@@ -50,6 +53,9 @@ public sealed partial class FenetrePilou
                 break;
             case ChoixNotification.Quitter:
                 Application.Current.Shutdown();
+                break;
+            case ChoixNotification.Defense:
+                LancerDefense();
                 break;
         }
     }

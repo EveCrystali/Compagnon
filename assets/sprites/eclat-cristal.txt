@@ -1,0 +1,19 @@
+# Éclat de cristal (expéditions)
+id: eclat-cristal
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1f4f8a b=#b4dbff c=#6cb6ff d=#ffffff e=#4a8fdc
+images:
+...aba...
+..acbba..
+.accbbba.
+accdbbbba
+ccccbbbbb
+eeeeccccc
+aeeecccca
+.aeeccca.
+.aeeccca.
+..aecca..
+...aca...
+...aca...

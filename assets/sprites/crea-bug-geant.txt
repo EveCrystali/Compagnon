@@ -1,0 +1,41 @@
+# Créature : bug géant
+id: crea-bug-geant
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 260
+palette: a=#1c2128 b=#adbac7 c=#2d333b d=#ffd8b0 e=#3b4654 f=#57606a g=#f69d50
+images:
+.....abaaaaaa.aaba....
+......abbccccabba.....
+.......acbcccbaa......
+......acccdcdcca......
+.....aeecccccceea.....
+aa..aefffccccfffea....
+bbaaeffffffafffffeaa..
+aabbeffgfffafffgfeebaa
+..aeeffffffafffffeeabb
+..aeeffffffafffffeeabb
+aabbeefffffaffffeeebaa
+bbaaeeeegffaffgeeeaa..
+bbaaaeeeeeeaeeeeea.a..
+aabbaaeeeeeaeeeea.abaa
+..aa..aaaeeeeaaa...abb
+.........aaaa.......aa
+---
+....abbaaaaaa.aabba...
+.....aabbccccabbaa....
+.......acbcccbaa......
+......acccdcdcca......
+.....aeecccccceea.....
+....aefffccccfffea..aa
+..aaeffffffafffffeaabb
+aabbeffgfffafffgfeebaa
+bbaeeffffffafffffeea..
+bbaeeffffffafffffeea..
+aabbeefffffaffffeeebaa
+..aaeeeegffaffgeeeaabb
+..aaaeeeeeeaeeeeea.abb
+aabbaaeeeeeaeeeea.abaa
+bbaa..aaaeeeeaaa...a..
+aa.......aaaa.........
