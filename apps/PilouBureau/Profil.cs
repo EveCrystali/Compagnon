@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PilouBureau;
 
@@ -42,6 +43,9 @@ public sealed class Profil
     // Expéditions (Expeditions.cs) : énergie ⚡, expédition en cours, dernier journal, collection. Propres à cet appareil.
     public EtatExpedition Expedition { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
+    // Profil de démonstration (tournage, Tournage.ProfilDemo) : il vit en mémoire et ne s'écrit jamais.
+    [JsonIgnore]
+    public bool EnMemoire { get; set; }
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 
@@ -63,6 +67,7 @@ public sealed class Profil
 
     public void Ecrire(string dossier)
     {
+        if (EnMemoire) return;
         try
         {
             Directory.CreateDirectory(dossier);

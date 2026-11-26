@@ -22,7 +22,9 @@ $t = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
   @{ session = 'demo-docs'; libelle = 'docs'; enTour = $false; finTour = $t - 20000; outil = ''; attente = '' }
 ) | ForEach-Object {
   $e = @{ v = 3; source = 'claude'; t = $t; ttl = 3600000; humeur = 'repos'; rev = 0; outilRev = 0; inquiet = $false; fatigue = $false;
-          nom = 'Pilou'; niveau = 12; bureau = $true; finRaison = ''; debutOutil = 0; finTour = 0; xp = 0 } + $_
+          nom = 'Pilou'; niveau = 12; bureau = $true; finRaison = ''; debutOutil = 0; finTour = 0; xp = 0 }
+  # La session écrase les valeurs par défaut (l'opérateur + refuse les clés en double).
+  foreach ($k in $_.Keys) { $e[$k] = $_[$k] }
   ($e | ConvertTo-Json -Compress) | Set-Content -Encoding UTF8 (Join-Path $demo "etat-$($_.session).json")
 }
 

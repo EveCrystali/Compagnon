@@ -68,6 +68,8 @@ sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+Idées gardées pour plus tard (petits jeux, notifications, vidéo) : [docs/IDEES.md](docs/IDEES.md).
+
 ## Connecteurs
 
 Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
@@ -265,6 +267,26 @@ Dans le **Gestionnaire des tâches**, il s'appelle **Pilou** (avec son icône), 
 (onglet *Détails* : `PilouBureau.exe`) : *Fin de tâche*, puis menu Démarrer → Pilou. Il n'est pas rangé
 dans *Applications* : Windows n'y met que les programmes qui ont une fenêtre dans la barre des tâches, et
 Pilou reste volontairement discret (ni barre des tâches, ni Alt+Tab).
+
+## Tourner une vidéo de ton écran
+
+Pour une vidéo de présentation avec de vraies images : `outils/tourner-ecran-gauche.ps1` filme **ton écran
+de gauche** (et lui seul) pendant qu'un Pilou de démonstration y joue une visite guidée d'environ 1 min 30 :
+promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la boutique, la fenêtre Amis, le
+clavier, la photo, une visite chez Léo, la pluie, deux petits jeux, l'évolution, le menu de l'icône près de
+l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions et le rayon Ensembles). Ferme d'abord
+tout ce qui est personnel sur cet écran, puis, dans PowerShell :
+
+```powershell
+irm https://raw.githubusercontent.com/EveCrystali/Compagnon/main/outils/tourner-ecran-gauche.ps1 -OutFile "$env:TEMP\tourner-ecran-gauche.ps1"
+powershell -ExecutionPolicy Bypass -File "$env:TEMP\tourner-ecran-gauche.ps1"
+```
+
+Le script montre l'écran choisi et demande confirmation, installe ffmpeg au besoin (winget), filme, remet ton
+Pilou habituel et pose `pilou-ecran-gauche.zip` sur le Bureau (la vidéo et `chronologie.json` : l'instant de
+chaque étape, si elle a été jouée, la version de Pilou). Le Pilou de démo ne lit que des sessions, un profil et
+des amis **fictifs**, en mémoire : ton XP, tes po, tes objets, tes amis et tes réglages ne sont ni lus ni
+modifiés. Ne touche pas à la souris pendant le tournage (elle bouge toute seule) ; Échap pour arrêter.
 
 ## Pour contribuer
 
