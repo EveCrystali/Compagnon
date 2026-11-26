@@ -21,6 +21,7 @@ bonus-tests
 bottes-pluie
 bouche-attente
 bouche-baille
+bouche-boude
 bouche-caresse
 bouche-concentre
 bouche-dort
@@ -30,6 +31,9 @@ bouche-inquiet
 bouche-repos
 bouche-soulage
 bouchon
+boude-bras
+boude-eclaircie
+boude-nuage
 bug-araignee
 bug-prod
 bug-scarabee
@@ -76,8 +80,9 @@ meteo-pluie
 meteo-soleil
 meteo-vent
 monocle
-mousse
 moufles
+mousse
+oeil-boude
 oeil-cligne
 oeil-concentre
 oeil-content

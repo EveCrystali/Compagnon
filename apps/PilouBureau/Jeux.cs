@@ -170,7 +170,7 @@ public sealed partial class FenetrePilou
             }
             else if (c.Xp > _profil.XpClaudeVue)
             {
-                int gain = c.Xp - _profil.XpClaudeVue;
+                int gain = BonusSoins(c.Xp - _profil.XpClaudeVue); // il boude : × 0,6 ; il rayonne : × 1,2
                 _profil.XpClaudeVue = c.Xp;
                 _profil.Xp += gain;
                 _profil.Ecrire(DossierPartage);
@@ -191,7 +191,7 @@ public sealed partial class FenetrePilou
         var nom = _suivi.Courant?.Nom ?? "Pilou";
         int n = Niveau, suivant = Profil.XpPourNiveau(n + 1);
         var activite = TenueAffichee == "" ? "" : $" · {Activites.Signe(TenueAffichee)} {Activites.Nom(TenueAffichee)}";
-        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}{activite}";
+        _scene.ToolTip = $"{nom} · niveau {n} · {_xpTotal}/{suivant} xp · {Recompenses.Titre(n)}{activite}{HumeurSoins()}";
     }
 
     private void VerifierNiveau()

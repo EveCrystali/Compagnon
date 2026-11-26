@@ -116,6 +116,14 @@ def main():
         e = min(0.99, 0.02 + i * 0.085)
         cases.append((pilou(stade=3, evolution=e, t=i * 120), "%.2f" % e))
     planche(cases, 6, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "evolution.png"))
+    # Soins : il boude (moue, sourcils, nuage gris, bras croisés du Nimbus), dos tourné, amadoué.
+    cases = []
+    for st in (1, 2, 3, 4):
+        bras = ["boude-bras"] if st == 3 else []
+        cases += [(pilou(stade=st, boude=True, objets=["boude-nuage"] + bras, t=840), "%d boude" % st),
+                  (pilou(stade=st, boude=True, dos=True, objets=["boude-nuage"], t=840), "%d dos" % st),
+                  (pilou(stade=st, boude=True, objets=["boude-eclaircie"], t=840), "%d amadoue" % st)]
+    planche(cases, 6, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "bouderie.png"))
     cases = [(pilou(reaction="sueur", t=200), "sueur"), (pilou(tenue="musique", t=500), "danse : notes")]
     planche(cases, 2, (48 * z + 8, 56 * z + 20), FOND, os.path.join(dossier, "reactions.png"))
 

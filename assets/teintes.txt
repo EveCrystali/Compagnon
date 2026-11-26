@@ -15,4 +15,3 @@ corail-orange: #7a3414 #d0662e #ff9a5c #ffd2b3
 ardoise: #1f262e #4a5563 #6b7787 #a9b4c2
 sable: #6b5235 #b08f62 #dcc193 #f6ead2
 glacier: #24506b #6aa6c7 #a9d7ee #e8f7ff
-terne: #3e4957 #76838f #9fabb7 #c9d2db

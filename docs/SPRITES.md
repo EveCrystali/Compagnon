@@ -79,9 +79,12 @@ Palette : bleus, oranges, argent, violets, jaunes, sables, neutres ; jamais d'op
 et chaque rareté ou état garde aussi un signe de forme. Un identifiant inconnu est ignoré sans erreur.
 
 Sur le PC : `PilouBureau.exe --instantane=<png> --essai=tenue:code` (ou `objet:cape`, `stade:3`,
-`evolution`, `soins:faim|proprete|moral|terne|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
+`evolution`, `soins:faim|proprete|moral|boude|amadoue|dos|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
 une image.
 
 Soins : icônes de besoin `soin-faim`, `soin-proprete`, `soin-moral` ; en-cas `encas-*` ; `mousse`
 (toilette) et `rayonnant` (effets animés, 4 images) ; variantes `variante-calin-<stade>` et
-`variante-espiegle-<stade>` (visage), avec `-tete` ; teinte `terne` (Pilou négligé).
+`variante-espiegle-<stade>` (visage), avec `-tete`. Bouderie : `oeil-boude` et `bouche-boude` (choisis
+par le rendu quand l'allure dit `Boude` au repos), `boude-nuage` (nuage gris qui bruine),
+`boude-eclaircie` (amadoué : un soleil pointe), `boude-bras` (bras croisés du Nimbus) ; `Dos` : ni
+visage ni sprites `visage`/`yeux`. Planche de contrôle : `bouderie.png`.

@@ -8,16 +8,19 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Soins (même modèle que apps/PilouBureau/Soins.cs) : trois besoins qui baissent lentement — faim, propreté,
- * moral. L'état est une fonction pure d'une base et d'actions horodatées ; rien ne s'affiche tant que tout va
- * bien, sous 30 % une petite icône près de Pilou, et un toucher la comble. Négligé, Pilou a l'air terne ;
- * bien soigné, il rayonne.
+ * Soins (même modèle que apps/PilouBureau/Soins.cs) : trois besoins qui baissent lentement, au même rythme
+ * pour tout le monde — faim, propreté, moral. L'état est une fonction pure d'une base et d'actions
+ * horodatées ; rien ne s'affiche tant que tout va bien, sous 30 % une petite icône près de Pilou, et un
+ * toucher la comble. Négligé, Pilou boude (ronchon, gains × 0,6 pendant un temps — c'est tout) ; bien
+ * soigné, il rayonne (× 1,2).
  */
 final class Soins {
     static final String FAIM = "faim", PROPRETE = "proprete", MORAL = "moral";
-    static final String DOUX = "doux", NORMAL = "normal", EXIGEANT = "exigeant";
     static final String[] BESOINS = {FAIM, PROPRETE, MORAL};
-    static final double SEUIL = 30, SEUIL_TERNE = 10, SEUIL_RAYONNANT = 70;
+    static final double SEUIL = 30, SEUIL_RAYONNANT = 70;
+    /** Bouderie : un besoin sous 20 % depuis 6 h, ou deux à la fois ; une fois soigné, il traîne encore 30 min. */
+    static final double SEUIL_BOUDERIE = 20, AVANT_BOUDERIE = 6 * 3600_000.0, RANCUNE = 30 * 60_000.0;
+    static final double MALUS_BOUDERIE = 0.6, BONUS_RAYONNANT = 1.2;
     static final double HEURES_FAIM = 36, HEURES_PROPRETE = 48, HEURES_MORAL = 30;
     private static final double HEURE = 3600_000, TAU_SCORE = 3 * 24 * HEURE;
     /** En-cas, du meilleur au plus simple (bonus de moral) : les croquettes sont toujours là, gratuites. */
@@ -29,8 +32,10 @@ final class Soins {
 
     static final class EtatSoins {
         double faim = 100, proprete = 100, moral = 100, score = 80, t;
-        String rythme = NORMAL;
         boolean vacances;
+        /** Bouderie : temps passé avec un besoin sous 20 % (ms), s'il boude, fin de la rancune (0 : il boude pour de bon). */
+        double neglige, finBouderie;
+        boolean boude;
 
         EtatSoins copie() {
             EtatSoins e = new EtatSoins();
@@ -39,8 +44,10 @@ final class Soins {
             e.moral = moral;
             e.score = score;
             e.t = t;
-            e.rythme = rythme;
             e.vacances = vacances;
+            e.neglige = neglige;
+            e.boude = boude;
+            e.finBouderie = finBouderie;
             return e;
         }
     }
@@ -55,10 +62,6 @@ final class Soins {
             this.t = t;
             this.objet = objet == null ? "" : objet;
         }
-    }
-
-    static double facteur(String rythme) {
-        return DOUX.equals(rythme) ? 0.6 : EXIGEANT.equals(rythme) ? 1.6 : 1.0;
     }
 
     static EtatSoins neuf(double t) {
@@ -89,14 +92,26 @@ final class Soins {
         while (e.t < jusqua) {
             double dt = Math.min(HEURE, jusqua - e.t);
             if (!e.vacances) {
-                double f = facteur(e.rythme) * dt / HEURE * 100;
+                double f = dt / HEURE * 100;
                 e.faim = Math.max(0, e.faim - f / HEURES_FAIM);
                 e.proprete = Math.max(0, e.proprete - f / HEURES_PROPRETE);
                 e.moral = Math.max(0, e.moral - f / HEURES_MORAL);
                 double moyenne = (e.faim + e.proprete + e.moral) / 3;
                 e.score += (moyenne - e.score) * (1 - Math.exp(-dt / TAU_SCORE));
+                // Bouderie : on regarde à la fin de chaque tranche (≤ 1 h).
+                int bas = bas(e);
+                e.neglige = bas > 0 ? e.neglige + dt : 0;
+                if (bas >= 2 || (bas >= 1 && e.neglige >= AVANT_BOUDERIE)) {
+                    e.boude = true;
+                    e.finBouderie = 0;
+                }
             }
             e.t += dt;
+            // Amadoué : la rancune passée, il ne boude plus.
+            if (e.boude && e.finBouderie > 0 && e.t >= e.finBouderie) {
+                e.boude = false;
+                e.finBouderie = 0;
+            }
         }
     }
 
@@ -121,15 +136,21 @@ final class Soins {
             case "jouer":
                 e.moral = Math.min(100, e.moral + 15);
                 break;
-            case "rythme":
-                if (DOUX.equals(a.objet) || NORMAL.equals(a.objet) || EXIGEANT.equals(a.objet)) e.rythme = a.objet;
-                break;
             case "vacances":
                 e.vacances = "1".equals(a.objet);
                 break;
-            default:
+            default: // « rythme » (ancien réglage de difficulté) : ignoré, tout le monde a le même rythme
                 break;
         }
+        // Soigné pendant qu'il boude : plus aucun besoin bas → il se laisse amadouer, mais garde 30 min de rancune.
+        if (bas(e) == 0) e.neglige = 0;
+        if (e.boude && e.finBouderie == 0 && bas(e) == 0) e.finBouderie = e.t + RANCUNE;
+    }
+
+    private static int bas(EtatSoins e) {
+        int n = 0;
+        for (String b : BESOINS) if (valeur(e, b) < SEUIL_BOUDERIE) n++;
+        return n;
     }
 
     static int bonusEnCas(String objet) {
@@ -154,11 +175,25 @@ final class Soins {
         return !e.vacances && e.faim > SEUIL_RAYONNANT && e.proprete > SEUIL_RAYONNANT && e.moral > SEUIL_RAYONNANT;
     }
 
-    static boolean terne(EtatSoins e) {
-        if (e.vacances) return false;
-        int n = 0;
-        for (String b : BESOINS) if (valeur(e, b) < SEUIL_TERNE) n++;
-        return n >= 2;
+    /** Il boude (ronchon, gains réduits) ; « amadoué » : soigné, mais il boude encore un peu. */
+    static boolean boudeur(EtatSoins e) {
+        return !e.vacances && e.boude;
+    }
+
+    static boolean amadoue(EtatSoins e) {
+        return boudeur(e) && e.finBouderie > 0;
+    }
+
+    /** Multiplicateur des gains d'XP et de po : × 0,6 s'il boude, × 1,2 s'il rayonne, sinon × 1. */
+    static double multiplicateur(EtatSoins e) {
+        return boudeur(e) ? MALUS_BOUDERIE : rayonnant(e) ? BONUS_RAYONNANT : 1;
+    }
+
+    /** Un gain ajusté (arrondi ; un gain positif rapporte toujours au moins 1). */
+    static int bonus(int gain, EtatSoins e) {
+        if (gain <= 0 || e == null) return gain;
+        double m = multiplicateur(e);
+        return m == 1 ? gain : Math.max(1, (int) Math.floor(gain * m + 0.5));
     }
 
     /** Signe de forme de chaque besoin (jamais la couleur seule). */
@@ -181,7 +216,7 @@ final class Soins {
 
     // ---- Échanges
 
-    /** L'état envoyé par le PC (clés f, p, m, s, t, r, v) ; null s'il manque. */
+    /** L'état envoyé par le PC (clés f, p, m, s, t, v, n, b, fb ; « r », l'ancien rythme, est ignoré) ; null s'il manque. */
     static EtatSoins lireEtat(JSONObject r) {
         if (r == null || r.optDouble("t", 0) <= 0) return null;
         EtatSoins e = new EtatSoins();
@@ -190,9 +225,10 @@ final class Soins {
         e.moral = borne(r.optDouble("m", 100));
         e.score = borne(r.optDouble("s", 80));
         e.t = r.optDouble("t", 0);
-        String rythme = r.optString("r", NORMAL);
-        e.rythme = DOUX.equals(rythme) || EXIGEANT.equals(rythme) ? rythme : NORMAL;
         e.vacances = r.optInt("v", 0) == 1;
+        e.neglige = Math.max(0, r.optDouble("n", 0));
+        e.boude = r.optInt("b", 0) == 1;
+        e.finBouderie = Math.max(0, r.optDouble("fb", 0));
         return e;
     }
 

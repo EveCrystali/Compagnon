@@ -7,8 +7,10 @@ namespace PilouBureau;
 
 // Soins sur le PC : une couche légère et passive par-dessus Pilou. Rien ne s'affiche tant que tout va bien ;
 // sous le seuil, une seule petite icône près de sa tête (◒ faim, ✦ propreté, ♥ moral), et un clic la comble.
-// « Prendre soin de Pilou » (clic droit) comble tout d'un coup. Négligé, il a l'air terne ; bien soigné, il
-// rayonne (XP et po × 1,2).
+// « Prendre soin de Pilou » (clic droit) comble tout d'un coup. Négligé, il boude : moue et sourcils froncés,
+// petit nuage gris, bras croisés (Nimbus), parfois le dos tourné, il marche plus lentement et ses gains d'XP et
+// de po passent à × 0,6 ; soigné, il se laisse amadouer une demi-heure puis se déride. Bien soigné, il rayonne
+// (× 1,2). Rien d'autre : ni maladie, ni fugue, ni perte.
 public sealed partial class FenetrePilou
 {
     private EtatSoins? _soinsEtat;
@@ -17,6 +19,10 @@ public sealed partial class FenetrePilou
     private double _toiletteJusque = -1e9, _repasDebut = -1e9;
     private Pixels? _iconeSoin, _repas;
     private string _iconeBesoin = "";
+    private int _humeurSoins = -1; // 0 : content, 1 : il boude, 2 : il se laisse amadouer (-1 : pas encore vu)
+    private double _prochainHmpf;
+    private bool _boudeur; // il marche plus lentement
+    private bool _essaiDos;
 
     // État des soins maintenant (recalculé au plus toutes les 2 s : c'est une fonction pure du journal).
     private EtatSoins SoinsMaintenant()
@@ -121,11 +127,12 @@ public sealed partial class FenetrePilou
 
     private bool Rayonnant => _profil.Soins.Base is not null && Soins.Rayonnant(SoinsMaintenant());
 
-    // Bonus quand il rayonne (XP des jeux, po des quêtes).
+    // Tous ses gains d'XP et de po : × 0,6 s'il boude, × 1,2 s'il rayonne.
     private int BonusSoins(int gain) => _profil.Soins.Base is null ? gain : Soins.Bonus(gain, SoinsMaintenant());
 
-    // Ce que la Pose ajoute : variante du stade, rayonnement, mousse ; teinte terne s'il est négligé.
-    private (IReadOnlyList<string> Objets, string Teinte) PoseSoins(int stade, double t)
+    // Ce que la Pose ajoute : variante du stade, rayonnement, mousse ; bouderie (sourcils et moue, nuage gris,
+    // bras croisés du Nimbus, dos tourné de temps en temps) ; amadoué, une éclaircie et la moue qui va et vient.
+    private (IReadOnlyList<string> Objets, bool Boude, bool Dos) PoseSoins(int stade, double t)
     {
         var objets = new List<string>();
         if (stade >= 2 && _profil.Evolution.Variantes.TryGetValue(stade, out var v))
@@ -133,12 +140,54 @@ public sealed partial class FenetrePilou
             objets.Add($"variante-{v}-{stade}");
             objets.Add($"variante-{v}-{stade}-tete");
         }
-        if (_profil.Soins.Base is null) return (objets, "");
+        _boudeur = false;
+        if (_profil.Soins.Base is null) return (objets, false, false);
         var e = SoinsMaintenant();
         if (Soins.Rayonnant(e)) objets.Add("rayonnant");
         if (t < _toiletteJusque) objets.Add("mousse");
-        return (objets, Soins.Terne(e) ? "terne" : "");
+        if (!Soins.Boudeur(e)) return (objets, false, false);
+        _boudeur = true;
+        if (Soins.Amadoue(e))
+        {
+            objets.Add("boude-eclaircie");
+            return (objets, t % 9000 < 6000, false); // il se déride peu à peu : la moue revient de moins en moins
+        }
+        bool dos = _essaiDos || t % 47_000 > 41_000; // 6 s sur 47 : il tourne le dos
+        objets.Add("boude-nuage");
+        if (stade == 3 && !dos) objets.Add("boude-bras");
+        return (objets, true, dos);
     }
+
+    // Infobulle : « ☁ Pilou boude : gains ×0,6 » (ou amadoué), rien sinon.
+    private string HumeurSoins()
+    {
+        if (_profil.Soins.Base is null) return "";
+        var e = SoinsMaintenant();
+        return Soins.Amadoue(e) ? "\n☁ Pilou se laisse amadouer : gains ×0,6"
+            : Soins.Boudeur(e) ? "\n☁ Pilou boude : gains ×0,6" : "";
+    }
+
+    // Les petites phrases de la bouderie : à l'entrée, à la réconciliation, et de loin en loin (8 à 15 min).
+    private void SuivreHumeur()
+    {
+        var e = SoinsMaintenant();
+        int h = !Soins.Boudeur(e) ? 0 : Soins.Amadoue(e) ? 2 : 1;
+        if (_humeurSoins >= 0 && h != _humeurSoins && !_discret)
+        {
+            if (h == 1) Dire("hmpf ! ☁", 2600);
+            else if (h == 2) Dire("…hmpf. bon, d'accord.", 2800);
+            else if (_humeurSoins == 2) Dire("♥ on est réconciliés", 2600);
+        }
+        if (h != _humeurSoins) _prochainHmpf = Maintenant + (8 + _hasard.NextDouble() * 7) * 60_000;
+        _humeurSoins = h;
+        if (h == 1 && Maintenant >= _prochainHmpf)
+        {
+            _prochainHmpf = Maintenant + (8 + _hasard.NextDouble() * 7) * 60_000;
+            if (!_discret && _jeuEnCours == Jeu.Aucun) Dire(Hmpf[_hasard.Next(Hmpf.Length)], 2400);
+        }
+    }
+
+    private static readonly string[] Hmpf = { "hmpf.", "…pff.", "je boude. ☁", "hmpf !", "…" };
 
     // Appelé à chaque lecture (300 ms) : repli du journal, soins des autres PC du dossier, icône de besoin.
     private void SuivreSoins()
@@ -165,6 +214,7 @@ public sealed partial class FenetrePilou
             }
         }
         MontrerIcone();
+        SuivreHumeur();
     }
 
     private bool FusionnerVariantes(IReadOnlyDictionary<int, string> autres)
@@ -257,7 +307,7 @@ public sealed partial class FenetrePilou
         }
     }
 
-    // Rendus de contrôle : --essai=soins:faim|proprete|moral|terne|rayonnant|lavage|calin|espiegle.
+    // Rendus de contrôle : --essai=soins:faim|proprete|moral|boude|amadoue|dos|rayonnant|lavage|calin|espiegle.
     private void EssaiSoins(string quoi)
     {
         var e = Soins.Neuf(Epoque);
@@ -266,7 +316,12 @@ public sealed partial class FenetrePilou
             case Soins.Faim: e.Faim = 18; break;
             case Soins.Proprete: e.Proprete = 18; break;
             case Soins.Moral: e.Moral = 18; break;
-            case "terne": e.Faim = e.Proprete = e.Moral = 4; break;
+            case "boude" or "dos":
+                e.Faim = e.Moral = 12;
+                e.Boude = true;
+                _essaiDos = quoi == "dos";
+                break;
+            case "amadoue": e.Boude = true; e.FinBouderie = Epoque + Soins.Rancune; break;
             case "rayonnant": e.Score = 95; break;
             case "lavage": _toiletteJusque = double.MaxValue; break;
             case "calin" or "espiegle":
@@ -282,12 +337,16 @@ public sealed partial class FenetrePilou
     private MenuItem MenuSoins()
     {
         var e = SoinsMaintenant();
-        var m = new MenuItem { Header = Soins.Rayonnant(e) ? "Soins · il rayonne ✧" : Soins.Manques(e).Count > 0 ? "Soins · il a besoin de toi" : "Soins · tout va bien" };
+        var m = new MenuItem
+        {
+            Header = Soins.Amadoue(e) ? "Soins · il se laisse amadouer ☁ (gains ×0,6)"
+                : Soins.Boudeur(e) ? "Soins · il boude ☁ (gains ×0,6)"
+                : Soins.Rayonnant(e) ? "Soins · il rayonne ✧ (gains ×1,2)"
+                : Soins.Manques(e).Count > 0 ? "Soins · il a besoin de toi" : "Soins · tout va bien",
+        };
         m.Items.Add(new MenuItem { Header = Soins.Resume(e), IsEnabled = false });
         m.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
         m.Items.Add(new Separator());
-        m.Items.Add(Choix("Rythme", new[] { ("Doux", Soins.Doux), ("Normal", Soins.Normal), ("Exigeant", Soins.Exigeant) }, e.Rythme,
-            v => FaireSoin("rythme", v)));
         m.Items.Add(Case("Vacances (tout est figé)", e.Vacances, v => FaireSoin("vacances", v ? "1" : "0")));
         if (_profil.Evolution.Variantes.Count > 0)
             m.Items.Add(new MenuItem

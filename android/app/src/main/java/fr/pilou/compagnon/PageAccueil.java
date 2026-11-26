@@ -205,7 +205,7 @@ final class PageAccueil extends Page {
         if (mousseJusque > t) pilou.postDelayed(this::rafraichir, 2100);
     }
 
-    private void soins(Etat e, int stade, long maintenant) {
+    private Soins.EtatSoins soins(Etat e, int stade, long maintenant) {
         Soins.EtatSoins s = Gains.soins(app, e, maintenant);
         java.util.List<String> objets = new java.util.ArrayList<>();
         String v = e.formes.get(stade);
@@ -215,16 +215,18 @@ final class PageAccueil extends Page {
         }
         if (Soins.rayonnant(s)) objets.add("rayonnant");
         if (SystemClock.uptimeMillis() < mousseJusque) objets.add("mousse");
-        pilou.soins(objets, Soins.terne(s) ? "terne" : "");
+        // Il boude : moue, nuage gris (PilouVue l'anime) ; amadoué, une éclaircie.
+        pilou.soins(objets, Soins.amadoue(s) ? PilouVue.AMADOUE : Soins.boudeur(s) ? PilouVue.BOUDE : PilouVue.CONTENT);
         java.util.List<String> manques = Soins.manques(s);
         String b = manques.isEmpty() ? "" : manques.get(0);
-        if (b.equals(besoinMontre)) return;
+        if (b.equals(besoinMontre)) return s;
         besoinMontre = b;
         besoin.setVisibility(b.isEmpty() ? View.GONE : View.VISIBLE);
         besoin.setText(b.isEmpty() ? "" : Soins.signe(b));
         besoin.setContentDescription(b.equals(Soins.FAIM) ? "Pilou a un petit creux : toucher pour le nourrir"
                 : b.equals(Soins.PROPRETE) ? "Pilou aimerait une toilette : toucher pour le laver"
                 : "Pilou a besoin d'un câlin : toucher pour un câlin");
+        return s;
     }
 
     @Override
@@ -249,11 +251,13 @@ final class PageAccueil extends Page {
         if (stadeVu > 0 && stade > stadeVu) pilou.evoluer(stade);
         else pilou.stade(stade);
         stadeVu = stade;
-        soins(e, stade, maintenant);
+        Soins.EtatSoins s = soins(e, stade, maintenant);
         niveau.setText("Niveau " + n + " · " + Butin.titre(n));
         barre.part((total - bas) / (float) Math.max(1, haut - bas));
         int attente = Gains.enAttente(app);
-        xp.setText(total + " / " + haut + " xp" + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : ""));
+        String humeur = Soins.amadoue(s) ? "\n☁  Pilou se laisse amadouer : gains ×0,6"
+                : Soins.boudeur(s) ? "\n☁  Pilou boude : gains ×0,6" : "";
+        xp.setText(total + " / " + haut + " xp" + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
 
         if (!appaire) {
             etatPc.setText("◌  pas encore appairé");

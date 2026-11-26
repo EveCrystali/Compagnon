@@ -311,7 +311,7 @@ public sealed partial class FenetrePilou
         {
             if (_xpSources.TryGetValue(e.Session, out var vu) && e.Xp > vu)
             {
-                int gain = Math.Min(50, e.Xp - vu);
+                int gain = BonusSoins(Math.Min(50, e.Xp - vu));
                 _profil.Xp += gain;
                 _profil.Ecrire(DossierPartage);
                 _xpTotal += gain;

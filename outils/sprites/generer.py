@@ -57,6 +57,8 @@ def visage():
         "content": ["......", "......", "k....k", "kk..kk", ".kkkk.", "..kk..", "......"],
         "inquiet": [".kkkk.", "kwwwwk", "kwkkwk", "kwkkwk", "kwwwwk", ".kkkk.", "......"],
         "spirale": ["kkkkk.", "k...k.", "k.k.k.", "k.kkk.", "k.....", "kkkkkk", "......"],
+        # Il boude : sourcil froncé (bas côté nez), paupière lourde, regard en coin.
+        "boude": ["kk....", ".kkk..", "...kkk", "oooooo", "cccccc", "kkwwkk", ".kkkk."],
     }
     for nom, lignes in yeux.items():
         t = T(6, 7)
@@ -82,6 +84,7 @@ def visage():
         "inquiet": ["..kkkk..", ".k....k.", "k......k"],
         "caresse": ["k..kk..k", ".kk..kk."],
         "baille": [".kkkk.", "kmmmmk", "kmmmmk", "kmttmk", "kttttk", ".kkkk."],
+        "boude": ["..kk..", ".k..k.", "k....k"],
     }
     for nom, lignes in bouches.items():
         t = T(len(lignes[0]), len(lignes))
@@ -1612,6 +1615,52 @@ def soins():
     ecrire("rayonnant", images, slot="effet", ancre="corps", point=(22, 19), duree=260,
            commentaire="bien soigné : il rayonne (étincelles discrètes)")
 
+    # Bouderie (Pilou négligé) : petit nuage gris qui bruine au-dessus de lui, en haut à droite (loin des
+    # antennes) ; amadoué, le nuage s'éclaircit et un soleil pointe. Gris et bleus, soleil jaune-orangé.
+    images = []
+    for k in range(4):
+        t = T(13, 12)
+        h = 1 if k in (1, 2) else 0  # le nuage flotte d'un pixel
+        for x, y, rx, ry in ((3.6, 5.2, 2.8, 2.3), (7, 3.8, 3.2, 2.9), (10, 5.4, 2.4, 2.1)):
+            t.ell(x, y + h, rx, ry, GRIS)
+        t.rect(2, 5 + h, 9, 2, GRIS)
+        t.ell(6.2, 2.8 + h, 1.8, 1, GRIS_C)
+        t.contour(ARDOISE)
+        for i, x in enumerate((3, 7, 10)):
+            y = 9 + (k + i * 2) % 4
+            if y < 12:
+                t.p(x, y, B3)
+        images.append(t)
+    ecrire("boude-nuage", images, slot="effet", ancre="tete", point=(-11, 17), duree=420,
+           commentaire="il boude : petit nuage gris qui bruine")
+    images = []
+    for k in range(4):
+        t = T(13, 12)
+        t.ell(8.5, 4, 3, 3, J3)
+        t.ell(7.8, 3.2, 1.1, 1.1, J4)
+        for i, (x, y) in enumerate(((8, 0), (12, 4), (11, 1), (5, 1))):
+            if (i + k) % 2 == 0:
+                t.p(x, y, O3)
+        for x, y, rx, ry in ((3.4, 7, 2.6, 2.2), (6.5, 6, 2.8, 2.4), (9.4, 7.6, 2.3, 1.9)):
+            t.ell(x, y, rx, ry, CREME_O)
+        t.rect(2, 7, 9, 2, CREME_O)
+        t.ell(5.6, 5.4, 1.4, 0.8, CREME)
+        t.contour(GRIS)
+        images.append(t)
+    ecrire("boude-eclaircie", images, slot="effet", ancre="tete", point=(-11, 17), duree=500,
+           commentaire="il se laisse amadouer : le nuage s'éclaircit, un soleil pointe")
+    # Bras croisés du Nimbus (le seul stade qui a des bras) : vus de face, deux avant-bras l'un sur l'autre qui
+    # partent des coudes (ses bras habituels) et passent sous la bouche ; celui du bas, devant, recouvre l'autre.
+    t = T(33, 7)
+    for (g, d, haut) in ((2, 27, 1), (5, 30, 3)):
+        lignes = {haut: (g + 1, d - 1, "@contour"), haut + 1: (g, d, "@clair" if haut > 1 else "@base"), haut + 2: (g, d, "@base"),
+                  haut + 3: (g + 1, d - 1, "@contour")}
+        for y, (x0, x1, c) in lignes.items():
+            for x in range(x0, x1 + 1):
+                t.p(x, y, "@contour" if c != "@contour" and x in (g, d) else c)
+    ecrire("boude-bras", t, slot="main", ancre="corps", point=(16, -4),
+           commentaire="il boude (Nimbus) : bras croisés")
+
     # Variantes d'évolution (stades 2 à 4) : « câlin » (joues roses, petit cœur), « espiègle » (mèche
     # rebelle, tache d'étoile). Les joues suivent la largeur du corps de chaque stade.
     k_ = 1.25 * 48 / 26
@@ -1665,8 +1714,6 @@ TEINTES = {
     "ardoise": ["#1f262e", "#4a5563", "#6b7787", "#a9b4c2"],
     "sable": ["#6b5235", "#b08f62", "#dcc193", "#f6ead2"],
     "glacier": ["#24506b", "#6aa6c7", "#a9d7ee", "#e8f7ff"],
-    # Soins : Pilou négligé a juste l'air terne (gris-bleu délavé), sans autre conséquence.
-    "terne": ["#3e4957", "#76838f", "#9fabb7", "#c9d2db"],
 }
 
 TENUES = {

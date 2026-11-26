@@ -159,28 +159,6 @@ final class PageReglages extends Page {
         corps.addView(Ui.titreSection(a, "Soins"));
         c = Ui.carte(a);
         Soins.EtatSoins es = Gains.soins(a, Prefs.etat(a), System.currentTimeMillis());
-        LinearLayout rythmes = Ui.rangee(a);
-        String[][] choix = {{"Doux", Soins.DOUX}, {"Normal", Soins.NORMAL}, {"Exigeant", Soins.EXIGEANT}};
-        android.widget.Button[] boutons = new android.widget.Button[choix.length];
-        for (int i = 0; i < choix.length; i++) {
-            String[] r = choix[i];
-            android.widget.Button b = boutons[i] = Ui.bouton(a, r[0], r[1].equals(es.rythme), null);
-            b.setOnClickListener(v -> {
-                Gains.soin(a, "rythme", r[1]);
-                for (int k = 0; k < boutons.length; k++) {
-                    boolean actif = boutons[k] == v;
-                    boutons[k].setTextColor(actif ? p.surAccent : p.bleu);
-                    boutons[k].setBackground(Ui.touchable(a, Ui.arrondi(a, actif ? p.bleu : p.surface2, 14, 0), 14));
-                }
-            });
-            LinearLayout.LayoutParams lr = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            lr.rightMargin = Ui.dp(a, 6);
-            rythmes.addView(b, lr);
-        }
-        c.addView(Ui.texte(a, "Rythme des besoins", 16, p.texte, false));
-        c.addView(Ui.texte(a, "Doux : Pilou a faim moins vite · Exigeant : plus vite", 13, p.doux, false));
-        c.addView(rythmes, Ui.large(a, 6));
-        c.addView(Ui.separateur(a));
         Ui.interrupteur(a, c, "Vacances", "Tout est figé : ses besoins ne baissent plus", es.vacances,
                 oui -> Gains.soin(a, "vacances", oui ? "1" : "0"));
         c.addView(Ui.separateur(a));
