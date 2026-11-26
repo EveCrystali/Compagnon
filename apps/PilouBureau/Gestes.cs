@@ -51,11 +51,13 @@ public sealed record DessinGeste(IReadOnlyList<string> Objets, int Regard = 0, b
 }
 
 // Pilou au clavier : un tour sur lui-même dans un pouf de fumée, il réapparaît assis devant un mini clavier
-// et tape tant que tu tapes ; après quelques secondes de silence, pouf inverse et il se relève.
+// et tape avec toi quelques dizaines de secondes au plus : après 6 s de silence, ou au bout de 40 s même si
+// tu tapes encore, pouf inverse et il se relève (sinon, pendant une journée de travail, il ne s'arrête jamais).
 // Pas à chaque rafale : après une séance, il se repose 10 min avant de revenir au clavier.
 public sealed class SceneClavier
 {
-    public const double DureeEntree = 1300, DureeSortie = 800, SilenceSortie = 9000;
+    public const double DureeEntree = 1300, DureeSortie = 800, SilenceSortie = 6000;
+    public const double DureeMax = 40_000;
     public const double ReposApres = 10 * 60_000;
     // Une image du tour sur lui-même (ms) : un tour lent, sans tourbillon.
     public const double PasTour = 130;
@@ -92,7 +94,7 @@ public sealed class SceneClavier
                 }
                 break;
             case EtapeClavier.Tape:
-                if (!permis || silence >= SilenceSortie) Sortir(t);
+                if (!permis || silence >= SilenceSortie || t - _debut >= DureeMax) Sortir(t);
                 break;
             case EtapeClavier.Sortie:
                 if (t - _debut >= DureeSortie)

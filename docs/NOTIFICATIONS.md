@@ -5,7 +5,7 @@ notifications**. Rien n'est imposé : décoche, et le crochet ou l'écoute corre
 
 | Case | Par défaut | Ce que fait Pilou |
 |---|---|---|
-| Pilou tape avec moi au clavier | cochée | tu tapes en rafale : pouf de fumée, tour sur lui-même, il réapparaît assis devant un mini clavier et tape avec toi ; 9 s sans frappe, pouf inverse |
+| Pilou tape avec moi au clavier | cochée | tu tapes en rafale : pouf de fumée, tour sur lui-même, il réapparaît assis devant un mini clavier et tape avec toi ; 6 s sans frappe ou 40 s au plus, pouf inverse, puis 10 min de repos |
 | Appareil photo à chaque capture d'écran | cochée | il sort son appareil, flash (cadre blanc bref), « CLIC ! », un polaroïd tombe à ses pieds et se développe |
 | Notifications Windows dans la bulle | **décochée** | il lève la tête, brandit une enveloppe et montre la notification dans sa bulle (voir plus bas : nécessite une identité de package) |
 
@@ -17,7 +17,7 @@ tenue code, manette…) laisse la place au mini clavier ou à l'appareil.
 Essayer sans conditions réelles :
 
 ```
-PilouBureau.exe --devant --essai=clavier        # frappes simulées 6 s, puis il range au bout de 9 s
+PilouBureau.exe --devant --essai=clavier        # frappes simulées 6 s, puis il range au bout de 6 s
 PilouBureau.exe --devant --essai=photo
 PilouBureau.exe --devant --essai=notif          # « Messagerie · Léo · On se voit à midi… »
 PilouBureau.exe --devant --essai=notif:masque   # « 2 messages de Messagerie »
