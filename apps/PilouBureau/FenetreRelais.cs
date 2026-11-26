@@ -51,6 +51,9 @@ public sealed partial class FenetrePilou
             case ChoixNotification.Quitter:
                 Application.Current.Shutdown();
                 break;
+            case ChoixNotification.Defense:
+                LancerDefense();
+                break;
         }
     }
 

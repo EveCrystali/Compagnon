@@ -141,7 +141,7 @@ public static class Tournage
     public static readonly IReadOnlyList<string> EssaisConnus = new[]
     {
         "etoile", "bulles", "tape", "etourdi", "peche", "mord", "prise", "cuisine", "niveau", "evolution",
-        "clavier", "photo", "notif", "notif:masque",
+        "clavier", "photo", "notif", "notif:masque", "defense",
         "visite:depart", "visite:arrivee", "visite:jeu", "visite:retour",
     };
 

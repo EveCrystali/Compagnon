@@ -174,6 +174,11 @@ public sealed partial class FenetrePilou
                 Essai("tape");
                 Plus(duree - 300, () => Arreter(""));
                 break;
+            case "defense":
+                // La bande de Défense du bureau, Pilou joue seul ; elle se referme avant l'étape suivante.
+                Essai("defense");
+                Plus(duree - 300, () => _defense?.Close());
+                break;
             case "icone":
                 IconeVisite(duree);
                 break;

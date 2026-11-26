@@ -70,6 +70,16 @@ cornes-viking
 couronne-fleurs
 couronne-laurier
 cravate
+defense-blinde
+defense-blinde-fele
+defense-bonus-bouclier
+defense-bonus-double
+defense-bonus-ralenti
+defense-diviseur
+defense-etincelle
+defense-mini
+defense-rapide
+defense-tir
 echarpe
 eclaboussure
 encas-croquettes

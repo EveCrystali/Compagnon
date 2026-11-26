@@ -13,6 +13,7 @@ public static class Acces
         ("tape", "Tape m'en cinq", 3),
         ("cuisine", "Cuisine", 4),
         ("chasse", "Chasse aux bugs (téléphone)", 5),
+        ("defense", "Défense du bureau", 5),
     };
 
     public static int NiveauJeu(string id) => Jeux.FirstOrDefault(j => j.Id == id).Niveau is var n && n > 0 ? n : 1;

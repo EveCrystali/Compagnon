@@ -137,6 +137,14 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
 - **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
   (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
   plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
+- **Jouer → Défense du bureau** (niveau 5, aussi depuis l'icône près de l'horloge ; jamais tout seul) : une
+  bande de l'écran au-dessus de la barre des tâches devient un jeu de tir. Pilou, en bas, suit la souris (ou
+  ← → / Q D) et tire au clic ou à Espace ; les bugs de Chasse aux bugs arrivent en formation (blindés,
+  diviseurs, moucherons, un Bug de prod toutes les 5 vagues), des fenêtres et des post-it servent d'abris,
+  des bonus tombent (tir double, bouclier, ralenti). Échap, clic droit ou ✕ pour quitter ; pause si une
+  autre appli passe en plein écran. Réglages : largeur de la bande, *réduire les flashs*. Gains bornés
+  (30 xp et 10 po par partie au plus, 120 xp et 30 po par jour), record, quête « jeu », succès Pare-feu,
+  Rempart (vague 10), Gardien. `--essai=defense` : Pilou joue seul. `apps/PilouBureau/Defense.cs` ;
 - **Niveaux** : ils **ouvrent l'accès** — jeux (pêche niveau 2, tape m'en cinq 3, cuisine 4, Chasse aux
   bugs 5), rangées de la boutique (paliers 1, 5, 10, 15, 20, 30, 40, 50), stades d'évolution — et chaque niveau gagné
   rapporte des pièces d'or (20 + 5 × niveau). Les titres restent liés au niveau (honorifiques).
