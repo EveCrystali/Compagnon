@@ -125,12 +125,82 @@ public sealed partial class FenetrePilou
         return m;
     }
 
-    private void OuvrirBoutique() => new FenetreBoutique(this).ShowDialog();
+    // Ouvre la boutique ; ce qui s'est ouvert depuis la dernière visite y clignote (« rangée débloquée ! »).
+    private void OuvrirBoutique() => OuvrirBoutique("vitrine");
+
+    private void OuvrirBoutique(string rayon)
+    {
+        int vu = _reglages.BoutiqueVue;
+        _reglages.BoutiqueVue = Math.Max(vu, Niveau);
+        _reglages.BoutiqueOffresVues = DateTime.Now.ToString("yyyy-MM-dd");
+        _reglages.Ecrire(_dossier);
+        _nouveautesLu = -1e12;
+        new FenetreBoutique(this, vu, rayon).ShowDialog();
+        _nouveautesLu = -1e12;
+    }
+
+    // Nouveautés : articles des rangées ouvertes depuis la dernière visite (pas encore à nous) + offres du jour pas vues.
+    private int NouveautesBoutique()
+    {
+        int n = Niveau;
+        var (_, inventaire, _) = Bourse();
+        int vu = _reglages.BoutiqueVue;
+        int neufs = vu <= 0
+            ? PilouBureau.Boutique.Catalogue.Count(a => PilouBureau.Boutique.Ouvert(a, n) && !inventaire.Contains(a.Id) && a.Slot != PilouBureau.Boutique.Consommable)
+            : PilouBureau.Boutique.Debloques(vu, n).Count(a => !inventaire.Contains(a.Id));
+        if (_reglages.BoutiqueOffresVues != DateTime.Now.ToString("yyyy-MM-dd"))
+            neufs += PilouBureau.Boutique.OffresDuJour(DateOnly.FromDateTime(DateTime.Now))
+                .Count(a => PilouBureau.Boutique.Ouvert(a, n) && !inventaire.Contains(a.Id));
+        return neufs;
+    }
+
+    private double _nouveautesLu = -1e12;
+    private int _nouveautes;
+    private Pixels? _badgeBoutique;
+
+    // Badge discret près de Pilou (sac de boutique) quand une rangée s'ouvre ou qu'une offre du jour attend ; un clic ouvre la boutique.
+    private void AnimerBoutique(double t)
+    {
+        if (t - _nouveautesLu > 4000)
+        {
+            _nouveautesLu = t;
+            _nouveautes = NouveautesBoutique();
+        }
+        bool montrer = _nouveautes > 0 && _jeuEnCours == Jeu.Aucun;
+        if (montrer && _badgeBoutique is null)
+        {
+            _badgeBoutique = Pixels.Sprite("badge-boutique", 2);
+            if (_badgeBoutique is null) return;
+            _badgeBoutique.Cursor = System.Windows.Input.Cursors.Hand;
+            _badgeBoutique.MouseLeftButtonUp += (_, e) =>
+            {
+                e.Handled = true;
+                OuvrirBoutique();
+            };
+            _jeu.Children.Add(_badgeBoutique);
+        }
+        else if (!montrer && _badgeBoutique is not null)
+        {
+            _jeu.Children.Remove(_badgeBoutique);
+            _badgeBoutique = null;
+        }
+        if (_badgeBoutique is null) return;
+        _badgeBoutique.ToolTip = $"Boutique : {_nouveautes} nouveauté{(_nouveautes > 1 ? "s" : "")} — clic pour y aller";
+        if (Bandeau.Anime) _badgeBoutique.Changer("badge-boutique", t);
+        Canvas.SetLeft(_badgeBoutique, TeteX + (_aGauche ? 34 : -64));
+        Canvas.SetTop(_badgeBoutique, TeteY - 6 + (Bandeau.Anime ? Math.Round(Math.Sin(t / 500) * 2) : 0));
+    }
 
     // Pour la fenêtre de la boutique.
     internal (int Solde, List<string> Inventaire, Dictionary<string, Port> Equipe) EtatBourse() => Bourse();
 
     internal int NiveauActuel => Niveau;
+
+    internal int XpTotal => _xpTotal;
+
+    internal int StadePilou => Math.Max(1, StadeAffiche());
+
+    internal string CouleurDeBase => "bleu";
 
     internal string AccessoireChoisi => _reglages.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : Recompenses.IdAccessoire(_reglages.Accessoire);
 
@@ -163,116 +233,5 @@ public sealed partial class FenetrePilou
         if (!PilouBureau.Boutique.Equiper(_profil.Bourse, slot, id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
-    }
-}
-
-// Boutique (gratuite) : solde, offres du jour, catalogue par emplacement ; acheter, équiper, retirer.
-internal sealed class FenetreBoutique : Window
-{
-    private readonly FenetrePilou _pilou;
-    private readonly StackPanel _corps = new() { Margin = new Thickness(16) };
-    private readonly TextBlock _solde = new() { FontSize = 18, FontWeight = FontWeights.Bold };
-    private readonly TextBlock _message = new() { FontSize = 12, Margin = new Thickness(0, 4, 0, 8), Foreground = Brushes.Gray };
-
-    private static readonly Brush Bleu = Geler("#2f7ed8"), Orange = Geler("#c86a1c"), Argent = Geler("#768390");
-
-    private static Brush Geler(string hex)
-    {
-        var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
-        b.Freeze();
-        return b;
-    }
-
-    public FenetreBoutique(FenetrePilou pilou)
-    {
-        _pilou = pilou;
-        Title = "Boutique de Pilou";
-        Width = 560;
-        Height = 640;
-        WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        Topmost = true;
-        Content = new ScrollViewer { Content = _corps, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        Remplir();
-    }
-
-    private void Remplir()
-    {
-        var (solde, inventaire, equipe) = _pilou.EtatBourse();
-        var jour = DateOnly.FromDateTime(DateTime.Now);
-        int niveau = _pilou.NiveauActuel;
-        _corps.Children.Clear();
-        _solde.Text = $"◉ {solde} po";
-        _corps.Children.Add(_solde);
-        _corps.Children.Add(new TextBlock
-        {
-            Text = "Les pièces d'or se gagnent en quêtes (clic droit → Quêtes). Tout est gratuit : aucune vraie monnaie.",
-            TextWrapping = TextWrapping.Wrap,
-            FontSize = 12,
-            Foreground = Brushes.Gray,
-        });
-        _corps.Children.Add(_message);
-
-        Section("◆ Offres du jour");
-        foreach (var a in PilouBureau.Boutique.OffresDuJour(jour)) Ligne(a, solde, inventaire, equipe, jour, niveau);
-        foreach (var slot in PilouBureau.Boutique.Rayons)
-        {
-            var articles = PilouBureau.Boutique.Catalogue.Where(a => a.Slot == slot).ToList();
-            Section($"{PilouBureau.Boutique.Signe(slot)} {PilouBureau.Boutique.NomSlot(slot)}");
-            foreach (var a in articles) Ligne(a, solde, inventaire, equipe, jour, niveau);
-        }
-    }
-
-    private void Section(string titre) =>
-        _corps.Children.Add(new TextBlock { Text = titre, FontSize = 14, FontWeight = FontWeights.Bold, Margin = new Thickness(0, 14, 0, 4) });
-
-    private void Ligne(Article a, int solde, List<string> inventaire, Dictionary<string, Port> equipe, DateOnly jour, int niveau)
-    {
-        bool consommable = a.Slot == PilouBureau.Boutique.Consommable, bonus = a.Slot == PilouBureau.Boutique.Bonus;
-        bool possede = !consommable && inventaire.Contains(a.Id);
-        bool porte = a.Slot == PilouBureau.Boutique.Accessoire ? _pilou.AccessoireChoisi == a.Id
-            : equipe.TryGetValue(a.Slot, out var p) && p.Id == a.Id;
-        bool enVente = PilouBureau.Boutique.EnVente(a, jour);
-        int prix = PilouBureau.Boutique.Prix(a, jour);
-        var rangee = new DockPanel { Margin = new Thickness(0, 2, 0, 2) };
-        var bouton = new Button { MinWidth = 110, Padding = new Thickness(8, 3, 8, 3), Margin = new Thickness(8, 0, 0, 0) };
-        DockPanel.SetDock(bouton, Dock.Right);
-        if (possede && bonus)
-        {
-            bouton.Content = "actif";
-            bouton.IsEnabled = false;
-        }
-        else if (possede)
-        {
-            bouton.Content = porte ? "Retirer" : "Porter";
-            bouton.Click += (_, _) =>
-            {
-                _pilou.Equiper(a.Slot, porte ? "" : a.Id);
-                Remplir();
-            };
-        }
-        else
-        {
-            bouton.Content = !enVente ? "pas aujourd'hui" : niveau < a.NiveauMin ? $"niveau {a.NiveauMin}" : $"Acheter · {prix} po";
-            bouton.IsEnabled = enVente && niveau >= a.NiveauMin && solde >= prix;
-            bouton.Click += (_, _) =>
-            {
-                var refus = _pilou.Acheter(a.Id);
-                Remplir();
-                _message.Text = refus is null ? $"✓ {a.Nom} est à toi." : $"✕ {refus}";
-            };
-        }
-        rangee.Children.Add(bouton);
-        var texte = new TextBlock { VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap };
-        texte.Inlines.Add(new System.Windows.Documents.Run($"{Butin.Signe(a.Rarete)} {a.Nom}")
-        {
-            FontWeight = porte ? FontWeights.Bold : FontWeights.Normal,
-            Foreground = a.Rarete >= Rarete.Epique ? Orange : a.Rarete == Rarete.Rare ? Bleu : Brushes.Black,
-        });
-        var detail = possede ? (bonus ? "  · actif" : porte ? "  · porté" : "  · à toi")
-            : consommable ? $"  · en réserve : {_pilou.Reserve(a.Id)}"
-            : prix < a.Prix ? $"  · promo -25 % ({a.Prix} po)" : "";
-        texte.Inlines.Add(new System.Windows.Documents.Run(detail) { Foreground = Argent, FontSize = 11 });
-        rangee.Children.Add(texte);
-        _corps.Children.Add(rangee);
     }
 }

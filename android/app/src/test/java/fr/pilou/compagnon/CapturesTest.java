@@ -65,6 +65,8 @@ public class CapturesTest {
                 appairer();
                 essayer("pluie", this::pluie);
                 appairer();
+                essayer("boutique", this::boutique);
+                appairer();
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
@@ -97,6 +99,42 @@ public class CapturesTest {
         c.get().aller(Principale.ACCUEIL, false);
         attendre();
         ecran(c.get(), "pluie-accueil");
+        c.pause().stop().destroy();
+    }
+
+    // Boutique rétro : vitrine, rayon Dos (rangées ouvertes et fermées), essayage, décor, fenêtre « Rangées débloquées ».
+    private void boutique() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        String etat = Prefs.de(ctx).getString("etat", "").replace("\"objets\":[\"echarpe\",\"petit-chat\"],\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\"},",
+                "\"objets\":[\"echarpe\",\"petit-chat\",\"fond-nuit\",\"bonnet-pompon\",\"sac-a-dos\"],"
+                        + "\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\",\"fond\":\"fond-nuit\",\"tete\":\"bonnet-pompon\"},");
+        // La dernière visite date du niveau 9 : les rangées du palier 10 clignotent « débloquées ! ».
+        Prefs.de(ctx).edit().putString("etat", etat).putInt("boutiqueVue", 9).putInt("niveauVu", 13).commit();
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = c.get();
+        a.aller(Principale.ACCUEIL, false);
+        attendre();
+        ecran(a, "boutique-accueil-decor");
+        a.aller(Principale.BOUTIQUE, false);
+        attendre();
+        PageBoutique b = (PageBoutique) a.page(Principale.BOUTIQUE);
+        ecran(a, "boutique-vitrine");
+        contenu(b, "boutique-vitrine-long");
+        b.rayon(Boutique.DOS);
+        b.choisir("cape");
+        attendre();
+        contenu(b, "boutique-dos-essai");
+        b.rayon(Boutique.TETE);
+        b.choisir("sombrero");
+        attendre();
+        contenu(b, "boutique-tete");
+        b.rayon(Boutique.FOND);
+        b.choisir("fond-arcade");
+        attendre();
+        contenu(b, "boutique-decors");
+        a.montrerRangees(9, 15);
+        attendre();
+        ecran(a, "boutique-rangees-debloquees");
         c.pause().stop().destroy();
     }
 
@@ -140,15 +178,15 @@ public class CapturesTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         Principale a = c.get();
         attendre();
-        String[] noms = {"accueil", "jouer", "collection", "reglages"};
-        for (int i = 0; i < 4; i++) {
+        String[] noms = {"accueil", "jouer", "boutique", "collection", "reglages"};
+        for (int i = 0; i < Principale.N; i++) {
             a.aller(i, false);
             attendre();
             ecran(a, etat + "-" + noms[i]);
             Page p = a.page(i);
             if (i == Principale.COLLECTION) {
-                String[] sous = {"carnet", "recettes", "niveaux", "style", "boutique"};
-                for (int k = 0; k <= PageCollection.BOUTIQUE; k++) {
+                String[] sous = {"carnet", "recettes", "niveaux", "style"};
+                for (int k = 0; k <= PageCollection.STYLE; k++) {
                     ((PageCollection) p).choisir(k);
                     attendre();
                     contenu(p, etat + "-collection-" + (k < sous.length ? sous[k] : String.valueOf(k)));

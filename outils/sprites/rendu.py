@@ -137,7 +137,7 @@ SPARK = {"concentre": "etincelle-roue", "attente": "etincelle-roue", "grimace": 
          "inquiet": "etincelle-alerte", "caresse": "etincelle-coeur"}
 OEIL = {"concentre": "concentre", "attente": "haut", "grimace": "grimace", "fete": "heureux", "caresse": "heureux",
         "soulage": "content", "dort": "dort", "inquiet": "inquiet"}
-CHAUDES = {"ambre", "braise", "comete", "corail-orange", "sable"}
+CHAUDES = {"ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche"}
 
 # Échelle du corps par stade (largeur, hauteur) : Gouttelette, Pilou, Nimbus, Astral.
 STADE_X = {1: 0.72, 2: 1.0, 3: 1.1, 4: 0.9}

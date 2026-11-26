@@ -11,6 +11,7 @@ import os
 import shutil
 
 from toile import Toile, ecrire, SORTIE, TOUS
+import boutique_sprites
 import meteo_sprites
 
 # ---- Couleurs
@@ -1714,6 +1715,9 @@ TEINTES = {
     "ardoise": ["#1f262e", "#4a5563", "#6b7787", "#a9b4c2"],
     "sable": ["#6b5235", "#b08f62", "#dcc193", "#f6ead2"],
     "glacier": ["#24506b", "#6aa6c7", "#a9d7ee", "#e8f7ff"],
+    **boutique_sprites.TEINTES,
+    # Soins : Pilou négligé a juste l'air terne (gris-bleu délavé), sans autre conséquence.
+    "terne": ["#3e4957", "#76838f", "#9fabb7", "#c9d2db"],
 }
 
 TENUES = {
@@ -1750,7 +1754,7 @@ PLATS = {
 def tables():
     base = os.path.dirname(SORTIE)
     with open(os.path.join(base, "teintes.txt"), "w", encoding="utf-8", newline="\n") as f:
-        f.write("# Teintes de Pilou : contour, ombre, base, clair. Les cinq dernières viennent de la boutique.\n")
+        f.write("# Teintes de Pilou : contour, ombre, base, clair. Lavande et les suivantes viennent de la boutique.\n")
         for k, v in TEINTES.items():
             f.write("%s: %s\n" % (k, " ".join(v)))
     with open(os.path.join(base, "tenues.txt"), "w", encoding="utf-8", newline="\n") as f:
@@ -1783,5 +1787,6 @@ if __name__ == "__main__":
     soins()
     meteo_sprites.effets()
     meteo_sprites.objets()
+    boutique_sprites.objets()
     tables()
     print(len(TOUS), "sprites dans", SORTIE)

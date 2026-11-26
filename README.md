@@ -106,7 +106,7 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
   (sinon Pilou ferre seul, avec bien moins de chance) ; 23 prises en cinq raretés, 30 recettes et des
   plats inventés à chaque fournée (`apps/PilouBureau/Butin.cs`) ;
 - **Niveaux** : ils **ouvrent l'accès** — jeux (pêche niveau 2, tape m'en cinq 3, cuisine 4, Chasse aux
-  bugs 5), objets de la boutique (chacun a son niveau), stades d'évolution — et chaque niveau gagné
+  bugs 5), rangées de la boutique (paliers 1, 5, 10, 15, 20, 30, 40, 50), stades d'évolution — et chaque niveau gagné
   rapporte des pièces d'or (20 + 5 × niveau). Les titres restent liés au niveau (honorifiques).
   Courbe : xp(n) = 25·(n−1)² (niveau 10 ≈ 2 000 xp, 25 ≈ 14 400, 50 ≈ 60 000) ; le niveau déjà
   atteint est gardé (« niveau acquis », partagé entre appareils), on ne redescend jamais.
@@ -118,11 +118,16 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
   (pêche, cuisine, jeux, caresses, présence, et, une fois vus : tours Claude/Codex, commits, tests,
   score de Chasse aux bugs, activités). Elles rapportent des **pièces d'or (po)** et un peu d'XP ; les
   trois du jour ouvrent un coffre, les jours d'affilée font une série. `apps/PilouBureau/Quetes.cs` ;
-- **Boutique…** (gratuite, aucune vraie monnaie) : offres du jour (4 objets, un en promo), chapeaux,
-  lunettes, écharpe, cape, objets à la main, compagnons, effets, couleurs, et les anciennes récompenses
-  (accessoires, couleurs, traînée, canne dorée, marmite en cuivre). Rien de ce qui était déjà gagné
-  n'est perdu : à la mise à jour, tout ce que le niveau avait débloqué passe dans l'inventaire.
-  Pièces, objets et tenue sont partagés dans le groupe d'appareils. `apps/PilouBureau/Boutique.cs` ;
+- **🛒 Boutique** (en tête du menu, gratuite, aucune vraie monnaie) : une boutique rétro rangée par
+  **rayons** (Tête, Yeux, Cou, Dos, Main, Pieds, Compagnons, Effets, Couleurs, Décors, Bulles, Spéciaux),
+  chaque rayon en **rangées de niveau** (1, 5, 10, 15, 20, 30, 40, 50) : le niveau ouvre la rangée, les
+  pièces d'or achètent. Plus de 100 articles (chapeaux, lunettes, sac à dos, ailes, jetpack, guitare,
+  compagnons, auras, teintes, décors, cadres de bulle…), une vitrine d'offres du jour (une à -25 %), une
+  cabine d'essayage (*Essayer / Acheter / Porter*). Le menu affiche « Boutique (N nouveautés) », un petit
+  sac apparaît près de Pilou quand une rangée s'ouvre ou qu'une offre attend, et le passage d'un palier
+  ouvre « Rangées débloquées → Voir en boutique ». Un **bandeau** niveau / XP / po est en tête du menu,
+  de la boutique et de l'info-bulle de Pilou. Rien de ce qui était déjà gagné n'est perdu ; pièces, objets
+  et tenue sont partagés dans le groupe d'appareils. `apps/PilouBureau/Boutique.cs`, `FenetreBoutique.cs` ;
 - **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
   fichier, le total fait les niveaux ;
 - **Intégrations → Partager l'XP entre mes appareils** (sans dossier commun : PC perso et PC de

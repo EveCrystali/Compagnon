@@ -134,8 +134,10 @@ public sealed class Scene : FrameworkElement
     public static Allure Allure(Pose p)
     {
         // Objets de boutique portés (un par emplacement) ; la couleur achetée remplace la couleur de niveau.
-        var objets = p.Equipe.Where(kv => kv.Key != Boutique.Couleur && kv.Value != "").Select(kv => kv.Value).ToList();
+        var objets = p.Equipe.Where(kv => Boutique.SurPilou(kv.Key) && kv.Value != "").Select(kv => kv.Value).ToList();
         var couleurAchetee = p.Equipe.GetValueOrDefault(Boutique.Couleur, "");
+        // Anciennes couleurs de niveau (« couleur-ambre ») : la teinte porte le nom sans préfixe.
+        if (couleurAchetee.StartsWith("couleur-")) couleurAchetee = couleurAchetee["couleur-".Length..];
         if (p.Reaction == "danse" && p.Tenue != "musique") objets.Add("tenue-musique-notes");
         objets.AddRange(p.Soins);
         objets.AddRange(p.Meteo);

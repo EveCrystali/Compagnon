@@ -19,12 +19,23 @@ public class LancementTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup();
         Principale a = c.get();
         assertNotNull(a);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < Principale.N; i++) {
             a.page(i);
-            if (i == Principale.COLLECTION) for (int k = 0; k <= PageCollection.BOUTIQUE; k++) ((PageCollection) a.page(i)).choisir(k);
+            if (i == Principale.COLLECTION) for (int k = 0; k <= PageCollection.STYLE; k++) ((PageCollection) a.page(i)).choisir(k);
+            if (i == Principale.BOUTIQUE) {
+                PageBoutique b = (PageBoutique) a.page(i);
+                for (String r : Boutique.RAYONS) b.rayon(r);
+                b.rayon(PageBoutique.VITRINE);
+                b.choisir("carapace");
+                b.choisir("fond-plage");
+                b.choisir("bulle-nuit");
+            }
             Intent onglet = new Intent(RuntimeEnvironment.getApplication(), Principale.class).putExtra(Principale.EXTRA_ONGLET, i);
             Robolectric.buildActivity(Principale.class, onglet).setup().pause().stop().destroy();
         }
+        a.montrerRangees(9, 15);
+        a.allerNiveaux();
+        a.allerBoutique(Boutique.DOS);
         c.pause().stop().destroy();
     }
 

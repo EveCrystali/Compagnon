@@ -29,6 +29,9 @@ final class Bulle {
     private final WindowManager wm;
     private final Handler h = new Handler(Looper.getMainLooper());
     private final LinearLayout racine, panneau;
+    private final GradientDrawable fond = new GradientDrawable();
+    private String styleVu = "?";
+    private boolean sombre;
     private final PilouVue pilou;
     private final WindowManager.LayoutParams lp;
     private boolean pose, ouvert;
@@ -44,10 +47,7 @@ final class Bulle {
         panneau.setOrientation(LinearLayout.VERTICAL);
         int m = (int) (10 * d);
         panneau.setPadding(m, m / 2, m, m / 2);
-        GradientDrawable fond = new GradientDrawable();
-        fond.setColor(0xf2f6f8fa);
-        fond.setStroke((int) (2 * d), 0xff6cb6ff);
-        fond.setCornerRadius(4 * d);
+        styler("");
         panneau.setBackground(fond);
         panneau.setVisibility(View.GONE);
         racine = new LinearLayout(c);
@@ -94,8 +94,22 @@ final class Bulle {
         pose = false;
     }
 
+    // Cadre de bulle de la boutique (« bulle-doree »…), sinon le cadre bleu d'origine.
+    private void styler(String id) {
+        if (id.equals(styleVu)) return;
+        styleVu = id;
+        Boutique.StyleBulle st = Boutique.style(id);
+        sombre = st != null && st.sombre;
+        fond.setColor(st != null && st.fond != 0 ? st.fond : 0xf2f6f8fa);
+        fond.setStroke((int) ((st == null ? 2 : st.epaisseur) * d), st == null ? 0xff6cb6ff : st.bord);
+        fond.setCornerRadius((st == null ? 4 : Math.max(4, st.rayon)) * d);
+        panneau.invalidate();
+    }
+
     void maj(Etat e, long maintenant) {
         etat = e;
+        String b = e.porte.get(Boutique.BULLE);
+        styler(b == null ? "" : b);
         pilou.montrer(e.expression(maintenant), e.couleur);
         pilou.accessoire(e.accessoire);
         pilou.meteo(e.etatMeteo(maintenant));
@@ -173,11 +187,12 @@ final class Bulle {
 
     private void remplir(long maintenant) {
         panneau.removeAllViews();
-        panneau.addView(texte(etat.nom + " · niv " + etat.niveau + "   " + etat.resume(maintenant), PALE, true));
+        panneau.addView(texte(etat.nom + " · niv " + etat.niveau + "   " + etat.resume(maintenant), sombre ? 0xffadbac7 : PALE, true));
         List<Etat.Ligne> lignes = etat.lignes(maintenant, (int) (maintenant / 300));
         for (int i = 0; i < Math.min(6, lignes.size()); i++) {
             Etat.Ligne l = lignes.get(i);
-            int couleur = l.ton == Etat.Ton.ATTENTE ? ORANGE : l.ton == Etat.Ton.TRAVAIL || l.nouveau ? BLEU : TEXTE;
+            int couleur = l.ton == Etat.Ton.ATTENTE ? (sombre ? 0xfff69d50 : ORANGE) : l.ton == Etat.Ton.TRAVAIL || l.nouveau ? (sombre ? 0xff6cb6ff : BLEU)
+                    : sombre ? 0xffe6ecf2 : TEXTE;
             panneau.addView(texte(l.signe + "  " + l.libelle + "  ·  " + l.texte, couleur, false));
         }
     }

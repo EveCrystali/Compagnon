@@ -6,13 +6,16 @@ le PC.
 
 ## L'app
 
-Une barre de navigation en bas, quatre onglets (thème clair ou sombre selon le téléphone) :
+Une barre de navigation en bas, cinq onglets (thème clair ou sombre selon le téléphone), et en haut de
+chacun un **bandeau permanent** : pastille de niveau, mini barre d'XP pixel, pièces d'or (une pièce qui
+tourne), titre et prochaine rangée de la boutique ; un toucher ouvre Collection → Niveaux.
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
-| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, articles de boutique), style (ce qu'on possède), **Boutique**. |
+| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède). |
 | **Réglages** | Appairage, Pilou flottant (taille, cacher, ramener), notifications, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
 
 ### Chasse aux bugs
@@ -51,10 +54,14 @@ question, une plus discrète quand une session finit (chacune se coupe dans l'ap
 Le PC tire les quêtes (3 du jour, 3 de la semaine, 1 du mois) et tient le solde de pièces d'or (po) ;
 le téléphone les affiche (Accueil) et y contribue : pêche, cuisine, petits jeux, caresses et score de
 Chasse aux bugs partent avec les gains, chiffrés, et font avancer les quêtes du PC. La **Boutique**
-(Collection → Boutique) est gratuite : aucune vraie monnaie. *Acheter* envoie la demande au PC, qui
-vérifie le solde et le niveau puis l'applique ; en attendant, l'objet est « en route » et le solde
-affiché le déduit déjà. *Porter* se voit tout de suite et part au PC. Les objets ne sont pas encore
-dessinés : la boutique les montre par leur nom et un signe d'emplacement.
+(onglet principal) est gratuite : aucune vraie monnaie. Même catalogue que le PC : des rayons par
+emplacement, chacun en rangées de niveau (1, 5, 10, 15, 20, 30, 40, 50) ; le niveau ouvre la rangée,
+les pièces d'or achètent. *Acheter* envoie la demande au PC, qui vérifie le solde et le niveau puis
+l'applique (l'objet portable est porté dès son arrivée) ; en attendant, l'objet est « ⇢ en route » et le
+solde affiché le déduit déjà. *Porter* se voit tout de suite et part au PC. Signes d'état : cadenas + NIV
+(fermé), ◉ (achetable), ◌ (trop cher), ✓ (à toi), ★ (porté). Quand un niveau ouvre des rangées, une
+fenêtre « NIVEAU N ! Rangées débloquées » propose « Voir en boutique ». Les animations (pièces, néon,
+clignotements) se figent si le téléphone supprime les animations.
 
 Les niveaux ouvrent l'accès (jeux, objets, évolution : Gouttelette, Pilou, Pilou Nimbus, Pilou
 Astral) au lieu d'offrir des objets ; chaque niveau gagné rapporte des pièces d'or. Ce qui avait déjà
@@ -114,7 +121,8 @@ fournir une clé privée par `PILOU_KEYSTORE` et `PILOU_KEYSTORE_PASS` (secrets 
 L'interface se relit régulièrement, sur captures plutôt que de mémoire.
 
 **Les captures.** `CapturesTest` (Robolectric, rendu graphique natif) photographie chaque écran : Accueil
-(neuf et appairé : sessions, quêtes, groupe), Jouer, Collection (Carnet, Recettes, Niveaux, Style, Boutique),
+(neuf et appairé : sessions, quêtes, groupe), Jouer, Boutique (vitrine, rayons Dos / Tête / Décors avec essayage,
+fenêtre « Rangées débloquées »), Collection (Carnet, Recettes, Niveaux, Style),
 Réglages, Atelier (pêche, cuisine), Chasse aux bugs (accueil, partie, pause) et la mise à jour, en thème
 **clair et sombre**, sur un **petit** (360 × 640 dp) et un **grand** téléphone (412 × 915 dp). Les pages qui
 défilent sont aussi prises en entier (`…-long.png`).
@@ -190,7 +198,10 @@ et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes
 | Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
 | Couleurs | achetées en boutique, portées au clic droit | achetées et portées dans la Boutique |
 | Accessoires (chapeaux historiques) | achetés en boutique, choisis au clic droit | achetés dans la Boutique (choisis sur le PC) |
-| Objets de boutique (tête, yeux, cou, dos, main, pieds, compagnon, effet) | ✓ Boutique… | ✓ Boutique (acheter, porter) |
+| Objets de boutique (tête, yeux, cou, dos, main, pieds, compagnon, effet) | ✓ Boutique (rayons, rangées, essayage) | ✓ onglet Boutique (rayons, rangées, essayage) |
+| Décors (derrière Pilou) | aperçu dans la boutique | ✓ Accueil et essayage |
+| Cadres de bulle | ✓ bulle de Pilou | ✓ Pilou flottant |
+| Bandeau niveau / XP / po | menu, boutique, info-bulle | ✓ en haut de chaque onglet |
 | Météo (pluie, neige, chaleur… et ce que Pilou en pense) | ✓ connecteur Météo | ✓ carte Accueil, Pilou mouillé ou au sec |
 | Quêtes et pièces d'or | ✓ menu Quêtes | ✓ Accueil ; les parties du téléphone comptent |
 | Niveaux (accès), évolution | ✓ menus Niveau, Évolution | ✓ Collection → Niveaux ; jeux verrouillés « niveau N » |

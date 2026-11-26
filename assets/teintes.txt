@@ -1,4 +1,4 @@
-# Teintes de Pilou : contour, ombre, base, clair. Les cinq dernières viennent de la boutique.
+# Teintes de Pilou : contour, ombre, base, clair. Lavande et les suivantes viennent de la boutique.
 bleu: #1f4f8a #4a8fdc #6cb6ff #b4dbff
 orange: #8a4a1f #d9803a #f69d50 #ffc89a
 nuit: #0d2a4d #2a5ea8 #3f7fd6 #8fbaf0
@@ -15,3 +15,10 @@ corail-orange: #7a3414 #d0662e #ff9a5c #ffd2b3
 ardoise: #1f262e #4a5563 #6b7787 #a9b4c2
 sable: #6b5235 #b08f62 #dcc193 #f6ead2
 glacier: #24506b #6aa6c7 #a9d7ee #e8f7ff
+pervenche: #2c3570 #5a6fd0 #8fa2ff #d3dbff
+mandarine: #7a3a08 #d06a14 #ff9933 #ffd2a0
+miel: #6e4c0c #c08a1c #f2bd3c #fff0b8
+prune: #3a1a46 #6e3d86 #a46cc2 #e3c9f0
+acier: #22303d #556b80 #8aa1b6 #d4e0ea
+peche: #7a4430 #d0866a #ffb89a #ffe6da
+terne: #3e4957 #76838f #9fabb7 #c9d2db

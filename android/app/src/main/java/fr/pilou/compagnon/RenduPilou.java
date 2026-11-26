@@ -18,7 +18,7 @@ public final class RenduPilou {
             GOUTTE = 0xff1f4f8a, GOUTTE_CLAIRE = 0xffb4dbff, BLANC = 0xffffffff;
     private static final int[] ECLAT = {0xffffd8b0, 0xfffff6cc, 0xffb4dbff};
     private static final List<String> ORDRE = Arrays.asList("dos", "cou", "visage", "yeux", "tete", "main", "compagnon", "effet", "objet");
-    private static final Set<String> CHAUDES = new HashSet<>(Arrays.asList("ambre", "braise", "comete", "corail-orange", "sable"));
+    private static final Set<String> CHAUDES = new HashSet<>(Arrays.asList("ambre", "braise", "comete", "corail-orange", "sable", "mandarine", "miel", "peche"));
     private static final int[] BLEU = {0xff1f4f8a, 0xff4a8fdc, 0xff6cb6ff, 0xffb4dbff};
     private static final int[] ORANGE = {0xff8a4a1f, 0xffd9803a, 0xfff69d50, 0xffffc89a};
     private static final int[][] CROIX = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};

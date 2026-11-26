@@ -1,0 +1,23 @@
+# Oreilles de chat
+id: oreilles-chat
+slot: tete
+ancre: tete
+decalage: -18 -13
+palette: a=#1c2128 b=#2d333b c=#ffc89a d=#3b4654
+images:
+......aa....................aa......
+.....abba..................abba.....
+.....abba..................abba.....
+....abbbba................abbbba....
+....abbbba................abbbba....
+...abbccbba..aaaaaaaaaa..abbccbba...
+..abbbccbbaaaddddddddddaabbbccbba...
+..abbccccbbddddddddddddddbbccccbba..
+.abbccccccbbaaaaaaaaaaaabbccccccbba.
+.abbccccccbba..........abbccccccbba.
+abbccccccccbba........abbccccccccbba
+abbbbbbbbbbbba........abbbbbbbbbbbba
+bbbbbbbbbbbbbba......abbbbbbbbbbbbbb
+aaaddaaaaaaaaa........aaaaaaaaaddaaa
+.addda........................addda.
+.addda........................addda.

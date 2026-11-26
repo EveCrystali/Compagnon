@@ -145,8 +145,8 @@ public final class PilouVue extends View {
         java.util.List<String> portes = new java.util.ArrayList<>(objets);
         for (java.util.Map.Entry<String, String> en : equipe.entrySet()) {
             if (en.getValue() == null || en.getValue().isEmpty()) continue;
-            if (en.getKey().equals("couleur")) a.couleur = en.getValue();
-            else portes.add(en.getValue());
+            if (en.getKey().equals(Boutique.COULEUR)) a.couleur = Vitrine.teinte(en.getValue());
+            else if (Boutique.surPilou(en.getKey())) portes.add(en.getValue());
         }
         portes.addAll(objetsSoins);
         bouder(a, portes, e, t);
