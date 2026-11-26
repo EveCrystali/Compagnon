@@ -30,9 +30,18 @@ public sealed partial class FenetrePilou
 
     private bool Boudeur => _profil.Soins.Base is not null && Soins.Boudeur(SoinsMaintenant());
 
-    private ExpeditionsAutres AutresExpeditions() =>
-        Expeditions.Autres(GroupeMem.Compteurs.Select(c => (c.ExpJour, c.ExpNombre, c.ExpLibre))
+    // Les autres appareils du groupe (relais et dossier partagé), relus au plus toutes les 5 s ; rien en essai.
+    private ExpeditionsAutres AutresExpeditions()
+    {
+        if (_essaiExp is not null) return ExpeditionsAutres.Aucun;
+        if (_expAutres is { } c && Maintenant - c.T < 5000) return c.Autres;
+        var autres = Expeditions.Autres(GroupeMem.Compteurs.Select(k => (k.ExpJour, k.ExpNombre, k.ExpLibre))
             .Concat(_profil.AutresDuDossier(DossierPartage).Select(p => (p.Expedition.Jour, p.Expedition.Nombre, p.Expedition.Libre))), DateTime.Now);
+        _expAutres = (Maintenant, autres);
+        return autres;
+    }
+
+    private (double T, ExpeditionsAutres Autres)? _expAutres;
 
     private void EcrireExpedition(bool tout_de_suite = true)
     {
@@ -435,7 +444,7 @@ public sealed partial class FenetrePilou
         {
             case "depart":
                 _essaiExp.Energie.Valeur = 100;
-                PartirExpedition(l.Id);
+                PartirExpedition(Expeditions.Lieux[0].Id); // ouvert dès le niveau 1
                 break;
             case "absent":
                 _essaiExp.Courante = new Expedition { Id = "essai", Lieu = l.Id, Debut = e, Fin = e + 50 * 60_000 };

@@ -215,6 +215,23 @@ un quart) — et rien ne s'affiche tant que tout va bien : ni jauge, ni bulle qu
   de ces actions et du temps passé. Les actions de plus de deux jours sont repliées dans la base, à une
   heure ronde. `apps/PilouBureau/Soins.cs`.
 
+## Expéditions
+
+Clic droit → **⚔ Partir en expédition…** (ou l'icône près de l'horloge) : un clic sur un lieu — Caverne des
+câbles, Forêt des onglets, Tour du tampon, Marais des mises à jour, Citadelle du nuage, ouverts par le niveau — et
+Pilou part seul, baluchon et épée en bois ; une pancarte « en expédition · ↩ 15 h 40 » le remplace (les sessions
+restent dans la bulle). L'aventure se résout toute seule (combats contre des bugs géants, slimes de cache, golems
+de tickets…, pièges, coffres, boss) : il rentre avec quelques po et un peu d'XP, parfois un butin introuvable en
+boutique ou un trophée, parfois bredouille et cabossé. Un petit coffre près de lui ouvre le journal.
+
+- **Énergie ⚡** (bandeau du menu et de la boutique, téléphone) : chaque départ en coûte ; elle remonte un peu
+  toute seule (jusqu'à 50), **surtout en travaillant** (temps dans une appli de travail, IA qui finit, quête
+  réussie) et en mangeant (plats cuisinés, en-cas de route de la boutique). Pilou boudeur : deux fois moins vite.
+- **Mesuré** : 30 min de repos entre deux, trois par jour pour tout le groupe, pas pendant une visite ; en
+  moyenne une journée rapporte de l'ordre d'une ou deux parties de pêche.
+- Équipement léger (un outil, un talisman), téléphone en lecture, trois quêtes. Détails, chiffres d'équilibre et
+  `--essai=expedition:depart|retour|defaite|journal` : [docs/EXPEDITIONS.md](docs/EXPEDITIONS.md).
+
 ## Activités
 
 Pilou devine ce que tu fais d'après la fenêtre au premier plan, et en tire une tenue :

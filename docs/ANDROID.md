@@ -12,7 +12,7 @@ tourne), titre et prochaine rangée de la boutique ; un toucher ouvre Collection
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
 | **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
 | **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède). |
@@ -196,6 +196,7 @@ et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes
 | État des sessions (❗ ? ◐ ✓ ■ ✕) | bulle | notification, widget, Pilou flottant |
 | Humeurs (concentré, inquiet, fête, grimace, soulagé, endormi) | ✓ | ✓ (venues du PC ; fête et caresse aussi dans l'atelier) |
 | Niveau, titre, XP | ✓ | ✓ reçus du PC, plus les gains en attente |
+| Expéditions (docs/EXPEDITIONS.md) | lancées au clic droit ou depuis l'icône près de l'horloge | lecture seule : carte « ⚔ Expédition » (en route, retour vers…, dernier journal) et ⚡ près de l'XP |
 | Couleurs | achetées en boutique, portées au clic droit | achetées et portées dans la Boutique |
 | Accessoires (chapeaux historiques) | achetés en boutique, choisis au clic droit | achetés dans la Boutique (choisis sur le PC) |
 | Objets de boutique (tête, yeux, cou, dos, main, pieds, compagnon, effet) | ✓ Boutique (rayons, rangées, essayage) | ✓ onglet Boutique (rayons, rangées, essayage) |
