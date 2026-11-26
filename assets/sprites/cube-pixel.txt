@@ -1,0 +1,83 @@
+# Cube pixel (ensemble Rétro-arcade)
+id: cube-pixel
+slot: compagnon
+ancre: cote
+decalage: -1 -17
+duree: 150
+palette: a=#3a2a7a b=#9b8cff c=#d2caff d=#6a5acd e=#1c2128
+images:
+..............
+..............
+..............
+..............
+..............
+..............
+aaaaaaaaaaaaaa
+bbbbbbbbbbbbbb
+bbccbbbbbbbbbb
+dddddddddddddd
+dddddddddddddd
+ddddeeddeedddd
+ddddeeddeedddd
+dddddddddddddd
+dddddddddddddd
+dddddeeeeddddd
+dddddddddddddd
+aaaaaaaaaaaaaa
+---
+..............
+..............
+.aaaaaaaaaaaa.
+abbbbbbbbbbbba
+abccbbbbbbbbba
+adddddddddddda
+adddddddddddda
+adddeeddeeddda
+adddeeddeeddda
+adddddddddddda
+adddddddddddda
+addddeeeedddda
+adddddddddddda
+adddddddddddda
+.aaaaaaaaaaaa.
+..............
+..............
+..............
+---
+.aaaaaaaaaaaa.
+abbbbbbbbbbbba
+abccbbbbbbbbba
+adddddddddddda
+adddddddddddda
+adddeeddeeddda
+adddeeddeeddda
+adddddddddddda
+adddddddddddda
+addddeeeedddda
+adddddddddddda
+adddddddddddda
+.aaaaaaaaaaaa.
+..............
+..............
+..............
+..............
+..............
+---
+..............
+..............
+.aaaaaaaaaaaa.
+abbbbbbbbbbbba
+abccbbbbbbbbba
+adddddddddddda
+adddddddddddda
+adddeeddeeddda
+adddeeddeeddda
+adddddddddddda
+adddddddddddda
+addddeeeedddda
+adddddddddddda
+adddddddddddda
+.aaaaaaaaaaaa.
+..............
+..............
+..............

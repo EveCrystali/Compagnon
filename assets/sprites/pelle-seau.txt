@@ -1,0 +1,29 @@
+# Seau et pelle (ensemble Plage)
+id: pelle-seau
+slot: main
+ancre: main
+decalage: -5 -16
+palette: a=#1c2128 b=#1f4f8a c=#4a8fdc d=#8a4a1f e=#d9803a f=#f69d50 g=#ffd8b0
+images:
+.......abbbba.
+........abca..
+........abca..
+....aaaaabca..
+...addddddca..
+..addaaaadda..
+.adaa...abcda.
+adda....abcdda
+adaaaaaaabcada
+adeeeeeeeeeeda
+addeeeeeeeedda
+afdffffffffdfa
+.afddffffddfa.
+.afgddddddffa.
+.afggfffffffa.
+.afggfffffffa.
+.afggfffffffa.
+.afggfffffffa.
+..aggffffffa..
+..aggffffffa..
+..affffffffa..
+...aaaaaaaa...

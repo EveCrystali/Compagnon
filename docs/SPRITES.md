@@ -62,6 +62,14 @@ d'interface (`cadenas`, `badge-boutique`, `pierre-calme`, `canne-doree`, `marmit
 ne sont pas des sprites : `Boutique.Style` (PC) et `Boutique.style` (téléphone). Planches : `boutique-retro.png`,
 `boutique-retro-stades.png` (stades 1, 3, 4, négligé, terne), `boutique-decors.png`.
 
+Boutique garnie (`outils/sprites/garde_robe.py` pour le catalogue, `garde_robe_dessins.py` pour les dessins) :
+140 articles de plus, rangés dans `assets/catalogue.txt` (lu tel quel par `Boutique.cs` et `Boutique.java` : numéro
+stable, emplacement, prix, niveau, rareté 0–5, saison, ensemble, passage), les dix ensembles et leur effet bonus
+(`bonus-<ensemble>`, ajouté aux objets quand l'ensemble est porté en entier), les paliers de collection, et neuf
+teintes (`caramel`, `potiron` et `cuivre` rejoignent `CHAUDES`). Les titres (emplacement `titre`) et les cadres de
+bulle ne sont pas des sprites. Planches de contrôle, une par rayon : `python3 outils/sprites/planches.py` →
+`planches/boutique2/` (`rayon-*.png`, `vignettes-petites.png` à la taille de la boutique, `ensembles.png`).
+
 Météo (`outils/sprites/meteo_sprites.py`) : `meteo-pluie`, `meteo-averse`, `meteo-eclair`,
 `meteo-neige`, `meteo-brouillard`, `meteo-vent`, `meteo-soleil` (plein cadre, animés) et
 `meteo-mouille`, `meteo-givre` (sur Pilou) ; les objets `impermeable`, `bottes-pluie`, `moufles`,

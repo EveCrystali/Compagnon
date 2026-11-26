@@ -1,0 +1,22 @@
+# Nœud géant
+id: noeud-geant
+slot: cou
+ancre: cou
+decalage: -16 -4
+palette: a=#f69d50 b=#8a4a1f c=#f6f8fa d=#d9803a
+images:
+abb.........................bbba
+aaabbb....................bbaaaa
+aaaaaabb................bbaaaaaa
+aaaaaaaabb...........bbbaaaaaaaa
+aaacaaaaaabbbbbbbbbbbaaaaaaacaaa
+aaaaaaaaaaaaaddddddaaaaaaaaaaaaa
+aaaaaaaacaaaaddddddaaaacaaaaaaaa
+aaaaaaaaaaaaaddddddaaaaaaaaaaaaa
+aaaaaaaaaaaaaddddddaaaaaaaaaaaaa
+aaaaaacaaaaaaddddddaaaaaacaaaaaa
+aaaaaaaaaabbbddddddbbaaaaaaaaaaa
+aaacaaaabb...bbbbbb..bbbaaaacaaa
+aaaaaabb................bbaaaaaa
+aaabbb....................bbaaaa
+abb.........................bbba

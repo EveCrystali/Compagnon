@@ -221,7 +221,9 @@ public final class Principale extends Activity {
         if (bandeau == null) return;
         Etat e = Prefs.etat(this);
         int n = Gains.niveau(this, e), xp = Gains.xp(this, e);
-        bandeau.mettre(n, xp, e.po < 0 ? -1 : Gains.solde(this, e), Butin.titre(n), Vitrine.prochaineRangee(n, xp));
+        // Titre porté (boutique, ensemble complet, collection) à la place du titre de niveau.
+        String titre = Boutique.nomTitre(Gains.porte(this, e).get(Boutique.TITRE));
+        bandeau.mettre(n, xp, e.po < 0 ? -1 : Gains.solde(this, e), titre != null ? titre : Butin.titre(n), Vitrine.prochaineRangee(n, xp));
         boolean neuf = courant != BOUTIQUE && PageBoutique.nouveautes(this, e) > 0;
         pastilleBoutique.setVisibility(neuf ? View.VISIBLE : View.GONE);
         if (boutons[BOUTIQUE].getParent() instanceof View)

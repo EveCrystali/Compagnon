@@ -4,7 +4,7 @@ namespace PilouBureau;
 // cuisine. Tout tirage passe par un Random reçu en paramètre (graine fixe dans les tests).
 
 // Rareté : un signe de forme et un cadre différent par rang, pas seulement une couleur.
-public enum Rarete { Commun, PeuCommun, Rare, Epique, Legendaire }
+public enum Rarete { Commun, PeuCommun, Rare, Epique, Legendaire, Mythique }
 
 // Forme du sprite d'une prise (Peche.cs les dessine) ; couleurs : principale, claire, détail.
 public enum Forme { Poisson, Long, Plat, Coquillage, Crabe, Algue, Botte, Bouteille, Caillou, Cle, Pieuvre, Hippocampe, Coffre, Perle, Baleine }

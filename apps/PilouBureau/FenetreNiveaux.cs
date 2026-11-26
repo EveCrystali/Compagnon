@@ -110,7 +110,7 @@ public sealed partial class FenetrePilou
     {
         int n = Niveau;
         var b = new Bandeau(compact: true);
-        b.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchaineRangee(n, _xpTotal));
+        b.Mettre(n, _xpTotal, Bourse().Solde, TitreAffiche(n), Bandeau.ProchaineRangee(n, _xpTotal));
         var m = new MenuItem { Header = b, ToolTip = "Ouvrir la boutique" };
         m.Click += (_, _) => OuvrirBoutique();
         return m;
@@ -135,7 +135,7 @@ public sealed partial class FenetrePilou
     private MenuItem MenuNiveaux()
     {
         int n = Niveau;
-        var m = new MenuItem { Header = $"Niveau {n} · {_xpTotal}/{Profil.XpPourNiveau(n + 1)} xp · {Recompenses.Titre(n)}" };
+        var m = new MenuItem { Header = $"Niveau {n} · {_xpTotal}/{Profil.XpPourNiveau(n + 1)} xp · {TitreAffiche(n)}" };
         if (_xpTotal < Profil.XpPourNiveau(n))
             m.Items.Add(new MenuItem { Header = $"Encore {Profil.XpPourNiveau(n + 1) - _xpTotal} xp avant le niveau {n + 1} (niveau acquis gardé)", IsEnabled = false });
         m.Items.Add(new MenuItem { Header = $"Prochain niveau : +{Acces.PoNiveau(n + 1)} po", IsEnabled = false });

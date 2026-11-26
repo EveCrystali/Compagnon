@@ -1,0 +1,20 @@
+# Loup de bal (ensemble Nuit des frissons)
+id: masque-loup
+slot: yeux
+ancre: yeux
+decalage: -17 -3
+palette: a=#3a2a7a b=#fff6cc c=#f5d76e d=#6a5acd e=#f6f8fa
+images:
+......aaa...............aaaa.....b
+..aaaacccaaa.........aaaccccaaaab.
+aaccccdddcccaaa...aaacccddddccccba
+cccdddddddddcccaaacccddddddddddebd
+addddddaaaaddddcccdddddaaaadddddda
+addddda....adddddddddda....addddda
+addddda....adddddddddda....adddda.
+.adddddaaaaddddddddddddaaaaddddda.
+.addddddddddddddaadddddddddddddda.
+..adddddddddddaa..adddddddddddda..
+...aaaadddddda.....aadddddaaaaa...
+.......aaaaaa........aaaaa........
+..................................

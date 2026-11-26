@@ -166,7 +166,7 @@ public static class Groupe
         ["formes"] = c.Formes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
-        ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = c.Objets, ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
+        ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = Boutique.HorsGarde(c.Objets), ["garde"] = Boutique.Garde(c.Objets), ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
         ["equipe"] = c.Porte.ToDictionary(kv => kv.Key, kv => new Dictionary<string, object> { ["id"] = kv.Value.Id, ["t"] = kv.Value.T }),
     });
 
@@ -193,7 +193,7 @@ public static class Groupe
                     if (!Boutique.Slots.Contains(x.Name) || x.Value.ValueKind != JsonValueKind.Object) continue;
                     var id = x.Value.TryGetProperty("id", out var iv) && iv.ValueKind == JsonValueKind.String ? iv.GetString() ?? "" : "";
                     double te = x.Value.TryGetProperty("t", out var tv2) && tv2.ValueKind == JsonValueKind.Number ? tv2.GetDouble() : 0;
-                    if (id == "" || Boutique.Trouver(id)?.Slot == x.Name) equipe[x.Name] = new Port(id, te);
+                    if (id == "" || Boutique.TrouverTout(id)?.Slot == x.Name) equipe[x.Name] = new Port(id, te);
                 }
             EtatSoins? soinsBase = null;
             string origine = "";
@@ -212,7 +212,8 @@ public static class Groupe
                         && x.Value.GetString() is "calin" or "espiegle")
                         formes[st] = x.Value.GetString()!;
             return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
-                N("po"), N("poDep"), N("poDepTel"), L("objets", 100).Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
+                N("po"), N("poDep"), N("poDepTel"), L("objets", 300).Concat(Boutique.Deplier(S("garde"))).Distinct()
+                    .Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
                 soinsBase, origine, actions, formes);
         }
         catch (JsonException)

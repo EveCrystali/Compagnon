@@ -1,0 +1,34 @@
+# Sac d'expédition (ensemble Explorateur)
+id: sac-explorateur
+slot: dos
+ancre: cou
+decalage: -23 -16
+couche: derriere
+palette: a=#1c2128 b=#f69d50 c=#d9803a d=#c4a77d e=#e8d5b0 f=#b8c4d2 g=#4a8fdc h=#8a6e4b i=#7a4b26
+images:
+.abbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbba.
+.abbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbba.
+.abbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbba.
+.abbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbba.
+.abbbcbbbbcbbbbcbbbbcbbbbcbbbbcbbbddddddddddda
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadeeeeeeeeeda
+ddddddddda.......................adeeeeeeeeeda
+dddfffddda.......................adeeeeeeeeeda
+dddfffddda.......................adeeeeeeeeeda
+ddgggggdda.......................adeeeeeeeeeda
+ddgggggdda.......................adeeeeeeeeeda
+ddgggggdda.......................addddddddddda
+ddgggggdda.......................addddddddddda
+ddgggggdda.......................adhhhhhhhhhda
+ddgggggdda.......................adhhhhhhhhhda
+dddgggddda.......................adhhiiiiihhda
+ddddddddda.......................adhhhhhhhhhda
+ddddddddda.......................adhhhhhhhhhda
+ddddddddda.......................adhhhhhhhhhda
+aaaaaaaaa........................adhhhhhhhhhda
+.................................adhhhhhhhhhda
+.................................addddddddddda
+.................................addddddddddda
+..................................aaaaaaaaaaa.
+..............................................
+..............................................

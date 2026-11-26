@@ -1,0 +1,63 @@
+# Lunettes kaléidoscope
+id: lunettes-kaleido
+slot: yeux
+ancre: yeux
+decalage: -16 -3
+duree: 200
+palette: a=#1c2128 b=#b8c4d2 c=#f69d50 d=#9b8cff e=#f5d76e f=#ffffff g=#6cb6ff
+images:
+....aaaaaaaa........aaaaaaaa....
+...abbbbbbbba......abbbbbbbba...
+..abbbccccbbba....abbbccccbbba..
+.abbddcccceebba..abbddcccceebba.
+.abbdddcceeebbaaaabbdddcceeebba.
+.abddddcceeeebbbbbbddddcceeeeba.
+abbeeeeefggggbbaabbeeeeefggggbba
+.abccccddggggba..abccccddggggba.
+.abbcccddgggbba..abbcccddgggbba.
+.abbccddddggbba..abbccddddggbba.
+..abbbddddbbba....abbbddddbbba..
+...abbbbbbbba......abbbbbbbba...
+....aaaaaaaa........aaaaaaaa....
+---
+....aaaaaaaa........aaaaaaaa....
+...abbbbbbbba......abbbbbbbba...
+..abbbeeeebbba....abbbeeeebbba..
+.abbcceeeeggbba..abbcceeeeggbba.
+.abbccceegggbbaaaabbccceegggbba.
+.abcccceeggggbbbbbbcccceeggggba.
+abbgggggfddddbbaabbgggggfddddbba
+.abeeeeccddddba..abeeeeccddddba.
+.abbeeeccdddbba..abbeeeccdddbba.
+.abbeeccccddbba..abbeeccccddbba.
+..abbbccccbbba....abbbccccbbba..
+...abbbbbbbba......abbbbbbbba...
+....aaaaaaaa........aaaaaaaa....
+---
+....aaaaaaaa........aaaaaaaa....
+...abbbbbbbba......abbbbbbbba...
+..abbbggggbbba....abbbggggbbba..
+.abbeeggggddbba..abbeeggggddbba.
+.abbeeeggdddbbaaaabbeeeggdddbba.
+.abeeeeggddddbbbbbbeeeeggddddba.
+abbdddddfccccbbaabbdddddfccccbba
+.abggggeeccccba..abggggeeccccba.
+.abbgggeecccbba..abbgggeecccbba.
+.abbggeeeeccbba..abbggeeeeccbba.
+..abbbeeeebbba....abbbeeeebbba..
+...abbbbbbbba......abbbbbbbba...
+....aaaaaaaa........aaaaaaaa....
+---
+....aaaaaaaa........aaaaaaaa....
+...abbbbbbbba......abbbbbbbba...
+..abbbddddbbba....abbbddddbbba..
+.abbggddddccbba..abbggddddccbba.
+.abbgggddcccbbaaaabbgggddcccbba.
+.abggggddccccbbbbbbggggddccccba.
+abbcccccfeeeebbaabbcccccfeeeebba
+.abddddggeeeeba..abddddggeeeeba.
+.abbdddggeeebba..abbdddggeeebba.
+.abbddggggeebba..abbddggggeebba.
+..abbbggggbbba....abbbggggbbba..
+...abbbbbbbba......abbbbbbbba...
+....aaaaaaaa........aaaaaaaa....

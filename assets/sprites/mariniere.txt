@@ -1,0 +1,18 @@
+# Col marin (ensemble Pirate des mers de café)
+id: mariniere
+slot: cou
+ancre: cou
+decalage: -17 -1
+palette: a=#1f4f8a b=#1c2128 c=#f6f8fa d=#f69d50
+images:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
+baccccccccccccccaaaccccccccccccccb
+.baaaaaaaaaaaaddddddaaaaaaaaaaaab.
+.bacccccccccccdddddbbcccccccccccb.
+..baaaaaaabbbbbddddb.bbaaaaaaaab..
+..baaaaabb....bddddb...bbbaaaaab..
+...babbb.....bddddddb.....bbbab...
+....b........bddbbddb........b....
+............bdbb..bbdb............
+.............b......b.............

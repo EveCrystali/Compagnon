@@ -106,7 +106,7 @@ public class CapturesTest {
     private void boutique() {
         Context ctx = RuntimeEnvironment.getApplication();
         String etat = Prefs.de(ctx).getString("etat", "").replace("\"objets\":[\"echarpe\",\"petit-chat\"],\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\"},",
-                "\"objets\":[\"echarpe\",\"petit-chat\",\"fond-nuit\",\"bonnet-pompon\",\"sac-a-dos\"],"
+                "\"objets\":[\"echarpe\",\"petit-chat\",\"fond-nuit\",\"bonnet-pompon\",\"sac-a-dos\",\"chapeau-explorateur\",\"jumelles\",\"boussole\"],"
                         + "\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\",\"fond\":\"fond-nuit\",\"tete\":\"bonnet-pompon\"},");
         // La dernière visite date du niveau 9 : les rangées du palier 10 clignotent « débloquées ! ».
         Prefs.de(ctx).edit().putString("etat", etat).putInt("boutiqueVue", 9).putInt("niveauVu", 13).commit();
@@ -132,6 +132,15 @@ public class CapturesTest {
         b.choisir("fond-arcade");
         attendre();
         contenu(b, "boutique-decors");
+        // Boutique garnie : onglet Ensembles (progression, bonus porté), rayon Titres (titres à gagner).
+        b.rayon(Boutique.RAYON_ENSEMBLES);
+        b.choisir("boussole");
+        attendre();
+        contenu(b, "boutique-ensembles");
+        b.rayon(Boutique.TITRE);
+        b.choisir("titre-reveur");
+        attendre();
+        contenu(b, "boutique-titres");
         a.montrerRangees(9, 15);
         attendre();
         ecran(a, "boutique-rangees-debloquees");

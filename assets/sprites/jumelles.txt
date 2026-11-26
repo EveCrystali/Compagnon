@@ -1,0 +1,18 @@
+# Jumelles (ensemble Explorateur)
+id: jumelles
+slot: yeux
+ancre: yeux
+decalage: -14 -2
+palette: a=#1c2128 b=#2d333b c=#768390 d=#4a8fdc e=#b4dbff f=#3b4654
+images:
+.aaaaaaaaaaa.aa.aaaaaaaaaaa.
+abbbbbbbbbbbaccabbbbbbbbbbba
+abbbdddddbbbaccabbbdddddbbba
+abbdeeedddbbffffbbdeeedddbba
+abbdeeedddbbffffbbdeeedddbba
+abddeeeddddbffffbddeeeddddba
+abbdddddddbbffffbbdddddddbba
+abbdddddddbbaaaabbdddddddbba
+abbbdddddbbba..abbbdddddbbba
+abbbbbbbbbbba..abbbbbbbbbbba
+.aaaaaaaaaaa....aaaaaaaaaaa.

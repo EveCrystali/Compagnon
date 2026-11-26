@@ -1,0 +1,53 @@
+# Petit bonhomme de neige (ensemble Hiver douillet)
+id: bonhomme-neige
+slot: compagnon
+ancre: cote
+decalage: -1 -21
+duree: 700
+palette: a=#adbac7 b=#2d333b c=#ffffff d=#1c2128 e=#f69d50 f=#7a4b26 g=#4a8fdc
+images:
+...abbbbbbbba...
+...abbbbbbbba...
+..aabbbbbbbbaa..
+.abbbbbbbbbbbba.
+..aaaaccccaaaa..
+...acccccccca...
+...acccccccca...
+...accdccdcca...
+...acccccceeea..
+a..acccccccca...
+faagggggggggga..
+afagggggggggga..
+afacccccccggca..
+.afcccccccggca..
+.accccccccggcca.
+.accccccdccccca.
+.acccccccccccca.
+.acccccccccccca.
+..acccccdcccca..
+..acccccccccca..
+...aaccccccaa...
+.....aaaaaa.....
+---
+...abbbbbbbba...
+...abbbbbbbba...
+..aabbbbbbbbaa..
+.abbbbbbbbbbbba.
+..aaaaccccaaaa..
+...acccccccca...
+...acccccccca...
+...accdccdcca...
+a..acccccceeea..
+fa.acccccccca...
+faagggggggggga..
+afagggggggggga..
+afacccccccggca..
+.afcccccccggca..
+.accccccccggcca.
+.accccccdccccca.
+.acccccccccccca.
+.acccccccccccca.
+..acccccdcccca..
+..acccccccccca..
+...aaccccccaa...
+.....aaaaaa.....

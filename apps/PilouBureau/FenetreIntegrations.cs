@@ -137,7 +137,7 @@ public sealed partial class FenetrePilou
         // Amis (lecture seule sur le téléphone) et visite en cours.
         if (AmisPourTelephone() is { Count: > 0 } amis) progression["amis"] = amis;
         if (VisitePourTelephone() is { Length: > 0 } visite) progression["visite"] = visite;
-        var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
+        var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
             _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
         var corps = Telephone.Chiffrer(code, charge);
@@ -150,7 +150,7 @@ public sealed partial class FenetrePilou
             leger.Remove("plats");
             foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) leger[k] = v;
             leger["stade"] = StadeAffiche();
-            charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, Recompenses.Titre(Niveau),
+            charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
                 _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
             corps = Telephone.Chiffrer(code, charge);
         }
@@ -333,7 +333,7 @@ public sealed partial class FenetrePilou
             _discord.Fermer();
             return;
         }
-        var details = $"{NomPilou} · niveau {Niveau} · {Recompenses.Titre(Niveau)}";
+        var details = $"{NomPilou} · niveau {Niveau} · {TitreAffiche(Niveau)}";
         var r = Statut.Resumer(vivantes, epoque);
         string etat;
         if (r.Attente > 0) etat = "❗ attend son humain";

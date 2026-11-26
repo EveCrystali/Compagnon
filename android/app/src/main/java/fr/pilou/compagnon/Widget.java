@@ -26,6 +26,7 @@ public final class Widget extends AppWidgetProvider {
         java.util.List<String> portes = new java.util.ArrayList<>();
         for (java.util.Map.Entry<String, String> en : etat.porte.entrySet())
             if (Boutique.surPilou(en.getKey())) portes.add(en.getValue());
+        portes.addAll(Boutique.bonusPortes(etat.porte));
         a.objets = portes;
         Meteo.appliquer(a, etat.etatMeteo(maintenant), 0);
         v.setImageViewBitmap(R.id.pilou, Dessin.image(a, 3));

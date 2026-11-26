@@ -1,0 +1,23 @@
+# Boussole (ensemble Explorateur)
+id: boussole
+slot: main
+ancre: main
+decalage: -4 -11
+palette: a=#7a5a10 b=#c9a227 c=#f6f8fa d=#f69d50 e=#1c2128 f=#768390 g=#4a8fdc
+images:
+.....abbba.....
+.....abbba.....
+...aabbbbbaa...
+..abbbcccbbba..
+.abbcccdcccbba.
+abbccccdccccbba
+abcccccdcccccba
+abccccdddccccba
+abccccdedccccba
+abcfccgggcccfba
+abccccgggccccba
+abcccccgcccccba
+abbccccgccccbba
+.abbcccgcccbba.
+..abbbcccbbba..
+...aabbbbbaa...

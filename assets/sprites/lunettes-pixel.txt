@@ -1,0 +1,15 @@
+# Lunettes pixel (ensemble Rétro-arcade)
+id: lunettes-pixel
+slot: yeux
+ancre: yeux
+decalage: -16 -1
+palette: a=#1c2128 b=#6a5acd c=#d2caff
+images:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+..abccbbbbbbbba..abccbbbbbbbba..
+..aaaaaaaaaaaaa..aaaaaaaaaaaaa..
+..abbbbbbbbbbba..abbbbbbbbbbba..
+..aaaaaaaaaaaaa..aaaaaaaaaaaaa..
+..abbbbbbbbbbba..abbbbbbbbbbba..
+................................

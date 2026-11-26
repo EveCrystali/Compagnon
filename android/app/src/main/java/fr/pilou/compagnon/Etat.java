@@ -217,6 +217,8 @@ public final class Etat {
         e.promo = r.optString("promo", "");
         JSONArray ob = r.optJSONArray("objets");
         if (ob != null) for (int i = 0; i < ob.length(); i++) if (!ob.optString(i, "").isEmpty()) e.objets.add(ob.optString(i));
+        // Articles numérotés de la boutique garnie, envoyés en bits (« garde »).
+        for (String id : Boutique.deplier(r.optString("garde", ""))) if (!e.objets.contains(id)) e.objets.add(id);
         JSONObject po = r.optJSONObject("porte");
         if (po != null)
             for (java.util.Iterator<String> k = po.keys(); k.hasNext(); ) {

@@ -1,0 +1,29 @@
+# Loupe
+id: loupe
+slot: main
+ancre: main
+decalage: -10 -16
+palette: a=#1c2128 b=#7a4b26 c=#b4dbff d=#ffffff e=#4a2e17
+images:
+...aaaaaa.....
+..abbbbbba....
+.abbccccbba...
+abbcddcccbba..
+abcddddcccba..
+abcddddcccba..
+abccddccccba..
+abccccccccba..
+abbccccccbba..
+.abbccccbba...
+..abbbbbbeba..
+...aaaaaaeba..
+.........aeba.
+.........aeba.
+.........aeba.
+..........aeba
+..........aeba
+..........aeba
+..........aeba
+...........aeb
+...........aeb
+............aa

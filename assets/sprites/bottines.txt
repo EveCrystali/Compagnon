@@ -1,0 +1,17 @@
+# Bottines de marche (ensemble Explorateur)
+id: bottines
+slot: pieds
+ancre: pieds
+decalage: -15 -6
+palette: a=#1c2128 b=#7a4b26 c=#f69d50 d=#2d333b
+images:
+abbbbbbbbba.....abbbbbbbbba...
+abbbcbcbbba.....abbbcbcbbba...
+abbbbbbbbbaaa...abbbbbbbbbaaa.
+abbbcbcbbbbbba..abbbcbcbbbbbba
+abbbbbbbbbbbba..abbbbbbbbbbbba
+abbbcbcbbbbbba..abbbcbcbbbbbba
+abbbbbbbbbbbba..abbbbbbbbbbbba
+ddddddddddddddaadddddddddddddd
+ddddddddddddddaadddddddddddddd
+aaaaaaaaaaaaaa..aaaaaaaaaaaaaa

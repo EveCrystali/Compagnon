@@ -59,6 +59,64 @@ def planche(cases, colonnes, case, fond, chemin, titre_h=0):
     print(chemin, out.size)
 
 
+def catalogue_garni():
+    """Articles de la boutique garnie (assets/catalogue.txt) : [(id, nom, emplacement, ensemble)] et ensembles."""
+    articles, ensembles = [], []
+    with open(os.path.join(rendu.ASSETS, "catalogue.txt"), encoding="utf-8") as f:
+        for ligne in f:
+            c = ligne.rstrip("\n").split("|")
+            if c[0] == "article":
+                articles.append((c[2], c[3], c[4], c[9]))
+            elif c[0] == "ensemble":
+                ensembles.append((c[1], c[2], c[4], c[6:]))
+    return articles, ensembles
+
+
+def garnie(dossier, B, T, TEN, z=4):
+    os.makedirs(dossier, exist_ok=True)
+    """Planches de la boutique garnie, une par rayon, plus les ensembles complets (bonus compris) et les stades."""
+    def pilou(**kw):
+        return grille_image(rendu.rendre(rendu.Pose(**kw), B, T, TEN), z)
+
+    articles, ensembles = catalogue_garni()
+    case = (48 * z + 8, 56 * z + 20)
+    for slot in ("tete", "yeux", "cou", "dos", "main", "pieds", "compagnon", "effet", "couleur"):
+        ids = [a[0] for a in articles if a[2] == slot]
+        if slot == "couleur":
+            cases = [(pilou(couleur=i), i) for i in ids] + [(pilou(couleur=i, expr="inquiet"), i + " inquiet") for i in ids[:3]]
+        else:
+            cases = [(pilou(objets=[i], t=300), i) for i in ids] + [(pilou(objets=[i], t=660), i + " ·2") for i in ids
+                                                                   if len(B[i].images) > 1][:4]
+        planche(cases, 7, case, FOND, os.path.join(dossier, "rayon-%s.png" % slot))
+    fonds = [a[0] for a in articles if a[2] == "fond"]
+    cases = []
+    for f in fonds:
+        im = sprite_image(B[f], 4)
+        p = grille_image(rendu.rendre(rendu.Pose(), B, T, TEN), 3)
+        im.alpha_composite(p, ((im.width - p.width) // 2, im.height - p.height - 4))
+        cases.append((im, f))
+    planche(cases, 4, (64 * 4 + 12, 48 * 4 + 24), FOND, os.path.join(dossier, "rayon-fond.png"))
+    # Vignettes à la taille de la boutique (1,5 px par pixel) : reconnaissables sans légende ?
+    petites = [(grille_image(rendu.rendre(rendu.Pose(objets=[a[0]], t=300), B, T, TEN), 2), a[0]) for a in articles
+               if a[2] not in ("couleur", "fond", "bulle", "titre")]
+    planche(petites, 12, (48 * 2 + 30, 56 * 2 + 20), FOND, os.path.join(dossier, "vignettes-petites.png"))
+    # Ensembles complets, portés ensemble, avec leur bonus (et le décor de l'ensemble derrière).
+    cases = []
+    for id_, nom, bonus, pieces in ensembles:
+        objets = [p for p in pieces if p in B and not p.startswith("fond-")] + [bonus]
+        im = sprite_image(B[next((p for p in pieces if p.startswith("fond-")), "fond-montagne")], 4)
+        p = grille_image(rendu.rendre(rendu.Pose(objets=objets, t=420, expr="fete"), B, T, TEN), 3)
+        im.alpha_composite(p, ((im.width - p.width) // 2, im.height - p.height - 2))
+        cases.append((im, nom))
+    planche(cases, 4, (64 * 4 + 12, 48 * 4 + 24), FOND, os.path.join(dossier, "ensembles.png"))
+    cases = []
+    for st in (1, 3, 4):
+        for id_, nom, bonus, pieces in ensembles[::2]:
+            objets = [p for p in pieces if p in B and not p.startswith("fond-")] + [bonus]
+            cases.append((pilou(stade=st, objets=objets, t=300), "%d %s" % (st, id_)))
+    planche(cases, 5, case, FOND, os.path.join(dossier, "ensembles-stades.png"))
+
+
 def main():
     dossier = sys.argv[1] if len(sys.argv) > 1 else os.path.join(rendu.ICI, "planches")
     os.makedirs(dossier, exist_ok=True)
@@ -178,6 +236,7 @@ def main():
     for k in jeux:
         cases.append((sprite_image(B[k], 6), k))
     planche(cases, 6, (36 * 6 + 10, 30 * 6 + 22), FOND, os.path.join(dossier, "jeux.png"))
+    garnie(os.path.join(dossier, "boutique2"), B, T, TEN)
 
 
 if __name__ == "__main__":

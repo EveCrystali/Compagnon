@@ -15,6 +15,7 @@ import boutique_sprites
 import meteo_sprites
 import visites_sprites
 import gestes_sprites
+import garde_robe
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1718,6 +1719,7 @@ TEINTES = {
     "sable": ["#6b5235", "#b08f62", "#dcc193", "#f6ead2"],
     "glacier": ["#24506b", "#6aa6c7", "#a9d7ee", "#e8f7ff"],
     **boutique_sprites.TEINTES,
+    **garde_robe.TEINTES,
     # Soins : Pilou négligé a juste l'air terne (gris-bleu délavé), sans autre conséquence.
     "terne": ["#3e4957", "#76838f", "#9fabb7", "#c9d2db"],
 }
@@ -1771,6 +1773,7 @@ def tables():
         f.write("# Recette -> sprite du plat ; plat inventé : plat-invente ; plat brûlé : plat-rate.\n")
         for k, v in PLATS.items():
             f.write("%s: %s\n" % (k, v))
+    garde_robe.ecrire_catalogue(base)
 
 
 if __name__ == "__main__":
@@ -1790,6 +1793,7 @@ if __name__ == "__main__":
     meteo_sprites.effets()
     meteo_sprites.objets()
     boutique_sprites.objets()
+    garde_robe.objets()
     visites_sprites.tout()
     gestes_sprites.tout()
     tables()

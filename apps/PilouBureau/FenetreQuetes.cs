@@ -93,6 +93,13 @@ public sealed partial class FenetrePilou
 
     private IReadOnlyDictionary<string, string> EquipeCourant() => PilouBureau.Boutique.Porte(Bourse().Equipe);
 
+    // Titre affiché : celui que Pilou porte (boutique, ensemble, collection), sinon le titre de son niveau.
+    internal string TitreAffiche(int niveau)
+    {
+        var (_, _, equipe) = EtatBourse();
+        return PilouBureau.Boutique.NomTitre(equipe.GetValueOrDefault(PilouBureau.Boutique.Titre)?.Id) ?? Recompenses.Titre(niveau);
+    }
+
     // ---- Menus
 
     private MenuItem MenuQuetes()
@@ -230,7 +237,11 @@ public sealed partial class FenetrePilou
         }
         // Un objet acheté sur un autre appareil du groupe est aussi à nous.
         if (id != "" && !_profil.Bourse.Inventaire.Contains(id) && Bourse().Inventaire.Contains(id)) _profil.Bourse.Inventaire.Add(id);
-        if (!PilouBureau.Boutique.Equiper(_profil.Bourse, slot, id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
+        double t = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        // Titre ou cadre gagné (ensemble complet, palier de collection) : compté sur l'inventaire de tout le groupe.
+        if (PilouBureau.Boutique.TrouverTout(id) is { Recompense: true } && PilouBureau.Boutique.PeutPorter(Bourse().Inventaire, slot, id))
+            _profil.Bourse.Equipe[slot] = new Port(id, t);
+        else if (!PilouBureau.Boutique.Equiper(_profil.Bourse, slot, id, t)) return;
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
     }

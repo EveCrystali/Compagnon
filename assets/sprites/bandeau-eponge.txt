@@ -1,0 +1,12 @@
+# Bandeau éponge
+id: bandeau-eponge
+slot: tete
+ancre: tete
+decalage: -13 1
+palette: a=#8a4a1f b=#f69d50 c=#f6f8fa
+images:
+...abbbbbbbbbbbbbbbbbba...
+..abbbbbbbbbbbbbbbbbbbba..
+.abccccccccccccccccccccba.
+abbbbbbbbbbbbbbbbbbbbbbbba
+.aaaaaaaaaaaaaaaaaaaaaaaa.

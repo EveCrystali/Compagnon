@@ -1,0 +1,19 @@
+# Rollers
+id: rollers
+slot: pieds
+ancre: pieds
+decalage: -16 -8
+palette: a=#1c2128 b=#d2caff c=#6a5acd d=#3b4654 e=#f69d50
+images:
+.abbbbbbbbba......abbbbbbbbba...
+.accccccccca......accccccccca...
+.acccccccccaaa....acccccccccaaa.
+.acccccccccccca...acccccccccccca
+.acccccccccccca...acccccccccccca
+.acccccccccccca...acccccccccccca
+.acccccccccccca...acccccccccccca
+addddddddddddda..addddddddddddda
+.aeeaaeeaaeeaa....aeeaaeeaaeeaa.
+aeeeeeeeeeeeea...aeeeeeeeeeeeea.
+.aeeaaeeaaeea.....aeeaaeeaaeea..
+..aa..aa..aa.......aa..aa..aa...

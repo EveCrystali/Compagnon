@@ -51,3 +51,8 @@ expr=concentre t=0 objets=appareil-photo,photo-flash | 5a694c92567b1cc0fc6f4f9c2
 expr=fete t=0 stade=1 objets=polaroid-3 | e19218953d9058e5c1c3dd179cf23ac02f83a5545e8538f7e856a4322526c49e
 expr=attente t=320 regard_y=-1 objets=enveloppe-notif | 19ca1e7fcab36bf5fd5290748b58132493e25f3662e1e38eeeafedf71c9bd50f
 expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close | ea43086844a18f4904b2d81fb36537784169ed60ce3cff18eb21a6d2ec704713
+expr=fete t=420 objets=chapeau-explorateur,jumelles,foulard-explorateur,sac-explorateur,boussole,bottines,bonus-explorateur | 9619605755ab6387b9fa286958c5fff1791231f6e0d3c4d6cbcf6be60cb373d3
+expr=inquiet t=0 couleur=cuivre objets=plaid,chocolat-chaud | cb6ccd59fcde1d43ec2050957b02c71d90ee3f09b5d2cb5ebd74d95c76e48053
+expr=repos t=660 stade=4 couleur=nebuleuse objets=cape-chauve-souris,coiffe-courge,chauve-souris,bonus-frissons | 866a4daf96fc5e0df27b6f0ad83d34e461189a6a76065580d2fcd4549bba201b
+expr=repos t=250 stade=1 objets=ailes-libellule,lunettes-kaleido,orbite-lunes,bottes-nuage | 5d045d028a6d0e5942abc10fc27c4fc2042cb5d25f02956f6e4b156aa98db52f
+expr=concentre t=900 stade=3 objets=tricorne-moka,bandeau-oeil,sabre-cuillere,perroquet-caramel,aurore-boreale | d82088f3d9141ae272d2b85ee8c41ab96a5375ac3c0cd07fcbbf5ee14b8251d6

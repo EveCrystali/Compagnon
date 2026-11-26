@@ -1,0 +1,20 @@
+# Livre ouvert
+id: livre
+slot: main
+ancre: main
+decalage: -4 -8
+palette: a=#3a2a7a b=#f6f8fa c=#6a5acd d=#adbac7
+images:
+.aa..............aa.
+abbaaaaa....aaaaabba
+cbbbbbbbaaaabbbbbbbc
+cbbdddbbbbbbbbbdddbc
+cbbbbbdddbbbdddbbbbc
+cbbdddbbbbbbbbbdddbc
+cbbbbbdddbbbdddbbbbc
+cbbdddbbbbbbbbbdddbc
+cbbbbbdddbbbdddbbbbc
+cccbbbbbbbbbbbbbbccc
+ccccccccbbbbcccccccc
+aacccccccccccccccaaa
+..aaaaacccccaaaaa...

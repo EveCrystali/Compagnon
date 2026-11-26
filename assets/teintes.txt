@@ -21,4 +21,13 @@ miel: #6e4c0c #c08a1c #f2bd3c #fff0b8
 prune: #3a1a46 #6e3d86 #a46cc2 #e3c9f0
 acier: #22303d #556b80 #8aa1b6 #d4e0ea
 peche: #7a4430 #d0866a #ffb89a #ffe6da
+turquoise: #0f4a63 #2689b8 #3fb8e0 #bfeaf7
+caramel: #5e3410 #a8652a #d99a52 #f6d2a2
+givre: #3a5a7a #8fb4d8 #d6ecff #ffffff
+potiron: #6e3208 #c4621a #f08a2c #ffd0a0
+lilas: #4a3a7a #8a72c8 #b9a4ee #ece4ff
+cuivre: #5a2a12 #a3532a #d07a45 #f3c2a0
+minuit: #120f33 #2e2a6e #46429e #9c98e0
+opale: #5a6290 #a9b6e0 #e6ecff #fff6cc
+nebuleuse: #2a1450 #5a3aa8 #8f6fe0 #c6f0ff
 terne: #3e4957 #76838f #9fabb7 #c9d2db
