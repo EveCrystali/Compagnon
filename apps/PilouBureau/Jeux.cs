@@ -116,6 +116,7 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("stade:") && int.TryParse(nom[6..], out var st)) _essaiStade = Math.Clamp(st, 1, 4);
         if (nom.StartsWith("tenue:")) _essaiTenue = nom[6..];
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
+        if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=meteo:pluie, meteo:pluie:parapluie, meteo:neige, meteo:chaleur, meteo:orage…
         if (nom.StartsWith("meteo:"))
         {
@@ -232,6 +233,8 @@ public sealed partial class FenetrePilou
 
     private void Gagner(int xp, Point ou)
     {
+        xp = BonusSoins(xp);
+        SoinJeu();
         _profil.Xp += xp;
         _profil.JeuxGagnes++;
         _profil.Ecrire(DossierPartage);

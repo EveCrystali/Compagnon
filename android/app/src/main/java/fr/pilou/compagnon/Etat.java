@@ -78,6 +78,10 @@ public final class Etat {
     public final List<String> offres = new ArrayList<>();
     public String promo = "";
     public final List<Quete> quetes = new ArrayList<>();
+    /** Soins (PC qui les connaît) : l'état calculé par le PC à son heure (ramenée à celle du téléphone), null sinon ;
+     *  variantes d'évolution par stade (« calin », « espiegle »). */
+    public Soins.EtatSoins soins;
+    public final java.util.Map<Integer, String> formes = new java.util.TreeMap<>();
     /** Météo vue par le PC (connecteur météo actif), ou null. */
     public Meteo meteo;
     /** Au-delà, la météo reçue est trop vieille pour être montrée. */
@@ -198,6 +202,19 @@ public final class Etat {
                 JSONArray q = qu.optJSONArray(i);
                 if (q == null || q.length() < 6) continue;
                 e.quetes.add(new Quete(q.optInt(0), q.optString(1), q.optInt(2), Math.max(1, q.optInt(3)), q.optInt(4), q.optInt(5) == 1));
+            }
+        e.soins = Soins.lireEtat(r.optJSONObject("soins"));
+        if (e.soins != null) e.soins.t += decalage;
+        JSONObject fo = r.optJSONObject("formes");
+        if (fo != null)
+            for (java.util.Iterator<String> k = fo.keys(); k.hasNext(); ) {
+                String st = k.next();
+                String v = fo.optString(st, "");
+                try {
+                    if (v.equals("calin") || v.equals("espiegle")) e.formes.put(Integer.parseInt(st), v);
+                } catch (NumberFormatException ignore) {
+                    // stade illisible : ignoré
+                }
             }
         e.meteo = Meteo.lire(r.optJSONObject("meteo"));
         JSONArray an = r.optJSONArray("annonces");

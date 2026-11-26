@@ -1,0 +1,15 @@
+# variante câlin, stade 3 : petit cœur
+id: variante-calin-3-tete
+slot: tete
+ancre: tete
+decalage: 8 -4
+palette: a=#8a4a1f b=#f69d50 c=#ffd8b0
+images:
+..aa.aa..
+.abbabba.
+abcbbbbba
+abbbbbbba
+.abbbbba.
+..abbba..
+...aba...
+....a....

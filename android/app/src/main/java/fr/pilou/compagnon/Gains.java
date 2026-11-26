@@ -223,6 +223,53 @@ public final class Gains {
         ajouter(c, 1, null, null, 1);
     }
 
+    /** Un soin fait sur le téléphone (nourrir, laver, calin, soin, rythme, vacances) : il part au PC. */
+    public static void soin(Context c, String type, String objet) {
+        Soins.Action a = new Soins.Action(nouvelId(), type, System.currentTimeMillis(), objet);
+        modifier(c, g -> {
+            JSONArray s = g.optJSONArray("soins");
+            if (s == null) g.put("soins", s = new JSONArray());
+            if (s.length() < 40) s.put(Soins.json(a));
+        });
+        if (!Chiffre.valide(Prefs.code(c)) && p(c).getString("soinsBase", "").isEmpty())
+            p(c).edit().putString("soinsBase", String.valueOf(a.t - 1)).apply();
+    }
+
+    /** Soins en route vers le PC (pas encore accusés). */
+    static java.util.List<Soins.Action> soinsEnAttente(Context c) {
+        java.util.List<Soins.Action> l = new java.util.ArrayList<>();
+        JSONArray f = file(c);
+        for (int i = 0; i < f.length(); i++) {
+            JSONObject g = f.optJSONObject(i);
+            JSONArray s = g == null ? null : g.optJSONArray("soins");
+            if (s == null) continue;
+            for (int k = 0; k < s.length(); k++) {
+                Soins.Action a = Soins.lireAction(s.optJSONArray(k));
+                if (a != null) l.add(a);
+            }
+        }
+        return l;
+    }
+
+    /** État des soins ici : celui du PC (ou, sans PC, un Pilou soigné au premier lancement), plus les soins
+     *  du téléphone que le PC n'a pas encore pu compter. */
+    public static Soins.EtatSoins soins(Context c, Etat e, long maintenant) {
+        Soins.EtatSoins base = e.soins;
+        if (base == null) {
+            double debut;
+            try {
+                debut = Double.parseDouble(p(c).getString("soinsBase", ""));
+            } catch (NumberFormatException x) {
+                debut = maintenant;
+                p(c).edit().putString("soinsBase", String.valueOf(debut)).apply();
+            }
+            base = Soins.neuf(debut);
+        }
+        java.util.List<Soins.Action> neuves = new java.util.ArrayList<>();
+        for (Soins.Action a : soinsEnAttente(c)) if (a.t > base.t) neuves.add(a);
+        return Soins.calculer(base, neuves, Math.max(maintenant, base.t));
+    }
+
     // ---- Ce que l'atelier montre
 
     public static Map<String, Integer> stock(Context c) {

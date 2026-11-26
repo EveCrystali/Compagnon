@@ -1,0 +1,11 @@
+# variante espiègle, stade 2 : tache d'étoile
+id: variante-espiegle-2
+slot: visage
+ancre: yeux
+decalage: -15 7
+palette: a=#f5d76e
+images:
+...........................a..
+..........................aaa.
+...........................a..
+..............................

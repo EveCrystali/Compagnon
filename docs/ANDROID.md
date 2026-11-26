@@ -60,6 +60,19 @@ Les niveaux ouvrent l'accès (jeux, objets, évolution : Gouttelette, Pilou, Pil
 Astral) au lieu d'offrir des objets ; chaque niveau gagné rapporte des pièces d'or. Ce qui avait déjà
 été gagné avant cette version reste acquis.
 
+## Soins
+
+Le PC envoie l'état des soins calculé à son heure (faim, propreté, moral, rythme, vacances) et les
+variantes d'évolution ; le téléphone y ajoute les soins qu'il a faits et que le PC n'a pas encore
+comptés. Sur l'Accueil, une petite icône (◒ faim, ✦ propreté, ♥ moral) n'apparaît près de Pilou que si
+un besoin passe sous 30 % : un toucher la comble ; **♥ Prendre soin de Pilou** comble tout. Les soins
+partent avec les gains (actions datées, identifiant unique) et le PC les verse au journal commun.
+Pilou terne quand il est négligé, rayonnant quand il est bien soigné, variante câlin ou espiègle :
+le téléphone les dessine comme le PC.
+
+Réglages → *Soins* : rythme (doux, normal, exigeant), vacances (tout est figé) et « Me prévenir s'il a
+besoin de moi » — **désactivé par défaut**, une notification par jour au plus.
+
 ## Mises à jour
 
 Une fois par jour, l'app lit `version.json` de la dernière release. Une version plus récente donne une
@@ -181,6 +194,7 @@ et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes
 | Quêtes et pièces d'or | ✓ menu Quêtes | ✓ Accueil ; les parties du téléphone comptent |
 | Niveaux (accès), évolution | ✓ menus Niveau, Évolution | ✓ Collection → Niveaux ; jeux verrouillés « niveau N » |
 | Caresse | ✓ | ✓ toucher Pilou (app, atelier), créditée au PC |
+| Soins (faim, propreté, moral ; icône seulement s'il en a besoin) | ✓ icône près de Pilou, clic droit | ✓ Accueil, Réglages → Soins |
 | Étoile filante, bulles, tape m'en cinq | ✓ | ✓ atelier |
 | Pêche, cuisine | ✓ | ✓ atelier |
 | Carnet de pêche, livre de recettes | ✓ | ✓ onglet Collection |

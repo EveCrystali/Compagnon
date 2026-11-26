@@ -1,0 +1,19 @@
+# besoin : propreté (étincelle et bulles)
+id: soin-proprete
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#6cb6ff b=#1f4f8a c=#ffffff d=#b4dbff
+images:
+.........aa.
+.....b..ac.a
+....bdb.aaaa
+....bdb..aa.
+....bdb.....
+.bbbdddbbb..
+bddddcddddb.
+.bbbdddbbb..
+....bdb.....
+....bdb.....
+....bdb.....
+.....b......

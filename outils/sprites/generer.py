@@ -1500,6 +1500,151 @@ def jeux():
 
 
 # =====================================================================================================
+# Soins : icônes de besoin (une forme chacune), en-cas, mousse, rayonnement, variantes d'évolution
+# =====================================================================================================
+def soins():
+    # Faim : un bol fumant (demi-disque, deux volutes au-dessus).
+    t = T(11, 10)
+    t.ell(5.5, 4, 5, 5, O3, cond=lambda x, y, u, v: v > 0.05)
+    t.ell(5.5, 4, 3.5, 3.5, O4, cond=lambda x, y, u, v: v > 0.2)
+    t.rect(0, 4, 11, 1, O2)
+    t.rect(3, 9, 5, 1, O2)
+    t.p(3, 1, CREME_O)
+    t.p(4, 0, CREME_O)
+    t.p(6, 2, CREME_O)
+    t.p(7, 1, CREME_O)
+    t.contour(O1)
+    ecrire("soin-faim", t, slot="objet", commentaire="besoin : faim (bol fumant)")
+    # Propreté : une étoile à quatre branches et deux bulles.
+    t = T(12, 12)
+    for d in range(5):
+        t.p(5 - d, 6, B4)
+        t.p(5 + d, 6, B4)
+        t.p(5, 6 - d, B4)
+        t.p(5, 6 + d, B4)
+    t.rect(4, 5, 3, 3, B4)
+    t.p(5, 6, BLANC)
+    t.contour(B1)
+    t.anneau(10, 1.8, 1.8, 1.8, B3, 1)
+    t.p(9, 1, BLANC)
+    ecrire("soin-proprete", t, slot="objet", commentaire="besoin : propreté (étincelle et bulles)")
+    # Moral : un cœur.
+    t = T(11, 10)
+    t.motif(0, 1, [".ooo.ooo..", "ooooooooo.", "ooooooooo.", ".ooooooo..", "..ooooo...", "...ooo....", "....o....."], {"o": O3})
+    t.p(2, 2, O5)
+    t.p(3, 2, O5)
+    t.contour(O1)
+    ecrire("soin-moral", t, slot="objet", commentaire="besoin : moral (cœur)")
+
+    # En-cas (consommables de la boutique) : croquettes, pomme dorée, gâteau, soupe.
+    t = T(12, 8)
+    assiette(t, 6, 6, 6, 2)
+    for x, y in ((3, 3), (6, 2), (8, 4), (5, 4), (9, 2)):
+        t.ell(x + 0.5, y + 0.5, 1.3, 1.1, BR3)
+        t.p(x, y, S3)
+    t.contour(BR1)
+    ecrire("encas-croquettes", t, slot="objet", commentaire="en-cas : croquettes")
+    t = T(10, 11)
+    t.ell(5, 6.5, 4.5, 4.2, J3)
+    t.ell(4, 5.5, 2, 2, J4)
+    t.ell(5, 9, 3.5, 1.5, J2, cond=lambda x, y, u, v: v > 0)
+    t.rect(5, 0, 1, 3, BR2)
+    t.poly([(6, 1), (9, 0), (8, 2)], T2)
+    t.contour(J1)
+    ecrire("encas-pomme", t, slot="objet", commentaire="en-cas : pomme dorée")
+    t = T(12, 11)
+    t.rect(1, 5, 10, 5, S2)
+    t.rect(1, 5, 10, 1, CREME)
+    t.rect(1, 7, 10, 1, O4)
+    t.ell(6, 4.5, 5, 2, CREME)
+    t.ell(6, 2, 1.4, 1.4, O3)
+    t.p(6, 1, O5)
+    t.contour(BR1)
+    ecrire("encas-gateau", t, slot="objet", commentaire="en-cas : gâteau")
+    t = T(12, 11)
+    t.ell(6, 6, 5.5, 4.5, B3, cond=lambda x, y, u, v: v > 0)
+    t.ell(6, 6, 4.5, 1.3, S3)
+    t.rect(0, 6, 12, 1, B2)
+    t.p(4, 2, CREME_O)
+    t.p(5, 1, CREME_O)
+    t.p(7, 3, CREME_O)
+    t.p(8, 2, CREME_O)
+    t.contour(B1)
+    ecrire("encas-soupe", t, slot="objet", commentaire="en-cas : soupe chaude")
+
+    # Mousse : bulles de savon qui grossissent et éclatent (toilette de 2 s).
+    # Mousse blanche sur le haut du crâne et les flancs, bulles qui montent et éclatent autour.
+    images = []
+    bulles = [(4, 20, 3.2), (43, 17, 3.0), (9, 6, 2.6), (39, 5, 2.8), (24, 1.5, 2.2), (2, 31, 2.4), (46, 30, 2.4)]
+    for k in range(4):
+        t = T(50, 36)
+        # Mousse : grappe de petits disques sur le crâne et les côtés.
+        for i, (x, y) in enumerate(((14, 12), (18, 9), (23, 8), (28, 9), (33, 11), (36, 15), (11, 16), (10, 22), (38, 21))):
+            r = 2.6 + 0.6 * ((i + k) % 2)
+            t.ell(x, y, r, r, BLANC)
+            t.p(int(x) - 1, int(y) - 1, B4)
+        for i, (x, y, r) in enumerate(bulles):
+            ph = (k + i) % 4
+            yy = y - ph * 1.5
+            if ph == 3:
+                for a, b in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                    t.p(x + a * 2, yy + b * 2, B4)
+                continue
+            rr = r * (0.7 + 0.15 * ph)
+            t.anneau(x, yy, rr, rr, B3, 1)
+            t.p(int(x - rr * 0.4), int(yy - rr * 0.4), BLANC)
+        t.contour(CREME_O)
+        images.append(t)
+    ecrire("mousse", images, slot="effet", ancre="corps", point=(24, 26), duree=160,
+           commentaire="toilette : mousse et bulles")
+
+    # Rayonnant : quelques étincelles discrètes qui scintillent autour de lui.
+    images = []
+    pts = [(2, 14), (40, 10), (6, 30), (37, 28), (20, 1)]
+    for k in range(4):
+        t = T(44, 34)
+        for i, (x, y) in enumerate(pts):
+            if (i + k) % 4 == 0:
+                etoile_pixel(t, x, y, J4)
+            elif (i + k) % 4 == 1:
+                t.p(x, y, J3)
+        images.append(t)
+    ecrire("rayonnant", images, slot="effet", ancre="corps", point=(22, 19), duree=260,
+           commentaire="bien soigné : il rayonne (étincelles discrètes)")
+
+    # Variantes d'évolution (stades 2 à 4) : « câlin » (joues roses, petit cœur), « espiègle » (mèche
+    # rebelle, tache d'étoile). Les joues suivent la largeur du corps de chaque stade.
+    k_ = 1.25 * 48 / 26
+    joues = {2: 1.0, 3: 1.1, 4: 0.9}
+    for stade, sx in joues.items():
+        j = int(round(6.8 * k_ * sx)) - 1
+        larg = 2 * j
+        t = T(larg, 3)
+        for x0 in (0, larg - 4):
+            t.rect(x0, 0, 4, 2, O4)
+            t.p(x0 + 1, 0, O5)
+        ecrire("variante-calin-%d" % stade, t, slot="visage", ancre="yeux", point=(j, -8),
+               commentaire="variante câlin, stade %d : joues roses" % stade)
+        t = T(9, 8)
+        coeur(t, 1, 1, O3)
+        t.contour(O1)
+        ecrire("variante-calin-%d-tete" % stade, t, slot="tete", ancre="tete",
+               point=(-5 if stade != 3 else -8, 4), commentaire="variante câlin, stade %d : petit cœur" % stade)
+        t = T(larg, 4)
+        etoile_pixel(t, larg - 3, 1, J3)
+        ecrire("variante-espiegle-%d" % stade, t, slot="visage", ancre="yeux", point=(j, -7),
+               commentaire="variante espiègle, stade %d : tache d'étoile" % stade)
+        t = T(9, 7)
+        t.ligne(1, 6, 3, 1, "@contour")
+        t.ligne(4, 6, 5, 0, "@contour")
+        t.ligne(6, 6, 8, 2, "@contour")
+        t.ligne(2, 6, 3, 3, "@base")
+        t.ligne(5, 6, 5, 3, "@base")
+        ecrire("variante-espiegle-%d-tete" % stade, t, slot="tete", ancre="tete",
+               point=(9 if stade != 3 else 12, 6), commentaire="variante espiègle, stade %d : mèche rebelle" % stade)
+
+
+# =====================================================================================================
 # Teintes, tenues, plats
 # =====================================================================================================
 TEINTES = {
@@ -1520,6 +1665,8 @@ TEINTES = {
     "ardoise": ["#1f262e", "#4a5563", "#6b7787", "#a9b4c2"],
     "sable": ["#6b5235", "#b08f62", "#dcc193", "#f6ead2"],
     "glacier": ["#24506b", "#6aa6c7", "#a9d7ee", "#e8f7ff"],
+    # Soins : Pilou négligé a juste l'air terne (gris-bleu délavé), sans autre conséquence.
+    "terne": ["#3e4957", "#76838f", "#9fabb7", "#c9d2db"],
 }
 
 TENUES = {
@@ -1586,6 +1733,7 @@ if __name__ == "__main__":
     prises()
     cuisine()
     jeux()
+    soins()
     meteo_sprites.effets()
     meteo_sprites.objets()
     tables()

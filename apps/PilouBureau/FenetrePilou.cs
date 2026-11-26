@@ -197,6 +197,8 @@ public sealed partial class FenetrePilou : Window
     {
         menu.Items.Clear();
         menu.Items.Add(Entree("♥ Caresser", Caresser));
+        menu.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
+        menu.Items.Add(MenuSoins());
         menu.Items.Add(Entree("Afficher Claude", () => Natif.Activer(Natif.TrouverClaude())));
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
@@ -339,6 +341,7 @@ public sealed partial class FenetrePilou : Window
             Integrer(vivantes, epoque);
             BattreConnecteurs(vivantes, epoque);
             SuivreQuetes(vivantes);
+            SuivreSoins();
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -562,6 +565,9 @@ public sealed partial class FenetrePilou : Window
         _inactif = Natif.InactifMs();
         Observer(t);
         expr = Sommeil(expr, t);
+        var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
+        var (objetsSoins, teinteSoins) = PoseSoins(stadePose, t);
+        if (teinteSoins == "terne") fatigue = true;
         _exprCourante = expr;
         ProposerJeu(t, expr);
         OccuperSeul(t, expr);
@@ -664,7 +670,7 @@ public sealed partial class FenetrePilou : Window
             Salue = t < _salueJusque,
             Accessoire = _reglages.Porte(DateTime.Now, a => Possede(Recompenses.IdAccessoire(a))),
             Equipe = EquipeEssai(EquipeCourant()),
-            Stade = _essaiStade > 0 ? _essaiStade : StadeAffiche(),
+            Stade = stadePose,
             Evolution = ProgresEvolution(t),
             Couleur = Recompenses.CouleurDe(EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Couleur, "")) ?? Couleur.Bleu,
             Trainee = EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
@@ -677,9 +683,12 @@ public sealed partial class FenetrePilou : Window
             BalleRot = _balleRot,
             Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
             Reaction = ReactionAffichee != "" ? ReactionAffichee : meteo.Reaction,
+            Soins = objetsSoins,
+            Teinte = teinteSoins,
         };
         _scene.InvalidateVisual();
         AnimerJeux(t);
+        AnimerSoins(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = _x < (_zone.Left + _zone.Right) / 2;
@@ -928,6 +937,7 @@ public sealed partial class FenetrePilou : Window
     private void Caresser()
     {
         Signaler("caresse", 1);
+        SoinCaresse();
         _tCaresse = Maintenant;
         _geste = Geste.Rien;
         try

@@ -30,7 +30,7 @@ import java.util.Set;
  * montre aux trois niveaux : notification permanente, widget, Pilou flottant.
  */
 public final class Veille extends Service {
-    static final String CANAL_STATUT = "statut", CANAL_ATTENTE = "attente", CANAL_FIN = "fin";
+    static final String CANAL_STATUT = "statut", CANAL_ATTENTE = "attente", CANAL_FIN = "fin", CANAL_SOINS = "soins";
     private static final int NOTIF_STATUT = 1;
 
     private final Handler principal = new Handler(Looper.getMainLooper());
@@ -82,6 +82,26 @@ public final class Veille extends Service {
     private void verifierMise() {
         new Thread(() -> MiseAJour.peutEtre(this), "pilou-maj").start();
         principal.postDelayed(this::verifierMise, 3600_000L);
+        soinsPeutEtre();
+    }
+
+    // Soins : désactivé par défaut ; au plus une notification par jour, seulement si un besoin est sous le seuil.
+    private void soinsPeutEtre() {
+        if (!Prefs.alerteSoins(this)) return;
+        long maintenant = System.currentTimeMillis();
+        if (maintenant - Prefs.de(this).getLong("soinsNotifie", 0) < 24 * 3600_000L) return;
+        java.util.List<String> manques = Soins.manques(Gains.soins(this, Prefs.etat(this), maintenant));
+        if (manques.isEmpty()) return;
+        Prefs.de(this).edit().putLong("soinsNotifie", maintenant).apply();
+        NotificationManager nm = getSystemService(NotificationManager.class);
+        nm.createNotificationChannel(new NotificationChannel(CANAL_SOINS, "Soins de Pilou", NotificationManager.IMPORTANCE_LOW));
+        nm.notify(CANAL_SOINS.hashCode(), new Notification.Builder(this, CANAL_SOINS)
+                .setSmallIcon(R.drawable.ic_stat_pilou)
+                .setContentTitle(Soins.signe(manques.get(0)) + "  Pilou aimerait un petit soin")
+                .setContentText("Un toucher sur l'Accueil suffit")
+                .setAutoCancel(true)
+                .setContentIntent(ouvrir())
+                .build());
     }
 
     // Gains de l'atelier vers le PC : toutes les minutes, ce qui attend part (chiffré).

@@ -1,0 +1,10 @@
+# variante câlin, stade 4 : joues roses
+id: variante-calin-4
+slot: visage
+ancre: yeux
+decalage: -13 8
+palette: a=#ffc89a b=#ffd8b0
+images:
+abaa..................abaa
+aaaa..................aaaa
+..........................

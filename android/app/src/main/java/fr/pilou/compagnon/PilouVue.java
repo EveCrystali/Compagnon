@@ -17,6 +17,8 @@ public final class PilouVue extends View {
     private String tenue = "";
     private java.util.List<String> objets = java.util.Collections.emptyList();
     private long debutEvolution = -1;
+    private java.util.List<String> objetsSoins = java.util.Collections.emptyList();
+    private String teinteSoins = "";
     private String meteo = "";
     /** Durée de l'animation d'évolution (silhouette qui alterne, puis éclat). */
     public static final long DUREE_EVOLUTION = 2600;
@@ -82,6 +84,16 @@ public final class PilouVue extends View {
         invalidate();
     }
 
+    /** Soins : sprites en plus (variante, rayonnement, mousse) et teinte imposée (« terne » ; "" : la sienne). */
+    public void soins(java.util.List<String> o, String teinte) {
+        java.util.List<String> l = o == null ? java.util.Collections.<String>emptyList() : o;
+        String t = teinte == null ? "" : teinte;
+        if (l.equals(objetsSoins) && t.equals(teinteSoins)) return;
+        objetsSoins = l;
+        teinteSoins = t;
+        invalidate();
+    }
+
     /** Météo du PC (Meteo.PLUIE…, "" : rien) : gouttes, Pilou mouillé s'il n'a pas de parapluie, etc. */
     public void meteo(String etat) {
         etat = etat == null ? "" : etat;
@@ -135,6 +147,8 @@ public final class PilouVue extends View {
             if (en.getKey().equals("couleur")) a.couleur = en.getValue();
             else portes.add(en.getValue());
         }
+        portes.addAll(objetsSoins);
+        if (!teinteSoins.isEmpty()) a.couleur = teinteSoins;
         a.objets = portes;
         Meteo.appliquer(a, meteo, t);
         if (debutEvolution >= 0) {

@@ -1,0 +1,10 @@
+# variante câlin, stade 3 : joues roses
+id: variante-calin-3
+slot: visage
+ancre: yeux
+decalage: -16 8
+palette: a=#ffc89a b=#ffd8b0
+images:
+abaa........................abaa
+aaaa........................aaaa
+................................

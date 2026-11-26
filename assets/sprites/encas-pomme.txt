@@ -1,0 +1,18 @@
+# en-cas : pomme dorée
+id: encas-pomme
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7a5a10 b=#7a4b26 c=#2689b8 d=#f5d76e e=#fff6cc f=#c9a227
+images:
+....abacca
+....abaca.
+..aadbaa..
+.adddddda.
+adeeeeddda
+adeeeeddda
+ddeeeedddd
+adddddddda
+adddddddda
+.affffffa.
+..aaddaa..

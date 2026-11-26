@@ -1,0 +1,11 @@
+# variante espiègle, stade 4 : tache d'étoile
+id: variante-espiegle-4
+slot: visage
+ancre: yeux
+decalage: -13 7
+palette: a=#f5d76e
+images:
+.......................a..
+......................aaa.
+.......................a..
+..........................

@@ -41,6 +41,11 @@ public final class Prefs {
         return de(c).getBoolean("alerteFin", true);
     }
 
+    /** « Pilou a besoin de toi » : désactivée par défaut, une fois par jour au plus. */
+    public static boolean alerteSoins(Context c) {
+        return de(c).getBoolean("alerteSoins", false);
+    }
+
     public static boolean alerteMaj(Context c) {
         return de(c).getBoolean("alerteMaj", true);
     }

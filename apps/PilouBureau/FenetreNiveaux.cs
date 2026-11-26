@@ -91,6 +91,7 @@ public sealed partial class FenetrePilou
         _profil.Evolution.StadeAtteint = Math.Max(_profil.Evolution.StadeAtteint, _evolutionCible);
         _profil.Evolution.StadeAffiche = 0;
         _profil.Ecrire(DossierPartage);
+        ChoisirVariante(_evolutionCible);
         Dire($"✦ Pilou est devenu {Acces.NomStade(_evolutionCible)} !", 5000);
         PublierSortie($"✦ {NomPilou} est devenu {Acces.NomStade(_evolutionCible)}", "");
         Flotter(Acces.NomStade(_evolutionCible).ToUpperInvariant(), 1.6, new Point(TeteX - 60, TeteY - 70));

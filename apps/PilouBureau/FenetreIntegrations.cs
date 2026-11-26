@@ -107,6 +107,7 @@ public sealed partial class FenetrePilou
             $"{accessoire}|{_reglages.Couleur}|{_profil.Recus.LastOrDefault()}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{GroupeMem.Autres.Count}"
             + $"|{Bourse().Solde}|{string.Join(",", Bourse().Inventaire)}|{string.Join(",", EquipeCourant().Values)}"
             + $"|{string.Join(",", _profil.Quetes.Liste.Select(q => q.Fait))}|{Quetes.CleJour(DateTime.Now)}"
+            + $"|{_profil.Soins.Actions.Count}|{_profil.Soins.Base?.T}|{_profil.Evolution.Variantes.Count}"
             + $"|{Meteo.Courante?.Etat}|{Math.Round(Meteo.Courante?.Releve.Temperature ?? 0)}"
             + $"|{(_reglages.Connecteurs.AnnoncesTelephone ? _registre?.Annonces().FirstOrDefault()?.T : 0)}");
         if (signature != _telSignature)

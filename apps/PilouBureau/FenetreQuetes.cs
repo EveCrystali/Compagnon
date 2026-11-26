@@ -30,6 +30,10 @@ public sealed partial class FenetrePilou
     {
         if (gains.Count == 0) return;
         var (po, xp) = Quetes.Appliquer(_profil, gains);
+        // Pilou rayonnant (bien soigné) : po × 1,2.
+        int bonus = BonusSoins(po) - po;
+        _profil.Bourse.PoGagnes += bonus;
+        po += bonus;
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
         _xpTotal = TotalXp();
