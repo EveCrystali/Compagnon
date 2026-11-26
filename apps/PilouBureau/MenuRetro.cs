@@ -44,6 +44,12 @@ public partial class MenuRetro : ResourceDictionary
     // À appeler à chaque ouverture : le thème de Pilou a pu changer depuis.
     public static void Habiller(ContextMenu menu, bool sombre)
     {
+        try { HabillerSansFilet(menu, sombre); }
+        catch (Exception e) { System.Diagnostics.Debug.WriteLine("menu rétro indisponible : " + e); }
+    }
+
+    private static void HabillerSansFilet(ContextMenu menu, bool sombre)
+    {
         _commun ??= new MenuRetro();
         if (!menu.Resources.MergedDictionaries.Contains(_commun)) menu.Resources.MergedDictionaries.Add(_commun);
         if (menu.Style is null && _commun["MenuRetroStyle"] is Style s) menu.Style = s;
@@ -63,7 +69,6 @@ internal sealed class MenuDiscret
     private readonly ContextMenu _menu;
     private readonly Window _pilou;
     private readonly DispatcherTimer _veille;
-    private IntPtr _avant;
     private bool _basAvant, _aEuLeFocus;
 
     public MenuDiscret(ContextMenu menu, Window pilou)
@@ -84,12 +89,11 @@ internal sealed class MenuDiscret
 
     private void Ouvert()
     {
-        var avant = Natif.AuPremierPlan();
-        // Rouvert pendant qu'il était déjà à nous : on garde la fenêtre d'origine.
-        if (!Natif.DeNotreProcessus(avant)) _avant = avant;
-        if (PresentationSource.FromVisual(_menu) is HwndSource source) Natif.MettreDevant(source.Handle);
+        // Surtout pas de SetForegroundWindow ici : changer d'activation pendant que le menu est ouvert lui fait
+        // perdre la capture de la souris, et WPF le referme aussitôt (v0.9.31 : le menu n'apparaissait plus).
+        // On ne fait que surveiller les clics : un bouton enfoncé hors du menu le ferme.
         _basAvant = Natif.BoutonEnfonce();
-        _aEuLeFocus = false;
+        _aEuLeFocus = Natif.DeNotreProcessus(Natif.AuPremierPlan());
         _veille.Start();
     }
 
@@ -109,22 +113,5 @@ internal sealed class MenuDiscret
         _basAvant = bas;
     }
 
-    private void Ferme()
-    {
-        _veille.Stop();
-        // Laisse d'abord agir l'entrée cliquée (elle peut ouvrir une fenêtre, ou afficher Claude).
-        var rendre = new DispatcherTimer(DispatcherPriority.Background, _menu.Dispatcher) { Interval = TimeSpan.FromMilliseconds(250) };
-        rendre.Tick += (_, _) =>
-        {
-            rendre.Stop();
-            if (_menu.IsOpen) return;
-            var devant = Natif.AuPremierPlan();
-            bool rien = devant == IntPtr.Zero;
-            bool resteDuMenu = Natif.DeNotreProcessus(devant) && HwndSource.FromHwnd(devant)?.RootVisual is not Window;
-            bool pilou = HwndSource.FromHwnd(devant)?.RootVisual == _pilou;
-            if ((rien || resteDuMenu || pilou) && Natif.Valide(_avant)) Natif.MettreDevant(_avant);
-            _avant = IntPtr.Zero;
-        };
-        rendre.Start();
-    }
+    private void Ferme() => _veille.Stop();
 }
