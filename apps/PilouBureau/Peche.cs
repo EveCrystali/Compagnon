@@ -11,8 +11,9 @@ namespace PilouBureau;
 // succès (Butin.cs). Avec ses prises, il cuisine : marmite, flammes, vapeur, et un plat, souvent nouveau.
 public sealed partial class FenetrePilou
 {
-    private const double FenetreMorsure = 1200;
+    private const double FenetreMorsure = Clics.FenetreMorsure;
     private const double LargeurEau = 28 * 4;
+    private int _tropTot;
 
     private Pixels? _eau, _canne, _bouchon, _alerte, _marmite, _feu, _trophee, _cadre;
     private Line? _fil;
@@ -130,16 +131,14 @@ public sealed partial class FenetrePilou
 
         _posBouchon = new Point(CoteJeu > 0 ? EauX + 44 : EauX + LargeurEau - 56, y - 18);
         _bouchon = Pixels.Sprite("bouchon", 1.6) ?? new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
-        _bouchon.Cursor = Cursors.Hand;
-        _bouchon.MouseLeftButtonDown += (_, e) =>
-        {
-            ClicBouchon();
-            e.Handled = true;
-        };
         _jeu.Children.Add(_bouchon);
+        // On ferre en cliquant le bouchon, l'eau (marge comprise) ou Pilou lui-même (ClicJeuSurPilou).
+        _tropTot = 0;
+        Cibler(_bouchon, () => ClicBouchon(Maintenant));
+        Cibler(_eau, () => ClicBouchon(Maintenant));
         _fil = new Line { Stroke = Creme, StrokeThickness = 1.2, IsHitTestVisible = false, Opacity = 0.85 };
         _jeu.Children.Add(_fil);
-        Dire(_inactif > 60_000 ? "je vais pêcher un peu…" : "on pêche ? clique quand ça mord !", 2600);
+        Dire(_inactif > 60_000 ? "je vais pêcher un peu…" : "on pêche ? quand le « ! » apparaît, clique sur l'eau ou sur moi", 3200);
     }
 
     private static int[,] Miroir(int[,] m)
@@ -152,19 +151,34 @@ public sealed partial class FenetrePilou
         return r;
     }
 
-    private void ClicBouchon()
+    // tAppui : instant de l'appui (MouseDown), pour qu'un relâché un peu lent ne fasse pas rater la touche.
+    private void ClicBouchon(double tAppui)
     {
-        if (_resultat) return;
+        if (_resultat || _bouchon is null) return;
         var t = Maintenant;
-        if (t < _mordA)
+        switch (Clics.Juger(tAppui, _mordA))
         {
-            Dire("trop tôt ! il a filé", 2200);
-            FinPeche(null, false, t);
+            case Clics.Ferrage.Attendre:
+                // Trop tôt : deux avertissements, puis le poisson file au troisième.
+                if (++_tropTot >= Clics.FuiteApres)
+                {
+                    Dire("trop tôt ! il a filé", 2200);
+                    FinPeche(null, false, t);
+                }
+                else Dire("pas encore… attends le « ! »", 1800);
+                break;
+            case Clics.Ferrage.Ferre:
+                FinPeche(Butin.Tirer(_hasard, Niveau, seul: false, canneDoree: Possede(PilouBureau.Boutique.CanneDoree)), false, t);
+                break;
         }
-        else if (t < _mordA + FenetreMorsure)
-        {
-            FinPeche(Butin.Tirer(_hasard, Niveau, seul: false, canneDoree: Possede(PilouBureau.Boutique.CanneDoree)), false, t);
-        }
+    }
+
+    private void Remuer()
+    {
+        if (_remue || _resultat) return;
+        _remue = true;
+        Dire("je remue, ça ne brûlera pas", 2000);
+        if (_indiceSur == _marmite) _indiceSur = null;
     }
 
     private void FinPeche(Prise? p, bool seul, double t)
@@ -304,21 +318,13 @@ public sealed partial class FenetrePilou
         Canvas.SetTop(_feu, _posMarmite.Y + 26);
         _jeu.Children.Add(_feu);
         _marmite = Pixels.Sprite("marmite", 2.2) ?? new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, 4);
-        _marmite.Cursor = Cursors.Hand;
         _marmite.ToolTip = "remuer";
-        _marmite.MouseLeftButtonDown += (_, e) =>
-        {
-            if (!_remue && !_resultat)
-            {
-                _remue = true;
-                Dire("je remue, ça ne brûlera pas", 2000);
-            }
-            e.Handled = true;
-        };
         Canvas.SetLeft(_marmite, _posMarmite.X);
         Canvas.SetTop(_marmite, _posMarmite.Y);
         _jeu.Children.Add(_marmite);
-        Dire("je cuisine quelque chose…", 2400);
+        Cibler(_marmite, Remuer);
+        _indiceSur = _marmite;
+        Dire("je cuisine… clique la marmite (ou moi) pour remuer", 2800);
     }
 
     private void AnimerCuisine(double t)
