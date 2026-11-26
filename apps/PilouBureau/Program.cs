@@ -8,6 +8,20 @@ public static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        // --essais-disponibles=<fichier> : écrit ce que cet exe sait montrer (version, scènes, rayons), puis rend la main.
+        // Le script de tournage le lit avant de filmer ; il ne touche ni au Pilou qui tourne ni à ses données.
+        if (args.FirstOrDefault(a => a.StartsWith("--essais-disponibles=", StringComparison.Ordinal)) is { } liste)
+        {
+            try
+            {
+                File.WriteAllText(liste["--essais-disponibles=".Length..].Trim('"'), Tournage.Disponibles(Mise.Actuelle));
+                return 0;
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+            {
+                return 3;
+            }
+        }
         var lancement = Lancement.Analyser(args);
         // --signal <source> … : un autre logiciel (Codex, script…) signale un événement, puis on rend la main.
         if (lancement.Mode == ModeLancement.Signal)
@@ -26,6 +40,14 @@ public static class Program
         // Les essais (--instantane, --film, --essai) ont leur propre verrou : ils tournent à côté, sans rien toucher.
         bool principal = lancement.Mode == ModeLancement.Principal;
         args = Lancement.Reste(args);
+        // Tournage (outils/tourner-ecran-gauche.ps1, Tournage.cs) : --visite-guidee[=<chronologie.json>], --ecran=gauche,
+        // --placer=x,y. La visite guidée prend la place du Pilou habituel (avec --redemarrer), en mode démo : profil,
+        // amis et réglages fictifs en mémoire, dans le dossier de démo donné (jamais le vrai dossier de Pilou).
+        var (tournage, sansTournage) = OptionsTournage.Analyser(args);
+        args = sansTournage;
+        if (tournage.Visite && (args.Length == 0 || args[0].StartsWith("--")
+            || Path.GetFullPath(args[0]).TrimEnd('\\', '/').Equals(Path.GetFullPath(Signal.Defaut()).TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase)))
+            return 2; // visite guidée : un dossier de démo est obligatoire
         using var autre = new AutreInstanceWindows(principal ? @"Local\PilouBureau" : @"Local\PilouBureau-essai");
         var issue = principal ? Instance.Decider(lancement, autre) : autre.Prendre() ? Issue.Demarrer : Issue.Rendre;
         if (issue == Issue.Rendre) return 0;
@@ -47,7 +69,14 @@ public static class Program
             && !a.StartsWith("--film=") && !a.StartsWith("--duree=") && !a.StartsWith("--ips=")).ToArray();
         var dossier = args.Length > 0 ? args[0] : Signal.Defaut();
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-        var fenetre = new FenetrePilou(dossier, devant);
+        var fenetre = new FenetrePilou(dossier, devant, tournage.Visite);
+        // Posé en bas de l'écran demandé pour cette session : les réglages durables ne changent pas.
+        if (tournage.Placer is { } point) fenetre.PoserSur(point.X, point.Y);
+        else if (tournage.Ecran is { } nom && Natif.Ecrans() is { Count: > 0 } ecrans)
+        {
+            var e = ecrans[Math.Max(0, Tournage.Choisir(nom, ecrans))];
+            fenetre.PoserSur(e.X + e.Largeur / 2, e.Y + e.Hauteur / 2);
+        }
         fenetre.Show();
         // Icône près de l'horloge et fenêtre relais (les autres lancements nous joignent par elle) : Pilou habituel seulement.
         if (principal) fenetre.BrancherRelais();
@@ -60,6 +89,16 @@ public static class Program
                 fenetre.Essai(essai);
             };
             declic.Start();
+        }
+        if (tournage.Visite)
+        {
+            var depart = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
+            depart.Tick += (_, _) =>
+            {
+                depart.Stop();
+                fenetre.VisiteGuidee(tournage.Chronologie);
+            };
+            depart.Start();
         }
         if (instantane is not null)
         {

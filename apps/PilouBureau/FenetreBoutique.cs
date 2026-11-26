@@ -128,6 +128,20 @@ internal sealed class FenetreBoutique : Window
         Remplir();
     }
 
+    // Visite guidée (FenetreVisite.cs) : un rayon, et un objet que Pilou essaie dans l'aperçu.
+    internal void Visiter(string rayon, string? article = null)
+    {
+        _rayon = rayon;
+        if (article is not null && Boutique.Trouver(article) is { } a)
+        {
+            _choisi = a;
+            _essai = true;
+            _message.Text = "";
+        }
+        Remplir();
+        _defile.ScrollToTop();
+    }
+
     // ---- Aperçu (gauche)
 
     private UIElement PanneauApercu()
