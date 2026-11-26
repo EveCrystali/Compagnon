@@ -82,6 +82,12 @@ public class BoutiqueGarnieTests
         Assert.Equal(10, Boutique.Seuil(Boutique.ProchainPalierCollection(0)!));
         inv.AddRange(Boutique.Catalogue.Where(Boutique.Collectionnable).Take(10).Select(a => a.Id));
         inv.Add(Boutique.PierreCalme); // consommable : ne compte pas
+        // Le butin exclusif d'expédition (ne s'achète pas) ne compte pas non plus, ni dans le total.
+        foreach (var x in Expeditions.Exclusifs)
+        {
+            inv.Add(x.Id);
+            Assert.DoesNotContain(Boutique.Catalogue, a => a.Id == x.Id);
+        }
         Assert.Equal(10, Boutique.Collection(inv));
         Assert.Contains("titre-col-herbe", Boutique.Gagnees(inv));
         Assert.Equal(25, Boutique.Seuil(Boutique.ProchainPalierCollection(10)!));
