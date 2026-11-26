@@ -42,6 +42,8 @@ public sealed class Profil
     public CarnetSoins Soins { get; set; } = new();
     // Expéditions (Expeditions.cs) : énergie ⚡, expédition en cours, dernier journal, collection. Propres à cet appareil.
     public EtatExpedition Expedition { get; set; } = new();
+    // Défense du bureau : record, plus haute vague, gains du jour (plafonds), propres à ce PC.
+    public EtatDefense Defense { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
     // Profil de démonstration (tournage, Tournage.ProfilDemo) : il vit en mémoire et ne s'écrit jamais.
     [JsonIgnore]

@@ -1,0 +1,25 @@
+# Défense du bureau : moitié d'un bug divisé (10 × 8)
+id: defense-mini
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 200
+palette: a=#3a2a7a b=#9b8cff c=#d2caff d=#ffffff e=#1c2128
+images:
+..a....a..
+...abba...
+..bccbbb..
+.bccddbbb.
+.bbcdebbb.
+.bbbbbbbb.
+..bbbbbb..
+.aaabbaaa.
+---
+..a....a..
+...abba...
+..bccbbb..
+.bccddbbb.
+.bbcdebbb.
+.bbbbbbbb.
+..bbbbbb..
+aa.abba.aa

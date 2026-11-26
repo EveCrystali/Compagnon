@@ -52,7 +52,7 @@ public static class Metiers
 // Ce que l'on sait pour juger les succès (les compteurs du profil et la série en cours).
 public sealed record Stats(
     IReadOnlyDictionary<string, long> Secondes, double SerieCodeSec, int ReunionsSemaine, int Presentations,
-    DateTime Heure, string Activite, int SeancesClavier = 0, int Captures = 0);
+    DateTime Heure, string Activite, int SeancesClavier = 0, int Captures = 0, EtatDefense? Defense = null);
 
 public static class Succes
 {
@@ -86,6 +86,10 @@ public static class Succes
         new("dactylo", "Dactylo", "taper avec Pilou au clavier 25 fois", s => s.SeancesClavier, 25),
         new("photographe", "Photographe", "10 captures d'écran photographiées par Pilou", s => s.Captures, 10),
         new("couteau-suisse", "Couteau suisse", "4 métiers au rang Compagnon", s => Metiers.Tous.Count(m => Metiers.Niveau(Metiers.Secondes(m, s.Secondes)) >= 2), 4, 50),
+        // Défense du bureau (DefenseTests.cs).
+        new("pare-feu", "Pare-feu", "vaincre un Bug de prod à Défense du bureau", s => s.Defense?.Boss ?? 0, 1),
+        new("rempart", "Rempart", "atteindre la vague 10 à Défense du bureau", s => s.Defense?.MeilleureVague ?? 0, 10, 40),
+        new("gardien", "Gardien du bureau", "10 000 points à Défense du bureau", s => s.Defense?.Meilleur ?? 0, 10_000, 40),
     };
 
     // Les succès qui viennent d'être atteints (jamais deux fois le même).
@@ -102,6 +106,8 @@ public static class Succes
         {
             "marathon" => $"{a:0.#} h / {d.But} h",
             "visio-man" or "orateur" or "explorateur" or "couteau-suisse" or "dactylo" or "photographe" => $"{a:0} / {d.But}",
+            "rempart" => $"vague {a:0} / {d.But}",
+            "gardien" => $"{a:0} / {d.But:0} points",
             _ => $"{a:0.#} h / {d.But} h",
         };
     }

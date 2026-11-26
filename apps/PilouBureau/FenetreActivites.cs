@@ -184,14 +184,7 @@ public sealed partial class FenetrePilou
                 GagnerActivite(10 * apres[m.Id]);
                 Dire($"{m.Nom} : {Metiers.Grades[apres[m.Id]]} !", 4500);
             }
-        foreach (var d in Succes.Nouveaux(StatsActuelles(activite), _profil.Succes))
-        {
-            _profil.Succes.Add(d.Id);
-            GagnerActivite(d.Xp);
-            Flotter("SUCCES !", 1.6, new Point(TeteX - 46, TeteY - 70));
-            Dire($"succès débloqué : {d.Nom} !", 5000);
-            _secondesNonEcrites = 60;
-        }
+        VerifierSucces(activite);
         // Le profil est réécrit au plus une fois par minute pour le temps qui passe.
         if (_secondesNonEcrites >= 60)
         {
@@ -204,7 +197,20 @@ public sealed partial class FenetrePilou
 
     private Stats StatsActuelles(string activite) =>
         new(_profil.Activites, _serieCode, _profil.Reunions.Count, _profil.Presentations, DateTime.Now, activite,
-            _profil.SeancesClavier, _profil.Captures);
+            _profil.SeancesClavier, _profil.Captures, _profil.Defense);
+
+    // Succès débloqués : annonce et XP (activités, et à la fin d'une partie de Défense du bureau).
+    private void VerifierSucces(string activite)
+    {
+        foreach (var d in Succes.Nouveaux(StatsActuelles(activite), _profil.Succes))
+        {
+            _profil.Succes.Add(d.Id);
+            GagnerActivite(d.Xp);
+            Flotter("SUCCES !", 1.6, new Point(TeteX - 46, TeteY - 70));
+            Dire($"succès débloqué : {d.Nom} !", 5000);
+            _secondesNonEcrites = 60;
+        }
+    }
 
     private void GagnerActivite(int xp)
     {

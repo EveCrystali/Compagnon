@@ -16,6 +16,7 @@ import meteo_sprites
 import visites_sprites
 import gestes_sprites
 import expedition_sprites
+import defense_sprites
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1794,5 +1795,6 @@ if __name__ == "__main__":
     visites_sprites.tout()
     gestes_sprites.tout()
     expedition_sprites.tout()
+    defense_sprites.tout()
     tables()
     print(len(TOUS), "sprites dans", SORTIE)

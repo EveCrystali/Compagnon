@@ -81,6 +81,16 @@ crea-golem-tickets
 crea-hydre-dependances
 crea-slime-cache
 crea-spectre-404
+defense-blinde
+defense-blinde-fele
+defense-bonus-bouclier
+defense-bonus-double
+defense-bonus-ralenti
+defense-diviseur
+defense-etincelle
+defense-mini
+defense-rapide
+defense-tir
 echarpe
 eclaboussure
 eclair-energie

@@ -306,7 +306,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Case("Se promène", _reglages.Promenade, v => _reglages.Promenade = v));
         menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
         menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
-        menu.Items.Add(Entree("Jouer maintenant", () => Demarrer(JeuAuHasard(), Maintenant)));
+        menu.Items.Add(MenuJouer());
         foreach (var m in MenusPeche()) menu.Items.Add(m);
         menu.Items.Add(MenuExpedition());
         menu.Items.Add(new Separator());
