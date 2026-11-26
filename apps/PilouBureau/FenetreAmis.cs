@@ -960,6 +960,9 @@ internal sealed class FenetreListeAmis : Window
         Section("Ajouter un ami");
         var ajout = new StackPanel { Orientation = Orientation.Horizontal };
         _saisie.Text = saisie;
+        // La zone de saisie est gardée d'un remplissage à l'autre : la détacher de l'ancienne rangée d'abord, sinon
+        // WPF refuse de l'ajouter (« déjà enfant d'un autre élément ») et Pilou plantait au rafraîchissement (5 s).
+        (_saisie.Parent as Panel)?.Children.Remove(_saisie);
         ajout.Children.Add(_saisie);
         ajout.Children.Add(Bouton("Ajouter", () =>
         {

@@ -71,11 +71,44 @@ public static class Program
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var fenetre = new FenetrePilou(dossier, devant, tournage.Visite);
         // Posé en bas de l'écran demandé pour cette session : les réglages durables ne changent pas.
-        if (tournage.Placer is { } point) fenetre.PoserSur(point.X, point.Y);
+        CadreEcran? ecranFilme = null;
+        if (tournage.Placer is { } point)
+        {
+            fenetre.PoserSur(point.X, point.Y);
+            ecranFilme = Natif.Ecrans().FirstOrDefault(e => point.X >= e.X && point.X < e.Droite && point.Y >= e.Y && point.Y < e.Bas);
+        }
         else if (tournage.Ecran is { } nom && Natif.Ecrans() is { Count: > 0 } ecrans)
         {
             var e = ecrans[Math.Max(0, Tournage.Choisir(nom, ecrans))];
             fenetre.PoserSur(e.X + e.Largeur / 2, e.Y + e.Hauteur / 2);
+            ecranFilme = e;
+        }
+        if (tournage.Visite)
+        {
+            // Visite guidée : journal prêt avant tout (même une erreur du démarrage y est notée) ; une erreur qui
+            // échappe aux étapes est notée et la visite continue, au lieu d'arrêter Pilou (et le tournage) net.
+            FenetreDecor? decor = null;
+            if (ecranFilme is { } ef && !tournage.SansDecor)
+            {
+                var travail = Natif.ZoneTravail(ef.X + ef.Largeur / 2, ef.Y + ef.Hauteur / 2);
+                decor = new FenetreDecor(ef, ef.Bas - travail.Bottom);
+                decor.Show(); // d'abord : Pilou et ses fenêtres, montrés après, passent devant
+            }
+            fenetre.PreparerVisite(tournage.Chronologie, ecranFilme, decor);
+            app.DispatcherUnhandledException += (_, ev) =>
+            {
+                fenetre.ErreurVisite(ev.Exception);
+                ev.Handled = true;
+            };
+            AppDomain.CurrentDomain.UnhandledException += (_, ev) =>
+            {
+                if (ev.ExceptionObject is Exception x) fenetre.ErreurVisite(x);
+            };
+            TaskScheduler.UnobservedTaskException += (_, ev) =>
+            {
+                fenetre.ErreurVisite(ev.Exception);
+                ev.SetObserved();
+            };
         }
         fenetre.Show();
         // Icône près de l'horloge et fenêtre relais (les autres lancements nous joignent par elle) : Pilou habituel seulement.
