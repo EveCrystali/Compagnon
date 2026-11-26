@@ -176,7 +176,9 @@ public sealed partial class FenetrePilou : Window
             DemarrerMises();
             DemarrerActivites();
             DemarrerConnecteurs();
+            DemarrerGestes();
         };
+        Closed += (_, _) => ArreterGestes();
     }
 
     private static Brush Gel(byte a, byte r, byte g, byte b)
@@ -281,6 +283,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(MenuIntegrations());
         menu.Items.Add(MenuConnecteurs());
         menu.Items.Add(MenuActivites());
+        menu.Items.Add(MenuGestes());
         menu.Items.Add(MenuVersion());
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
@@ -424,6 +427,7 @@ public sealed partial class FenetrePilou : Window
     private void ToutLu()
     {
         foreach (var e in _vivantes) _lus[e.Session] = Signature(e);
+        _notifs.Vider();
         _survol = false;
         _alerteJusque = -1e9;
         Bulle(_vivantes, Epoque);
@@ -461,6 +465,8 @@ public sealed partial class FenetrePilou : Window
 
         // Parti chez un ami : une ligne dit où il est et quand il revient ; les sessions restent au-dessous.
         if (LigneVisite() is { Length: > 0 } visite) _lignes.Children.Insert(Maintenant < _messageJusque ? 1 : 0, Discret(visite));
+        // Notification Windows (désactivé par défaut) : tout en haut, quelques secondes.
+        if (BlocNotif() is { } notif) _lignes.Children.Insert(0, notif);
         bool visible = _lignes.Children.Count > 0;
         _pileBulle.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         Peindre();
@@ -640,7 +646,9 @@ public sealed partial class FenetrePilou : Window
         {
             _yPieds = sol;
             _x = Math.Clamp(_x, min, max);
-            marche = Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && Gestes(expr, fatigue, t, dt, min, max));
+            // Au clavier ou l'appareil photo en main, il reste sur place.
+            if (GesteEnCours) _geste = Geste.Rien;
+            marche = Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && !GesteEnCours && Gestes(expr, fatigue, t, dt, min, max));
         }
 
         // Assis : on s'y pose et on s'en relève en douceur.
@@ -723,6 +731,7 @@ public sealed partial class FenetrePilou : Window
             Dos = dosTourne && montre == Expr.Repos && !marche && _jeuEnCours == Jeu.Aucun && !_attrape,
         };
         HabillerVisite(_scene.Pose, t);
+        HabillerGestes(_scene.Pose, t);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);

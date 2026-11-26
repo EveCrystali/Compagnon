@@ -52,7 +52,7 @@ public static class Metiers
 // Ce que l'on sait pour juger les succès (les compteurs du profil et la série en cours).
 public sealed record Stats(
     IReadOnlyDictionary<string, long> Secondes, double SerieCodeSec, int ReunionsSemaine, int Presentations,
-    DateTime Heure, string Activite);
+    DateTime Heure, string Activite, int SeancesClavier = 0, int Captures = 0);
 
 public static class Succes
 {
@@ -83,6 +83,8 @@ public static class Succes
         new("plume", "Plume", "10 h d'écriture", s => H(s, "texte"), 10),
         new("facteur", "Facteur", "5 h de mail", s => H(s, "mail"), 5),
         new("explorateur", "Explorateur", "8 activités différentes", s => Activites.Toutes.Count(a => s.Secondes.TryGetValue(a, out var v) && v >= 60), 8),
+        new("dactylo", "Dactylo", "taper avec Pilou au clavier 25 fois", s => s.SeancesClavier, 25),
+        new("photographe", "Photographe", "10 captures d'écran photographiées par Pilou", s => s.Captures, 10),
         new("couteau-suisse", "Couteau suisse", "4 métiers au rang Compagnon", s => Metiers.Tous.Count(m => Metiers.Niveau(Metiers.Secondes(m, s.Secondes)) >= 2), 4, 50),
     };
 
@@ -99,7 +101,7 @@ public static class Succes
         return d.But <= 1 ? "" : d.Id switch
         {
             "marathon" => $"{a:0.#} h / {d.But} h",
-            "visio-man" or "orateur" or "explorateur" or "couteau-suisse" => $"{a:0} / {d.But}",
+            "visio-man" or "orateur" or "explorateur" or "couteau-suisse" or "dactylo" or "photographe" => $"{a:0} / {d.But}",
             _ => $"{a:0.#} h / {d.But} h",
         };
     }

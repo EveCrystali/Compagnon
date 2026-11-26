@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Package d'identité « avec emplacement externe » (sparse package) pour Pilou : il ne contient aucun fichier
+  de l'appli, il donne seulement une identité de package à PilouBureau.exe, là où il est installé, afin que
+  Windows accepte la capacité userNotificationListener (lecture des notifications des autres applis).
+  NON UTILISÉ PAR DÉFAUT et NON TESTÉ sur un vrai Windows : mode d'emploi dans docs/NOTIFICATIONS.md.
+  Modèle : https://learn.microsoft.com/windows/apps/desktop/modernize/grant-identity-to-nonpackaged-apps
+  Publisher doit être exactement le sujet du certificat qui signe le package (ici un certificat local).
+-->
+<Package IgnorableNamespaces="uap uap3 uap10 rescap"
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity Name="PilouBureau.Identite" Publisher="CN=PilouLocal" Version="1.0.0.0" ProcessorArchitecture="neutral" />
+  <Properties>
+    <DisplayName>Pilou de bureau</DisplayName>
+    <PublisherDisplayName>Pilou</PublisherDisplayName>
+    <Logo>pilou.png</Logo>
+    <uap10:AllowExternalContent>true</uap10:AllowExternalContent>
+  </Properties>
+  <Resources>
+    <Resource Language="fr-fr" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="unvirtualizedResources" />
+    <uap3:Capability Name="userNotificationListener" />
+  </Capabilities>
+  <Applications>
+    <Application Id="PilouBureau" Executable="PilouBureau.exe" uap10:TrustLevel="mediumIL" uap10:RuntimeBehavior="win32App">
+      <uap:VisualElements AppListEntry="none" DisplayName="Pilou de bureau" Description="Pilou, compagnon de bureau"
+        BackgroundColor="transparent" Square150x150Logo="pilou.png" Square44x44Logo="pilou.png" />
+    </Application>
+  </Applications>
+</Package>

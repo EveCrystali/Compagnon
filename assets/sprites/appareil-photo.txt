@@ -1,0 +1,21 @@
+# Appareil photo tenu devant les yeux
+id: appareil-photo
+slot: main
+ancre: yeux
+decalage: -12 -4
+palette: a=#1c2128 b=#3b4654 c=#f69d50 d=#545d68 e=#ffffff f=#c9d1d9 g=#1f4f8a h=#b4dbff i=#4a8fdc
+images:
+..abbbbbba.....aaa....
+aaabbbbbbaaaaaacccaaaa
+dddddddddddddddddddddd
+dddddddddddaaaaddddddd
+bbefffbbbaaggggaabbbbb
+bbffffbbaaggggggaabbbb
+bbbbbbbbaggheiiggabbbb
+bbbbbbbbagihiiiigabbbb
+bbbbbbbbagiiiiiigabbbb
+bbbbbbbbaggiiiiggabbbb
+bbbbbbbbaaggggggaabbbb
+baaaaaaaaaaggggaaaaaab
+bbbbbbbbbbbaaaabbbbbbb
+aaaaaaaaaaaaaaaaaaaaaa

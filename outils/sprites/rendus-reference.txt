@@ -44,3 +44,10 @@ expr=repos t=600 reaction=sueur | bf677441b1c5bcff55ab3bf58f4a483a26e2142bbf246d
 expr=repos t=840 boude=1 objets=boude-nuage | ce96dd13d5f339e0acaccd74d0da0f158d57a6547254bbc29cc24564d42b4301
 expr=repos t=840 stade=3 boude=1 cligne=1 objets=boude-nuage,boude-bras | 6dae183a1fc767dcca31a320417d4299eb07552a5c72347caea3b002c58fafa7
 expr=repos t=840 stade=1 boude=1 dos=1 objets=boude-eclaircie,variante-calin-2,lunettes-rondes | edc806054cdbe03a278194f7c2d37e97e4918250ea1603faec876a34901b0483
+expr=concentre t=360 assis=1 objets=clavier-mini | 6cd77f9f6c7fa7beb8a5cf1838c4f369ca958675824e6a0b38f231cc9c012c2f
+expr=concentre t=120 assis=1 stade=3 objets=tenue-code-lunettes,clavier-mini,pouf-4 | 0e23ca69b1b7cf3131940cd79d937a1b5b419bbad5b2643649145f02bac57d23
+expr=repos t=0 dos=1 objets=pouf-2 | c363f86bd93a3c207cc98b0417da7cff8dcc325d2f19fc1d886788b9e3627f99
+expr=concentre t=0 objets=appareil-photo,photo-flash | 5a694c92567b1cc0fc6f4f9c2b51e33040953e3e5b9ed73e22df879b3adc50cc
+expr=fete t=0 stade=1 objets=polaroid-3 | e19218953d9058e5c1c3dd179cf23ac02f83a5545e8538f7e856a4322526c49e
+expr=attente t=320 regard_y=-1 objets=enveloppe-notif | 19ca1e7fcab36bf5fd5290748b58132493e25f3662e1e38eeeafedf71c9bd50f
+expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close | ea43086844a18f4904b2d81fb36537784169ed60ce3cff18eb21a6d2ec704713

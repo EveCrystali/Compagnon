@@ -119,6 +119,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
+        // --essai=clavier, photo, notif, notif:masque : les petits gestes sans conditions réelles.
+        if (nom is "clavier" or "photo" or "notif" or "notif:masque") EssaiGeste(nom);
         // --essai=meteo:pluie, meteo:pluie:parapluie, meteo:neige, meteo:chaleur, meteo:orage…
         if (nom.StartsWith("meteo:"))
         {

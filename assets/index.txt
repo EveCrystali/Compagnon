@@ -11,6 +11,7 @@ acc-tablier
 acc-toque
 ailes-papillon
 antenne-neon
+appareil-photo
 astral-cape
 aura
 aura-feu
@@ -60,6 +61,7 @@ casquette
 chapeau-cowboy
 chapeau-pirate
 chapeau-sorcier
+clavier-mini
 coeurs-amitie
 coffre-quete
 collier-perles
@@ -74,6 +76,8 @@ encas-croquettes
 encas-gateau
 encas-pomme
 encas-soupe
+enveloppe-close
+enveloppe-notif
 epee-mousse
 etincelle-alerte
 etincelle-coeur
@@ -117,8 +121,8 @@ mini-dragon
 monocle
 moufles
 mousse
-oeil-boude
 noeud-pois
+oeil-boude
 oeil-cligne
 oeil-concentre
 oeil-content
@@ -143,6 +147,7 @@ patins
 petit-chat
 petit-poisson-bocal
 petit-robot
+photo-flash
 pierre-calme
 plat-assiette
 plat-bol
@@ -160,6 +165,15 @@ plat-tarte
 plat-tartine
 po
 po-tourne
+polaroid-1
+polaroid-2
+polaroid-3
+polaroid-4
+pouf-1
+pouf-2
+pouf-3
+pouf-4
+pouf-5
 prise-ablette
 prise-algue
 prise-anguille

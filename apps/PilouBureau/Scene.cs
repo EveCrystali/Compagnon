@@ -53,6 +53,11 @@ public sealed class Pose
     // Parti en visite chez un ami : la pancarte remplace Pilou ; deux lignes écrites dessus (« chez Léo »,
     // « ↩ 14 h 20 »). "" : Pilou est là.
     public string Pancarte = "";
+    // Petits gestes (Gestes.cs) : sprites en plus (pouf, mini clavier, appareil, polaroïd, enveloppe) ; flash de
+    // l'appareil (0..1 : cadre blanc atténué autour de Pilou) ; bruitage écrit en pixels (« CLIC ! »).
+    public IReadOnlyList<string> Gestes = Array.Empty<string>();
+    public double Flash;
+    public string Bruit = "";
 }
 
 // Pilou en pixel art, grille fine de 48 × 56 commune avec l'app Android (RenduPilou), affichée en pixels
@@ -144,13 +149,21 @@ public sealed class Scene : FrameworkElement
         if (p.Reaction == "danse" && p.Tenue != "musique") objets.Add("tenue-musique-notes");
         objets.AddRange(p.Soins);
         objets.AddRange(p.Meteo);
+        // Pendant un geste, la tenue garde ses lunettes et chapeaux ; ce qu'elle tient en main laisse la place.
+        var tenue = p.Tenue;
+        if (p.Gestes.Count > 0 && tenue != "" && Banque.Commune.Tenues.TryGetValue(tenue, out var habits))
+        {
+            objets.InsertRange(0, GestesPilou.TenueCompatible(habits, id => Banque.Commune[id]?.Slot));
+            tenue = "";
+        }
+        objets.AddRange(p.Gestes);
         return new Allure
         {
             Expr = p.Expr.ToString().ToLowerInvariant(),
             T = p.T,
             Couleur = couleurAchetee != "" ? couleurAchetee : p.Couleur.ToString().ToLowerInvariant(),
             Accessoire = p.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : p.Accessoire.ToString().ToLowerInvariant(),
-            Tenue = p.Tenue,
+            Tenue = tenue,
             Objets = objets,
             Cligne = p.Cligne, Clin = p.Clin, Marche = p.Marche, Course = p.Course, Baille = p.Baille, Etourdi = p.Etourdi,
             Fatigue = p.Fatigue, Salue = p.Salue, Boude = p.Boude, Dos = p.Dos,
@@ -173,6 +186,19 @@ public sealed class Scene : FrameworkElement
         // Collé à l'écran : tout grossit, à partir des pieds.
         dc.PushTransform(new ScaleTransform(p.Zoom, p.Zoom, MargeX + C * P, Sol));
         Dessiner(dc, p);
+        dc.Pop();
+        if (p.Flash > 0) Flash(dc, p.Flash);
+        if (p.Bruit != "") TextePixel(dc, p.Bruit, MargeX + 6 * P, MargeY - 2 * P, 3, Blanc, Encre);
+    }
+
+    // Flash de l'appareil photo : un cadre blanc translucide autour de Pilou, bref (200 ms) et jamais plein
+    // écran ni opaque, pour ne pas éblouir.
+    private static void Flash(DrawingContext dc, double force)
+    {
+        double ep = 2 * P;
+        var r = new Rect(MargeX - 3 * P, MargeY - 2 * P, W * P + 6 * P, H * P + 4 * P);
+        dc.PushOpacity(Math.Clamp(force, 0, 1) * 0.7);
+        dc.DrawRectangle(null, new Pen(Blanc, ep), r);
         dc.Pop();
     }
 

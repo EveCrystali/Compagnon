@@ -60,6 +60,17 @@ public sealed class Reglages
     public bool PartagerAnecdotes { get; set; } = true;
     public int CalmeDebut { get; set; } = 22;
     public int CalmeFin { get; set; } = 8;
+    // Petits gestes (docs/NOTIFICATIONS.md) : Pilou tape avec toi (le crochet clavier compte les frappes,
+    // jamais lesquelles), sort son appareil photo à chaque capture d'écran, montre les notifications Windows
+    // dans sa bulle (désactivé par défaut ; filtre d'applis et mode « masquer le contenu »).
+    public bool GesteClavier { get; set; } = true;
+    public bool GestePhoto { get; set; } = true;
+    public bool NotifsWindows { get; set; }
+    public ModeApps NotifsMode { get; set; } = ModeApps.Toutes;
+    public List<string> NotifsApps { get; set; } = new();
+    public bool NotifsMasquer { get; set; }
+
+    public ReglagesNotifs FiltreDesNotifs() => new(NotifsWindows, NotifsMode, NotifsApps, NotifsMasquer);
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
 

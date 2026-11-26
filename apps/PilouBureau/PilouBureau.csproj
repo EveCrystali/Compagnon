@@ -14,6 +14,16 @@
     <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
   </PropertyGroup>
 
+  <!-- Option -p:IdentitePackage=true : version qui lit les notifications Windows (docs/NOTIFICATIONS.md). Windows
+       réserve cette lecture (UserNotificationListener) aux applis qui ont une identité de package : cette version
+       embarque le manifeste qui relie l'exe au package d'identité (identite/) et les projections WinRT du SDK
+       Windows 10 (2004), environ 25 Mo de plus. Non utilisée par défaut : sans identité, elle ne lirait rien. -->
+  <PropertyGroup Condition="'$(IdentitePackage)' == 'true'">
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <ApplicationManifest>identite\PilouBureau.identite.manifest</ApplicationManifest>
+    <DefineConstants>$(DefineConstants);LECTEUR_NOTIFS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="tests\**" />
   </ItemGroup>
