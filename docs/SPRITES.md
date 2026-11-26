@@ -87,6 +87,13 @@ python3 outils/sprites/reference.py    # nouvelles empreintes si le rendu de Pil
 Palette : bleus, oranges, argent, violets, jaunes, sables, neutres ; jamais d'opposition rouge / vert,
 et chaque rareté ou état garde aussi un signe de forme. Un identifiant inconnu est ignoré sans erreur.
 
+Petits gestes (`outils/sprites/gestes_sprites.py`, docs/NOTIFICATIONS.md) : `pouf-1` à `pouf-5` (fumée, une image
+par étape, sur l'ancre `corps`), `clavier-mini` (devant Pilou assis, pattes à sa teinte qui tapent, touche enfoncée
+d'un pixel), `appareil-photo` et `photo-flash` (ancre `yeux`), `polaroid-1` à `polaroid-4` (la photo glisse le long
+du flanc et se développe), `enveloppe-notif` (ouverte, une lettre dépasse) et `enveloppe-close` (cachet rond),
+brandies sur l'ancre `tete`. Pendant un geste, le PC retire de la tenue d'activité ce qu'elle tient en main
+(`GestesPilou.TenueCompatible`) et passe le reste en objets : le rendu commun n'a rien de nouveau à savoir.
+
 Sur le PC : `PilouBureau.exe --instantane=<png> --essai=tenue:code` (ou `objet:cape`, `stade:3`,
 `evolution`, `soins:faim|proprete|moral|boude|amadoue|dos|rayonnant|lavage|calin|espiegle`) rend la fenêtre dans
 une image.

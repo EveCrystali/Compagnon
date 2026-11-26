@@ -14,4 +14,7 @@ format : `docs/BRANCHER.md`.
 | `Integrations.cs` | branchement Codex (`~/.codex/hooks.json`) |
 | `Discord.cs` | statut Discord (Rich Presence), webhook |
 | `FenetrePilou.cs`, `FenetreIntegrations.cs`, `Jeux.cs`, `Scene.cs`, `Pixels.cs` | fenêtre, dessin, jeux |
+| `Gestes.cs`, `Notifications.cs` | Pilou au clavier, appareil photo, filtre et file des notifications (sans WPF, testés) |
+| `Crochets.cs`, `SourceNotifsWindows.cs`, `FenetreGestes.cs` | crochet clavier (compte seulement), presse-papiers et dossier Captures, lecteur de notifications, menu et bulle (`docs/NOTIFICATIONS.md`) |
+| `identite/` | package d'identité optionnel (`-p:IdentitePackage=true`), non utilisé par défaut |
 | `tests/` | tests xunit de la logique sans WPF |

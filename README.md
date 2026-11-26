@@ -110,6 +110,21 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
 - Essayer sans attendre la pluie : `PilouBureau.exe --essai=meteo:pluie` (ou `meteo:pluie:parapluie`,
   `meteo:neige`, `meteo:chaleur`, `meteo:orage`).
 
+## Clavier, captures d'écran, notifications
+
+Clic droit → **Clavier, photo, notifications** (trois cases) :
+
+- **Tu tapes en rafale** : pouf de fumée, Pilou tourne sur lui-même et réapparaît assis devant un mini clavier ;
+  il tape avec toi, puis range tout après quelques secondes de calme. Le crochet clavier ne fait que **compter**
+  les frappes, jamais lesquelles.
+- **Tu fais une capture d'écran** (Impr. écran, Win+Maj+S, Win+Impr. écran) : il sort son appareil, flash,
+  « CLIC ! », un polaroïd tombe. L'image n'est jamais lue.
+- **Notifications Windows dans sa bulle** (coupé par défaut ; filtre d'applis, mode « 1 message de X ») : prêt
+  côté Pilou, mais Windows réserve cette lecture aux applis qui ont une identité de package, que Pilou n'a pas
+  encore. Ce qui marche, ce qui manque et la vie privée : [docs/NOTIFICATIONS.md](docs/NOTIFICATIONS.md).
+
+Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `notif:masque`).
+
 ## Clic droit sur Pilou
 
 - **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;

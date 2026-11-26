@@ -200,7 +200,8 @@ public sealed partial class FenetrePilou
     private Dictionary<string, int>? _niveauxMetiers;
 
     private Stats StatsActuelles(string activite) =>
-        new(_profil.Activites, _serieCode, _profil.Reunions.Count, _profil.Presentations, DateTime.Now, activite);
+        new(_profil.Activites, _serieCode, _profil.Reunions.Count, _profil.Presentations, DateTime.Now, activite,
+            _profil.SeancesClavier, _profil.Captures);
 
     private void GagnerActivite(int xp)
     {

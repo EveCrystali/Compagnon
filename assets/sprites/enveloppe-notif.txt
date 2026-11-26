@@ -1,0 +1,41 @@
+# Enveloppe brandie (ouverte, une lettre dépasse)
+id: enveloppe-notif
+slot: main
+ancre: tete
+decalage: -7 -17
+duree: 320
+palette: a=#1c2128 b=#ffffff c=#4a8fdc d=#c9d1d9 e=#f6f8fa f=#f69d50
+images:
+...aaaaaaaaaaaa...
+..abbbbbbbbbbbba..
+..abbcccccccbbba..
+.aabbbbbbbbbbbbaa.
+addeeeeeeeeeeeedda
+aeeddeeeeeeeeddeea
+aeeeeddeeeeddeeeea
+aeeeeeeddddeeeeeea
+aeeeeeeeeeeeeeeeea
+aeeeeeeffffeeeeeea
+aeeeeeeffffeeeeeea
+aeeeeeeeeeeeeeeeea
+adddddddddddddddda
+adddddddddddddddda
+.aaaaaaaaaaaaaaaa.
+..................
+---
+..abbbbbbbbbbbba..
+..abbcccccccbbba..
+.aabbbbbbbbbbbbaa.
+addeeeeeeeeeeeedda
+aeeddeeeeeeeeddeea
+aeeeeddeeeeddeeeea
+aeeeeeeddddeeeeeea
+aeeeeeeeeeeeeeeeea
+aeeeeeeffffeeeeeea
+aeeeeeeffffeeeeeea
+aeeeeeeeeeeeeeeeea
+adddddddddddddddda
+adddddddddddddddda
+.aaaaaaaaaaaaaaaa.
+..................
+..................

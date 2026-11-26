@@ -1,0 +1,79 @@
+# Mini clavier devant Pilou assis (pattes qui tapent, touche enfoncée)
+id: clavier-mini
+slot: objet
+ancre: pieds
+decalage: -18 -5
+duree: 120
+palette: a=@contour b=#1c2128 c=@clair d=@base e=#545d68 f=#f6f8fa g=#c9d1d9 h=#ffc89a i=#3b4654 j=#f69d50
+images:
+......................aaaaaa........
+...bbbbbaaaaaabbbbbbbaccddddabbbb...
+..beeeeaccddddaeeeeeeaddddddaeeeeb..
+.beeefeaddddddafefefefaaaaaaeeeeeeb.
+.beeegegaaaaaaegegegegegegegeeeeeeb.
+beeefefefefefefefefefefefefeeeeeeeb.
+beeegegegegegegegegegegegegeeeeeeeeb
+beeefefefefefefefefefefefeeeeeeeeeeb
+eeeegegegegehhhhhhhhhhhhgeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+---
+........aaaaaa......................
+...bbbbaccddddabbbbbbbaaaaaabbbbb...
+..beeeeaddddddaeeeeeeaccddddaeeeeb..
+.beeefefaaaaaaefefefeaddddddaeeeeeb.
+.beeegegegegegegegegegaaaaaaeeeeeeb.
+beeefefefefefefefefeiefefefeeeeeeeb.
+beeegegegegegegegegejegegegeeeeeeeeb
+beeefefefefefefefefefefefeeeeeeeeeeb
+eeeegegegegegggggggggggggeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+---
+......................aaaaaa........
+...bbbbbaaaaaabbbbbbbaccddddabbbb...
+..beeeeaccddddaeeeeeeaddddddaeeeeb..
+.beeefeaddddddafeiefefaaaaaaeeeeeeb.
+.beeegegaaaaaaegejegegegegegeeeeeeb.
+beeefefefefefefefefefefefefeeeeeeeb.
+beeegegegegegegegegegegegegeeeeeeeeb
+beeefefefefefefefefefefefeeeeeeeeeeb
+eeeegegegegegggggggggggggeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+---
+........aaaaaa......................
+...bbbbaccddddabbbbbbbaaaaaabbbbb...
+..beeeeaddddddaeeeeeeaccddddaeeeeb..
+.beeefefaaaaaaefefefeaddddddaeeeeeb.
+.beeegegegegegegegegegaaaaaaeeeeeeb.
+beeefefefefefefefefefefefefeeeeeeeb.
+beeegegegegegegegegegegegegeeeeeeeeb
+beeefefefefeiefefefefefefeeeeeeeeeeb
+eeeegegegegehhhhhhhhhhhhgeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+---
+......................aaaaaa........
+...bbbbbaaaaaabbbbbbbaccddddabbbb...
+..beeeeaccddddaeeeeeeaddddddaeeeeb..
+.beeefeaddddddafefefefaaaaaaeeeeeeb.
+.beeegegaaaaaaegegegegegegegeeeeeeb.
+beeefefeiefefefefefefefefefeeeeeeeb.
+beeegegejegegegegegegegegegeeeeeeeeb
+beeefefefefefefefefefefefeeeeeeeeeeb
+eeeegegegegegggggggggggggeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+---
+........aaaaaa......................
+...bbbbaccddddabbbbbbbaaaaaabbbbb...
+..beeeeaddddddaeeeeeeaccddddaeeeeb..
+.beeefefaaaaaaefefefeaddddddaeeeeeb.
+.beeegegegegegegegegegaaaaaaeeeeeeb.
+beeefefefefefefefefefefefefeeeeeeeb.
+beeegegegegegegegegegegegegeeeeeeeeb
+beeefefefefefefefefefefefeeeeeeeeeeb
+eeeegegegegegggggggggggggeeeeeeeeeee
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii

@@ -55,6 +55,13 @@ POSES = [
     "expr=repos t=840 boude=1 objets=boude-nuage",
     "expr=repos t=840 stade=3 boude=1 cligne=1 objets=boude-nuage,boude-bras",
     "expr=repos t=840 stade=1 boude=1 dos=1 objets=boude-eclaircie,variante-calin-2,lunettes-rondes",
+    "expr=concentre t=360 assis=1 objets=clavier-mini",
+    "expr=concentre t=120 assis=1 stade=3 objets=tenue-code-lunettes,clavier-mini,pouf-4",
+    "expr=repos t=0 dos=1 objets=pouf-2",
+    "expr=concentre t=0 objets=appareil-photo,photo-flash",
+    "expr=fete t=0 stade=1 objets=polaroid-3",
+    "expr=attente t=320 regard_y=-1 objets=enveloppe-notif",
+    "expr=attente t=0 regard_y=-1 stade=4 objets=enveloppe-close",
 ]
 
 
