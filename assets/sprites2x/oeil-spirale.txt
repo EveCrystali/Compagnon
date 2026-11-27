@@ -1,0 +1,21 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-spirale
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+.aaaaaaaa...
+aaaaaaaaaa..
+aa......aa..
+aa......aa..
+aa..aa..aa..
+aa..aa..aa..
+aa..aaaaaa..
+aa...aaaa...
+aa..........
+aa..........
+aaaaaaaaaaaa
+.aaaaaaaaaaa
+............
+............

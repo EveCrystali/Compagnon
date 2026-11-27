@@ -1,0 +1,10 @@
+# bouche d'humeur (campagnes), centrée sur l'axe de Pilou
+id: bouche-colere
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffffff
+images:
+.aaaaaa.
+abababba
+.aaaaaa.

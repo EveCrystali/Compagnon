@@ -1,0 +1,17 @@
+# bouche, dessin fin, centrée sur l'axe de Pilou
+id: bouche-fete
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3a2a2f c=#f69d50 d=#ffc89a
+images:
+aaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbaa
+aabbbbbbbbbbbbaa
+aabbbbbbbbbbbbaa
+aabbcccccccccbaa
+.aabcddddccccaa.
+.aaaccccccccaaa.
+..aaaccccccaaa..
+...aaaaaaaaaa...
+.....aaaaaa.....

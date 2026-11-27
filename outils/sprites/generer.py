@@ -10,7 +10,9 @@ import math
 import os
 import shutil
 
+import toile
 from toile import Toile, ecrire, SORTIE, TOUS
+import visage_sprites
 import boutique_sprites
 import meteo_sprites
 import visites_sprites
@@ -18,6 +20,7 @@ import gestes_sprites
 import expedition_sprites
 import defense_sprites
 import garde_robe
+import voyage_sprites
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -50,6 +53,11 @@ def T(w, h):
 # Visage : yeux (œil gauche ; le droit est son miroir) et bouches
 # =====================================================================================================
 def visage():
+    if toile.fin():
+        # Dessin fin : tout le visage est redessiné en pixels fins (visage_sprites.py).
+        visage_sprites.fins()
+        return
+    visage_sprites.humeurs()
     pal = {"k": ENCRE, "w": BLANC, "o": "@ombre", "c": "@contour"}
     yeux = {
         "ouvert": [".kkkk.", "kwwkkk", "kwwkkk", "kkkkkk", "kkkkwk", "kkkkkk", ".kkkk."],
@@ -1740,6 +1748,8 @@ TENUES = {
     "mail": ["tenue-mail-casquette", "tenue-mail-enveloppe"],
     "texte": ["tenue-texte-plume"],
     "diaporama": ["tenue-diaporama-pointeur"],
+    # Tenues de voyage des campagnes (voyage_sprites.py) : « voyage-marche », « voyage-bateau »…
+    **voyage_sprites.TENUES,
 }
 
 PLATS = {
@@ -1764,7 +1774,7 @@ def tables():
         for k, v in TEINTES.items():
             f.write("%s: %s\n" % (k, " ".join(v)))
     with open(os.path.join(base, "tenues.txt"), "w", encoding="utf-8", newline="\n") as f:
-        f.write("# Tenues d'activité : identifiant (Pose.Tenue) -> sprites portés.\n")
+        f.write("# Tenues d'activité et de voyage : identifiant (Pose.Tenue) -> sprites portés.\n")
         for k, v in TENUES.items():
             f.write("%s: %s\n" % (k, " ".join(v)))
     with open(os.path.join(base, "index.txt"), "w", encoding="utf-8", newline="\n") as f:
@@ -1778,9 +1788,8 @@ def tables():
     garde_robe.ecrire_catalogue(base)
 
 
-if __name__ == "__main__":
-    if os.path.isdir(SORTIE):
-        shutil.rmtree(SORTIE)
+def dessiner():
+    """Tous les dessins, à l'échelle courante de la toile (toile.ECHELLE)."""
     visage()
     etincelles()
     accessoires()
@@ -1800,5 +1809,16 @@ if __name__ == "__main__":
     gestes_sprites.tout()
     expedition_sprites.tout()
     defense_sprites.tout()
+    voyage_sprites.tout()
+
+
+if __name__ == "__main__":
+    for d in (SORTIE, toile.SORTIE2):
+        if os.path.isdir(d):
+            shutil.rmtree(d)
+    dessiner()
     tables()
-    print(len(TOUS), "sprites dans", SORTIE)
+    # Dessin fin (2×) : les mêmes fonctions, rejouées sur une toile deux fois plus fine, pour la série de fin.py.
+    import fin
+    fin.generer(dessiner)
+    print(len(TOUS), "sprites dans", SORTIE, "dont", len(toile.TOUS2), "redessinés en fin dans", toile.SORTIE2)

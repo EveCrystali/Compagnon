@@ -1,0 +1,64 @@
+# Tenue de voyage « grimpe » : corde à nœuds (derrière Pilou)
+id: voyage-corde
+slot: dos
+ancre: aucun
+decalage: 36 0
+couche: derriere
+palette: a=#1c2128 b=#c4a77d c=#8a6e4b d=#e8d5b0
+images:
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+cccc
+cddc
+cccc
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+cccc
+cddc
+cccc
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+acca
+acca
+abba
+abba
+cccc
+cddc
+cccc
+abba
+acca
+acca

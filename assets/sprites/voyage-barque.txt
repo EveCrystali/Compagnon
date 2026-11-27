@@ -1,0 +1,21 @@
+# Tenue de voyage « bateau » : petite barque (devant Pilou assis)
+id: voyage-barque
+slot: dos
+ancre: pieds
+decalage: -23 -10
+palette: a=#1c2128 b=#a86f3c c=#7a4b26 d=#4a2e17
+images:
+..................................aaaaaaabbbbb
+............aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbba
+.aaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcca.
+abbbbbbbbbbbbbbccccccccccccccccccccccccccccca.
+.accccccccccccccccccccccccccccccccccccccccca..
+..accccccccccccccccccccddddddddddddddddddddda.
+..addddddddddddddddddddcccccccccccccccccccca..
+...acccccccccccccccccccccccccccccccccccccca...
+....accccccccccccccccccddddddddddddddddddda...
+....addddddddddddddddddccccccccccccccccccca...
+.....accccccccccccccccccccccccccccccccccca....
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.....
+..............................................

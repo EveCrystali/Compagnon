@@ -59,3 +59,30 @@ expr=inquiet t=0 couleur=cuivre objets=plaid,chocolat-chaud | cb6ccd59fcde1d43ec
 expr=repos t=660 stade=4 couleur=nebuleuse objets=cape-chauve-souris,coiffe-courge,chauve-souris,bonus-frissons | 866a4daf96fc5e0df27b6f0ad83d34e461189a6a76065580d2fcd4549bba201b
 expr=repos t=250 stade=1 objets=ailes-libellule,lunettes-kaleido,orbite-lunes,bottes-nuage | 5d045d028a6d0e5942abc10fc27c4fc2042cb5d25f02956f6e4b156aa98db52f
 expr=concentre t=900 stade=3 objets=tricorne-moka,bandeau-oeil,sabre-cuillere,perroquet-caramel,aurore-boreale | d82088f3d9141ae272d2b85ee8c41ab96a5375ac3c0cd07fcbbf5ee14b8251d6
+expr=joie t=350 | f1be1ade1e8a5ae0fdfc22ffc4f273246bb39e04231a0ce64b8ea2259cc89d6d
+expr=peur t=420 tremble=0.4 | b8a4ed9ad962446622846a6ee3f304d5c7b1c40c174b7573e565068653bb53ae
+expr=triste t=900 | ed6dc92c69d40190eef7b595a4b6b0be7f530ff0682a67a4025bc3052b9c6359
+expr=surpris t=150 saut=1.5 | f57382f466f91b583ffb7ded1e8faf85ddf8be97d2773e1133b9eda97d73a988
+expr=determine t=640 regard=1 | 7fe2ba88df6f27506ee89f402ebaf990d0e076294d3aeb599a15a1e38a0eeaff
+expr=fatigue t=1200 | ea59e1764c52775846b53a78645a1d9891c635ef9270ab42dc5e5c8b60aed562
+expr=tendre t=700 stade=3 | 7f26017270f1346e448081293f01e8ada308c70f86d892a444a6b44eda884eed
+expr=colere t=350 stade=4 | 21282da7e538e4532c17bae2315cb9e1d5c52378c3a2507d068b35b9e9d4a885
+expr=malice t=500 stade=1 | 9ba4dd44d321f26baa78846fcfbea20fdfc67ab8b8dc51608e48e0c739ae952c
+expr=neutre t=260 cligne=1 | 7e9ec35c4d336de40e6df38cc17c1aa98b256dacf092f7ddf9be5c961a7952fc
+expr=triste t=1300 stade=1 objets=echarpe | 95c76fd1fd558fa30af14226a1e4b7ad6c6998f58da4e3a754aec41d597e8b11
+expr=peur t=800 couleur=miel objets=lanterne | 00dd183789b72833155ca4c29a1d2068b47fcd5e4773ec73d038d69e21ea38d6
+expr=repos t=250 tenue=voyage-marche | e114fde8f2ba59395fe4bdc4f03239ed4c66dbb197726a6eb3651a60a07f0790
+expr=determine t=410 tenue=voyage-course | 5cf3802ba292ac2bf24e276141ee061456625f8a3137d71d18766cb8f5092627
+expr=joie t=780 tenue=voyage-bateau | 1e861de67601a1fe3e138531358e6203148fe1a832c66f9ca43ebce63b580170
+expr=determine t=630 tenue=voyage-grimpe stade=3 | 09a1fb2e780cc87a9102f9abe6470fc8f6ee5984de8e79d7b906e6e204f521ab
+expr=repos t=1150 tenue=voyage-nage | 28b8ab8c29d3b9a08246e95352698492def90c8fb2462af68ed6cecf81941697
+expr=repos t=2100 tenue=voyage-nuit | f6ebe5e6c22d2de2a144ea519dd219b2a437b123fc65c6b18671f36d818b9089
+expr=peur t=950 tenue=voyage-cache | 79e99088fff16b121147db177acac710e926b8c36b236df0e4111ad1e8c5a97f
+expr=neutre t=3000 tenue=voyage-attend | 73e83721d82dc5aece253a3ece8dac4c59eba6a3fcfe408149fa8cb864f35cce
+expr=neutre t=1700 tenue=voyage-attend stade=4 | 4e02ce1d4e71dbcdb4ba96b5aad875c081561fb7cb727b417d373e740164e7c6
+expr=repos t=330 tenue=voyage-marche stade=1 regard=-1 | 6f418dbd1bca01f48d54a16a589eb9a21153623150c95bc95041c2edd8502b80
+expr=surpris t=2000 tenue=voyage-cache stade=4 | fbe94e91a49e8900207c956058ab04ec9961275db1a05711b628aa27b79bcd30
+expr=repos t=300 objets=chapeau-explorateur,lunettes-rondes,sac-a-dos,parapluie,oiseau | 75e4ae4b8cbf9409e84a86d395331254a1368bce88f0cd679dbd8461797683af
+expr=joie t=900 stade=3 objets=bonnet-pompon,echarpe-tricot,cartable,ballon-helium,tortue | 89963fe8c812de2c88a4a5b1b011b8849814eca1feeaf2d317307b3ae70ed3fd
+expr=malice t=120 stade=4 objets=chapeau-pirate,lunettes-etoiles,medaille,epee-bois,mini-dragon | 5775673bdb0768e67e0525cebe2aa5a6206652bcb3afb36bbcc5b166f8a64da1
+expr=tendre t=640 stade=1 objets=couronne-fleurs,foulard-explorateur,baguette,escargot | 5e8ef765cb3e7c62f75807c50416a9c8ffe1fe16b803aff376a0c311d0b71381

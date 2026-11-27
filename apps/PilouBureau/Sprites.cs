@@ -20,6 +20,23 @@ public sealed class Sprite
     // Couleur par lettre : ARGB, ou une référence à la teinte de Pilou (@contour, @ombre, @base, @clair).
     public Dictionary<char, string> Palette { get; } = new();
     public List<string[]> Images { get; } = new();
+    // Rendu fin : faux si ce sprite 2× vient de l'agrandissement automatique d'un sprite 1× (Agrandi) ; vrai s'il est
+    // dessiné (assets/sprites2x, ou tout sprite 1×).
+    public bool Natif { get; private set; } = true;
+
+    private uint[]? _compilee;
+
+    // Palette prête à peindre, par lettre : ARGB ; 0 : rien ; 1 à 4 : contour, ombre, base, clair de la teinte de
+    // Pilou. Calculée une fois (le rendu ne relit pas les codes à chaque pixel).
+    public uint[] Compilee()
+    {
+        if (_compilee is { } pret) return pret;
+        var c = new uint[128];
+        foreach (var (ch, code) in Palette)
+            if (ch < 128)
+                c[ch] = code switch { "@contour" => 1, "@ombre" => 2, "@base" => 3, "@clair" => 4, _ => Couleur(code) };
+        return _compilee = c;
+    }
 
     public int W => Images.Count == 0 ? 0 : Images[0].Max(l => l.Length);
     public int H => Images.Count == 0 ? 0 : Images[0].Length;
@@ -87,6 +104,103 @@ public sealed class Sprite
         return this;
     }
 
+    // ---- Agrandissement automatique (rendu fin) : même règle que rendu.agrandir (Python) et Sprites.agrandir (Java).
+    // Règle « MMPX » (McGuire et Gagiu, 2021) : chaque pixel devient 2 × 2 pixels pris parmi lui-même et ses voisins,
+    // sans flou ni nouvelle couleur ; les cernes sombres d'un pixel sont gardés, les diagonales et les pentes 2:1
+    // lissées. Les couleurs se comparent par leur lettre ; le vide (« . », hors de l'image) compte comme une couleur.
+    public Sprite Agrandi()
+    {
+        var g = new Sprite { Id = Id, Slot = Slot, Ancre = Ancre, Dx = Dx * 2, Dy = Dy * 2, Derriere = Derriere, Coiffe = Coiffe, Duree = Duree, Natif = false };
+        foreach (var (k, v) in Palette) g.Palette[k] = v;
+        foreach (var im in Images) g.Images.Add(AgrandirImage(im, Palette));
+        return g;
+    }
+
+    // Clarté d'une couleur de palette : (r + v + b + 1) × (256 − alpha) ; vide : 256. Les références à la teinte de
+    // Pilou prennent les valeurs du bleu, pour que l'agrandissement ne dépende pas de la teinte portée.
+    public static int Clarte(string code)
+    {
+        code = code switch { "@contour" => "#1f4f8a", "@ombre" => "#4a8fdc", "@base" => "#6cb6ff", "@clair" => "#b4dbff", _ => code };
+        if (code.Length < 7 || code[0] != '#') return 256;
+        uint c = Couleur(code);
+        return (int)(((c >> 16 & 0xff) + (c >> 8 & 0xff) + (c & 0xff) + 1) * (256 - (c >> 24)));
+    }
+
+    public static string[] AgrandirImage(string[] im, IReadOnlyDictionary<char, string> palette)
+    {
+        int h = im.Length, w = h == 0 ? 0 : im.Max(l => l.Length);
+        var clarte = new Dictionary<char, int> { ['.'] = 256 };
+        foreach (var (k, v) in palette) clarte[k] = Clarte(v);
+        char Src(int x, int y) => y >= 0 && y < h && x >= 0 && x < im[y].Length ? im[y][x] : '.';
+        int Cl(char ch) => clarte.TryGetValue(ch, out var v) ? v : 256;
+        var sortie = new string[h * 2];
+        var haut = new char[w * 2];
+        var bas = new char[w * 2];
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                char A = Src(x - 1, y - 1), B = Src(x, y - 1), C = Src(x + 1, y - 1);
+                char D = Src(x - 1, y), E = Src(x, y), F = Src(x + 1, y);
+                char G = Src(x - 1, y + 1), H = Src(x, y + 1), I = Src(x + 1, y + 1);
+                char J = E, K = E, L = E, M = E;
+                if (!(A == E && B == E && C == E && D == E && F == E && G == E && H == E && I == E))
+                {
+                    char P = Src(x, y - 2), S = Src(x, y + 2), Q = Src(x - 2, y), R = Src(x + 2, y);
+                    int Bl = Cl(B), Dl = Cl(D), El = Cl(E), Fl = Cl(F), Hl = Cl(H);
+                    // Pentes 1:1 (coins arrondis, diagonales lissées).
+                    if (D == B && D != H && D != F && (El >= Dl || E == A) && (E == A || E == C || E == G) && (El < Dl || A != D || E != P || E != Q)) J = D;
+                    if (B == F && B != D && B != H && (El >= Bl || E == C) && (E == A || E == C || E == I) && (El < Bl || C != B || E != P || E != R)) K = B;
+                    if (H == D && H != F && H != B && (El >= Hl || E == G) && (E == A || E == G || E == I) && (El < Hl || G != H || E != S || E != Q)) L = H;
+                    if (F == H && F != B && F != D && (El >= Fl || E == I) && (E == C || E == G || E == I) && (El < Fl || I != H || E != R || E != S)) M = F;
+                    // Croisements.
+                    if (E != F && E == C && E == I && E == D && E == Q && F == B && F == H && F != Src(x + 3, y)) K = M = F;
+                    if (E != D && E == A && E == G && E == F && E == R && D == B && D == H && D != Src(x - 3, y)) J = L = D;
+                    if (E != H && E == G && E == I && E == B && E == P && H == D && H == F && H != Src(x, y + 3)) L = M = H;
+                    if (E != B && E == A && E == C && E == H && E == S && B == D && B == F && B != Src(x, y - 3)) J = K = B;
+                    if (Bl < El && E == G && E == H && E == I && E == S && E != A && E != D && E != C && E != F) J = K = B;
+                    if (Hl < El && E == A && E == B && E == C && E == P && E != D && E != G && E != I && E != F) L = M = H;
+                    if (Fl < El && E == A && E == D && E == G && E == Q && E != B && E != C && E != I && E != H) K = M = F;
+                    if (Dl < El && E == C && E == F && E == I && E == R && E != B && E != A && E != G && E != H) J = L = D;
+                    // Pentes 2:1.
+                    if (H != B)
+                    {
+                        if (H != A && H != E && H != C)
+                        {
+                            if (H == G && H == F && H == R && H != D && H != Src(x + 2, y - 1)) L = M;
+                            if (H == I && H == D && H == Q && H != F && H != Src(x - 2, y - 1)) M = L;
+                        }
+                        if (B != I && B != G && B != E)
+                        {
+                            if (B == A && B == F && B == R && B != D && B != Src(x + 2, y + 1)) J = K;
+                            if (B == C && B == D && B == Q && B != F && B != Src(x - 2, y + 1)) K = J;
+                        }
+                    }
+                    if (F != D)
+                    {
+                        if (D != I && D != E && D != C)
+                        {
+                            if (D == A && D == H && D == S && D != B && D != Src(x + 1, y + 2)) J = L;
+                            if (D == G && D == B && D == P && D != H && D != Src(x + 1, y - 2)) L = J;
+                        }
+                        if (F != E && F != A && F != G)
+                        {
+                            if (F == C && F == H && F == S && F != B && F != Src(x - 1, y + 2)) K = M;
+                            if (F == I && F == B && F == P && F != H && F != Src(x - 1, y - 2)) M = K;
+                        }
+                    }
+                }
+                haut[x * 2] = J;
+                haut[x * 2 + 1] = K;
+                bas[x * 2] = L;
+                bas[x * 2 + 1] = M;
+            }
+            sortie[y * 2] = new string(haut);
+            sortie[y * 2 + 1] = new string(bas);
+        }
+        return sortie;
+    }
+
     // Couleur ARGB d'un code de palette (#rrggbb ou #rrggbbaa) ; 0 = transparent ou inconnu.
     public static uint Couleur(string code)
     {
@@ -107,6 +221,25 @@ public sealed class Banque
 
     public Sprite? this[string id] => Sprites.GetValueOrDefault(id);
 
+    // Rendu fin (grille 96 × 112) : sprites redessinés en 2× (assets/sprites2x) ; les autres sont agrandis à la
+    // demande à partir du sprite 1× (Sprite.Agrandi) et gardés.
+    public Dictionary<string, Sprite> Fins { get; } = new();
+    private readonly Dictionary<string, Sprite?> _agrandis = new();
+
+    // Sprite du rendu fin : le dessin 2× s'il existe, sinon le sprite 1× agrandi (calculé une fois).
+    public Sprite? Fin(string id)
+    {
+        if (Fins.TryGetValue(id, out var natif)) return natif;
+        lock (_agrandis)
+        {
+            if (_agrandis.TryGetValue(id, out var s)) return s;
+            return _agrandis[id] = Sprites.GetValueOrDefault(id)?.Agrandi();
+        }
+    }
+
+    // Sprite à l'échelle demandée (1 : grille 48 × 56 ; 2 : rendu fin).
+    public Sprite? Echelle(string id, int echelle) => echelle == 2 ? Fin(id) : this[id];
+
     public static Banque DepuisDossier(string assets)
     {
         var b = new Banque();
@@ -115,6 +248,13 @@ public sealed class Banque
             var s = Sprite.Lire(File.ReadAllText(f), Path.GetFileNameWithoutExtension(f));
             b.Sprites[s.Id] = s;
         }
+        var fins = Path.Combine(assets, "sprites2x");
+        if (Directory.Exists(fins))
+            foreach (var f in Directory.EnumerateFiles(fins, "*.txt"))
+            {
+                var s = Sprite.Lire(File.ReadAllText(f), Path.GetFileNameWithoutExtension(f));
+                b.Fins[s.Id] = s;
+            }
         b.Tables(n => File.ReadAllText(Path.Combine(assets, n)));
         return b;
     }
@@ -125,11 +265,12 @@ public sealed class Banque
         var b = new Banque();
         foreach (var nom in a.GetManifestResourceNames())
         {
-            if (!nom.StartsWith("sprite:", StringComparison.Ordinal)) continue;
+            bool fin = nom.StartsWith("sprite2x:", StringComparison.Ordinal);
+            if (!fin && !nom.StartsWith("sprite:", StringComparison.Ordinal)) continue;
             if (nom == "sprite:index") continue;
             using var r = new StreamReader(a.GetManifestResourceStream(nom)!);
-            var s = Sprite.Lire(r.ReadToEnd(), nom[7..]);
-            b.Sprites[s.Id] = s;
+            var s = Sprite.Lire(r.ReadToEnd(), nom[(fin ? 9 : 7)..]);
+            (fin ? b.Fins : b.Sprites)[s.Id] = s;
         }
         b.Tables(n =>
         {

@@ -1,0 +1,19 @@
+# Tenue de voyage « nuit » : couverture en patchwork
+id: voyage-couverture
+slot: cou
+ancre: pieds
+decalage: -22 -6
+palette: a=#1c2128 b=#f6f8fa c=#4a8fdc d=#9b8cff e=#6a5acd
+images:
+............................................
+......aaaa..........aaaa..........aaa.......
+...aaabbbbaaa....aaabbbbaaa....aaabbbaaa....
+..abbbbbbbbbbaaaabbbbbbbbbbaaaabbbbbbbbbaa..
+.abbbbccccbbbbbbbbbbddddbbbbbbbbbbcceebbbba.
+.abeeeccccccebbbbeddddddeeebbbbccccceeeeeba.
+aeeeeecccccceeeeeeddddddeeeeeecccccceeeeeeda
+aeeeeecccccceeeeeeddddddeeeeeecccccceeeeeeda
+adddddeeeeeecccccceeeeeeddddddeeeeeeccccccea
+adddddeeeeeecccccceeeeeeddddddeeeeeeccccccea
+ddddddeeeeeecccccceeeeeeddddddeeeeeeccccccee
+ddddddeeeeeecccccceeeeeeddddddeeeeeeccccccee
