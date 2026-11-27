@@ -56,10 +56,6 @@ public sealed class TextePixel : FrameworkElement
         }
     }
 
-    // Pixels physiques par pixel de police : au moins 1, le plus proche de la taille voulue.
-    public static int PixelsPhysiques(double taille, double physiqueParUnite) =>
-        Math.Max(1, (int)Math.Round(taille * physiqueParUnite, MidpointRounding.AwayFromZero));
-
     private PolicePixel? Police => Titre ? PolicePixel.Titre : PolicePixel.Texte;
 
     private PolicePixel? PoliceDessin(int n) =>
@@ -69,7 +65,7 @@ public sealed class TextePixel : FrameworkElement
     {
         var p = Police;
         double ppu = Math.Max(0.1, PhysiqueParUnite());
-        int n = PixelsPhysiques(Taille, ppu);
+        int n = PolicePixel.PixelsPhysiques(Taille, ppu);
         _unite = n / ppu;
         if (p is null) return new Size(0, 0);
         _largeurMax = double.IsInfinity(dispo.Width) ? 0 : Math.Max(1, (int)Math.Floor(dispo.Width / _unite));
@@ -85,7 +81,7 @@ public sealed class TextePixel : FrameworkElement
         // Toute la boîte prend la souris (un clic entre deux lettres reste sur le texte).
         dc.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
         double ppu = Math.Max(0.1, PhysiqueParUnite());
-        int n = PixelsPhysiques(Taille, ppu);
+        int n = PolicePixel.PixelsPhysiques(Taille, ppu);
         var dessin = PoliceDessin(n) ?? p;
         double pas = _unite / dessin.Echelle;
         var geo = new StreamGeometry();

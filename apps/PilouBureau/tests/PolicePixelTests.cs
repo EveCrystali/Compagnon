@@ -69,6 +69,16 @@ public class PolicePixelTests
         }
     }
 
+    [Theory]
+    [InlineData(1.0, 1)]
+    [InlineData(1.25, 2)]
+    [InlineData(1.5, 2)]
+    [InlineData(1.75, 2)]
+    [InlineData(2.0, 3)]
+    [InlineData(0.5, 1)]
+    public void Un_pixel_de_police_tombe_sur_des_pixels_entiers(double echelleWindows, int attendu) =>
+        Assert.Equal(attendu, PolicePixel.PixelsPhysiques(1.3, echelleWindows));
+
     [Fact]
     public void Tout_le_francais_a_un_dessin()
     {

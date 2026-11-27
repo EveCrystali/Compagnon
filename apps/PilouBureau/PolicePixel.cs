@@ -80,6 +80,11 @@ public sealed class PolicePixel
     public static PolicePixel? Texte => Ressource("texte");
     public static PolicePixel? Titre => Ressource("titre");
 
+    // Pixels de l'écran par pixel de police : au moins 1, le plus proche de la taille voulue (unités × pixels par unité).
+    // Même règle que TextePixelVue.pixels (Android).
+    public static int PixelsPhysiques(double taille, double physiqueParUnite) =>
+        Math.Max(1, (int)Math.Round(taille * physiqueParUnite, MidpointRounding.AwayFromZero));
+
     private static long Cle(int a, int b) => ((long)a << 32) | (uint)b;
 
     public bool Connu(int code) => _glyphes.ContainsKey(code);
