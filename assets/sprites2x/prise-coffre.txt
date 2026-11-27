@@ -1,0 +1,41 @@
+# prise de pêche
+id: prise-coffre
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f6c68a c=#f2a94e d=#b4dbff e=#6cb6ff f=#c68c48 g=#ca8f49 h=#f8d4a6 i=#3b4654 j=#a7acb2 k=#fff6cc l=#f8e59f m=#f5d76e n=#dba771 o=#935d2a p=#c97a28 q=#a5662a r=#c8b162
+images:
+...............aaaaaaaaaaaaaa...............
+...........aaaaaaaaaaaaaaaaaaaaaa...........
+.........aaaaaaabbbbbbbbbbbbaaaaaaa.........
+.......aaaaabbbbccccccccccccbbbbaaada.......
+.....aaaaabbccccccccccccccccccccbcadaaa.....
+....aaaecccccccccccccccccccccccccdddddaa....
+...aaa.ecccccccccffffffffffcccccccbdbbaaa...
+..aaaeeeeefffffffggggggggggffffccccdccbaaa..
+.aaacchehhhhhggggggccccccggggggffccccccbaaa.
+.aaccchehhggghggghcccccccccgggcgggfccccccaa.
+aaacccccggghhggccccccccccccccggccgggfccccaaa
+aacccccggccccgccccccccccccccccgccccggfffccaa
+aaiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiaa
+aaiijjiiiijjiiiiiiiiiiiiiiiiiijjiiiijjiiiiaa
+aaiijjiiiijjiiiiiikkkkkkkkiiiijjiiiijjiiiiaa
+aaiiiiiiiiiiiiiiiilllmmllliiiiiiiiiiiiiiiiaa
+aannnnnnnnnoppppppmmmmmmmmnnnnnonnnnnnnnnnaa
+aanppppppppoppppppmmmaammmnpppponpppppppppaa
+aanpppppppqoppppppmmmaammmnpppqonppppppppqaa
+aanpppppppqoppppppmmmaammmnpppqonppppppppqaa
+aanpppppppqoppppppmmmaammmnpppqopppppppppqaa
+aanqqqqqqqqoppppppmmmmmmmmnqqqqoqqqqqqqqqqaa
+aapooooooooooooooommmmmmmmpoookkooooooooooaa
+aannnnnnnnnonnnnnnrrrmmrrrnnnnkknnnnnnnnnnaa
+aanpppppppponpppppnnnnnnnnppppnonpppppppppaa
+aanpppppppqonpppppppppppppppppponppppppppqaa
+aappppppppqoppppppppppppppppppqopppppppppqaa
+aaqqqqqqqqqoqqqqqqqqqqqqqqqqqqqoqqqqqqqqqqaa
+aaiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiaa
+aaiijjiiiijjiiiiiiiiiiiiiiiiiijjiiiijjiiiiaa
+aaiijjiiiijjiiiiiiiiiiiiiiiiiijjiiiijjiiiiaa
+aaiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.

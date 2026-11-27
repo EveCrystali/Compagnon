@@ -1,0 +1,35 @@
+# prise de pêche
+id: prise-saumon
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#b2886b b=#8a4a1f c=#7e4521 d=#724022 e=#f9be8c f=#f69d50 g=#c9824a h=#f9ba84 i=#d2884b j=#fac69a k=#ffffff l=#e8c5a3 m=#1c2128 n=#ecc9a6 o=#b27546 p=#ffd8b0 q=#ffe5cb r=#d0b296
+images:
+.................abbbbbbbbbbbccbab....................bba.
+.............abbbbbbbbbbbbbccbccabbbbb...............abbba
+..........abbbbbbdeeeeeebbcbccbbbbbbbbbbb...........bbbfbb
+........abbbbdeeeeffffffffffbbbbdeeeebbbbbb........bbbffbb
+......abbbdeeefffffffffffffffffffffffeeebbbbb.....bbbffabd
+....abbbdeefffffffggggggffffffffffffffffeebbbb...bbbffhbb.
+...abbdeeffffffffgiijjjjjjjjjjjjjjgfffffffeebbb.bbbffhfbb.
+..abbeefffffffffgieijjiijjiijjiiffieffffffffebbbbdffhffbb.
+.abbeffffggfffffgifeiibbiiffiiffiieffffffffffebbbffhffabd.
+.bbeffffgkkgfffgieffefbbffffffffffffgffffffffffbfhhfffbb..
+abdefffgkkkkgffgiefffiffilffllbbllfgleffffffffffhfffhhbb..
+bbefffgkkkmmkfffieggffiiffllffbbffllefffffffffghffhhffbb..
+bbefffgkkmmmkfffifbbeffffffffffffffffffffffffghfhhfffabd..
+bbeffffekmmkeffgifbbfffffffffffffffffgggggffghhhfffffbb...
+bbefffffekkefffgifeigniinniinniinninnnnnnnffhhhhhhhhhbb...
+bbffggfffffffffgifffiiffiiffiiffiieffffffffffhhhfffffdba..
+bbggoofffffffffgifffffffbbffffffffffffffffffffhfhhffffbb..
+dbaoffgggffgggggiggffiffbbffllffllfflfffffggfffhffhhffbb..
+.bbfpppqqqqqqqqqipppqqqqqqqqqqqqqqqqqqqqqqqpppfbhfffhhbb..
+.dbdfpppppppppppqippppppppppppppppppppppppppppbdbhhfffdda.
+..dbdfpppppppppppippppppppppppppppppppppppppradbdbfhfffbd.
+...dbdbrrrppppppppiiqpppppppppppppppppppprrfbdb.bdbfhffdb.
+....dbdbdfrrrpppppppppppppppppppppppprrrrfabdd...bdbfhfbd.
+......dddddffrrrrpppppppppppppprrrrrrfffadddd.....dddfhdda
+........ddddddfffffprrrrrrrrrrrffffffaddddd........dddfhdd
+..........ddddddddffffffffffffffadddddddd...........dddfdd
+.............ddddddddddddddddddddddddd...............ddddd
+.................dddddddddddddddd.....................ddd.
