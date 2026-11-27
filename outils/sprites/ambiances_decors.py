@@ -308,7 +308,7 @@ def regles():
 
     # ---- La Grande Panne : néons, câbles, papiers, poussière de bureau.
     d("grande-panne", "bureau-1337", 6, 240, True, [
-        onduler((0, 2, 96, 22), 0.5, 3), balayage((60, 30, 96, 40), G.C3, largeur=2.5, force=0.4, sur=[G.N0, G.N1, G.N2])])
+        onduler((0, 11, 96, 22), 0.5, 3), balayage((60, 30, 96, 40), G.C3, largeur=2.5, force=0.4, sur=[G.N0, G.N1, G.N2])])
     d("grande-panne", "bureau-echeance", 6, 240, True, [
         pulse(48, 30, 14, G.J3, force=0.35, ampleur=0.3, ry=8),
         particules((32, 14, 66, 34), [G.J3, G.E5], n=9, dx=2, dy=-4, graine=31, oscille=0.6)])
@@ -316,7 +316,7 @@ def regles():
         particules((50, 0, 96, 32), [G.E5, G.BLANC], n=12, dx=-3, dy=5, graine=32, oscille=0.6),
         pulse(84, 6, 16, G.E5, force=0.25, ampleur=0.3)])
     d("grande-panne", "caverne-cables", 6, 240, True, [
-        pulse(28, 30, 14, G.C2, force=0.45, ampleur=0.35, teinte=True), scintille((0, 0, 96, 40), ecart=120, part=0.6, graine=33),
+        pulse(28, 30, 14, G.C2, force=0.45, ampleur=0.2, teinte=True), scintille((0, 0, 96, 40), ecart=120, part=0.6, graine=33),
         particules((20, 18, 36, 32), [G.C3, G.T3], n=6, dx=0, dy=-8, graine=34)])
     d("grande-panne", "citadelle-nuage", 6, 250, True, [
         scintille((0, 0, 96, 18), ecart=80, part=0.5, graine=35),
