@@ -31,7 +31,7 @@
       "type": "recit",
       "humeur": "joie",
       "texte": [
-        "« Deux Pilou et demi, facile », a dit Tournebise. Je ne lui avais pas donné l'unité : il a deviné. « Tu l'as bien tenu, la goutte. À ce train, il arrive entier. J'en ai vu passer, des petits, au bout d'un fil ou dans un panier, qui ne faisaient plus qu'une pomme, ici. En dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Lui, il a de la marge. Ne la gaspille pas. »"
+        "« Deux Pilou et demi, au moins », a dit Tournebise. Je ne lui avais pas donné l'unité : il a deviné. « Tu l'as bien tenu, la goutte. À ce train, il arrive entier. J'en ai vu passer, des petits, au bout d'un fil ou dans un panier, qui ne faisaient plus qu'une pomme, ici. En dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Lui, il a de la marge. Ne la gaspille pas. »"
       ],
       "suite": "ch5-histoire"
     },
@@ -60,7 +60,7 @@
       "humeur": "triste",
       "texte": [
         "Voilà ce qu'il m'a dit. Il y a très longtemps, il était sur un autre toit, et il tournait, comme tout le monde. Un matin d'après orage, il a trouvé une petite nuageuse coincée dans sa gouttière. Il l'a appelée Ondée. Et il est descendu de son toit, lui, un coq en fer, pour l'emmener à pied derrière les Dents-de-Lait.",
-        "Il est arrivé à temps. Par le col, trois jours de neige, la veille de la gelée. Il l'a vue boire au lac avec les autres. Il était si fatigué qu'il s'est assis. « Une minute. Je me suis dit : une minute. » Quand il a rouvert les yeux, il faisait jour, l'herbe était blanche, et le ciel était vide.",
+        "Il est arrivé à temps. Par le col, trois jours de neige, la veille de la gelée. Il l'a vue boire au lac avec les autres, tous serrés comme des moutons : la veille du départ, ils se serrent. Il était si fatigué qu'il s'est assis. « Une minute. Je me suis dit : une minute. » Quand il a rouvert les yeux, il faisait jour, l'herbe était blanche, et le ciel était vide.",
         "« Je ne sais pas si elle m'a cherché avant de partir. C'est ça que je regarde, quand je regarde là-bas. » Il a grincé un coup. « J'ai fait tout le chemin, la goutte, et j'ai raté la seule minute qui comptait. » Je n'ai rien trouvé à dire. La soupe était prête. Elle a refroidi."
       ],
       "suite": "ch5-minute"
@@ -81,7 +81,7 @@
       "type": "recit",
       "humeur": "tendre",
       "texte": [
-        "J'ai demandé : « Vous regrettez d'y être allé ? » Le tuyau n'a rien dit pendant longtemps. Puis : « Le voyage ? Jamais. Pas un pas. Elle est arrivée, tu comprends. Elle est grande, maintenant, quelque part. C'est moi qui l'ai menée jusque-là. » Un grincement. « La minute, par contre. La minute, tous les jours. » Il n'a plus parlé de la soirée. Mais il a laissé la lanterne allumée pour nous."
+        "J'ai demandé : « Vous regrettez d'y être allé ? » Le tuyau n'a rien dit pendant longtemps. Puis : « Le voyage ? Jamais. Pas un pas. Elle est arrivée, tu comprends. Elle est grande, maintenant, quelque part. C'est moi qui l'ai menée jusque-là. » Un grincement. « La minute, par contre. La minute, tous les jours. » Il n'a plus parlé d'elle de la soirée. Mais il a laissé la lanterne allumée pour nous."
       ],
       "suite": "ch5-toit"
     },
@@ -89,7 +89,7 @@
       "type": "recit",
       "humeur": "tendre",
       "texte": [
-        "Je suis monté sur le toit par la gouttière, ce qui m'a pris un temps fou, et je me suis assis à côté de lui. On a regardé la montagne. On n'a rien dit. Au bout d'un long moment, il a poussé vers moi, du bec, un petit sachet. « Café de gland. C'est infect. Ça tiendrait éveillé un caillou. Tu le boiras la dernière nuit, pas avant. Et tu ne t'assieds pas. Même une minute. »"
+        "Je suis monté sur le toit par la gouttière, ce qui m'a pris un temps fou, et je me suis assis à côté de lui. On a regardé la montagne. On n'a rien dit. Au bout d'un long moment, il a poussé vers moi, du bec, un petit sachet. « Café de gland. C'est infect. Ça tiendrait éveillé un caillou, et ça ferait courir un escargot. Tu le boiras la dernière nuit, pas avant. Et tu ne t'assieds pas. Même une minute. »"
       ],
       "suite": "ch5-toit"
     },
@@ -97,7 +97,7 @@
       "type": "recit",
       "humeur": "determine",
       "texte": [
-        "J'ai dit : « Moi, je ne dormirai pas. Je vous le promets. » C'est sorti tout seul. Le tuyau a ri, un rire de vieille charnière, pas méchant. « Tout le monde promet ça, la goutte. Moi aussi, j'avais promis. » Puis quelque chose a glissé le long de la gouttière : un petit sachet. « Café de gland. C'est infect. Bois-le la dernière nuit. Et puisque tu as promis : tiens parole, toi. » J'ai une promesse sur le dos, maintenant. Ça pèse plus que la casserole."
+        "J'ai dit : « Moi, je ne dormirai pas. Je vous le promets. » C'est sorti tout seul. Le tuyau a ri, un rire de vieille charnière, pas méchant. « Tout le monde promet ça, la goutte. Moi aussi, j'avais promis. » Puis quelque chose a glissé le long de la gouttière : un petit sachet. « Café de gland. C'est infect, ça ferait courir un escargot. Bois-le la dernière nuit. Et puisque tu as promis : tiens parole, toi. » J'ai une promesse sur le dos, maintenant. Ça pèse plus que la casserole."
       ],
       "suite": "ch5-toit"
     },
@@ -171,7 +171,7 @@
       "recompense": { "po": 20, "xp": 10 },
       "texte": [
         "Voilà. Il y a deux passages, m'a dit Tournebise. Le col, là-haut, entre deux dents : la Gencive. C'est par là qu'il est passé. C'est long et froid, mais on voit où on met les pieds. Si on n'a pas perdu un seul jour en route, on arrive au lac le dernier soir. Pas avant.",
-        "Ou le Trou-qui-Siffle, au pied de la paroi. Le vent traverse la montagne par là. C'est noir et c'est court : on sort de l'autre côté avec un jour d'avance. « Mais là-dedans, ça déchire. Quand le sifflet monte dans l'aigu, tu ne bouges plus. Et ton petit, dans le vent, ne le serre pas : un nuage qu'on serre, ça file entre les doigts. » Brouillon attend. Par où ?"
+        "Ou le Trou-qui-Siffle, au pied de la paroi. Le vent traverse la montagne par là. C'est noir et c'est court : on sort de l'autre côté avec une demi-journée d'avance. « Mais là-dedans, ça déchire. Le trou siffle un la. Quand il monte au si, tu ne bouges plus. Et ton petit, dans le vent, ne le serre pas : un nuage qu'on serre, ça file entre les doigts. » Brouillon attend. Par où ?"
       ],
       "options": [
         { "id": "ch5-routes-col", "libelle": "Le col : long, mais on voit clair", "vers": "ch6-sentier", "effets": [ { "drapeau": "route-col" } ] },
@@ -180,12 +180,15 @@
       ]
     },
     "ch5-temps": {
-      "type": "recit",
+      "type": "choix",
       "humeur": "peur",
       "texte": [
-        "Je lui ai avoué qu'on avait perdu un jour. Il le savait : « Ça se voit à ta façon de regarder derrière toi. » Par le col, avec un jour de moins, on arrivera pour les voir partir, pas pour dire au revoir. À moins de regagner le temps dans la montée, en coupant par les rochers au lieu de suivre les lacets. « C'est faisable. C'est casse-figure. » Par le trou, même en retard, on arrive le dernier soir. Voilà. Je sais tout, maintenant."
+        "Je lui ai avoué qu'on avait perdu un jour. Il le savait : « Ça se voit à ta façon de regarder derrière toi. » Par le col, avec un jour de moins, on arrivera pour les voir partir, pas pour dire au revoir. À moins de le regagner dans la montée, en coupant par les rochers au lieu des lacets : « C'est faisable. C'est casse-figure. » Ou de trouver, là-haut, des jambes qui ne dorment pas. Par le trou, même en retard, on arrive le dernier soir. Alors, par où ?"
       ],
-      "suite": "ch5-routes"
+      "options": [
+        { "id": "ch5-temps-col", "libelle": "Le col quand même : tu couperas par les rochers", "vers": "ch6-sentier", "effets": [ { "drapeau": "route-col" } ] },
+        { "id": "ch5-temps-trou", "libelle": "Le Trou-qui-Siffle : noir, mais à temps", "vers": "ch8-entree", "effets": [ { "drapeau": "route-gorge" } ] }
+      ]
     }
   }
 }

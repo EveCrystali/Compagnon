@@ -38,7 +38,7 @@
     { "id": "plume-de-girouette", "nom": "Plume de girouette", "portable": true, "emplacement": "tete" }
   ],
   "souvenirs": [
-    { "id": "rond-sec", "nom": "Le rond sec", "texte": "Il a plu partout sur la rive, sauf sur toi. Un cercle d'herbe sèche, juste à ta taille." },
+    { "id": "rond-sec", "nom": "Le rond sec", "texte": "Sa première vraie pluie, au bord du lac, était pour toi. Et un soir, sur ta vitre mouillée, un rond sans une goutte, juste à ta taille." },
     { "id": "main-levee", "nom": "La main levée", "texte": "Tu as agité la main longtemps. Au cas où les nuages auraient des yeux derrière." },
     { "id": "buee-du-matin", "nom": "La buée du matin", "texte": "Tout un hiver, il s'est posé sur la vitre de la cabane. Au printemps, vous recommencerez." },
     { "id": "arc-beige", "nom": "L'arc beige", "texte": "Vu de très loin, au-dessus du lac : un tout petit arc-en-ciel. Beige. C'était pour toi." },
