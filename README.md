@@ -1,7 +1,7 @@
 # Pilou — ton petit compagnon de bureau
 
 <p align="center">
-  <img src="docs/promo/pilou-promo.gif" alt="Pilou en action : il vit en bas de l'écran, joue, pêche, évolue avec toi et rend visite à tes amis" width="640">
+  <img src="docs/promo/pilou-promo.gif" alt="Pilou en action : il vit en bas de l'écran, joue, pêche, évolue avec toi et rend visite à tes amis" width="560">
 </p>
 
 <p align="center">
