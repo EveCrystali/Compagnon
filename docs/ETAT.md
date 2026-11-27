@@ -3,7 +3,7 @@
 À mettre à jour à la fin de chaque session : ce qui est fait, ce qui est en cours, ce qui attend.
 Dernière mise à jour : 27 novembre 2026.
 
-## En ligne (v0.9.74)
+## En ligne (v0.9.75 et suivantes)
 
 - Overlay Windows, app Android, mod Claude Code, extensions VS Code et Visual Studio.
 - Boutique garnie, métiers et succès partagés entre appareils, expéditions, Défense du bureau,
@@ -14,7 +14,8 @@ Dernière mise à jour : 27 novembre 2026.
   (`--essai=campagne:…`). Sur Android : onglet Aventure (conversation, épreuves, attente), notification de retour,
   bulle flottante, accueil repensé.
 - **Les trois grandes campagnes ont été relues de bout en bout** (parcours entiers, raccords, dosage des fins, orthographe) ;
-  Petit Nuage est en plus passé au correcteur LanguageTool (PR #67). Le prologue est court exprès.
+  les quatre sont passées au correcteur LanguageTool (français) le 27 novembre : 550 signalements triés, aucune faute
+  retenue, aucun texte modifié. Le prologue est court exprès.
 - **Illustrations** : 46 décors animés en boucle, 69 portraits animés de 29 personnages (champs `personnage` et
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
@@ -25,14 +26,10 @@ Dernière mise à jour : 27 novembre 2026.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 
-## En cours (branches `claude/…`, une PR chacune)
+## En cours
 
-| Branche | Travail |
-|---|---|
-| `visite-nouvelles-scenes` (PR n° 76) | Visite guidée : pêche, cuisine, aventure (personnage, épreuve, fin), mot, complicité et journal |
-| `finitions-campagnes` | Relecture de la pose des portraits (champs `personnage` / `expression`), deux veilles du phare ramenées à 20–30 min, cet état des lieux |
-
-Toutes les autres branches `claude/…` du dépôt sont fusionnées dans `main`.
+Aucune branche : tout est fusionné dans `main`. La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la
+pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
