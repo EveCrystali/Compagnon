@@ -197,8 +197,8 @@ internal sealed class FenetreExpeditions : Window
             carte.Child = g;
             _lieux.Children.Add(carte);
         }
-        _lieux.Children.Add(Texte("⚡ L'énergie remonte toute seule jusqu'à 50 (≈ +5/h), surtout en travaillant : +1 toutes les 4 min "
-                                  + "dans une appli de travail, quand une IA finit, à chaque quête (60 par jour au plus) ; et en mangeant : plats "
+        _lieux.Children.Add(Texte("⚡ L'énergie remonte toute seule jusqu'à 50 (≈ +5/h), surtout en travaillant : +1 toutes les 6 min "
+                                  + "dans une appli de travail, quand une IA finit, à chaque quête (40 par jour au plus) ; et en mangeant : plats "
                                   + "cuisinés, en-cas de route de la boutique (40 par jour au plus). Pilou boudeur : deux fois moins vite.",
             11, Bandeau.Argent));
     }

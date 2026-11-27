@@ -47,7 +47,7 @@ gargouille de latence.
 | Source | Gain | Plafond |
 |---|---|---|
 | Attente | ≈ +5 / h | jusqu'à 50 seulement |
-| **Travail productif** : temps passé dans une appli de travail (code, tableur, écriture, mail, diaporama, lecture, dessin), la personne présente | +1 toutes les 4 min | 60 / jour (avec les deux lignes suivantes) |
+| **Travail productif** : temps passé dans une appli de travail (code, tableur, écriture, mail, diaporama, lecture, dessin), la personne présente | +1 toutes les 6 min | 40 / jour (avec les deux lignes suivantes) |
 | Une IA finit (« ✓ fini », Claude, Codex…) | +1, au plus toutes les 3 min | (même plafond) |
 | Une quête réussie | +2 | (même plafond) |
 | Plat cuisiné | +6 (inventé +4, brûlé +1) | 40 / jour (repas) |

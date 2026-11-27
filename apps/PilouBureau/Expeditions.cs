@@ -40,9 +40,9 @@ public static class Jauge
     public const double Max = 100;
     // À l'attente : +5 par heure, jusqu'à 50 seulement ; au-delà, il faut travailler ou manger.
     public const double PlafondAttente = 50, ParHeure = 5;
-    // Travail productif : +1 toutes les 4 min passées dans une appli de travail (au plus 60 par jour, travail,
+    // Travail productif : +1 toutes les 6 min passées dans une appli de travail (au plus 40 par jour, travail,
     // IA et quêtes compris). Un appel compte au plus une minute (un long silence du minuteur ne paie pas double).
-    public const double Tranche = 240, PlafondTravail = 60, AppelMax = 60;
+    public const double Tranche = 360, PlafondTravail = 40, AppelMax = 60;
     public const double BonusTour = 1, BonusQuete = 2, EcartTours = 180_000;
     // Nourriture : au plus 40 par jour.
     public const double PlafondNourriture = 40;
