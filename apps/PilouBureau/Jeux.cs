@@ -197,7 +197,7 @@ public sealed partial class FenetrePilou
     // Essai (--essai=<nom>) : déclenche tout de suite un jeu ou un état, pour les rendus de contrôle.
     // Rendus de contrôle : stade, tenue ou objet imposés (--essai=stade:3, --essai=tenue:code, --essai=objet:cape).
     private int _essaiStade;
-    private string _essaiTenue = "", _essaiObjet = "";
+    private string _essaiTenue = "", _essaiObjet = "", _essaiHumeur = "";
 
     private IReadOnlyDictionary<string, string> EquipeEssai(IReadOnlyDictionary<string, string> equipe)
     {
@@ -219,7 +219,16 @@ public sealed partial class FenetrePilou
             nom = bord.Jeu;
         }
         if (nom.StartsWith("stade:") && int.TryParse(nom[6..], out var st)) _essaiStade = Math.Clamp(st, 1, 4);
+        // --essai=tenue:voyage-marche (course, bateau, grimpe, nage, nuit, cache, attend) : tenues de voyage des campagnes.
         if (nom.StartsWith("tenue:")) _essaiTenue = nom[6..];
+        // --essai=humeur:joie (peur, triste, surpris, determine, fatigue, tendre, colere, malice, neutre).
+        if (nom.StartsWith("humeur:")) _essaiHumeur = nom[7..];
+        // --essai=dessin:origine : le rendu d'origine (grille 48 × 56) ; dessin:fin : le dessin fin.
+        if (nom.StartsWith("dessin:"))
+        {
+            _reglages.DessinFin = nom[7..] != "origine";
+            AppliquerTaille();
+        }
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.

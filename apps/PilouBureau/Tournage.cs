@@ -180,7 +180,7 @@ public static class Tournage
     };
 
     // Familles à paramètre (--essai=stade:3, tenue:code, objet:cape, soins:faim, meteo:pluie:parapluie).
-    public static readonly IReadOnlyList<string> FamillesConnues = new[] { "stade:", "tenue:", "objet:", "soins:", "meteo:" };
+    public static readonly IReadOnlyList<string> FamillesConnues = new[] { "stade:", "tenue:", "objet:", "soins:", "meteo:", "humeur:", "dessin:" };
 
     public static bool EssaiConnu(string scene) =>
         EssaisConnus.Contains(scene) || EssaiAuBord(scene) is not null

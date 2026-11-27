@@ -1,0 +1,17 @@
+# bouche, dessin fin, centrée sur l'axe de Pilou
+id: bouche-surpris
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3a2a2f
+images:
+..aaaa..
+.aaaaaa.
+aabbbbaa
+aabbbbaa
+aabbbbaa
+aabbbbaa
+aabbbbaa
+aabbbbaa
+.aaaaaa.
+..aaaa..

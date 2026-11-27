@@ -25,7 +25,9 @@ internal sealed class FenetreBoutique : Window
     private readonly WrapPanel _onglets = new() { Margin = new Thickness(0, 0, 0, 6) };
     private readonly StackPanel _etageres = new() { Margin = new Thickness(0, 0, 8, 12) };
     private readonly ScrollViewer _defile;
-    private readonly Grid _scene = new() { Width = 256, Height = 216, ClipToBounds = true };
+    // Hauteur : celle de Pilou en dessin fin au zoom net le plus grand (4 unités par pixel de grille : 224), plus sa marge.
+    private readonly Grid _scene = new() { Width = 256, Height = 228, ClipToBounds = true };
+    private uint[]? _pilouPixels;
     private readonly TextBlock _nom = Texte(15, Bandeau.ArgentClair, gras: true);
     private readonly TextBlock _detail = Texte(11.5, Bandeau.Argent);
     private readonly TextBlock _message = Texte(11.5, Bandeau.Violet);
@@ -222,7 +224,10 @@ internal sealed class FenetreBoutique : Window
                     VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(x, y, 0, 0),
                 });
         }
-        _pilouVu = Apercu.Vue(Apercu.Image(AllureApercu(_choisi)), 3.4);
+        // Dessin fin : Pilou sur la grille 96 × 112, au zoom le plus proche de 3,4 qui met un pixel fin sur un nombre
+        // entier de pixels physiques.
+        _pilouPixels = null;
+        _pilouVu = Apercu.Vue(Apercu.ImageSiChange(AllureApercu(_choisi), ref _pilouPixels, fin: true)!, Finesse.ZoomNet(3.4));
         _pilouVu.HorizontalAlignment = HorizontalAlignment.Center;
         _pilouVu.VerticalAlignment = VerticalAlignment.Bottom;
         _pilouVu.Margin = new Thickness(0, 0, 0, 2);
@@ -742,7 +747,7 @@ internal sealed class FenetreBoutique : Window
         }
         int k = (int)(_t / 140);
         _enseigne.Palette = new Brush?[] { null, k % 37 == 0 || k % 37 == 2 ? NeonClair : Neon };
-        if (_pilouVu is not null) _pilouVu.Source = Apercu.Image(AllureApercu(_choisi));
+        if (_pilouVu is not null && Apercu.ImageSiChange(AllureApercu(_choisi), ref _pilouPixels, fin: true) is { } image) _pilouVu.Source = image;
     }
 }
 

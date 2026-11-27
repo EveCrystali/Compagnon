@@ -52,6 +52,60 @@ public final class Dessin {
             }
     }
 
+    /** Rendu fin (grille 96 × 112) dans le même carré : p reste la taille d'un pixel de la grille 48 × 56. */
+    public static void dessinerFin(Peintre pe, float x0, float y0, float p, RenduPilou.Allure a) {
+        int[] g = RenduPilou.rendre(a, Sprites.banque(), null, 2);
+        float f = p / 2;
+        for (int y = 0; y < 2 * H; y++)
+            for (int x = 0; x < 2 * W; x++) {
+                int c = g[y * 2 * W + x];
+                if (c != 0) pe.rect(x0 + (x + 2) * f, y0 + (y + 2) * f, x0 + (x + 3) * f, y0 + (y + 3) * f, c);
+            }
+    }
+
+    /**
+     * Pixels physiques d'un pixel fin pour une vue dont le pixel de grille vaut p : l'entier le plus proche, pour que
+     * chaque pixel fin tombe sur un nombre entier de pixels de l'écran. Moins de 2 : la vue reste au rendu 1×.
+     */
+    public static int pixelFin(float p) {
+        return Math.round(p / 2);
+    }
+
+    /**
+     * Image de Pilou au rendu fin, réécrite d'une image à l'autre sans rien allouer : une vue animée la garde et la
+     * dessine d'un seul trait (un bitmap de 96 × 112 agrandi au plus proche voisin) au lieu d'un rectangle par pixel.
+     */
+    public static final class ImageFine {
+        public static final int LARGEUR = 2 * W, HAUTEUR = 2 * H;
+        private final RenduPilou.Tampon tampon = new RenduPilou.Tampon();
+        private final int[] dernier = new int[LARGEUR * HAUTEUR];
+        private final Bitmap bitmap = Bitmap.createBitmap(LARGEUR, HAUTEUR, Bitmap.Config.ARGB_8888);
+        private final Paint pinceau = new Paint();
+        private final android.graphics.RectF cadre = new android.graphics.RectF();
+        private boolean pleine;
+
+        public ImageFine() {
+            pinceau.setAntiAlias(false);
+            pinceau.setFilterBitmap(false);
+            pinceau.setDither(false);
+        }
+
+        /** Rend l'allure ; le bitmap n'est réécrit que si des pixels ont changé (Pilou respire lentement). */
+        public void rendre(RenduPilou.Allure a) {
+            int[] g = RenduPilou.rendre(a, Sprites.banque(), null, 2, tampon);
+            if (pleine && java.util.Arrays.equals(g, dernier)) return;
+            System.arraycopy(g, 0, dernier, 0, dernier.length);
+            bitmap.setPixels(dernier, 0, LARGEUR, 0, 0, LARGEUR, HAUTEUR);
+            pleine = true;
+        }
+
+        /** Dessine l'image, coin haut-gauche de la grille en (x0, y0), f pixels de l'écran par pixel fin. */
+        public void dessiner(Canvas cv, float x0, float y0, float f) {
+            cadre.set(x0, y0, x0 + LARGEUR * f, y0 + HAUTEUR * f);
+            cv.drawBitmap(bitmap, null, cadre, pinceau);
+        }
+    }
+
     public static RenduPilou.Allure allure(String expr, long t, String couleur, String accessoire, boolean cligne, float saut) {
         RenduPilou.Allure a = new RenduPilou.Allure();
         a.expr = expr == null ? "repos" : expr;

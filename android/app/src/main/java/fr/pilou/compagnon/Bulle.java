@@ -42,7 +42,7 @@ final class Bulle {
         ctx = c;
         wm = c.getSystemService(WindowManager.class);
         d = c.getResources().getDisplayMetrics().density;
-        pilou = new PilouVue(c, 2.2f * d * Prefs.taille(c));
+        pilou = new PilouVue(c, 2.2f * d * Prefs.taille(c), true);
         panneau = new LinearLayout(c);
         panneau.setOrientation(LinearLayout.VERTICAL);
         int m = (int) (10 * d);

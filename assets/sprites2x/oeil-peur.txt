@@ -1,0 +1,23 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-peur
+slot: visage
+ancre: aucun
+decalage: 0 -4
+palette: a=#1c2128 b=#ffffff
+images:
+.........aaa
+......aaaaa.
+...aaaaa....
+..aaa.......
+....aaaa....
+..aaaaaaaa..
+.aabbbbbbaa.
+.abbbbbbbba.
+aabbbbbbbbaa
+aabbbbaabbaa
+aabbbbaabbaa
+aabbbbbbbbaa
+aabbbbbbbbaa
+.abbbbbbbba.
+.aaabbbbaaa.
+...aaaaaa...

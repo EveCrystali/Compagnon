@@ -1,0 +1,31 @@
+# Tenue de voyage « nuit » : couverture en patchwork
+id: voyage-couverture
+slot: cou
+ancre: pieds
+decalage: -44 -12
+palette: a=#1c2128 b=#f6f8fa c=#c9d1d9 d=#4a8fdc e=#9b8cff f=#6a5acd g=#3a2a7a
+images:
+........................................................................................
+........................................................................................
+.............aaaaaa......................aaaaaa......................aaaaa..............
+..........aaaaaaaaaaaa................aaaaaaaaaaaa................aaaaaaaaaaa...........
+.......aaaaaaabbbbaaaaaaaa........aaaaaaaabbbbaaaaaaaa........aaaaaaaabbbaaaaaaa........
+....aaaaaaabbbbbbbbbbaaaaaaaa..aaaaaaaabbbbbbbbbbaaaaaaaa..aaaaaaaabbbbbbbbbaaaaaaa.....
+...aaaaabbbbbbccccbbbbbbbaaaaaaaaaabbbbbbbccccbbbbbbbaaaaaaaaaabbbbbbbcccbbbbbbaaaaaa...
+..aaabbbbbbcccbbbbcccbbbbbbbaaaabbbbbbbcccbbbbcccbbbbbbbaaaabbbbbbbcccbbbcccbbbbbbaaaa..
+..aabbbbcccbbbddddbbbccccbbbbbbbbbbccccbbbeeeebbbccccbbbbbbbbbbccccbbbddffbbcccbbbbbaa..
+.aaabcccbbbfdddddddddbbbbcccbbbbcccbbbbeeeeeeeeefbbbbcccbbbbcccbbbbdddddfffffbbcccbbaaa.
+.aabcbbbffffddddddddddddfbbbccccbbbfeeeeeeeeeeeefffffbbbccccbbbdddddddddffffffffbbcceaa.
+.aabbfffffffddddddddddddffffbbbbffffeeeeeeeeeeeeffffffffbbbbddddddddddddfffffffffffbbaa.
+.aafffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeaa.
+aaafffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeaaa
+aaffffffffffgdddddddddddgfffffffffffgeeeeeeeeeeegfffffffffffgdddddddddddgfffffffffffgeaa
+aagfffgfffgfddgdddgdddgdffgfffgfffgfeegeeegeeegeffgfffgfffgfddgdddgdddgdffgfffgfffgfeega
+aaeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddffaa
+aaeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddffaa
+aeeeeeeeeeeegfffffffffffgdddddddddddgfffffffffffgeeeeeeeeeeegfffffffffffgdddddddddddgffa
+aeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddfffa
+aeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddfffa
+aeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddfffa
+eeeeeeeeeeeegfffffffffffgdddddddddddgfffffffffffgeeeeeeeeeeegfffffffffffgdddddddddddgfff
+eeeeeeeeeeeeffffffffffffddddddddddddffffffffffffeeeeeeeeeeeeffffffffffffddddddddddddffff

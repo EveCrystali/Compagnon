@@ -1,0 +1,12 @@
+# bouche d'humeur (campagnes), centrée sur l'axe de Pilou
+id: bouche-joie
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffffff c=#3a2a2f d=#f69d50
+images:
+aaaaaaaaaa
+abbbbbbbba
+acccccccca
+.acddddca.
+..aaaaaa..
