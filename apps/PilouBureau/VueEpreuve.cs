@@ -259,31 +259,28 @@ internal sealed class VueEpreuve : Border
             bool allume = r.Phase == Reflexe.Etape.Allume;
             if (allume)
             {
-                // Halo : trois carrés concentriques qui respirent.
-                double k = 1 + 0.08 * Math.Sin(t / 60);
+                // Halo en escalier (trois croix de lumière qui respirent), serré autour de l'étoile.
+                double k = 1 + 0.06 * Math.Sin(t / 60);
                 for (int i = 3; i >= 1; i--)
                 {
-                    var halo = new SolidColorBrush(Color.FromArgb((byte)(28 * i), 0xf5, 0xd7, 0x6e));
-                    Carre(dc, halo, 200 - 22 * i * k, 92 - 22 * i * k, 44 * i * k, 44 * i * k);
+                    var halo = new SolidColorBrush(Color.FromArgb((byte)(34 * (4 - i)), 0xf5, 0xd7, 0x6e));
+                    double ray = (30 + 6 * i) * k, c = ray * 0.55;
+                    Carre(dc, halo, 200 - ray, 92 - c, 2 * ray, 2 * c);
+                    Carre(dc, halo, 200 - c, 92 - ray, 2 * c, 2 * ray);
                 }
             }
-            Motif(dc, Etoile, 200, 92, 8, allume ? Or : (int)(t / 700) % 2 == 0 ? Ligne : Gel("#3b4654"));
+            Motif(dc, Etoile, 200, 92, 7, allume ? Or : (int)(t / 700) % 2 == 0 ? Ligne : Gel("#3b4654"));
+            // Les manches : les réussites d'abord (seul leur nombre compte), puis les ratées, puis celles à jouer.
             for (int i = 0; i < Reflexe.Manches; i++)
             {
                 double x = 200 - (Reflexe.Manches - 1) * 15 + i * 30;
-                if (i < r.Manche)
-                {
-                    bool touche = i < r.Touches + r.Ratees && TouchesAvant(r, i);
-                    if (touche) Motif(dc, Losange, x, 160, 2.4, Orange);
-                    else Ecrire(dc, "✕", x, 160, 15, Ardoise, police: "Segoe UI Symbol");
-                }
+                if (i < r.Touches) Motif(dc, Losange, x, 160, 2.4, Orange);
+                else if (i < r.Manche) Ecrire(dc, "✕", x, 160, 15, Ardoise, police: "Segoe UI Symbol");
                 else Contour(dc, x - 7, 153, 14, 14, Ligne);
             }
             Ecrire(dc, $"il en faut {r.Besoin} sur {Reflexe.Manches}", 200, 26, 11.5, Gel("#adbac7"), gras: false);
         }
 
-        // L'ordre exact des manches n'est pas gardé : les réussites d'abord (ce qui compte, c'est le nombre).
-        private static bool TouchesAvant(Reflexe r, int i) => i < r.Touches;
 
         private static readonly string[] Losange = { "..#..", ".###.", "#####", ".###.", "..#.." };
 

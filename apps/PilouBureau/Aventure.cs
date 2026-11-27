@@ -117,7 +117,7 @@ public static class Aventure
         if (e is null) return "";
         var l = new List<string>();
         if (e.ChapitreTitre != "") l.Add($"Chapitre {e.ChapitreNumero}/{e.ChapitreTotal} · {e.ChapitreTitre}");
-        if (e.Lieu != "") l.Add("⌖ " + e.Lieu);
+        if (e.Lieu != "") l.Add("▸ " + e.Lieu);
         l.Add("clic : ouvrir l'aventure");
         return string.Join("\n", l);
     }
@@ -236,10 +236,9 @@ public static class Aventure
             {
                 s = Statut.Nouvelle;
                 action = "Commencer";
-                detail = c.Duree;
+                detail = "pas encore commencée";
             }
             bool bloquee = courante != "" && c.Id != courante && s != Statut.Verrouillee;
-            if (bloquee) detail = "une autre aventure est en cours";
             l.Add(new Fiche(c.Id, c.Titre, c.Ton, c.Accroche, c.Duree, c.Niveau, s, prog, fins, total, action, detail, bloquee));
         }
         return l;

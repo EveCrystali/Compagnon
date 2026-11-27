@@ -129,7 +129,7 @@ public sealed partial class FenetrePilou
     {
         _tSaut = Maintenant;
         _salueJusque = Maintenant + 2200;
-        Dire(r.Lieu == "" ? $"✉ {r.Texte}" : $"✉ {r.Texte} · ⌖ {r.Lieu}", 9000);
+        Dire(r.Lieu == "" ? $"✉ {r.Texte}" : $"✉ {r.Texte} · ▸ {r.Lieu}", 9000);
         _messageTag = "aventure";
         Bulle(_vivantes, Epoque);
         if (_essaiCamp is null && !_demo) PublierSortie("✉ Pilou est revenu de son aventure", r.Lieu == "" ? "il t'attend" : $"{r.Lieu} · il t'attend");

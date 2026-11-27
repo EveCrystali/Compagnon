@@ -447,6 +447,7 @@ internal sealed class FenetreAventure : Window
             var b = Bouton($"{signe} {f.Action}", f.Statut is Aventure.Statut.Nouvelle or Aventure.Statut.EnCours or Aventure.Statut.Suspendue,
                 () => Lancer(f), 13.5);
             b.IsEnabled = !f.Bloquee;
+            if (f.Bloquee) b.ToolTip = "Une seule aventure à la fois : finis ou mets de côté celle en cours";
             b.MinWidth = 140;
             boutons.Children.Add(b);
             if (f.Statut == Aventure.Statut.Suspendue && !f.Bloquee)
@@ -783,6 +784,12 @@ internal sealed class FenetreAventure : Window
         dg.Children.Add(_bandeDecor);
         _scene.Children.Clear();
         _scene.Children.Add(_defile);
+        // Le haut du fil s'efface en douceur sous la bande de décor (au lieu d'une coupe nette).
+        _scene.Children.Add(new Border
+        {
+            Height = 22, VerticalAlignment = VerticalAlignment.Top, IsHitTestVisible = false, Margin = new Thickness(0, 0, 10, 0),
+            Background = new LinearGradientBrush(Color.FromArgb(255, 18, 23, 41), Color.FromArgb(0, 18, 23, 41), 90),
+        });
         Grid.SetRow(_scene, 1);
         dg.Children.Add(_scene);
         _action.Background = Bandeau.Nuit2;
@@ -818,7 +825,7 @@ internal sealed class FenetreAventure : Window
         Reecrire(_chapitreN, $"CHAPITRE {e.ChapitreNumero}/{Math.Max(e.ChapitreNumero, e.ChapitreTotal)}", 2);
         _chapitreTitre.Text = e.ChapitreTitre;
         _progression.Children.Clear();
-        _progression.Children.Add(Cases(e.Progression, 16, Bandeau.OrangePo));
+        _progression.Children.Add(Cases(e.Progression, 14, Bandeau.OrangePo));
         _progression.Children.Add(Texte($"  {Math.Round(e.Progression * 100)} %", 11, Bandeau.Argent));
         _sac.Children.Clear();
         foreach (var o in e.Objets) _sac.Children.Add(Pastille(Aventure.NomObjet(c, o), Bandeau.ArgentClair, o));
@@ -985,7 +992,7 @@ internal sealed class FenetreAventure : Window
         var nom = lieu != "" ? lieu : Aventure.NomDecor(c, decor);
         Reecrire(_decorLieu, nom, 3);
         _decorChapitre.Text = _etat is { } e ? $"{c.Titre} · chapitre {e.ChapitreNumero} · {e.ChapitreTitre}" : c.Titre;
-        _lieu.Text = nom == "" ? "" : "⌖ " + nom;
+        _lieu.Text = nom == "" ? "" : "▸ " + nom;
         if (sprite is null && _bandeDecor.Children.Count > 0 && _bandeDecor.Children[0] is Border fond)
         {
             // Pas encore de dessin pour ce décor : un ciel sobre, et le nom du lieu.
@@ -1352,7 +1359,7 @@ internal sealed class FenetreAventure : Window
         }
         g.Children.Add(signe);
         var p = new StackPanel();
-        p.Children.Add(Enseigne($"FIN · {Aventure.NomIssue(e.Issue)}", teinte, 2.5));
+        p.Children.Add(Enseigne(Aventure.NomIssue(e.Issue), teinte, 2.5));
         var titre = Texte($"« {e.TitreFin} »", 18, Bandeau.ArgentClair, true);
         titre.Margin = new Thickness(0, 6, 0, 6);
         p.Children.Add(titre);
