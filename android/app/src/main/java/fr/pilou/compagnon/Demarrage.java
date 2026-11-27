@@ -20,6 +20,7 @@ public final class Demarrage extends BroadcastReceiver {
             try {
                 Retour.programmer(app);
                 Retour.verifier(app); // revenu pendant que le téléphone était éteint : la notification part maintenant
+                MotDuSoir.programmer(app); // le mot du soir aussi, qu'Android oublie au redémarrage
             } finally {
                 fin.finish();
             }
