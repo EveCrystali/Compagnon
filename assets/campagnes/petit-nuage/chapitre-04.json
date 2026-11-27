@@ -70,7 +70,7 @@
         "Et il a demandé : « Brouillon petit ? » Il ne fait plus trois Pilou, et il le voit bien. Il attend. Je pourrais lui dire la vérité. Je pourrais aussi lui dire que c'est moi qui grandis : il le croirait, il croit tout ce que je dis. Qu'est-ce que je réponds ?"
       ],
       "options": [
-        { "id": "ch4-question-vrai", "libelle": "La vérité : oui, il rétrécit, c'est pour ça qu'on se dépêche", "vers": "ch4-vrai", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch4-question-vrai", "libelle": "La vérité : il rétrécit, c'est pour ça qu'on se dépêche", "vers": "ch4-vrai", "effets": [ { "var": "lien", "plus": 1 } ] },
         { "id": "ch4-question-menti", "libelle": "Dis-lui que c'est toi qui grandis", "vers": "ch4-menti", "effets": [ { "drapeau": "a-menti" }, { "var": "lien", "plus": 1 } ] }
       ]
     },

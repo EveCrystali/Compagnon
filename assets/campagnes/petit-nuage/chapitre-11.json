@@ -80,7 +80,7 @@
       ],
       "options": [
         { "id": "ch11-veille-cafe", "libelle": "Bois le café de gland, tant pis pour le goût", "vers": "ch11-nuit", "si": { "objet": "cafe" } },
-        { "id": "ch11-veille-goutte", "libelle": "Demande à Brouillon une goutte sur le nez, de temps en temps", "vers": "ch11-nuit", "si": { "tous": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "min": 14 } ] } },
+        { "id": "ch11-veille-goutte", "libelle": "Demande-lui une goutte sur le nez, de temps en temps", "vers": "ch11-nuit", "si": { "tous": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "min": 14 } ] } },
         { "id": "ch11-veille-seul", "libelle": "Tiens bon tout seul : marche, compte, chante", "vers": "ch11-tenir" },
         { "id": "ch11-veille-dormir", "libelle": "Dors une heure, juste une, pour être en forme à l'aube", "vers": "ch11-une-minute", "si": { "non": { "drapeau": "promesse-veille" } } }
       ]

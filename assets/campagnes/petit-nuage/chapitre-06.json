@@ -12,7 +12,7 @@
         "Et il m'arrive un truc. Quand je souffle, ça fait de la buée. Brouillon a poussé un cri : « Goutte fait des petits ! » Il croit que ce sont des bébés nuages. Il essaie d'en adopter un à chaque fois que je respire, il lui parle, et le petit disparaît en deux secondes. Il les cherche derrière moi, un par un. Il vient de demander : « Partis où ? » Je lui réponds quoi ?"
       ],
       "options": [
-        { "id": "ch6-sentier-buee", "libelle": "Que c'est de la buée : ça ne dure pas, c'est fait comme ça", "vers": "ch6-montee" },
+        { "id": "ch6-sentier-buee", "libelle": "Que c'est de la buée : ça ne dure pas, c'est comme ça", "vers": "ch6-montee" },
         { "id": "ch6-sentier-devant", "libelle": "Qu'ils sont partis devant, prévenir les siens", "vers": "ch6-montee" },
         { "id": "ch6-sentier-ensemble", "libelle": "Souffles-en un gros, et regardez-le ensemble jusqu'au bout", "vers": "ch6-montee", "effets": [ { "var": "lien", "plus": 1 } ] }
       ]
