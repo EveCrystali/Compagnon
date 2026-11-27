@@ -15,6 +15,10 @@ public static class Telephone
     public const int TailleMax = 3800;
     private const string Alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
 
+    // Accents et apostrophes tels quels (UTF-8) au lieu de « é » : un texte français prend jusqu'à
+    // trois fois moins de place. Le message n'est jamais inséré dans une page HTML.
+    private static readonly JsonSerializerOptions Compact = new() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
     public static string NouveauCode()
     {
         var c = new char[16];
@@ -129,12 +133,61 @@ public static class Telephone
         };
         if (plus is not null)
             foreach (var (k, v) in plus) d[k] = v;
-        return JsonSerializer.Serialize(d);
+        return JsonSerializer.Serialize(d, Compact);
+    }
+
+    // Ce qu'on retire, dans l'ordre, d'un message trop long : d'abord les niveaux des métiers (un téléphone à jour les
+    // déduit des heures, un ancien ne les lit pas), carnet et recettes (le téléphone garde ceux du message précédent :
+    // Veille.completer), puis ce que l'ancien allègement retirait d'un bloc (nouvelles, amis, appareils, visite,
+    // météo), et en dernier l'avancement des succès et les heures des métiers (gardés aussi).
+    public static readonly string[] Allegements =
+        { "metiers", "carnet", "plats", "annonces", "amis", "appareils", "visite", "meteo", "avance", "heures" };
+
+    // Le message chiffré à publier : complet s'il tient sous TailleMax, sinon allégé pas à pas. charge : la
+    // progression → le JSON complet (Charge).
+    public static string SousLimite(string code, Dictionary<string, object> progression, Func<Dictionary<string, object>, string> charge)
+    {
+        var d = new Dictionary<string, object>(progression);
+        var corps = Chiffrer(code, charge(d));
+        foreach (var cle in Allegements)
+        {
+            if (corps.Length <= TailleMax) break;
+            if (!d.Remove(cle)) continue;
+            corps = Chiffrer(code, charge(d));
+        }
+        return corps;
     }
 
     // Ce que le PC dit de la progression au téléphone : XP, accessoire porté, carnet et livre de recettes,
     // et les derniers gains du téléphone qu'il a crédités (le téléphone les retire de sa file d'attente).
-    public static Dictionary<string, object> Progression(Profil p, int xpTotal, string accessoire) => new()
+    // stats : les totaux du groupe (Groupe.StatsGroupe) ; sans, ceux de ce PC seul.
+    public static Dictionary<string, object> Progression(Profil p, int xpTotal, string accessoire, Stats? stats = null)
+    {
+        var d = ProgressionSansMetiers(p, xpTotal, accessoire);
+        foreach (var (k, v) in MetiersEtSucces(p, stats)) d[k] = v;
+        return d;
+    }
+
+    // Métiers et succès pour le téléphone. « metiers » (niveaux) et « succes » (ids) : ce que lit tout téléphone ;
+    // « heures » (dixièmes d'heure par métier, non nuls, arrondis vers le bas : le téléphone en déduit le même grade
+    // que le PC, les paliers étant des heures entières) et « avance » (dixièmes d'avancement des succès pas encore
+    // obtenus qui ont commencé) : la page Métiers et succès (un ancien téléphone les ignore).
+    public static Dictionary<string, object> MetiersEtSucces(Profil p, Stats? stats = null)
+    {
+        stats ??= new Stats(p.Activites, 0, p.Reunions.Count, p.Presentations, DateTime.Now, "", p.SeancesClavier, p.Captures, p.Defense);
+        var heures = new Dictionary<string, int>();
+        foreach (var m in Metiers.Tous)
+            if (Metiers.Secondes(m, stats.Secondes) / 360 is > 0 and var h) heures[m.Id] = (int)Math.Min(h, int.MaxValue);
+        return new()
+        {
+            ["metiers"] = Metiers.Niveaux(stats.Secondes).Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value),
+            ["succes"] = p.Succes.ToList(),
+            ["heures"] = heures,
+            ["avance"] = Succes.Avancements(stats, p.Succes),
+        };
+    }
+
+    private static Dictionary<string, object> ProgressionSansMetiers(Profil p, int xpTotal, string accessoire) => new()
     {
         ["xp"] = xpTotal,
         ["accessoire"] = accessoire,
@@ -142,9 +195,6 @@ public static class Telephone
         ["plats"] = p.Plats.Where(x => !x.StartsWith("inv:")).OrderBy(x => x).ToList(),
         ["inventes"] = p.Plats.Count(x => x.StartsWith("inv:")),
         ["recus"] = p.Recus.TakeLast(10).ToList(),
-        // Métiers (niveau par métier) et succès obtenus : pour un futur affichage sur le téléphone.
-        ["metiers"] = Metiers.Niveaux(p.Activites).Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value),
-        ["succes"] = p.Succes.ToList(),
         // Soins : l'état calculé maintenant (le téléphone y ajoute ses propres soins pas encore reçus ici)
         // et les variantes d'évolution.
         ["soins"] = Soins.JsonEtat(Soins.Etat(p.Soins, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())),

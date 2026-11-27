@@ -110,7 +110,9 @@ public sealed partial class FenetrePilou
             + $"|{_profil.Soins.Actions.Count}|{_profil.Soins.Base?.T}|{_profil.Evolution.Variantes.Count}"
             + $"|{Meteo.Courante?.Etat}|{Math.Round(Meteo.Courante?.Releve.Temperature ?? 0)}"
             + $"|{(_reglages.Connecteurs.AnnoncesTelephone ? _registre?.Annonces().FirstOrDefault()?.T : 0)}"
-            + $"|{SignatureAmis()}|{Exp.Courante?.Id}|{Exp.Dernier?.Id}|{Jauge.Affiche(Exp.Energie) / 5}");
+            + $"|{SignatureAmis()}|{Exp.Courante?.Id}|{Exp.Dernier?.Id}|{Jauge.Affiche(Exp.Energie) / 5}"
+            // Métiers et succès : un succès tout de suite, les heures par demi-heure (le battement de 15 min fait le reste).
+            + $"|{_profil.Succes.Count}|{CumulGroupe().Secondes.Values.Sum() / 1800}");
         if (signature != _telSignature)
         {
             _telSignature = signature;
@@ -120,7 +122,7 @@ public sealed partial class FenetrePilou
         bool battement = epoque - _telEnvoi >= 15 * 60_000;
         if (!change && !battement) return;
 
-        var progression = Telephone.Progression(_profil, _xpTotal, accessoire);
+        var progression = Telephone.Progression(_profil, _xpTotal, accessoire, StatsActuelles(_activite));
         var (solde, inventaire, equipe) = Bourse();
         Quetes.Actualiser(_profil.Quetes, DateTime.Now, IdAppareil);
         foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) progression[k] = v;
@@ -140,24 +142,12 @@ public sealed partial class FenetrePilou
         // Expédition (lecture seule sur le téléphone) : énergie, en route ou pas, dernier journal.
         var expedition = Expeditions.PourTelephone(Exp, epoque, DateTime.Now, AutresExpeditions());
         progression["expedition"] = expedition;
-        var charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
-            _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, progression);
         var url = $"{_reglages.Relais.TrimEnd('/')}/{Telephone.Sujet(code)}";
-        var corps = Telephone.Chiffrer(code, charge);
-        // Au-delà de 4 096 octets, ntfy transforme le message en pièce jointe : on retire alors les listes
-        // (carnet, recettes), que le téléphone garde de l'envoi précédent.
-        if (corps.Length > Telephone.TailleMax)
-        {
-            var leger = Telephone.Progression(_profil, _xpTotal, accessoire);
-            leger.Remove("carnet");
-            leger.Remove("plats");
-            foreach (var (k, v) in Telephone.EtatBoutique(solde, inventaire, equipe, _profil.Quetes, DateTime.Now)) leger[k] = v;
-            leger["stade"] = StadeAffiche();
-            leger["expedition"] = expedition;
-            charge = Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
-                _reglages.Couleur.ToString().ToLowerInvariant(), humeur, vivantes.Count - sessions.Count, leger);
-            corps = Telephone.Chiffrer(code, charge);
-        }
+        // Au-delà de 4 096 octets, ntfy transforme le message en pièce jointe : on l'allège alors pas à pas, d'abord
+        // de ce que le téléphone garde de l'envoi précédent (carnet, recettes, heures des métiers…).
+        var couleur = _reglages.Couleur.ToString().ToLowerInvariant();
+        var corps = Telephone.SousLimite(code, progression, d => Telephone.Charge(sessions, epoque, NomPilou, Niveau, TitreAffiche(Niveau),
+            couleur, humeur, vivantes.Count - sessions.Count, d));
         _telEnCours = true;
         _ = Task.Run(async () =>
         {

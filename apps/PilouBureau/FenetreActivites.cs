@@ -174,16 +174,8 @@ public sealed partial class FenetrePilou
         }
         _profil.Reunions.RemoveAll(d => DateTime.Now - d > TimeSpan.FromDays(7));
 
-        // Métier qui monte, succès débloqués : annonce et XP.
-        var avant = _niveauxMetiers ?? Metiers.Niveaux(_profil.Activites);
-        var apres = Metiers.Niveaux(_profil.Activites);
-        _niveauxMetiers = apres;
-        foreach (var m in Metiers.Tous)
-            if (apres[m.Id] > avant[m.Id])
-            {
-                GagnerActivite(10 * apres[m.Id]);
-                Dire($"{m.Nom} : {Metiers.Grades[apres[m.Id]]} !", 4500);
-            }
+        // Métier qui monte, succès débloqués : annonce et XP (avec les heures de tout le groupe).
+        MonterMetiers(CumulGroupe());
         VerifierSucces(activite);
         // Le profil est réécrit au plus une fois par minute pour le temps qui passe.
         if (_secondesNonEcrites >= 60)
@@ -195,13 +187,46 @@ public sealed partial class FenetrePilou
 
     private Dictionary<string, int>? _niveauxMetiers;
 
-    private Stats StatsActuelles(string activite) =>
-        new(_profil.Activites, _serieCode, _profil.Reunions.Count, _profil.Presentations, DateTime.Now, activite,
-            _profil.SeancesClavier, _profil.Captures, _profil.Defense);
+    // Grades de métier : payés une fois dans le groupe (Metiers.Monter). Un grade monté grâce aux heures d'un
+    // autre PC, qui l'a déjà payé, s'annonce ici d'un petit texte, sans XP.
+    private void MonterMetiers(Groupe.Cumul cumul)
+    {
+        var niveaux = Metiers.Niveaux(cumul.Secondes);
+        // Premier calcul : les grades de ce PC seul ont été payés par les versions précédentes.
+        if (_niveauxMetiers is null)
+            foreach (var m in Metiers.Tous)
+                if (Metiers.Niveau(m, Metiers.Secondes(m, _profil.Activites)) is > 0 and var seul && seul > _profil.MetiersPayes.GetValueOrDefault(m.Id))
+                    _profil.MetiersPayes[m.Id] = seul;
+        foreach (var x in Metiers.Monter(niveaux, _niveauxMetiers, _profil.MetiersPayes, cumul.PayesAutres))
+        {
+            var texte = $"{x.Metier.Nom} : {Metiers.Grades[x.Niveau]}";
+            if (x.Discret) Flotter(texte);
+            else
+            {
+                GagnerActivite(x.Xp);
+                Dire(texte + " !", 4500);
+            }
+        }
+        _niveauxMetiers = niveaux;
+    }
 
-    // Succès débloqués : annonce et XP (activités, et à la fin d'une partie de Défense du bureau).
+    // Après une lecture du groupe : succès des autres PC (sans XP), grades montés ailleurs, succès franchis à plusieurs.
+    private void MetiersEtSuccesDuGroupe()
+    {
+        var cumul = CumulGroupe();
+        if (Groupe.UnirSucces(_profil, cumul).Count > 0) _secondesNonEcrites = 60;
+        MonterMetiers(cumul);
+        VerifierSucces(_activite);
+    }
+
+    private Stats StatsActuelles(string activite) =>
+        Groupe.StatsGroupe(CumulGroupe(), _serieCode, _profil.Reunions.Count, DateTime.Now, activite);
+
+    // Succès débloqués : annonce et XP (activités, et à la fin d'une partie de Défense du bureau). Un succès déjà
+    // obtenu par un autre PC du groupe est repris sans XP (Groupe.UnirSucces) : il n'est crédité qu'une fois.
     private void VerifierSucces(string activite)
     {
+        Groupe.UnirSucces(_profil, CumulGroupe());
         foreach (var d in Succes.Nouveaux(StatsActuelles(activite), _profil.Succes))
         {
             _profil.Succes.Add(d.Id);
@@ -273,7 +298,7 @@ public sealed partial class FenetrePilou
         m.Items.Add(new Separator());
         foreach (var me in Metiers.Tous)
         {
-            var sec = Metiers.Secondes(me, _profil.Activites);
+            var sec = Metiers.Secondes(me, stats.Secondes); // heures de tout le groupe
             int n = Metiers.Niveau(me, sec);
             m.Items.Add(new MenuItem { Header = $"{me.Nom} — {Metiers.Grades[n]} · {Metiers.Progres(me, sec)}", IsEnabled = sec > 0 });
         }

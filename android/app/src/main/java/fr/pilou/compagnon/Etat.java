@@ -82,6 +82,12 @@ public final class Etat {
      *  variantes d'évolution par stade (« calin », « espiegle »). */
     public Soins.EtatSoins soins;
     public final java.util.Map<Integer, String> formes = new java.util.TreeMap<>();
+    /** Métiers et succès (Metiers.java) : niveau par métier (tout PC récent), heures en dixièmes et avancement des
+     *  succès en dixièmes (PC à jour : heuresConnues), succès obtenus. Totaux de tout le groupe d'appareils. */
+    public final java.util.Map<String, Integer> metiers = new java.util.TreeMap<>(), heures = new java.util.TreeMap<>(),
+            avance = new java.util.TreeMap<>();
+    public final java.util.Set<String> succes = new java.util.TreeSet<>();
+    public boolean heuresConnues;
     /** Météo vue par le PC (connecteur météo actif), ou null. */
     public Meteo meteo;
     /** Au-delà, la météo reçue est trop vieille pour être montrée. */
@@ -313,6 +319,12 @@ public final class Etat {
                     // stade illisible : ignoré
                 }
             }
+        entiers(r.optJSONObject("metiers"), e.metiers, 6);
+        entiers(r.optJSONObject("heures"), e.heures, Integer.MAX_VALUE);
+        entiers(r.optJSONObject("avance"), e.avance, Integer.MAX_VALUE);
+        e.heuresConnues = r.optJSONObject("heures") != null;
+        JSONArray su = r.optJSONArray("succes");
+        if (su != null) for (int i = 0; i < Math.min(200, su.length()); i++) if (!su.optString(i, "").isEmpty()) e.succes.add(su.optString(i));
         e.meteo = Meteo.lire(r.optJSONObject("meteo"));
         JSONArray an = r.optJSONArray("annonces");
         if (an != null)
@@ -341,6 +353,16 @@ public final class Etat {
         e.visite = r.optString("visite", "");
         e.expedition = Expedition.lire(r.optJSONObject("expedition"), decalage);
         return e;
+    }
+
+    /** { "id": entier ≥ 0 } → la table (les valeurs illisibles sont sautées), bornées à max. */
+    private static void entiers(JSONObject o, java.util.Map<String, Integer> dans, int max) {
+        if (o == null) return;
+        for (java.util.Iterator<String> k = o.keys(); k.hasNext(); ) {
+            String id = k.next();
+            Object v = o.opt(id);
+            if (v instanceof Number && ((Number) v).longValue() > 0) dans.put(id, (int) Math.min(max, ((Number) v).longValue()));
+        }
     }
 
     /** La météo encore valable (le PC a parlé il y a moins de trois heures), ou null. */

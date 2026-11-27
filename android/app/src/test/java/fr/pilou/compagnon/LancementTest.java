@@ -21,7 +21,7 @@ public class LancementTest {
         assertNotNull(a);
         for (int i = 0; i < Principale.N; i++) {
             a.page(i);
-            if (i == Principale.COLLECTION) for (int k = 0; k <= PageCollection.STYLE; k++) ((PageCollection) a.page(i)).choisir(k);
+            if (i == Principale.COLLECTION) for (int k = 0; k <= PageCollection.METIERS; k++) ((PageCollection) a.page(i)).choisir(k);
             if (i == Principale.BOUTIQUE) {
                 PageBoutique b = (PageBoutique) a.page(i);
                 for (String r : Boutique.RAYONS) b.rayon(r);
@@ -35,6 +35,7 @@ public class LancementTest {
         }
         a.montrerRangees(9, 15);
         a.allerNiveaux();
+        a.allerMetiers();
         a.allerBoutique(Boutique.DOS);
         c.pause().stop().destroy();
     }

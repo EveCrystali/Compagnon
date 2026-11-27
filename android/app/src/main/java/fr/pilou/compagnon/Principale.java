@@ -216,6 +216,12 @@ public final class Principale extends Activity {
         ((PageCollection) page(COLLECTION)).choisir(PageCollection.NIVEAUX);
     }
 
+    /** Collection → Métiers et succès (la carte de l'accueil y mène). */
+    void allerMetiers() {
+        aller(COLLECTION, true);
+        ((PageCollection) page(COLLECTION)).choisir(PageCollection.METIERS);
+    }
+
     /** Bandeau, pastille de la boutique, et fenêtre « Rangées débloquées » au passage d'un palier. */
     void majBandeau() {
         if (bandeau == null) return;

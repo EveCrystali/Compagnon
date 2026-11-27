@@ -249,7 +249,7 @@ public final class Veille extends Service {
         }
     }
 
-    // Un message allégé (sans carnet ni recettes) garde les listes du message précédent.
+    // Un message allégé (Telephone.SousLimite : sans carnet, recettes, heures des métiers…) garde ceux du message précédent.
     private String completer(String json) {
         try {
             JSONObject n = new JSONObject(json);
@@ -257,7 +257,7 @@ public final class Veille extends Service {
             if (avant.isEmpty()) return json;
             JSONObject a = new JSONObject(avant);
             boolean change = false;
-            for (String cle : new String[]{"carnet", "plats"})
+            for (String cle : new String[]{"carnet", "plats", "metiers", "heures", "avance"})
                 if (!n.has(cle) && a.has(cle)) {
                     n.put(cle, a.get(cle));
                     change = true;

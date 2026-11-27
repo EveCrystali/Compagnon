@@ -35,6 +35,9 @@ public sealed class Profil
     public List<string> Succes { get; set; } = new();
     public List<DateTime> Reunions { get; set; } = new();
     public int Presentations { get; set; }
+    // Grade de chaque métier déjà récompensé (XP) : partagé avec le groupe, pour qu'un grade atteint avec les
+    // heures de plusieurs PC ne soit payé qu'une fois (Metiers.Monter).
+    public Dictionary<string, int> MetiersPayes { get; set; } = new();
     // Petits gestes : séances de frappe avec Pilou au clavier, captures d'écran photographiées (des nombres, rien d'autre).
     public int SeancesClavier { get; set; }
     public int Captures { get; set; }
