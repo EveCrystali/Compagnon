@@ -187,6 +187,7 @@ public sealed partial class FenetrePilou : Window
             DemarrerActivites();
             DemarrerConnecteurs();
             DemarrerGestes();
+            Bienvenue();
         };
         Closed += (_, _) => ArreterGestes();
     }
@@ -522,6 +523,22 @@ public sealed partial class FenetrePilou : Window
         _message = texte;
         _messageJusque = Maintenant + ms;
         Bulle(_vivantes, Epoque);
+    }
+
+    // Tout premier lancement : un mot de bienvenue, une seule fois (noté aussitôt dans reglages.json).
+    private void Bienvenue()
+    {
+        if (_demo || _reglages.BienvenueFaite) return;
+        _reglages.BienvenueFaite = true;
+        _reglages.Ecrire(_dossier);
+        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromSeconds(4) };
+        t.Tick += (_, _) =>
+        {
+            t.Stop();
+            Dosage.Noter(Maintenant);
+            Dire(Reglages.MotBienvenue, 9000);
+        };
+        t.Start();
     }
 
     // Phrases liées à l'heure, une fois par jour chacune.

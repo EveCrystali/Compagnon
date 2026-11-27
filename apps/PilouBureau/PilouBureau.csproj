@@ -14,7 +14,7 @@
     <Product>Pilou</Product>
     <Company>Pilou</Company>
     <ApplicationIcon>pilou.ico</ApplicationIcon>
-    <Description>Pilou, compagnon de tes IA de code (Claude, Codex…), sur le bas de l'écran.</Description>
+    <Description>Pilou, petit compagnon de bureau qui vit en bas de ton écran et grandit avec toi.</Description>
     <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
   </PropertyGroup>
 

@@ -17,7 +17,8 @@ public class MenuNotificationTests
     [Fact]
     public void Textes()
     {
-        Assert.Equal("Pilou", MenuNotification.Infobulle);
+        Assert.StartsWith("Pilou", MenuNotification.Infobulle);
+        Assert.True(MenuNotification.Infobulle.Length < 128); // szTip de NOTIFYICONDATA
         Assert.Contains(MenuNotification.Entrees, e => e.Texte == "Afficher / ramener Pilou");
         Assert.Contains(MenuNotification.Entrees, e => e.Texte == "Ouvrir le menu de Pilou");
         Assert.Contains(MenuNotification.Entrees, e => e.Texte == "Chercher une mise à jour");
