@@ -1,0 +1,128 @@
+{
+  "chapitre": "ch11",
+  "noeuds": {
+    "ch11-crepuscule": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "La rive, la nuit",
+      "decor": "abreuvoir",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai fait un petit feu de réchaud sur le rocher plat. Le lac est noir, et dessus, le troupeau fait une grande masse claire qui respire. De temps en temps, un vieux soupire, et ça fait de la brume jusqu'à nous. Brouillon est entre les deux : un moment là-bas, un moment ici.",
+        "Je lui ai fait sa vapeur du soir, la dernière, avec l'eau du lac. Il l'a mangée lentement, pour une fois. Moi, j'ai vidé mon baluchon. C'est vite vu. Tout ce que j'ai emporté du jardin tient sur un rocher. Tout ce que j'ai ramassé en route aussi."
+      ],
+      "suite": "ch11-sac"
+    },
+    "ch11-sac": {
+      "type": "hasard",
+      "humeur": "neutre",
+      "texte": [
+        "J'ai tout étalé devant moi, pour compter. La casserole, cabossée. Le réchaud. La gourde. Des miettes. Un caillou plat que je ne me rappelle pas avoir ramassé. Brouillon a tout reniflé, objet par objet, comme s'il faisait l'inventaire avec moi. Il s'est arrêté plus longtemps sur la casserole."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch11-ondee", "si": { "objet": "plume" } },
+        { "poids": 1, "vers": "ch11-emporter", "si": { "non": { "objet": "plume" } } }
+      ]
+    },
+    "ch11-ondee": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "ondee" } ],
+      "texte": [
+        "Et la plume. Elle a tinté contre le rocher quand je l'ai posée : ding. Tout bas. Sur le lac, quelque chose a bougé. Pas un des grands : derrière eux, ce que je prenais pour un versant de montagne, gris, immobile. Ça s'est tourné. Ça s'est approché, sans bruit, large comme une vallée. Elle s'est arrêtée au-dessus de nous. Et une goutte, une seule, est tombée sur la plume. Ding. Je crois qu'elle a répondu. Je crois qu'elle sait de qui ça vient."
+      ],
+      "suite": "ch11-emporter"
+    },
+    "ch11-emporter": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Demain, il part, et il n'a rien. Pas de baluchon, pas de poche. Je voudrais lui donner quelque chose à emporter, et je ne sais pas ce qu'on donne à un nuage. Il ne peut rien porter : tout lui passe à travers, depuis le premier jour.",
+        "Il faut que ce soit quelque chose qui tienne dans lui. J'ai deux ou trois idées, pas plus. Il me regarde chercher. Il a compris que c'était pour lui, alors il se tient très droit, comme pour une photo. Qu'est-ce que je lui donne ?"
+      ],
+      "options": [
+        { "id": "ch11-emporter-tache", "libelle": "Une tache d'encre, pour le reconnaître de loin", "vers": "ch11-marque", "si": { "non": { "un": [ { "drapeau": "tache-bleue" }, { "drapeau": "pale" } ] } }, "effets": [ { "drapeau": "tache-bleue" }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch11-emporter-nom", "libelle": "Ton vrai nom : apprends-lui à dire Pilou", "vers": "ch11-nom", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch11-emporter-perle", "libelle": "La perle de rosée : qu'il la boive ce soir", "vers": "ch11-perle", "si": { "objet": "perle" }, "effets": [ { "var": "taille", "plus": 3 }, { "objet": "perle", "donne": false } ] },
+        { "id": "ch11-emporter-rien", "libelle": "Rien. Il doit monter léger.", "vers": "ch11-veille" }
+      ]
+    },
+    "ch11-marque": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai posé la main sur son flanc, à plat, et j'ai compté jusqu'à dix. Quand je l'ai retirée, il y avait une petite marque bleue, de la forme de ma paume. Pour toujours. Il s'est tordu pour la regarder. Je lui ai dit : c'est pour que je te reconnaisse, de ma fenêtre, quand tu passeras. Il a demandé : « Brouillon passe ? » J'ai dit que les nuages passent toujours, que c'est leur métier. Il a eu l'air content d'avoir un métier."
+      ],
+      "suite": "ch11-veille"
+    },
+    "ch11-nom": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je lui ai dit : je ne m'appelle pas Goutte. Je m'appelle Pilou. Il a penché tout son corps. « Pi. » Oui. « Pilou. » Oui ! Il l'a répété onze fois, de plus en plus fort, les grands se sont retournés. Puis il a réfléchi, et il a dit : « Pilou Goutte. » Il garde les deux. Il a raison, remarque. Pilou, c'est comme on m'appelle. Goutte, c'est comme lui m'appelle. Ce n'est pas pareil. Je crois même que je préfère le deuxième."
+      ],
+      "suite": "ch11-veille"
+    },
+    "ch11-perle": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai déroulé la feuille. La perle de Dentelle n'avait pas séché, pas d'un cheveu. Je la lui ai tendue et, pour une fois, quelque chose ne lui est pas passé à travers : il l'a bue. D'un coup. Il a gonflé comme un soufflé, un bord, deux bords, trois. Il s'est regardé dans le lac, il n'en revenait pas. Je me suis couché à côté de lui pour vérifier. Je ne te donne pas le chiffre, je compte mal la nuit. Mais il dépasse. De partout."
+      ],
+      "suite": "ch11-veille"
+    },
+    "ch11-veille": {
+      "type": "choix",
+      "humeur": "fatigue",
+      "texte": [
+        "Voilà. Il somnole contre le troupeau, à la lisière, du côté où je suis. Moi, il me reste une chose à faire : ne pas dormir. Ils se lèvent à la première lueur, et ils n'attendent personne. Je pense à un vieux coq en fer qui s'est assis une minute.",
+        "Le problème, c'est que j'ai marché des jours, que le rocher est tiède à cause du réchaud, et que mes yeux se ferment tout seuls depuis une heure. La nuit est longue. Comment je tiens jusqu'au matin ?"
+      ],
+      "options": [
+        { "id": "ch11-veille-cafe", "libelle": "Bois le café de gland, tant pis pour le goût", "vers": "ch11-nuit", "si": { "objet": "cafe" } },
+        { "id": "ch11-veille-goutte", "libelle": "Demande à Brouillon une goutte sur le nez, de temps en temps", "vers": "ch11-nuit", "si": { "tous": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "min": 14 } ] } },
+        { "id": "ch11-veille-seul", "libelle": "Tiens bon tout seul : marche, compte, chante", "vers": "ch11-tenir" },
+        { "id": "ch11-veille-dormir", "libelle": "Dors une heure, juste une, pour être en forme à l'aube", "vers": "ch11-une-minute", "si": { "non": { "drapeau": "promesse-veille" } } }
+      ]
+    },
+    "ch11-tenir": {
+      "type": "epreuve",
+      "humeur": "fatigue",
+      "jeu": "reflexe",
+      "difficulte": 2,
+      "bonus": "lien",
+      "texte": [
+        "Je marche en rond autour du rocher. Je compte les étoiles, puis les nuages, puis mes pas. Je chante tout bas la seule chanson que je connais. À chaque fois que mes yeux se ferment, je me pince. Ça marche. Ça marche de moins en moins. Il doit rester trois heures. Attention, ça recommence, mes paupières… maintenant !"
+      ],
+      "reussite": "ch11-nuit",
+      "echec": "ch11-une-minute"
+    },
+    "ch11-une-minute": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "effets": [ { "drapeau": "endormi" } ],
+      "duree_min": 170,
+      "duree_max": 180,
+      "pendant": "Pilou repose ses yeux, juste une minute",
+      "tenue": "nuit",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Je m'assieds. Juste pour reposer les jambes. Le rocher est tiède. Je pose la tête sur le baluchon, juste pour reposer la tête. J'entends Brouillon qui fait son bruit de bouilloire, là-bas, et les grands qui respirent. Je ferme les yeux une minute. Une seule. C'est exactement ce qu'il ne faut pas faire, je le sais, je te le dis moi-même. Mais une minute, ça va. Tu me réveilles, hein ? Dans une minute ?"
+      ],
+      "suite": "ch12-gelee"
+    },
+    "ch11-nuit": {
+      "type": "attente",
+      "humeur": "determine",
+      "duree_min": 170,
+      "duree_max": 180,
+      "pendant": "Pilou veille au bord du lac",
+      "tenue": "nuit",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Je veille. Je marche en rond, je souffle dans mes mains, je recompte les nuages : il en manque toujours un, c'est le mien, il est à part, à la lisière, tourné vers ici. Le feu baisse. L'herbe blanchit par plaques, et le bord de l'eau se met à faire de la dentelle. Les grands se sont encore serrés. Je ne m'assieds pas. Je te le promets, je ne m'assieds pas. Il reste des heures. Qu'est-ce qu'il fera, lui, quand ils se lèveront ? Je te dis au matin."
+      ],
+      "suite": "ch12-gelee"
+    }
+  }
+}

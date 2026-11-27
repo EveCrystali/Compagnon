@@ -1,0 +1,149 @@
+{
+  "chapitre": "ch9",
+  "noeuds": {
+    "ch9-salle": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "La Grande Salle",
+      "decor": "grande-salle",
+      "humeur": "peur",
+      "texte": [
+        "J'ai décidé que c'était le matin. Ici, on ne peut pas savoir. On a marché jusqu'au bout de la galerie, et d'un coup, plus de murs. La Grande Salle. Je ne vois pas le plafond. Je ne vois pas le fond. Je vois juste, au milieu, de la poussière qui file à l'horizontale, d'un trait, sans un bruit.",
+        "C'est le vent. Il traverse la salle comme un fleuve, large, lisse, et il ne siffle pas. Les Froisseuses avaient raison : il n'en a pas besoin. Il y a une corniche le long de la paroi, large comme deux Pilou. Il faut la suivre jusqu'en face. Sur cent pas, le fleuve la lèche."
+      ],
+      "suite": "ch9-traverse"
+    },
+    "ch9-traverse": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Cent pas dans le vent. Moi, je suis lourd, avec ma casserole : je passerai courbé. C'est pour lui que j'ai peur. J'ai envie de le prendre dans mes bras et de le serrer très fort, tout le long. Je me rappelle ce qu'a dit Tournebise, un nuage qu'on serre… Mais c'était facile à dire, sur un toit. Brouillon regarde le fleuve. Il attend que je décide. Comment on traverse ?"
+      ],
+      "options": [
+        { "id": "ch9-traverse-seul", "libelle": "Qu'il se tienne seul, comme sur le toit : le ventre rentré", "vers": "ch9-tient", "si": { "drapeau": "sait-tenir" }, "effets": [ { "var": "lien", "plus": 2 } ] },
+        { "id": "ch9-traverse-caillou", "libelle": "Dis-lui de se faire petit et dur comme un caillou, et de te suivre", "vers": "ch9-caillou" },
+        { "id": "ch9-traverse-serre", "libelle": "Serre-le contre toi, très fort, et avance", "vers": "ch9-dechire" }
+      ]
+    },
+    "ch9-tient": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Il s'est placé face au vent. Il a rentré le ventre. Il a dit « Caillou », pour lui-même, et il est entré dans le fleuve. Le vent lui est passé autour, comme l'eau autour d'une pierre. Il a tremblé, il s'est allongé, il a tenu. Cent pas. Je marchais derrière, courbé, et je ne l'ai pas touché une seule fois. De l'autre côté, il s'est retourné, entier. Il n'a rien dit. Moi non plus. On savait tous les deux ce qu'il venait de faire."
+      ],
+      "suite": "ch9-pause"
+    },
+    "ch9-caillou": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "taille", "plus": -1 }, { "var": "lien", "plus": 1 }, { "drapeau": "sait-tenir" } ],
+      "texte": [
+        "Je lui ai dit : fais-toi tout petit, tout dur, pense à un caillou, et laisse passer le vent autour. Je l'inventais en parlant. Il a essayé. Aux vingt premiers pas, le fleuve lui a arraché un bord, d'un coup, qui est parti dans le noir. Il a eu peur. Il a failli revenir. Puis il a serré, serré, et il a trouvé : il est passé derrière moi, rond, compact, en grognant. Il est plus petit. Mais il sait quelque chose qu'il ne savait pas ce matin."
+      ],
+      "suite": "ch9-pause"
+    },
+    "ch9-dechire": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "Je l'ai serré de toutes mes forces et je suis entré dans le vent. Au trentième pas, j'ai senti que mes bras se refermaient sur rien. Il filait. Entre mes doigts, par les côtés, par en dessous, en longues mèches. Plus je serrais, plus il filait. Quand j'ai rouvert les bras, il n'y avait plus personne dedans. Et dans la salle, partout, des petits bouts de lui qui tournaient, blancs dans le noir. Tournebise l'avait dit. Je l'avais entendu."
+      ],
+      "suite": "ch9-eparpille"
+    },
+    "ch9-eparpille": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Il y en a six. Je crois. Six morceaux de Brouillon, qui tournent dans les remous, chacun de son côté. Un derrière un rocher. Un tout en haut. Un qui m'a regardé, je te jure, avant de repartir. Ils sont de plus en plus pâles. Si je ne les rassemble pas vite, il n'y aura plus rien à rassembler. Je suis au milieu de la corniche, les bras vides. Dis-moi quoi faire !"
+      ],
+      "options": [
+        { "id": "ch9-eparpille-froisseuses", "libelle": "Appelle les Froisseuses !", "vers": "ch9-aident", "si": { "drapeau": "guide" } },
+        { "id": "ch9-eparpille-cours", "libelle": "Cours après chaque morceau, sans en oublier un seul", "vers": "ch9-memoire" }
+      ]
+    },
+    "ch9-memoire": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "jeu": "memoire",
+      "difficulte": 2,
+      "bonus": "lien",
+      "texte": [
+        "Je cours. Le premier est derrière le rocher. Le deuxième, en haut à gauche, non, il a bougé. Le troisième file vers le fond. Il faut que je retienne où va chacun, parce que je ne peux en attraper qu'un à la fois, et les rapporter au même endroit, dans la casserole, un par un. Le rocher. En haut. Le fond. Et les trois autres. Vite."
+      ],
+      "reussite": "ch9-remonte",
+      "echec": "ch9-echec-salle"
+    },
+    "ch9-aident": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai crié vers le plafond, et le plafond est descendu. Trois cents Froisseuses, d'un seul bloc, dans un bruit de journal qu'on secoue. Elles ne voient rien, mais elles entendent tout, même un bout de nuage qui tourne. Elles les ont rabattus un par un avec leurs ailes, comme des chiens de berger, jusqu'à ma casserole. Six. Le compte y est. La plus vieille m'a dit : « On ne serre pas, petit. On entoure. » Je sais. Maintenant, je sais."
+      ],
+      "suite": "ch9-remonte"
+    },
+    "ch9-echec-salle": {
+      "type": "echec",
+      "humeur": "triste",
+      "repos_min": 40,
+      "texte": [
+        "Je n'en ai rattrapé que trois. Les autres, je les ai perdus de vue, j'ai mélangé les endroits, j'ai couru derrière des remous vides. Je suis revenu à l'entrée de la salle avec une demi-casserole de Brouillon, qui ne parlait pas. Les Froisseuses ont rapporté le reste dans la nuit, mèche par mèche, sans rien demander. Il se recolle. Il est tout pâle. On retraversera quand il tiendra en un seul morceau. Je ne le serrerai plus."
+      ]
+    },
+    "ch9-remonte": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "Il s'est remonté tout seul, dans la casserole, comme une pâte qui lève. Ça a pris un moment. Il manque un peu de matière, et il ne s'est pas tout à fait remis dans l'ordre : il a une bosse d'un côté, qui ressemble à une oreille. Les nuages n'ont pas d'oreille. Il s'est tâté partout, il s'est compté. Il sait compter jusqu'à deux. Il a dit : « Brouillon un. » Puis il est venu contre moi, et je n'ai pas serré."
+      ],
+      "suite": "ch9-pause"
+    },
+    "ch9-pause": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou souffle au bout de la corniche",
+      "tenue": "attend",
+      "texte": [
+        "On est de l'autre côté de la salle. Je me suis assis contre la paroi, j'ai les jambes en coton, et j'ai mis la casserole à chauffer : de la vapeur pour lui, et pour moi le bruit de l'eau qui bout, ça me calme. Il mange. Derrière nous, le fleuve de vent continue, sans nous. Devant, la galerie remonte, et au bout, pour la première fois, il y a une lueur. On respire un peu. Je te raconte la suite."
+      ],
+      "suite": "ch9-cheminee"
+    },
+    "ch9-cheminee": {
+      "type": "choix",
+      "lieu": "La cheminée",
+      "humeur": "surpris",
+      "texte": [
+        "La lueur, c'est une cheminée. Un puits tout droit dans la roche, avec le jour en haut, très loin, gros comme une pièce de monnaie. Le vent y monte doucement. C'est la sortie. Il y a des prises, des creux, des bosses : ça se grimpe. Moi, il me faudra des heures.",
+        "Brouillon, lui, n'a qu'à se laisser monter. Il a regardé le puits, puis moi, puis mes petits bras. Et il a dit : « Brouillon porte Goutte. » Il s'est mis à plat devant moi, comme un tapis. Il veut que je monte dessus. Je ne sais pas s'il est assez gros pour ça. Je ne sais pas si j'ose. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch9-cheminee-dos", "libelle": "Accepte : monte sur son dos", "vers": "ch9-vole", "si": { "var": "taille", "min": 4 }, "effets": [ { "var": "lien", "plus": 2 } ] },
+        { "id": "ch9-cheminee-grimpe", "libelle": "Remercie-le, et grimpe : il flottera à côté de toi", "vers": "ch9-lumiere" },
+        { "id": "ch9-cheminee-devant", "libelle": "Envoie-le devant : qu'il t'attende en haut", "vers": "ch9-lumiere", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch9-vole": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Je suis monté dessus. C'est mou, c'est froid, ça s'enfonce un peu, et ça tient. Il a tremblé sous le poids, il a dit « Lourd », et il a décollé. Je suis sur le dos d'un nuage ! Moi ! Je me tiens à ses bords, la casserole serrée entre les genoux, et les parois descendent autour de nous. Il y a une semaine, il était coincé dans des ronces. Il monte doucement, il fait attention à moi. Je crois que je n'ai jamais rien fait d'aussi bien de ma vie."
+      ],
+      "suite": "ch9-lumiere"
+    },
+    "ch9-lumiere": {
+      "type": "attente",
+      "humeur": "surpris",
+      "duree_min": 120,
+      "duree_max": 150,
+      "pendant": "Pilou monte vers le jour",
+      "tenue": "grimpe",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "La cheminée est longue. Très. Le rond de jour, en haut, grossit à peine. On monte. À mesure, l'air change : il est plus froid, et il sent l'eau. Et il y a un bruit qui descend jusqu'à nous, un bruit que je ne connais pas. Lent. Énorme. Comme si quelqu'un buvait, là-haut. Quelqu'un de très grand, ou alors beaucoup de monde à la fois. Brouillon s'est arrêté pour écouter. Il tremble, et ce n'est pas de froid. Qui est-ce qui boit ? On monte voir."
+      ],
+      "suite": "ch10-rive"
+    }
+  }
+}

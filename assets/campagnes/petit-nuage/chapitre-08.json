@@ -1,0 +1,158 @@
+{
+  "chapitre": "ch8",
+  "noeuds": {
+    "ch8-entree": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Le Trou-qui-Siffle",
+      "decor": "trou-qui-siffle",
+      "humeur": "peur",
+      "texte": [
+        "On y est. C'est un trou dans le pied de la montagne, haut comme une porte de grange. Il en sort du vent, tout le temps, et ce vent siffle une note. Une seule, grave, tenue. Tournebise a dit que c'était un la. Quand ça monte au si, on ne bouge plus. Je ne sais pas reconnaître un si. J'espère que ça s'entend.",
+        "Dedans, c'est noir. Pas sombre : noir. Je n'aime pas le noir, tu le sais, je dors à la lueur de ton écran. Brouillon, lui, regarde le trou avec intérêt. Et je remarque une chose : dans le noir, il se voit. Il n'éclaire pas. Mais il est moins noir que le reste, comme un drap dans une chambre, la nuit."
+      ],
+      "suite": "ch8-noir"
+    },
+    "ch8-noir": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Il faut entrer. J'ai un pied dans le noir et un pied dehors, depuis un moment. La galerie est étroite, on ne passe pas à deux de front. Si Brouillon passe devant, je n'ai qu'à suivre sa tache pâle. Mais c'est lui qui prend le vent en premier. Si je passe devant, je le protège, et je ne vois rien du tout. Qui passe devant ?"
+      ],
+      "options": [
+        { "id": "ch8-noir-lui", "libelle": "Brouillon devant : il se voit dans le noir", "vers": "ch8-devant", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch8-noir-toi", "libelle": "Toi devant : tu le protèges du vent", "vers": "ch8-derriere" }
+      ]
+    },
+    "ch8-devant": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou suit une tache pâle dans le noir",
+      "tenue": "marche",
+      "texte": [
+        "Il est passé devant. Il a hésité, il m'a regardé, j'ai dit « vas-y, je te suis », et il y est allé. Je marche derrière une petite lueur de rien du tout, les mains sur les parois. De temps en temps, il s'arrête et il dit « Goutte ? » dans le noir. Je réponds « là ». Il repart. C'est la première fois que c'est lui qui m'emmène quelque part. À tout à l'heure."
+      ],
+      "suite": "ch8-echo"
+    },
+    "ch8-derriere": {
+      "type": "attente",
+      "humeur": "peur",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou avance à tâtons, un nuage dans le dos",
+      "tenue": "marche",
+      "texte": [
+        "Je passe devant. Je ne vois rien, rien du tout, je tâte le mur avec une main et le sol avec un pied. Je me suis cogné la casserole deux fois, ça résonne jusqu'au fond. Brouillon est collé dans mon dos, à l'abri. De temps en temps, je dis « ça va ? » et il fait pff. Je fais le brave. Ne lui dis pas que j'ai l'antenne qui tremble. À tout à l'heure."
+      ],
+      "suite": "ch8-echo"
+    },
+    "ch8-echo": {
+      "type": "choix",
+      "humeur": "joie",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "On a fait une découverte. J'ai éternué, à cause du courant d'air, et la galerie a éternué après moi. Trois fois. Brouillon s'est figé. Puis il a essayé : « Goutte ! » Et le noir a répondu : « outte… outte… outte… » Il a été fou de joie pendant dix secondes. Puis inquiet : « Qui ? »",
+        "Il veut savoir qui habite au fond, et qui connaît mon nom. Je note au passage que le courant d'air le sèche : il a perdu un bord depuis l'entrée. Mais là, tout de suite, il attend une réponse, et il a l'air de tenir beaucoup à ce qu'il y ait quelqu'un. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch8-echo-explique", "libelle": "Explique-lui l'écho : c'est sa voix qui revient", "vers": "ch8-rafales" },
+        { "id": "ch8-echo-joue", "libelle": "Crie « Brouillon ! » et écoutez-le revenir, tous les deux", "vers": "ch8-rafales", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch8-echo-chut", "libelle": "Dis-lui chut : on ne sait pas ce qui dort là-dedans", "vers": "ch8-rafales" }
+      ]
+    },
+    "ch8-rafales": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Le sifflet a changé. Il est monté, d'un coup, très aigu, et un mur de vent nous est arrivé dessus. Je me suis jeté dans un creux de la paroi en tirant Brouillon par un bord. Ça a duré le temps de compter jusqu'à cinq. Puis la note est redescendue. C'était donc ça, un si. Ça s'entend, finalement.",
+        "Devant, la galerie est droite, avec des creux de chaque côté, tous les vingt pas. Ça souffle, ça se calme, ça souffle. Il y a un rythme. On peut avancer de creux en creux entre deux rafales, si on compte bien. Ou je plie Brouillon dans le baluchon, je serre le nœud, et je fonce tête baissée. Comment on fait ?"
+      ],
+      "options": [
+        { "id": "ch8-rafales-ensemble", "libelle": "De creux en creux, entre les rafales, ensemble", "vers": "ch8-rythme" },
+        { "id": "ch8-rafales-baluchon", "libelle": "Brouillon dans le baluchon, et fonce", "vers": "ch8-baluchon", "effets": [ { "drapeau": "couve" }, { "var": "lien", "plus": -1 } ] }
+      ]
+    },
+    "ch8-rythme": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "jeu": "rythme",
+      "difficulte": 2,
+      "bonus": "lien",
+      "texte": [
+        "D'accord. On écoute. La note grave : on court. La note qui monte : on plonge dans le creux le plus proche. Brouillon a très bien compris, il fait même le si avant le vent, pour me prévenir, ce qui m'embrouille. Vingt pas à chaque fois. Il y a neuf creux. Attention… la note redescend… maintenant !"
+      ],
+      "reussite": "ch8-froisseuses",
+      "echec": "ch8-echec-rafale"
+    },
+    "ch8-baluchon": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Je l'ai plié dans le baluchon, j'ai serré le nœud, et j'ai couru. Tout droit, tête baissée. La plus grosse rafale m'a fait reculer de six pas, et j'ai recouru. On est passés. Quand j'ai rouvert le baluchon, il est sorti tout chiffonné, avec la marque de la casserole sur le côté. Il ne m'a pas regardé. Il s'est défroissé tout seul, dans un coin. Il ne s'est pas plaint. Il n'a rien appris non plus, sauf que le vent, c'est moi qui m'en occupe."
+      ],
+      "suite": "ch8-froisseuses"
+    },
+    "ch8-echec-rafale": {
+      "type": "echec",
+      "humeur": "fatigue",
+      "repos_min": 20,
+      "texte": [
+        "Je suis parti une seconde trop tôt. Ou trop tard. La rafale nous a cueillis au milieu, entre deux creux, et elle nous a ramenés jusqu'à l'entrée comme deux feuilles. J'ai roulé. Brouillon a volé. On est assis dehors, au soleil, devant le trou, un peu sonnés. Lui, il a de la poussière partout, on dirait un mouton. Moi, j'ai le sifflet dans les oreilles. On souffle, et on y retourne."
+      ]
+    },
+    "ch8-froisseuses": {
+      "type": "choix",
+      "lieu": "Sous les Froisseuses",
+      "humeur": "surpris",
+      "texte": [
+        "Après les rafales, la galerie s'élargit, et le plafond s'est mis à faire du bruit. Un bruit de papier qu'on froisse. Ce sont des chauves-souris, des centaines, pendues là-haut. On les appelle les Froisseuses. Elles connaissent toute la montagne par cœur, sans rien voir, au son.",
+        "Elles nous ont prévenus : plus loin, il y a la Grande Salle, et le vent y est mauvais. Elles veulent bien nous y accompagner demain. Mais pas pour rien. Elles aiment ce qui sonne et ce qui est doux, et elles n'ont ni l'un ni l'autre. Elles regardent beaucoup Brouillon. Très moelleux, disent-elles. Je leur propose quoi ?"
+      ],
+      "options": [
+        { "id": "ch8-froisseuses-chanson", "libelle": "Apprends-leur la chanson des rainettes", "vers": "ch8-troc-chanson", "si": { "drapeau": "chanson" }, "effets": [ { "drapeau": "guide" } ] },
+        { "id": "ch8-froisseuses-plume", "libelle": "Donne-leur la plume de fer : elle sonne", "vers": "ch8-troc-plume", "si": { "objet": "plume" }, "effets": [ { "objet": "plume", "donne": false }, { "drapeau": "guide" } ] },
+        { "id": "ch8-froisseuses-oreiller", "libelle": "Prête-leur Brouillon comme oreiller, pour la nuit", "vers": "ch8-oreiller", "effets": [ { "var": "taille", "plus": -1 }, { "drapeau": "guide" } ] },
+        { "id": "ch8-froisseuses-rien", "libelle": "Rien : remercie, et passe ton chemin", "vers": "ch8-bivouac" }
+      ]
+    },
+    "ch8-troc-chanson": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai chanté. Coâ, coâ, co-coâ. Tu aurais dû entendre ça : avec l'écho, j'étais quarante. Les Froisseuses se sont tues d'un coup, puis elles l'ont reprise, toutes, la tête en bas. Elles ne l'oublieront jamais, elles n'oublient aucun son. Mi-Bémol serait furieuse du tempo. Marché conclu : demain, elles viennent avec nous. Brouillon a chanté aussi. Il ne connaît que le dernier coâ, mais il le place très bien."
+      ],
+      "suite": "ch8-bivouac"
+    },
+    "ch8-troc-plume": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai sorti la plume de fer et je l'ai cognée contre la paroi. Ding. Avec l'écho, ça a duré une minute entière. Elles sont devenues folles. Elles l'ont emportée au plafond, à douze, et elles la font sonner chacune son tour. Marché conclu : demain, elles nous accompagnent. Je marche plus droit, sans ce poids. J'essaie de ne pas penser à un vieux coq qui regarde la montagne. Ding, fait le plafond. Ding."
+      ],
+      "suite": "ch8-bivouac"
+    },
+    "ch8-oreiller": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai demandé à Brouillon. Il a dit oui avant la fin de ma phrase. Il est monté au plafond et elles se sont toutes couchées contre lui, à trois cents, avec des soupirs. Il va passer la nuit là-haut, aplati, immobile, très digne. Il y laissera sûrement un bord : trois cents chauves-souris, ça pèse. Il m'a soufflé, tout bas, pour ne pas les réveiller : « Ronflent en papier. » Marché conclu : demain, elles viennent avec nous."
+      ],
+      "suite": "ch8-bivouac"
+    },
+    "ch8-bivouac": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "duree_min": 20,
+      "duree_max": 30,
+      "pendant": "Pilou dort dans un creux de la galerie",
+      "tenue": "nuit",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "On dort ici. J'ai trouvé un creux à l'abri du courant d'air et j'ai allumé le réchaud, tout petit, pour voir mes mains. Le sifflet fait son la, tout au fond, comme quelqu'un qui souffle dans une bouteille. Demain, la Grande Salle. Les Froisseuses disent que là-bas, le vent ne siffle plus. Qu'il n'en a pas besoin. Je ne sais pas ce que ça veut dire, et je préfère ne pas y penser avant de dormir. Bonne nuit."
+      ],
+      "suite": "ch9-salle"
+    }
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "chapitre": "ch1",
+  "noeuds": {
+    "ch1-orage": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Le fond du jardin",
+      "decor": "jardin-lave",
+      "humeur": "surpris",
+      "texte": [
+        "Tu as entendu, cette nuit ? L'orage. Moi, j'ai tout entendu, de sous mon pot de fleurs : je n'aime pas l'eau, tu sais bien, je suis fait d'encre, ça me délaie. Ce matin, le jardin est tout lavé. L'arrosoir a roulé jusqu'au portail. Et l'herbe est couchée dans le même sens, comme si quelqu'un l'avait peignée.",
+        "Je t'écris parce que j'ai trouvé quelque chose, et que je ne sais pas ce que c'est. C'est au fond, dans les ronces. C'est blanc. C'est gros comme un oreiller. Ça n'y était pas hier. Et ça respire, je crois : ça fait un tout petit bruit, pff, pff, comme une bouilloire qui n'ose pas."
+      ],
+      "suite": "ch1-ronces"
+    },
+    "ch1-ronces": {
+      "type": "choix",
+      "lieu": "Les ronces",
+      "humeur": "peur",
+      "texte": [
+        "Je me suis approché à dix pas. C'est pris dans les épines, de travers, et ça tremble. Ça n'a pas d'yeux, mais je te jure que ça m'a vu : le pff s'est arrêté net. On se regarde. Enfin, moi, je regarde. J'ai le cœur qui tape jusque dans l'antenne. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch1-ronces-doucement", "libelle": "Approche doucement, en lui parlant", "vers": "ch1-doucement", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch1-ronces-de-loin", "libelle": "Observe d'abord, caché derrière l'arrosoir", "vers": "ch1-de-loin" },
+        { "id": "ch1-ronces-vite", "libelle": "Décroche-le vite : il a peut-être mal", "vers": "ch1-vite", "effets": [ { "var": "taille", "plus": -1 } ] }
+      ]
+    },
+    "ch1-doucement": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai avancé tout doucement en disant n'importe quoi : bonjour, il a plu, hein, moi c'est Pilou, j'habite là, sous le pot. À chaque pas, ça tremblait un peu moins. J'ai défait les épines une par une. Ça m'a pris longtemps, je n'ai pas des doigts très précis. Quand la dernière a lâché, la chose n'est pas partie. Elle est restée là, à côté de moi, à hauteur de genou. Si j'avais des genoux."
+      ],
+      "suite": "ch1-libre"
+    },
+    "ch1-de-loin": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Je me suis caché derrière l'arrosoir. D'accord : dedans. La chose a cru que j'étais parti. Alors elle a essayé quelque chose de bizarre : elle s'est toute plissée, elle est devenue grise d'effort, et puis rien. Pff. On aurait dit quelqu'un qui veut éternuer et qui n'y arrive pas. Ça m'a fait de la peine. Je suis sorti de l'arrosoir et j'ai défait les épines une par une. Elle m'a laissé faire."
+      ],
+      "suite": "ch1-libre"
+    },
+    "ch1-vite": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai couru, j'ai tiré. C'est venu d'un coup, sauf un bout qui est resté accroché aux épines : une petite mèche blanche, grande comme ma main, qui s'est défaite dans l'air pendant que je la regardais. Ça ne saigne pas. Ça ne crie pas. Mais la chose s'est recroquevillée, et moi j'ai dit pardon, pardon, pardon, au moins douze fois. Elle est restée quand même. À hauteur de genou, un peu de travers."
+      ],
+      "suite": "ch1-libre"
+    },
+    "ch1-libre": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Bon. Je crois que je sais ce que c'est. C'est un nuage. Un vrai, mais tout petit, un nuage de poche. Il a dû tomber cette nuit avec l'orage. Il flotte de travers, il grelotte, et quand je passe la main dedans, c'est froid et ça ne pèse rien du tout.",
+        "Il a l'air d'attendre que je fasse quelque chose. Moi aussi, remarque, j'attends que je fasse quelque chose. Il faudrait le réchauffer, ou le nourrir, je ne sais pas dans quel ordre. Qu'est-ce que ça mange, un nuage ? Tu le sais, toi ?"
+      ],
+      "options": [
+        { "id": "ch1-libre-vapeur", "libelle": "De la vapeur, peut-être : fais chauffer de l'eau", "vers": "ch1-vapeur" },
+        { "id": "ch1-libre-gouter", "libelle": "Ton goûter : tout le monde aime ton goûter", "vers": "ch1-gouter", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch1-gouter": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Je lui ai tendu mon meilleur biscuit, celui avec le trou au milieu. Il s'est penché dessus très poliment. Le biscuit est passé à travers lui et il est tombé dans l'herbe. On l'a regardé tous les deux. Puis il a éternué des miettes, et je crois bien qu'il a ri : ça fait un bruit de bulle. Bon. Raté. Alors j'ai fait ce que je fais quand je ne sais plus quoi faire : j'ai mis de l'eau à chauffer."
+      ],
+      "suite": "ch1-vapeur"
+    },
+    "ch1-vapeur": {
+      "type": "attente",
+      "humeur": "neutre",
+      "duree_min": 6,
+      "duree_max": 10,
+      "pendant": "Pilou surveille sa casserole",
+      "tenue": "attend",
+      "texte": [
+        "J'ai sorti ma petite casserole et j'ai allumé le réchaud derrière le pot de fleurs. L'eau chauffe. Il s'est approché, il regarde la casserole sans bouger, comme toi tu regardes ton écran quand ça charge. Je ne sais pas si c'est une bonne idée. Je te dis dès que ça bout."
+      ],
+      "suite": "ch1-il-boit"
+    },
+    "ch1-il-boit": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Ça bout. Et lui, il s'est jeté dans la vapeur comme toi sur un croissant. Il la boit, il la mange, je ne sais pas le mot. Il s'est arrondi, il est devenu plus blanc, il ne grelotte plus. Moi, je n'ai plus d'eau pour mon thé, mais ça va. Il fait un bruit nouveau : un petit ronron de bouilloire contente.",
+        "Je l'ai mesuré. Je n'ai pas de mètre, alors je me suis couché par terre à côté de lui, trois fois de suite. Il fait trois Pilou de large. C'est officiel. Et je lui ai donné un nom : Brouillon. Parce qu'il a l'air d'un nuage pas fini. J'aime bien les brouillons, moi : tout peut encore arriver."
+      ],
+      "suite": "ch1-sieste"
+    },
+    "ch1-sieste": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Après manger, il a eu sommeil. Il est venu se poser tout contre moi, comme ça, sans demander. Et moi, j'ai reculé d'un bond. Pas parce que je ne veux pas ! Parce que je tache. Tu le sais, toi, regarde ton bureau. Tout ce que je touche longtemps garde du bleu, et l'encre, ça ne part pas.",
+        "S'il dort contre moi, il aura une marque. Pour toujours, sur un nuage tout neuf. Il me regarde, il ne comprend pas pourquoi je suis parti à l'autre bout du pot de fleurs. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch1-sieste-laisse", "libelle": "Laisse-le venir. Tant pis pour la tache.", "vers": "ch1-tache", "effets": [ { "drapeau": "tache-bleue" }, { "var": "lien", "plus": 2 } ] },
+        { "id": "ch1-sieste-feuille", "libelle": "Glisse une feuille de rhubarbe entre vous deux", "vers": "ch1-feuille", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch1-tache": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il a dormi contre moi tout l'après-midi. Je n'ai pas bougé, j'avais une crampe partout. Quand il s'est réveillé, il avait une petite tache bleue sur le flanc, de la forme de moi, en plus petit. Il l'a regardée longtemps, en se tordant pour mieux voir. Puis il a fait son bruit de bulle. Je crois qu'il la trouve bien. Moi, je n'ose pas te dire ce que ça m'a fait. Quelque chose, en tout cas."
+      ],
+      "suite": "ch1-retrecit"
+    },
+    "ch1-feuille": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai cueilli la plus grande feuille de rhubarbe du jardin et je l'ai glissée entre nous, comme un drap. Il a dormi de son côté de la feuille, moi du mien. Au réveil, la feuille était bleue d'un côté, toute mouillée de l'autre, et lui, blanc comme neuf. Il a regardé la feuille, puis moi, l'air de dire : c'était pour quoi, ce truc ? Je n'ai pas su lui expliquer."
+      ],
+      "suite": "ch1-retrecit"
+    },
+    "ch1-retrecit": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "Mauvaise nouvelle. Ce matin, je me suis recouché à côté de lui pour vérifier : il ne fait plus tout à fait trois Pilou. Il lui manque un bord. J'ai recompté deux fois. Il a rétréci pendant la nuit, sans rien dire, et il n'a pas l'air de le savoir.",
+        "Une bergeronnette qui passait me l'a expliqué, très vite, elles sont toujours pressées. Un petit nuage tout seul, ça s'use. Les siens, les blancs, se rassemblent loin derrière les montagnes, et ils repartent à la première gelée. « Les blancs, hein. Pas les noirs : les noirs avalent. » Chaque jour compte, elle a dit. Puis elle a filé. Qu'est-ce qu'on fait ?"
+      ],
+      "options": [
+        { "id": "ch1-retrecit-partir", "libelle": "Pars ce matin. Chaque jour compte.", "vers": "ch1-baluchon" },
+        { "id": "ch1-retrecit-attendre", "libelle": "Attends demain : qu'il reprenne des forces d'abord", "vers": "ch1-attend", "effets": [ { "drapeau": "a-traine" }, { "var": "taille", "plus": -1 } ] }
+      ]
+    },
+    "ch1-attend": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "On a attendu. Je lui ai fait bouillir toute l'eau de l'arrosoir, il a ronronné toute la journée, j'étais fier. Et ce matin, je me suis recouché à côté de lui : il manque encore un bord. La vapeur le console, mais elle ne le répare pas. On a perdu un jour, et lui un morceau. J'ai regardé les montagnes : elles sont plus blanches qu'hier, en haut. On part. Tout de suite."
+      ],
+      "suite": "ch1-baluchon"
+    },
+    "ch1-baluchon": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Je fais mon baluchon. La casserole, c'est obligé : c'est sa cantine. Le réchaud aussi. Après ça, il reste de la place pour une seule chose, et j'en ai trois devant moi. Ma pelote de laine bleue. Mon goûter de secours. Mon parapluie de poche, parce que tu me connais. Brouillon tourne autour des trois sans rien renverser, presque. Je prends quoi ?"
+      ],
+      "options": [
+        { "id": "ch1-baluchon-pelote", "libelle": "La pelote de laine", "vers": "ch1-depart", "effets": [ { "objet": "pelote", "donne": true } ] },
+        { "id": "ch1-baluchon-gouter", "libelle": "Le goûter de secours", "vers": "ch1-depart", "effets": [ { "objet": "gouter", "donne": true } ] },
+        { "id": "ch1-baluchon-parapluie", "libelle": "Le parapluie de poche", "vers": "ch1-depart", "effets": [ { "objet": "parapluie", "donne": true } ] }
+      ]
+    },
+    "ch1-depart": {
+      "type": "attente",
+      "lieu": "Le portail",
+      "humeur": "determine",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou quitte le jardin",
+      "tenue": "marche",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Voilà. J'ai fermé le pot de fleurs à clé. Enfin, j'ai posé un caillou dessus. On passe sous le portail. Brouillon n'a jamais vu ce qu'il y a derrière. Moi non plus, pour être honnête, pas plus loin que la boîte aux lettres. Il flotte à côté de moi, un peu de travers. Les montagnes sont au bout du chemin. Je t'écris dès qu'on a fait un vrai bout de route."
+      ],
+      "suite": "ch2-chemin"
+    }
+  }
+}

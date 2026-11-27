@@ -1,0 +1,247 @@
+{
+  "chapitre": "ch12",
+  "noeuds": {
+    "ch12-gelee": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "L'Abreuvoir, à l'aube",
+      "decor": "abreuvoir-aube",
+      "humeur": "neutre",
+      "texte": [
+        "Il a gelé. La vraie gelée, la première. L'herbe est blanche et elle craque comme des biscottes, le lac fume, et il y a de la glace fine tout le long du bord. Je t'écris avec les mains raides. Le ciel est rose d'un côté et encore noir de l'autre. C'est le matin qu'on attendait depuis le jardin, depuis les ronces. Je vais te raconter dans l'ordre, sinon je n'y arriverai pas."
+      ],
+      "suite": "ch12-mode"
+    },
+    "ch12-mode": {
+      "type": "hasard",
+      "humeur": "surpris",
+      "texte": [
+        "D'abord, le bruit. Tu sais, ce bruit de mille personnes qui soufflent sur leur soupe ? Il s'est arrêté. D'un coup, tout le lac s'est tu. Puis il y a eu un froissement immense, comme un drap qu'on secoue, mais grand comme la vallée. C'est ce bruit-là qui m'a fait lever la tête."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch12-de-loin", "si": { "drapeau": "seul-devant" } },
+        { "poids": 1, "vers": "ch12-reveil", "si": { "tous": [ { "drapeau": "endormi" }, { "non": { "drapeau": "seul-devant" } } ] } },
+        { "poids": 1, "vers": "ch12-leve", "si": { "non": { "un": [ { "drapeau": "seul-devant" }, { "drapeau": "endormi" } ] } } }
+      ]
+    },
+    "ch12-de-loin": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'étais encore dans la pente. À cent pas de la rive, peut-être deux cents, avec mes petites jambes. Et je les ai vus se lever. Tous. Lentement, les vieux d'abord, puis les autres, en une longue file qui montait vers le sud. J'ai couru. On ne rattrape pas des nuages en courant, je le sais, maintenant.",
+        "Je l'ai cherché. Des centaines de nuages blancs, vus d'en dessous. Et puis, presque en queue de file, il y en a un tout petit qui s'est arrêté. Il a laissé passer les autres. Il s'est tourné vers la pente, et il a fait quelque chose, au-dessus du lac. Un arc. Minuscule. D'une seule couleur. Tu devines laquelle. Il savait que je le reconnaîtrais à ça. Puis il a rejoint la file."
+      ],
+      "suite": "ch12-fin-de-loin"
+    },
+    "ch12-reveil": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai levé la tête de mon baluchon. Il faisait jour. J'ai mis une seconde à comprendre où j'étais, et une autre à comprendre ce que j'avais fait. Le ciel était plein de nuages qui s'en allaient, déjà hauts, déjà petits, en file vers le sud. Sur le lac, il n'y avait plus personne. J'ai crié son nom. C'était trop loin.",
+        "Tout autour de moi, l'herbe était blanche de givre. Sauf à un endroit. Un rond, juste contre mon dos, grand comme un oreiller, où l'herbe était verte, mouillée, encore tiède. Il était venu dormir là. Il est resté contre moi jusqu'au dernier moment, et il n'a pas voulu me réveiller. Ou il a essayé, et je n'ai rien senti. Je ne le saurai pas."
+      ],
+      "suite": "ch12-fin-manque"
+    },
+    "ch12-leve": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Ils se levaient. Tous. Lentement, les vieux d'abord, puis les autres, en une longue file qui montait vers le sud. J'étais au bord de l'eau, debout, avec ma casserole. Brouillon est monté avec eux, à la hauteur d'un arbre. Et puis il s'est arrêté. Il a laissé passer deux grands, trois. Il est redescendu. Il est revenu se coller contre moi, tout froid, tout tremblant, et il a dit : « Goutte. » Rien d'autre. Au-dessus de nous, la file avançait."
+      ],
+      "suite": "ch12-adieu"
+    },
+    "ch12-adieu": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "On y est. Il est contre moi, et les siens s'en vont. Les derniers passent au-dessus du lac, ils ne l'attendront pas. Il ne bouge pas. Il n'attend pas que je le retienne, et il n'attend pas que je le chasse : il attend que je lui dise ce qui est juste, comme depuis le premier jour. J'ai la gorge toute petite. Je ne t'ai jamais autant demandé : qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch12-adieu-va", "libelle": "Dis-lui : « Va. »", "vers": "ch12-va" },
+        { "id": "ch12-adieu-noeud", "libelle": "Défais le nœud de laine, sans rien dire", "vers": "ch12-va", "si": { "drapeau": "ficelle" }, "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch12-adieu-recule", "libelle": "Recule d'un pas, et ouvre les mains", "vers": "ch12-va" },
+        { "id": "ch12-adieu-garde", "libelle": "Garde-le encore un peu. Juste un peu.", "vers": "ch12-encore" }
+      ]
+    },
+    "ch12-encore": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Je l'ai gardé. J'ai refermé les bras, sans serrer, et j'ai dit : encore un peu. Il n'a pas discuté. Il s'est fait tout rond contre moi. On a regardé passer les derniers, les traînards, un vieux tout effiloché qui fermait la marche. Puis le ciel a été vide, et bleu, et très grand. Brouillon a levé un bord vers le haut, comme on lève la main. Personne n'a répondu. Il a dit : « Partis. » J'ai dit oui. C'est moi. C'est moi qui n'ai pas su."
+      ],
+      "suite": "ch12-fin-hiver"
+    },
+    "ch12-va": {
+      "type": "hasard",
+      "humeur": "tendre",
+      "texte": [
+        "Il a compris. Je ne sais pas ce qu'il a compris exactement, ni si c'est ce que j'ai dit ou ce que j'ai fait. Il s'est décollé de moi, d'un bord, puis de l'autre. Il a regardé en haut. Il m'a regardé, moi. Il a regardé la file qui s'éloignait, et il a pris son élan, enfin, ce qui lui sert d'élan : il s'est tassé, comme un chat avant de sauter."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch12-vite", "si": { "tous": [ { "drapeau": "descente-nuit" }, { "non": { "drapeau": "attendu" } } ] } },
+        { "poids": 1, "vers": "ch12-trop-petit", "si": { "tous": [
+          { "non": { "tous": [ { "drapeau": "descente-nuit" }, { "non": { "drapeau": "attendu" } } ] } },
+          { "un": [ { "var": "taille", "max": 1 }, { "tous": [ { "drapeau": "couve" }, { "non": { "drapeau": "sait-tenir" } } ] } ] }
+        ] } },
+        { "poids": 1, "vers": "ch12-pluie-autour", "si": { "tous": [
+          { "non": { "tous": [ { "drapeau": "descente-nuit" }, { "non": { "drapeau": "attendu" } } ] } },
+          { "non": { "un": [ { "var": "taille", "max": 1 }, { "tous": [ { "drapeau": "couve" }, { "non": { "drapeau": "sait-tenir" } } ] } ] } },
+          { "var": "lien", "min": 16 },
+          { "drapeau": "sait-pleuvoir" }
+        ] } },
+        { "poids": 1, "vers": "ch12-trois-gouttes", "si": { "tous": [
+          { "non": { "tous": [ { "drapeau": "descente-nuit" }, { "non": { "drapeau": "attendu" } } ] } },
+          { "non": { "un": [ { "var": "taille", "max": 1 }, { "tous": [ { "drapeau": "couve" }, { "non": { "drapeau": "sait-tenir" } } ] } ] } },
+          { "var": "lien", "min": 16 },
+          { "non": { "drapeau": "sait-pleuvoir" } }
+        ] } },
+        { "poids": 1, "vers": "ch12-sans", "si": { "tous": [
+          { "non": { "tous": [ { "drapeau": "descente-nuit" }, { "non": { "drapeau": "attendu" } } ] } },
+          { "non": { "un": [ { "var": "taille", "max": 1 }, { "tous": [ { "drapeau": "couve" }, { "non": { "drapeau": "sait-tenir" } } ] } ] } },
+          { "var": "lien", "max": 15 }
+        ] } }
+      ]
+    },
+    "ch12-vite": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Et il a été pris. La queue du troupeau passait juste au-dessus, basse, rapide, et elle l'a emporté comme une chaussette dans une lessive. Je n'avais pas fini ma phrase. Elle faisait un mot. J'ai couru le long du lac en criant le reste, tout ce que j'avais préparé dans la descente, pêle-mêle, la casserole me battait les jambes. Je ne sais pas ce qu'il en a entendu. On est arrivés trop tard pour un au revoir entier. Il en a eu un morceau."
+      ],
+      "suite": "ch12-fin-manque"
+    },
+    "ch12-trop-petit": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Il a sauté. Il est monté de la hauteur d'un tabouret. Le vent du matin l'a retourné comme une crêpe, et il est redescendu. Il a recommencé. Quatre fois. À la cinquième, il n'a même plus décollé. Trop petit, ou pas assez appris : je ne sais pas, et dans les deux cas, c'est moi. Là-haut, les derniers passaient. Un vieux a ralenti, il a regardé en bas, longtemps. Puis il a suivi les autres. Brouillon est revenu se poser sur ma casserole, sans rien dire."
+      ],
+      "suite": "ch12-fin-hiver"
+    },
+    "ch12-pluie-autour": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il est monté. Droit, sans trembler, à la hauteur des arbres, puis des rochers. Et là, il s'est arrêté, juste au-dessus de moi. Il est devenu gris. J'ai compris ce qui venait. Je n'ai pas bougé. Je me suis dit : tant pis, je serai délavé, je serai bleu pâle jusqu'à la fin de mes jours, je ne bouge pas.",
+        "Il a plu. Une vraie pluie, fine, tiède, toute la rive a chanté. Et pas une goutte sur moi. Pas une. Il a plu tout autour, en rond, exactement à ma taille. Je suis resté debout au milieu d'un cercle d'herbe sèche, pendant qu'il lâchait tout ce qu'il avait. Il s'en souvenait : sa pluie, je l'aime, mais pas sur moi. Puis il a crié, de là-haut, très fort : « Goutte ! » Et il a rejoint la file."
+      ],
+      "suite": "ch12-apres"
+    },
+    "ch12-trois-gouttes": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il est monté. Droit, sans trembler, à la hauteur des arbres, puis des rochers. Et là, il s'est arrêté, juste au-dessus de moi. Il est devenu gris. Il ne s'est pas plissé, il n'a pas forcé. Il m'a regardé, et quelque chose en lui s'est défait, tout doucement, comme un nœud.",
+        "Ploc. Sur mon antenne. Puis une deuxième. Puis une troisième, plus petite, qui a hésité. Il pleuvait. Lui qui n'y était jamais vraiment arrivé : il fallait qu'il parte pour savoir. Je ne me suis pas sauvé. Je n'ai pas cherché de feuille. J'ai levé la tête et je les ai prises toutes les trois, en pleine figure. J'en garde trois taches claires. Il a crié : « Goutte ! » Et il a rejoint la file."
+      ],
+      "suite": "ch12-apres"
+    },
+    "ch12-sans": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Il est monté. Droit, vite, sans trembler. Il a rattrapé la file en trois coups de bords, il s'est glissé entre deux grands, à sa place, et il a continué avec eux. Il ne s'est pas retourné. J'ai attendu qu'il se retourne. Je me suis dit : au prochain rocher. À la crête. Il ne s'est pas retourné. C'est bien. C'est exactement ce qu'on voulait, depuis le début : qu'il sache y aller. J'ai agité la main quand même, longtemps. Au cas où les nuages auraient des yeux derrière."
+      ],
+      "suite": "ch12-fin-sans"
+    },
+    "ch12-apres": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Je suis resté sur la rive. La file s'est étirée vers le sud, de plus en plus fine. J'ai essayé de ne pas le perdre des yeux, et j'ai tenu longtemps, jusqu'à ce qu'il ne soit plus qu'un point parmi les points. Le soleil est sorti de derrière les crêtes. La casserole est vide. Le réchaud est froid. Il n'y a plus qu'à rentrer, je crois. Ou alors il reste une dernière chose à faire, et je ne la vois pas. Toi, tu la vois ?"
+      ],
+      "options": [
+        { "id": "ch12-apres-rentrer", "libelle": "Rentre à la maison", "vers": "ch12-fin-pluie" },
+        { "id": "ch12-apres-rester", "libelle": "Reste encore, jusqu'à ne plus voir aucun point", "vers": "ch12-fin-pluie" },
+        { "id": "ch12-apres-plume", "libelle": "Fais sonner la plume de fer, une dernière fois", "vers": "ch12-ding", "si": { "tous": [ { "objet": "plume" }, { "drapeau": "ondee" } ] } }
+      ]
+    },
+    "ch12-ding": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai cogné la plume contre la casserole. Ding. Tout en haut, loin derrière les autres, la grande grise fermait la marche. Elle s'est arrêtée. Elle est redescendue, elle toute seule, à contre-courant de tout le troupeau, jusqu'à toucher le lac. Je lui ai dit, je ne sais pas si les très vieux nuages comprennent : il n'a pas dormi exprès. Il regarde par ici tous les jours. Il s'appelle Tournebise.",
+        "Elle est restée immobile un long moment. Puis elle a fait une chose que je n'avais vu faire à aucun nuage : elle a quitté la file. Elle est partie de l'autre côté. Vers le col, vers le plateau, vers un petit toit avec un coq dessus. Les autres l'ont attendue en tournant lentement au-dessus des crêtes. Brouillon aussi, je le voyais : le plus petit point, tout au bord."
+      ],
+      "suite": "ch12-fin-deux"
+    },
+    "ch12-fin-pluie": {
+      "type": "fin",
+      "issue": "bonne",
+      "titre": "La pluie autour",
+      "lieu": "Chez toi, plus tard",
+      "decor": "fenetre-maison",
+      "humeur": "tendre",
+      "texte": [
+        "Je suis rentré. Ça m'a pris du temps, tu t'en doutes, et je te raconterai le retour un autre jour. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. J'ai reposé la casserole à sa place. Elle a toujours sa bosse. Je mesure encore des choses en Pilou, par habitude : ton écran en fait quatre.",
+        "Hier soir, il a plu sur ta fenêtre. J'étais sur le rebord, comme tous les soirs, à regarder passer les nuages. Il y en avait un, pas très grand, qui traînait derrière les autres. Il a plu sur toute la rue. Et sur la vitre, juste devant moi, il est resté un rond sans une goutte. De ma taille. Je ne dis pas que c'était lui. Je dis juste que j'ai fait bonjour de la main, et que le rond a mis longtemps à se remplir."
+      ],
+      "recompenses": { "po": 300, "xp": 150, "souvenir": "rond-sec", "titre": "Berger de nuage", "objet": "casserole-chapeau" }
+    },
+    "ch12-fin-sans": {
+      "type": "fin",
+      "issue": "douce-amere",
+      "titre": "Sans se retourner",
+      "lieu": "Chez toi, plus tard",
+      "decor": "fenetre-maison",
+      "humeur": "triste",
+      "texte": [
+        "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. Je me suis demandé, tout le long du chemin, ce que j'aurais pu faire de plus pour qu'il se retourne. Rire plus. Le laisser faire davantage. Avoir moins peur de l'eau. Je ne sais pas. Peut-être rien. Peut-être qu'un nuage qui s'en va bien, c'est un nuage qui ne regarde pas derrière.",
+        "Tournebise m'avait dit : elle est arrivée, c'est moi qui l'ai menée jusque-là. Je comprends mieux la phrase. Il est arrivé. Il est grand, quelque part, ou il le sera. Le soir, je monte sur le rebord de ta fenêtre et je regarde passer les nuages. Je ne sais pas lequel c'est. J'agite la main pour tous. Ça fait beaucoup de bonjours, mais j'ai le temps."
+      ],
+      "recompenses": { "po": 220, "xp": 110, "souvenir": "main-levee", "titre": "Passeur de nuage", "objet": "baluchon-cabosse" }
+    },
+    "ch12-fin-hiver": {
+      "type": "fin",
+      "issue": "douce-amere",
+      "titre": "Un hiver à deux",
+      "lieu": "La cabane du lac",
+      "decor": "abreuvoir-aube",
+      "humeur": "tendre",
+      "texte": [
+        "On n'est pas rentrés. Pas cet hiver. Il y a une cabane de berger au bord du lac, vide, avec un poêle et une fenêtre. On s'y est installés. Je fais de la vapeur matin et soir, et il ne rétrécit plus : il lui suffisait d'un toit, d'une casserole et de quelqu'un. La nuit, il gèle un peu, et il se pose sur la vitre, en givre, en fougères. Le matin, je souffle dessus, et il redevient lui.",
+        "Je ne vais pas te dire que c'est ce qu'il fallait. Les siens sont partis sans lui, et certains soirs, il regarde le sud. Mais une sarcelle, qui hiverne ici, dit qu'ils repassent au printemps. Alors on travaille. Le vent, la pluie, monter tout seul. Je le laisse se tromper, un peu, exprès. Au printemps, il sera prêt. Moi aussi, j'espère. C'est surtout moi qui dois apprendre, je crois. Je t'écrirai."
+      ],
+      "recompenses": { "po": 220, "xp": 110, "souvenir": "buee-du-matin", "titre": "Gardien d'hiver", "objet": "bonnet-de-givre" }
+    },
+    "ch12-fin-de-loin": {
+      "type": "fin",
+      "issue": "douce-amere",
+      "titre": "De loin",
+      "lieu": "Chez toi, plus tard",
+      "decor": "fenetre-maison",
+      "humeur": "tendre",
+      "texte": [
+        "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. On ne s'est pas dit au revoir de près. Les derniers mots, c'était en haut de la pente, la veille, dans le noir, et je ne suis pas sûr d'avoir choisi les bons. Mais il est arrivé avant la gelée, il a eu toute une nuit avec les siens, et il est parti dans la file, à sa place. C'est parce que je l'ai laissé descendre seul. Je me le répète.",
+        "Et puis il y a eu l'arc. Il s'est arrêté pour moi, lui, alors que c'était moi le retardataire. Il m'a attendu comme il pouvait, de là-haut. Le soir, je monte sur le rebord de ta fenêtre et je regarde passer les nuages. Si un jour tu vois, au-dessus de ta rue, un tout petit arc-en-ciel d'une seule couleur, un peu raté, viens me chercher. Vite."
+      ],
+      "recompenses": { "po": 220, "xp": 110, "souvenir": "arc-beige", "titre": "Guetteur d'arc-en-ciel", "objet": "caillou-du-col" }
+    },
+    "ch12-fin-manque": {
+      "type": "fin",
+      "issue": "mauvaise",
+      "titre": "L'adieu manqué",
+      "lieu": "Chez toi, plus tard",
+      "decor": "fenetre-maison",
+      "humeur": "triste",
+      "texte": [
+        "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. Je ne vais pas te mentir : j'ai refait cette dernière aube dans ma tête à chaque pas du retour. Il est arrivé. Il est avec les siens, il ne rétrécira plus, et c'est pour ça qu'on était partis. Mais je ne lui ai pas dit au revoir comme il faut. Il m'a manqué un peu de temps. Il m'en manquera toujours un peu.",
+        "En repassant à la halte, je n'ai pas eu besoin de raconter. Tournebise a su en me voyant. Il a juste dit : « Toi aussi. » Et il m'a fait une place sur le toit. Depuis, le soir, je monte sur le rebord de ta fenêtre, je regarde passer les nuages, et je dis au revoir. À voix haute, à tous, à tout hasard. On ne sait jamais lequel écoute. Je crois que je le dirai longtemps. Ça ne me dérange pas."
+      ],
+      "recompenses": { "po": 120, "xp": 60, "souvenir": "rond-tiede", "titre": "Veilleur du soir", "objet": "echarpe-de-veille" }
+    },
+    "ch12-fin-deux": {
+      "type": "fin",
+      "issue": "secrete",
+      "titre": "Deux adieux",
+      "lieu": "La halte, au retour",
+      "decor": "halte-girouette",
+      "humeur": "joie",
+      "texte": [
+        "Je suis rentré par la halte du Bout-des-Prés. De loin, j'ai vu qu'il avait plu : le toit brillait, et rien que le toit. Tout autour, le pré était sec. Tournebise ne m'a pas dit bonjour. Il a dit : « Elle est venue. Elle a plu sur moi. Rien que sur moi. Ça m'a dérouillé le pivot. » Et il a fait une chose que je ne lui avais jamais vue faire. Il a tourné. Un tour complet, en grinçant, pour me montrer.",
+        "Il indique le vent, maintenant, comme tout le monde. Sauf le soir : le soir, il se remet vers la montagne, mais il dit que ce n'est plus pour chercher. Il m'a laissé la plume. Je l'ai accrochée à ta fenêtre. Quand il pleut, elle sonne. Hier, elle a sonné deux fois : un coup grave, et, juste après, un tout petit, à côté. Sur la vitre, il restait un rond sec, de ma taille. J'ai fait bonjour aux deux."
+      ],
+      "recompenses": { "po": 330, "xp": 165, "souvenir": "girouette-qui-tourne", "titre": "Porteur de plume", "objet": "plume-de-girouette" }
+    }
+  }
+}

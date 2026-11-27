@@ -1,0 +1,171 @@
+{
+  "chapitre": "ch6",
+  "noeuds": {
+    "ch6-sentier": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le sentier des mélèzes",
+      "decor": "sentier-des-melezes",
+      "humeur": "malice",
+      "texte": [
+        "On monte. Le sentier fait des lacets entre des mélèzes tout jaunes qui perdent leurs aiguilles, ça fait un tapis qui glisse. Là-haut, entre deux Dents-de-Lait, on voit le col : la Gencive. Je n'ai pas choisi le nom. Il fait froid, un froid propre, qui sent le caillou.",
+        "Et il m'arrive un truc. Quand je souffle, ça fait de la buée. Brouillon a poussé un cri : « Goutte fait des petits ! » Il croit que ce sont des bébés nuages. Il essaie d'en adopter un à chaque fois que je respire, il lui parle, et le petit disparaît en deux secondes. Il les cherche derrière moi, un par un. Il vient de demander : « Partis où ? » Je lui réponds quoi ?"
+      ],
+      "options": [
+        { "id": "ch6-sentier-buee", "libelle": "Que c'est de la buée : ça ne dure pas, c'est fait comme ça", "vers": "ch6-montee" },
+        { "id": "ch6-sentier-devant", "libelle": "Qu'ils sont partis devant, prévenir les siens", "vers": "ch6-montee" },
+        { "id": "ch6-sentier-ensemble", "libelle": "Souffles-en un gros, et regardez-le ensemble jusqu'au bout", "vers": "ch6-montee", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch6-montee": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Premier vrai raidillon. Le sentier part à gauche en grands lacets tranquilles, il y en a pour la matinée. Ou alors on coupe tout droit, par un éboulis de gros rochers : c'est trois fois plus court. Il faudrait que je lance mon baluchon par-dessus chaque bloc pour me hisser derrière, et je vise comme une goutte. Brouillon, lui, flotte : il ne voit pas le problème. On prend par où ?"
+      ],
+      "options": [
+        { "id": "ch6-montee-rochers", "libelle": "Coupe par les rochers", "vers": "ch6-grimpe" },
+        { "id": "ch6-montee-sentier", "libelle": "Reste sur le sentier", "vers": "ch6-lacets" }
+      ]
+    },
+    "ch6-grimpe": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "jeu": "visee",
+      "difficulte": 2,
+      "texte": [
+        "Bon. Les rochers. La méthode : je fais tourner le baluchon, je le lance par-dessus le bloc, il se coince, et je grimpe à la ficelle. Si je vise mal, il redescend, et moi avec. Brouillon s'est mis au-dessus du premier rocher pour me montrer où viser. C'est gentil. Il bouge tout le temps. Allez : je lance."
+      ],
+      "reussite": "ch6-grimpe-ok",
+      "echec": "ch6-grimpe-rate"
+    },
+    "ch6-grimpe-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "effets": [ { "drapeau": "a-traine", "ote": true } ],
+      "texte": [
+        "Six rochers, six lancers, six fois dedans ! Je ne sais pas ce qui m'a pris. Au dernier, Brouillon a applaudi, enfin, il a tapé deux de ses bords l'un contre l'autre, ça ne fait aucun bruit, mais j'ai compris l'intention. On est en haut du raidillon et le soleil n'est même pas au milieu du ciel. On a regagné une belle demi-journée. Si on avait du retard, on n'en a plus. J'ai mal partout et je suis très content."
+      ],
+      "suite": "ch6-etageres"
+    },
+    "ch6-grimpe-rate": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "Au troisième rocher, j'ai visé à côté. Le baluchon est redescendu, moi derrière, sur le dos, jusqu'en bas de l'éboulis. Rien de cassé, la casserole a une bosse. Brouillon est venu me pousser pour m'aider à remonter, de toutes ses forces, rocher après rocher, et un nuage qui pousse, ça transpire : il y a laissé un bord. On est en haut à la même heure que par le sentier. Je vise comme une goutte, je te l'avais dit."
+      ],
+      "suite": "ch6-etageres"
+    },
+    "ch6-lacets": {
+      "type": "attente",
+      "humeur": "malice",
+      "duree_min": 20,
+      "duree_max": 25,
+      "pendant": "Pilou monte les lacets, un par un",
+      "tenue": "marche",
+      "texte": [
+        "On prend le sentier. Un lacet à gauche, un lacet à droite, et on recommence. À chaque virage, on revoit le même mélèze, d'un peu plus haut. Brouillon coupe les lacets en ligne droite et m'attend au virage suivant en regardant ailleurs, l'air de rien. Je crois qu'il se moque de moi. Il apprend vite. Je t'écris en haut."
+      ],
+      "suite": "ch6-etageres"
+    },
+    "ch6-etageres": {
+      "type": "attente",
+      "lieu": "Chez Madame Bocal",
+      "decor": "terrier-aux-bocaux",
+      "humeur": "surpris",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou visite quatre cents étagères",
+      "tenue": "attend",
+      "texte": [
+        "En haut du raidillon, il y a une porte ronde dans le talus, et derrière, une marmotte en tablier : Madame Bocal. Elle ferme pour l'hiver dans deux jours, et elle met tout en conserve avant de dormir. Tout. Elle veut absolument nous montrer. J'ai lu les étiquettes : « Mirabelles. » « Courant d'air du mois d'août. » « Odeur de foin. » « Un fond de sieste. » Il y a quatre cents étagères. Je reviens."
+      ],
+      "suite": "ch6-bocaux"
+    },
+    "ch6-bocaux": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Elle a fini la visite devant Brouillon, les pattes sur les hanches. « Il ne passera pas le col comme ça, votre petit. Il va geler en route, ça fera de la neige, c'est joli, mais ce ne sera plus lui. » Elle a sorti son plus grand bocal. « Mettez-le là-dedans. Je vous le prête. Il ne perdra pas une miette jusqu'au lac. »",
+        "Elle a raison, il ne perdrait rien. Il ne verrait rien non plus. Ni le col, ni le vent, ni la neige. Un nuage en conserve. Je regarde le bocal, je regarde Brouillon, qui renifle le couvercle. Je ne sais pas ce qui est le mieux pour lui. Toi, tu sais ?"
+      ],
+      "options": [
+        { "id": "ch6-bocaux-accepte", "libelle": "Accepte le bocal : au moins, il arrivera entier", "vers": "ch6-bocal-oui", "effets": [ { "objet": "bocal", "donne": true } ] },
+        { "id": "ch6-bocaux-refuse", "libelle": "Refuse : il doit voir la route", "vers": "ch6-bocal-non", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch6-bocaux-demande", "libelle": "Demande à Brouillon ce qu'il veut, lui", "vers": "ch6-bocal-lui", "effets": [ { "var": "lien", "plus": 2 } ] }
+      ]
+    },
+    "ch6-bocal-oui": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Il est entré dedans sans discuter, puisque c'est moi qui le demandais. Il s'est plié comme une chaussette. J'ai vissé le couvercle, pas trop fort. Il remplit tout le verre, tout blanc, on dirait un bocal de lait. Il a posé un bord contre la paroi, là où est ma main. Il est à l'abri. C'est ce que je voulais. Alors pourquoi est-ce que je porte ce bocal comme si j'avais fait une bêtise ?"
+      ],
+      "suite": "ch6-meteo"
+    },
+    "ch6-bocal-non": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai dit non merci. Qu'il n'est pas une mirabelle. Madame Bocal n'a pas été vexée : « C'est vous qui voyez. Moi, je conserve. Chacun son métier. » Elle nous a donné un petit pot de vapeur de tilleul pour la route, étiqueté de sa main. Brouillon n'a pas compris de quoi on parlait, mais il a compris qu'il restait dehors, à côté de moi, et il a fait trois tours autour de ma casserole."
+      ],
+      "suite": "ch6-meteo"
+    },
+    "ch6-bocal-lui": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je me suis accroupi et je lui ai expliqué. Dans le bocal, tu ne perds rien, mais tu ne vois rien. Dehors, tu vois tout, mais tu peux fondre. C'est toi qui choisis. Personne ne lui avait jamais demandé ça. Il a regardé le bocal. Il a regardé la porte ronde, et le ciel dedans. Il a mis un temps fou. Puis il a dit : « Dehors. Avec Goutte. » Madame Bocal a haussé les épaules et lui a donné une mirabelle, pour l'odeur."
+      ],
+      "suite": "ch6-meteo"
+    },
+    "ch6-meteo": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Le soir tombe. Madame Bocal a sorti le museau, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas ce soir. Le ciel a sa tête de couvercle. Il neigera cette nuit. Demain matin, à la première heure, ou pas du tout. » Elle nous offre son paillasson pour dormir. Mais le col est juste là, on le voit, et chaque heure compte. Je l'écoute, ou on tente ?"
+      ],
+      "options": [
+        { "id": "ch6-meteo-dormir", "libelle": "Écoute-la : dors ici, pars à l'aube", "vers": "ch6-nuit" },
+        { "id": "ch6-meteo-monter", "libelle": "Monte ce soir : le col est tout près", "vers": "ch6-ce-soir" }
+      ]
+    },
+    "ch6-ce-soir": {
+      "type": "choix",
+      "lieu": "Sous le col, dans la neige",
+      "decor": "sentier-des-melezes",
+      "humeur": "peur",
+      "texte": [
+        "On est partis quand même. Au bout d'une heure, il s'est mis à neiger, d'abord trois flocons, puis tous les autres. Je ne vois plus mes pieds. Et Brouillon fait un bruit nouveau : il craque. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch6-ce-soir-redescendre", "libelle": "Redescends au terrier, tout de suite", "vers": "ch6-nuit", "effets": [ { "var": "taille", "plus": -1 } ] },
+        { "id": "ch6-ce-soir-continuer", "libelle": "Continue : vous y êtes presque", "vers": "ch6-echec-tourmente" }
+      ]
+    },
+    "ch6-echec-tourmente": {
+      "type": "echec",
+      "humeur": "triste",
+      "repos_min": 30,
+      "texte": [
+        "Je ne sais pas où on était. Plus de sentier, plus de haut, plus de bas. Brouillon est tombé dans la neige comme une assiette : gelé, raide, tout léger. J'ai eu très peur. C'est Madame Bocal qui nous a retrouvés, avec une lanterne et beaucoup de reproches. Elle l'a mis à dégeler au-dessus de sa bouilloire, il reprend sa forme goutte à goutte. « Demain matin ou pas du tout. Je l'avais dit ? » Elle l'avait dit. On reprendra la montée du début, et cette fois, on l'écoutera."
+      ]
+    },
+    "ch6-nuit": {
+      "type": "attente",
+      "lieu": "Chez Madame Bocal",
+      "decor": "terrier-aux-bocaux",
+      "humeur": "fatigue",
+      "duree_min": 25,
+      "duree_max": 30,
+      "pendant": "Pilou dort sur un paillasson, chez une marmotte",
+      "tenue": "nuit",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Nous voilà sur le paillasson de Madame Bocal, derrière sa porte ronde. Dehors, il neige, sans bruit. Elle a posé une bouilloire à côté de Brouillon et elle lit ses étiquettes à voix basse pour s'endormir. Demain, le col. Elle dit que là-haut, après la neige, tout est blanc : le sol, l'air, le ciel. Blanc sur blanc. Je regarde Brouillon. Il est de quelle couleur, déjà ? Bonne nuit."
+      ],
+      "suite": "ch7-aube"
+    }
+  }
+}

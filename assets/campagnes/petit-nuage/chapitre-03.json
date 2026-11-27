@@ -1,0 +1,193 @@
+{
+  "chapitre": "ch3",
+  "noeuds": {
+    "ch3-etang": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "L'Étang-qui-fume",
+      "decor": "etang-qui-fume",
+      "humeur": "malice",
+      "texte": [
+        "C'étaient des grenouilles. Enfin, des rainettes, elles y tiennent. Elles répétaient. Un, deux, trois, et puis toutes ensemble : coâ. C'est le chœur de l'étang, et il répète la nuit parce que le jour, il y a les hérons. J'ai eu peur pour rien pendant deux heures. Mais j'ai bien écouté.",
+        "Leur cheffe s'appelle Mi-Bémol. Elle est grande comme mon pouce et elle fait plus peur que l'orage. Ce matin, elle a regardé Brouillon traverser la brume sans en garder une miette, et elle a levé les yeux au ciel. « Un nuage qui ne sait pas boire. On aura tout vu. Ça boit comme ça chante, mon petit : en mesure. »"
+      ],
+      "suite": "ch3-chorale"
+    },
+    "ch3-chorale": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Elle propose de lui apprendre. Tout le chœur chante, lui se gonfle sur le temps fort, se relâche sur le temps faible, et la brume entre toute seule. Sauf qu'il n'a aucun sens du rythme : il lui faut quelqu'un qui batte la mesure juste devant lui. Elle m'a regardé, moi. Je n'ai jamais battu quoi que ce soit. Sinon, je le laisse chercher tout seul, à sa façon. Tu en penses quoi ?"
+      ],
+      "options": [
+        { "id": "ch3-chorale-mesure", "libelle": "Bats la mesure pour lui", "vers": "ch3-rythme" },
+        { "id": "ch3-chorale-seul", "libelle": "Laisse-le trouver sa façon tout seul", "vers": "ch3-seul" }
+      ]
+    },
+    "ch3-rythme": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "jeu": "rythme",
+      "difficulte": 1,
+      "bonus": "lien",
+      "texte": [
+        "Me voilà sur un nénuphar, face à lui, une brindille à la main. Derrière moi, quarante rainettes qui attendent mon signal. Mi-Bémol a dit : « Si tu ralentis, je te mords. » Brouillon ne me quitte pas des yeux qu'il n'a pas. Bon. Un, deux, trois…"
+      ],
+      "reussite": "ch3-il-boit",
+      "echec": "ch3-hoquet"
+    },
+    "ch3-il-boit": {
+      "type": "recit",
+      "humeur": "joie",
+      "effets": [ { "drapeau": "sait-boire" }, { "drapeau": "chanson" }, { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ],
+      "texte": [
+        "Il a bu ! Sur le quatrième coâ, il s'est gonflé au bon moment et la brume est entrée d'un coup, comme du lait dans un bol. Il a repris un bon bord en trois mesures. Tout le chœur a applaudi avec les pattes de derrière. Mi-Bémol a dit « pas mal » sans sourire, ce qui est énorme, paraît-il. Et moi, à force, j'ai la chanson dans la tête. Je la connais par cœur. Coâ, coâ, co-coâ."
+      ],
+      "suite": "ch3-tour"
+    },
+    "ch3-hoquet": {
+      "type": "recit",
+      "humeur": "malice",
+      "effets": [ { "var": "lien", "plus": 1 } ],
+      "texte": [
+        "J'ai accéléré. Je crois. Ou ralenti. Brouillon s'est gonflé à contretemps, il a avalé de travers, et maintenant il a le hoquet. Tu sais ce que c'est, un hoquet de nuage ? Un tout petit éclair. Il a roussi un nénuphar et fait sursauter trois ténors. Mi-Bémol nous a mis dehors, enfin, sur la rive. On a ri tous les deux pendant dix minutes, lui par éclairs. Il n'a rien bu, mais ça valait le coup."
+      ],
+      "suite": "ch3-tour"
+    },
+    "ch3-seul": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "sait-boire" }, { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ],
+      "texte": [
+        "J'ai dit non merci, il va chercher. Mi-Bémol a haussé ce qui lui sert d'épaules. Il a cherché toute la matinée. Il a essayé par en dessous, à l'envers, en tournant. Et il a fini par trouver un truc à lui : il boit de côté, en se penchant, comme un chat à un robinet. Ce n'est pas en mesure, ce n'est même pas joli. Mais c'est lui qui l'a trouvé, et il a repris un bord. Il est venu me le montrer quatre fois."
+      ],
+      "suite": "ch3-tour"
+    },
+    "ch3-tour": {
+      "type": "attente",
+      "humeur": "neutre",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou fait le tour de l'étang par les roseaux",
+      "tenue": "marche",
+      "texte": [
+        "Mi-Bémol nous a donné un conseil avant de retourner à ses ténors. Sur l'autre rive, il y a de grandes toiles. C'est chez Dentelle, une araignée, qui tient le marché de la rosée. « Si tu veux de l'eau qui se garde, c'est là. Mais compte tes pattes en sortant. » On y va, on fait le tour par les roseaux. Brouillon passe devant, il a hâte de tout. À dans un moment."
+      ],
+      "suite": "ch3-toile"
+    },
+    "ch3-toile": {
+      "type": "choix",
+      "lieu": "Le marché de la rosée",
+      "humeur": "surpris",
+      "texte": [
+        "C'est très beau, chez Dentelle. Des toiles grandes comme des fenêtres, et sur chaque fil, des gouttes de rosée rangées par taille. La plus grosse, au centre, c'est une perle : de la rosée qui ne sèche pas. Un petit nuage qui l'avale reprend d'un coup une bonne part de ce qu'il a perdu. Il n'y en a qu'une.",
+        "Dentelle m'a regardé avec plusieurs yeux. « Ici, on paie en fil. Tu n'as pas de fil ? Alors en couleur. Je n'ai jamais eu de bleu. » Elle veut de mon encre. Une bonne cuillerée de moi. Brouillon regarde la perle, puis moi, puis la perle. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch3-toile-encre", "libelle": "Paie avec ton encre", "vers": "ch3-pale", "effets": [ { "drapeau": "pale" }, { "objet": "perle", "donne": true } ] },
+        { "id": "ch3-toile-gouter", "libelle": "Propose ton goûter de secours à la place", "vers": "ch3-troc", "si": { "objet": "gouter" }, "effets": [ { "objet": "gouter", "donne": false }, { "objet": "perle", "donne": true } ] },
+        { "id": "ch3-toile-chanson", "libelle": "Propose la chanson des rainettes à la place", "vers": "ch3-troc", "si": { "drapeau": "chanson" }, "effets": [ { "objet": "perle", "donne": true } ] },
+        { "id": "ch3-toile-refuse", "libelle": "Refuse : c'est trop cher", "vers": "ch3-gouttes" }
+      ]
+    },
+    "ch3-pale": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "J'ai payé. Elle a trempé un fil dans mon épaule, enfin, là où j'aurais une épaule, et elle a tiré une longue mèche bleue qu'elle a tissée tout de suite. C'est joli, dans sa toile. Ça ne fait pas mal. Mais je me suis vu dans l'étang : je suis bleu layette. Bleu de pyjama. Brouillon me trouve très bien comme ça, il l'a dit : « Goutte ciel. » La perle est dans le baluchon, roulée dans une feuille. Mais il ne faudra plus que j'en donne, du bleu : il m'en reste juste assez pour moi."
+      ],
+      "suite": "ch3-gouttes"
+    },
+    "ch3-troc": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai dit : je n'ai pas de fil, mais j'ai autre chose, et j'ai proposé. Dentelle a réfléchi longtemps, les huit pattes croisées. « Ce n'est pas du fil. Ce n'est pas de la couleur. Mais on ne m'en avait jamais offert, et à mon âge, c'est rare. Marché conclu. » Elle a décroché la perle elle-même et l'a roulée dans une feuille. Elle est dans le baluchon. Je suis assez fier de moi, je te le dis."
+      ],
+      "suite": "ch3-gouttes"
+    },
+    "ch3-gouttes": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Il s'est passé une chose incroyable. On quittait les toiles, et Brouillon s'est arrêté juste au-dessus de moi. Il est devenu gris. Il s'est tout plissé, comme quelqu'un qui va éternuer. Et là : ploc. Une goutte. Sur mon antenne. Il pleut ! Il est en train de pleuvoir, pour la première fois de sa vie !",
+        "Sauf qu'il pleut sur moi. Sur moi qui suis en encre. Il a l'air tellement concentré, tellement fier, et moi, j'ai une goutte qui me coule dans le cou et qui me délaie. Il y en a deux autres qui arrivent, je les vois se former. Vite, je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch3-gouttes-dessous", "libelle": "Reste dessous. C'est sa première pluie.", "vers": "ch3-dessous", "effets": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "plus": 2 } ] },
+        { "id": "ch3-gouttes-parapluie", "libelle": "Ouvre ton parapluie de poche et reste dessous", "vers": "ch3-parapluie", "si": { "objet": "parapluie" }, "effets": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch3-gouttes-applaudit", "libelle": "Écarte-toi d'un pas, et applaudis", "vers": "ch3-applaudit", "effets": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch3-gouttes-feuille", "libelle": "Sauve-toi sous une feuille !", "vers": "ch3-feuille", "effets": [ { "var": "lien", "plus": -1 } ] }
+      ]
+    },
+    "ch3-dessous": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je suis resté. Trois gouttes. Ploc, ploc, et une troisième, plus petite, qui a hésité. Ça m'a fait trois taches claires sur la tête, trois taches de rousseur à l'envers. Je ne me suis pas dilué. Je ne suis pas mort. Brouillon est redescendu voir de près ce qu'il m'avait fait, très inquiet, et j'ai dit : « C'est bien. C'est très bien. Ça pique un peu. » Il a retenu les deux choses, je crois : que c'est bien, et que ça me pique."
+      ],
+      "suite": "ch3-midi"
+    },
+    "ch3-parapluie": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai ouvert mon parapluie de poche. Tu vois que j'ai bien fait de le prendre ! Ploc, ploc, ploc : trois gouttes sur la toile, trois petits tambours. J'ai crié bravo de là-dessous. Brouillon est descendu regarder le parapluie de très près, puis moi, bien au sec, puis encore le parapluie. Il a compris quelque chose : que sa pluie, je l'aime bien, mais pas sur moi. Il a touché la toile mouillée du bout d'un bord. Très doucement."
+      ],
+      "suite": "ch3-midi"
+    },
+    "ch3-applaudit": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai fait un pas de côté, et les deux gouttes suivantes sont tombées dans l'herbe, ploc, ploc, à l'endroit exact où j'étais. J'ai applaudi très fort. Il est redescendu regarder les petites marques mouillées par terre, puis moi, puis encore les marques. Je lui ai expliqué : « C'est de la pluie. C'est toi qui l'as faite. Moi, l'eau me délaie, alors je regarde d'à côté. Mais je regarde. » Il a eu l'air de trouver ça juste."
+      ],
+      "suite": "ch3-midi"
+    },
+    "ch3-feuille": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai couru sous une feuille de bardane en criant. Je sais. Ce n'est pas glorieux. Quand j'ai osé regarder, il ne pleuvait plus. Il avait tout ravalé. Il était redevenu blanc, et tout petit dans sa façon de se tenir, comme quelqu'un qui a fait une bêtise. Je suis sorti, j'ai dit que ce n'était rien, que c'était moi, que l'eau me fait peur. Il a écouté. Mais il n'a pas recommencé. Je m'en veux un peu. Beaucoup."
+      ],
+      "suite": "ch3-midi"
+    },
+    "ch3-midi": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Avant de partir, il faut décider. Après l'étang, il y a un plateau, sec et long, sans une flaque. Ici, la brume se lève : encore une heure et il n'y en aura plus. Si Brouillon prend tout ce qui reste, il partira bien rempli, mais on arrivera au plateau à midi passé, en pleine chaleur. Si on part maintenant, on y sera à la fraîche, et lui un peu moins plein. Tu choisis quoi ?"
+      ],
+      "options": [
+        { "id": "ch3-midi-boire", "libelle": "Qu'il boive tout ce qui reste, il sait faire maintenant", "vers": "ch3-boit-encore", "si": { "drapeau": "sait-boire" }, "effets": [ { "var": "taille", "plus": 2 }, { "drapeau": "midi-passe" } ] },
+        { "id": "ch3-midi-rouler", "libelle": "Qu'il se roule dans ce qui reste, à défaut de boire", "vers": "ch3-boit-encore", "si": { "non": { "drapeau": "sait-boire" } }, "effets": [ { "var": "taille", "plus": 1 }, { "drapeau": "midi-passe" } ] },
+        { "id": "ch3-midi-partir", "libelle": "Partez maintenant, à la fraîche", "vers": "ch3-depart" }
+      ]
+    },
+    "ch3-boit-encore": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou attend que la brume se lève",
+      "tenue": "attend",
+      "texte": [
+        "On reste. Il prend tout ce que l'étang veut bien fumer, à sa manière, et ses bords s'épaississent à vue d'œil. Moi, je me tiens loin de l'eau et je remplis ma gourde avec des précautions de chirurgien. Le chœur est allé se coucher, sauf un ténor qui révise. Le soleil monte. Je le vois monter. On partira dès que la dernière brume sera bue. Je te fais signe."
+      ],
+      "suite": "ch3-depart"
+    },
+    "ch3-depart": {
+      "type": "attente",
+      "humeur": "neutre",
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou marche vers le plateau",
+      "tenue": "marche",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "On quitte l'étang. Mi-Bémol n'a pas dit au revoir, mais elle a fait donner un coâ par tout le chœur, pile quand on passait le saule. Brouillon s'est retourné onze fois. Devant, le chemin monte un peu. L'herbe devient jaune, puis rase. Et puis, là-bas, il n'y a plus d'herbe du tout, on dirait. Je vais voir à quoi ça ressemble. Je t'écris de là-haut."
+      ],
+      "suite": "ch4-bord"
+    }
+  }
+}

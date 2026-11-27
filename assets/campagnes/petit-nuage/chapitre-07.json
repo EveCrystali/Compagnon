@@ -1,0 +1,191 @@
+{
+  "chapitre": "ch7",
+  "noeuds": {
+    "ch7-aube": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "La Gencive",
+      "decor": "col-blanc",
+      "humeur": "surpris",
+      "texte": [
+        "Tout est blanc. Madame Bocal n'avait pas menti. Il a neigé toute la nuit, et ce matin, on ne sait plus où finit la montagne et où commence le ciel. Elle nous a mis dehors à l'aube avec une tartine et un conseil : suivre les cairns, les petits tas de cailloux, un par un, sans jamais lâcher le dernier des yeux.",
+        "Elle a dit aussi que ce n'était pas encore la vraie gelée. Juste un avertissement. La vraie, c'est pour dans deux ou trois nuits. On monte. La neige crisse. Et juste devant, posé sur le col comme un couvercle, il y a un nuage. Un vrai. Un énorme, immobile, blanc."
+      ],
+      "suite": "ch7-blanc"
+    },
+    "ch7-blanc": {
+      "type": "hasard",
+      "humeur": "peur",
+      "texte": [
+        "On est entrés dans le nuage du col. Dedans, on n'y voit pas à trois pas : c'est du brouillard, épais, froid, qui mouille. Je compte les cairns à voix haute pour me donner du courage. Quatre. Cinq. Brouillon ne dit plus rien du tout. Je le sens qui s'agite : il a compris où on est. Chez un grand. Dans un grand."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch7-bocal-brouillard", "si": { "objet": "bocal" } },
+        { "poids": 1, "vers": "ch7-perdu", "si": { "non": { "objet": "bocal" } } }
+      ]
+    },
+    "ch7-bocal-brouillard": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "Dans le bocal, sous mon bras, Brouillon s'est collé à la vitre. Il a fait de la buée de l'intérieur, et dans la buée, il a appuyé un bord, bien à plat. On aurait dit une main. Il regarde le grand nuage, tout autour de nous. Il dit quelque chose, je vois le verre vibrer, mais le couvercle est vissé et je n'entends rien.",
+        "Si j'ouvre, il ira. Dans ce blanc, je risque de le perdre de vue, et il prendra le froid en plein. Si je n'ouvre pas, il aura traversé le premier des siens derrière une vitre. J'ai la main sur le couvercle. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch7-bocal-brouillard-ouvre", "libelle": "Ouvre le bocal : qu'il aille dire bonjour", "vers": "ch7-perdu", "effets": [ { "objet": "bocal", "donne": false }, { "var": "lien", "plus": 2 } ] },
+        { "id": "ch7-bocal-brouillard-ferme", "libelle": "Garde-le fermé : c'est trop risqué", "vers": "ch7-vitre", "effets": [ { "drapeau": "couve" }, { "var": "lien", "plus": -1 } ] }
+      ]
+    },
+    "ch7-perdu": {
+      "type": "choix",
+      "humeur": "peur",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "Il est parti dire bonjour. Je l'ai vu entrer dans le blanc, tout content, et puis je ne l'ai plus vu. Je cherche un petit nuage blanc, dans un grand nuage blanc, au-dessus de la neige. Tu vois le problème. J'ai appelé. Le brouillard avale tout, même son nom.",
+        "Je suis au sixième cairn, je n'ose plus le lâcher. Il fait très froid, et le froid, il ne faut pas qu'il y reste longtemps. J'entends des pff, parfois, à gauche, puis derrière, puis plus rien. Qu'est-ce que je fais ? Vite !"
+      ],
+      "options": [
+        { "id": "ch7-perdu-tache", "libelle": "Cherche du bleu : sa tache", "vers": "ch7-tache", "si": { "drapeau": "tache-bleue" }, "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch7-perdu-laine", "libelle": "Tire tout doucement sur la laine", "vers": "ch7-laine", "si": { "drapeau": "ficelle" } },
+        { "id": "ch7-perdu-ecoute", "libelle": "Ne bouge plus. Écoute d'où viennent les pff.", "vers": "ch7-memoire" },
+        { "id": "ch7-perdu-vapeur", "libelle": "Allume le réchaud : il viendra à la vapeur", "vers": "ch7-vapeur", "effets": [ { "drapeau": "a-traine" } ] }
+      ]
+    },
+    "ch7-tache": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "La tache. Sa tache bleue, de la forme de moi. Dans tout ce blanc, c'est la seule chose qui ne soit pas blanche. J'ai arrêté de chercher un nuage et j'ai cherché du bleu. Et là, à dix pas, à hauteur de genou : un petit point bleu qui se balançait. Je l'avais taché pour toujours, et je m'en voulais. Tu parles. Je ne m'en veux plus du tout."
+      ],
+      "suite": "ch7-neige"
+    },
+    "ch7-laine": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "La laine ! J'ai un brin de laine au poignet depuis le deuxième jour, et je l'avais oublié. Il était raide de givre, tendu vers la gauche. J'ai tiré dessus très doucement, de peur qu'il casse, en avançant d'un pas à chaque fois. Dix pas. Vingt. Au bout du fil, il y avait Brouillon, en grande conversation avec un nuage qui ne lui répondait pas. Il a regardé la laine, puis moi : « Goutte triche. » Oui. Et alors ?"
+      ],
+      "suite": "ch7-neige"
+    },
+    "ch7-memoire": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "jeu": "memoire",
+      "difficulte": 2,
+      "bonus": "lien",
+      "texte": [
+        "Je ne bouge plus. Je ferme les yeux, de toute façon ça ne change rien. Un pff à gauche. Un devant, plus loin. Un derrière. Il tourne, ou c'est l'écho, je ne sais pas. Il faut que je retienne l'ordre, que je comprenne dans quel sens il va, et que je marche droit sur le prochain. Un, deux, trois…"
+      ],
+      "reussite": "ch7-retrouve",
+      "echec": "ch7-echec-blanc"
+    },
+    "ch7-vapeur": {
+      "type": "attente",
+      "humeur": "peur",
+      "duree_min": 20,
+      "duree_max": 25,
+      "pendant": "Pilou fait de la vapeur dans le brouillard, et attend",
+      "tenue": "attend",
+      "texte": [
+        "J'allume le réchaud, là, au pied du cairn, les doigts gourds. La casserole, de la neige dedans, et tout ce qu'il me reste de tilleul. S'il sent la vapeur, il viendra : c'est sa cantine, il la reconnaîtrait entre mille. Ça va prendre du temps, et du temps, on n'en a pas de reste. Mais je ne pars pas d'ici sans lui. Je souffle sur la vapeur pour l'envoyer loin. J'attends."
+      ],
+      "suite": "ch7-retrouve"
+    },
+    "ch7-retrouve": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Il est sorti du blanc d'un seul coup, à deux pas de moi, comme quelqu'un qui pousse une porte. Couvert de givre, tout raide, avec des paillettes partout. Et ravi. Il a dit : « Grand dit rien. Grand dort. » Il lui a parlé tout ce temps, et l'autre n'a pas répondu, les très grands sont comme ça. Je l'ai frotté avec mon baluchon pour le dégeler. Je n'ai rien dit. J'avais la voix qui faisait n'importe quoi."
+      ],
+      "suite": "ch7-neige"
+    },
+    "ch7-echec-blanc": {
+      "type": "echec",
+      "humeur": "triste",
+      "repos_min": 30,
+      "texte": [
+        "Je me suis trompé de sens. J'ai marché sur un pff qui n'était qu'un écho, j'ai lâché le cairn, et je nous ai perdus tous les deux. C'est lui qui m'a retrouvé, à la nuit, en suivant le bruit de ma casserole. Il était dur comme une meringue. On est redescendus à tâtons jusqu'au premier cairn, à la sortie du terrier. Madame Bocal a remis la bouilloire sans un mot. On remontera au matin."
+      ]
+    },
+    "ch7-vitre": {
+      "type": "attente",
+      "humeur": "triste",
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou grimpe, un bocal serré contre lui",
+      "tenue": "grimpe",
+      "texte": [
+        "Je n'ai pas ouvert. On est sortis du nuage par le haut, et Brouillon est resté tourné vers l'arrière, contre la vitre, jusqu'à ce qu'on ne voie plus rien. Maintenant, il s'est mis en boule au fond. Il reste la dernière pente, et un pont de neige que je vais passer à plat ventre, en poussant le bocal devant moi. Je rouvrirai de l'autre côté, quand le vent sera tombé. Il arrivera entier. Je me le répète à chaque cairn. À tout à l'heure."
+      ],
+      "suite": "ch7-col"
+    },
+    "ch7-neige": {
+      "type": "attente",
+      "humeur": "determine",
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou monte dans la neige, de cairn en cairn",
+      "tenue": "grimpe",
+      "texte": [
+        "On sort du nuage par le haut. D'un coup, il y a du ciel, bleu, dur, et la dernière pente du col devant nous. Je monte de cairn en cairn, dans la neige jusqu'au ventre. Brouillon me suit de si près qu'il me souffle dans le cou. Il fait un froid qui pince les idées. Je ne t'écris pas en marchant : j'ai besoin de mes deux mains pour ne pas tomber. À tout à l'heure, de plus haut."
+      ],
+      "suite": "ch7-corniche"
+    },
+    "ch7-corniche": {
+      "type": "choix",
+      "lieu": "Le pont de neige",
+      "humeur": "peur",
+      "texte": [
+        "Dernier obstacle. Une faille, bleue, profonde, et par-dessus, un pont de neige. Pas plus large que moi. J'ai posé un pied : ça a fait un bruit de biscotte. Il tient, mais il ne tiendra pas grand-chose. Et moi, avec tout ce que je porte, je suis beaucoup plus que pas grand-chose.",
+        "Brouillon a compris avant moi. Il s'est posé sur le pont et il a dit : « Brouillon colle. » Il peut y laisser un peu de son eau, pour geler la neige et la durcir. Un peu de lui, donc. Sinon, il y a un grand tour par la crête : une demi-journée de plus. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch7-corniche-plume", "libelle": "Laisse la plume de fer ici, et passe léger", "vers": "ch7-leger", "si": { "objet": "plume" }, "effets": [ { "objet": "plume", "donne": false } ] },
+        { "id": "ch7-corniche-pont", "libelle": "Garde tout, et laisse Brouillon durcir le pont", "vers": "ch7-pont", "effets": [ { "var": "taille", "plus": -1 }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch7-corniche-tour", "libelle": "Fais le grand tour par la crête", "vers": "ch7-tour", "effets": [ { "drapeau": "a-traine" } ] }
+      ]
+    },
+    "ch7-leger": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai détaché la plume. Je l'ai plantée dans la neige au bord de la faille, bien droite, pour qu'on la voie de loin. Le vent l'a fait sonner, une fois : ding. J'ai passé le pont en trois pas, léger, sans un craquement. De l'autre côté, je me suis retourné. Elle brillait encore. J'avais dit que je la porterais. Brouillon a regardé la plume, puis moi, et il n'a rien demandé. J'aurais préféré qu'il demande."
+      ],
+      "suite": "ch7-col"
+    },
+    "ch7-pont": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il s'est étalé sur le pont comme du beurre sur une tartine. Il a serré très fort, il est devenu gris, et la neige sous lui a blanchi, durci, craqué. Quand il s'est relevé, il lui manquait un bord, et le pont était de la glace. J'ai traversé à quatre pattes avec tout mon barda. Ça n'a pas bougé. De l'autre côté, il m'attendait, plus petit et très fier : « Brouillon sert. » Oui. Tu sers. Tu n'imagines pas à quel point."
+      ],
+      "suite": "ch7-col"
+    },
+    "ch7-tour": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "duree_min": 25,
+      "duree_max": 30,
+      "pendant": "Pilou contourne la faille par la crête",
+      "tenue": "marche",
+      "texte": [
+        "On ne risque rien : ni lui, ni le pont. On fait le tour. La crête est longue, étroite, avec du vide des deux côtés et un vent qui me pousse dans le dos comme quelqu'un de pressé. Brouillon se cramponne à ma casserole. On perd une demi-journée, je le sais, je vois le soleil descendre pendant qu'on fait des détours. Je t'écris quand on a rejoint le sentier."
+      ],
+      "suite": "ch7-col"
+    },
+    "ch7-col": {
+      "type": "attente",
+      "lieu": "Sous le col",
+      "humeur": "determine",
+      "duree_min": 150,
+      "duree_max": 180,
+      "pendant": "Pilou franchit le col",
+      "tenue": "grimpe",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "C'est la dernière pente. Au-dessus, il n'y a plus que le bord du col, et du ciel. Tournebise m'avait dit, au moment de partir : « De l'autre côté, tu verras, ça brille. » Je ne sais pas ce qui brille. Je ne sais pas si on arrive à temps. Il faut encore des heures pour passer de l'autre côté. Qu'est-ce qu'on va trouver, derrière ? Je grimpe. Je te dis ce qui brille."
+      ],
+      "suite": "ch10-rive"
+    }
+  }
+}
