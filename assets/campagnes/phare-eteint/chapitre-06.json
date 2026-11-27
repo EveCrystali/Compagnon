@@ -25,6 +25,40 @@
       "duree_max": 18,
       "pendant": "Pilou traverse le Passe-Pied, lanterne au poing",
       "tenue": "marche",
+      "suite": "ch6a-vernier"
+    },
+    "ch6a-vernier": {
+      "type": "choix",
+      "lieu": "Au pied de la Dent-Creuse",
+      "decor": "pied-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "Au pied du rocher, je me suis retourné. Sur le Passe-Pied, derrière moi, il y a une deuxième lumière. Plus haute que la mienne, plus lente, qui se balance au bout d'un grand bras. Et des bottes neuves qui grincent sur les pierres. Le monsieur aux jumelles m'a vu traverser, et il m'a suivi.",
+        "Il est à cent pas. La porte du charbon est à vingt. Je peux souffler ma lanterne et me tapir dans les rochers en attendant qu'il passe. Ou l'attendre ici, la lanterne levée, et lui parler. Un inspecteur qui traverse la mer à pied, la nuit, derrière une goutte d'encre, a peut-être quelque chose à dire. Tu choisis quoi ?"
+      ],
+      "options": [
+        { "id": "parler", "libelle": "Attends-le, et parle-lui", "vers": "ch6a-vernier-parle" },
+        { "id": "cacher", "libelle": "Souffle la lanterne et cache-toi", "vers": "ch6a-cache" }
+      ]
+    },
+    "ch6a-vernier-parle": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-feu-faux" }, { "var": "confiance", "plus": -1 } ],
+      "texte": [
+        "Il est arrivé tout essoufflé, le ciré trempé jusqu'aux genoux. « Vous allez chez lui. » Ce n'était pas une question. Il a regardé ma clef. « La clef du Service. Elle était en dépôt chez l'horloger, qui m'a juré ce matin n'être pas monté là-haut depuis l'été. » Il a soupiré. « Je n'entre pas chez un homme qui ne m'a pas ouvert. Je suis inspecteur, pas cambrioleur. »",
+        "« Mais dites-lui ceci. Dans la nuit de jeudi, son feu a donné trois éclats au lieu de deux et un long : un caboteur s'en est plaint. Et dites-lui que je préférerais l'entendre, lui. » Il est reparti vers le quai. En levant les yeux, j'ai vu une petite tête disparaître d'une meurtrière. Zut. Quelqu'un m'a vu bavarder avec le ciré jaune."
+      ],
+      "suite": "ch6a-serrure"
+    },
+    "ch6a-cache": {
+      "type": "recit",
+      "humeur": "peur",
+      "effets": [ { "var": "courage", "plus": 1 }, { "var": "confiance", "plus": 1 } ],
+      "texte": [
+        "J'ai soufflé ma lanterne et je me suis glissé entre deux rochers, à plat ventre dans le goémon, ce qui pour une goutte d'encre est presque une baignade. Les bottes sont passées à un mètre de ma tête. Il a frappé à la grande porte, longtemps. Puis : « Monsieur le gardien. Achille Vernier, Service des Feux. Mercredi, cinq heures. Je préférerais vous entendre. »",
+        "Personne n'a répondu. Il est reparti, sa lumière a rétréci sur le Passe-Pied, et j'ai recommencé à respirer. C'est là que je l'ai entendu, tout en haut de la tour : un petit rire étouffé, vite ravalé. Quelqu'un a tout vu. Et je crois que ça lui a plu."
+      ],
       "suite": "ch6a-serrure"
     },
     "ch6a-noir": {
@@ -60,7 +94,7 @@
       "effets": [ { "drapeau": "k-tudal" } ],
       "texte": [
         "Sur chaque bidon, un dessin à la craie : une petite puce. La Puce, la barque de Tudal. Et dessous, à chaque fois : « payé ». Vingt-deux bidons, vingt-deux puces. Cloué au mur, un vieux bon de livraison du Service des Feux, barré d'un tampon : « Fournitures suspendues. Phare en instance de fermeture. » Il date du printemps.",
-        "Donc le Service ne livre plus d'huile depuis des mois. Et la lampe a brûlé quand même, tous les soirs, jusqu'à la semaine dernière. Parce qu'un grand pêcheur bourru rame la nuit avec des bidons qu'il paie de sa poche, sans en parler à personne. Je lui dois des excuses, et une sardine."
+        "Donc le Service ne livre plus d'huile depuis des mois. Et la lampe a brûlé quand même, tous les soirs, jusqu'à la semaine dernière. Parce qu'un grand pêcheur bourru rame la nuit avec des bidons qu'il paie de sa poche, sans en parler à personne. Moi qui le soupçonnais depuis le premier soir, je lui dois des excuses."
       ],
       "suite": "ch6a-fin"
     },
@@ -69,7 +103,7 @@
       "humeur": "surpris",
       "texte": [
         "J'ai monté vingt marches sur la pointe des pieds et je me suis collé au mur. Deux voix. Une très vieille, lente comme une marée basse. Et une toute jeune, qui chuchote fort. La vieille disait : « Mes doigts ne se trompent pas. Trente ans que je compte les crans. Onze à gauche, deux à droite. » La jeune : « C'est pas tes doigts, c'est tes yeux, et on s'en fiche. »",
-        "Puis la vieille voix, plus bas : « Et pourtant le feu a menti. » Un long silence. Anselme est vivant. Il est là-haut, il mange de la soupe, et il parle de ses yeux et d'un feu qui ment. Je n'ose plus respirer."
+        "Puis la vieille voix, plus bas : « Et pourtant le feu a menti. » Un long silence. Trente ans de crans : c'est le gardien. Anselme est vivant. J'entends sa cuillère cogner un bol, là-haut, et il parle de ses yeux et d'un feu qui ment. Je n'ose plus respirer."
       ],
       "suite": "ch6a-fin"
     },
