@@ -1,0 +1,31 @@
+# Manette (ensemble Rétro-arcade)
+id: manette
+slot: main
+ancre: main
+decalage: -22 -16
+palette: a=#1c2128 b=#adbac7 c=#3b4654 d=#f69d50 e=#6cb6ff
+images:
+............................................
+............................................
+........aaaaaaaaaaaaaaaaaaaaaaaaaaaa........
+......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa......
+..aaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaa..
+.aaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaa.
+aabbbbbbbbccbbbbbbbbbbbbbbbbbbddddbbbbbbbbaa
+aabbbbbbbbccbbbbbbbbbbbbbbbbbbddddbbbbbbbbaa
+aabbbbbbbbccbbbbbbbbccccbbbbbbddddbbbbbbbbaa
+aabbbbbbbbccbbbbbbbbccccbbbbbbddddbbbbbbbbaa
+bbbbbbccccccccccbbbbbbbbbbbbbbddddbbbbbbbbbb
+bbbbbbccccccccccbbbbbbbbbbbbbbddddbbbbbbbbbb
+bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
+bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
+bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
+bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+aabbbbbbbbbbbbaaaaaaaaaaaaaaaabbbbbbbbbbbbaa
+aabbbbbbbbbbbbaaaaaaaaaaaaaaaabbbbbbbbbbbbaa
+aabbbbbbbbbbbbaaa..........aaabbbbbbbbbbbbaa
+aabbbbbbbbbbbbaa............aabbbbbbbbbbbbaa
+.aaaaaaaaaaaaaa..............aaaaaaaaaaaaaa.
+..aaaaaaaaaaaa................aaaaaaaaaaaa..

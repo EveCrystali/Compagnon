@@ -94,6 +94,27 @@ SERIE3 = [
 ]
 
 
+# Quatrième série : ce qui restait agrandi automatiquement (variantes, poufs, polaroïds, bonus d'ensemble, icônes,
+# accessoires, particules). Dessin fin propre à chaque sprite (finition_lot3.py), sans finition générique.
+SERIE4 = [
+    "acc-chapeaupeche", "acc-etoilemer", "acc-feuille", "acc-tablier", "appareil-photo", "arrosoir", "badge-boutique",
+    "ballon", "bonus-arcade", "bonus-astronome", "bonus-cafe", "bonus-explorateur", "bonus-fetes", "bonus-frissons",
+    "bonus-hiver", "bonus-jardinier", "bonus-patissier", "bonus-pirate", "bonus-plage", "bonus-tests", "bouchon",
+    "boude-bras", "boude-eclaircie", "boude-nuage", "bulle", "bulles-savon", "cadenas", "carapace", "cercle-glyphes",
+    "clavier-mini", "clochette", "coeurs-amitie", "coffre-expedition-ouvert", "coffre-quete", "confettis",
+    "cube-pixel", "eclaboussure", "eclair-energie", "enveloppe-close", "enveloppe-notif", "etincelles", "etoile",
+    "feu", "feuilles-tourbillon", "fouet", "fourchette-geante", "guirlande", "jeton-arcade", "lampe-poche",
+    "lanterne-courge", "macaron", "main", "manette", "marmite", "marmite-cuivre", "mousse", "nid-oiseau",
+    "orbite-lunes", "pancarte", "parchemin-quete", "pelle-seau", "photo-flash", "pierre-calme", "pinceau",
+    "pluie-petales", "po", "po-tourne", "polaroid-1", "polaroid-2", "polaroid-3", "polaroid-4", "pouf-1", "pouf-2",
+    "pouf-3", "pouf-4", "pouf-5", "rayonnant", "sucette", "sucre-orge", "trainee-coeurs", "trainee-notes",
+    "trainee-prisme", "vapeur", "variante-calin-2", "variante-calin-2-tete", "variante-calin-3",
+    "variante-calin-3-tete", "variante-calin-4", "variante-calin-4-tete", "variante-espiegle-2",
+    "variante-espiegle-2-tete", "variante-espiegle-3", "variante-espiegle-3-tete", "variante-espiegle-4",
+    "variante-espiegle-4-tete", "vie",
+]
+
+
 def ids_campagnes():
     """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
     import campagnes_sprites
@@ -130,7 +151,7 @@ def generer(dessiner):
     import finition
     finition.inscrire()
     toile.ECHELLE = 2
-    toile.FINS = set(SERIE) | set(SERIE2) | set(SERIE3) | set(ids_visage()) | set(ids_campagnes())
+    toile.FINS = set(SERIE) | set(SERIE2) | set(SERIE3) | set(SERIE4) | set(ids_visage()) | set(ids_campagnes())
     toile.RETOUCHES = RETOUCHES
     try:
         dessiner()

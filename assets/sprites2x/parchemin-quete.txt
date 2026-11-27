@@ -1,0 +1,42 @@
+id: parchemin-quete
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#c4a77d c=#e8d5b0 d=#8a6e4b e=#f69d50 f=#d9803a
+images:
+........................................
+....aaaa........................aaaa....
+...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...
+..aaabbaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa..
+.aaabbbbccccccccccccccccccccccccbbbbaaa.
+.aabbbbbbccccccccccccccccccccccbbbbbbaa.
+aaabbddbbccccccccccccccccccccccbbbbbbaaa
+aabbbddbbbccccccccccccccccccccbbbbbbbbaa
+aabbbddbbbccccccccccccccccccccbbbbbbbbaa
+aabbbddbbbccccccccccccccccccccbbbbbbbbaa
+aabbddddbbccddddddddddddddddddbbbbbbbbaa
+abbbddddbbbcddddddddddddddddddbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbcddddddddddddddddddbbbbbbbbba
+abbbddddbbbcddddddddddddddddddbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbcbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbddddbbbcbbbbbbbbbbbbbbbbbbbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+abbbddddbbbcddddddddddddddddddbbbbbbbbba
+abbbddddbbbcddddddddddddddddddbbbbbbbbba
+abbbddddbbbccccccccccccccccccbbbbbbbbbba
+aabbddddbbccccccccccccccccccccbbbbbbbbaa
+aabbbddbbbccddddddddddddddddddbbbbbbbbaa
+aabbbddbbbccddddddddddddddddddbbbbbbbbaa
+aabbbddbbbcccccccceeeeeeccccccbbbbbbbbaa
+aaabbddbbccccccccceeeeeecccccccbbbbbbaaa
+.aabbbbbbccccccccceeeeeecccccccbbbbbbaa.
+.aaabbbbcccccccccceeeeeeccccccccbbbbaaa.
+..aaabbaaaaaaaaaaaeeeeeeaaaaaaaaabbaaa..
+...aaaaaaaaaaaaaaaeeeeeeaaaaaaaaaaaaa...
+....aaaa......aaaffaaaafaa......aaaa....
+..............aafaaaaaaaaa..............

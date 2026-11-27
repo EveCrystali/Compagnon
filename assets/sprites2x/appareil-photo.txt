@@ -1,0 +1,35 @@
+# Appareil photo tenu devant les yeux
+id: appareil-photo
+slot: main
+ancre: yeux
+decalage: -24 -8
+palette: a=#1c2128 b=#3b4654 c=#f69d50 d=#545d68 e=#ffffff f=#c9d1d9 g=#1f4f8a h=#b4dbff i=#4a8fdc
+images:
+....aabbbbbbbbbbbbaa..........aaaaaa........
+...aaabbbbbbbbbbbbaaa.......aaaaaaaaaa......
+aaaaaabbbbbbbbbbbbaaaaaaaaaaaaccccccaaaaaaaa
+aaaaaabbbbbbbbbbbbaaaaaaaaaaaaccccccaaaaaaaa
+dddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddaaaaaaaadddddddddddddd
+ddddddddddddddddddddaaaaaaaaaaaadddddddddddd
+bbbbeeffffffbbbbbbaaaaaggggggaaaaabbbbbbbbbb
+bbbbeeffffffbbbbbaaaaaggggggggaaaaabbbbbbbbb
+bbbbffffffffbbbbaaaaaggggggggggaaaaabbbbbbbb
+bbbbffffffffbbbbaaaaggggggggggggaaaabbbbbbbb
+bbbbbbbbbbbbbbbbaaaggghheeiiiggggaaabbbbbbbb
+bbbbbbbbbbbbbbbbaagggghheeiiiiggggaabbbbbbbb
+bbbbbbbbbbbbbbbbaaggiihhiiiiiiigggaabbbbbbbb
+bbbbbbbbbbbbbbbbaaggiihhiiiiiiiiggaabbbbbbbb
+bbbbbbbbbbbbbbbbaaggiiiiiiiiiiiiggaabbbbbbbb
+bbbbbbbbbbbbbbbbaagggiiiiiiiiiigggaabbbbbbbb
+bbbbbbbbbbbbbbbbaaggggiiiiiiiiggggaabbbbbbbb
+bbbbbbbbbbbbbbbbaaaggggiiiiiiggggaaabbbbbbbb
+bbbbbbbbbbbbbbbbaaaaggggggggggggaaaabbbbbbbb
+bbbbbbbbbbbbbbbbaaaaaggggggggggaaaaabbbbbbbb
+bbaaaaaaaaaaaaaaaaaaaaggggggggaaaaaaaaaaaabb
+bbaaaaaaaaaaaaaaaaaaaaaggggggaaaaaaaaaaaaabb
+bbbbbbbbbbbbbbbbbbbbbbaaaaaaaabbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbaaaaaaaabbbbbbbbbbbbbb
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

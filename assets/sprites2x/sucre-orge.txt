@@ -1,0 +1,63 @@
+# Sucre d'orge (ensemble Fêtes de l'hiver)
+id: sucre-orge
+slot: main
+ancre: main
+decalage: -18 -46
+palette: a=#8a4a1f b=#f6f8fa c=#f69d50
+images:
+....aaaaaaaaaaaa........
+...aaaaaaaaaaaaaa.......
+..aaabccccbbbbccaa......
+.aaabcccccbbbcccaaa.....
+aaabcccccbbbccccbbaa....
+aabcccccbbbbccccbbaa....
+aaccccaaaaaaaabbbbaa....
+aaccccaaaaaaaabbbbaa....
+aaccbbaaa..aaabbccaaa...
+aaccbbaa....aabbccaaa...
+.aaaaaa......aaaccbbaa..
+..aaaa........aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+..............aabbccaa..
+..............aabcccaa..
+..............aaccccaa..
+..............aaccccaa..
+..............aacccbaa..
+..............aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+..............aabbccaa..
+..............aabcccaa..
+..............aaccccaa..
+..............aaccccaa..
+..............aacccbaa..
+..............aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+..............aabbccaa..
+..............aabcccaa..
+..............aaccccaa..
+..............aaccccaa..
+..............aacccbaa..
+..............aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+..............aabbccaa..
+..............aabcccaa..
+..............aaccccaa..
+..............aaccccaa..
+..............aacccbaa..
+..............aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+..............aabbccaa..
+..............aabcccaa..
+..............aaccccaa..
+..............aaccccaa..
+..............aacccbaa..
+..............aaccbbaa..
+..............aabbbbaa..
+..............aabbbbaa..
+...............aaaaaa...
+................aaaa....
