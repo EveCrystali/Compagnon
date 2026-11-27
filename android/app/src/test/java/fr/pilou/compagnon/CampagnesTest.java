@@ -129,6 +129,19 @@ public class CampagnesTest {
                     Campagnes.Etat e = Campagnes.actualiser(k, CampagnesTest::biblio, Long.parseLong(m[1]));
                     return "actualiser " + m[1] + " " + (e == null ? "rien" : e.texte());
                 }
+                case "etat": {
+                    // Parcours complets (docs/TEST-JEU.md) : l'état en empreinte.
+                    Campagnes.Etat e = Campagnes.actualiser(k, CampagnesTest::biblio, Long.parseLong(m[1]));
+                    return "etat " + m[1] + " " + (e == null ? "rien" : empreinte(e.texte()));
+                }
+                case "messagesh": {
+                    List<String> l = Campagnes.messages(k, m[1], m[2]);
+                    int max = 0;
+                    for (String x : l) max = Math.max(max, Campagnes.octets(x));
+                    return "messagesh " + m[1] + " " + m[2] + " " + l.size() + " " + max + " " + empreinte(String.join("\n", l));
+                }
+                case "signatureh":
+                    return "signatureh " + empreinte(Campagnes.signature(k));
                 case "messages": {
                     attendus = new ArrayList<>(Campagnes.messages(k, m[1], m[2]));
                     restants = attendus.size();

@@ -162,6 +162,24 @@ public sealed class CampagnesVecteurs
         return e;
     }
 
+    // Version courte pour les parcours complets (docs/TEST-JEU.md) : l'empreinte de l'état au lieu de son texte.
+    public Campagnes.Etat? EtatH(long t)
+    {
+        var e = Campagnes.Actualiser(K, Biblio, t);
+        L.Add($"etat {F(t)} {(e is null ? "rien" : Empreinte(e.Texte()))}");
+        return e;
+    }
+
+    // Les messages publiés, en empreinte, avec la taille du plus gros (octets de JSON).
+    public List<string> MessagesH(string appareil, string sorte)
+    {
+        var l = Campagnes.Messages(K, appareil, sorte);
+        L.Add($"messagesh {appareil} {sorte} {F(l.Count)} {F(l.Count == 0 ? 0 : l.Max(Campagnes.Octets))} {Empreinte(string.Join("\n", l))}");
+        return l;
+    }
+
+    public void SignatureH() => L.Add("signatureh " + Empreinte(Campagnes.Signature(K)));
+
     public List<string> Messages(string appareil, string sorte)
     {
         var l = Campagnes.Messages(K, appareil, sorte);
@@ -469,6 +487,15 @@ public sealed class CampagnesVecteurs
         s.Recevoir("pc-x", T0 + 12_000, "pas du json");
         s.Recevoir("pc-x", T0 + 12_000, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"q\":{\"c\":\"Mauvais Id\",\"p\":9},\"h\":{\"x\":[1,0,{},\"zz\"]}}");
         s.Signature();
+
+        // 6. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
+        //    simulateur et jouée par le carnet (choix, épreuves, dés, « vas-y », attentes franchies à l'horloge, échecs,
+        //    abandons et reprises, rejeu), états en empreinte, messages et signature en empreinte.
+        foreach (var id in ParcoursTests.Ids)
+        {
+            s.Note($"parcours complets : {id}");
+            ParcoursTests.Rejouer(id, s);
+        }
         return string.Join("\n", s.L) + "\n";
     }
 }
