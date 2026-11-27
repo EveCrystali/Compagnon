@@ -71,6 +71,27 @@ Renvoie l'état de Pilou :
 
 `meteo` vaut `null` tant que le connecteur météo n'a reçu aucun relevé.
 
+## `POST /diagnostics`
+
+Erreurs et avertissements du fichier ouvert dans un éditeur (extensions Visual Studio et VS Code :
+[EDITEURS.md](EDITEURS.md)). Réponse `202 {"recu":true}` (`false` si le connecteur *Éditeurs* est
+coupé : rien n'est gardé), `400` si le JSON ne va pas.
+
+```json
+{ "source": "vs", "fichier": "Program.cs", "erreurs": 3, "avertissements": 2, "message": "CS1002: ; attendu" }
+```
+
+| Champ | Obligatoire | Sens |
+|---|---|---|
+| `source` | oui | `vs`, `vscode`… (lettres et chiffres) |
+| `fichier` | non | nom du fichier actif ; un chemin est réduit au nom (ce qui suit le dernier `/` ou `\`). Vide : plus de fichier actif |
+| `erreurs`, `avertissements` | non | comptes (0 par défaut) |
+| `message` | non | premier message d'erreur ; chemins retirés, 160 caractères au plus, affiché seulement si la case est cochée dans Pilou |
+| `ferme` | non | `true` : l'éditeur se ferme, l'état est oublié |
+
+Pilou regroupe (2,5 s de calme, rien pendant la saisie, 20 s au moins entre deux bulles) et oublie un
+éditeur muet depuis 5 min : renvoyer l'état une fois par minute suffit.
+
 ## Exemples
 
 Le jeton se copie depuis la fenêtre Connecteurs ; ci-dessous, il est dans la variable `JETON`.
