@@ -58,3 +58,37 @@ jobs:
         with:
           name: Pilou-apk
           path: android/app/build/outputs/apk/release/app-release.apk
+
+  vscode:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: integrations/vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Extension VS Code (compilation, tests, .vsix)
+        run: |
+          npm ci
+          npm run compile
+          npm test
+          npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pilou-vscode
+          path: integrations/vscode/pilou-vscode.vsix
+
+  visualstudio:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Extension Visual Studio (.vsix, MSBuild + Microsoft.VSSDK.BuildTools)
+        run: msbuild integrations/visualstudio/PilouVisualStudio.csproj -restore -p:Configuration=Release -v:minimal -nologo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PilouVisualStudio
+          path: integrations/visualstudio/bin/Release/PilouVisualStudio.vsix
+          if-no-files-found: error
