@@ -433,7 +433,7 @@ public sealed partial class FenetrePilou : Window
     {
         double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
         if (!(dpi > 0)) dpi = 1;
-        Finesse.Active = _reglages.DessinFin;
+        Finesse.Active = _reglages.DessinFin && Placement.FinPossible(_reglages.Taille, dpi);
         Finesse.Dpi = dpi;
         _k = Placement.Echelle(_reglages.Taille, dpi, _reglages.DessinFin);
         Finesse.PhysiqueParUnite = _k * dpi;

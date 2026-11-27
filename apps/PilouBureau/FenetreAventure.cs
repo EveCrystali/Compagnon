@@ -112,7 +112,9 @@ internal sealed class FenetreAventure : Window
     private static ControlTemplate? _gabaritBouton;
     private static Style? _styleBarre;
 
-    private static ControlTemplate? GabaritBouton()
+    // Partagé avec le journal : le gabarit Windows par défaut grise le fond des boutons désactivés et l'éclaircit
+    // au survol, ce qui rend illisible le texte argent sur ces fenêtres sombres.
+    internal static ControlTemplate? GabaritBouton()
     {
         if (_gabaritBouton is not null) return _gabaritBouton;
         try
