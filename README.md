@@ -83,6 +83,11 @@ t'attendent :
 
 Brancher un autre logiciel (Cursor, Gemini CLI, un script, ta CI) : [docs/BRANCHER.md](docs/BRANCHER.md).
 
+**Dans ton éditeur** (Visual Studio 2022, VS Code) : une petite extension, et Pilou connaît les erreurs
+du fichier ouvert — « ⚠ 3 erreurs · 2 avert. · Program.cs », une grimace quand ça empire, « ✓ propre ! »
+quand tu repasses à zéro, et le silence le reste du temps. Seuls le nom du fichier et les comptes
+partent, vers Pilou sur ta machine : [docs/EDITEURS.md](docs/EDITEURS.md).
+
 Idées gardées pour plus tard (petits jeux, notifications, vidéo) : [docs/IDEES.md](docs/IDEES.md).
 
 ## Connecteurs

@@ -16,7 +16,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Extension Visual Studio : il faut MSBuild de Visual Studio, donc Windows. Si ce job échoue, la release
+  # part quand même (sans PilouVisualStudio.vsix).
+  visualstudio:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Version de l'extension
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; v="${v%%-*}"; else v="0.9.${GITHUB_RUN_NUMBER}"; fi
+          sed -i "s/Version=\"0.9.0\" Language/Version=\"$v\" Language/" integrations/visualstudio/source.extension.vsixmanifest
+          grep 'Identity' integrations/visualstudio/source.extension.vsixmanifest
+      - name: Extension Visual Studio (.vsix)
+        run: msbuild integrations/visualstudio/PilouVisualStudio.csproj -restore -p:Configuration=Release -v:minimal -nologo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PilouVisualStudio
+          path: integrations/visualstudio/bin/Release/PilouVisualStudio.vsix
+
   publier:
+    needs: visualstudio
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -60,6 +82,26 @@ jobs:
             -p:Version=${{ steps.v.outputs.version }} -o out
           (cd out && zip -q ../PilouBureau.zip *)
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Extension VS Code (.vsix)
+        working-directory: integrations/vscode
+        run: |
+          npm ci
+          npm version "${{ steps.v.outputs.version }}" --no-git-tag-version --allow-same-version
+          npm run compile
+          npm test
+          npm run package
+          cp pilou-vscode.vsix ../../pilou-vscode.vsix
+
+      - name: Extension Visual Studio (construite sous Windows)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: PilouVisualStudio
+          path: .
+
       - name: version.json
         run: |
           cat > version.json <<EOF
@@ -77,6 +119,8 @@ jobs:
             Pilou.apk
             installer.ps1
             version.json
+            pilou-vscode.vsix
+            PilouVisualStudio.vsix
           generate_release_notes: true
           prerelease: ${{ contains(steps.v.outputs.version, '-') }}
           make_latest: ${{ !contains(steps.v.outputs.version, '-') }}

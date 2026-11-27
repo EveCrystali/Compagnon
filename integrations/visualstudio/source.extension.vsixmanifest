@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="PilouVisualStudio.5b0f3a52-8c1e-4d2a-9f37-6a1c2e7d4b90" Version="0.9.0" Language="fr-FR" Publisher="Pilou" />
+    <DisplayName>Pilou — erreurs du fichier ouvert</DisplayName>
+    <Description xml:space="preserve">Montre à Pilou, ton compagnon de bureau, combien d'erreurs et d'avertissements a le fichier ouvert (Liste d'erreurs). Rien ne quitte la machine : seulement le nom du fichier et les deux comptes, vers l'API locale de Pilou (127.0.0.1).</Description>
+    <MoreInfo>https://github.com/EveCrystali/Compagnon/blob/main/docs/EDITEURS.md</MoreInfo>
+    <Tags>pilou, erreurs, compagnon</Tags>
+  </Metadata>
+  <Installation>
+    <!-- Visual Studio 2022 (17.x) et suivant (18.x) ; Community couvre aussi Professional et Enterprise. -->
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
+      <ProductArchitecture>arm64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,19.0)" DisplayName="Éditeur principal de Visual Studio" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

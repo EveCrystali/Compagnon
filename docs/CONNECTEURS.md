@@ -27,6 +27,7 @@ secondes, font la fête ou font avancer une quête.
 | GitHub | ⑂ | 2 min | un jeton personnel |
 | Mail | ✉ | 3 min | un mot de passe d'application IMAP |
 | Agenda | ▦ | 1 min (lien relu toutes les 30 min) | le lien ICS secret de ton agenda |
+| Éditeurs (VS, VS Code) | ⚠ | quand le fichier actif change (actif par défaut) | l'extension de ton éditeur ([EDITEURS.md](EDITEURS.md)) |
 | Spotify | ♪ | 20 s | une app Spotify (Client ID) et ton accord |
 | Twitch | ▶ | 3 min | une app Twitch (Client ID + secret) |
 | YouTube | ▷ | 10 min | rien (une clé d'API pour les lives) |

@@ -29,6 +29,8 @@ public sealed partial class FenetrePilou
         _registre.Ajouter(new ConnecteurTwitch());
         _registre.Ajouter(new ConnecteurYouTube());
         _registre.Ajouter(new ConnecteurHomeAssistant());
+        // Erreurs du fichier ouvert dans Visual Studio / VS Code (extensions de integrations/, POST /diagnostics).
+        _registre.Ajouter(new ConnecteurEditeurs());
         ConnecteurAgenda.Inactivite = Natif.InactifMs;
         _registre.Evenement += e => Dispatcher.BeginInvoke(() => Recevoir(e));
         RelancerApi();
@@ -61,7 +63,7 @@ public sealed partial class FenetrePilou
         _api?.Dispose();
         _api = null;
         if (_registre is null || !_reglages.Connecteurs.Api) return;
-        _api = new ApiLocale(() => _registre.JetonApi(), () => _etatApi, e => _registre.Recevoir(e));
+        _api = new ApiLocale(() => _registre.JetonApi(), () => _etatApi, e => _registre.Recevoir(e), diagnostics: RecevoirDiagnostics);
         if (!_api.Demarrer(_reglages.Connecteurs.PortApi)) _registre.Noter("api", _api.Erreur ?? "API indisponible");
         else _registre.Noter("api", $"API locale sur http://127.0.0.1:{_api.Port}/");
     }
@@ -77,6 +79,7 @@ public sealed partial class FenetrePilou
             _etatApi = EtatPourApi(vivantes, epoque);
         }
         VivreMeteo();
+        VivreDiagnostics();
     }
 
     private string EtatPourApi(IReadOnlyList<EtatSession> vivantes, double epoque)
