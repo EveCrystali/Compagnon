@@ -20,7 +20,8 @@ namespace PilouBureau;
 //                    Etat.Phase   Choix | Epreuve | Depart | Attente | Repos | Fin | Abandon | Cassee
 //                    Etat.Options (Choix), Etat.Jeu / Difficulte / Aide (Epreuve), Etat.Fin (ms Unix : fin de
 //                    l'attente ou du repos → notification locale, bulle), Etat.Pendant et Etat.Tenue (Pilou occupé),
-//                    Etat.Lieu, Etat.Decor, Etat.Humeur, Etat.Chapitre…, Etat.Progression, Etat.Issue (fin obtenue)
+//                    Etat.Lieu, Etat.Decor, Etat.Humeur, Etat.Chapitre…, Etat.Progression, Etat.Issue (fin obtenue),
+//                    Etat.Reprise et Message.Reprise (retour à un check-point : ce que Pilou redit n'est pas nouveau)
 //                    carnet.Fil : les messages (Pilou et joueur), carnet.NonLus, Campagnes.MarquerLu(carnet)
 //   Décisions      Campagnes.Demarrer(carnet, campagne, niveau, maintenant, appareil, Charger) → null ou la raison du refus
 //                  Campagnes.Choisir(carnet, campagne, maintenant, appareil, idOption)   (phase Choix)
@@ -77,7 +78,9 @@ public static class Campagnes
     }
 
     public sealed record Chapitre(string Id, string Titre, string Fichier);
-    public sealed record Nomme(string Id, string Nom, string Texte = "");
+    // Objet, souvenir ou décor déclaré dans la fiche. Portable : objet exclusif gagné à une fin, qui se porte
+    // (Emplacement : tete, yeux, cou, dos, main, pieds ou compagnon ; à défaut, la main).
+    public sealed record Nomme(string Id, string Nom, string Texte = "", bool Portable = false, string Emplacement = "");
 
     public sealed class Noeud
     {
@@ -240,7 +243,7 @@ public static class Campagnes
     {
         var l = new List<Nomme>();
         foreach (var x in L(o, cle))
-            if (S(x, "id") != "") l.Add(new Nomme(S(x, "id"), S(x, "nom"), S(x, "texte", S(x, "description"))));
+            if (S(x, "id") != "") l.Add(new Nomme(S(x, "id"), S(x, "nom"), S(x, "texte", S(x, "description")), B(x, "portable"), S(x, "emplacement")));
         return l;
     }
 
@@ -338,6 +341,52 @@ public static class Campagnes
             .Where(x => x.StartsWith("campagne:", StringComparison.Ordinal) && x.EndsWith("/campagne.json", StringComparison.Ordinal))
             .Select(x => x["campagne:".Length..^"/campagne.json".Length]).OrderBy(x => x, StringComparer.Ordinal).ToList();
 
+    // Ajoute une campagne à la bibliothèque sans passer par les ressources (tests, campagne lue d'un dossier).
+    public static void Connaitre(Campagne c)
+    {
+        lock (Cache)
+        {
+            Cache[c.Id] = c;
+            _exclusifs = null;
+        }
+    }
+
+    // ---- Objets exclusifs : les objets « portable » des campagnes, gagnés à une fin. Ils se portent comme un article
+    // de la boutique (Boutique.Trouver les connaît) mais ne s'achètent pas. Le dessin peut manquer : l'objet existe
+    // quand même, sans sprite, en attendant l'illustrateur.
+
+    private static Dictionary<string, Article>? _exclusifs;
+
+    public static IReadOnlyCollection<Article> Exclusifs
+    {
+        get
+        {
+            lock (Cache)
+            {
+                if (_exclusifs is not null) return _exclusifs.Values;
+                foreach (var id in Disponibles()) Charger(id);
+                var d = new Dictionary<string, Article>(StringComparer.Ordinal);
+                foreach (var c in Cache.Values.Where(c => c is not null).OrderBy(c => c!.Id, StringComparer.Ordinal))
+                    foreach (var o in c!.Objets.Where(o => o.Portable))
+                        d.TryAdd(o.Id, new Article(o.Id, o.Nom == "" ? o.Id : o.Nom,
+                            Boutique.Slots.Contains(o.Emplacement) && Boutique.SurPilou(o.Emplacement) ? o.Emplacement : Boutique.Main, 0, 1, Rarete.Epique, true));
+                _exclusifs = d;
+                return d.Values;
+            }
+        }
+    }
+
+    public static Article? Exclusif(string id)
+    {
+        lock (Cache)
+        {
+            _ = Exclusifs;
+            return _exclusifs!.GetValueOrDefault(id);
+        }
+    }
+
+    public static bool EstExclusif(string id) => Exclusif(id) is not null;
+
     public static Campagne? Charger(string id)
     {
         lock (Cache)
@@ -390,6 +439,9 @@ public static class Campagnes
         public bool Geste { get; set; }
         public bool Entre { get; set; }
         public bool Abandonnee { get; set; }
+        // Reprise : on revient à un check-point (après un échec, ou une partie abandonnée qu'on reprend) ; ce que Pilou
+        // redit jusqu'à la prochaine décision n'est pas une nouveauté.
+        public bool Reprise { get; set; }
         public Instantane Ici { get; set; } = new();
         // Dernier check-point (null : c'est « Ici », pas encore entré).
         public Instantane? Cp { get; set; }
@@ -398,12 +450,15 @@ public static class Campagnes
         public Partie Copie() => new()
         {
             Campagne = Campagne, P = P, D = D, O = O, Graine = Graine, Rejeu = Rejeu, E = E, R = R, I = I, Tirages = Tirages, T = T,
-            Geste = Geste, Entre = Entre, Abandonnee = Abandonnee, Ici = Ici.Copie(), Cp = Cp?.Copie(), Journal = new(Journal),
+            Geste = Geste, Entre = Entre, Abandonnee = Abandonnee, Reprise = Reprise, Ici = Ici.Copie(), Cp = Cp?.Copie(), Journal = new(Journal),
         };
     }
 
     // Un message du fil : Pilou (« pilou ») ou le choix du joueur (« joueur »). Clé stable : partie, étape, rang.
-    public sealed record Message(int P, int E, int I, string Qui, string Texte, string Noeud, string Lieu, string Humeur, string Decor, long T);
+    // Reprise : Pilou le redit en revenant à un check-point (après un échec) ; l'interface peut le replier ou le
+    // remplacer par un mot court (« Bon. On reprend ici. ») au lieu de le montrer comme une nouveauté.
+    public sealed record Message(int P, int E, int I, string Qui, string Texte, string Noeud, string Lieu, string Humeur, string Decor, long T,
+        bool Reprise = false);
 
     // Point où la base peut avancer. Mur : heure de la dernière décision qui y mène. Naturel : check-point ou abandon.
     public sealed record Point(Partie Base, long Mur, bool Naturel);
@@ -433,6 +488,8 @@ public static class Campagnes
         public string Issue = "", TitreFin = "";
         public Prime Recompenses = new(0, 0);
         public bool Rejeu;
+        // On vient de revenir à un check-point (échec, reprise d'une partie abandonnée) et rien n'a encore été décidé.
+        public bool Reprise;
         public List<Point> Points = new();
 
         public bool EnAttente => Phase is Phase.Attente or Phase.Repos;
@@ -444,7 +501,7 @@ public static class Campagnes
             var ci = CultureInfo.InvariantCulture;
             ulong h = 14695981039346656037UL;
             foreach (var m in Messages)
-                foreach (char ch in $"{m.E}.{m.I}.{m.Qui}.{m.Noeud}.{m.Humeur}.{m.Decor}.{m.Lieu}.{m.T}.{m.Texte}\n")
+                foreach (char ch in $"{m.E}.{m.I}.{m.Qui}.{m.Noeud}.{m.Humeur}.{m.Decor}.{m.Lieu}.{m.T}.{(m.Reprise ? 1 : 0)}.{m.Texte}\n")
                 {
                     h ^= ch;
                     h *= 1099511628211UL;
@@ -452,6 +509,7 @@ public static class Campagnes
             return string.Join("|", new[]
             {
                 "phase=" + Phase, "noeud=" + Noeud, "e=" + E.ToString(ci), "t=" + T.ToString(ci), "fin=" + Fin.ToString(ci),
+                "reprise=" + (Reprise ? "1" : "0"),
                 "tirages=" + Tirages.ToString(ci), "chapitre=" + Chapitre + ":" + ChapitreNumero.ToString(ci) + "/" + ChapitreTotal.ToString(ci),
                 "lieu=" + Lieu, "decor=" + Decor, "humeur=" + Humeur, "pendant=" + Pendant, "tenue=" + Tenue,
                 "options=" + string.Join(",", Options.Select(o => o.Rang.ToString(ci) + ":" + o.Id)),
@@ -478,7 +536,7 @@ public static class Campagnes
         public SortedSet<string> CpObjets = new(StringComparer.Ordinal), CpDrapeaux = new(StringComparer.Ordinal);
         public int E, R, I, Tirages, Pas;
         public long T, Fin, Mur = long.MinValue;
-        public bool Geste;
+        public bool Geste, Reprise;
         public Phase Phase = Phase.Aucune;
         public List<Message> Messages = new();
         public List<string> Credits = new();
@@ -490,7 +548,7 @@ public static class Campagnes
             Drapeaux = new(Drapeaux, StringComparer.Ordinal), Decor = Decor, LieuDe = LieuDe, AvecCp = AvecCp, CpNoeud = CpNoeud,
             CpDecor = CpDecor, CpLieuDe = CpLieuDe, CpVars = new(CpVars, StringComparer.Ordinal),
             CpObjets = new(CpObjets, StringComparer.Ordinal), CpDrapeaux = new(CpDrapeaux, StringComparer.Ordinal),
-            E = E, R = R, I = I, Tirages = Tirages, Pas = Pas, T = T, Fin = Fin, Mur = Mur, Geste = Geste, Phase = Phase,
+            E = E, R = R, I = I, Tirages = Tirages, Pas = Pas, T = T, Fin = Fin, Mur = Mur, Geste = Geste, Reprise = Reprise, Phase = Phase,
             Messages = new(Messages), Credits = new(Credits), Points = new(Points),
         };
     }
@@ -558,7 +616,8 @@ public static class Campagnes
         private Partie Base(Cours s, Instantane ici, Instantane? cp, int i, bool entre, bool abandonnee) => new()
         {
             Campagne = _p.Campagne, P = _p.P, D = _p.D, O = _p.O, Graine = _p.Graine, Rejeu = _p.Rejeu,
-            E = s.E, R = s.R, I = i, Tirages = s.Tirages, T = s.T, Geste = s.Geste, Entre = entre, Abandonnee = abandonnee, Ici = ici, Cp = cp,
+            E = s.E, R = s.R, I = i, Tirages = s.Tirages, T = s.T, Geste = s.Geste, Entre = entre, Abandonnee = abandonnee,
+            Reprise = s.Reprise && !abandonnee, Ici = ici, Cp = cp,
         };
 
         private Instantane PhotoCp(Cours s) => Photo(s.CpNoeud, s.CpVars, s.CpObjets, s.CpDrapeaux, s.CpDecor, s.CpLieuDe);
@@ -587,7 +646,7 @@ public static class Campagnes
         private string Lieu(Cours s) => s.LieuDe == "" ? "" : _c.Noeud(s.LieuDe)?.Lieu ?? "";
 
         private void Dire(Cours s, string qui, string texte, Noeud n) =>
-            s.Messages.Add(new Message(_p.P, s.E, s.I++, qui, texte, n.Id, Lieu(s), qui == "pilou" ? n.Humeur : "neutre", s.Decor, s.T));
+            s.Messages.Add(new Message(_p.P, s.E, s.I++, qui, texte, n.Id, Lieu(s), qui == "pilou" ? n.Humeur : "neutre", s.Decor, s.T, s.Reprise));
 
         private bool LancerDe(Cours s, Noeud n) =>
             Tirage(_p.Graine, s.Tirages).Suivant(100) < ChanceDe(n.Difficulte, n.Bonus == "" ? 0 : s.Vars.GetValueOrDefault(n.Bonus));
@@ -663,6 +722,8 @@ public static class Campagnes
                         break;
                     case "hasard":
                     {
+                        // On tire parmi les issues dont la condition est vraie (un « hasard » sert aussi d'aiguillage :
+                        // conditions complémentaires). Aucune de vraie, ce que le validateur interdit : parmi toutes.
                         var possibles = n.Issues.Where(x => Vrai(x.Si, s)).ToList();
                         if (possibles.Count == 0) possibles = n.Issues;
                         if (possibles.Count == 0)
@@ -718,6 +779,7 @@ public static class Campagnes
                 s.Drapeaux = new(s.CpDrapeaux, StringComparer.Ordinal);
                 s.Decor = s.CpDecor;
                 s.LieuDe = s.CpLieuDe;
+                s.Reprise = true;
                 Entrer(s, s.CpNoeud, Mode.Neuf);
             }
         }
@@ -756,6 +818,7 @@ public static class Campagnes
                 return;
             }
             s.Geste = true;
+            s.Reprise = false;
             switch (phase)
             {
                 case Phase.Choix:
@@ -780,7 +843,7 @@ public static class Campagnes
 
         public Cours Jouer(long maintenant)
         {
-            var s = new Cours { E = _p.E, R = _p.R, I = _p.I, Tirages = _p.Tirages, T = _p.T, Geste = _p.Geste };
+            var s = new Cours { E = _p.E, R = _p.R, I = _p.I, Tirages = _p.Tirages, T = _p.T, Geste = _p.Geste, Reprise = _p.Reprise };
             Charger(_p.Ici, s, false);
             if (_p.Cp is not null) Charger(_p.Cp, s, true);
             if (_p.Abandonnee)
@@ -846,7 +909,7 @@ public static class Campagnes
             var e = new Etat
             {
                 Phase = s.Phase, Campagne = _c.Id, Noeud = s.Noeud, Lieu = Lieu(s), Decor = s.Decor, E = s.E, Tirages = s.Tirages, T = s.T,
-                Fin = Timer(s) ? s.Fin : 0, Messages = s.Messages, Credits = s.Credits, Points = s.Points, Rejeu = _p.Rejeu,
+                Fin = Timer(s) ? s.Fin : 0, Messages = s.Messages, Credits = s.Credits, Points = s.Points, Rejeu = _p.Rejeu, Reprise = s.Reprise,
                 ChapitreTotal = _c.Chapitres.Count,
             };
             foreach (var kv in s.Vars) e.Variables[kv.Key] = kv.Value;
@@ -1203,6 +1266,7 @@ public static class Campagnes
                 p.I = 0;
             }
             p.Abandonnee = false;
+            p.Reprise = true;
             p.P = numero;
             p.D = p.T = Seconde(maintenant);
             p.O = appareil;
@@ -1298,8 +1362,8 @@ public static class Campagnes
 
     // ---- Récompenses (PC) : chaque nœud acquis est versé une fois. Les po vont dans Bourse.PoCampagnes et l'xp dans
     // Profil.XpTelephone : deux compteurs « à part », que chaque PC du groupe tient à l'identique et qui se comptent au
-    // maximum, jamais en somme (comme les gains du téléphone). L'objet exclusif d'une fin rejoint l'inventaire dès que
-    // la boutique le connaît ; souvenirs et titres se lisent dans l'historique (Souvenirs, Titres).
+    // maximum, jamais en somme (comme les gains du téléphone). L'objet exclusif d'une fin (déclaré « portable » dans la
+    // fiche : Exclusifs) rejoint l'inventaire ; souvenirs et titres se lisent dans l'historique (Souvenirs, Titres).
 
     public sealed record Versement(int Po, int Xp, List<string> Objets);
 
@@ -1374,7 +1438,7 @@ public static class Campagnes
     }
 
     // Une partie en JSON compact. Heures en secondes ; celles des décisions, relatives à la base.
-    // {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée),
+    // {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée, 16 reprise),
     //  "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
     public static string JsonPartie(Partie p, bool journal = true)
     {
@@ -1386,7 +1450,7 @@ public static class Campagnes
         Chaine(b, p.O);
         b.Append(",\"g\":");
         Chaine(b, p.Graine);
-        int x = (p.Rejeu ? 1 : 0) | (p.Geste ? 2 : 0) | (p.Entre ? 4 : 0) | (p.Abandonnee ? 8 : 0);
+        int x = (p.Rejeu ? 1 : 0) | (p.Geste ? 2 : 0) | (p.Entre ? 4 : 0) | (p.Abandonnee ? 8 : 0) | (p.Reprise ? 16 : 0);
         b.Append(",\"x\":").Append(x.ToString(ci)).Append(",\"e\":").Append(p.E.ToString(ci)).Append(",\"r\":").Append(p.R.ToString(ci))
             .Append(",\"i\":").Append(p.I.ToString(ci)).Append(",\"n\":").Append(p.Tirages.ToString(ci))
             .Append(",\"t\":").Append((p.T / 1000).ToString(ci)).Append(",\"ici\":");
@@ -1546,7 +1610,7 @@ public static class Campagnes
         var p = new Partie
         {
             Campagne = S(o, "c"), P = N(o, "p"), D = Long(o, "d") * 1000, O = S(o, "o"), Graine = S(o, "g"),
-            Rejeu = (x & 1) != 0, Geste = (x & 2) != 0, Entre = (x & 4) != 0, Abandonnee = (x & 8) != 0,
+            Rejeu = (x & 1) != 0, Geste = (x & 2) != 0, Entre = (x & 4) != 0, Abandonnee = (x & 8) != 0, Reprise = (x & 16) != 0,
             E = N(o, "e"), R = N(o, "r"), I = N(o, "i"), Tirages = N(o, "n"), T = Long(o, "t") * 1000,
         };
         if (!IdValide(p.Campagne) || p.P < 1 || p.E < 0 || p.R < 0 || p.I < 0 || p.Tirages < 0 || p.O.Length is 0 or > 64 || p.Graine.Length is 0 or > 32

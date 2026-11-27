@@ -36,7 +36,8 @@ import java.util.TreeSet;
  *                    etat.phase   Choix | Epreuve | Depart | Attente | Repos | Fin | Abandon | Cassee
  *                    etat.options (Choix), etat.jeu / difficulte / aide (Epreuve), etat.fin (ms : fin de l'attente ou
  *                    du repos → notification locale), etat.pendant et etat.tenue (Pilou occupé), etat.lieu, etat.decor,
- *                    etat.humeur, etat.chapitre…, etat.progression, etat.issue (fin obtenue)
+ *                    etat.humeur, etat.chapitre…, etat.progression, etat.issue (fin obtenue), etat.reprise et
+ *                    message.reprise (retour à un check-point : ce que Pilou redit n'est pas nouveau)
  *                    carnet.fil : les messages (Pilou et joueur), carnet.nonLus(), Campagnes.marquerLu(carnet)
  *   Décisions      Campagnes.demarrer(carnet, campagne, niveau, maintenant, appareil, biblio, graine, neuf) → null ou le refus
  *                  Campagnes.choisir(carnet, campagne, maintenant, appareil, idOption)   (phase Choix)
@@ -144,14 +145,20 @@ public final class Campagnes {
         }
     }
 
-    /** Objet, souvenir ou décor déclaré : id, nom, texte (ou description). */
+    /**
+     * Objet, souvenir ou décor déclaré : id, nom, texte (ou description). portable : objet exclusif gagné à une fin, qui
+     * se porte (emplacement : tete, yeux, cou, dos, main, pieds ou compagnon ; à défaut, la main).
+     */
     public static final class Nomme {
-        public final String id, nom, texte;
+        public final String id, nom, texte, emplacement;
+        public final boolean portable;
 
-        Nomme(String id, String nom, String texte) {
+        Nomme(String id, String nom, String texte, boolean portable, String emplacement) {
             this.id = id;
             this.nom = nom;
             this.texte = texte;
+            this.portable = portable;
+            this.emplacement = emplacement;
         }
     }
 
@@ -379,7 +386,8 @@ public final class Campagnes {
         List<Nomme> r = new ArrayList<>();
         for (Object x : liste(o, cle)) {
             JSONObject e = objet(x);
-            if (e != null && !s(e, "id").isEmpty()) r.add(new Nomme(s(e, "id"), s(e, "nom"), s(e, "texte", s(e, "description"))));
+            if (e != null && !s(e, "id").isEmpty())
+                r.add(new Nomme(s(e, "id"), s(e, "nom"), s(e, "texte", s(e, "description")), b(e, "portable", false), s(e, "emplacement")));
         }
         return r;
     }
@@ -578,6 +586,8 @@ public final class Campagnes {
         public int e, r, i, tirages;
         public long t;
         public boolean geste, entre, abandonnee;
+        /** On revient à un check-point (après un échec, ou une partie abandonnée qu'on reprend) : ce que Pilou redit n'est pas une nouveauté. */
+        public boolean reprise;
         public Instantane ici = new Instantane();
         /** Dernier check-point (null : c'est « ici », pas encore entré). */
         public Instantane cp;
@@ -599,6 +609,7 @@ public final class Campagnes {
             q.geste = geste;
             q.entre = entre;
             q.abandonnee = abandonnee;
+            q.reprise = reprise;
             q.ici = ici.copie();
             q.cp = cp == null ? null : cp.copie();
             q.journal = new ArrayList<>(journal);
@@ -606,13 +617,19 @@ public final class Campagnes {
         }
     }
 
-    /** Un message du fil : Pilou (« pilou ») ou le choix du joueur (« joueur »). Clé stable : partie, étape, rang. */
+    /**
+     * Un message du fil : Pilou (« pilou ») ou le choix du joueur (« joueur »). Clé stable : partie, étape, rang.
+     * reprise : Pilou le redit en revenant à un check-point (après un échec) ; l'interface peut le replier ou le remplacer
+     * par un mot court (« Bon. On reprend ici. ») au lieu de le montrer comme une nouveauté.
+     */
     public static final class Message {
         public final int p, e, i;
         public final String qui, texte, noeud, lieu, humeur, decor;
         public final long t;
+        public final boolean reprise;
 
-        public Message(int p, int e, int i, String qui, String texte, String noeud, String lieu, String humeur, String decor, long t) {
+        public Message(int p, int e, int i, String qui, String texte, String noeud, String lieu, String humeur, String decor, long t, boolean reprise) {
+            this.reprise = reprise;
             this.p = p;
             this.e = e;
             this.i = i;
@@ -671,6 +688,8 @@ public final class Campagnes {
         public String issue = "", titreFin = "";
         public Prime recompenses = new Prime(0, 0, "", "", "");
         public boolean rejeu;
+        /** On vient de revenir à un check-point (échec, reprise d'une partie abandonnée) et rien n'a encore été décidé. */
+        public boolean reprise;
         List<Point> points = new ArrayList<>();
 
         public boolean enAttente() {
@@ -685,7 +704,8 @@ public final class Campagnes {
         public String texte() {
             long h = 0xcbf29ce484222325L;
             for (Message m : messages) {
-                String s = m.e + "." + m.i + "." + m.qui + "." + m.noeud + "." + m.humeur + "." + m.decor + "." + m.lieu + "." + m.t + "." + m.texte + "\n";
+                String s = m.e + "." + m.i + "." + m.qui + "." + m.noeud + "." + m.humeur + "." + m.decor + "." + m.lieu + "." + m.t + "."
+                        + (m.reprise ? 1 : 0) + "." + m.texte + "\n";
                 for (int k = 0; k < s.length(); k++) {
                     h ^= s.charAt(k);
                     h *= 0x100000001b3L;
@@ -695,7 +715,8 @@ public final class Campagnes {
             for (OptionVue x : options) o.add(x.rang + ":" + x.id);
             for (Map.Entry<String, Integer> kv : variables.entrySet()) v.add(kv.getKey() + ":" + kv.getValue());
             return String.join("|", Arrays.asList(
-                    "phase=" + phase.name(), "noeud=" + noeud, "e=" + e, "t=" + t, "fin=" + fin, "tirages=" + tirages,
+                    "phase=" + phase.name(), "noeud=" + noeud, "e=" + e, "t=" + t, "fin=" + fin, "reprise=" + (reprise ? "1" : "0"),
+                    "tirages=" + tirages,
                     "chapitre=" + chapitre + ":" + chapitreNumero + "/" + chapitreTotal,
                     "lieu=" + lieu, "decor=" + decor, "humeur=" + humeur, "pendant=" + pendant, "tenue=" + tenue,
                     "options=" + String.join(",", o),
@@ -719,7 +740,7 @@ public final class Campagnes {
         TreeSet<String> cpObjets = new TreeSet<>(), cpDrapeaux = new TreeSet<>();
         int e, r, i, tirages, pas;
         long t, fin, mur = Long.MIN_VALUE;
-        boolean geste;
+        boolean geste, reprise;
         Phase phase = Phase.Aucune;
         List<Message> messages = new ArrayList<>();
         List<String> credits = new ArrayList<>();
@@ -749,6 +770,7 @@ public final class Campagnes {
             x.fin = fin;
             x.mur = mur;
             x.geste = geste;
+            x.reprise = reprise;
             x.phase = phase;
             x.messages = new ArrayList<>(messages);
             x.credits = new ArrayList<>(credits);
@@ -843,6 +865,7 @@ public final class Campagnes {
             q.geste = s.geste;
             q.entre = entre;
             q.abandonnee = abandonnee;
+            q.reprise = s.reprise && !abandonnee;
             q.ici = ici;
             q.cp = cp;
             return q;
@@ -889,7 +912,7 @@ public final class Campagnes {
         }
 
         void dire(Cours s, String qui, String texte, Noeud n) {
-            s.messages.add(new Message(p.p, s.e, s.i++, qui, texte, n.id, lieu(s), qui.equals("pilou") ? n.humeur : "neutre", s.decor, s.t));
+            s.messages.add(new Message(p.p, s.e, s.i++, qui, texte, n.id, lieu(s), qui.equals("pilou") ? n.humeur : "neutre", s.decor, s.t, s.reprise));
         }
 
         boolean lancerDe(Cours s, Noeud n) {
@@ -957,6 +980,8 @@ public final class Campagnes {
                         s.phase = Phase.Epreuve;
                         break;
                     case "hasard": {
+                        // On tire parmi les issues dont la condition est vraie (un « hasard » sert aussi d'aiguillage :
+                        // conditions complémentaires). Aucune de vraie, ce que le validateur interdit : parmi toutes.
                         List<IssueHasard> possibles = new ArrayList<>();
                         for (IssueHasard x : n.issues) if (vrai(x.si, s)) possibles.add(x);
                         if (possibles.isEmpty()) possibles = n.issues;
@@ -1009,6 +1034,7 @@ public final class Campagnes {
                 s.drapeaux = new TreeSet<>(s.cpDrapeaux);
                 s.decor = s.cpDecor;
                 s.lieuDe = s.cpLieuDe;
+                s.reprise = true;
                 entrer(s, s.cpNoeud, NEUF);
             }
         }
@@ -1047,6 +1073,7 @@ public final class Campagnes {
                 return;
             }
             s.geste = true;
+            s.reprise = false;
             switch (phase) {
                 case Choix: {
                     Option o = n.options.get(x.v);
@@ -1083,6 +1110,7 @@ public final class Campagnes {
             s.tirages = p.tirages;
             s.t = p.t;
             s.geste = p.geste;
+            s.reprise = p.reprise;
             charger(p.ici, s, false);
             if (p.cp != null) charger(p.cp, s, true);
             if (p.abandonnee) {
@@ -1152,6 +1180,7 @@ public final class Campagnes {
             e.credits = s.credits;
             e.points = s.points;
             e.rejeu = p.rejeu;
+            e.reprise = s.reprise;
             e.chapitreTotal = c.chapitres.size();
             e.variables.putAll(s.vars);
             e.objets = new ArrayList<>(s.objets);
@@ -1501,6 +1530,7 @@ public final class Campagnes {
                 p.i = 0;
             }
             p.abandonnee = false;
+            p.reprise = true;
             p.p = numero;
             p.d = p.t = seconde(maintenant);
             p.o = appareil;
@@ -1700,7 +1730,7 @@ public final class Campagnes {
 
     /**
      * Une partie en JSON compact. Heures en secondes ; celles des décisions, relatives à la base.
-     * {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée),
+     * {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée, 16 reprise),
      * "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
      */
     public static String jsonPartie(Partie p, boolean journal) {
@@ -1711,7 +1741,7 @@ public final class Campagnes {
         chaine(b, p.o);
         b.append(",\"g\":");
         chaine(b, p.graine);
-        int x = (p.rejeu ? 1 : 0) | (p.geste ? 2 : 0) | (p.entre ? 4 : 0) | (p.abandonnee ? 8 : 0);
+        int x = (p.rejeu ? 1 : 0) | (p.geste ? 2 : 0) | (p.entre ? 4 : 0) | (p.abandonnee ? 8 : 0) | (p.reprise ? 16 : 0);
         b.append(",\"x\":").append(x).append(",\"e\":").append(p.e).append(",\"r\":").append(p.r)
                 .append(",\"i\":").append(p.i).append(",\"n\":").append(p.tirages)
                 .append(",\"t\":").append(p.t / 1000).append(",\"ici\":");
@@ -1884,6 +1914,7 @@ public final class Campagnes {
         p.geste = (x & 2) != 0;
         p.entre = (x & 4) != 0;
         p.abandonnee = (x & 8) != 0;
+        p.reprise = (x & 16) != 0;
         p.e = n(o, "e", 0);
         p.r = n(o, "r", 0);
         p.i = n(o, "i", 0);
@@ -2001,7 +2032,8 @@ public final class Campagnes {
         try {
             JSONArray fil = new JSONArray();
             for (Message m : k.fil)
-                fil.put(new JSONArray().put(m.p).put(m.e).put(m.i).put(m.qui).put(m.texte).put(m.noeud).put(m.lieu).put(m.humeur).put(m.decor).put(m.t));
+                fil.put(new JSONArray().put(m.p).put(m.e).put(m.i).put(m.qui).put(m.texte).put(m.noeud).put(m.lieu).put(m.humeur).put(m.decor).put(m.t)
+                        .put(m.reprise ? 1 : 0));
             JSONArray pc = new JSONArray();
             for (String cle : k.payesPc) pc.put(cle);
             return new JSONObject().put("m", new JSONObject(signature(k))).put("fil", fil).put("lu", k.lu).put("pc", pc).toString();
@@ -2021,9 +2053,9 @@ public final class Campagnes {
             k.lu = s(r, "lu");
             for (Object x : liste(r, "fil")) {
                 JSONArray a = x instanceof JSONArray ? (JSONArray) x : null;
-                if (a == null || a.length() != 10) continue;
+                if (a == null || a.length() < 10) continue;
                 k.fil.add(new Message(a.optInt(0), a.optInt(1), a.optInt(2), a.optString(3), a.optString(4), a.optString(5), a.optString(6),
-                        a.optString(7), a.optString(8), a.optLong(9)));
+                        a.optString(7), a.optString(8), a.optLong(9), a.optInt(10) == 1));
             }
         } catch (JSONException e) {
             // carnet illisible : on repart d'un carnet vide (les autres appareils du groupe le rempliront)

@@ -9,6 +9,7 @@ Il applique « Ce que le validateur exige » et les plafonds de récompenses, pu
 choix et attentes par parcours, temps réel, fins atteignables). Chaque message dit le fichier, le nœud et la raison.
 Les ERREURS font échouer (code de sortie 1) ; les AVERTISSEMENTS ne bloquent pas ; les notes situent la campagne par
 rapport à la taille visée. Les mêmes règles que le moteur (apps/PilouBureau/Campagnes.cs, android/.../Campagnes.java).
+Une campagne courte exprès (le prologue) porte "court": true dans sa fiche : la taille visée ne lui est pas demandée.
 """
 import argparse
 import json
@@ -36,7 +37,10 @@ PROPRES = {
     "echec": {"repos_min"},
     "fin": {"issue", "titre", "recompenses"},
 }
-FICHE = {"v", "id", "titre", "ton", "accroche", "niveau", "duree", "depart", "chapitres", "variables", "objets", "souvenirs", "decors"}
+FICHE = {"v", "id", "titre", "ton", "accroche", "niveau", "duree", "depart", "chapitres", "variables", "objets", "souvenirs", "decors", "court"}
+# Où se porte un objet exclusif gagné à une fin (« portable »).
+EMPLACEMENTS = ("tete", "yeux", "cou", "dos", "main", "pieds", "compagnon")
+OBJETS_MAX = 6
 
 # Plafonds (docs/CAMPAGNES.md, « Récompenses »).
 PO_CAMPAGNE, XP_CAMPAGNE, PO_CHAPITRE, XP_CHAPITRE = 600, 300, 40, 20
@@ -141,6 +145,8 @@ class Validateur:
         self.variables, self.objets, self.souvenirs, self.decors = {}, set(), set(), set()
         self.drapeaux_poses, self.drapeaux_lus = set(), {}
         self.vars_lues, self.objets_lus, self.souvenirs_lus, self.decors_lus = set(), set(), set(), set()
+        self.portables, self.objets_donnes = set(), {}
+        self.aiguillages, self.sans_issue, self.sans_emplacement = [], {}, []
 
     # ---- Petites vérifications communes
 
@@ -248,8 +254,8 @@ class Validateur:
                 self.r.erreur(fichier, noeud, "le titre offert est un texte de 1 à 40 caractères")
             elif "titre" in p:
                 self.prose(fichier, noeud, "recompenses.titre", p["titre"])
-            if "objet" in p:
-                self.ident(fichier, noeud, "objet exclusif", p["objet"])
+            if "objet" in p and self.ident(fichier, noeud, "objet exclusif", p["objet"]):
+                self.objets_donnes.setdefault(p["objet"], []).append(noeud)
         po, xp = p.get("po", 0), p.get("xp", 0)
         return (po if entier(po) else 0), (xp if entier(xp) else 0)
 
@@ -313,7 +319,22 @@ class Validateur:
                         self.prose(f, "", f"{cle}.{x['id']}.{k}", x[k])
             return vus
 
+        if "court" in fiche and not isinstance(fiche["court"], bool):
+            r.erreur(f, "", "« court » vaut true ou false (true : campagne courte exprès, dispensée de la taille visée)")
         self.objets = declares("objets", None)
+        for x in fiche.get("objets", []) if isinstance(fiche.get("objets", []), list) else []:
+            if not isinstance(x, dict) or not isinstance(x.get("id"), str):
+                continue
+            for k in sorted(set(x) - {"id", "nom", "portable", "emplacement"}):
+                r.avert(f, "", f"« objets » · {x['id']} : champ inconnu « {k} » (ignoré par le moteur)")
+            if "portable" in x and not isinstance(x["portable"], bool):
+                r.erreur(f, "", f"« objets » · {x['id']} : « portable » vaut true ou false")
+            if x.get("portable") is True:
+                self.portables.add(x["id"])
+                if "emplacement" not in x:
+                    self.sans_emplacement.append(x["id"])
+            if "emplacement" in x and (x.get("portable") is not True or x["emplacement"] not in EMPLACEMENTS):
+                r.erreur(f, "", f"« objets » · {x['id']} : « emplacement » = {x['emplacement']!r} : pour un objet portable, l'un de {', '.join(EMPLACEMENTS)}")
         self.souvenirs = declares("souvenirs", "texte")
         self.decors = declares("decors", "description")
 
@@ -411,6 +432,8 @@ class Validateur:
                     r.avert(f, ident, f"message {i + 1} : {m} mots (visé : 30 à {MOTS_MAX})")
         if "checkpoint" in n and not isinstance(n["checkpoint"], bool):
             r.erreur(f, ident, "« checkpoint » vaut true ou false")
+        elif n.get("checkpoint") is True and t in ("echec", "fin"):
+            r.erreur(f, ident, f"pas de check-point sur un nœud « {t} » (tout autre type de nœud peut en porter un)")
         if "effets" in n:
             self.effets(f, ident, "effets", n["effets"])
         if "lieu" in n:
@@ -518,7 +541,7 @@ class Validateur:
             if len(issues) == 1:
                 r.avert(f, ident, "une seule issue : ce n'est pas un hasard (un nœud « recit » suffit)")
             elif issues and libres == 0:
-                r.avert(f, ident, "toutes les issues ont une condition : si aucune n'est vraie, le moteur tire parmi toutes")
+                self.aiguillages.append(ident)  # un aiguillage : il faut qu'une issue soit toujours possible (voir aiguillages())
         if t == "echec":
             if not entier(n.get("repos_min")) or not 10 <= n.get("repos_min") <= 180:
                 r.erreur(f, ident, f"« repos_min » = {n.get('repos_min')!r} : un entier de 10 à 180 minutes")
@@ -708,11 +731,57 @@ class Validateur:
                 r.erreur(f, "", f"le chapitre « {ch} » peut rapporter {po} po sur un parcours : au plus {PO_CHAPITRE} par chapitre (hors fin)")
             if xp > XP_CHAPITRE:
                 r.erreur(f, "", f"le chapitre « {ch} » peut rapporter {xp} xp sur un parcours : au plus {XP_CHAPITRE} par chapitre (hors fin)")
-        for cle, nom in (("titre", "titre"), ("objet", "objet exclusif")):
-            donnes = sorted({self.noeuds[i]["recompenses"][cle] for i in tous if typ[i] == "fin" and isinstance(self.noeuds[i].get("recompenses"), dict)
-                             and isinstance(self.noeuds[i]["recompenses"].get(cle), str)})
-            if len(donnes) > 1:
-                r.erreur("campagne.json", "", f"plusieurs {nom}s différents selon les fins ({', '.join(donnes)}) : un seul par campagne")
+        if len(self.objets_donnes) > OBJETS_MAX:
+            r.erreur("campagne.json", "", f"{len(self.objets_donnes)} objets exclusifs donnés par les fins ({', '.join(sorted(self.objets_donnes))}) : {OBJETS_MAX} au plus par campagne")
+
+    # ---- Aiguillages : un « hasard » dont toutes les issues ont une condition (conditions complémentaires)
+
+    def aiguillages_prouves(self):
+        """Pour chaque aiguillage, cherche un état (quelconque) où aucune issue n'est possible. Aucun : c'est prouvé."""
+        import itertools
+        for ident in self.aiguillages:
+            issues = [o.get("si") for o in self.noeuds[ident]["issues"] if isinstance(o, dict)]
+            objets, drapeaux, seuils = set(), set(), {}
+
+            def atomes(c):
+                if not isinstance(c, dict):
+                    return
+                if "non" in c:
+                    atomes(c["non"])
+                for k in ("tous", "un"):
+                    for x in c.get(k, []) if isinstance(c.get(k), list) else []:
+                        atomes(x)
+                if "var" in c:
+                    for k in ("min", "max"):
+                        if entier(c.get(k)):
+                            seuils.setdefault(c["var"], set()).update((c[k] - 1, c[k], c[k] + 1))
+                if isinstance(c.get("objet"), str):
+                    objets.add(c["objet"])
+                if isinstance(c.get("drapeau"), str):
+                    drapeaux.add(c["drapeau"])
+
+            for c in issues:
+                atomes(c)
+            objets, drapeaux, noms = sorted(objets), sorted(drapeaux), sorted(seuils)
+            axes = [(False, True)] * (len(objets) + len(drapeaux)) + [sorted(seuils[v]) for v in noms]
+            taille = 1
+            for axe in axes:
+                taille *= len(axe)
+            contre = None
+            if taille <= 20000:
+                for valeurs in itertools.product(*axes):
+                    e = {"objets": {o for o, v in zip(objets, valeurs) if v},
+                         "drapeaux": {d for d, v in zip(drapeaux, valeurs[len(objets):]) if v},
+                         "vars": dict(zip(noms, valeurs[len(objets) + len(drapeaux):]))}
+                    if not any(self.vrai(c, e) for c in issues):
+                        contre = e
+                        break
+                if contre is None:
+                    continue
+            exemple = "trop de cas pour les essayer tous" if contre is None else "par exemple avec " + (", ".join(
+                [f"{v} = {n}" for v, n in sorted(contre["vars"].items())] + [f"objet {o}" for o in sorted(contre["objets"])]
+                + [f"drapeau {d}" for d in sorted(contre["drapeaux"])]) or "rien en poche")
+            self.aiguillages_douteux[ident] = exemple
 
     # ---- Déclarations, codes courts
 
@@ -731,8 +800,14 @@ class Validateur:
             r.avert("campagne.json", "", f"variable « {v} » déclarée mais jamais testée (ni condition, ni bonus d'épreuve)")
         for v in sorted(set(self.variables) - modifiees):
             r.avert("campagne.json", "", f"variable « {v} » déclarée mais jamais modifiée par un effet")
-        for o in sorted(self.objets - self.objets_lus):
+        for o in sorted(self.objets - self.objets_lus - self.portables - set(self.objets_donnes)):
             r.avert("campagne.json", "", f"objet « {o} » déclaré mais jamais testé par une condition")
+        for o, fins in sorted(self.objets_donnes.items()):
+            if o not in self.portables:
+                r.erreur("campagne.json", "", f"objet « {o} » donné en récompense ({', '.join(fins)}) : il doit être déclaré dans « objets » "
+                                              "avec \"portable\": true et un « nom »" + ("" if o in self.objets else " (il n'y est pas du tout)"))
+        for o in sorted(self.portables - set(self.objets_donnes)):
+            r.avert("campagne.json", "", f"objet portable « {o} » déclaré mais donné par aucune fin")
         for d in sorted(self.drapeaux_poses - set(self.drapeaux_lus)):
             r.avert("campagne.json", "", f"drapeau « {d} » posé mais jamais testé par une condition")
         for s in sorted(self.souvenirs - self.souvenirs_lus):
@@ -797,7 +872,7 @@ class Validateur:
             n = self.noeuds[ident]
             t = n["type"]
             if n.get("checkpoint") is True or cp is None:
-                cp = (ident, photo())
+                cp = (ident, photo(), (c["choix"], c["attentes"], c["longues"]))
             self.appliquer(n.get("effets"), e)
             c["noeuds"] += 1
             c["mots"] += sum(mots(x) for x in self.textes(ident))
@@ -823,11 +898,18 @@ class Validateur:
                 ok = h.randrange(100) < chance_de(n["difficulte"], e["vars"].get(n.get("bonus"), 0) if n.get("bonus") else 0)
                 ident = n["reussite"] if ok else n["echec"]
             elif t == "hasard":
-                possibles = [o for o in n["issues"] if self.vrai(o.get("si"), e)] or n["issues"]
+                possibles = [o for o in n["issues"] if self.vrai(o.get("si"), e)]
+                if not possibles:
+                    self.sans_issue.setdefault(ident, ", ".join(
+                        [f"{v} = {x}" for v, x in sorted(e["vars"].items())] + [f"objet {o}" for o in sorted(e["objets"])]
+                        + [f"drapeau {d}" for d in sorted(e["drapeaux"])]) or "rien en poche")
+                    possibles = n["issues"]
                 ident = h.choices(possibles, weights=[o["poids"] for o in possibles])[0]["vers"]
             elif t == "echec":
                 c["echecs"] += 1
                 c["minutes"] += n["repos_min"]
+                # Ce qui a été fait depuis le check-point est à refaire : ces choix et ces attentes ne comptent qu'une fois.
+                c["choix"], c["attentes"], c["longues"] = cp[2]
                 ident = cp[0]
                 e = {"vars": dict(cp[1]["vars"]), "objets": set(cp[1]["objets"]), "drapeaux": set(cp[1]["drapeaux"])}
             else:
@@ -869,8 +951,8 @@ class Validateur:
                 return f"min {f(v[0])}, médiane {f(statistics.median(v))}, max {f(v[-1])}"
             entier_ = lambda x: str(int(x))
             r.stats.append(f"sur {len(finis)} parcours tirés au hasard (choix au hasard, épreuves aux dés) :")
-            r.stats.append(f"  choix par parcours : {trio('choix', entier_)}")
-            r.stats.append(f"  attentes par parcours : {trio('attentes', entier_)} (dont longues, ≥ 1 h : {trio('longues', entier_)})")
+            r.stats.append(f"  choix par parcours (reprises après échec non comptées) : {trio('choix', entier_)}")
+            r.stats.append(f"  attentes par parcours (idem) : {trio('attentes', entier_)} (dont longues, ≥ 1 h : {trio('longues', entier_)})")
             r.stats.append(f"  temps réel total (attentes et repos) : {trio('minutes', self.duree)}")
             r.stats.append(f"  nœuds traversés : {trio('noeuds', entier_)} · mots lus : {trio('mots', entier_)} · échecs : {trio('echecs', entier_)}")
             r.stats.append(f"  récompenses : po {trio('po', entier_)} · xp {trio('xp', entier_)}")
@@ -884,25 +966,39 @@ class Validateur:
             r.stats.append(f"  {i} [{noeuds[i].get('issue')}] « {noeuds[i].get('titre', '')} » : {100 * n / max(1, len(finis)):.1f} % des parcours".replace(".", ","))
             if finis and n == 0:
                 r.avert(self.fichier[i], i, f"fin jamais atteinte sur {len(finis)} parcours tirés au hasard (conditions impossibles à réunir ?)")
-        # Repères : la taille visée d'une vraie campagne (le prologue, lui, est court exprès).
+        for ident, etat in sorted(self.sans_issue.items()):
+            r.erreur(self.fichier[ident], ident, f"aiguillage sans issue : aucune condition n'est vraie dans un état atteint par un parcours ({etat})")
+        for ident, exemple in sorted(self.aiguillages_douteux.items()):
+            if ident not in self.sans_issue:
+                r.avert(self.fichier[ident], ident, "toutes les issues ont une condition, et rien ne prouve qu'il y en a toujours une de vraie "
+                                                    f"({exemple}) ; aucun des {len(finis)} parcours tirés n'y est resté bloqué")
+        if self.sans_emplacement:
+            r.note(f"objets portables sans « emplacement » ({', '.join(EMPLACEMENTS)}) : {', '.join(self.sans_emplacement)} ; ils se porteront à la main")
+        # La taille visée (docs/CAMPAGNES.md). Choix et attentes : sur un parcours, reprises après échec non comptées.
         if finis:
             med = lambda cle: statistics.median(c[cle] for c in finis)
             reperes = [
-                ("chapitres", len(self.chapitres), 8, 12), ("nœuds", len(noeuds), 120, 200), ("mots", sum(messages), 12000, 20000),
-                ("fins", len(self.fins_graphe), 4, 6), ("choix par parcours (médiane)", med("choix"), 30, 45),
-                ("attentes par parcours (médiane)", med("attentes"), 14, 22), ("attentes longues par parcours (médiane)", med("longues"), 3, 5),
+                ("chapitres", len(self.chapitres), 8, 12, False), ("nœuds", len(noeuds), 120, 200, True), ("mots", sum(messages), 12000, 20000, True),
+                ("fins", len(self.fins_graphe), 4, 6, False), ("choix par parcours (médiane)", med("choix"), 30, 45, False),
+                ("attentes par parcours (médiane)", med("attentes"), 14, 22, False), ("attentes longues par parcours (médiane)", med("longues"), 3, 5, False),
             ]
-            hors = [f"{nom} : {int(v)} (visé {a} à {b})" for nom, v, a, b in reperes if not a <= v <= b]
-            if hors:
-                r.note("hors de la taille visée d'une campagne : " + " ; ".join(hors))
+            if self.fiche.get("court") is True:
+                r.note("campagne courte (\"court\": true) : la taille visée ne lui est pas demandée")
+            else:
+                for nom, v, a_, b_, borne in reperes:
+                    if borne and v > b_ * 1.1:
+                        r.erreur("campagne.json", "", f"{nom} : {int(v)}, plus de 10 % au-dessus de la taille visée ({a_} à {b_})")
+                    elif not a_ <= v <= b_:
+                        r.avert("campagne.json", "", f"{nom} : {int(v) if v == int(v) else v} (visé : {a_} à {b_})")
 
     def valider(self):
         if self.lire():
             for i in self.noeuds:
                 self.noeud(i)
-            self.fins_graphe, self.po_max, self.xp_max = [], 0, 0
+            self.fins_graphe, self.po_max, self.xp_max, self.aiguillages_douteux = [], 0, 0, {}
             self.graphe()
             self.declarations()
+            self.aiguillages_prouves()
             if not self.r.erreurs:
                 self.statistiques()
         return self.r

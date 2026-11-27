@@ -46,7 +46,7 @@
       "titre": "Par la grande porte",
       "humeur": "joie",
       "texte": [ "La clé tourne. C'est gagné." ],
-      "recompenses": { "po": 50, "xp": 20, "souvenir": "s-bon", "titre": "Testeur de portes", "objet": "cape" }
+      "recompenses": { "po": 50, "xp": 20, "souvenir": "s-bon", "titre": "Testeur de portes", "objet": "cape-d-essai" }
     },
     "b-fin-mauvaise": {
       "type": "fin",
@@ -60,7 +60,7 @@
       "issue": "secrete",
       "titre": "Le passage",
       "texte": [ "Un passage derrière le lierre." ],
-      "recompenses": { "po": 5, "xp": 5, "souvenir": "s-secret" }
+      "recompenses": { "po": 5, "xp": 5, "souvenir": "s-secret", "titre": "Passe-muraille", "objet": "caillou-d-essai" }
     }
   }
 }

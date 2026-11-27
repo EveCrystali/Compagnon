@@ -214,7 +214,7 @@ public class CampagnesTests(ITestOutputHelper sortie)
         Assert.Equal(Phase.Fin, e.Phase);
         Assert.Equal("bonne", e.Issue);
         Assert.Equal("Par la grande porte", e.TitreFin);
-        Assert.Equal(new Prime(50, 20, "s-bon", "Testeur de portes", "cape"), e.Recompenses);
+        Assert.Equal(new Prime(50, 20, "s-bon", "Testeur de portes", "cape-d-essai"), e.Recompenses);
         Assert.Equal(new[] { "a-prime", "b-fin-bonne" }, e.Credits);
         Assert.Equal(1, e.Progression);
         Assert.Equal(2, e.ChapitreNumero);
@@ -430,7 +430,7 @@ public class CampagnesTests(ITestOutputHelper sortie)
         Assert.Equal(new[] { "b-fin-bonne" }, Fins(tel, Essai).Select(f => f.Noeud));
         Assert.Equal(new[] { "s-bon" }, Souvenirs(tel, Essai).Select(s => s.Id));
         Assert.Equal(new[] { "Testeur de portes" }, Titres(tel, Essai));
-        Assert.Equal(new[] { "cape" }, ObjetsGagnes(tel, Essai));
+        Assert.Equal(new[] { "cape-d-essai" }, ObjetsGagnes(tel, Essai));
 
         // Le PC s'allume : il reçoit, verse une fois, l'annonce ; le téléphone n'attend plus.
         var pc = new Profil { Machine = "PC" };
@@ -438,10 +438,10 @@ public class CampagnesTests(ITestOutputHelper sortie)
         Actualiser(pc.CarnetCampagnes, Biblio, t);
         var v = Crediter(pc, Biblio);
         Assert.Equal((60, 25), (v.Po, v.Xp));
-        Assert.Equal(new[] { "cape" }, v.Objets);
+        Assert.Equal(new[] { "cape-d-essai" }, v.Objets);
         Assert.Equal(60, pc.Bourse.PoCampagnes);
         Assert.Equal(25, pc.XpTelephone);
-        Assert.Contains("cape", pc.Bourse.Inventaire);
+        Assert.Contains("cape-d-essai", pc.Bourse.Inventaire);
         v = Crediter(pc, Biblio);                                      // une seule fois
         Assert.Equal((0, 0), (v.Po, v.Xp));
         Assert.Empty(v.Objets);
@@ -583,6 +583,7 @@ public class CampagnesTests(ITestOutputHelper sortie)
         Assert.Null(Abandonner(b, Prologue, t += 5000, "pc-b"));
         Assert.Null(Demarrer(b, Essai, 5, t += 5000, "pc-b", Biblio, "g3"));
         var e = Actualiser(b, Biblio, t)!;
+        Assert.True(e.Reprise);                                        // ce que Pilou redit n'est pas une nouveauté
         Assert.Equal("b-entree", e.Noeud);                             // le dernier check-point, pas le début
         Assert.Equal(Phase.Choix, e.Phase);
         Assert.Contains("cle", e.Objets);
@@ -782,6 +783,197 @@ public class CampagnesTests(ITestOutputHelper sortie)
         foreach (var m in l.AsEnumerable().Reverse()) Recevoir(autre, m, "tel", B, t);
         Actualiser(autre, B, t);
         Assert.Equal(Signature(k), Signature(autre));
+    }
+
+    // ---- Reprise, aiguillages, objets exclusifs, campagnes entières
+
+    [Fact]
+    public void Au_retour_d_un_echec_ce_que_Pilou_redit_est_marque_reprise()
+    {
+        var c = Essai;
+        long t = T0;
+        var p = Jouer(c, Nouvelle(c, 1, t, "pc", "g", false), ref t, "pc", 0, Suite, Reussite, 3);   // jusqu'au piège du chapitre b
+        var e = Rejouer(c, p, t);
+        Assert.Equal(Phase.Repos, e.Phase);
+        Assert.False(e.Reprise);
+        Assert.DoesNotContain(e.Messages, m => m.Reprise);
+        var retour = Rejouer(c, p, e.Fin);
+        Assert.True(retour.Reprise);
+        Assert.Equal("b-entree", retour.Noeud);
+        var redits = retour.Messages.Where(m => m.Reprise).ToList();
+        Assert.Equal(new[] { "La maison. Par où entrer ?" }, redits.Select(m => m.Texte));
+        Assert.All(redits, m => Assert.Equal(e.Fin, m.T));
+        // L'indicateur survit à la compaction (la base est alors le check-point retrouvé)…
+        var q = Compacter(c, p, e.Fin + Grace + 60_000);
+        Assert.True(q.Reprise);
+        Assert.Empty(q.Journal);
+        Assert.Equal(q.Reprise, LirePartie(JsonPartie(q))!.Reprise);
+        var apres = Rejouer(c, q, e.Fin + Grace + 60_000);
+        Assert.True(apres.Reprise);
+        Assert.All(apres.Messages, m => Assert.True(m.Reprise));
+        // … et tombe à la première décision.
+        q = Decider(c, q, e.Fin + Grace + 61_000, "pc", 1)!;
+        apres = Rejouer(c, q, e.Fin + Grace + 62_000);
+        Assert.False(apres.Reprise);
+        Assert.False(apres.Messages[^1].Reprise);
+    }
+
+    // Une petite campagne en une ligne par nœud (type|champs JSON), pour les règles qu'on veut voir seules.
+    private static Campagne Petite(string id, string variables, params string[] noeuds) => Lire(
+        "{\"v\":1,\"id\":\"" + id + "\",\"depart\":\"" + noeuds[0].Split('|')[0] + "\",\"chapitres\":[{\"id\":\"c\",\"titre\":\"C\",\"fichier\":\"c.json\"}],"
+        + "\"variables\":{" + variables + "},\"objets\":[{\"id\":\"cle\",\"nom\":\"Clé\"}]}",
+        _ => "{\"chapitre\":\"c\",\"noeuds\":{" + string.Join(",", noeuds.Select(n => "\"" + n.Split('|')[0] + "\":{" + n.Split('|')[1] + "}")) + "}}")!;
+
+    [Fact]
+    public void Un_hasard_sert_aussi_d_aiguillage()
+    {
+        // Toutes les issues ont une condition, complémentaires : pas de tirage au sort, la route dépend de l'état.
+        var c = Petite("aiguillage", "\"courage\":0",
+            "debut|\"type\":\"choix\",\"checkpoint\":true,\"texte\":[\"?\"],\"options\":[{\"id\":\"a\",\"libelle\":\"A\",\"vers\":\"tri\",\"effets\":[{\"var\":\"courage\",\"plus\":2}]},"
+            + "{\"id\":\"b\",\"libelle\":\"B\",\"vers\":\"tri\"},{\"id\":\"c\",\"libelle\":\"C\",\"vers\":\"tri\",\"effets\":[{\"objet\":\"cle\",\"donne\":true}]}]",
+            "tri|\"type\":\"hasard\",\"checkpoint\":true,\"issues\":[{\"poids\":1,\"vers\":\"brave\",\"si\":{\"var\":\"courage\",\"min\":2}},"
+            + "{\"poids\":1,\"vers\":\"prudent\",\"si\":{\"tous\":[{\"var\":\"courage\",\"max\":1},{\"non\":{\"objet\":\"cle\"}}]}},"
+            + "{\"poids\":5,\"vers\":\"porte\",\"si\":{\"objet\":\"cle\"}}]",
+            "brave|\"type\":\"fin\",\"issue\":\"bonne\",\"titre\":\"Brave\",\"texte\":[\"!\"],\"recompenses\":{\"po\":1,\"xp\":1}",
+            "prudent|\"type\":\"fin\",\"issue\":\"mauvaise\",\"titre\":\"Prudent\",\"texte\":[\".\"],\"recompenses\":{\"po\":0,\"xp\":0}",
+            "porte|\"type\":\"fin\",\"issue\":\"secrete\",\"titre\":\"Porte\",\"texte\":[\".\"],\"recompenses\":{\"po\":0,\"xp\":0}");
+        for (int g = 0; g < 30; g++)
+        {
+            var p = Nouvelle(c, 1, T0, "pc", "graine" + g, false);
+            Assert.Equal("brave", Rejouer(c, Decider(c, p, T0, "pc", 0)!, T0).Noeud);
+            Assert.Equal("prudent", Rejouer(c, Decider(c, p, T0, "pc", 1)!, T0).Noeud);
+            Assert.Equal("porte", Rejouer(c, Decider(c, p, T0, "pc", 2)!, T0).Noeud);
+        }
+    }
+
+    [Fact]
+    public void Un_checkpoint_sur_une_attente_ou_un_hasard()
+    {
+        // Check-point sur une attente : après l'échec et le repos, Pilou redit ce qu'il disait avant de partir, et
+        // attend un « vas-y » (il ne repart jamais sans un geste).
+        var c = Petite("cp-attente", "",
+            "debut|\"type\":\"choix\",\"checkpoint\":true,\"texte\":[\"?\"],\"options\":[{\"id\":\"a\",\"libelle\":\"A\",\"vers\":\"route\"},{\"id\":\"b\",\"libelle\":\"B\",\"vers\":\"route\"}]",
+            "route|\"type\":\"attente\",\"checkpoint\":true,\"texte\":[\"Je pars.\"],\"duree_min\":5,\"pendant\":\"Pilou marche\",\"tenue\":\"marche\",\"suite\":\"gue\"",
+            "gue|\"type\":\"choix\",\"texte\":[\"Le gué.\"],\"options\":[{\"id\":\"a\",\"libelle\":\"A\",\"vers\":\"plouf\"},{\"id\":\"b\",\"libelle\":\"B\",\"vers\":\"fin\"}]",
+            "plouf|\"type\":\"echec\",\"texte\":[\"Plouf.\"],\"repos_min\":10",
+            "fin|\"type\":\"fin\",\"issue\":\"bonne\",\"titre\":\"Fin\",\"texte\":[\".\"],\"recompenses\":{\"po\":0,\"xp\":0}");
+        long t = T0;
+        var p = Jouer(c, Nouvelle(c, 1, t, "pc", "g", false), ref t, "pc", 0, 0);   // on part, on arrive au gué, plouf
+        var e = Rejouer(c, p, t);
+        Assert.Equal(Phase.Repos, e.Phase);
+        e = Rejouer(c, p, e.Fin);
+        Assert.Equal(Phase.Depart, e.Phase);
+        Assert.Equal("route", e.Noeud);
+        Assert.True(e.Reprise);
+        Assert.Equal("Je pars.", e.Messages[^1].Texte);
+        Assert.True(e.Messages[^1].Reprise);
+        p = Decider(c, p, e.T + 1000, "pc", Suite)!;
+        Assert.Equal(Phase.Attente, Rejouer(c, p, e.T + 2000).Phase);
+        Assert.False(Rejouer(c, p, e.T + 2000).Reprise);
+    }
+
+    [Fact]
+    public void Objets_exclusifs_gagnes_en_campagne()
+    {
+        _ = Essai; // connue de la bibliothèque (comme une campagne embarquée) : ses objets « portable » sont des exclusifs
+        var cape = Boutique.Trouver("cape-d-essai");
+        Assert.NotNull(cape);
+        Assert.Equal(("Cape d'essai", Boutique.Dos), (cape!.Nom, cape.Slot));
+        Assert.Equal(Boutique.Main, Boutique.Trouver("caillou-d-essai")!.Slot);            // sans emplacement : à la main
+        Assert.True(EstExclusif("cape-d-essai"));
+        Assert.False(EstExclusif("cle"));                                                  // objet de l'histoire, pas un objet à porter
+        Assert.False(EstExclusif("cape"));                                                 // article de la boutique
+        Assert.Null(Boutique.Trouver("objet-jamais-vu"));
+        var b = new Bourse();
+        Assert.Equal("introuvable en boutique : récompense de campagne", Boutique.Acheter(b, "cape-d-essai", 50, 99_999, new DateOnly(2026, 11, 27)));
+        Assert.False(Boutique.Equiper(b, Boutique.Dos, "cape-d-essai", 1));                // pas encore gagnée
+        b.Inventaire.Add("cape-d-essai");
+        Assert.True(Boutique.Equiper(b, Boutique.Dos, "cape-d-essai", 2));
+        Assert.False(Boutique.Equiper(b, Boutique.Tete, "cape-d-essai", 3));
+        // Ils ne voyagent pas dans les messages existants (groupe, téléphone) : chaque appareil les tient de l'historique.
+        var p = new Profil { Machine = "A" };
+        p.Bourse.Inventaire.AddRange(new[] { "cape", "cape-d-essai", "caillou-d-essai" });
+        var json = Groupe.Json(Groupe.Moi(p, "a", "A"));
+        Assert.Contains("\"cape\"", json);
+        Assert.DoesNotContain("essai", json);
+        Assert.DoesNotContain("essai", JsonSerializer.Serialize(Telephone.EtatBoutique(0, p.Bourse.Inventaire, p.Bourse.Equipe, p.Quetes, DateTime.Now)["objets"]));
+    }
+
+    // Les campagnes à jouer en entier : celles de l'exécutable, la campagne d'essai, et celles d'un dossier donné par
+    // PILOU_CAMPAGNES (pour essayer une campagne en cours d'écriture : PILOU_CAMPAGNES=assets/campagnes dotnet test).
+    private static List<Campagne> AJouer()
+    {
+        var l = Disponibles().Select(id => Charger(id)!).Append(Essai).ToList();
+        if (Environment.GetEnvironmentVariable("PILOU_CAMPAGNES") is { Length: > 0 } dossier && Directory.Exists(dossier))
+            foreach (var d in Directory.GetDirectories(dossier).OrderBy(x => x, StringComparer.Ordinal))
+                if (File.Exists(Path.Combine(d, "campagne.json")) && l.All(c => c.Id != Path.GetFileName(d)))
+                    l.Add(Lire(File.ReadAllText(Path.Combine(d, "campagne.json")),
+                        f => File.Exists(Path.Combine(d, f)) ? File.ReadAllText(Path.Combine(d, f)) : null)!);
+        return l;
+    }
+
+    // PILOU_CAMPAGNES=<dossier de campagnes> PILOU_VECTEURS=<fichier> dotnet test : écrit des vecteurs pour ces
+    // campagnes-là ; le test Java les rejoue avec PILOU_VECTEURS=<fichier> (même état, ligne à ligne, sur 200 nœuds).
+    [Fact]
+    public void Vecteurs_pour_les_campagnes_d_un_dossier()
+    {
+        if (Environment.GetEnvironmentVariable("PILOU_VECTEURS") is not { Length: > 0 } fichier) return;
+        var texte = CampagnesVecteurs.Pour(AJouer().Where(c => c.Id != "essai"));
+        File.WriteAllText(fichier, texte);
+        sortie.WriteLine($"{texte.Split('\n').Length} lignes écrites dans {fichier}");
+    }
+
+    [Fact]
+    public void Toutes_les_campagnes_se_jouent_jusqu_a_une_fin()
+    {
+        foreach (var c in AJouer())
+        {
+            Campagne? B(string id) => id == c.Id ? c : Biblio(id);
+            var fins = new SortedDictionary<string, int>(StringComparer.Ordinal);
+            int max = 0, decisions = 0, echecs = 0;
+            long duree = 0;
+            for (int g = 0; g < 24; g++)
+            {
+                var h = new Hasard(Hasard.Graine($"entier|{c.Id}|{g}"));
+                var k = new Carnet();
+                long t = T0;
+                Assert.Null(Demarrer(k, c, 99, t, "pc", B, "graine" + g));
+                var e = Actualiser(k, B, t)!;
+                for (int i = 0; i < 4000 && e.EnCours; i++)
+                {
+                    if (e.Phase == Phase.Repos) echecs++;
+                    if (e.EnAttente) t = e.Fin;
+                    t += 30_000 + h.Suivant(600) * 1000L;
+                    e = Actualiser(k, B, t)!;
+                    string appareil = h.Suivant(2) == 0 ? "pc" : "tel";
+                    string? r = e.Phase switch
+                    {
+                        Phase.Choix => Choisir(k, c, t, appareil, e.Options[h.Suivant(e.Options.Count)].Id),
+                        Phase.Epreuve => h.Suivant(2) == 0 ? EpreuveAuDe(k, c, t, appareil) : Epreuve(k, c, t, appareil, h.Suivant(3) != 0),
+                        Phase.Depart => Continuer(k, c, t, appareil),
+                        _ => null,
+                    };
+                    Assert.True(r is null, $"{c.Id}, graine {g}, nœud {e.Noeud} : {r}");
+                    if (e.Phase is Phase.Choix or Phase.Epreuve or Phase.Depart) decisions++;
+                    e = Actualiser(k, B, t)!;
+                    Assert.True(e.Phase != Phase.Cassee, $"{c.Id}, graine {g} : partie cassée au nœud {e.Noeud}");
+                    Assert.True(e.Phase != Phase.Choix || e.Options.Count > 0, $"{c.Id}, graine {g}, nœud {e.Noeud} : aucune option proposée");
+                    foreach (var m in Messages(k, "PC-BUREAU-1a2b", "pc"))
+                    {
+                        max = Math.Max(max, Octets(m));
+                        Assert.True(Octets(m) <= TailleJson, $"{c.Id}, nœud {e.Noeud} : message de {Octets(m)} octets");
+                    }
+                }
+                Assert.True(e.Phase == Phase.Fin, $"{c.Id}, graine {g} : pas de fin après 4000 pas (nœud {e.Noeud}, {e.Phase})");
+                fins[e.Noeud] = fins.GetValueOrDefault(e.Noeud) + 1;
+                duree += t - T0;
+                var (po, xp) = Acquis(k, c);
+                Assert.True(po <= 600 && xp <= 300, $"{c.Id}, graine {g} : {po} po, {xp} xp");
+            }
+            sortie.WriteLine($"{c.Id} ({c.Noeuds.Count} nœuds) : 24 parties, {decisions / 24} décisions et {echecs / 24.0:0.0} échecs par partie, "
+                             + $"{duree / 24 / 3_600_000.0:0.0} h en moyenne, message le plus gros {max} octets ; fins : "
+                             + string.Join(", ", fins.Select(kv => $"{kv.Key} × {kv.Value}")));
+        }
     }
 
     // ---- Profil du PC

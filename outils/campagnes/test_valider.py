@@ -17,7 +17,7 @@ RACINE = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)
 
 FICHE = {
     "v": 1, "id": "essai", "titre": "Essai", "ton": "humour", "accroche": "Une campagne pour les tests.", "niveau": 1, "duree": "≈ 1 h",
-    "depart": "a-debut",
+    "court": True, "depart": "a-debut",
     "chapitres": [{"id": "a", "titre": "Un", "fichier": "chapitre-01.json"}, {"id": "b", "titre": "Deux", "fichier": "chapitre-02.json"}],
     "variables": {"courage": 0},
     "objets": [{"id": "cle", "nom": "Clé"}],
@@ -115,6 +115,67 @@ class Cas(unittest.TestCase):
             b["b-hasard"]["issues"].append({"poids": 1, "vers": "b-r1"})
         self.erreur(boucle, "boucle sans attente ni choix : b-r1 → b-r2")
 
+    def test_checkpoint_partout_sauf_echec_et_fin(self):
+        r = self.valider(lambda f, a, b: (a["a-attente"].update(checkpoint=True), b["b-hasard"].update(checkpoint=True), a["a-epreuve"].update(checkpoint=True)))
+        self.assertEqual([], r.erreurs)
+        self.erreur(lambda f, a, b: a["a-chute"].update(checkpoint=True), "a-chute", "pas de check-point sur un nœud « echec »")
+        self.erreur(lambda f, a, b: b["b-fin"].update(checkpoint=True), "b-fin", "pas de check-point sur un nœud « fin »")
+
+    def test_aiguillages(self):
+        # Toutes les issues ont une condition : permis si elles se complètent (une de vraie dans tous les cas).
+        def complet(f, a, b):
+            b["b-hasard"]["issues"] = [{"poids": 1, "vers": "b-fin", "si": {"var": "courage", "min": 1}},
+                                       {"poids": 1, "vers": "b-triste", "si": {"var": "courage", "max": 0}}]
+        r = self.valider(complet)
+        self.assertEqual([], r.erreurs)
+        self.assertEqual([], [x for x in r.avertissements if "moins de 30 mots" not in x])
+
+        # Rien ne le prouve (aucune issue avec la clé ET le drapeau), mais aucun parcours n'y arrive ainsi : avertissement.
+        def douteux(f, a, b):
+            b["b-hasard"]["issues"] = [{"poids": 1, "vers": "b-fin", "si": {"non": {"objet": "cle"}}},
+                                       {"poids": 1, "vers": "b-triste", "si": {"non": {"drapeau": "parti"}}}]
+            a["a-choix"]["options"][0]["effets"].append({"drapeau": "parti", "ote": True})
+        r = self.valider(douteux)
+        self.assertEqual([], r.erreurs)
+        self.assertTrue(any("b-hasard" in x and "rien ne prouve" in x and "objet cle" in x for x in r.avertissements), r.avertissements)
+
+        # Un état atteint par un parcours où aucune issue n'est possible : erreur.
+        def bloque(f, a, b):
+            b["b-hasard"]["issues"] = [{"poids": 1, "vers": "b-fin", "si": {"var": "courage", "min": 5}},
+                                       {"poids": 1, "vers": "b-triste", "si": {"objet": "cle"}}]
+        self.erreur(bloque, "chapitre-02.json · b-hasard", "aiguillage sans issue", "courage = 0")
+
+    def test_taille_visee(self):
+        # Hors de la taille visée : des avertissements (le prologue, « court », en est dispensé).
+        r = self.valider(lambda f, a, b: f.pop("court"))
+        self.assertEqual([], r.erreurs)
+        for morceau in ("chapitres : 2 (visé : 8 à 12)", "nœuds : 9 (visé : 120 à 200)", "choix par parcours (médiane)", "attentes par parcours (médiane)"):
+            self.assertTrue(any(morceau in x for x in r.avertissements), (morceau, r.avertissements))
+        r = self.valider()
+        self.assertFalse(any("visé : 8 à 12" in x for x in r.avertissements))
+        self.assertTrue(any("campagne courte" in x for x in r.notes))
+
+        # Plus de 10 % au-dessus du plus grand nombre de nœuds visé : erreur.
+        def enorme(f, a, b):
+            f.pop("court")
+            for i in range(215):
+                b[f"b-couloir-{i}"] = {"type": "recit", "texte": ["Un couloir."], "suite": f"b-couloir-{i + 1}" if i < 214 else "b-fin"}
+            b["b-hasard"]["issues"].append({"poids": 1, "vers": "b-couloir-0"})
+        self.erreur(enorme, "nœuds : 224, plus de 10 % au-dessus de la taille visée (120 à 200)")
+
+    def test_les_reprises_apres_echec_ne_comptent_pas(self):
+        # Un échec à 90 % après deux choix : les parcours repassent souvent, mais chaque choix ne compte qu'une fois.
+        def piege(f, a, b):
+            b["b-hasard"]["issues"] = [{"poids": 1, "vers": "b-fin"}, {"poids": 9, "vers": "b-piege"}]
+            b["b-piege"] = {"type": "echec", "texte": ["Aïe."], "repos_min": 10}
+            b.pop("b-triste")
+            b["b-entree"]["options"][0]["vers"] = "b-hasard"
+        r = self.valider(piege)
+        self.assertEqual([], r.erreurs)
+        ligne = next(x for x in r.stats if "choix par parcours" in x)
+        self.assertIn("max 2", ligne)
+        self.assertTrue(any("échecs : min 0" in x and "max 0" not in x.split("échecs")[1] for x in r.stats), r.stats)
+
     def test_checkpoints(self):
         self.erreur(lambda f, a, b: b["b-entree"].pop("checkpoint"), "chapitre-02.json · b-entree", "on entre dans le chapitre « b » par ce nœud")
         self.erreur(lambda f, a, b: a["a-debut"].pop("checkpoint"), "a-debut", "checkpoint", "a-chute", "avant le premier check-point")
@@ -158,7 +219,29 @@ class Cas(unittest.TestCase):
         self.erreur(lambda f, a, b: b["b-entree"].update(recompense={"po": 10, "xp": 21}), "le chapitre « b » peut rapporter 21 xp")
         self.erreur(lambda f, a, b: b["b-fin"]["recompenses"].update(po=590), "le meilleur parcours rapporte 610 po")
         self.erreur(lambda f, a, b: b["b-fin"]["recompenses"].update(xp=295), "le meilleur parcours rapporte 305 xp")
-        self.erreur(lambda f, a, b: (b["b-fin"]["recompenses"].update(titre="Un"), b["b-triste"]["recompenses"].update(titre="Deux")), "plusieurs titres différents")
+        # Chaque fin peut donner son titre et son objet à porter ; l'objet se déclare dans la fiche, « portable ».
+        def deux(f, a, b):
+            f["objets"] += [{"id": "cape", "nom": "Cape", "portable": True, "emplacement": "dos"}, {"id": "galet", "nom": "Galet", "portable": True}]
+            b["b-fin"]["recompenses"].update(titre="Un", objet="cape")
+            b["b-triste"]["recompenses"].update(titre="Deux", objet="galet")
+        r = self.valider(deux)
+        self.assertEqual([], r.erreurs)
+        self.assertEqual([], [x for x in r.avertissements if "moins de 30 mots" not in x])
+        self.assertTrue(any("sans « emplacement »" in x and "galet" in x for x in r.notes), r.notes)
+        self.erreur(lambda f, a, b: b["b-fin"]["recompenses"].update(objet="cle"),
+                    "objet « cle » donné en récompense (b-fin) : il doit être déclaré dans « objets » avec \"portable\": true")
+        self.erreur(lambda f, a, b: b["b-fin"]["recompenses"].update(objet="epee"), "objet « epee » donné en récompense", "il n'y est pas du tout")
+        self.erreur(lambda f, a, b: f["objets"].append({"id": "cape", "nom": "Cape", "portable": True, "emplacement": "queue"}), "« emplacement » = 'queue'")
+        self.erreur(lambda f, a, b: f["objets"].append({"id": "cape", "nom": "Cape", "portable": "oui"}), "« portable » vaut true ou false")
+
+        def sept(f, a, b):
+            for i in range(7):
+                f["objets"].append({"id": f"objet-{i}", "nom": f"Objet {i}", "portable": True})
+                f["souvenirs"].append({"id": f"s-{i}", "nom": "S", "texte": "S."})
+                b[f"b-fin-{i}"] = {"type": "fin", "issue": "mauvaise", "titre": f"Fin {i}", "texte": ["Fin."],
+                                    "recompenses": {"po": 0, "xp": 0, "objet": f"objet-{i}", "souvenir": f"s-{i}"}}
+                b["b-hasard"]["issues"].append({"poids": 1, "vers": f"b-fin-{i}"})
+        self.erreur(sept, "7 objets exclusifs donnés par les fins", "6 au plus par campagne")
         self.erreur(lambda f, a, b: b["b-entree"].update(recompense={"po": 10, "souvenir": "s-bon"}), "champ « souvenir » inattendu")
         self.erreur(lambda f, a, b: b["b-fin"].update(recompense={"po": 1}), "« recompenses » (au pluriel)")
 

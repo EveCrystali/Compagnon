@@ -182,6 +182,18 @@ public class CampagnesTest {
         assertTrue("vecteurs trop courts : " + faites, faites > 500);
     }
 
+    /** Vecteurs d'autres campagnes, écrits par le PC (PILOU_VECTEURS=<fichier>, voir CampagnesTests.cs) : même rejeu. */
+    @Test
+    public void vecteursDUnAutreFichier() throws Exception {
+        String fichier = System.getenv("PILOU_VECTEURS");
+        if (fichier == null || fichier.isEmpty()) return;
+        String texte = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(fichier)), StandardCharsets.UTF_8);
+        Lecteur l = new Lecteur();
+        String[] lignes = texte.replace("\r\n", "\n").split("\n");
+        for (int i = 0; i < lignes.length; i++)
+            if (!lignes[i].isEmpty()) assertEquals(fichier + ", ligne " + (i + 1), lignes[i], l.refaire(lignes[i]));
+    }
+
     @Test
     public void leProloguEstEmbarque() {
         // L'index est écrit à la compilation (app/build.gradle) : Android ne sait pas lister ses ressources.
@@ -245,6 +257,80 @@ public class CampagnesTest {
 
         // Le message tient sous la limite du relais, une fois chiffré.
         for (String m : Campagnes.messages(k, "tel-0123456789ab", "tel")) assertTrue(Campagnes.octets(m) <= Campagnes.TAILLE_JSON);
+    }
+
+    /** Chaque campagne embarquée (et la campagne d'essai) se joue jusqu'à une fin, au hasard, sans casse ni message trop gros. */
+    @Test
+    public void toutesLesCampagnesSeJouentJusquAUneFin() {
+        List<Campagnes.Campagne> toutes = new ArrayList<>();
+        for (String id : Campagnes.disponibles()) toutes.add(Campagnes.charger(id));
+        toutes.add(essai());
+        for (Campagnes.Campagne c : toutes) {
+            for (int g = 0; g < 12; g++) {
+                java.util.Random h = new java.util.Random(1000L * g + c.id.length());
+                Campagnes.Carnet k = new Campagnes.Carnet();
+                long t = T0;
+                assertNull(Campagnes.demarrer(k, c, 99, t, "tel", CampagnesTest::biblio, "graine" + g, false));
+                Campagnes.Etat e = Campagnes.actualiser(k, CampagnesTest::biblio, t);
+                for (int i = 0; i < 4000 && e.enCours(); i++) {
+                    if (e.enAttente()) t = e.fin;
+                    t += 30_000 + h.nextInt(600) * 1000L;
+                    e = Campagnes.actualiser(k, CampagnesTest::biblio, t);
+                    String ou = c.id + ", graine " + g + ", nœud " + e.noeud;
+                    String r = null;
+                    if (e.phase == Campagnes.Phase.Choix) {
+                        assertFalse(ou + " : aucune option", e.options.isEmpty());
+                        r = Campagnes.choisir(k, c, t, "tel", e.options.get(h.nextInt(e.options.size())).id);
+                    } else if (e.phase == Campagnes.Phase.Epreuve) {
+                        r = h.nextBoolean() ? Campagnes.epreuveAuDe(k, c, t, "tel") : Campagnes.epreuve(k, c, t, "tel", h.nextInt(3) != 0);
+                    } else if (e.phase == Campagnes.Phase.Depart) r = Campagnes.continuer(k, c, t, "tel");
+                    assertNull(ou, r);
+                    e = Campagnes.actualiser(k, CampagnesTest::biblio, t);
+                    assertTrue(ou + " : partie cassée", e.phase != Campagnes.Phase.Cassee);
+                    for (String m : Campagnes.messages(k, "tel-0123456789ab", "tel")) assertTrue(ou + " : message trop gros", Campagnes.octets(m) <= Campagnes.TAILLE_JSON);
+                    // Le carnet gardé puis relu donne le même état (préférences du téléphone).
+                    if (i % 7 == 0) assertEquals(ou, Campagnes.signature(k), Campagnes.signature(Campagnes.relire(Campagnes.sauver(k))));
+                }
+                assertEquals(c.id + ", graine " + g + " : pas de fin (nœud " + e.noeud + ")", Campagnes.Phase.Fin, e.phase);
+                int[] acquis = Campagnes.acquis(k, c);
+                assertTrue(c.id + " : " + acquis[0] + " po, " + acquis[1] + " xp", acquis[0] <= 600 && acquis[1] <= 300);
+            }
+        }
+    }
+
+    @Test
+    public void repriseEtObjetsPortables() {
+        Campagnes.Campagne c = essai();
+        Campagnes.Nomme cape = null;
+        for (Campagnes.Nomme o : c.objets) if (o.id.equals("cape-d-essai")) cape = o;
+        assertNotNull(cape);
+        assertTrue(cape.portable);
+        assertEquals("dos", cape.emplacement);
+        // Nord, vas-y, épreuve réussie, puis le trou : un piège, le repos, et le retour au check-point « b-entree ».
+        Campagnes.Carnet k = new Campagnes.Carnet();
+        long t = T0;
+        assertNull(Campagnes.demarrer(k, c, 9, t, "tel", CampagnesTest::biblio, "g", false));
+        assertNull(Campagnes.choisir(k, c, t += 1000, "tel", "nord"));
+        t = Campagnes.actualiser(k, CampagnesTest::biblio, t).fin;
+        assertNull(Campagnes.continuer(k, c, t, "tel"));
+        t = Campagnes.actualiser(k, CampagnesTest::biblio, t).fin;
+        assertNull(Campagnes.epreuve(k, c, t, "tel", true));
+        assertNull(Campagnes.choisir(k, c, t += 1000, "tel", "trou"));
+        Campagnes.Etat e = Campagnes.actualiser(k, CampagnesTest::biblio, t);
+        assertEquals(Campagnes.Phase.Repos, e.phase);
+        assertFalse(e.reprise);
+        e = Campagnes.actualiser(k, CampagnesTest::biblio, e.fin);
+        assertEquals("b-entree", e.noeud);
+        assertTrue(e.reprise);
+        Campagnes.Message dernier = k.fil.get(k.fil.size() - 1);
+        assertTrue(dernier.reprise);
+        assertEquals("La maison. Par où entrer ?", dernier.texte);
+        assertTrue(Campagnes.relire(Campagnes.sauver(k)).fil.get(k.fil.size() - 1).reprise);
+        assertNull(Campagnes.choisir(k, c, e.t + 1000, "tel", "porte"));
+        e = Campagnes.actualiser(k, CampagnesTest::biblio, e.t + 2000);
+        assertFalse(e.reprise);
+        assertEquals("cape-d-essai", Campagnes.objetsGagnes(k, c).get(0));
+        assertEquals("Testeur de portes", Campagnes.titres(k, c).get(0));
     }
 
     @Test

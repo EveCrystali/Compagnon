@@ -6,6 +6,7 @@
   "accroche": "Pilou part pour sa toute première aventure : la colline d'en face. Il veut savoir où le soleil va se coucher.",
   "niveau": 1,
   "duree": "≈ 15 minutes",
+  "court": true,
   "depart": "p1-lettre",
   "chapitres": [
     { "id": "ch1", "titre": "Le sac à dos", "fichier": "chapitre-01.json" },

@@ -35,8 +35,10 @@ public sealed class CampagnesVecteurs
     {
         if (_essai is not null) return _essai;
         var dossier = Path.Combine(Racine().FullName, "android/app/src/test/resources/campagnes-essai/essai");
-        return _essai = Campagnes.Lire(File.ReadAllText(Path.Combine(dossier, "campagne.json")),
+        _essai = Campagnes.Lire(File.ReadAllText(Path.Combine(dossier, "campagne.json")),
             f => File.Exists(Path.Combine(dossier, f)) ? File.ReadAllText(Path.Combine(dossier, f)) : null)!;
+        Campagnes.Connaitre(_essai); // la boutique connaît ainsi ses objets exclusifs, comme ceux d'une campagne embarquée
+        return _essai;
     }
 
     public static Campagnes.Campagne? Biblio(string id) => id == "essai" ? Essai() : Campagnes.Charger(id);
@@ -236,7 +238,7 @@ public sealed class CampagnesVecteurs
         + ",\"ici\":[\"" + Campagnes.Code(depart) + "\",{},\"\",\"\",\"\",\"\"],\"l\":[" + string.Join(",", appareils.Select(a => "\"" + a + "\"")) + "],\"j\":["
         + string.Join(",", journal.Select(j => $"[{F(j.E)},{F(j.Dt)},{F(j.A)},\"{Campagnes.Code(j.N)}\",{F(j.V)}]")) + "]}";
 
-    private void Marche(string id, int graine, int pas)
+    private void Marche(string id, int graine, int pas, bool abandon = true)
     {
         var h = new Hasard(Hasard.Graine($"marche|{id}|{graine}"));
         long t = T0 + graine * 977_000L + 123;
@@ -269,7 +271,7 @@ public sealed class CampagnesVecteurs
                         Rejouer(t + (e.Fin - t) / 2);                      // au milieu de l'attente : toujours là
                         Decider(t + 1000, a, Campagnes.Suite);             // rien à décider pendant l'attente
                     }
-                    if (h.Suivant(12) == 0) Decider(t + 2000, a, Campagnes.Abandon);
+                    if (abandon && h.Suivant(12) == 0) Decider(t + 2000, a, Campagnes.Abandon);
                     else t = e.Fin + h.Suivant(90) * 1000L;
                     break;
             }
@@ -279,6 +281,19 @@ public sealed class CampagnesVecteurs
         Rejouer(t + 86_400_000);
         Compacter(t + 86_400_000);
         Rejouer(t + 86_400_000);
+    }
+
+    // Des vecteurs pour d'autres campagnes (une campagne en cours d'écriture, par exemple) : quelques parties entières
+    // chacune, à faire rejouer par le moteur Java (PILOU_VECTEURS=<fichier> côté CampagnesTest).
+    public static string Pour(IEnumerable<Campagnes.Campagne> campagnes)
+    {
+        var s = new CampagnesVecteurs();
+        foreach (var c in campagnes)
+        {
+            Campagnes.Connaitre(c);
+            for (int g = 0; g < 3; g++) s.Marche(c.Id, g, 400, abandon: false);
+        }
+        return string.Join("\n", s.L) + "\n";
     }
 
     public static string Tout()

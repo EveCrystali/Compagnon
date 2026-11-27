@@ -6,6 +6,7 @@
   "accroche": "Un petit labyrinthe qui passe par toutes les règles du moteur. Elle ne sert qu'aux tests (PC et Android).",
   "niveau": 3,
   "duree": "≈ 2 heures",
+  "court": true,
   "depart": "a-debut",
   "chapitres": [
     { "id": "a", "titre": "Le carrefour", "fichier": "chapitre-01.json" },
@@ -14,7 +15,9 @@
   "variables": { "courage": 1, "ruse": 0 },
   "objets": [
     { "id": "cle", "nom": "Clé" },
-    { "id": "pain", "nom": "Pain" }
+    { "id": "pain", "nom": "Pain" },
+    { "id": "cape-d-essai", "nom": "Cape d'essai", "portable": true, "emplacement": "dos" },
+    { "id": "caillou-d-essai", "nom": "Caillou d'essai", "portable": true }
   ],
   "souvenirs": [
     { "id": "s-bon", "nom": "La porte ouverte", "texte": "Tu es entré par la porte." },
