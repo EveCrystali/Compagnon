@@ -62,7 +62,7 @@
       "options": [
         { "id": "ch10-plan-a-formulaire", "libelle": "Remplis la case : demande à l'enregistrer", "vers": "ch10-enr-formulaire", "si": { "tous": [ { "objet": "formulaire" }, { "var": "tampons", "min": 3 } ] }, "effets": [ { "drapeau": "plan-enregistre" } ] },
         { "id": "ch10-plan-a-corbeille", "libelle": "Glisse-le dans la Corbeille avant 13 h 38", "vers": "ch10-corbeille", "effets": [ { "drapeau": "plan-corbeille" } ] },
-        { "id": "ch10-plan-a-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause" },
+        { "id": "ch10-plan-a-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause", "si": { "non": { "drapeau": "pause-refusee" } } },
         { "id": "ch10-plan-a-ticket", "libelle": "Fais confiance au ticket n° 1 338", "vers": "ch10-seconde", "si": { "tous": [ { "objet": "ticket" }, { "drapeau": "sait-seconde" }, { "var": "complicite", "min": 5 } ] }, "effets": [ { "drapeau": "plan-seconde" } ] }
       ]
     },
@@ -75,7 +75,7 @@
       "options": [
         { "id": "ch10-plan-b-touches", "libelle": "Appelle Ctrl et S : qu'elles l'enregistrent", "vers": "ch10-enr-touches", "si": { "drapeau": "s-apprivoisee" }, "effets": [ { "drapeau": "plan-enregistre" } ] },
         { "id": "ch10-plan-b-papier", "libelle": "Fais-le imprimer, en bleu", "vers": "ch10-imprime" },
-        { "id": "ch10-plan-b-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause" },
+        { "id": "ch10-plan-b-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause", "si": { "non": { "drapeau": "pause-refusee" } } },
         { "id": "ch10-plan-b-ticket", "libelle": "Fais confiance au ticket n° 1 338", "vers": "ch10-seconde", "si": { "tous": [ { "objet": "ticket" }, { "drapeau": "sait-seconde" }, { "var": "complicite", "min": 5 } ] }, "effets": [ { "drapeau": "plan-seconde" } ] }
       ]
     },
@@ -136,7 +136,7 @@
       "type": "choix",
       "humeur": "malice",
       "texte": [
-        "J'ai sorti mon ticket. Numéro 1 338. Ici, le numéro appelé, c'est l'heure : à 13 h 38 pile, mon guichet ouvre, et je serai le premier servi de tout l'ordinateur. Et la gargouille l'a dit : parfois, on glisse une seconde en plus. Une seconde à personne. Alors voilà mon idée : je réclame. Le remboursement du temps perdu. Depuis ce matin, j'ai de quoi.",
+        "J'ai sorti mon ticket. Numéro 1 338. Ici, le numéro appelé, c'est l'heure : à 13 h 38 pile, mon guichet ouvre. Et Grumeau l'a dit, sur le banc : quand ton numéro sort, tu as droit à une réclamation. Une seule. La gargouille, elle, a dit que parfois on glisse une seconde en plus, une seconde à personne. Alors voilà ma réclamation : le remboursement du temps perdu. Depuis ce matin, j'ai de quoi.",
         "Brouillon ne comprend pas. Grumeau, si. Je l'ai vu comprendre : son sable a coulé d'un trait. « Il te faudra un témoin. Quelqu'un d'assermenté, qui certifie que tu as attendu. » Il a toussé. « Je connais quelqu'un. » Reste à décider où je mets Brouillon pendant que je cours au guichet. Où ?"
       ],
       "options": [
@@ -176,7 +176,7 @@
       "type": "attente",
       "humeur": "peur",
       "texte": [
-        "La minute la plus longue de ma vie commence. Grumeau la compte à la main, il s'est retourné exprès, il ne laisse ça à personne. Avec son grumeau, sa minute fait un peu plus de soixante secondes. Je ne vais pas m'en plaindre. En bas de l'escalier, le pas régulier se rapproche, avec le frottement du balai. Je ne peux plus rien faire d'autre que ce qu'on a décidé. Reste avec moi jusqu'au bout."
+        "La minute la plus longue de ma vie commence. Grumeau la compte à la main, il ne laisse ça à personne. Au trentième grain, sans lever les yeux, il a dit : « Je ne vais pas dans la même direction que toi, Pilou. Je vais avec toi. Nuance. » Pilou. Pas « petit ». Pas « pâté ». Il connaissait mon nom depuis le début. En bas de l'escalier, le pas régulier se rapproche, avec le frottement du balai. Reste avec moi jusqu'au bout."
       ],
       "duree_min": 5,
       "duree_max": 8,
@@ -203,7 +203,7 @@
       "texte": [
         "Le Balayeur a levé son balai au-dessus de Brouillon. Et il s'est arrêté. Il a lu la première ligne, celle qu'on venait d'écrire en bleu. « Vous avez un nom. Un emplacement. Vous êtes enregistré. » Il a reposé son balai. « Alors vous n'êtes plus temporaire. Toutes mes excuses, monsieur. » Il a balayé autour, très soigneusement, les coins d'abord. Brouillon n'osait pas respirer. Puis il a dit son nom, en entier. Avec un point à la fin. Son premier.",
         "Le reste est allé vite. Le Tic-Tac a négocié, des deux côtés : il veut une minute à lui par jour. Qui le remplace ? Grumeau a levé le socle avant tout le monde. Une minute par jour, c'est lui qui compte, à la main, pour quelqu'un. Sa minute fait soixante-quatre secondes. Alors si un jour, vers la fin de l'après-midi, une minute te paraît un tout petit peu longue : ne dis rien. C'est lui.",
-        "Dans le Hall, on a appelé le 1 338. Je n'y suis pas allé : je n'avais plus rien à réclamer. Regarde en bas de ton écran. 13 h 39. 13 h 40. Ça tourne ! Je remonte. À 16 h pile, tu sais ce que je fais. Merci d'avoir choisi avec moi. Tout seul, je n'aurais jamais su finir. Point final. Tu as vu ? J'en ai mis un, moi aussi."
+        "Dans le Hall, on a enfin appelé le 1 338. Je n'y suis pas allé : qu'est-ce que j'aurais réclamé ? Une seconde de plus, peut-être. Une autre fois. Regarde en bas de ton écran. 13 h 39. 13 h 40. Ça tourne ! Je remonte. À 16 h pile, tu sais ce que je fais. Merci d'avoir choisi avec moi. Tout seul, je n'aurais jamais su finir. Point final. Tu as vu ? J'en ai mis un, moi aussi."
       ],
       "issue": "bonne",
       "titre": "Enregistré sous…",
@@ -239,7 +239,7 @@
       "decor": "hall-pas-comptes",
       "humeur": "joie",
       "texte": [
-        "Au même instant, dans le Hall, l'afficheur a changé : « Numéro appelé : 1 338. » J'ai couru comme jamais. Le Balayeur, lui, a commencé par les coins. Au guichet : Mlle Renvoi. « Motif de la réclamation* ? » Temps perdu. « Quantité ? » Grumeau s'est avancé : « Matricule 0003, sablier assermenté. Je certifie que cette goutte attend depuis ce matin. Je l'ai compté moi-même. Cent quarante retournements. Et je ne suis le minuteur de personne. »",
+        "Et là-bas, dans le Hall, l'afficheur a changé : « Numéro appelé : 1 338. » J'ai couru comme jamais. Le Balayeur, lui, a commencé par les coins. Au guichet : Mlle Renvoi. « Motif de la réclamation* ? » Temps perdu. « Quantité ? » Grumeau s'est avancé : « Matricule 0003, sablier assermenté. Je certifie que cette goutte attend depuis ce matin. J'ai compté moi-même : cent quarante retournements. Et je ne suis le minuteur de personne. »",
         "Elle a tamponné. « Remboursement accordé* : une seconde. » Une seule, c'est le barème. « Où la voulez-vous ? » J'ai dit : juste avant 13 h 38. J'ai retourné le reçu pour lire l'astérisque : « *Remboursement rétroactif. » Et dans l'Horloge, entre 13 h 37 et 59 secondes et 13 h 38, une seconde de plus s'est ouverte, comme une porte dans un mur. 13 h 37 et 60 secondes. Elle n'est sur aucun planning. Le balai est retombé sur du vide.",
         "Brouillon habite là. Dans une seconde qui n'est à personne, où rien n'est jamais dû, où un brouillon a le droit de rester un brouillon. Il n'a pas fini sa phrase. Il dit qu'il a tout son temps. Le Tic-Tac y prend sa pause chaque jour, dans le hamac : enfin une seconde à lui. Et pendant qu'il s'y repose, c'est Grumeau qui bat à sa place. Il compte pour quelqu'un. Il râle que c'est mal payé.",
         "Regarde en bas de ton écran : 13 h 39. Ça tourne. Mais chaque jour, juste avant 13 h 38, si tu fais très attention, il y a une seconde qui dure un tout petit peu trop. Fais-leur coucou. Moi, j'ai gardé mon ticket. Il ne vaut plus rien. Grumeau dit que c'est pour ça qu'on les garde. À 16 h, il y a goûter. Tu es invité : c'est toi qui as compté pour nous."
@@ -253,11 +253,22 @@
       "humeur": "triste",
       "texte": [
         "J'ai lâché le levier. On ne relance pas. Brouillon a mis du temps à y croire, puis il a tremblé de joie, ce qui chez lui ressemble beaucoup au reste. Le Tic-Tac a haussé le balancier : « Une pause — qui dure, — on ne va pas — dire non. » Et il est reparti vers son hamac. Grumeau n'a rien dit. Il a regardé, très loin, la direction de son guichet. « Retour à 13 h 38. » Jamais, donc.",
-        "Voilà. Il est 13 h 37 et il le restera. Plus de 16 h, plus de goûter, plus de demain. Il faut bien que je m'installe quelque part dans cette minute, puisqu'on va y vivre. Où est-ce que je me mets ?"
+        "Voilà. Il est 13 h 37 et il le restera. Plus de 16 h, plus de goûter, plus de demain. Il y a un guichet libre, le 9 : on dirait qu'il m'attendait. Il faut bien que je m'installe quelque part, puisqu'on va vivre dans cette minute. Je le prends ?"
       ],
       "options": [
         { "id": "ch10-pause-guichet", "libelle": "Prends le guichet 9, il est libre", "vers": "ch10-fin-pause" },
-        { "id": "ch10-pause-file", "libelle": "Assieds-toi dans la file, avec les autres", "vers": "ch10-fin-pause" }
+        { "id": "ch10-pause-grumeau", "libelle": "Regarde Grumeau une dernière fois", "vers": "ch10-pause-non", "effets": [ { "drapeau": "pause-refusee" } ] }
+      ]
+    },
+    "ch10-pause-non": {
+      "type": "hasard",
+      "humeur": "determine",
+      "texte": [
+        "J'ai regardé Grumeau. Il fixait toujours la direction de son guichet, son ticket 1 337 serré contre le verre. Il ne dira jamais rien, je le connais maintenant. Alors je l'ai dit pour lui : « Non. On relance. » Brouillon a cessé de trembler de joie et s'est mis à trembler tout court. Le Tic-Tac est revenu sur son balancier, sans un reproche. Grumeau a fait « mmh ». Le plus beau « mmh » de la journée. Bon. Je te redis ce qu'on a, et cette fois on choisit pour de bon. Brouillon va sûrement retenter sa chance."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-plan-a", "si": { "drapeau": "route-guichets" } },
+        { "poids": 1, "vers": "ch10-plan-b", "si": { "non": { "drapeau": "route-guichets" } } }
       ]
     },
     "ch10-fin-pause": {
@@ -266,7 +277,7 @@
       "decor": "hall-pas-comptes",
       "humeur": "triste",
       "texte": [
-        "Je me suis installé. On s'y fait. Le Hall des Pas Comptés est calme, à 13 h 37 : la file ne bouge pas, le haut-parleur répète que notre attente est estimée à 13 h 38, et le Rond dit « Un instant… » au-dessus de la porte, pour toujours. On m'a confié un guichet, finalement. Le 9. J'ai un panneau à mon nom : « Pilou, stagiaire. Pause déjeuner. Retour à 13 h 38. »",
+        "Je me suis installé. On s'y fait. Le Hall des Pas Comptés est calme, à 13 h 37 : la file ne bouge pas, le haut-parleur répète que notre attente est estimée à 13 h 38, et quelque part le Rond dit « Un instant… », pour toujours. On m'a confié un guichet, finalement. Le 9. J'ai un panneau à mon nom : « Pilou, stagiaire. Pause déjeuner. Retour à 13 h 38. »",
         "Brouillon vient me voir tous les jours, enfin toutes les fois. Il est content, il est vivant, il commence des phrases. Le Balayeur attend devant Temp, le balai levé, sans rancune. La cantine est fermée. Tout le monde a faim, très poliment. Et Grumeau s'est rassis sur son banc, avec le ticket 1 337. Il se retourne, il compte, pour rien, pour personne. Je n'arrive pas à regarder de ce côté-là.",
         "Chez toi, en bas de l'écran, il est 13 h 37. Il sera 13 h 37 ce soir, et demain, et à Noël. Je crois qu'on a sauvé quelqu'un et oublié tous les autres, moi compris. Si un jour tu veux bien qu'on réessaie, viens toquer à ma vitre. Je suis là. Comme tout le monde ici : le prochain. Pour longtemps."
       ],

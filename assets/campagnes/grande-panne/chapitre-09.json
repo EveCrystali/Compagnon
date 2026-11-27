@@ -154,9 +154,17 @@
       ],
       "options": [
         { "id": "ch9-demi-moi", "libelle": "Toi : tu diras tac entre chaque tic", "vers": "ch9-demi-montee" },
-        { "id": "ch9-demi-grumeau", "libelle": "Grumeau : il a trente ans de métier", "vers": "ch9-demi-montee" },
+        { "id": "ch9-demi-grumeau", "libelle": "Grumeau : il a trente ans de métier", "vers": "ch9-demi-refus" },
         { "id": "ch9-demi-retour", "libelle": "Personne : fais demi-tour, raccroche le hamac", "vers": "ch9-veille" }
       ]
+    },
+    "ch9-demi-refus": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai regardé Grumeau. Il a reculé d'un grain. « Moi ? Faire le tac ? Je coule, petit, je ne bats pas. Et je ne relancerai pas une horloge à cloche-pied. » Puis, plus bas : « On rentre. On raccroche ce hamac. Et on attend. Attendre, c'est mon métier, je te rappelle. Pour une fois qu'il sert à quelque chose. » Il avait raison. On a refait les vingt pas dans l'autre sens. Brouillon nous a rouvert sans rien dire, avec un soulagement qui faisait du vent."
+      ],
+      "suite": "ch9-veille"
     },
     "ch9-demi-montee": {
       "type": "attente",
@@ -176,7 +184,7 @@
       "decor": "horloge-systeme",
       "humeur": "fatigue",
       "texte": [
-        "On a relancé l'horloge. Enfin, la moitié. Le côté tic a battu, et à la place du tac, il y a eu nous, en retard, à côté, jamais au même endroit. Le balancier est reparti, mais il boite : tic… rien… tic… rien. Regarde en bas de ton écran. Ça avance ? Oui. Une seconde sur deux. Il a fallu deux minutes pour arriver à 13 h 38. Les guichets ont rouvert à moitié : un rideau sur deux.",
+        "On a relancé l'horloge. Enfin, la moitié. Le côté tic a battu, et à la place du tac, il y a eu moi, en retard, à côté, jamais au même endroit. Le balancier est reparti, mais il boite : tic… rien… tic… rien. Regarde en bas de ton écran. Ça avance ? Oui. Une seconde sur deux. Il a fallu deux minutes pour arriver à 13 h 38. Les guichets ont rouvert à moitié : un rideau sur deux.",
         "Tout marche au ralenti, maintenant. La file avance d'un demi-pas. Le Balayeur est entré dans Temp à demi-vitesse, et Brouillon court devant lui, deux fois moins vite aussi, ce qui fait une poursuite très longue et très polie. Personne ne rattrape personne. Le côté tac dort toujours. Il paraît qu'une première sieste, ça peut durer des années.",
         "Grumeau a fait le calcul : à ce rythme, le goûter de 16 h tombe à 32 h. Il dit que c'est ma faute, puis que c'est la sienne, puis il se retourne, par habitude. On aurait dû attendre. Pour une fois qu'attendre servait à quelque chose. Je te laisse, on m'appelle. Enfin, on m'appelle à moitié. Si tu veux essayer autrement, tu sais où me trouver : à 13 h 38 et demie."
       ],
