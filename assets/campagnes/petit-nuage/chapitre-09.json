@@ -21,7 +21,7 @@
       ],
       "options": [
         { "id": "ch9-traverse-seul", "libelle": "Qu'il se tienne seul, comme sur le toit : le ventre rentré", "vers": "ch9-tient", "si": { "drapeau": "sait-tenir" }, "effets": [ { "var": "lien", "plus": 2 } ] },
-        { "id": "ch9-traverse-caillou", "libelle": "Dis-lui de se faire petit et dur comme un caillou, et de te suivre", "vers": "ch9-caillou" },
+        { "id": "ch9-traverse-caillou", "libelle": "Dis-lui de se faire petit et dur comme un caillou", "vers": "ch9-caillou" },
         { "id": "ch9-traverse-serre", "libelle": "Serre-le contre toi, très fort, et avance", "vers": "ch9-dechire" }
       ]
     },

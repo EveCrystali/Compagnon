@@ -38,7 +38,7 @@
       "options": [
         { "id": "ch10-trop-tard-ensemble", "libelle": "Descends avec lui, toute la nuit, sans t'arrêter", "vers": "ch10-descente", "effets": [ { "drapeau": "descente-nuit" } ] },
         { "id": "ch10-trop-tard-seul", "libelle": "Envoie-le devant, seul. Tu le rejoindras.", "vers": "ch10-mots", "effets": [ { "drapeau": "seul-devant" } ] },
-        { "id": "ch10-trop-tard-plume", "libelle": "Fais sonner la plume de fer, de là-haut, le plus fort possible", "vers": "ch10-sonne", "si": { "objet": "plume" }, "effets": [ { "drapeau": "ondee" }, { "drapeau": "attendu" }, { "drapeau": "descente-nuit" } ] }
+        { "id": "ch10-trop-tard-plume", "libelle": "Fais sonner la plume de fer, là-haut, le plus fort possible", "vers": "ch10-sonne", "si": { "objet": "plume" }, "effets": [ { "drapeau": "ondee" }, { "drapeau": "attendu" }, { "drapeau": "descente-nuit" } ] }
       ]
     },
     "ch10-sonne": {

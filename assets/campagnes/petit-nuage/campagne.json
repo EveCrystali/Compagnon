@@ -30,12 +30,12 @@
     { "id": "cafe", "nom": "Café de gland" },
     { "id": "plume", "nom": "Plume de fer" },
     { "id": "bocal", "nom": "Grand bocal" },
-    { "id": "casserole-chapeau", "nom": "Casserole-chapeau" },
-    { "id": "baluchon-cabosse", "nom": "Baluchon cabossé" },
-    { "id": "bonnet-de-givre", "nom": "Bonnet de givre" },
-    { "id": "caillou-du-col", "nom": "Caillou du col" },
-    { "id": "echarpe-de-veille", "nom": "Écharpe de veille" },
-    { "id": "plume-de-girouette", "nom": "Plume de girouette" }
+    { "id": "casserole-chapeau", "nom": "Casserole-chapeau", "portable": true, "emplacement": "tete" },
+    { "id": "baluchon-cabosse", "nom": "Baluchon cabossé", "portable": true, "emplacement": "dos" },
+    { "id": "bonnet-de-givre", "nom": "Bonnet de givre", "portable": true, "emplacement": "tete" },
+    { "id": "caillou-du-col", "nom": "Caillou du col", "portable": true, "emplacement": "main" },
+    { "id": "echarpe-de-veille", "nom": "Écharpe de veille", "portable": true, "emplacement": "cou" },
+    { "id": "plume-de-girouette", "nom": "Plume de girouette", "portable": true, "emplacement": "tete" }
   ],
   "souvenirs": [
     { "id": "rond-sec", "nom": "Le rond sec", "texte": "Il a plu partout sur la rive, sauf sur toi. Un cercle d'herbe sèche, juste à ta taille." },
