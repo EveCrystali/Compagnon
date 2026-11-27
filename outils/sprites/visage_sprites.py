@@ -16,7 +16,7 @@ LANGUE = "#f69d50"
 LANGUE_C = "#ffc89a"
 IRIS = "#34496e"        # reflet bas de l'œil (dessin fin seulement)
 GOUTTE, GOUTTE_C = "#1f4f8a", "#b4dbff"
-COLERE, COLERE_C = "#8a4a1f", "#f69d50"
+COLERE, COLERE_C = "#d9803a", "#ffc89a"
 
 PAL = {"k": ENCRE, "w": BLANC, "o": "@ombre", "c": "@contour", "i": IRIS, "m": BOUCHE, "t": LANGUE, "h": LANGUE_C,
        "g": GOUTTE, "b": GOUTTE_C, "r": COLERE, "s": COLERE_C}

@@ -4,7 +4,7 @@ slot: visage
 ancre: yeux
 decalage: 20 -14
 duree: 300
-palette: a=#8a4a1f b=#f69d50
+palette: a=#d9803a b=#ffc89a
 images:
 aaaa..aaaa
 abba..abba

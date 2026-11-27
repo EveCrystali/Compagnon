@@ -237,7 +237,7 @@ def nage():
         for x in range(4, 42, 7):
             t.ligne(x, 2.5, x - 0.5, 10, O1)                       # coutures des quartiers
     t.contour(ENCRE)
-    ecrire("voyage-bouee", t, slot="dos", ancre="cou", point=(21, 2),
+    ecrire("voyage-bouee", t, slot="dos", ancre="cou", point=(21, -1),
            commentaire="Tenue de voyage « nage » : bouée")
 
     images = []
@@ -253,7 +253,7 @@ def nage():
                 t.ell(x + 0.5, y + 0.5, 0.7, 0.9, B4)
                 t.p(x + 0.5, y, BLANC)
         images.append(t)
-    ecrire("voyage-brasse", images, slot="main", ancre="cou", point=(24, 0), duree=450,
+    ecrire("voyage-brasse", images, slot="main", ancre="cou", point=(24, -2), duree=450,
            commentaire="Tenue de voyage « nage » : les mains qui brassent")
 
 

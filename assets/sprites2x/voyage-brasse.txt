@@ -2,7 +2,7 @@
 id: voyage-brasse
 slot: main
 ancre: cou
-decalage: -48 0
+decalage: -48 4
 duree: 450
 palette: a=#b4dbff b=#ffffff c=@contour d=@ombre e=@base
 images:

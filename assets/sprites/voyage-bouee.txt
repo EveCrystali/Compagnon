@@ -2,7 +2,7 @@
 id: voyage-bouee
 slot: dos
 ancre: cou
-decalage: -21 -2
+decalage: -21 1
 palette: a=#1c2128 b=#d9803a c=#f69d50 d=#f6f8fa
 images:
 ...........aaaaaaaaaaaaaaaaaaaa...........

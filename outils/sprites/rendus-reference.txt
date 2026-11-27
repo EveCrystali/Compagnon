@@ -66,7 +66,7 @@ expr=surpris t=150 saut=1.5 | f57382f466f91b583ffb7ded1e8faf85ddf8be97d2773e1133
 expr=determine t=640 regard=1 | 7fe2ba88df6f27506ee89f402ebaf990d0e076294d3aeb599a15a1e38a0eeaff
 expr=fatigue t=1200 | ea59e1764c52775846b53a78645a1d9891c635ef9270ab42dc5e5c8b60aed562
 expr=tendre t=700 stade=3 | 7f26017270f1346e448081293f01e8ada308c70f86d892a444a6b44eda884eed
-expr=colere t=350 stade=4 | 21282da7e538e4532c17bae2315cb9e1d5c52378c3a2507d068b35b9e9d4a885
+expr=colere t=350 stade=4 | 1aeb30c9046e064b8f03d08dd05dc6da9b46dcffc775e541409031c7e02e1252
 expr=malice t=500 stade=1 | 9ba4dd44d321f26baa78846fcfbea20fdfc67ab8b8dc51608e48e0c739ae952c
 expr=neutre t=260 cligne=1 | 7e9ec35c4d336de40e6df38cc17c1aa98b256dacf092f7ddf9be5c961a7952fc
 expr=triste t=1300 stade=1 objets=echarpe | 95c76fd1fd558fa30af14226a1e4b7ad6c6998f58da4e3a754aec41d597e8b11
@@ -75,7 +75,7 @@ expr=repos t=250 tenue=voyage-marche | e114fde8f2ba59395fe4bdc4f03239ed4c66dbb19
 expr=determine t=410 tenue=voyage-course | 5cf3802ba292ac2bf24e276141ee061456625f8a3137d71d18766cb8f5092627
 expr=joie t=780 tenue=voyage-bateau | 1e861de67601a1fe3e138531358e6203148fe1a832c66f9ca43ebce63b580170
 expr=determine t=630 tenue=voyage-grimpe stade=3 | 09a1fb2e780cc87a9102f9abe6470fc8f6ee5984de8e79d7b906e6e204f521ab
-expr=repos t=1150 tenue=voyage-nage | 28b8ab8c29d3b9a08246e95352698492def90c8fb2462af68ed6cecf81941697
+expr=repos t=1150 tenue=voyage-nage | b3a1ac1b95eb2ce52405397b8703eae0353adfe6f2d1d71a1885f2c7e59c944e
 expr=repos t=2100 tenue=voyage-nuit | f6ebe5e6c22d2de2a144ea519dd219b2a437b123fc65c6b18671f36d818b9089
 expr=peur t=950 tenue=voyage-cache | 79e99088fff16b121147db177acac710e926b8c36b236df0e4111ad1e8c5a97f
 expr=neutre t=3000 tenue=voyage-attend | 73e83721d82dc5aece253a3ece8dac4c59eba6a3fcfe408149fa8cb864f35cce
