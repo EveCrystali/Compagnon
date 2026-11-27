@@ -20,7 +20,7 @@ internal sealed class Bandeau : Border
     private readonly TextBlock _titre = new() { Foreground = Argent, FontSize = 11, FontFamily = new FontFamily("Segoe UI") };
     private readonly StackPanel _barre = new() { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 3, 0, 2) };
     private readonly TextBlock _xp = new() { Foreground = Argent, FontSize = 10.5, FontFamily = new FontFamily("Segoe UI") };
-    private readonly Pixels? _piece = Pixels.Sprite("po-tourne", 2);
+    private readonly Pixels? _piece = Pixels.Sprite("po-tourne", 2, dansPilou: false);
     private readonly TextBlock _po = new()
     {
         Foreground = OrangePo, FontSize = 17, FontWeight = FontWeights.Bold, FontFamily = new FontFamily("Consolas"),
@@ -158,13 +158,27 @@ internal sealed class Bandeau : Border
 // Rendus de Pilou pour l'interface (boutique, fiches) : même rendu commun que la scène (RenduPilou).
 internal static class Apercu
 {
-    public static BitmapSource Image(Allure a, bool silhouette = false)
+    // fin : rendu fin (grille 96 × 112) si le réglage « Dessin fin » est actif. L'image garde sa taille en unités
+    // (48 × 56 : elle porte 192 points par pouce), les mises en page ne changent pas.
+    public static BitmapSource Image(Allure a, bool silhouette = false, bool fin = false)
     {
-        var pixels = RenduPilou.Rendre(a, Banque.Commune);
-        return Bitmap(pixels, RenduPilou.W, RenduPilou.H, silhouette);
+        int e = fin && Finesse.Active ? 2 : 1;
+        var pixels = RenduPilou.Rendre(a, Banque.Commune, e);
+        return Bitmap(pixels, RenduPilou.W * e, RenduPilou.H * e, silhouette, 96.0 * e);
     }
 
-    public static BitmapSource Bitmap(uint[] pixels, int w, int h, bool silhouette = false)
+    // Comme Image, mais rien si les pixels sont ceux de l'image précédente (vues animées : pas de bitmap refait
+    // quand Pilou n'a pas bougé). precedent : gardé par l'appelant d'un appel à l'autre.
+    public static BitmapSource? ImageSiChange(Allure a, ref uint[]? precedent, bool fin = false)
+    {
+        int e = fin && Finesse.Active ? 2 : 1;
+        var pixels = RenduPilou.Rendre(a, Banque.Commune, e);
+        if (precedent is not null && pixels.AsSpan().SequenceEqual(precedent)) return null;
+        precedent = pixels;
+        return Bitmap(pixels, RenduPilou.W * e, RenduPilou.H * e, false, 96.0 * e);
+    }
+
+    public static BitmapSource Bitmap(uint[] pixels, int w, int h, bool silhouette = false, double dpi = 96)
     {
         var bgra = new byte[pixels.Length * 4];
         for (int i = 0; i < pixels.Length; i++)
@@ -176,7 +190,7 @@ internal static class Apercu
             bgra[i * 4 + 2] = (byte)(c >> 16);
             bgra[i * 4 + 3] = (byte)(c >> 24);
         }
-        var image = BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgra32, null, bgra, w * 4);
+        var image = BitmapSource.Create(w, h, dpi, dpi, PixelFormats.Bgra32, null, bgra, w * 4);
         image.Freeze();
         return image;
     }

@@ -408,18 +408,12 @@ public final class RenduPilou {
             geo.sommet = Math.floorDiv(sommet, ec); geo.ey = Math.floorDiv(ey, ec); geo.pied = Math.floorDiv(pied, ec);
         }
 
-        // Ancres : tete, yeux, bouche, cou, corps, main, main-g, pieds, cote, antenne.
-        java.util.Map<String, int[]> ancres = new java.util.HashMap<>();
-        ancres.put("tete", new int[]{c0 + dx, sommet});
-        ancres.put("yeux", new int[]{c0 + dxf, ey});
-        ancres.put("bouche", new int[]{c0 + dxf, ey + 9 * ec});
-        ancres.put("cou", new int[]{c0 + dx, rond(cy + ry * 0.45)});
-        ancres.put("corps", new int[]{c0 + dx, rond(cy)});
-        ancres.put("main", new int[]{rond(cx + rx) - ec, rond(cy + ry * 0.15)});
-        ancres.put("main-g", new int[]{rond(cx - rx), rond(cy + ry * 0.15)});
-        ancres.put("pieds", new int[]{c0 + dx, pied});
-        ancres.put("cote", new int[]{rond(cx + rx * 0.45), pied + 2 * ec});
-        ancres.put("antenne", new int[]{c0 + dx + 2 * balance, sommet - hautAntenne});
+        // Ancres (x puis y), dans l'ordre d'ANCRES : tete, yeux, bouche, cou, corps, main, main-g, pieds, cote, antenne.
+        int[] ancres = {
+                c0 + dx, sommet, c0 + dxf, ey, c0 + dxf, ey + 9 * ec, c0 + dx, rond(cy + ry * 0.45), c0 + dx, rond(cy),
+                rond(cx + rx) - ec, rond(cy + ry * 0.15), rond(cx - rx), rond(cy + ry * 0.15), c0 + dx, pied,
+                rond(cx + rx * 0.45), pied + 2 * ec, c0 + dx + 2 * balance, sommet - hautAntenne,
+        };
 
         // Astral : couronne d'étincelles en orbite.
         List<int[]> orbite = new ArrayList<>();
@@ -454,6 +448,31 @@ public final class RenduPilou {
             }
         }
 
+        // Rendu fin : le corps (ellipse, bosses et bras du Nimbus, pieds) tient dans un cadre connu d'avance ; les
+        // boucles du corps et du cerne ne parcourent que lui (mêmes pixels qu'en parcourant toute la grille).
+        int bx0 = 0, bx1 = w - 1, by0 = 0, by1 = h - 1;
+        if (ec != 1) {
+            double mg = st == 3 ? 0.3 * ry + 1 : 1;
+            double gx0 = cx - rx - mg, gx1 = cx + rx + mg, gy0 = cy - ry - mg, gy1 = cy + ry + mg;
+            if (st == 3) {
+                double bras = rx + 4.4 * ec + 1;
+                gx0 = Math.min(gx0, cx - bras);
+                gx1 = Math.max(gx1, cx + bras);
+                gy0 = Math.min(gy0, cy + ry * 0.28 - 3.2 * ec - 1);
+                gy1 = Math.max(gy1, cy + ry * 0.28 + 3.2 * ec + 1);
+            }
+            if (a.assis <= 0.5) {
+                gx0 = Math.min(gx0, (C - 10) * ec + dx);
+                gx1 = Math.max(gx1, (C + 10) * ec + dx);
+                gy0 = Math.min(gy0, pied - 2 * ec);
+                gy1 = Math.max(gy1, pied + 4 * ec);
+            }
+            bx0 = Math.max(0, (int) Math.floor(gx0));
+            bx1 = Math.min(w - 1, (int) Math.ceil(gx1));
+            by0 = Math.max(0, (int) Math.floor(gy0));
+            by1 = Math.min(h - 1, (int) Math.ceil(gy1));
+        }
+
         // Corps : ombrage tramé, reflet ; Nimbus : volutes et bras ; puis cerne.
         double[][] bosses = null;
         if (st == 3) {
@@ -464,8 +483,8 @@ public final class RenduPilou {
                 bosses[i] = new double[]{cx + Math.cos(an) * rx * 0.84, cy + Math.sin(an) * ry * 0.84, ry * (degres[i] < 0 ? 0.3 : 0.24)};
             }
         }
-        for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++) {
+        for (int y = by0; y <= by1; y++)
+            for (int x = bx0; x <= bx1; x++) {
                 double u = (x + 0.5 - cx) / rx, v = (y + 0.5 - cy) / ry, r2 = u * u + v * v;
                 boolean dans = r2 <= 1;
                 if (!dans && bosses != null) {
@@ -485,8 +504,8 @@ public final class RenduPilou {
         if (st == 3)
             for (int sg = -1; sg <= 1; sg += 2) {
                 double bx = cx + sg * (rx + 1.2 * ec), by = cy + ry * 0.28 + Math.sin(t / 300 + sg) * 0.8 * ec;
-                for (int y = 0; y < h; y++)
-                    for (int x = 0; x < w; x++)
+                for (int y = by0; y <= by1; y++)
+                    for (int x = bx0; x <= bx1; x++)
                         if (Math.pow((x + 0.5 - bx) / (3.2 * ec), 2) + Math.pow((y + 0.5 - by) / (2.4 * ec), 2) <= 1) m[y * w + x] = te[1];
             }
         if (a.assis <= 0.5) {
@@ -523,13 +542,14 @@ public final class RenduPilou {
         } else {
             // Cerne fin : deux pixels d'épaisseur, diagonales comprises (tout ce qui est à moins de √5 du vide).
             boolean[] bord1 = tampon != null ? tampon.bord : new boolean[w * h];
-            for (int y = 0; y < h; y++)
-                for (int x = 0; x < w; x++)
+            for (int y = by0; y <= by1; y++)
+                for (int x = bx0; x <= bx1; x++)
                     bord1[y * w + x] = m[y * w + x] != 0
                             && (x == 0 || y == 0 || x == w - 1 || y == h - 1 || m[y * w + x - 1] == 0 || m[y * w + x + 1] == 0
                             || m[(y - 1) * w + x] == 0 || m[(y + 1) * w + x] == 0);
-            for (int y = 0; y < h; y++)
-                for (int x = 0; x < w; x++) {
+            // Hors du cadre, tout est vide : le test du vide passe avant la lecture du premier passage.
+            for (int y = by0; y <= by1; y++)
+                for (int x = bx0; x <= bx1; x++) {
                     int c = m[y * w + x];
                     if (c == 0) continue;
                     boolean bord = x == 0 || y == 0 || x == w - 1 || y == h - 1;
@@ -673,9 +693,10 @@ public final class RenduPilou {
         return g;
     }
 
-    private static void poserAncre(Toile to, Sprites.Sprite s, java.util.Map<String, int[]> ancres) {
-        int[] a = ancres.get(s.ancre);
-        if (a == null) a = new int[]{0, 0};
-        to.poser(s, false, a[0] + s.dx, a[1] + s.dy, null);
+    private static final List<String> ANCRES = Arrays.asList("tete", "yeux", "bouche", "cou", "corps", "main", "main-g", "pieds", "cote", "antenne");
+
+    private static void poserAncre(Toile to, Sprites.Sprite s, int[] ancres) {
+        int i = ANCRES.indexOf(s.ancre);
+        to.poser(s, false, (i < 0 ? 0 : ancres[2 * i]) + s.dx, (i < 0 ? 0 : ancres[2 * i + 1]) + s.dy, null);
     }
 }

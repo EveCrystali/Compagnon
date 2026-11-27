@@ -98,6 +98,7 @@ public sealed partial class FenetrePilou : Window
         _demo = demo;
         _reglages = Reglages.Lire(dossier);
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
+        CalculerEchelle();
         WindowStyle = WindowStyle.None;
         AllowsTransparency = true;
         Background = Brushes.Transparent;
@@ -174,6 +175,8 @@ public sealed partial class FenetrePilou : Window
         {
             _nous = new WindowInteropHelper(this).Handle;
             Natif.StyleDiscret(_nous);
+            // La fenêtre connaît maintenant son écran : si sa mise à l'échelle n'est pas celle supposée, on recalcule.
+            if (Math.Abs(VisualTreeHelper.GetDpi(this).DpiScaleX - Finesse.Dpi) > 1e-6) AppliquerTaille();
         };
 
         _lecture = new DispatcherTimer(TimeSpan.FromMilliseconds(300), DispatcherPriority.Background, (_, _) => Lire(), Dispatcher);
@@ -199,7 +202,10 @@ public sealed partial class FenetrePilou : Window
         return br;
     }
 
-    private double K => _reglages.Taille;
+    // Échelle de la fenêtre : la Taille choisie, ramenée en dessin fin à celle qui met un pixel fin de Pilou sur un
+    // nombre entier de pixels physiques (Placement.Echelle) ; recalculée quand la Taille, le réglage ou l'écran changent.
+    private double _k = 1;
+    private double K => _k;
     private double Maintenant => _chrono.Elapsed.TotalMilliseconds;
     private static double Epoque => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     private Palette Couleurs => _sombre || BulleSombre ? Sombre : Claire;
@@ -234,6 +240,10 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
             v => { _reglages.Taille = v; AppliquerTaille(); }));
+        var fin = Case("Dessin fin", _reglages.DessinFin, v => { _reglages.DessinFin = v; AppliquerTaille(); });
+        fin.ToolTip = "Pilou dessiné deux fois plus fin, en pixels nets à toutes les mises à l'échelle. Décoché : le dessin d'origine.\n"
+                      + MesuresDessin();
+        menu.Items.Add(fin);
         menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand on t'attend", ModeBulle.Masquee) },
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
@@ -380,9 +390,41 @@ public sealed partial class FenetrePilou : Window
 
     private void AppliquerTaille()
     {
+        CalculerEchelle();
         _racine.LayoutTransform = new ScaleTransform(K, K);
         Width = LargeurBase * K;
         Height = (HauteurBulle + Scene.Hauteur) * K;
+        _scene.InvalidateVisual();
+    }
+
+    // Échelle de la fenêtre et repères du dessin fin (Finesse), d'après la Taille, le réglage « Dessin fin » et la
+    // mise à l'échelle de l'écran où est la fenêtre (1 = 100 % ; avant son affichage : celle du système).
+    private void CalculerEchelle()
+    {
+        double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+        if (!(dpi > 0)) dpi = 1;
+        Finesse.Active = _reglages.DessinFin;
+        Finesse.Dpi = dpi;
+        _k = Placement.Echelle(_reglages.Taille, dpi, _reglages.DessinFin);
+        Finesse.PhysiqueParUnite = _k * dpi;
+    }
+
+    // L'écran a changé de mise à l'échelle (autre écran, réglage Windows) : l'échelle nette est recalculée.
+    protected override void OnDpiChanged(DpiScale ancien, DpiScale nouveau)
+    {
+        base.OnDpiChanged(ancien, nouveau);
+        if (_jeuEnCours != Jeu.Aucun) Arreter(""); // ce qui est posé autour de Pilou a été mesuré à l'ancienne échelle
+        AppliquerTaille();
+    }
+
+    // Mesures du dessin (diagnostic) : échelle, pixels physiques par pixel fin, temps du dernier rendu, part des
+    // images dont le bitmap a dû être réécrit.
+    public string MesuresDessin()
+    {
+        int n = Finesse.Active ? Placement.PixelsParPixelFin(_reglages.Taille, Finesse.Dpi) : 0;
+        string net = Finesse.Active ? $"fin, {n} px physique(s) par pixel fin, Pilou {96 * n} px de large" : "d'origine";
+        return $"dessin {net} · échelle écran {Finesse.Dpi:0.##} · rendu {_scene.DernierRenduMs:0.00} ms · "
+               + $"{_scene.RendusEcrits}/{_scene.Rendus} images réécrites";
     }
 
     // ---- Lecture des sessions et bulle
@@ -795,6 +837,7 @@ public sealed partial class FenetrePilou : Window
             BalleX = _balleX,
             BalleRot = _balleRot,
             Tenue = _essaiTenue != "" ? _essaiTenue : TenueAffichee,
+            Humeur = _essaiHumeur,
             Reaction = ReactionAffichee != "" ? ReactionAffichee : meteo.Reaction,
             Soins = objetsSoins,
             // Il boude : moue et sourcils au repos ; dos tourné seulement immobile, au repos et sans jeu en cours.
@@ -819,8 +862,10 @@ public sealed partial class FenetrePilou : Window
             if (_jeuEnCours != Jeu.Aucun) Arreter("");
             Placer(gauche);
         }
-        Left = Placement.GaucheFenetre(_x, _aGauche, K);
-        Top = Placement.HautFenetre(_yPieds, K);
+        // Dessin fin : la fenêtre se pose sur un pixel physique entier, même en marchant.
+        double gaucheFenetre = Placement.GaucheFenetre(_x, _aGauche, K), haut = Placement.HautFenetre(_yPieds, K);
+        Left = Finesse.Active ? Placement.Aligner(gaucheFenetre, Finesse.Dpi) : gaucheFenetre;
+        Top = Finesse.Active ? Placement.Aligner(haut, Finesse.Dpi) : haut;
         Borner();
     }
 

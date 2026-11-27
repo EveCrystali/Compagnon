@@ -39,7 +39,7 @@ public final class Installation extends Activity {
         // Même identité que le reste de l'app : fond, texte et bouton de la palette (clair / sombre).
         Ui.Palette p = Ui.p(this);
         pile.setBackgroundColor(p.fond);
-        PilouVue pilou = new PilouVue(this, 4 * d);
+        PilouVue pilou = new PilouVue(this, 4 * d, true);
         pilou.montrer("concentre", "bleu");
         pilou.setContentDescription("Pilou prépare sa mise à jour");
         pile.addView(pilou);

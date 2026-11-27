@@ -89,7 +89,7 @@ final class PageReglages extends Page {
         gauche.addView(curseur, Ui.large());
         taille.addView(gauche, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         float d = a.getResources().getDisplayMetrics().density;
-        apercu = new PilouVue(a, 2.2f * d * Prefs.taille(a));
+        apercu = new PilouVue(a, 2.2f * d * Prefs.taille(a), true);
         LinearLayout boite = Ui.rangee(a);
         boite.setGravity(Gravity.CENTER);
         boite.setMinimumWidth(Ui.dp(a, 96));

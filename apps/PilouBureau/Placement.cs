@@ -14,6 +14,26 @@ public sealed record GeoPeche(
     Pt Bout,                 // bout de la canne : départ du fil
     Pt Attache);             // haut du bouchon posé sur l'eau : arrivée du fil
 
+// Dessin fin (réglage « Dessin fin », activé par défaut) : Pilou et ce qui l'accompagne sont rendus sur la grille
+// fine 96 × 112 (RenduPilou, échelle 2), et la fenêtre est mise à une échelle telle qu'un pixel fin tombe sur un
+// nombre entier de pixels physiques (net à 100, 125, 150, 175, 200 %…). Désactivé : le rendu d'origine, tel quel.
+public static class Finesse
+{
+    public static bool Active { get; set; } = true;
+    public static int Echelle => Active ? 2 : 1;
+    // Mise à l'échelle Windows de l'écran de Pilou (1 = 100 %, 1,25 = 125 %…) et pixels physiques par unité de la
+    // fenêtre de Pilou (échelle de la fenêtre × mise à l'échelle) : tenus à jour par FenetrePilou.
+    public static double Dpi { get; set; } = 1;
+    public static double PhysiqueParUnite { get; set; } = 1;
+
+    // Taille d'un pixel (unités de la fenêtre de Pilou) d'un dessin posé près de lui, ramenée à un nombre pair de
+    // pixels physiques : son dessin fin (deux fois plus de pixels) tombe alors sur des pixels physiques entiers.
+    public static double Net(double taille) => Active ? Placement.TailleNette(taille, PhysiqueParUnite) : taille;
+
+    // Zoom d'une image de Pilou rendue en fin dans une autre fenêtre (boutique) : pixels fins entiers.
+    public static double ZoomNet(double zoom) => Active ? Placement.TailleNette(zoom, Dpi) : zoom;
+}
+
 // Géométrie de la fenêtre de Pilou, sans WPF (testable) : repères dans la fenêtre, côté de la place, bornage
 // à l'écran courant (qui peut être à gauche de l'écran principal, en X négatif), éléments posés « à côté »
 // de Pilou en miroir exact d'un côté à l'autre. Les fenêtres l'appliquent ; les tests le balaient.
@@ -37,6 +57,46 @@ public static class Placement
 
     // Écart du bord de l'écran où Pilou disparaît quand il part (visite, expédition), en unités × K.
     public const double HorsEcran = 90;
+
+    // ---- Dessin fin : un pixel de la grille fine (96 × 112) = un nombre entier de pixels physiques
+
+    // Pixels physiques par pixel fin pour la Taille choisie (0,75 ; 1 ; 1,3) et la mise à l'échelle de l'écran
+    // (1 = 100 %) : l'entier le plus proche de la taille voulue (PX × taille × dpi / 2), au moins 1. Les trois
+    // tailles du menu restent ordonnées : « Grand » fait toujours un cran de plus que « Normal », « Petit » un cran
+    // de moins quand il en reste un (à 100 % : 1, 1 et 2 pixels physiques par pixel fin).
+    public static int PixelsParPixelFin(double taille, double dpi)
+    {
+        if (!(dpi > 0)) dpi = 1;
+        int Proche(double t) => Math.Max(1, (int)Math.Round(PX * t * dpi / 2, MidpointRounding.AwayFromZero));
+        int normal = Proche(1), n = Proche(taille);
+        if (taille > 1.15) n = Math.Max(n, normal + 1);
+        else if (taille < 0.9) n = Math.Max(1, Math.Min(n, normal - 1));
+        return n;
+    }
+
+    // Échelle à donner à la fenêtre (à la place de la Taille) : en dessin fin, celle qui met un pixel fin sur un
+    // nombre entier de pixels physiques ; sinon la Taille telle quelle.
+    public static double Echelle(double taille, double dpi, bool fin)
+    {
+        if (!fin) return taille;
+        if (!(dpi > 0)) dpi = 1;
+        return 2.0 * PixelsParPixelFin(taille, dpi) / (PX * dpi);
+    }
+
+    // Largeur de la grille de Pilou (48 pixels de grille) en pixels physiques : 96 × n en dessin fin.
+    public static double LargeurPhysique(double taille, double dpi, bool fin) =>
+        fin ? 2.0 * RenduPilou.W * PixelsParPixelFin(taille, dpi) : W * P * taille * (dpi > 0 ? dpi : 1);
+
+    // Taille d'un pixel de dessin (en unités, « physique » pixels physiques par unité) ramenée à un nombre pair de
+    // pixels physiques (au moins 2) : chaque moitié — un pixel fin — est alors un nombre entier de pixels physiques.
+    public static double TailleNette(double taille, double physique)
+    {
+        if (!(physique > 0)) return taille;
+        return 2.0 * Math.Max(1, (int)Math.Round(taille * physique / 2, MidpointRounding.AwayFromZero)) / physique;
+    }
+
+    // Une coordonnée d'écran (unités WPF) ramenée sur un pixel physique entier.
+    public static double Aligner(double v, double dpi) => dpi > 0 ? Math.Round(v * dpi, MidpointRounding.AwayFromZero) / dpi : v;
 
     // ---- Repères dans la fenêtre
 

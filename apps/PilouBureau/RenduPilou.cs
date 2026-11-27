@@ -418,6 +418,34 @@ public static class RenduPilou
                 }
         }
 
+        // Rendu fin : le corps (ellipse, bosses et bras du Nimbus, pieds) tient dans un cadre connu d'avance ; les
+        // boucles du corps et du cerne ne parcourent que lui (mêmes pixels qu'en parcourant toute la grille).
+        int bx0 = 0, bx1 = w - 1, by0 = 0, by1 = h - 1;
+        if (ec != 1)
+        {
+            double mg = st == 3 ? 0.3 * ry + 1 : 1;
+            double gx0 = cx - rx - mg, gx1 = cx + rx + mg, gy0 = cy - ry - mg, gy1 = cy + ry + mg;
+            if (st == 3)
+            {
+                double bras = rx + 4.4 * ec + 1;
+                gx0 = Math.Min(gx0, cx - bras);
+                gx1 = Math.Max(gx1, cx + bras);
+                gy0 = Math.Min(gy0, cy + ry * 0.28 - 3.2 * ec - 1);
+                gy1 = Math.Max(gy1, cy + ry * 0.28 + 3.2 * ec + 1);
+            }
+            if (a.Assis <= 0.5)
+            {
+                gx0 = Math.Min(gx0, (C - 10) * ec + dx);
+                gx1 = Math.Max(gx1, (C + 10) * ec + dx);
+                gy0 = Math.Min(gy0, pied - 2 * ec);
+                gy1 = Math.Max(gy1, pied + 4 * ec);
+            }
+            bx0 = Math.Max(0, (int)Math.Floor(gx0));
+            bx1 = Math.Min(w - 1, (int)Math.Ceiling(gx1));
+            by0 = Math.Max(0, (int)Math.Floor(gy0));
+            by1 = Math.Min(h - 1, (int)Math.Ceiling(gy1));
+        }
+
         // Corps : ombrage tramé, reflet ; Nimbus : volutes et bras ; puis cerne.
         var bosses = new List<(double X, double Y, double R)>();
         if (st == 3)
@@ -426,8 +454,8 @@ public static class RenduPilou
                 double an = deg * Math.PI / 180;
                 bosses.Add((cx + Math.Cos(an) * rx * 0.84, cy + Math.Sin(an) * ry * 0.84, ry * (deg < 0 ? 0.3 : 0.24)));
             }
-        for (int y = 0; y < h; y++)
-        for (int x = 0; x < w; x++)
+        for (int y = by0; y <= by1; y++)
+        for (int x = bx0; x <= bx1; x++)
         {
             double u = (x + 0.5 - cx) / rx, v = (y + 0.5 - cy) / ry, r2 = u * u + v * v;
             bool dans = r2 <= 1;
@@ -450,8 +478,8 @@ public static class RenduPilou
             foreach (int sg in new[] { -1, 1 })
             {
                 double bx = cx + sg * (rx + 1.2 * ec), by = cy + ry * 0.28 + Math.Sin(t / 300 + sg) * 0.8 * ec;
-                for (int y = 0; y < h; y++)
-                for (int x = 0; x < w; x++)
+                for (int y = by0; y <= by1; y++)
+                for (int x = bx0; x <= bx1; x++)
                     if (Math.Pow((x + 0.5 - bx) / (3.2 * ec), 2) + Math.Pow((y + 0.5 - by) / (2.4 * ec), 2) <= 1) m[y * w + x] = te[1];
             }
         if (a.Assis <= 0.5)
@@ -497,22 +525,26 @@ public static class RenduPilou
             // Cerne fin : deux pixels d'épaisseur, diagonales comprises (tout ce qui est à moins de √5 du vide).
             bool Vide(int x, int y) => x < 0 || y < 0 || x >= w || y >= h || m[y * w + x] == 0;
             var bord1 = tampon?.Bord ?? new bool[w * h];
-            for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++)
+            for (int y = by0; y <= by1; y++)
+            for (int x = bx0; x <= bx1; x++)
                 bord1[y * w + x] = m[y * w + x] != 0 && (Vide(x - 1, y) || Vide(x + 1, y) || Vide(x, y - 1) || Vide(x, y + 1));
-            for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++)
+            for (int y = by0; y <= by1; y++)
+            for (int x = bx0; x <= bx1; x++)
             {
                 uint c = m[y * w + x];
                 if (c == 0) continue;
-                bool bord = false;
+                // Hors du cadre, tout est vide : le test du vide passe avant la lecture du premier passage.
+                bool bord = x == 0 || y == 0 || x == w - 1 || y == h - 1;
                 for (int v = -1; v <= 1 && !bord; v++)
                 for (int u = -1; u <= 1; u++)
-                    if (Vide(x + u, y + v) || bord1[(y + v) * w + x + u])
+                {
+                    int i = (y + v) * w + x + u;
+                    if (m[i] == 0 || bord1[i])
                     {
                         bord = true;
                         break;
                     }
+                }
                 g[y * w + x] = bord ? te[0] : c;
             }
         }

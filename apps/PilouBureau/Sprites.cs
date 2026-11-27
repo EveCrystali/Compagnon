@@ -227,14 +227,26 @@ public sealed class Banque
     private readonly Dictionary<string, Sprite?> _agrandis = new();
 
     // Sprite du rendu fin : le dessin 2× s'il existe, sinon le sprite 1× agrandi (calculé une fois).
-    public Sprite? Fin(string id)
+    public Sprite? Fin(string id) => Fins.TryGetValue(id, out var natif) ? natif : Auto(id);
+
+    // Le sprite 1× agrandi automatiquement (exactement deux fois plus grand, mêmes ancrages × 2), même s'il existe
+    // un dessin fin : pour ce qui se place d'après la taille du sprite 1×.
+    public Sprite? Auto(string id)
     {
-        if (Fins.TryGetValue(id, out var natif)) return natif;
         lock (_agrandis)
         {
             if (_agrandis.TryGetValue(id, out var s)) return s;
             return _agrandis[id] = Sprites.GetValueOrDefault(id)?.Agrandi();
         }
+    }
+
+    // Sprite fin de la taille exacte du sprite 1× doublé : le dessin fin s'il la respecte, sinon l'agrandi.
+    public Sprite? FinExact(string id)
+    {
+        var s = this[id];
+        if (s is null) return null;
+        return Fins.TryGetValue(id, out var f) && f.W == s.W * 2 && f.H == s.H * 2 && f.Images.Count == s.Images.Count && f.Duree == s.Duree
+            ? f : Auto(id);
     }
 
     // Sprite à l'échelle demandée (1 : grille 48 × 56 ; 2 : rendu fin).

@@ -176,6 +176,31 @@ public class RenduTests
         Assert.Equal("dort", RenduPilou.Voyager(new Allure { Tenue = "voyage-nuit" }).Expr);
     }
 
+    // Temps de rendu d'une image (Pilou équipé, animé), aux deux échelles : le rendu fin reste très en dessous de la
+    // durée d'une image (33 ms à 30 images par seconde). Les temps mesurés sont écrits dans la sortie du test.
+    [Fact]
+    public void Rendu_fin_assez_rapide()
+    {
+        var b = B.Value;
+        var a = Lire("expr=repos objets=chapeau-explorateur,lunettes-rondes,sac-a-dos,parapluie,oiseau");
+        var tampon = new TamponRendu();
+        var temps = new double[3];
+        for (int e = 1; e <= 2; e++)
+        {
+            for (int i = 0; i < 60; i++) RenduPilou.Rendre(a, b, out _, null, e, tampon);   // échauffement
+            const int n = 300;
+            long debut = System.Diagnostics.Stopwatch.GetTimestamp();
+            for (int i = 0; i < n; i++)
+            {
+                a.T = i * 33;
+                RenduPilou.Rendre(a, b, out _, null, e, tampon);
+            }
+            temps[e] = System.Diagnostics.Stopwatch.GetElapsedTime(debut).TotalMilliseconds / n;
+        }
+        Console.WriteLine($"RENDU-TEMPS échelle 1 : {temps[1] * 1000:0} µs par image ; échelle 2 : {temps[2] * 1000:0} µs par image");
+        Assert.True(temps[2] < 5, $"rendu fin : {temps[2]:0.00} ms par image");
+    }
+
     // Le tampon réutilisé donne les mêmes pixels, et la géométrie reste en pixels de la grille 48 × 56.
     [Fact]
     public void Rendu_fin_tampon_et_geometrie()

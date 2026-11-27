@@ -25,9 +25,38 @@ public final class PilouVue extends View {
     /** Durée de l'animation d'évolution (silhouette qui alterne, puis éclat). */
     public static final long DUREE_EVOLUTION = 2600;
 
+    /** Rendu fin (grille 96 × 112) : demandé par l'écran ; tenu seulement si un pixel fin fait au moins 2 pixels
+     *  de l'écran (sinon la vue reste au rendu 1×, comme avant). */
+    private final boolean finDemande;
+    private Dessin.ImageFine fine;
+
     public PilouVue(Context c, float pixel) {
+        this(c, pixel, false);
+    }
+
+    /** fin : Pilou en rendu fin si l'écran est assez dense pour cette taille (accueil, essayage, installation). */
+    public PilouVue(Context c, float pixel, boolean fin) {
         super(c);
-        p = pixel * Dessin.ECHELLE;
+        finDemande = fin;
+        regler(pixel * Dessin.ECHELLE);
+    }
+
+    /** Taille du pixel de grille. En rendu fin, elle est arrondie pour qu'un pixel fin tombe sur un nombre entier
+     *  de pixels de l'écran (dessin net, sans pixels inégaux). */
+    private void regler(float pixel) {
+        int n = Dessin.pixelFin(pixel);
+        if (finDemande && n >= 2) {
+            p = 2 * n;
+            if (fine == null) fine = new Dessin.ImageFine();
+        } else {
+            p = pixel;
+            fine = null;
+        }
+    }
+
+    /** Vrai si la vue dessine Pilou en rendu fin. */
+    public boolean fin() {
+        return fine != null;
     }
 
     public void montrer(String expression, String teinte) {
@@ -63,9 +92,9 @@ public final class PilouVue extends View {
 
     /** Nouvelle taille de pixel (même unité qu'au constructeur) : la vue se remesure. */
     public void pixel(float nouveau) {
-        nouveau *= Dessin.ECHELLE;
-        if (nouveau == p) return;
-        p = nouveau;
+        float avant = p;
+        regler(nouveau * Dessin.ECHELLE);
+        if (avant == p) return;
         requestLayout();
         invalidate();
     }
@@ -159,7 +188,13 @@ public final class PilouVue extends View {
             if (k >= 1) debutEvolution = -1;
             else a.evolution = Math.max(0.001, k);
         }
-        Dessin.dessiner(cv, 0, 0, p, a);
+        if (fine != null) {
+            // Rendu fin : un bitmap de 96 × 112 gardé d'une image à l'autre, posé avec la même marge d'un pixel de grille.
+            fine.rendre(a);
+            fine.dessiner(cv, p, p, p / 2);
+        } else {
+            Dessin.dessiner(cv, 0, 0, p, a);
+        }
         if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
     }
 

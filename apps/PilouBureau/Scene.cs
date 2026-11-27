@@ -38,9 +38,14 @@ public sealed class Pose
     public double BalleX;       // position de la balle depuis son centre (anciens pixels)
     public double BalleRot;     // rotation de la balle (radians)
     public Couleur Couleur;
+    // Humeur imposée (campagnes) : « joie », « peur », « triste », « surpris », « determine », « fatigue », « tendre »,
+    // « colere », « malice », « neutre » ; "" : celle de Expr.
+    public string Humeur = "";
     public bool Trainee;        // traînée d'étoiles quand il marche (récompense)
     // Activité reconnue (Activites.Toutes : code, tableur, jeu-mmo, jeu, musique, video, lecture, dessin,
-    // visio, nuit, mail, texte, diaporama) : la tenue à dessiner ; "" = aucune.
+    // visio, nuit, mail, texte, diaporama) : la tenue à dessiner ; "" = aucune. Tenues de voyage des campagnes :
+    // « voyage-marche », « voyage-course », « voyage-bateau », « voyage-grimpe », « voyage-nage », « voyage-nuit »,
+    // « voyage-cache », « voyage-attend » (le rendu impose alors la pose : RenduPilou.Voyager).
     public string Tenue = "";
     // Petite réaction liée à l'activité : "danse" (musique), "sueur" (processeur chargé pendant le code), "".
     public string Reaction = "";
@@ -60,8 +65,8 @@ public sealed class Pose
     public string Bruit = "";
 }
 
-// Pilou en pixel art, grille fine de 48 × 56 commune avec l'app Android (RenduPilou), affichée en pixels
-// nets à la même taille qu'avant. Les effets (Z, confettis, étoiles…) restent dessinés ici, alignés sur
+// Pilou en pixel art, grille de 48 × 56 commune avec l'app Android (RenduPilou), ou sa version fine de 96 × 112
+// (Finesse : réglage « Dessin fin »), affichée en pixels nets à la même place. Les effets (Z, confettis, étoiles…) restent dessinés ici, alignés sur
 // la même grille. Les grandeurs du mouvement (Saut, BalleX…) restent en « anciens » pixels de 5 unités.
 // Seuls les pixels dessinés prennent la souris.
 public sealed class Scene : FrameworkElement
@@ -93,7 +98,14 @@ public sealed class Scene : FrameworkElement
     public Pose Pose { get; set; } = new();
 
     private uint[]? _pixels;
+    private int _echelle = 1;      // échelle du dernier rendu (1 : 48 × 56 ; 2 : 96 × 112)
     private double _zoom = 1;
+    // Image gardée d'un rendu à l'autre : rien n'est alloué par image, et le bitmap n'est réécrit que si des pixels
+    // ont changé (Pilou respire lentement : la plupart des images sont identiques à la précédente).
+    private readonly TamponRendu _tampon = new();
+    private WriteableBitmap? _image;
+    private uint[] _affiche = Array.Empty<uint>();
+    private bool _imagePleine;
 
     public Scene()
     {
@@ -167,7 +179,7 @@ public sealed class Scene : FrameworkElement
         objets.AddRange(p.Gestes);
         return new Allure
         {
-            Expr = p.Expr.ToString().ToLowerInvariant(),
+            Expr = p.Humeur != "" ? p.Humeur : p.Expr.ToString().ToLowerInvariant(),
             T = p.T,
             Couleur = couleurAchetee != "" ? couleurAchetee : p.Couleur.ToString().ToLowerInvariant(),
             Accessoire = p.Accessoire is Accessoire.Aucun or Accessoire.Saison ? "" : p.Accessoire.ToString().ToLowerInvariant(),
@@ -214,25 +226,29 @@ public sealed class Scene : FrameworkElement
     // la souris comme lui : un clic rappelle Pilou), puis le texte écrit sur le papier.
     private void DessinerPancarte(DrawingContext dc, Pose p)
     {
-        var s = Banque.Commune["pancarte"];
-        var pixels = new uint[RenduPilou.W * RenduPilou.H];
+        int e = Finesse.Echelle;
+        int gw = RenduPilou.W * e, gh = RenduPilou.H * e;
+        double pf = PX / e;
+        var s = Banque.Commune.Echelle("pancarte", e);
+        var pixels = new uint[gw * gh];
         int gx0 = 0, gy0 = 0, w = 0;
         if (s is not null)
         {
             var g = Banque.Grille(s, p.T);
             int h = g.GetLength(0);
             w = g.GetLength(1);
-            gx0 = (RenduPilou.W - w) / 2;
-            gy0 = Math.Max(0, (int)Math.Round((Sol - MargeY) / PX) - h);
-            for (int y = 0; y < h && gy0 + y < RenduPilou.H; y++)
-            for (int x = 0; x < w && gx0 + x < RenduPilou.W; x++)
-                pixels[(gy0 + y) * RenduPilou.W + gx0 + x] = g[y, x];
+            gx0 = (gw - w) / 2;
+            gy0 = Math.Max(0, (int)Math.Round((Sol - MargeY) / pf) - h);
+            for (int y = 0; y < h && gy0 + y < gh; y++)
+            for (int x = 0; x < w && gx0 + x < gw; x++)
+                pixels[(gy0 + y) * gw + gx0 + x] = g[y, x];
         }
         _pixels = pixels;
-        Image(dc, pixels);
+        _echelle = e;
+        Image(dc, pixels, e);
         var lignes = p.Pancarte.Split('\n');
         double dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-        double cx = MargeX + (gx0 + w / 2.0) * PX, y0 = MargeY + (gy0 + 4) * PX;
+        double cx = MargeX + (gx0 + w / 2.0) * pf, y0 = MargeY + (gy0 + 4 * e) * pf;
         for (int i = 0; i < lignes.Length && i < 2; i++)
         {
             var ft = new FormattedText(lignes[i], System.Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
@@ -245,44 +261,50 @@ public sealed class Scene : FrameworkElement
 
     private static readonly Brush Bleu1 = B("#1f4f8a");
 
-    private static void Image(DrawingContext dc, uint[] pixels)
+    // La grille rendue (ARGB, échelle e), posée dans le même rectangle quelle que soit l'échelle. Le bitmap est gardé :
+    // il n'est réécrit que si les pixels ont changé depuis la dernière image (aucune allocation sinon). En mémoire,
+    // un uint ARGB est déjà l'ordre B, G, R, A du format Bgra32 : les pixels passent tels quels.
+    private void Image(DrawingContext dc, uint[] pixels, int e)
     {
-        var bgra = new byte[pixels.Length * 4];
-        for (int i = 0; i < pixels.Length; i++)
+        int w = RenduPilou.W * e, h = RenduPilou.H * e;
+        if (_image is null || _image.PixelWidth != w || _affiche.Length != pixels.Length)
         {
-            uint c = pixels[i];
-            bgra[i * 4] = (byte)c;
-            bgra[i * 4 + 1] = (byte)(c >> 8);
-            bgra[i * 4 + 2] = (byte)(c >> 16);
-            bgra[i * 4 + 3] = (byte)(c >> 24);
+            _image = new WriteableBitmap(w, h, 96, 96, PixelFormats.Bgra32, null);
+            _affiche = new uint[pixels.Length];
+            _imagePleine = false;
         }
-        var image = BitmapSource.Create(RenduPilou.W, RenduPilou.H, 96, 96, PixelFormats.Bgra32, null, bgra, RenduPilou.W * 4);
-        image.Freeze();
-        dc.DrawImage(image, new Rect(MargeX, MargeY, RenduPilou.W * PX, RenduPilou.H * PX));
+        if (!_imagePleine || !pixels.AsSpan().SequenceEqual(_affiche))
+        {
+            pixels.CopyTo(_affiche, 0);
+            _image.WritePixels(new Int32Rect(0, 0, w, h), _affiche, w * 4, 0);
+            _imagePleine = true;
+            RendusEcrits++;
+        }
+        dc.DrawImage(_image, new Rect(MargeX, MargeY, RenduPilou.W * PX, RenduPilou.H * PX));
     }
+
+    // Mesures (diagnostic, essais) : images rendues, images dont le bitmap a dû être réécrit, temps du dernier rendu.
+    public int Rendus { get; private set; }
+    public int RendusEcrits { get; private set; }
+    public double DernierRenduMs { get; private set; }
 
     private void Dessiner(DrawingContext dc, Pose p)
     {
         _debord.Clear();
-        var pixels = RenduPilou.Rendre(Allure(p), Banque.Commune, out var geo, _debord);
+        int e = Finesse.Echelle;
+        long debut = System.Diagnostics.Stopwatch.GetTimestamp();
+        var pixels = RenduPilou.Rendre(Allure(p), Banque.Commune, out var geo, _debord, e, _tampon);
         _pixels = pixels;
+        _echelle = e;
         Geo = geo;
-        var bgra = new byte[pixels.Length * 4];
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            uint c = pixels[i];
-            bgra[i * 4] = (byte)c;
-            bgra[i * 4 + 1] = (byte)(c >> 8);
-            bgra[i * 4 + 2] = (byte)(c >> 16);
-            bgra[i * 4 + 3] = (byte)(c >> 24);
-        }
-        var image = BitmapSource.Create(RenduPilou.W, RenduPilou.H, 96, 96, PixelFormats.Bgra32, null, bgra, RenduPilou.W * 4);
-        image.Freeze();
-        dc.DrawImage(image, new Rect(MargeX, MargeY, RenduPilou.W * PX, RenduPilou.H * PX));
+        Image(dc, pixels, e);
+        Rendus++;
+        DernierRenduMs = System.Diagnostics.Stopwatch.GetElapsedTime(debut).TotalMilliseconds;
         // Ce qui dépasse de la grille (parapluie, longue-vue tenus au bout de la main) : dans la marge de la scène
         // (12 pixels de grille de chaque côté), au lieu d'être coupé au bord de la grille.
+        double pf = PX / e;
         foreach (var (x, y, c) in _debord)
-            if (y < RenduPilou.H) dc.DrawRectangle(Pinceau(c), null, new Rect(MargeX + x * PX, MargeY + y * PX, PX, PX));
+            if (y < RenduPilou.H * e) dc.DrawRectangle(Pinceau(c), null, new Rect(MargeX + x * pf, MargeY + y * pf, pf, pf));
 
         // Repères dans l'ancienne grille, pour les effets.
         double cx = geo.Cx / F;
@@ -305,25 +327,27 @@ public sealed class Scene : FrameworkElement
         if (px is null) return null;
         double ox = MargeX + C * P, oy = Sol;
         double x = ox + (h.HitPoint.X - ox) / _zoom, y = oy + (h.HitPoint.Y - oy) / _zoom;
-        int gx = (int)Math.Floor((x - MargeX) / PX), gy = (int)Math.Floor((y - MargeY) / PX);
-        if (gx < 0 || gy < 0 || gx >= RenduPilou.W || gy >= RenduPilou.H) return null;
-        uint c = px[gy * RenduPilou.W + gx];
+        int e = _echelle, gw = RenduPilou.W * e;
+        int gx = (int)Math.Floor((x - MargeX) / (PX / e)), gy = (int)Math.Floor((y - MargeY) / (PX / e));
+        if (gx < 0 || gy < 0 || gx >= gw || gy >= RenduPilou.H * e || px.Length != gw * RenduPilou.H * e) return null;
+        uint c = px[gy * gw + gx];
         return c >> 24 == 0xff ? new PointHitTestResult(this, h.HitPoint) : null;
     }
 
     // Ballon : sprite de la banque (quatre images de rotation), au sol devant Pilou.
     private static void Balle(DrawingContext dc, Pose p)
     {
-        var s = Banque.Commune["ballon"];
+        int e = Finesse.Echelle;
+        var s = Banque.Commune.Echelle("ballon", e);
         if (s is null) return;
         int quart = (int)Math.Floor(((p.BalleRot % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) / (Math.PI / 4)) % Math.Max(1, s.Images.Count);
         var g = Banque.Grille(s, s.Duree * quart);
-        double bx = RenduPilou.C + p.BalleX * RenduPilou.K;
-        int x0 = (int)Math.Round(bx) - s.W / 2, y0 = 53 - s.H - (int)Math.Round(Math.Abs(Math.Sin(p.BalleRot)) * 1.5);
+        double bx = (RenduPilou.C + p.BalleX * RenduPilou.K) * e, pf = PX / e;
+        int x0 = (int)Math.Round(bx) - s.W / 2, y0 = 53 * e - s.H - (int)Math.Round(Math.Abs(Math.Sin(p.BalleRot)) * 1.5 * e);
         for (int y = 0; y < g.GetLength(0); y++)
         for (int x = 0; x < g.GetLength(1); x++)
             if (g[y, x] != 0)
-                dc.DrawRectangle(Pinceau(g[y, x]), null, new Rect(MargeX + (x0 + x) * PX, MargeY + (y0 + y) * PX, PX, PX));
+                dc.DrawRectangle(Pinceau(g[y, x]), null, new Rect(MargeX + (x0 + x) * pf, MargeY + (y0 + y) * pf, pf, pf));
     }
 
     private static readonly Dictionary<uint, Brush> Pinceaux = new();
@@ -336,6 +360,46 @@ public sealed class Scene : FrameworkElement
         return Pinceaux[argb] = br;
     }
 
+    // ---- Petites formes des effets (étoile, cœur, goutte…) : faites de cases de l'ancienne grille (2 × 2 pixels
+    // de la grille 48 × 56). En dessin fin, la forme est agrandie deux fois par la règle commune
+    // (Sprite.AgrandirImage) : quatre pixels fins par case, coins arrondis, au lieu de gros carrés.
+    private static readonly string[] FormeEtoile = { ".#.", "###", ".#." };
+    private static readonly string[] FormeCoeur = { "h.#", "###", ".#." };
+    private static readonly string[] FormeGoutte = { ".c.", "clc", "cwc", ".c." };
+    private static readonly string[] FormeSoupir = { ".#.", "#.#", ".#." };
+    // Clarté des lettres pour l'agrandissement : le trait (#, c) plus sombre que les reflets (h, l, w).
+    private static readonly Dictionary<char, string> ClartesFormes = new()
+    {
+        ['#'] = "#606060", ['c'] = "#303030", ['h'] = "#e0e0e0", ['l'] = "#c0c0c0", ['w'] = "#ffffff",
+    };
+    private static readonly Dictionary<string[], string[]> FormesFines = new();
+
+    // La forme, coin haut-gauche sur la case (x, y) ; couleur : pinceau d'une lettre (null : rien).
+    private static void Forme(DrawingContext dc, string[] forme, int x, int y, Func<char, Brush?> couleur)
+    {
+        if (Finesse.Echelle != 2)
+        {
+            for (int j = 0; j < forme.Length; j++)
+            for (int i = 0; i < forme[j].Length; i++)
+                if (couleur(forme[j][i]) is { } b) dc.DrawRectangle(b, null, Case(x + i, y + j));
+            return;
+        }
+        if (!FormesFines.TryGetValue(forme, out var fine))
+            FormesFines[forme] = fine = Sprite.AgrandirImage(Sprite.AgrandirImage(forme, ClartesFormes), ClartesFormes);
+        double pf = PX / 2, x0 = MargeX + Math.Round(x * F) * PX, y0 = MargeY + Math.Round(y * F) * PX;
+        for (int j = 0; j < fine.Length; j++)
+        {
+            var l = fine[j];
+            for (int i = 0; i < l.Length;)
+            {
+                int fin = i + 1;
+                while (fin < l.Length && l[fin] == l[i]) fin++;
+                if (couleur(l[i]) is { } b) dc.DrawRectangle(b, null, new Rect(x0 + i * pf, y0 + j * pf, (fin - i) * pf, pf));
+                i = fin;
+            }
+        }
+    }
+
     // Trois petites étoiles en croix qui tournent autour de la tête.
     private static void Etoiles(DrawingContext dc, double t, double cx, int sommet)
     {
@@ -344,7 +408,7 @@ public sealed class Scene : FrameworkElement
             double a = t / 260.0 + i * 2.094;
             int x = (int)Math.Round(cx + Math.Cos(a) * 9), y = (int)Math.Round(sommet + 1 + Math.Sin(a) * 2);
             var br = i % 2 == 0 ? Etincelle : Bleu.Clair;
-            foreach (var (a2, b2) in new[] { (0, 0), (-1, 0), (1, 0), (0, -1), (0, 1) }) dc.DrawRectangle(br, null, Case(x + a2, y + b2));
+            Forme(dc, FormeEtoile, x - 1, y - 1, ch => ch == '#' ? br : null);
         }
     }
 
@@ -400,8 +464,7 @@ public sealed class Scene : FrameworkElement
                     double phase = (t / 1500.0 + i / 3.0) % 1.0;
                     dc.PushOpacity(Math.Clamp(1 - phase, 0, 1));
                     int x = (int)Math.Round(4 + i * 8 + Math.Sin(phase * 6 + i) * 1.5), y = (int)Math.Round(ey - 3 - phase * 12);
-                    foreach (var (a, b) in new[] { (0, 0), (2, 0), (0, 1), (1, 1), (2, 1), (1, 2) }) dc.DrawRectangle(Etincelle, null, Case(x + a, y + b));
-                    dc.DrawRectangle(EtincelleClair, null, Case(x, y));
+                    Forme(dc, FormeCoeur, x, y, ch => ch == '#' ? Etincelle : ch == 'h' ? EtincelleClair : null);
                     dc.Pop();
                 }
                 break;
@@ -417,7 +480,7 @@ public sealed class Scene : FrameworkElement
                 double phase = Math.Min(1, p.Depuis / 1400);
                 int x = (int)Math.Round(21 + phase * 6), y = (int)Math.Round(ey + 4 - phase * 8);
                 dc.PushOpacity(1 - phase);
-                foreach (var (a, b) in new[] { (1, 0), (0, 1), (2, 1), (1, 2) }) dc.DrawRectangle(Brume, null, Case(x + a, y + b));
+                Forme(dc, FormeSoupir, x, y, ch => ch == '#' ? Brume : null);
                 dc.Pop();
                 break;
             }
@@ -427,10 +490,7 @@ public sealed class Scene : FrameworkElement
                 double phase = t / 1200.0 % 1.0;
                 int x = 21 + dx, y = (int)Math.Round(ey + phase * 6);
                 dc.PushOpacity(1 - phase);
-                dc.DrawRectangle(Bleu.Contour, null, Case(x, y - 1));
-                foreach (var (a, b) in new[] { (-1, 0), (0, 0), (1, 0), (-1, 1), (1, 1), (0, 2) }) dc.DrawRectangle(Bleu.Contour, null, Case(x + a, y + b));
-                dc.DrawRectangle(Bleu.Clair, null, Case(x, y));
-                dc.DrawRectangle(Blanc, null, Case(x, y + 1));
+                Forme(dc, FormeGoutte, x - 1, y - 1, ch => ch == 'c' ? Bleu.Contour : ch == 'l' ? Bleu.Clair : ch == 'w' ? Blanc : null);
                 dc.Pop();
                 break;
             }
