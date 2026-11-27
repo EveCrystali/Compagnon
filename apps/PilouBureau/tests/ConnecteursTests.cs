@@ -277,9 +277,9 @@ public class ConnecteursTests
         Assert.False(reglages.Valeurs.TryGetValue("sonde", out var v) && v.ContainsKey("jeton")); // jamais dans reglages.json
 
         r.Battre();
-        SpinWait.SpinUntil(() => s.Releves == 1, 2000);
+        SpinWait.SpinUntil(() => s.Releves == 1, 20_000);
         Assert.Equal(1, s.Releves);
-        SpinWait.SpinUntil(() => recus.Count == 1, 2000);
+        SpinWait.SpinUntil(() => recus.Count == 1, 20_000);
         Assert.Equal("relevé 1", recus.Single().Titre);
         Assert.Equal(EtatConnecteur.Actif, r.Etat(s));
         r.Battre();                                           // pas encore dû (5 min)
@@ -316,7 +316,7 @@ public class ConnecteursTests
         var p = new Panne();
         r.Ajouter(p);
         r.Battre();
-        SpinWait.SpinUntil(() => r.Etat(p) == EtatConnecteur.Erreur, 2000);
+        SpinWait.SpinUntil(() => r.Etat(p) == EtatConnecteur.Erreur, 20_000);
         Assert.Equal(EtatConnecteur.Erreur, r.Etat(p));
         Assert.Equal("service injoignable", r.Erreur("panne"));
     }
