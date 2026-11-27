@@ -42,7 +42,7 @@
     { "id": "main-levee", "nom": "La main levée", "texte": "Tu as agité la main longtemps. Au cas où les nuages auraient des yeux derrière." },
     { "id": "buee-du-matin", "nom": "La buée du matin", "texte": "Tout un hiver, il s'est posé sur la vitre de la cabane. Au printemps, vous recommencerez." },
     { "id": "arc-beige", "nom": "L'arc beige", "texte": "Vu de très loin, au-dessus du lac : un tout petit arc-en-ciel. Beige. C'était pour toi." },
-    { "id": "rond-tiede", "nom": "Le rond tiède", "texte": "Un rond d'herbe pas gelée, là où il avait dormi contre toi. Tu lui dis au revoir quand même." },
+    { "id": "au-revoir-du-soir", "nom": "L'au revoir du soir", "texte": "Tu n'as pas pu lui dire au revoir comme il faut. Alors tu le dis tous les soirs, à tout hasard, aux nuages qui passent." },
     { "id": "girouette-qui-tourne", "nom": "La girouette qui tourne", "texte": "Il a plu sur le toit de la halte. Le vieux coq de fer a tourné, pour la première fois depuis des années." }
   ],
   "decors": [

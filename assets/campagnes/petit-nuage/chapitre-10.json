@@ -190,7 +190,7 @@
       "humeur": "tendre",
       "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
-        "Il a dit : « Petit. » J'ai dit oui. Il s'est comparé aux grands, puis à moi, puis encore aux grands. « Goutte avait dit. » Oui. À l'arbre mort, je te l'avais dit. Il a hoché tout son corps. Puis : « Goutte dit aussi Brouillon grand, après ? » Je ne lui ai jamais dit ça. Mais j'ai regardé les vieux, larges comme des collines, qui ont tous eu sa taille un jour. J'ai dit oui. Et ça non plus, ce n'était pas un mensonge."
+        "Il a dit : « Petit. » J'ai dit oui. Il s'est comparé aux grands, puis à moi, puis encore aux grands. « Goutte avait dit. » Oui. À l'arbre mort, je le lui avais dit. Il a hoché tout son corps. Puis : « Goutte dit aussi Brouillon grand, après ? » Je ne lui ai jamais dit ça. Mais j'ai regardé les vieux, larges comme des collines, qui ont tous eu sa taille un jour. J'ai dit oui. Et ça non plus, ce n'était pas un mensonge."
       ],
       "suite": "ch10-question"
     },
@@ -220,7 +220,7 @@
       "humeur": "tendre",
       "recompense": { "po": 14, "xp": 8 },
       "texte": [
-        "Il n'a pas insisté. Il a regardé la place vide, à côté de la sienne, là-haut, un moment. Puis il est venu se poser sur mes genoux, comme le premier jour, quand je n'en avais pas encore. La nuit est là. Il gèle déjà un peu : l'herbe fait un petit bruit quand je bouge. La sarcelle dit que le troupeau se lèvera à la première lueur. Il nous reste une nuit. La dernière."
+        "Il n'a pas insisté. Il a regardé la place vide, à côté de la sienne, là-haut, un moment. Puis il est venu se poser sur mes genoux. J'en ai, finalement : il suffisait que quelqu'un s'y pose. La nuit est là. Il gèle déjà un peu : l'herbe fait un petit bruit quand je bouge. La sarcelle dit que le troupeau se lèvera à la première lueur. Il nous reste une nuit. La dernière."
       ],
       "suite": "ch11-crepuscule"
     }

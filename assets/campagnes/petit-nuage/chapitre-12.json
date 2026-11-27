@@ -67,7 +67,7 @@
       "type": "recit",
       "humeur": "triste",
       "texte": [
-        "Je l'ai gardé. J'ai refermé les bras, sans serrer, et j'ai dit : encore un peu. Il n'a pas discuté. Il s'est fait tout rond contre moi. On a regardé passer les derniers, les traînards, un vieux tout effiloché qui fermait la marche. Puis le ciel a été vide, et bleu, et très grand. Brouillon a levé un bord vers le haut, comme on lève la main. Personne n'a répondu. Il a dit : « Partis. » J'ai dit oui. C'est moi. C'est moi qui n'ai pas su."
+        "Je l'ai gardé. J'ai refermé les bras, sans serrer, et j'ai dit : encore un peu. Il n'a pas discuté. Il s'est fait tout rond contre moi. On a regardé passer les derniers, les traînards, un vieux tout effiloché qui fermait la marche. Puis le ciel a été vide, et bleu, et très grand. Brouillon a levé un bord vers le haut, comme on lève la main. Personne n'a répondu. Il a dit : « Partis. » J'ai dit oui. Il n'y était pour rien. C'est moi qui n'ai pas su."
       ],
       "suite": "ch12-fin-hiver"
     },
@@ -114,7 +114,7 @@
       "type": "recit",
       "humeur": "triste",
       "texte": [
-        "Il a sauté. Il est monté de la hauteur d'un tabouret. Le vent du matin l'a retourné comme une crêpe, et il est redescendu. Il a recommencé. Quatre fois. À la cinquième, il n'a même plus décollé. Trop petit, ou pas assez appris : je ne sais pas, et dans les deux cas, c'est moi. Là-haut, les derniers passaient. Un vieux a ralenti, il a regardé en bas, longtemps. Puis il a suivi les autres. Brouillon est revenu se poser sur ma casserole, sans rien dire."
+        "Il a sauté. Il est monté de la hauteur d'un tabouret. Le vent du matin l'a retourné comme une crêpe, et il est redescendu. Il a recommencé. Quatre fois. À la cinquième, il n'a même plus décollé. Il lui manque quelque chose pour tenir là-haut : un peu de corps, ou un peu de métier. Je ne sais pas lequel des deux je ne lui ai pas donné. Les derniers passaient. Un vieux a ralenti, il a regardé en bas, longtemps. Puis il a suivi les autres. Brouillon est revenu se poser sur ma casserole, sans rien dire."
       ],
       "suite": "ch12-fin-hiver"
     },
@@ -160,7 +160,7 @@
       "type": "recit",
       "humeur": "tendre",
       "texte": [
-        "J'ai cogné la plume contre la casserole. Ding. Tout en haut, loin derrière les autres, la grande grise fermait la marche. Elle s'est arrêtée. Elle est redescendue, elle toute seule, à contre-courant de tout le troupeau, jusqu'à toucher le lac. Je lui ai dit, je ne sais pas si les très vieux nuages comprennent : il n'a pas dormi exprès. Il regarde par ici tous les jours. Il s'appelle Tournebise.",
+        "J'ai cogné la plume contre la casserole. Ding. Tout en haut, loin derrière les autres, la grande grise fermait la marche. Elle s'est arrêtée. Elle est redescendue, elle toute seule, à contre-courant de tout le troupeau, jusqu'à toucher le lac. Je lui ai dit, je ne sais pas si les très vieux nuages comprennent : il ne s'est pas endormi exprès. Il regarde par ici tous les jours. Il s'appelle Tournebise.",
         "Elle est restée immobile un long moment. Puis elle a fait une chose que je n'avais vu faire à aucun nuage : elle a quitté la file. Elle est partie de l'autre côté. Vers le col, vers le plateau, vers un petit toit avec un coq dessus. Les autres l'ont attendue en tournant lentement au-dessus des crêtes. Brouillon aussi, je le voyais : le plus petit point, tout au bord."
       ],
       "suite": "ch12-fin-deux"
@@ -228,7 +228,7 @@
         "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. Je ne vais pas te mentir : j'ai refait cette dernière aube dans ma tête à chaque pas du retour. Il est arrivé. Il est avec les siens, il ne rétrécira plus, et c'est pour ça qu'on était partis. Mais je ne lui ai pas dit au revoir comme il faut. Il m'a manqué un peu de temps. Il m'en manquera toujours un peu.",
         "En repassant à la halte, je n'ai pas eu besoin de raconter. Tournebise a su en me voyant. Il a juste dit : « Toi aussi. » Et il m'a fait une place sur le toit. Depuis, le soir, je monte sur le rebord de ta fenêtre, je regarde passer les nuages, et je dis au revoir. À voix haute, à tous, à tout hasard. On ne sait jamais lequel écoute. Je crois que je le dirai longtemps. Ça ne me dérange pas."
       ],
-      "recompenses": { "po": 120, "xp": 60, "souvenir": "rond-tiede", "titre": "Veilleur du soir", "objet": "echarpe-de-veille" }
+      "recompenses": { "po": 120, "xp": 60, "souvenir": "au-revoir-du-soir", "titre": "Veilleur du soir", "objet": "echarpe-de-veille" }
     },
     "ch12-fin-deux": {
       "type": "fin",
