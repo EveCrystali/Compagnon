@@ -92,7 +92,7 @@
       "humeur": "peur",
       "texte": [
         "Mauvaise nouvelle : la mer rentre. Je croyais avoir une heure, mais les flaques du Passe-Pied se rejoignent déjà et l'eau lèche les premières pierres claires. Il faut repartir. Maintenant, pas dans cinq minutes.",
-        "Sauf que. En me retournant une dernière fois, j'ai vu un bout de papier coincé sous la porte du phare, côté intérieur, dont un coin dépasse. Un coin écrit. Pour l'attraper sans le déchirer, il me faut cinq minutes, peut-être plus. Si je reste, je devrai courir devant la marée. Je rentre sagement, ou je reste pour ce papier ?"
+        "Sauf que. En me retournant une dernière fois, j'ai vu un bout de papier coincé sous la porte du phare, côté intérieur, dont un coin dépasse. Un coin écrit. Pour l'attraper sans le déchirer, il me faut cinq minutes, peut-être plus. Si je reste, je devrai courir devant la marée. Je rentre sagement, ou je reste pour ce papier ? Décide, toi : mes jambes ont déjà voté pour rentrer."
       ],
       "options": [
         { "id": "rentrer", "libelle": "Rentre tout de suite", "vers": "ch3-retour" },
