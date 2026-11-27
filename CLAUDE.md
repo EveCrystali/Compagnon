@@ -62,10 +62,20 @@ captures Robolectric dans l'artefact `captures-ui`).
 ## Git
 
 - Une branche `claude/<sujet>` par changement, une PR vers `main`, corps en français.
-- **Fusionner dès que la CI est verte** (règle d'Antoine). Conflit : fusionner `main` dans la branche,
+- **Committer et pousser systématiquement**, sans demander : chaque changement fini part en commit, puis sur
+  la branche, puis en PR.
+- **Fusionner dès que la CI est verte**, sans demander (règle d'Antoine). Conflit : fusionner `main` dans la branche,
   garder les deux côtés, jamais de rebase ni de push forcé sur la branche d'un autre.
 - Chaque fusion sur `main` publie une version `v0.9.<n>` ; le PC se met à jour seul sous deux heures.
 - Messages de commit en français, sans nom de modèle.
+
+## Tester en vrai sur le PC d'Antoine
+
+Dans une session locale, le PC est à disposition pour les tests de bout en bout : lancer l'exe construit,
+ouvrir la scène voulue (`--essai=<scène>`), prendre des captures, cliquer comme un joueur. Le faire **chaque
+fois qu'un changement se voit à l'écran** (interface, rendu, taille, menus), sans demander, avant de dire
+que c'est fini. Captures et vidéos : décor fictif, aucune donnée personnelle (règle 4). Fermer l'exe d'essai
+à la fin ; ne pas toucher au Pilou installé ni à ses réglages réels.
 
 ## Ce qu'on ne peut pas vérifier depuis le cloud
 

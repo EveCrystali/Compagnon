@@ -86,16 +86,32 @@ public static class Placement
 
     // Échelle à donner à la fenêtre (à la place de la Taille) : en dessin fin, celle qui met un pixel fin sur un
     // nombre entier de pixels physiques ; sinon la Taille telle quelle.
+    // Le dessin fin peut-il servir pour cette Taille ? Non quand une taille plus petite que « Normal » tomberait sur le
+    // même nombre de pixels physiques (à 100 et 125 % : un pixel fin ne descend pas sous un pixel physique) : « Petit »
+    // ne changerait rien. Elle passe alors au dessin d'origine (EchelleOrigine).
+    public static bool FinPossible(double taille, double dpi) =>
+        !(taille < 0.9 && PixelsParPixelFin(taille, dpi) >= PixelsParPixelFin(1, dpi));
+
+    // Échelle du dessin d'origine quand le dessin fin est impossible pour une petite Taille : la même proportion de
+    // « Normal » en dessin fin (0,75 → trois quarts de sa largeur), pour rester plus petit à toutes les échelles.
+    private static double EchelleOrigine(double taille, double dpi) => taille * 2.0 * PixelsParPixelFin(1, dpi) / (PX * dpi);
+
     public static double Echelle(double taille, double dpi, bool fin)
     {
         if (!fin) return taille;
         if (!(dpi > 0)) dpi = 1;
+        if (!FinPossible(taille, dpi)) return EchelleOrigine(taille, dpi);
         return 2.0 * PixelsParPixelFin(taille, dpi) / (PX * dpi);
     }
 
     // Largeur de la grille de Pilou (48 pixels de grille) en pixels physiques : 96 × n en dessin fin.
-    public static double LargeurPhysique(double taille, double dpi, bool fin) =>
-        fin ? 2.0 * RenduPilou.W * PixelsParPixelFin(taille, dpi) : W * P * taille * (dpi > 0 ? dpi : 1);
+    public static double LargeurPhysique(double taille, double dpi, bool fin)
+    {
+        if (!(dpi > 0)) dpi = 1;
+        if (!fin) return W * P * taille * dpi;
+        if (!FinPossible(taille, dpi)) return W * P * EchelleOrigine(taille, dpi) * dpi;
+        return 2.0 * RenduPilou.W * PixelsParPixelFin(taille, dpi);
+    }
 
     // Taille d'un pixel de dessin (en unités, « physique » pixels physiques par unité) ramenée à un nombre pair de
     // pixels physiques (au moins 2) : chaque moitié — un pixel fin — est alors un nombre entier de pixels physiques.
