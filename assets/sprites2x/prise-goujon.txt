@@ -1,0 +1,31 @@
+# prise de pêche
+id: prise-goujon
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#6b8bb2 b=#1f4f8a c=#1e4a81 d=#1d4478 e=#88b5e8 f=#4a8fdc g=#3f77ba h=#417cc0 i=#96beeb j=#80b1e6 k=#ffffff l=#1c2128 m=#a4c8ea n=#a7cbee o=#3a6ba8 p=#b4dbff q=#cee7ff r=#94b4d6
+images:
+...............abbbbbbbbbccbbab.............bba.
+...........abbbbbbbbbbbbcbbccabbb..........abbba
+.........abbbbbdeffffbbcbccbbbbbbbb.......bbbfbb
+.......abbbdeeeffffffffffbbbbdeebbbbb....bbbffbb
+.....abbbdeefffffffffffffffffeffeebbbb..bbbffabd
+....abbdeffffffghhiiiiiiiiiiffffffeebbbbbdffjbb.
+...abbefffffffghhhbbhhiihhiiheffffffebbbdffjfbb.
+..abbeffgkkgffgheebbeehheehheffffffffebbffjfabd.
+..bbeffgkkkkgfghefefffffffbbefffffffffffjjffbb..
+..bbfffkkkllkfhffffffffffgbbffgffffffffjffjjbb..
+.abdfffkklllkfbbfffhgghmggmmggmffffffgjfjjfabd..
+.bbfffffkllkefbbefgfhhffmmffmmfggggfgjjjfffbb...
+.bbfffffekkeffhffgnnnnnnnnnnnnnnnnnfjjjjjjjbb...
+.dbagggffffffghffhffhhffhhffhefffffffjjjfffdba..
+..bboooofffffghfffhhbbhhffhhffffffffffjfjjffbb..
+..bbffffgffgggfhgfffbbfffffffffffffgfffjffjjbb..
+..dbbfpppppqqqqhppqqqqqqqqqqqqqqqpppppbbjjffdba.
+...dbdfpppppppphhppppppppppppppppppppabdbfjffdb.
+....dbdbpppppppphhqppppppppppppppprfabdbdbfjfbd.
+.....dddddfrrrrppppppppppppprrrrrfaddd..dddfjdda
+.......dddddfffppprrrrrrrrrrffffadddd....dddfjdd
+.........dddddddffffffffffffadddddd.......dddfdd
+...........dddddddddddddddddddddd..........ddddd
+...............dddddddddddddd...............ddd.

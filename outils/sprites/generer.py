@@ -970,11 +970,22 @@ def poisson(t, x, y, w, h, corps, clair, detail, queue="fourche", nageoire=True,
     if lanterne:
         t.ligne(ex + 1, int(cy - h / 2), ex - 2, int(cy - h / 2) - 4, detail)
         t.ell(ex - 2.5, cy - h / 2 - 5, 1.8, 1.8, O5)
+    if toile.fin():
+        import finition_prises
+        finition_prises.poisson_fin(t, x, y, w, h, corps, clair, detail, queue, taches, lanterne)
 
 
 def prises():
+    # Au fin, les positions gardent leurs demi-unités et les rubans avancent d'un demi-pixel (courbes lisses).
+    ent = (lambda v: v) if toile.fin() else int
+    pas = 0.5 if toile.fin() else 1
+    rangef = (lambda a, b: [v / 2 for v in range(a * 2, b * 2)]) if toile.fin() else range
+
     def fin(t, id_, contour):
         t.contour(contour)
+        if toile.fin():
+            import finition
+            finition.poser_detail("prise-" + id_, t)
         t, _, _ = t.rogner()
         ecrire("prise-" + id_, t, slot="objet", commentaire="prise de pêche")
 
@@ -982,10 +993,10 @@ def prises():
     t = T(24, 10); poisson(t, 1, 1, 22, 8, GRIS_C, ARGENT_C, GRIS); fin(t, "ablette", ARDOISE)
     t = T(16, 22)
     for i, x in enumerate((3, 7, 11)):
-        for y in range(1, 21):
-            xx = x + int(math.sin(y / 2.5 + i) * 1.6)
-            t.rect(xx, y, 2, 1, [B2, B3, T2][i])
-        t.ell(x + 1 + int(math.sin(1 / 2.5 + i) * 1.6), 1.5, 1.5, 1.5, B4)
+        for y in rangef(1, 21):
+            xx = x + ent(math.sin(y / 2.5 + i) * 1.6)
+            t.rect(xx, y, 2, pas, [B2, B3, T2][i])
+        t.ell(x + 1 + ent(math.sin(1 / 2.5 + i) * 1.6), 1.5, 1.5, 1.5, B4)
     fin(t, "algue", B1)
     t = T(18, 22)
     t.rect(4, 1, 9, 13, GRIS)
@@ -1019,11 +1030,15 @@ def prises():
     t.poly([(17, 10), (23, 8), (23, 12)], O3)
     fin(t, "ecrevisse", O1)
     t = T(18, 18)
-    for k in range(70):
-        a = k * 0.18
+    for k in (range(70) if not toile.fin() else range(900)):
+        a = k * 0.18 if not toile.fin() else k * 0.014
         r = 0.9 + a * 0.75
         x, y = 9 + math.cos(a) * r, 9 + math.sin(a) * r
-        t.rect(int(x), int(y), 2, 2, CREME if k % 9 else CREME_O)
+        if toile.fin():
+            # Coquille en spirale tracée au demi-pixel : un ruban crème, une arête plus sombre à chaque quart de tour.
+            t.ell(x + 1, y + 1, 1.15, 1.15, CREME_O if (a % 1.57) < 0.3 else CREME)
+            continue
+        t.rect(ent(x), ent(y), 2, 2, CREME if k % 9 else CREME_O)
     t.ell(9, 9, 2, 2, O4)
     t.p(9, 9, O3)
     fin(t, "spirale", GRIS)
@@ -1042,7 +1057,7 @@ def prises():
     for x in range(1, 30):
         y = 5 + math.sin(x / 4) * 2.5
         t.ell(x, y, 2.6, 2.6 if x < 26 else 1.6, "#2a5ea8")
-        t.p(x, int(y) + 1, B3)
+        t.p(x, int(y) + 1, B3) if not toile.fin() else t.p(x - 0.5, y + 1.2, B3)
     t.rect(4, 4, 2, 2, ENCRE)
     t.p(4, 4, BLANC)
     t.ell(29.5, 5 + math.sin(29.5 / 4) * 2.5, 2.5, 3, "#2a5ea8")
@@ -1074,9 +1089,9 @@ def prises():
     t.ell(10, 5, 3, 2.5, V4)
     for i in range(6):
         x0 = 5 + i * 2.8
-        for y in range(13, 21):
-            xx = int(x0 + math.sin(y / 2 + i) * 1.3)
-            t.rect(xx, y, 2, 1, V3 if i % 2 else V2)
+        for y in rangef(13, 21):
+            xx = ent(x0 + math.sin(y / 2 + i) * 1.3)
+            t.rect(xx, y, 2, pas, V3 if i % 2 else V2)
     t.rect(8, 8, 2, 2, ENCRE); t.rect(14, 8, 2, 2, ENCRE)
     t.p(8, 8, BLANC); t.p(14, 8, BLANC)
     t.rect(11, 11, 2, 1, V1)
@@ -1087,9 +1102,9 @@ def prises():
     t.ell(8, 5, 4.5, 4, "#f2a94e")
     t.poly([(10, 3), (14, 4), (10, 6)], "#f2a94e")
     t.ell(7, 12, 4, 5, "#f2a94e")
-    for y in range(15, 24):
+    for y in rangef(15, 24):
         x = 7 - (y - 15) * 0.3 + math.sin((y - 15) / 2.5) * 1.5
-        t.rect(int(x), y, 3 if y < 20 else 2, 1, "#f2a94e")
+        t.rect(ent(x), y, 3 if y < 20 else 2, pas, "#f2a94e")
     t.ell(5, 24, 2.2, 2, "#f2a94e")
     t.ell(5, 24, 1, 1, None)
     for y in range(8, 17, 2):
@@ -1126,14 +1141,24 @@ def prises():
     t = T(32, 18)
     poisson(t, 1, 1, 30, 16, O3, BLANC, B2, taches=True)
     for (x, y) in ((10, 6), (14, 10), (18, 5), (20, 11)):
+        if toile.fin():
+            # Taches rondes de la carpe koï, un point bleu à l'ombre.
+            t.ell(x + 1.5, y + 1.5, 1.7, 1.5, BLANC)
+            t.ell(x + 0.8, y + 0.8, 0.5, 0.5, B2)
+            continue
         t.rect(x, y, 3, 3, BLANC)
         t.rect(x, y, 1, 1, B2)
     fin(t, "carpe", O1)
     t = T(34, 12)
     t.ell(8, 6, 6.5, 5, O5)
     t.ell(7, 5, 3, 2, BLANC)
-    for x in range(13, 33):
+    for x in (range(13, 33) if not toile.fin() else [v / 2 for v in range(26, 66)]):
         h = max(0.6, 4.5 - (x - 13) * 0.21)
+        if toile.fin():
+            # Traînée lisse : le biseau de la queue se calcule au demi-pixel, bandes plus claires au cœur.
+            t.rect(x, 6 - h, 0.5, h * 2, O3 if (int(x) // 3) % 2 else O4)
+            t.rect(x, 6 - h * 0.34, 0.5, h * 0.68, O4 if (int(x) // 3) % 2 else O5)
+            continue
         t.rect(x, int(6 - h), 1, int(h * 2), O3 if (x // 3) % 2 else O4)
     for (x, y) in ((20, 2), (26, 9), (30, 4)):
         t.p(x, y, BLANC)
@@ -1536,22 +1561,39 @@ def soins():
     ecrire("soin-faim", t, slot="objet", commentaire="besoin : faim (bol fumant)")
     # Propreté : une étoile à quatre branches et deux bulles.
     t = T(12, 12)
-    for d in range(5):
-        t.p(5 - d, 6, B4)
-        t.p(5 + d, 6, B4)
-        t.p(5, 6 - d, B4)
-        t.p(5, 6 + d, B4)
-    t.rect(4, 5, 3, 3, B4)
-    t.p(5, 6, BLANC)
-    t.contour(B1)
-    t.anneau(10, 1.8, 1.8, 1.8, B3, 1)
-    t.p(9, 1, BLANC)
+    if toile.fin():
+        # Étincelle à quatre branches effilées, cœur blanc ; la bulle garde son anneau et son reflet.
+        cx, cy = 5.5, 6.5
+        t.poly([(cx, cy - 5.5), (cx + 1.2, cy - 1.2), (cx + 5.5, cy), (cx + 1.2, cy + 1.2), (cx, cy + 5.5),
+                (cx - 1.2, cy + 1.2), (cx - 5.5, cy), (cx - 1.2, cy - 1.2)], B4)
+        t.ell(cx, cy, 1.5, 1.5, BLANC)
+        t.contour(B1)
+        t.anneau(10, 1.8, 1.8, 1.8, B3, 1)
+        t.ell(9.3, 1.2, 0.5, 0.5, BLANC)
+    else:
+        for d in range(5):
+            t.p(5 - d, 6, B4)
+            t.p(5 + d, 6, B4)
+            t.p(5, 6 - d, B4)
+            t.p(5, 6 + d, B4)
+        t.rect(4, 5, 3, 3, B4)
+        t.p(5, 6, BLANC)
+        t.contour(B1)
+        t.anneau(10, 1.8, 1.8, 1.8, B3, 1)
+        t.p(9, 1, BLANC)
     ecrire("soin-proprete", t, slot="objet", commentaire="besoin : propreté (étincelle et bulles)")
     # Moral : un cœur.
     t = T(11, 10)
-    t.motif(0, 1, [".ooo.ooo..", "ooooooooo.", "ooooooooo.", ".ooooooo..", "..ooooo...", "...ooo....", "....o....."], {"o": O3})
-    t.p(2, 2, O5)
-    t.p(3, 2, O5)
+    if toile.fin():
+        # Cœur rond : deux lobes et une pointe, reflet en arc sur le lobe gauche.
+        t.ell(3.1, 3.5, 2.7, 2.6, O3)
+        t.ell(6.5, 3.5, 2.7, 2.6, O3)
+        t.poly([(0.5, 4.6), (9.1, 4.6), (4.8, 8.6)], O3)
+        t.ell(2.4, 2.6, 1.0, 0.7, O5)
+    else:
+        t.motif(0, 1, [".ooo.ooo..", "ooooooooo.", "ooooooooo.", ".ooooooo..", "..ooooo...", "...ooo....", "....o....."], {"o": O3})
+        t.p(2, 2, O5)
+        t.p(3, 2, O5)
     t.contour(O1)
     ecrire("soin-moral", t, slot="objet", commentaire="besoin : moral (cœur)")
 
