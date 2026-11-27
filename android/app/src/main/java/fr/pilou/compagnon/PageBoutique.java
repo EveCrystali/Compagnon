@@ -374,6 +374,7 @@ final class PageBoutique extends Page {
         Boutique.Article a = Boutique.trouver(choisi);
         if (a == null) return;
         Gains.acheter(app, a.id);
+        Sons.jouer(app, Sons.ACHAT);
         // Un objet portable se porte dès qu'il arrive (le PC applique l'achat puis l'équipement).
         if (java.util.Arrays.asList(Boutique.SLOTS).contains(a.slot)) Gains.equiper(app, a.slot, a.id);
         envoyer();

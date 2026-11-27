@@ -52,7 +52,9 @@ regarder de ses yeux sur un vrai Windows et un vrai téléphone. Le contrat du m
   des retards : carnets identiques à la fin, une fin, versé une fois.
 - **Divergence** au même choix : dans le délai de grâce (10 min), le plus ancien gagne ; au-delà, la base
   la plus avancée l'emporte. Dans les deux cas les carnets se retrouvent identiques et aucun fil ne garde
-  le choix perdant.
+  le choix perdant. Même quand le perdant est **en retard** (son rejeu n'atteint pas l'étape de la base
+  reçue) : la route des décisions montre la séparation et son fil repart de la base reçue (test
+  `Divergence_quand_le_perdant_est_en_retard`, vecteur `divergence-perdant-en-retard`).
 - **Taille des messages au pire** : 20 fins dans l'historique, trois parties suspendues, la plus longue
   marche de chaque campagne mesurée pas à pas.
 
@@ -99,18 +101,51 @@ Sans SDK Android, `CampagnesTest` (Java pur) se lance avec `javac`/`java`, `org.
 chemin de classes, les ressources `assets/campagnes` et un `campagnes/index.txt` ; la CI fait foi.
 Les tests ajoutés prennent environ 5 s côté PC et 3 s côté Java.
 
-## À vérifier à la main (rien ne tourne ici sur un vrai appareil)
+## À vérifier à la main
 
-**Windows**
+**Windows** — passé le 27 novembre 2026 sur le PC d'Antoine (Windows 11, deux écrans à 100 %, 96 ppp), exe d'essai
+dans un dossier jetable (le Pilou installé et ses réglages n'ont pas été touchés). Les fenêtres ont été rendues par
+l'exe lui-même : `--essai=<scène> --captures=<dossier>` écrit chaque fenêtre ouverte en PNG à 100, 125 et 150 %, puis à sa
+taille minimale, et liste les défileurs horizontaux (`fenetres.txt`). La souris et le clavier n'ont pas été pilotés
+(accès au bureau resté sans réponse) : ce qui demande un geste du joueur reste à faire.
 
-- [ ] Fenêtre Aventure, `--essai=campagne:lecture` : le message le plus long (phare, 107 mots) et un
-      choix à quatre options de 60 caractères (phare, `ch8-reunion-a`) tiennent sans barre horizontale,
-      à 100 %, 125 % et 150 % d'échelle, fenêtre à sa taille minimale (840 × 560).
-- [ ] `--essai=campagne:attente`, `retour`, `epreuve`, `fin` : compte à rebours, annonce une seule fois,
-      chaque épreuve jouable au clavier et à la souris, « laisser faire les dés » (Échap).
-- [ ] Bande de décor : chaque décor s'affiche net en dessin fin ; repli « ciel au ton » si un sprite manque.
-- [ ] Fermer le PC pendant une attente, le rouvrir après l'heure de retour : Pilou revient, une annonce.
-- [ ] Une fin obtenue : po et xp s'envolent une fois, l'objet exclusif est dans l'inventaire.
+- [x] **ok, après deux corrections** — Fenêtre Aventure, `--essai=campagne:longue` (nouvelle scène : le message le plus
+      long des campagnes et le choix à quatre options `ch8-reunion-a` du phare) : aucun défileur horizontal à 1004 × 681
+      ni à la taille minimale (840 × 560), rendu à 100, 125 et 150 %. Défauts trouvés et corrigés à la taille minimale :
+      la colonne de gauche (portrait, chapitre, sac) passait sous « Bibliothèque / Mettre de côté » (elle défile
+      maintenant) ; quatre options écrasaient le fil à zéro hauteur (la zone d'action défile, le fil garde 110 px).
+      **Non vérifié** : un vrai passage de Windows à 125 / 150 % (il faudrait changer l'échelle d'Antoine) ; le rendu
+      à ces échelles est celui de WPF, sans les messages DPI ni l'arrondi des pixels de l'écran.
+- [~] **en partie** — `--essai=campagne:attente`, `retour`, `epreuve`, `fin` : compte à rebours et barre affichés
+      (« encore moins d'une minute »), écran d'épreuve et de fin sans débordement, y compris à la taille minimale (la
+      fin y défile). **Non vérifié** : jouer chaque épreuve au clavier et à la souris, « laisser faire les dés »
+      (Échap) — demande de piloter la souris.
+- [~] **en partie** — Bande de décor : jardin, mare, maison, hall de la Grande Panne nets à 100 % ; le dessin fin de
+      Pilou est net à l'écran (capture de la fenêtre par Windows, pixels francs). **Non vérifié** : chaque décor un par
+      un, le repli « ciel au ton », la netteté à 125 / 150 % sur un vrai écran.
+- [x] **ok** — Fermer le PC pendant une attente, le rouvrir après l'heure de retour : profil isolé avec le prologue en
+      attente (1 min), exe arrêté net pendant l'attente, relancé après : **une** annonce (« je suis arrivé ! … ▸ La
+      mare »), notée aussitôt ; relancé encore : plus de bulle, le signe « ! » seul. Dans les heures calmes
+      (22 h – 8 h), Pilou se tait et ne montre que le « ! » : voulu.
+- [x] **ok** (sauf l'animation) — Une fin obtenue (prologue fini hors de l'exe, puis deux lancements) : 25 po
+      (`PoCampagnes`), 13 xp (`XpTelephone`) et l'objet exclusif `feuille` versés au premier lancement, rien de plus au
+      second. **Non vu** : l'envol des po et de l'xp (trop bref pour une capture à heure fixe).
+
+**Autres points Windows** (section « Jamais vérifié » de `ETAT.md`)
+
+- [x] **ok** — Charge du dessin fin, mesurée 60 s sur l'exe d'essai au repos : 4,7 % d'un cœur en dessin fin, 4,5 %
+      en dessin d'origine (0,17 % du processeur, 28 cœurs) ; pour mémoire, le Pilou installé : environ 6 % d'un cœur.
+- [x] **ok, après correction** — Fenêtre des expéditions (`--essai=expedition:journal`) : rien ne déborde, à
+      sa taille normale ni minimale. Défaut corrigé : les ◀ ▶ de l'équipement, désactivés, prenaient le gris clair de
+      Windows ; ils ont maintenant l'habit rétro, comme l'Aventure et le journal.
+- [x] **ok** — Fenêtre Journal (`--essai=journal`, `complicite`) : page, navigation, ligne de complicité lisibles ;
+      à la taille minimale le texte d'une page défile.
+- [x] **ok, après correction** — Bulle de Pilou : une phrase plus large que la bulle était coupée net, sans « … »
+      (retour d'expédition, mot du jour). Elle passe maintenant à la ligne ; les lignes discrètes (en expédition…)
+      finissent par « … ».
+- [ ] **non vérifié** — Extensions VS Code et Visual Studio : il faudrait les installer dans les éditeurs d'Antoine.
+- Test `Vecteurs_partages_avec_le_telephone` : échouait sur un PC à l'heure de Paris (date convertie à l'heure locale,
+  fichier écrit en UTC par la CI). Corrigé : décalage fixe UTC dans le test.
 
 **Téléphone**
 

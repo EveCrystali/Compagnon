@@ -214,6 +214,7 @@ public sealed partial class FenetrePilou
         _x = _expX0;
         _tSaut = Maintenant;
         if (r is null || r.Issue == Denouement.Rappel) return;
+        Sons.Jouer(Son.Expedition);
         var (po, xp) = _essaiExp is not null ? (r.Po, r.Xp) : _expGains;
         _expGains = (0, 0);
         if (po > 0) FlotterPo($"+{po} po");

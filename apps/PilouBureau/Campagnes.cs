@@ -140,6 +140,12 @@ public static class Campagnes
 
     private const string Alphabet64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
+    // La lettre d'une décision dans la route : Abandon (-4) → A, Rate → B, Reussite → C, Suite → D, option 0 → E…
+    private static char Pas64(int valeur) => Alphabet64[valeur - Abandon];
+
+    private static bool CheminValide(string chemin, int e) =>
+        chemin.Length == e && chemin.All(ch => Alphabet64.IndexOf(ch) is >= 0 and <= 16 - Abandon);
+
     // 4 caractères tirés de l'identifiant (FNV-1a 64 bits, 24 bits gardés) : ce qui voyage dans les messages.
     public static string Code(string id)
     {
@@ -448,12 +454,17 @@ public static class Campagnes
         public Instantane Ici { get; set; } = new();
         // Dernier check-point (null : c'est « Ici », pas encore entré).
         public Instantane? Cp { get; set; }
+        // Route : une lettre par décision consommée depuis le départ (Pas64 de sa valeur), donc E lettres ; vide ou d'une
+        // autre longueur : inconnue (message d'un appareil plus ancien). Deux routes dont aucune ne prolonge l'autre
+        // racontent deux histoires.
+        public string Chemin { get; set; } = "";
         public List<Entree> Journal { get; set; } = new();
 
         public Partie Copie() => new()
         {
             Campagne = Campagne, P = P, D = D, O = O, Graine = Graine, Rejeu = Rejeu, E = E, R = R, I = I, Tirages = Tirages, T = T,
-            Geste = Geste, Entre = Entre, Abandonnee = Abandonnee, Reprise = Reprise, Ici = Ici.Copie(), Cp = Cp?.Copie(), Journal = new(Journal),
+            Geste = Geste, Entre = Entre, Abandonnee = Abandonnee, Reprise = Reprise, Ici = Ici.Copie(), Cp = Cp?.Copie(), Chemin = Chemin,
+            Journal = new(Journal),
         };
     }
 
@@ -494,6 +505,8 @@ public static class Campagnes
         // On vient de revenir à un check-point (échec, reprise d'une partie abandonnée) et rien n'a encore été décidé.
         public bool Reprise;
         public List<Point> Points = new();
+        // Route jusqu'ici (voir Partie.Chemin) ; inconnue si sa longueur n'est pas E.
+        public string Chemin = "";
 
         public bool EnAttente => Phase is Phase.Attente or Phase.Repos;
         public bool EnCours => Phase is Phase.Choix or Phase.Epreuve or Phase.Depart or Phase.Attente or Phase.Repos;
@@ -532,7 +545,7 @@ public static class Campagnes
         public string Noeud = "";
         public Dictionary<string, int> Vars = new(StringComparer.Ordinal);
         public SortedSet<string> Objets = new(StringComparer.Ordinal), Drapeaux = new(StringComparer.Ordinal);
-        public string Decor = "", LieuDe = "";
+        public string Decor = "", LieuDe = "", Chemin = "";
         public bool AvecCp;
         public string CpNoeud = "", CpDecor = "", CpLieuDe = "";
         public Dictionary<string, int> CpVars = new(StringComparer.Ordinal);
@@ -547,7 +560,7 @@ public static class Campagnes
 
         public Cours Copie() => new()
         {
-            Noeud = Noeud, Vars = new(Vars, StringComparer.Ordinal), Objets = new(Objets, StringComparer.Ordinal),
+            Noeud = Noeud, Chemin = Chemin, Vars = new(Vars, StringComparer.Ordinal), Objets = new(Objets, StringComparer.Ordinal),
             Drapeaux = new(Drapeaux, StringComparer.Ordinal), Decor = Decor, LieuDe = LieuDe, AvecCp = AvecCp, CpNoeud = CpNoeud,
             CpDecor = CpDecor, CpLieuDe = CpLieuDe, CpVars = new(CpVars, StringComparer.Ordinal),
             CpObjets = new(CpObjets, StringComparer.Ordinal), CpDrapeaux = new(CpDrapeaux, StringComparer.Ordinal),
@@ -620,7 +633,7 @@ public static class Campagnes
         {
             Campagne = _p.Campagne, P = _p.P, D = _p.D, O = _p.O, Graine = _p.Graine, Rejeu = _p.Rejeu,
             E = s.E, R = s.R, I = i, Tirages = s.Tirages, T = s.T, Geste = s.Geste, Entre = entre, Abandonnee = abandonnee,
-            Reprise = s.Reprise && !abandonnee, Ici = ici, Cp = cp,
+            Reprise = s.Reprise && !abandonnee, Ici = ici, Cp = cp, Chemin = s.Chemin,
         };
 
         private Instantane PhotoCp(Cours s) => Photo(s.CpNoeud, s.CpVars, s.CpObjets, s.CpDrapeaux, s.CpDecor, s.CpLieuDe);
@@ -811,6 +824,7 @@ public static class Campagnes
             var phase = s.Phase;
             s.T = Math.Max(s.T, x.T);
             s.Mur = x.T;
+            if (s.Chemin.Length == s.E) s.Chemin += Pas64(x.V);
             s.E++;
             s.I = 0;
             s.Fin = 0;
@@ -846,7 +860,10 @@ public static class Campagnes
 
         public Cours Jouer(long maintenant)
         {
-            var s = new Cours { E = _p.E, R = _p.R, I = _p.I, Tirages = _p.Tirages, T = _p.T, Geste = _p.Geste, Reprise = _p.Reprise };
+            var s = new Cours
+            {
+                E = _p.E, R = _p.R, I = _p.I, Tirages = _p.Tirages, T = _p.T, Geste = _p.Geste, Reprise = _p.Reprise, Chemin = _p.Chemin,
+            };
             Charger(_p.Ici, s, false);
             if (_p.Cp is not null) Charger(_p.Cp, s, true);
             if (_p.Abandonnee)
@@ -913,7 +930,7 @@ public static class Campagnes
             {
                 Phase = s.Phase, Campagne = _c.Id, Noeud = s.Noeud, Lieu = Lieu(s), Decor = s.Decor, E = s.E, Tirages = s.Tirages, T = s.T,
                 Fin = Timer(s) ? s.Fin : 0, Messages = s.Messages, Credits = s.Credits, Points = s.Points, Rejeu = _p.Rejeu, Reprise = s.Reprise,
-                ChapitreTotal = _c.Chapitres.Count,
+                Chemin = s.Chemin, ChapitreTotal = _c.Chapitres.Count,
             };
             foreach (var kv in s.Vars) e.Variables[kv.Key] = kv.Value;
             e.Objets = s.Objets.ToList();
@@ -1442,7 +1459,7 @@ public static class Campagnes
 
     // Une partie en JSON compact. Heures en secondes ; celles des décisions, relatives à la base.
     // {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée, 16 reprise),
-    //  "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
+    //  "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"u":route?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
     public static string JsonPartie(Partie p, bool journal = true)
     {
         var ci = CultureInfo.InvariantCulture;
@@ -1462,6 +1479,11 @@ public static class Campagnes
         {
             b.Append(",\"cp\":");
             JsonInstantane(b, p.Cp);
+        }
+        if (p.Chemin != "")
+        {
+            b.Append(",\"u\":");
+            Chaine(b, p.Chemin);
         }
         if (journal && p.Journal.Count > 0)
         {
@@ -1622,6 +1644,8 @@ public static class Campagnes
         if (LireInstantane(o, "ici") is not { } ici) return null;
         p.Ici = ici;
         p.Cp = LireInstantane(o, "cp");
+        var chemin = S(o, "u");
+        p.Chemin = CheminValide(chemin, p.E) ? chemin : "";
         var appareils = L(o, "l").Select(a => a.ValueKind == JsonValueKind.String ? a.GetString() ?? "" : "").ToList();
         foreach (var j in L(o, "j"))
         {
@@ -1684,11 +1708,16 @@ public static class Campagnes
         return change;
     }
 
-    // La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Si mon rejeu passe par la même étape, il doit
-    // y être au même point (même rang, même nœud, même état) ; s'il n'y est pas encore, rien à comparer.
+    // La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Les deux routes connues : l'une doit
+    // prolonger l'autre (mon rejeu peut être en retard ou en avance sur la base reçue). Une route inconnue (appareil plus
+    // ancien) : si mon rejeu passe par la même étape, il doit y être au même point (même rang, même nœud, même état) ;
+    // s'il n'y est pas encore, rien à comparer.
     private static bool Diverge(Campagne c, Partie mienne, Partie recue, long maintenant)
     {
-        var points = Rejouer(c, mienne, maintenant).Points.Where(pt => pt.Base.E == recue.E && !pt.Base.Abandonnee).ToList();
+        var e = Rejouer(c, mienne, maintenant);
+        if (CheminValide(e.Chemin, e.E) && CheminValide(recue.Chemin, recue.E))
+            return !recue.Chemin.StartsWith(e.Chemin, StringComparison.Ordinal) && !e.Chemin.StartsWith(recue.Chemin, StringComparison.Ordinal);
+        var points = e.Points.Where(pt => pt.Base.E == recue.E && !pt.Base.Abandonnee).ToList();
         if (points.Count == 0) return false;
         string Ici(Partie p)
         {

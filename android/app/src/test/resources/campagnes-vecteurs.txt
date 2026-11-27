@@ -39,7 +39,7 @@ decider 1790000192236 pc-a -4 aae7f5763c1b84fc
 decider 1790000192236 pc-a 1 refus
 rejouer 1790000307178 phase=Abandon|noeud=p2-chemins|e=4|t=1790000192000|fin=0|reprise=0|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=|credits=p1-rive|issue=:0:0|messages=14:64a2fbbb2e6b850b
 rejouer 1790086707178 phase=Abandon|noeud=p2-chemins|e=4|t=1790000192000|fin=0|reprise=0|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=|credits=p1-rive|issue=:0:0|messages=14:64a2fbbb2e6b850b
-compacter 1790086707178 {"c":"prologue","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":10,"e":4,"r":2,"i":0,"n":1,"t":1790000192,"ici":["w0qW",{},"6z8Z","","KKuf","JiOI"]}
+compacter 1790086707178 {"c":"prologue","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":10,"e":4,"r":2,"i":0,"n":1,"t":1790000192,"ici":["w0qW",{},"6z8Z","","KKuf","JiOI"],"u":"EECA"}
 rejouer 1790086707178 phase=Abandon|noeud=p2-pied|e=4|t=1790000192000|fin=0|reprise=0|tirages=1|chapitre=ch2:2/2|lieu=L'autre rive|decor=mare|humeur=determine|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-prologue-1
 campagne prologue
@@ -55,7 +55,7 @@ rejouer 1790001203397 phase=Attente|noeud=p1-tour|e=2|t=1790001197000|fin=179000
 decider 1790001205397 pc-c -4 652742e3b165ead9
 rejouer 1790001217496 phase=Abandon|noeud=p1-tour|e=3|t=1790001205000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=La mare|decor=mare|humeur=malice|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=|credits=|issue=:0:0|messages=9:e4bb2c26748af99c
 rejouer 1790087617496 phase=Abandon|noeud=p1-tour|e=3|t=1790001205000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=La mare|decor=mare|humeur=malice|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=|credits=|issue=:0:0|messages=9:e4bb2c26748af99c
-compacter 1790087617496 {"c":"prologue","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":10,"e":3,"r":1,"i":0,"n":0,"t":1790001205,"ici":["nfeZ",{},"","","",""]}
+compacter 1790087617496 {"c":"prologue","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":10,"e":3,"r":1,"i":0,"n":0,"t":1790001205,"ici":["nfeZ",{},"","","",""],"u":"EFA"}
 rejouer 1790087617496 phase=Abandon|noeud=p1-lettre|e=3|t=1790001205000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=|decor=|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-prologue-2
 campagne prologue
@@ -80,7 +80,7 @@ rejouer 1790002395438 phase=Attente|noeud=p2-veille|e=5|t=1790002317000|fin=1790
 decider 1790002397438 pc-c -4 bdabb6beb9dddcb2
 rejouer 1790002503757 phase=Abandon|noeud=p2-veille|e=6|t=1790002397000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=|credits=p1-rive|issue=:0:0|messages=20:592bf70283d50f16
 rejouer 1790088903757 phase=Abandon|noeud=p2-veille|e=6|t=1790002397000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=|credits=p1-rive|issue=:0:0|messages=20:592bf70283d50f16
-compacter 1790088903757 {"c":"prologue","p":3,"d":1790001954,"o":"pc-a","g":"g2","x":11,"e":6,"r":2,"i":0,"n":2,"t":1790002397,"ici":["w0qW",{"DH0_":1},"","","KKuf","JiOI"]}
+compacter 1790088903757 {"c":"prologue","p":3,"d":1790001954,"o":"pc-a","g":"g2","x":11,"e":6,"r":2,"i":0,"n":2,"t":1790002397,"ici":["w0qW",{"DH0_":1},"","","KKuf","JiOI"],"u":"GECEFA"}
 rejouer 1790088903757 phase=Abandon|noeud=p2-pied|e=6|t=1790002397000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=L'autre rive|decor=mare|humeur=determine|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-prologue-3
 campagne prologue
@@ -104,7 +104,7 @@ rejouer 1790003248966 phase=Attente|noeud=p2-veille-lampe|e=5|t=1790003238000|fi
 decider 1790003250966 pc-c -4 f75a19cbca0caafc
 rejouer 1790003279250 phase=Abandon|noeud=p2-veille-lampe|e=6|t=1790003250000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=mouille|credits=p1-rive|issue=:0:0|messages=21:402ca5e6bfd24cfd
 rejouer 1790089679250 phase=Abandon|noeud=p2-veille-lampe|e=6|t=1790003250000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=mouille|credits=p1-rive|issue=:0:0|messages=21:402ca5e6bfd24cfd
-compacter 1790089679250 {"c":"prologue","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":10,"e":6,"r":2,"i":0,"n":2,"t":1790003250,"ici":["w0qW",{},"6z8Z","qqBa","KKuf","JiOI"]}
+compacter 1790089679250 {"c":"prologue","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":10,"e":6,"r":2,"i":0,"n":2,"t":1790003250,"ici":["w0qW",{},"6z8Z","qqBa","KKuf","JiOI"],"u":"EEBFEA"}
 rejouer 1790089679250 phase=Abandon|noeud=p2-pied|e=6|t=1790003250000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=L'autre rive|decor=mare|humeur=determine|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=lampe|drapeaux=mouille|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-essai-0
 campagne essai
@@ -127,13 +127,13 @@ rejouer 1790005008644 phase=Repos|noeud=b-piege|e=4|t=1790004993000|fin=17900055
 rejouer 1790005691846 phase=Choix|noeud=b-entree|e=4|t=1790005593000|fin=0|reprise=1|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=17:c1afdf4f32ba6b7b
 decider 1790005691846 pc-c 3 426d6f9e7667714b
 rejouer 1790005794447 phase=Repos|noeud=b-piege|e=5|t=1790005691000|fin=1790006291000|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=19:1e89d2dfa8b5dc58
-compacter 1790006354847 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":16,"e":5,"r":5,"i":2,"n":2,"t":1790006291,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790006354847 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":16,"e":5,"r":5,"i":2,"n":2,"t":1790006291,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GHFHH"}
 rejouer 1790006354847 phase=Choix|noeud=b-entree|e=5|t=1790006291000|fin=0|reprise=1|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=1:85712b5777ab26c8
-decider 1790006354847 pc-c 1 56cff8fb6ed691e2
+decider 1790006354847 pc-c 1 39a0302dc5c75768
 rejouer 1790006440623 phase=Attente|noeud=b-attente|e=6|t=1790006354000|fin=1790009954000|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:daf2c88c08a3c167
 rejouer 1790010008446 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009954000|fin=0|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=4:da768716f5656d1c
 rejouer 1790096408446 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009954000|fin=0|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=4:da768716f5656d1c
-compacter 1790096408446 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":16,"e":5,"r":5,"i":2,"n":2,"t":1790006291,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-c"],"j":[[5,63,0,"HVHf",1]]}
+compacter 1790096408446 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"g0","x":16,"e":5,"r":5,"i":2,"n":2,"t":1790006291,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GHFHH","l":["pc-c"],"j":[[5,63,0,"HVHf",1]]}
 rejouer 1790096408446 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009954000|fin=0|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=4:da768716f5656d1c
 cas marche-essai-1
 campagne essai
@@ -144,55 +144,55 @@ rejouer 1790001044841 phase=Choix|noeud=b-entree|e=1|t=1790000977000|fin=0|repri
 decider 1790001044841 tel-b 1 549790818606a5f3
 rejouer 1790001131623 phase=Attente|noeud=b-attente|e=2|t=1790001044000|fin=1790004644000|reprise=0|tirages=1|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=9:2905be2dd157c94c
 rejouer 1790004748324 phase=Repos|noeud=b-piege|e=2|t=1790004644000|fin=1790005244000|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=10:bca80f8388f3d40b
-compacter 1790005368919 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790005368919 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GF"}
 rejouer 1790005368919 phase=Choix|noeud=b-entree|e=2|t=1790005244000|fin=0|reprise=1|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=1:4476eb19fb9c9405
-decider 1790005368919 tel-b 1 dcdd40a8fd12de37
-compacter 1790005449828 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["tel-b"],"j":[[2,124,0,"HVHf",1]]}
+decider 1790005368919 tel-b 1 9baf580c7c6a8221
+compacter 1790005449828 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GF","l":["tel-b"],"j":[[2,124,0,"HVHf",1]]}
 rejouer 1790005449828 phase=Attente|noeud=b-attente|e=3|t=1790005368000|fin=1790008968000|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:2b15c81583babc20
-compacter 1790009123491 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["tel-b"],"j":[[2,124,0,"HVHf",1]]}
+compacter 1790009123491 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":2,"r":2,"i":3,"n":2,"t":1790005244,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GF","l":["tel-b"],"j":[[2,124,0,"HVHf",1]]}
 rejouer 1790009123491 phase=Repos|noeud=b-piege|e=3|t=1790008968000|fin=1790009568000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:6a8efe9949631acb
 rejouer 1790009711116 phase=Choix|noeud=b-entree|e=3|t=1790009568000|fin=0|reprise=1|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=5:31040af6b177fed1
-decider 1790009711116 pc-c 3 72480ee8582142e2
+decider 1790009711116 pc-c 3 15bd45f734efa92c
 rejouer 1790009828346 phase=Repos|noeud=b-piege|e=4|t=1790009711000|fin=1790010311000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=7:b65c62d60678c256
 rejouer 1790010069673 phase=Repos|noeud=b-piege|e=4|t=1790009711000|fin=1790010311000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=7:b65c62d60678c256
 decider 1790009829346 pc-a -1 refus
 rejouer 1790010401022 phase=Choix|noeud=b-entree|e=4|t=1790010311000|fin=0|reprise=1|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=8:3b1fc5a21e715b14
-decider 1790010401022 pc-c 3 06cce583b25b25d5
-compacter 1790010407302 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":4,"r":4,"i":2,"n":3,"t":1790010311,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-c"],"j":[[4,90,0,"HVHf",3]]}
+decider 1790010401022 pc-c 3 afb88ff545ef2fa3
+compacter 1790010407302 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":4,"r":4,"i":2,"n":3,"t":1790010311,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFH","l":["pc-c"],"j":[[4,90,0,"HVHf",3]]}
 rejouer 1790010407302 phase=Repos|noeud=b-piege|e=5|t=1790010401000|fin=1790011001000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:abe6a2bfd2f92f78
 rejouer 1790011059265 phase=Choix|noeud=b-entree|e=5|t=1790011001000|fin=0|reprise=1|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:596403f5db415e76
-decider 1790011059265 pc-c 3 ffcb7f8cbe46c4d4
+decider 1790011059265 pc-c 3 a7526ce9b91769e2
 rejouer 1790011151809 phase=Repos|noeud=b-piege|e=6|t=1790011059000|fin=1790011659000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=6:acd0ce01134a4d9f
 rejouer 1790011405404 phase=Repos|noeud=b-piege|e=6|t=1790011059000|fin=1790011659000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=6:acd0ce01134a4d9f
 decider 1790011152809 pc-c -1 refus
 rejouer 1790011810506 phase=Choix|noeud=b-entree|e=6|t=1790011659000|fin=0|reprise=1|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=7:dc3ed2ba795c24db
-decider 1790011810506 pc-a 1 c753740dbaaacdc5
-compacter 1790011902480 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":6,"r":6,"i":2,"n":3,"t":1790011659,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-a"],"j":[[6,151,0,"HVHf",1]]}
+decider 1790011810506 pc-a 1 aa44cd30787a9cd3
+compacter 1790011902480 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":6,"r":6,"i":2,"n":3,"t":1790011659,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHH","l":["pc-a"],"j":[[6,151,0,"HVHf",1]]}
 rejouer 1790011902480 phase=Attente|noeud=b-attente|e=7|t=1790011810000|fin=1790015410000|reprise=0|tirages=3|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:da55d92d72e9dbec
-compacter 1790015551914 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":6,"r":6,"i":2,"n":3,"t":1790011659,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-a"],"j":[[6,151,0,"HVHf",1]]}
+compacter 1790015551914 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":6,"r":6,"i":2,"n":3,"t":1790011659,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHH","l":["pc-a"],"j":[[6,151,0,"HVHf",1]]}
 rejouer 1790015551914 phase=Repos|noeud=b-piege|e=7|t=1790015410000|fin=1790016010000|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:0a842df48d16599d
-compacter 1790016127980 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":7,"r":7,"i":3,"n":4,"t":1790016010,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790016127980 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":7,"r":7,"i":3,"n":4,"t":1790016010,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHHF"}
 rejouer 1790016127980 phase=Choix|noeud=b-entree|e=7|t=1790016010000|fin=0|reprise=1|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=1:ecf476311dd2459f
-decider 1790016127980 pc-a 1 8d82b310c4d60b16
+decider 1790016127980 pc-a 1 87e8e6c3ddb94820
 rejouer 1790016199529 phase=Attente|noeud=b-attente|e=8|t=1790016127000|fin=1790019727000|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:4c2a4d38dbc80c86
 rejouer 1790017963264 phase=Attente|noeud=b-attente|e=8|t=1790016127000|fin=1790019727000|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:4c2a4d38dbc80c86
 decider 1790016200529 pc-a -1 refus
 rejouer 1790019750776 phase=Repos|noeud=b-piege|e=8|t=1790019727000|fin=1790020327000|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:211bfde5e98f2db5
 rejouer 1790020460378 phase=Choix|noeud=b-entree|e=8|t=1790020327000|fin=0|reprise=1|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=5:df206fba4a505682
-decider 1790020460378 pc-a 3 189bdfcb3af8d43e
+decider 1790020460378 pc-a 3 b29b84d824c110b8
 rejouer 1790020543614 phase=Repos|noeud=b-piege|e=9|t=1790020460000|fin=1790021060000|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=7:5ce2b1b5acd02c89
-compacter 1790021096204 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":9,"r":9,"i":2,"n":5,"t":1790021060,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790021096204 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":9,"r":9,"i":2,"n":5,"t":1790021060,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHHFFH"}
 rejouer 1790021096204 phase=Choix|noeud=b-entree|e=9|t=1790021060000|fin=0|reprise=1|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=1:058da987299b9235
-decider 1790021096204 pc-a 3 68ef85ba0da9001f
+decider 1790021096204 pc-a 3 32731044f2defacb
 rejouer 1790021179368 phase=Repos|noeud=b-piege|e=10|t=1790021096000|fin=1790021696000|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:cf505c5549b62010
 rejouer 1790021795752 phase=Choix|noeud=b-entree|e=10|t=1790021696000|fin=0|reprise=1|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:e1ca81de7bff0629
-decider 1790021795752 pc-a 1 8755d8f2c0dbdc24
+decider 1790021795752 pc-a 1 45ece25ad2db1b30
 rejouer 1790021899300 phase=Attente|noeud=b-attente|e=11|t=1790021795000|fin=1790025395000|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=6:da05f970d04b03a6
-decider 1790021901300 tel-b -4 a9dc0b8a316a5fe7
-compacter 1790021964526 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":10,"r":10,"i":2,"n":5,"t":1790021696,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-a","tel-b"],"j":[[10,99,0,"HVHf",1],[11,205,1,"3A2v",-4]]}
+decider 1790021901300 tel-b -4 d4a96857fd2dcce3
+compacter 1790021964526 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":16,"e":10,"r":10,"i":2,"n":5,"t":1790021696,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHHFFHH","l":["pc-a","tel-b"],"j":[[10,99,0,"HVHf",1],[11,205,1,"3A2v",-4]]}
 rejouer 1790021964526 phase=Abandon|noeud=b-attente|e=12|t=1790021901000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:b211ed11fb0bd921
 rejouer 1790108364526 phase=Abandon|noeud=b-attente|e=12|t=1790021901000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:b211ed11fb0bd921
-compacter 1790108364526 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":10,"e":12,"r":11,"i":0,"n":5,"t":1790021901,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790108364526 {"c":"essai","p":2,"d":1790000977,"o":"pc-a","g":"g1","x":10,"e":12,"r":11,"i":0,"n":5,"t":1790021901,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"GFFHHHFFHHFA"}
 rejouer 1790108364526 phase=Abandon|noeud=b-entree|e=12|t=1790021901000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le départ|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-essai-2
 campagne essai
@@ -215,7 +215,7 @@ rejouer 1790003978385 phase=Choix|noeud=b-entree|e=4|t=1790003843000|fin=0|repri
 decider 1790003978385 pc-c 0 4569ee9894d735f4
 rejouer 1790004005732 phase=Fin|noeud=b-fin-bonne|e=5|t=1790003978000|fin=0|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-bonne|issue=bonne:50:20|messages=14:2d994265a704496a
 rejouer 1790090405732 phase=Fin|noeud=b-fin-bonne|e=5|t=1790003978000|fin=0|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-bonne|issue=bonne:50:20|messages=14:2d994265a704496a
-compacter 1790090405732 {"c":"essai","p":3,"d":1790001954,"o":"pc-a","g":"g2","x":17,"e":4,"r":2,"i":2,"n":2,"t":1790003843,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"l":["pc-c"],"j":[[4,135,0,"HVHf",0]]}
+compacter 1790090405732 {"c":"essai","p":3,"d":1790001954,"o":"pc-a","g":"g2","x":17,"e":4,"r":2,"i":2,"n":2,"t":1790003843,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"u":"EDCH","l":["pc-c"],"j":[[4,135,0,"HVHf",0]]}
 rejouer 1790090405732 phase=Fin|noeud=b-fin-bonne|e=5|t=1790003978000|fin=0|reprise=0|tirages=2|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=b-fin-bonne|issue=bonne:50:20|messages=3:90ca17a8b5155951
 cas marche-essai-3
 campagne essai
@@ -238,15 +238,15 @@ rejouer 1790005403759 phase=Attente|noeud=a-double|e=4|t=1790005235000|fin=17900
 decider 1790005273519 tel-b -1 refus
 rejouer 1790005594851 phase=Epreuve|noeud=a-epreuve|e=4|t=1790005535000|fin=0|reprise=0|tirages=3|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=memoire:2:2:65|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=17:733ad5a46ef17a2c
 decider 1790005594851 tel-b -2 4c870842649b01e4
-compacter 1790005613656 {"c":"essai","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":16,"e":2,"r":1,"i":4,"n":2,"t":1790004163,"ici":["XppY",{},"","","",""],"l":["pc-c","tel-b"],"j":[[2,66,1,"Sn2Q",0],[3,1072,0,"exgz",-1],[4,1431,1,"zMcf",-2]]}
+compacter 1790005613656 {"c":"essai","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":16,"e":2,"r":1,"i":4,"n":2,"t":1790004163,"ici":["XppY",{},"","","",""],"u":"HG","l":["pc-c","tel-b"],"j":[[2,66,1,"Sn2Q",0],[3,1072,0,"exgz",-1],[4,1431,1,"zMcf",-2]]}
 rejouer 1790005613656 phase=Choix|noeud=b-entree|e=5|t=1790005594000|fin=0|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=0:porte,1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=9:062a609d239cccf4
-decider 1790005613656 pc-a 1 eaf4355e74a4c339
+decider 1790005613656 pc-a 1 71b71ba1460fc55f
 rejouer 1790005647286 phase=Attente|noeud=b-attente|e=6|t=1790005613000|fin=1790009213000|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=11:906ca76667c83413
 rejouer 1790007430143 phase=Attente|noeud=b-attente|e=6|t=1790005613000|fin=1790009213000|reprise=0|tirages=4|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=11:906ca76667c83413
 decider 1790005648286 tel-b -1 refus
 rejouer 1790009314096 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009213000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-mauvaise|issue=mauvaise:0:1|messages=12:8a7e4dcb8c7dc340
 rejouer 1790095714096 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009213000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-mauvaise|issue=mauvaise:0:1|messages=12:8a7e4dcb8c7dc340
-compacter 1790095714096 {"c":"essai","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":2,"e":5,"r":2,"i":1,"n":4,"t":1790005594,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"l":["pc-a"],"j":[[5,19,0,"HVHf",1]]}
+compacter 1790095714096 {"c":"essai","p":4,"d":1790002931,"o":"pc-a","g":"g3","x":2,"e":5,"r":2,"i":1,"n":4,"t":1790005594,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"u":"HGEDC","l":["pc-a"],"j":[[5,19,0,"HVHf",1]]}
 rejouer 1790095714096 phase=Fin|noeud=b-fin-mauvaise|e=6|t=1790009213000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=4:8eb8da6e69b7dfdf
 cas marche-essai-4
 campagne essai
@@ -272,16 +272,16 @@ rejouer 1790006519762 phase=Attente|noeud=b-attente|e=6|t=1790006502000|fin=1790
 rejouer 1790010241179 phase=Repos|noeud=b-piege|e=6|t=1790010102000|fin=1790010702000|reprise=0|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=30:833988639ce21182
 rejouer 1790010471589 phase=Repos|noeud=b-piege|e=6|t=1790010102000|fin=1790010702000|reprise=0|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=30:833988639ce21182
 decider 1790010242179 pc-c -1 refus
-compacter 1790010866485 {"c":"essai","p":5,"d":1790003908,"o":"pc-a","g":"g4","x":16,"e":6,"r":4,"i":3,"n":7,"t":1790010702,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"]}
+compacter 1790010866485 {"c":"essai","p":5,"d":1790003908,"o":"pc-a","g":"g4","x":16,"e":6,"r":4,"i":3,"n":7,"t":1790010702,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"FHGGGF"}
 rejouer 1790010866485 phase=Choix|noeud=b-entree|e=6|t=1790010702000|fin=0|reprise=1|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=1:09a5c3071cd3fdcc
-decider 1790010866485 pc-a 3 a443895a6f3a3697
+decider 1790010866485 pc-a 3 1176dd47d8605567
 rejouer 1790010906804 phase=Repos|noeud=b-piege|e=7|t=1790010866000|fin=1790011466000|reprise=0|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=3:8016ed2a31947a6d
 rejouer 1790011592591 phase=Choix|noeud=b-entree|e=7|t=1790011466000|fin=0|reprise=1|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=4:261871d849504a76
-decider 1790011592591 pc-c 1 bca46573864dd646
+decider 1790011592591 pc-c 1 68cbf608c34cf316
 rejouer 1790011628125 phase=Attente|noeud=b-attente|e=8|t=1790011592000|fin=1790015192000|reprise=0|tirages=7|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou guette|tenue=cache|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=|issue=:0:0|messages=6:5f815135b776febd
 rejouer 1790015350169 phase=Fin|noeud=b-fin-mauvaise|e=8|t=1790015192000|fin=0|reprise=0|tirages=8|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=7:9887e0f42fd6d675
 rejouer 1790101750169 phase=Fin|noeud=b-fin-mauvaise|e=8|t=1790015192000|fin=0|reprise=0|tirages=8|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=7:9887e0f42fd6d675
-compacter 1790101750169 {"c":"essai","p":5,"d":1790003908,"o":"pc-a","g":"g4","x":16,"e":7,"r":5,"i":2,"n":7,"t":1790011466,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"l":["pc-c"],"j":[[7,126,0,"HVHf",1]]}
+compacter 1790101750169 {"c":"essai","p":5,"d":1790003908,"o":"pc-a","g":"g4","x":16,"e":7,"r":5,"i":2,"n":7,"t":1790011466,"ici":["HVHf",{"vfB3":2},"V6Ki","","Je54","XppY"],"u":"FHGGGFH","l":["pc-c"],"j":[[7,126,0,"HVHf",1]]}
 rejouer 1790101750169 phase=Fin|noeud=b-fin-mauvaise|e=8|t=1790015192000|fin=0|reprise=0|tirages=8|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=b-fin-mauvaise|issue=mauvaise:0:1|messages=4:a93ad78e1cfcea2d
 cas marche-essai-5
 campagne essai
@@ -297,20 +297,20 @@ decider 1790006960320 tel-b 0 3fb41ac619f80bd3
 rejouer 1790006983447 phase=Attente|noeud=a-marche|e=3|t=1790006960000|fin=1790008700000|reprise=0|tirages=4|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=18:c28969e60051b21d
 rejouer 1790008784633 phase=Depart|noeud=a-double|e=3|t=1790008700000|fin=0|reprise=0|tirages=4|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=Pilou dort au gué|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=19:1c7308e21d3d1b4a
 decider 1790008784633 tel-b -1 c4535a16214a5510
-compacter 1790008787119 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":2,"r":2,"i":3,"n":3,"t":1790006782,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[2,178,0,"Sn2Q",0],[3,2002,0,"exgz",-1]]}
+compacter 1790008787119 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":2,"r":2,"i":3,"n":3,"t":1790006782,"ici":["XppY",{},"","","",""],"u":"GF","l":["tel-b"],"j":[[2,178,0,"Sn2Q",0],[3,2002,0,"exgz",-1]]}
 rejouer 1790008787119 phase=Attente|noeud=a-double|e=4|t=1790008784000|fin=1790009084000|reprise=0|tirages=4|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=Pilou dort au gué|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=6:5c490aa047075316
-compacter 1790009203228 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":2,"r":2,"i":3,"n":3,"t":1790006782,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[2,178,0,"Sn2Q",0],[3,2002,0,"exgz",-1]]}
+compacter 1790009203228 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":2,"r":2,"i":3,"n":3,"t":1790006782,"ici":["XppY",{},"","","",""],"u":"GF","l":["tel-b"],"j":[[2,178,0,"Sn2Q",0],[3,2002,0,"exgz",-1]]}
 rejouer 1790009203228 phase=Epreuve|noeud=a-epreuve|e=4|t=1790009084000|fin=0|reprise=0|tirages=4|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=memoire:2:2:65|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=7:53325c9e85fdfbb1
 de 1790009203228 1
-decider 1790009203228 pc-c -2 42f96c8dd0cd0b3c
+decider 1790009203228 pc-c -2 9ce30b452c363064
 rejouer 1790009309611 phase=Choix|noeud=b-entree|e=5|t=1790009203000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=0:porte,1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=9:02bcc8fcb4cd9345
-decider 1790009309611 pc-c 3 d291aab4df2e2666
+decider 1790009309611 pc-c 3 448aec393d8f6e3e
 rejouer 1790009427385 phase=Repos|noeud=b-piege|e=6|t=1790009309000|fin=1790009909000|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=11:43702f712024ef30
 rejouer 1790009952401 phase=Choix|noeud=b-entree|e=6|t=1790009909000|fin=0|reprise=1|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=0:porte,1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime|issue=:0:0|messages=12:190e76884b20a193
-decider 1790009952401 pc-c 0 01dd12774252f081
+decider 1790009952401 pc-c 0 b8b00c49743cd7a9
 rejouer 1790010018392 phase=Fin|noeud=b-fin-bonne|e=7|t=1790009952000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-bonne|issue=bonne:50:20|messages=14:06032e905548cb29
 rejouer 1790096418392 phase=Fin|noeud=b-fin-bonne|e=7|t=1790009952000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=a-prime,b-fin-bonne|issue=bonne:50:20|messages=14:06032e905548cb29
-compacter 1790096418392 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":6,"r":4,"i":2,"n":5,"t":1790009909,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"l":["pc-c"],"j":[[6,43,0,"HVHf",0]]}
+compacter 1790096418392 {"c":"essai","p":6,"d":1790004885,"o":"pc-a","g":"g5","x":17,"e":6,"r":4,"i":2,"n":5,"t":1790009909,"ici":["HVHf",{"EpqZ":2,"vfB3":2},"V6Kit-9A","","Je54","lzzQ"],"u":"GFEDCH","l":["pc-c"],"j":[[6,43,0,"HVHf",0]]}
 rejouer 1790096418392 phase=Fin|noeud=b-fin-bonne|e=7|t=1790009952000|fin=0|reprise=0|tirages=5|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle,pain|drapeaux=|credits=b-fin-bonne|issue=bonne:50:20|messages=3:4a82f61900058890
 cas marche-essai-6
 campagne essai
@@ -324,7 +324,7 @@ rejouer 1790005990600 phase=Attente|noeud=a-boucle|e=2|t=1790005980000|fin=17900
 decider 1790005992600 tel-b -4 4ce314b2da1b3ac4
 rejouer 1790006011417 phase=Abandon|noeud=a-boucle|e=3|t=1790005992000|fin=0|reprise=0|tirages=2|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=9:d8e0376f06824e13
 rejouer 1790092411417 phase=Abandon|noeud=a-boucle|e=3|t=1790005992000|fin=0|reprise=0|tirages=2|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=9:d8e0376f06824e13
-compacter 1790092411417 {"c":"essai","p":7,"d":1790005862,"o":"pc-a","g":"g6","x":10,"e":3,"r":1,"i":0,"n":2,"t":1790005992,"ici":["XppY",{},"","","",""]}
+compacter 1790092411417 {"c":"essai","p":7,"d":1790005862,"o":"pc-a","g":"g6","x":10,"e":3,"r":1,"i":0,"n":2,"t":1790005992,"ici":["XppY",{},"","","",""],"u":"GHA"}
 rejouer 1790092411417 phase=Abandon|noeud=a-debut|e=3|t=1790005992000|fin=0|reprise=0|tirages=2|chapitre=a:1/2|lieu=|decor=|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:1,ruse:0|objets=|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas marche-essai-7
 campagne essai
@@ -334,27 +334,27 @@ decider 1790006839123 tel-b 1 bab4d997800def0b
 rejouer 1790006877275 phase=Repos|noeud=a-chute|e=1|t=1790006839000|fin=1790007739000|reprise=0|tirages=1|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=triste|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=6:a69c2d982c1b4446
 rejouer 1790007308137 phase=Repos|noeud=a-chute|e=1|t=1790006839000|fin=1790007739000|reprise=0|tirages=1|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=triste|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=6:a69c2d982c1b4446
 decider 1790006878275 pc-c -1 refus
-compacter 1790007788690 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""]}
+compacter 1790007788690 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"u":"F"}
 rejouer 1790007788690 phase=Choix|noeud=a-carrefour|e=1|t=1790007739000|fin=0|reprise=1|tirages=1|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=determine|pendant=|tenue=|options=0:nord,1:sud,2:secret,3:boucle|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=3:9b27ac657f672ef0
-decider 1790007788690 pc-c 0 16579c947b3b8ee2
+decider 1790007788690 pc-c 0 93a1abb771c5149b
 rejouer 1790007894031 phase=Attente|noeud=a-marche|e=2|t=1790007788000|fin=1790008388000|reprise=0|tirages=2|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=5:5d7e43c527a0f36b
 rejouer 1790008478664 phase=Depart|noeud=a-double|e=2|t=1790008388000|fin=0|reprise=0|tirages=2|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=Pilou dort au gué|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=6:a612be131353cfa7
-decider 1790008478664 tel-b -1 79459527320d995c
-compacter 1790008565087 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1]]}
+decider 1790008478664 tel-b -1 5ef666a1b420bbfd
+compacter 1790008565087 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"u":"F","l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1]]}
 rejouer 1790008565087 phase=Attente|noeud=a-double|e=3|t=1790008478000|fin=1790008778000|reprise=0|tirages=2|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=Pilou dort au gué|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=6:a612be131353cfa7
 rejouer 1790008671543 phase=Attente|noeud=a-double|e=3|t=1790008478000|fin=1790008778000|reprise=0|tirages=2|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=Pilou dort au gué|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=6:a612be131353cfa7
 decider 1790008566087 pc-c -1 refus
-compacter 1790008809886 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1]]}
+compacter 1790008809886 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"u":"F","l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1]]}
 rejouer 1790008809886 phase=Epreuve|noeud=a-epreuve|e=3|t=1790008778000|fin=0|reprise=0|tirages=2|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=memoire:2:2:65|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=7:d907a1992534f634
 de 1790008809886 0
-decider 1790008809886 tel-b -3 06c23d8d1e2693de
-compacter 1790008818190 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1],[3,1070,1,"zMcf",-3]]}
+decider 1790008809886 tel-b -3 c937db74859725e9
+compacter 1790008818190 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"u":"F","l":["pc-c","tel-b"],"j":[[1,49,0,"Sn2Q",0],[2,739,1,"exgz",-1],[3,1070,1,"zMcf",-3]]}
 rejouer 1790008818190 phase=Repos|noeud=a-chute|e=4|t=1790008809000|fin=1790009709000|reprise=0|tirages=3|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=triste|pendant=Pilou se repose|tenue=nuit|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=8:52ca7d791a521742
-decider 1790008820190 pc-a -4 fd1c57b60ff23600
-compacter 1790008914773 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[1,49,1,"Sn2Q",0],[2,739,2,"exgz",-1],[3,1070,2,"zMcf",-3],[4,1081,0,"k7hE",-4]]}
+decider 1790008820190 pc-a -4 cf23d21bbd4df77f
+compacter 1790008914773 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":16,"e":1,"r":1,"i":3,"n":1,"t":1790007739,"ici":["XppY",{},"","","",""],"u":"F","l":["pc-a","pc-c","tel-b"],"j":[[1,49,1,"Sn2Q",0],[2,739,2,"exgz",-1],[3,1070,2,"zMcf",-3],[4,1081,0,"k7hE",-4]]}
 rejouer 1790008914773 phase=Abandon|noeud=a-chute|e=5|t=1790008820000|fin=0|reprise=0|tirages=3|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=triste|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=8:52ca7d791a521742
 rejouer 1790095314773 phase=Abandon|noeud=a-chute|e=5|t=1790008820000|fin=0|reprise=0|tirages=3|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=triste|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=8:52ca7d791a521742
-compacter 1790095314773 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":10,"e":5,"r":2,"i":0,"n":3,"t":1790008820,"ici":["XppY",{},"","","",""]}
+compacter 1790095314773 {"c":"essai","p":8,"d":1790006839,"o":"pc-a","g":"g7","x":10,"e":5,"r":2,"i":0,"n":3,"t":1790008820,"ici":["XppY",{},"","","",""],"u":"FEDBA"}
 rejouer 1790095314773 phase=Abandon|noeud=a-debut|e=5|t=1790008820000|fin=0|reprise=0|tirages=3|chapitre=a:1/2|lieu=|decor=|humeur=joie|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:1,ruse:0|objets=|drapeaux=|credits=|issue=:0:0|messages=0:cbf29ce484222325
 cas conflit-plus-ancienne
 campagne essai
@@ -380,7 +380,7 @@ cas abandon-pendant-l-attente
 partie {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"graine","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""],"l":["pc-a","tel-b"],"j":[[0,10,0,"Sn2Q",3],[1,500,1,"Sn2Q",0],[1,200,0,"zVfd",-4],[1,320,0,"zVfd",-4]]}
 rejouer 1790000100000 phase=Abandon|noeud=a-boucle|e=2|t=1790000200000|fin=0|reprise=0|tirages=0|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=5:04c41a0f1fe7496c
 rejouer 1790000900000 phase=Abandon|noeud=a-boucle|e=2|t=1790000200000|fin=0|reprise=0|tirages=0|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=neutre|pendant=|tenue=|options=|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=5:04c41a0f1fe7496c
-compacter 1790000900000 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"graine","x":10,"e":2,"r":1,"i":0,"n":0,"t":1790000200,"ici":["XppY",{},"","","",""]}
+compacter 1790000900000 {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"graine","x":10,"e":2,"r":1,"i":0,"n":0,"t":1790000200,"ici":["XppY",{},"","","",""],"u":"HA"}
 cas journal-mal-forme
 partie {"c":"essai","p":1,"d":1790000000,"o":"pc-a","g":"graine","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""],"l":["pc-a","tel-b"],"j":[[0,10,0,"Sn2Q",9],[0,11,0,"OAuj",0],[0,12,1,"Sn2Q",2],[5,13,1,"Sn2Q",0],[0,14,1,"Sn2Q",-1],[0,15,1,"Sn2Q",1]]}
 rejouer 1790000060000 phase=Choix|noeud=b-entree|e=1|t=1790000012000|fin=0|reprise=0|tirages=1|chapitre=b:2/2|lieu=Le seuil|decor=d-deux|humeur=neutre|pendant=|tenue=|options=1:fenetre,3:trou|jeu=:0:0:0|vars=courage:2,ruse:0|objets=pain|drapeaux=|credits=a-prime|issue=:0:0|messages=7:a238b84e176330e6
@@ -483,7 +483,7 @@ fil 29 24 bb5dceed1c3a07ff
 acquis prologue 25 13 p2-fin-coucher
 carnet pc-a
 messages pc-a pc 1
-m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
 messages tel-b tel 1
 m {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
@@ -495,22 +495,22 @@ recevoir pc-a 1790001063000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","
 recevoir pc-a 1790001063000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
 actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet tel-b
-recevoir tel-b 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 recevoir tel-b 1790001063000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
 actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet pc-c
-recevoir pc-c 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 recevoir pc-c 1790001063000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
 actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet tel-b
 acquis prologue 25 13 p2-fin-coucher
 attente 0 0
 carnet pc-a
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 cas carnets-rejeu-abandon-reprise
 carnet tel-b
 demarrer prologue 3 1790004661000 tel-b g3 0 ok
@@ -524,53 +524,53 @@ actualiser 1790004752000 phase=Abandon|noeud=p2-chemins|e=4|t=1790004751000|fin=
 demarrer essai 3 1790004761000 tel-b g4 0 ok
 choisir essai 1790004771000 tel-b nord ok
 actualiser 1790004781000 phase=Attente|noeud=a-marche|e=1|t=1790004771000|fin=1790005731000|reprise=0|tirages=1|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=5:64ec488384f6fe52
-signature {"v":1,"a":"","k":"","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
 messages tel-b tel 1
-m {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-a
 messages pc-a pc 1
-m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
 messages pc-c pc 1
-m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
-recevoir tel-b 1790004782000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir tel-b 1790004782000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004782000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004782000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004782000 phase=Attente|noeud=a-marche|e=1|t=1790004771000|fin=1790005731000|reprise=0|tirages=1|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=5:64ec488384f6fe52
 carnet pc-a
-recevoir pc-a 1790004782000 1 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-a 1790004782000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004782000 1 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004782000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004782000 phase=Attente|noeud=a-marche|e=1|t=1790004771000|fin=1790005731000|reprise=0|tirages=1|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=5:64ec488384f6fe52
 carnet pc-c
-recevoir pc-c 1790004782000 1 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-c 1790004782000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004782000 1 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004782000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"u":"FGF","l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004782000 phase=Attente|noeud=a-marche|e=1|t=1790004771000|fin=1790005731000|reprise=0|tirages=1|chapitre=a:1/2|lieu=La route du nord|decor=d-un|humeur=fatigue|pendant=Pilou marche vers le nord|tenue=marche|options=|jeu=:0:0:0|vars=courage:2,ruse:2|objets=cle|drapeaux=parti|credits=|issue=:0:0|messages=5:64ec488384f6fe52
 carnet pc-c
 abandonner essai 1790004791000 pc-c ok
 demarrer prologue 3 1790004801000 pc-c g5 0 ok
 actualiser 1790004802000 phase=Choix|noeud=p2-chemins|e=4|t=1790004801000|fin=0|reprise=1|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=0:sentier,1:raccourci|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=mouille|credits=|issue=:0:0|messages=3:f8336adc2e2f8e48
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
 messages pc-c pc 1
-m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
 messages tel-b tel 1
-m {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-a
 messages pc-a pc 1
-m {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
-recevoir pc-c 1790004811000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-c 1790004811000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004811000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004811000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004811000 phase=Choix|noeud=p2-chemins|e=4|t=1790004801000|fin=0|reprise=1|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=0:sentier,1:raccourci|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=mouille|credits=|issue=:0:0|messages=3:f8336adc2e2f8e48
 carnet tel-b
-recevoir tel-b 1790004811000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir tel-b 1790004811000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004811000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004811000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004811000 phase=Choix|noeud=p2-chemins|e=4|t=1790004801000|fin=0|reprise=1|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=0:sentier,1:raccourci|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=mouille|credits=|issue=:0:0|messages=3:f8336adc2e2f8e48
 carnet pc-a
-recevoir pc-a 1790004811000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-a 1790004811000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004811000 1 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004811000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790004761,"ici":["XppY",{},"","","",""],"l":["tel-b"],"j":[[0,10,0,"Sn2Q",0]]},"s":[{"c":"prologue","p":2,"d":1790004661,"o":"tel-b","g":"g3","x":11,"e":4,"r":2,"i":0,"n":1,"t":1790004751,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"}],"h":{"essai":[3,0,{},""],"prologue":[2,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004811000 phase=Choix|noeud=p2-chemins|e=4|t=1790004801000|fin=0|reprise=1|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=0:sentier,1:raccourci|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=mouille|credits=|issue=:0:0|messages=3:f8336adc2e2f8e48
 carnet pc-a
 actualiser 1790004812000 phase=Choix|noeud=p2-chemins|e=4|t=1790004801000|fin=0|reprise=1|tirages=1|chapitre=ch2:2/2|lieu=Au pied de la colline|decor=pied-colline|humeur=neutre|pendant=|tenue=|options=0:sentier,1:raccourci|jeu=:0:0:0|vars=elan:1|objets=|drapeaux=mouille|credits=|issue=:0:0|messages=3:f8336adc2e2f8e48
@@ -586,52 +586,52 @@ demarrer prologue 3 1790004851000 pc-a g7 1 ok
 actualiser 1790004852000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet pc-a
 messages pc-a pc 1
-m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
 messages pc-c pc 1
-m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
 messages tel-b tel 1
-m {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-a
-recevoir pc-a 1790004861000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-a 1790004861000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004861000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004861000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004861000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet pc-c
-recevoir pc-c 1790004861000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-c 1790004861000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004861000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004861000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004861000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet tel-b
-recevoir tel-b 1790004861000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir tel-b 1790004861000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"]},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""]}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004861000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004861000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":4,"d":1790004801,"o":"pc-c","g":"g3","x":19,"e":4,"r":2,"i":0,"n":1,"t":1790004801,"ici":["w0qW",{"DH0_":1},"","qqBa","KKuf","JiOI"],"u":"GEBA"},"s":[{"c":"essai","p":3,"d":1790004761,"o":"tel-b","g":"g4","x":10,"e":2,"r":1,"i":0,"n":1,"t":1790004791,"ici":["XppY",{},"","","",""],"u":"EA"}],"h":{"essai":[3,0,{},""],"prologue":[4,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004861000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet tel-b
 messages tel-b tel 1
-m {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
 messages pc-c pc 1
-m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-a
 messages pc-a pc 1
-m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+m {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
-recevoir tel-b 1790004862000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir tel-b 1790004862000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004862000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir tel-b 1790004862000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004862000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet pc-c
-recevoir pc-c 1790004862000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-c 1790004862000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004862000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-c 1790004862000 0 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004862000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet pc-a
-recevoir pc-a 1790004862000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
-recevoir pc-a 1790004862000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004862000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+recevoir pc-a 1790004862000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 actualiser 1790004862000 phase=Choix|noeud=p1-sac|e=0|t=1790004851000|fin=0|reprise=0|tirages=0|chapitre=ch1:1/2|lieu=Devant la porte|decor=seuil|humeur=determine|pendant=|tenue=|options=0:lampe,1:corde,2:gouter|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=|credits=|issue=:0:0|messages=3:a468556b8668a607
 carnet pc-a
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet tel-b
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 carnet pc-c
-signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""]}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
+signature {"v":1,"a":"","k":"","q":{"c":"prologue","p":6,"d":1790004851,"o":"pc-a","g":"g7","x":3,"e":0,"r":0,"i":0,"n":0,"t":1790004851,"ici":["nfeZ",{},"","","",""]},"s":[{"c":"essai","p":5,"d":1790004831,"o":"pc-a","g":"g4","x":10,"e":3,"r":2,"i":0,"n":1,"t":1790004841,"ici":["XppY",{},"","","",""],"u":"EAA"}],"h":{"essai":[5,0,{},""],"prologue":[6,1,{"LyH9":1790001056},"JiOILyH9"]}}
 cas carnets-departs-simultanes
 carnet pc-x
 demarrer essai 9 1790000000000 pc-x gx 0 ok
@@ -651,24 +651,24 @@ recevoir tel-y 1790000010000 1 {"v":1,"a":"pc-x","k":"pc","q":{"c":"essai","p":1
 actualiser 1790000010000 phase=Choix|noeud=a-carrefour|e=0|t=1790000000000|fin=0|reprise=0|tirages=0|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=determine|pendant=|tenue=|options=0:nord,1:sud,2:secret,3:boucle|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=3:5c1401841a8b0173
 carnet tel-y
 messages tel-y tel 1
-m {"v":1,"a":"tel-y","k":"tel","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+m {"v":1,"a":"tel-y","k":"tel","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 carnet pc-x
 messages pc-x pc 1
-m {"v":1,"a":"pc-x","k":"pc","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+m {"v":1,"a":"pc-x","k":"pc","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 carnet tel-y
-recevoir tel-y 1790000011000 0 {"v":1,"a":"pc-x","k":"pc","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+recevoir tel-y 1790000011000 0 {"v":1,"a":"pc-x","k":"pc","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 actualiser 1790000011000 phase=Choix|noeud=a-carrefour|e=0|t=1790000000000|fin=0|reprise=0|tirages=0|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=determine|pendant=|tenue=|options=0:nord,1:sud,2:secret,3:boucle|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=3:5c1401841a8b0173
 carnet pc-x
-recevoir pc-x 1790000011000 0 {"v":1,"a":"tel-y","k":"tel","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+recevoir pc-x 1790000011000 0 {"v":1,"a":"tel-y","k":"tel","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 actualiser 1790000011000 phase=Choix|noeud=a-carrefour|e=0|t=1790000000000|fin=0|reprise=0|tirages=0|chapitre=a:1/2|lieu=Le départ|decor=d-un|humeur=determine|pendant=|tenue=|options=0:nord,1:sud,2:secret,3:boucle|jeu=:0:0:0|vars=courage:2,ruse:0|objets=|drapeaux=parti|credits=|issue=:0:0|messages=3:5c1401841a8b0173
 carnet pc-x
-signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 carnet tel-y
-signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
+signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""]}}
 recevoir pc-x 1790000012000 0 {"v":2,"a":"pc-z"}
 recevoir pc-x 1790000012000 0 pas du json
 recevoir pc-x 1790000012000 1 {"v":1,"a":"pc-z","k":"pc","q":{"c":"Mauvais Id","p":9},"h":{"x":[1,0,{},"zz"]}}
-signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""],"x":[1,0,{},""]}}
+signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""],"u":"A"}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""],"x":[1,0,{},""]}}
 cas divergence-au-dela-du-delai
 carnet dv-pc
 demarrer phare-eteint 99 1824560000000 pc-a dv 0 ok
@@ -690,13 +690,13 @@ etat 1824561952000 d29bb96071387f81
 etat 1824561952000 5d4d87ad1cc30a74
 carnet dv-pc
 messages dv-pc pc 1
-m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"]},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"],"u":"EEF"},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
 carnet dv-tel
 messages dv-tel pc 0
 carnet dv-pc
 etat 1824561952000 5d4d87ad1cc30a74
 carnet dv-tel
-recevoir dv-tel 1824561952000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"]},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+recevoir dv-tel 1824561952000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"],"u":"EEF"},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
 etat 1824561952000 5d4d87ad1cc30a74
 etat 1824561952000 5d4d87ad1cc30a74
 carnet dv-pc
@@ -741,22 +741,102 @@ etat 1824562743000 69276430ef92d687
 etat 1824571384000 b64a54d2e955118d
 carnet dv-tel
 messages dv-tel pc 1
-m {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+m {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"],"u":"EEFFEFCE"},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
 carnet dv-pc
 messages dv-pc pc 1
-m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"],"u":"EEFEFECF"},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
 carnet dv-tel
-recevoir dv-tel 1824571385000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+recevoir dv-tel 1824571385000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"],"u":"EEFEFECF"},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
 etat 1824571385000 ed3e67b61305e6c4
 carnet dv-pc
-recevoir dv-pc 1824571385000 1 {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+recevoir dv-pc 1824571385000 1 {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"],"u":"EEFFEFCE"},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
 etat 1824571385000 ed3e67b61305e6c4
 carnet dv-pc
 filh 38 31 340e846c4e74b71e
-signatureh 62437bfd44a97b28
+signatureh 1d439ad8639ec488
 carnet dv-tel
 filh 2 2 d3af88590e2b8c82
-signatureh 62437bfd44a97b28
+signatureh 1d439ad8639ec488
+cas divergence-perdant-en-retard
+carnet dr-pc
+demarrer phare-eteint 99 1826288000000 pc-a dr 0 ok
+etat 1826288000000 c47246b5d6fa69e9
+etat 1826288000000 c47246b5d6fa69e9
+choisir phare-eteint 1826288030000 pc-a bruler ok
+etat 1826288030000 797a766540895ed7
+etat 1826288030000 797a766540895ed7
+etat 1826288631000 afc3a2b01e98557b
+etat 1826288631000 afc3a2b01e98557b
+etat 1826288631000 afc3a2b01e98557b
+choisir phare-eteint 1826288661000 pc-a auberge ok
+etat 1826288661000 a9bc16ae47e54014
+etat 1826288661000 a9bc16ae47e54014
+choisir phare-eteint 1826288691000 pc-a ecouter ok
+etat 1826288691000 7cb1b073f0d72ba8
+etat 1826288691000 7cb1b073f0d72ba8
+etat 1826289592000 0e0eb60a635d698f
+etat 1826289592000 1c249774f35519cf
+carnet dr-pc
+messages dr-pc pc 1
+m {"v":1,"a":"dr-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":3,"r":1,"i":4,"n":2,"t":1826289591,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"],"u":"EFF"},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+carnet dr-tel
+messages dr-tel pc 0
+carnet dr-pc
+etat 1826289592000 1c249774f35519cf
+carnet dr-tel
+recevoir dr-tel 1826289592000 1 {"v":1,"a":"dr-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":3,"r":1,"i":4,"n":2,"t":1826289591,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"],"u":"EFF"},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+etat 1826289592000 1c249774f35519cf
+etat 1826289592000 1c249774f35519cf
+carnet dr-pc
+choisir phare-eteint 1826289602000 pc-a odile ok
+carnet dr-tel
+choisir phare-eteint 1826289662000 tel-b basile ok
+carnet dr-pc
+etat 1826289602000 9e5c69e7ad0ee383
+choisir phare-eteint 1826289632000 pc-a chambre ok
+etat 1826289632000 59df1d742d0684b2
+etat 1826290353000 dc4357a472317ead
+etat 1826290353000 dc4357a472317ead
+choisir phare-eteint 1826290383000 pc-a porte ok
+etat 1826290383000 81c97915a8a7b7a3
+aude phare-eteint 1826290413000 pc-a ok
+etat 1826290413000 d9dfe52ebbb9e771
+choisir phare-eteint 1826290443000 pc-a silence ok
+etat 1826290443000 f83845e8d568edbe
+etat 1826297764000 6e9899be0e8705d3
+etat 1826297764000 756783793f1380a8
+choisir phare-eteint 1826297794000 pc-a pierres ok
+etat 1826297794000 4e8f6dac9d1215b0
+aude phare-eteint 1826297824000 pc-a ok
+carnet dr-pc
+etat 1826301424000 991ece7961047910
+carnet dr-tel
+etat 1826301424000 d795517f6fe93837
+carnet dr-pc
+messagesh pc-a pc 1 313 f0f0eeabe5b560b5
+carnet dr-tel
+recevoir tel-b 1826301424000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":8,"r":2,"i":3,"n":5,"t":1826297763,"ici":["hopp",{"NIxc":1,"vfB3":1},"dTFX","hLoN","jlUD","x31C"],"u":"EFFEEEBF","l":["pc-a"],"j":[[8,31,0,"hopp",0],[9,61,0,"EYdK",-2]]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+carnet dr-tel
+etat 1826301424000 991ece7961047910
+filh 6 5 c60ee6cd273452d0
+carnet dr-tel
+messages dr-tel pc 1
+m {"v":1,"a":"dr-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":8,"r":2,"i":3,"n":5,"t":1826297763,"ici":["hopp",{"NIxc":1,"vfB3":1},"dTFX","hLoN","jlUD","x31C"],"u":"EFFEEEBF","l":["pc-a"],"j":[[8,31,0,"hopp",0],[9,61,0,"EYdK",-2]]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+carnet dr-pc
+messages dr-pc pc 1
+m {"v":1,"a":"dr-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":8,"r":2,"i":3,"n":5,"t":1826297763,"ici":["hopp",{"NIxc":1,"vfB3":1},"dTFX","hLoN","jlUD","x31C"],"u":"EFFEEEBF","l":["pc-a"],"j":[[8,31,0,"hopp",0],[9,61,0,"EYdK",-2]]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+carnet dr-tel
+recevoir dr-tel 1826301425000 0 {"v":1,"a":"dr-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":8,"r":2,"i":3,"n":5,"t":1826297763,"ici":["hopp",{"NIxc":1,"vfB3":1},"dTFX","hLoN","jlUD","x31C"],"u":"EFFEEEBF","l":["pc-a"],"j":[[8,31,0,"hopp",0],[9,61,0,"EYdK",-2]]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+etat 1826301425000 991ece7961047910
+carnet dr-pc
+recevoir dr-pc 1826301425000 1 {"v":1,"a":"dr-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1826288000,"o":"pc-a","g":"dr","x":0,"e":8,"r":2,"i":3,"n":5,"t":1826297763,"ici":["hopp",{"NIxc":1,"vfB3":1},"dTFX","hLoN","jlUD","x31C"],"u":"EFFEEEBF","l":["pc-a"],"j":[[8,31,0,"hopp",0],[9,61,0,"EYdK",-2]]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+etat 1826301425000 991ece7961047910
+carnet dr-pc
+filh 42 34 8664da9b8cd2700a
+signatureh 7902e1fb1ae11001
+carnet dr-tel
+filh 6 5 c60ee6cd273452d0
+signatureh 7902e1fb1ae11001
 # parcours complets : prologue
 cas parcours-prologue-m12
 carnet j-prologue-m12
@@ -809,7 +889,7 @@ choisir prologue 1790175301000 tel-b rentre ok
 etat 1790175301000 31b63580b9ab43fd
 filh 21 17 1523042e261b34d4
 acquis prologue 15 8 p2-fin-prudent
-signatureh 770f708aba9db4b5
+signatureh 4a3b54607fb58d5d
 # parcours complets : grande-panne
 cas parcours-grande-panne-m839
 carnet j-grande-panne-m839
@@ -846,7 +926,7 @@ etat 1790135695000 8e67bc1eaa6f67c1
 choisir grande-panne 1790135705000 pc-a ch3-revendeur-garde ok
 etat 1790135705000 eb38a5434d50b066
 etat 1790137925000 e6ca2a28ab8e4186
-messagesh pc-a pc 1 249 f4a1615e25e78c87
+messagesh pc-a pc 1 267 e6b61cf539b57ceb
 choisir grande-panne 1790138009000 pc-a ch3-golem-galette ok
 etat 1790138009000 0baa1b2c7e5bbe4f
 choisir grande-panne 1790138031000 pc-a ch3-route-monte ok
@@ -879,7 +959,7 @@ etat 1790199982000 e6538c3ce70c027e
 continuer grande-panne 1790200047000 pc-a ok
 etat 1790200047000 22da285bfc4ba13d
 etat 1790200827000 e24a9d5f954b9e5d
-messagesh pc-a pc 1 315 f845f3485524757e
+messagesh pc-a pc 1 342 f1a7c32d8383aebb
 choisir grande-panne 1790200881000 pc-a ch6a-question-apres ok
 etat 1790200881000 48e5a704e50cdc7a
 choisir grande-panne 1790200980000 pc-a ch6a-cartes-loin ok
@@ -915,7 +995,7 @@ choisir grande-panne 1790246048000 tel-b ch8-seuil-frappe ok
 etat 1790246048000 a2d261cb742be049
 choisir grande-panne 1790264048000 tel-b ch9-face-pourquoi ok
 etat 1790264048000 8cf6fa112cd3ccbe
-messagesh pc-a pc 1 338 c1d21280aed89f2c
+messagesh pc-a pc 1 377 726d5dfaa4d8a3e7
 etat 1790264948000 e469164b4b37c18f
 choisir grande-panne 1790265037000 tel-b ch9-tac-attend ok
 etat 1790265037000 1081757cb8248ef6
@@ -1033,7 +1113,7 @@ etat 1790319009000 40df43d992fc2321
 choisir grande-panne 1790319009000 tel-b ch8-labyrinthe-zip ok
 filh 150 117 abeb84acaf9424bb
 acquis grande-panne 390 195 ch10-fin-corbeille
-signatureh bc3f20434eb3c202
+signatureh 8b92656ee688627b
 cas parcours-grande-panne-m519
 carnet j-grande-panne-m519
 demarrer grande-panne 99 1790172800000 pc-a m519 0 ok
@@ -1068,7 +1148,7 @@ etat 1790178975000 4e9891af5e99fc8c
 continuer grande-panne 1790178975000 tel-b ce n'est pas possible maintenant
 etat 1790179424000 4e9891af5e99fc8c
 etat 1790179425000 a6b8ccec9c9e766a
-messagesh tel-b tel 1 259 f92d51fd07e48d36
+messagesh tel-b tel 1 277 ddac8d1162c16f2f
 choisir grande-panne 1790180085000 tel-b ch3-golem-galette ok
 etat 1790180085000 4d8c00767a5610ec
 choisir grande-panne 1790180505000 pc-a ch3-route-descend ok
@@ -1103,7 +1183,7 @@ choisir grande-panne 1790240175000 tel-b ch6b-quai-crie ok
 etat 1790240175000 bfa7c6d2607b6d15
 choisir grande-panne 1790240263000 pc-a ch6b-imprimante-touche ok
 etat 1790240263000 c5763a2ee7d3b9a7
-messagesh tel-b tel 1 369 5302f7ab7b65fb5a
+messagesh tel-b tel 1 395 eb872fec1d7893e1
 etat 1790241774000 970b7c21ce10bf62
 choisir grande-panne 1790241784000 tel-b ch7-pied-nuage ok
 etat 1790241784000 428893bc470ee4ce
@@ -1134,7 +1214,7 @@ choisir grande-panne 1790255580000 pc-a ch9-tac-moitie ok
 etat 1790255580000 50987f266e44b072
 choisir grande-panne 1790257200000 pc-a ch9-demi-retour ok
 etat 1790257200000 f7b6085b97d41bb8
-messagesh tel-b tel 1 359 a1bf07f081ccd887
+messagesh tel-b tel 1 397 cd853121beb9f22f
 choisir grande-panne 1790257920000 tel-b ch9-veille-grumeau ok
 etat 1790257920000 d53650cee3541c73
 etat 1790265000000 07c0163b18714e5a
@@ -1150,7 +1230,7 @@ etat 1790266654000 b7135300184d650a
 etat 1790267069000 db9af4702d9dc0d4
 filh 150 118 cafb063bcb3ab426
 acquis grande-panne 490 245 ch10-fin-enregistre
-signatureh 2d61c4e2f9751a47
+signatureh e1b38cf125273cd2
 cas parcours-grande-panne-m1299
 carnet j-grande-panne-m1299
 demarrer grande-panne 99 1790259200000 pc-a m1299 0 ok
@@ -1182,7 +1262,7 @@ etat 1790265368000 d78b7dbd75a35c4e
 choisir grande-panne 1790265450000 pc-a ch3-revendeur-rumeur ok
 etat 1790265450000 614b0371a3242290
 etat 1790266350000 301443c4b0e557cb
-messagesh tel-b tel 1 260 05906d648c6479b9
+messagesh tel-b tel 1 278 88bcab6622782416
 choisir grande-panne 1790266450000 tel-b ch3-golem-galette ok
 etat 1790266450000 ce0faba6dba3fe3b
 choisir grande-panne 1790266516000 pc-a ch3-route-descend ok
@@ -1213,7 +1293,7 @@ choisir grande-panne 1790321439000 tel-b ch6b-quai-crie ok
 etat 1790321439000 db87c5507530ca07
 choisir grande-panne 1790321481000 tel-b ch6b-imprimante-rouleau ok
 etat 1790321481000 5506f517e553422f
-messagesh tel-b tel 1 371 4d6c1cdbec18efde
+messagesh tel-b tel 1 397 7be9f94567999734
 etat 1790322441000 341f9ad6d2f09fa2
 choisir grande-panne 1790322543000 pc-a ch7-pied-nuage ok
 etat 1790322543000 9bb873cfeb6d1d21
@@ -1244,7 +1324,7 @@ choisir grande-panne 1790337007000 pc-a ch9-tac-attend ok
 etat 1790337007000 cd85ebd355148c65
 choisir grande-panne 1790338267000 pc-a ch9-veille-phrase ok
 etat 1790338267000 e2b4a4347653232c
-messagesh pc-a pc 1 355 c1706eb21ce34dfb
+messagesh pc-a pc 1 393 72ecef068dd82afa
 etat 1790344694000 b4f7c1b4567190ad
 choisir grande-panne 1790344792000 pc-a ch10-reveil-balayeur ok
 etat 1790344792000 28e2776bdc787e37
@@ -1261,7 +1341,7 @@ etat 1790346226000 0c2afd37e80f9e91
 etat 1790346269000 1bb18956149df957
 filh 150 119 b14969336b813ab0
 acquis grande-panne 390 195 ch10-fin-papier
-signatureh f0dfa1d1f03a1507
+signatureh ebb47df5fd2517a4
 cas parcours-grande-panne-m204
 carnet j-grande-panne-m204
 demarrer grande-panne 99 1790345600000 pc-a m204 0 ok
@@ -1292,7 +1372,7 @@ etat 1790350973000 08ad9c5d4f6f9bf4
 choisir grande-panne 1790365373000 pc-a ch3-revendeur-garde ok
 etat 1790365373000 625c1c49d42defea
 etat 1790366273000 9fad2c5f835695dc
-messagesh tel-b tel 1 255 f137dee1ae1d081e
+messagesh tel-b tel 1 273 8aa1edd936e9cf17
 choisir grande-panne 1790366331000 tel-b ch3-golem-patiente ok
 etat 1790366331000 3bb1c6fc857b251b
 choisir grande-panne 1790366444000 tel-b ch3-route-descend ok
@@ -1324,7 +1404,7 @@ choisir grande-panne 1790400217000 pc-a ch6b-quai-crie ok
 etat 1790400217000 d3a4113e1c5bb7a0
 choisir grande-panne 1790400229000 pc-a ch6b-imprimante-touche ok
 etat 1790400229000 212efb29585e03e1
-messagesh tel-b tel 1 362 68e09764b7264fe7
+messagesh tel-b tel 1 388 a1bd477db1d88415
 etat 1790401669000 b5683110c70d7532
 continuer grande-panne 1790402629000 tel-b ce n'est pas possible maintenant
 choisir grande-panne 1790402629000 tel-b ch7-pied-nuage ok
@@ -1353,7 +1433,7 @@ choisir grande-panne 1790412659000 tel-b ch9-tac-attend ok
 etat 1790412659000 23b65ddc1db7f9e6
 choisir grande-panne 1790441459000 pc-a ch9-veille-dort ok
 etat 1790441459000 ce6f26e5812dcfb0
-messagesh pc-a pc 1 365 46aed43e0c674813
+messagesh pc-a pc 1 403 8c063ba8725e31c9
 etat 1790449019000 abe6a44d205de74b
 continuer grande-panne 1790449132000 tel-b ce n'est pas possible maintenant
 choisir grande-panne 1790449132000 tel-b ch10-reveil-balayeur ok
@@ -1369,7 +1449,7 @@ choisir grande-panne 1790450830000 pc-a ch10-pause-guichet ok
 etat 1790450830000 3700f880bc870fc0
 filh 150 118 c6ca955c7295990d
 acquis grande-panne 270 135 ch10-fin-pause
-signatureh 2e95d96787913932
+signatureh a620cf6f1ccc00af
 cas parcours-grande-panne-m1444
 carnet j-grande-panne-m1444
 demarrer grande-panne 99 1790432000000 pc-a m1444 0 ok
@@ -1403,7 +1483,7 @@ etat 1790439366000 85d03133212ef1ad
 choisir grande-panne 1790439409000 pc-a ch3-revendeur-rumeur ok
 etat 1790439409000 489e2d6f0552e7f1
 etat 1790440129000 c4f189d0be0a6ce1
-messagesh tel-b tel 1 268 e553b1c29277c02a
+messagesh tel-b tel 1 286 ea34d7cb533d0585
 choisir grande-panne 1790440200000 tel-b ch3-golem-patiente ok
 etat 1790440200000 e3d372b69649deed
 choisir grande-panne 1790440211000 pc-a ch3-route-monte ok
@@ -1439,7 +1519,7 @@ etat 1790456449000 d6ea829f7f022cb2
 continuer grande-panne 1790456525000 tel-b ok
 etat 1790456525000 8f9d8405af6d3375
 etat 1790456885000 0ae1cd0d3cdb8368
-messagesh tel-b tel 1 338 1038ef5b8336463c
+messagesh tel-b tel 1 365 5537fbe62c51cd2d
 choisir grande-panne 1790456969000 tel-b ch6a-question-apres ok
 etat 1790456969000 9fb0fcef9cad63e8
 continuer grande-panne 1790458649000 pc-a ce n'est pas possible maintenant
@@ -1471,7 +1551,7 @@ choisir grande-panne 1790471982000 tel-b ch8-ratures-colles ok
 etat 1790471982000 5ac0a2991df856e6
 choisir grande-panne 1790472402000 pc-a ch8-seuil-fonce ok
 etat 1790472402000 f2b5a44d00f7d8dc
-messagesh tel-b tel 1 407 78d0777831128ffa
+messagesh tel-b tel 1 444 9dc29d9e570c6892
 choisir grande-panne 1790508402000 tel-b ch9-face-purge ok
 etat 1790508402000 7ae535e640eb64b0
 etat 1790509362000 d822f679c17d68de
@@ -1499,7 +1579,7 @@ etat 1790517006000 e020007ae7ece515
 etat 1790517096000 7e766918b0fa42e5
 filh 150 118 643ab6592ebb2d0d
 acquis grande-panne 530 265 ch10-fin-seconde
-signatureh c0b29ac972c5c946
+signatureh 0aec446dd9b5ec40
 cas parcours-grande-panne-m75
 carnet j-grande-panne-m75
 demarrer grande-panne 99 1790518400000 pc-a m75 0 ok
@@ -1530,7 +1610,7 @@ etat 1790568101000 f6fcf3d374a824c3
 choisir grande-panne 1790568145000 tel-b ch3-revendeur-echange ok
 etat 1790568145000 38519403940b68b2
 etat 1790569031000 c3be2e78be38117c
-messagesh tel-b tel 1 254 cfa36f3c08576c32
+messagesh tel-b tel 1 272 cbc3f9b08284fc7d
 choisir grande-panne 1790569124000 tel-b ch3-golem-galette ok
 etat 1790569124000 4c3ab486fd4f03a6
 choisir grande-panne 1790569175000 tel-b ch3-route-descend ok
@@ -1558,7 +1638,7 @@ choisir grande-panne 1790591216000 pc-a ch6b-quai-crie ok
 etat 1790591216000 82fa96731c7ebbee
 choisir grande-panne 1790592296000 pc-a ch6b-imprimante-rouleau ok
 etat 1790592296000 cb43635b48591f2a
-messagesh pc-a pc 1 361 b2f32492889954fe
+messagesh pc-a pc 1 387 13d7603d7eebcd10
 etat 1790593196000 710bb130b9cfd075
 choisir grande-panne 1790614796000 tel-b ch7-pied-nuage ok
 etat 1790614796000 da9880569aeee361
@@ -1589,11 +1669,11 @@ choisir grande-panne 1790627099000 tel-b ch9-tac-moitie ok
 etat 1790627099000 6594a0c3479a034f
 choisir grande-panne 1790627879000 pc-a ch9-demi-moi ok
 etat 1790627879000 b0e179d526bf324b
-messagesh pc-a pc 1 357 b7579fb7d4b3d5b8
+messagesh pc-a pc 1 395 35d3292bd83cf788
 etat 1790628659000 ccdb0d33fd43552c
 filh 150 119 5b9e18555394804c
 acquis grande-panne 240 120 ch9-fin-demi-temps
-signatureh 5e2e3efe0807563e
+signatureh 12f5109551a2cea6
 # parcours complets : phare-eteint
 cas parcours-phare-eteint-m30
 carnet j-phare-eteint-m30
@@ -1629,7 +1709,7 @@ epreuve phare-eteint 1790107733000 tel-b 1 ok
 etat 1790107733000 51a1389abf6d7a76
 choisir phare-eteint 1790107754000 pc-a appel ok
 etat 1790107754000 0a568e2e0abcf16a
-messagesh pc-a pc 1 321 82fb2eb5544924bc
+messagesh pc-a pc 1 336 07b231f4dd459d21
 choisir phare-eteint 1790107813000 pc-a rentrer ok
 etat 1790107813000 dd39d742b6e1dff5
 etat 1790108603000 760ffb7105f11653
@@ -1662,7 +1742,7 @@ etat 1790113065000 6ca69ec4a5e297a8
 choisir phare-eteint 1790113115000 tel-b haut ok
 etat 1790113115000 3c8571a2c29dafb1
 etat 1790121155000 a9400127c81c96ef
-messagesh pc-a pc 1 281 525f170226d4a279
+messagesh pc-a pc 1 309 3bbe7df0861ed3b2
 choisir phare-eteint 1790121201000 pc-a noir ok
 etat 1790121201000 e6ce82f2dc529eda
 etat 1790121921000 7d8625145fa73e24
@@ -1698,7 +1778,7 @@ etat 1790137592000 cb7a94f32cd7e4fe
 etat 1790138504000 b0ad75bced7de06c
 choisir phare-eteint 1790139944000 tel-b atelier ok
 etat 1790139944000 5173932102ee9dea
-messagesh tel-b tel 1 373 02f1ece9c1e6806b
+messagesh tel-b tel 1 410 cf6d3b1463d3bcb3
 etat 1790141504000 c7601536bf47343d
 choisir phare-eteint 1790141602000 pc-a verite ok
 etat 1790141602000 9d8c80cff2e849aa
@@ -1804,7 +1884,7 @@ choisir phare-eteint 1790205974000 tel-b sable ok
 etat 1790205976000 71c8b77a9e81f189
 filh 150 117 a2f5a7c2210e0f2d
 acquis phare-eteint 360 176 fin-automatique
-signatureh 61fee9f705a70252
+signatureh fd052b4e9e06c8e2
 cas parcours-phare-eteint-m18
 carnet j-phare-eteint-m18
 demarrer phare-eteint 99 1790172800000 pc-a m18 0 ok
@@ -1836,7 +1916,7 @@ etat 1790183959000 7d2c4137305c2298
 continuer phare-eteint 1790184003000 tel-b ce n'est pas possible maintenant
 choisir phare-eteint 1790184003000 tel-b tour ok
 etat 1790184003000 5d28c9a26d936f2a
-messagesh tel-b tel 1 322 0df1d9b1fa989c3d
+messagesh tel-b tel 1 337 2f366bd7b04f9095
 choisir phare-eteint 1790184076000 tel-b rentrer ok
 etat 1790184076000 f16bb0c35a854873
 etat 1790184683000 5b822a1bacdd6079
@@ -1878,7 +1958,7 @@ etat 1790272566000 378ac1292ef0eec7
 continuer phare-eteint 1790272566000 tel-b ce n'est pas possible maintenant
 etat 1790276855000 378ac1292ef0eec7
 etat 1790276862000 4f612d71a1cf6199
-messagesh tel-b tel 1 283 4efad0b05fe15578
+messagesh tel-b tel 1 311 7e45675f6f67d61a
 continuer phare-eteint 1790276949000 tel-b ce n'est pas possible maintenant
 choisir phare-eteint 1790276949000 tel-b noir ok
 etat 1790276949000 cad24a313d8546e8
@@ -1911,7 +1991,7 @@ etat 1790329621000 51f0659bff49e030
 etat 1790330413000 44a8544cf007ac92
 choisir phare-eteint 1790330445000 pc-a atelier ok
 etat 1790330445000 6183d4b68e6d4e97
-messagesh pc-a pc 1 376 8a82ccc986f6663a
+messagesh pc-a pc 1 413 8a1101d6147d116d
 etat 1790331765000 0c4b4f537bed54d0
 choisir phare-eteint 1790331837000 pc-a basile ok
 etat 1790331837000 208da241df5935cc
@@ -1928,7 +2008,7 @@ choisir phare-eteint 1790340878000 tel-b lison ok
 etat 1790340878000 e17462ed57e54819
 filh 150 120 014b52a3903ed066
 acquis phare-eteint 440 216 fin-bonne
-signatureh cb11a1ba67fe72d2
+signatureh e39397c7809ba7e2
 cas parcours-phare-eteint-m33
 carnet j-phare-eteint-m33
 demarrer phare-eteint 99 1790259200000 pc-a m33 0 ok
@@ -1965,7 +2045,7 @@ epreuve phare-eteint 1790307355000 tel-b 1 ok
 etat 1790307355000 a54b75eb8d1c8bd8
 choisir phare-eteint 1790307368000 pc-a porte ok
 etat 1790307368000 b223b473705dea26
-messagesh tel-b tel 1 338 785491cb3d28a3a5
+messagesh tel-b tel 1 353 474cdbb7f2e1ece5
 choisir phare-eteint 1790307451000 tel-b rentrer ok
 etat 1790307451000 2c47dd1d623fee02
 etat 1790307871000 2c47dd1d623fee02
@@ -1998,7 +2078,7 @@ etat 1790313729000 70ec3314cb97a2eb
 choisir phare-eteint 1790313773000 pc-a haut ok
 etat 1790313773000 9637127624bbad5a
 etat 1790322733000 9da43c79fb5f3a9e
-messagesh tel-b tel 1 295 dac827f134782a45
+messagesh tel-b tel 1 323 8f7c6238202a1498
 choisir phare-eteint 1790322795000 tel-b noir ok
 etat 1790322795000 bf8a2f268c448c70
 etat 1790323568000 d0d4ac0c0a9fe946
@@ -2032,7 +2112,7 @@ etat 1790337039000 fe2f40157e58b1aa
 etat 1790337759000 8d112434487a47ea
 choisir phare-eteint 1790337805000 pc-a atelier ok
 etat 1790337805000 6ccfb67818d0bc97
-messagesh tel-b tel 1 370 47c0fdc6dae0bed3
+messagesh tel-b tel 1 407 32ef73f3346d04e2
 etat 1790339005000 ca8b246cc6ad9be6
 choisir phare-eteint 1790339785000 pc-a accuser ok
 etat 1790339785000 af22641dfa2c644e
@@ -2043,7 +2123,7 @@ choisir phare-eteint 1790346976000 tel-b rallumer ok
 etat 1790346976000 c607e7de63aa3546
 filh 150 118 856f9f23856c4636
 acquis phare-eteint 280 136 fin-eteint
-signatureh 343b0027f3b72f3e
+signatureh 9dd0de39ba79d9c3
 cas parcours-phare-eteint-m1176
 carnet j-phare-eteint-m1176
 demarrer phare-eteint 99 1790345600000 pc-a m1176 0 ok
@@ -2074,7 +2154,7 @@ epreuve phare-eteint 1790361731000 pc-a 1 ok
 etat 1790361731000 b9b9ef5cf37c3def
 choisir phare-eteint 1790361813000 pc-a appel ok
 etat 1790361813000 962c3ac5371759a8
-messagesh pc-a pc 1 319 d72b7702da8539b6
+messagesh pc-a pc 1 334 517b8337237369ad
 choisir phare-eteint 1790361871000 pc-a rentrer ok
 etat 1790361871000 311c508133b522a5
 etat 1790362291000 311c508133b522a5
@@ -2111,7 +2191,7 @@ etat 1790375627000 1ecd857885783c66
 continuer phare-eteint 1790375627000 tel-b ce n'est pas possible maintenant
 etat 1790379226000 1ecd857885783c66
 etat 1790426027000 018f7b81c36dbdec
-messagesh tel-b tel 1 281 4c1273f36cfe4c39
+messagesh tel-b tel 1 309 b554c9346b63c136
 choisir phare-eteint 1790426088000 tel-b noir ok
 etat 1790426088000 8aaea75be60d7cfd
 etat 1790426598000 8aaea75be60d7cfd
@@ -2149,7 +2229,7 @@ etat 1790441441000 a6a29a3be7e06d93
 etat 1790441495000 a8c7053dd68a30d8
 choisir phare-eteint 1790441590000 pc-a quai ok
 etat 1790441590000 578638c4f4b76869
-messagesh tel-b tel 1 373 80cd7b3f06fdaa4c
+messagesh tel-b tel 1 410 bca1a0b138cefff8
 etat 1790443353000 cc3fbaf6fd09f31f
 choisir phare-eteint 1790444553000 pc-a accuser ok
 etat 1790444553000 762ff4a82f09b2bf
@@ -2164,7 +2244,7 @@ etat 1790452291000 22b0f61f6abdd59b
 etat 1790457239000 ae7c24676e2ab843
 filh 150 117 0434ce3e11393cfc
 acquis phare-eteint 280 136 fin-faux
-signatureh af64f4bf259fcdb9
+signatureh e9625c981179e0ee
 cas parcours-phare-eteint-m99
 carnet j-phare-eteint-m99
 demarrer phare-eteint 99 1790432000000 pc-a m99 0 ok
@@ -2196,7 +2276,7 @@ epreuve phare-eteint 1790461181000 pc-a 1 ok
 etat 1790461181000 38d049efeb1da507
 choisir phare-eteint 1790461297000 pc-a tour ok
 etat 1790461297000 1b827eea4b02e693
-messagesh pc-a pc 1 313 97eff8438fbd52d7
+messagesh pc-a pc 1 328 b920456cde137f1a
 choisir phare-eteint 1790461777000 pc-a rentrer ok
 etat 1790461777000 22d1bcf684290745
 etat 1790462541000 217fdebc80d4bac7
@@ -2226,7 +2306,7 @@ etat 1790468796000 84f9d0e6bdbebc2f
 choisir phare-eteint 1790468818000 pc-a semer ok
 etat 1790468818000 46a9e16d5fc3ac9d
 etat 1790477398000 d9466aef7dc855d2
-messagesh tel-b tel 1 275 1d3eacf5097a96bf
+messagesh tel-b tel 1 303 d545059260a45fdb
 choisir phare-eteint 1790477450000 tel-b noir ok
 etat 1790477450000 bcb003cb2b7d26e6
 etat 1790478170000 6079771847f69aa5
@@ -2257,7 +2337,7 @@ etat 1790522345000 ad637ca0fdb3e185
 etat 1790523131000 44b135c52fc68e3b
 choisir phare-eteint 1790523226000 tel-b quai ok
 etat 1790523226000 06dc315d93cc05f0
-messagesh tel-b tel 1 375 eac31ad7043cd600
+messagesh tel-b tel 1 412 f0e4278ca1da0b2e
 etat 1790524814000 281fa5fa7796d0b7
 choisir phare-eteint 1790525474000 pc-a basile ok
 etat 1790525474000 dca0b3558f8d8cdb
@@ -2274,7 +2354,7 @@ choisir phare-eteint 1790541037000 tel-b tous ok
 etat 1790541037000 bcf41fd45d8caf23
 filh 150 120 2c11e0d384d0f5d0
 acquis phare-eteint 500 246 fin-secrete
-signatureh d5367ec3b628cd76
+signatureh 2b9d500cc80477dc
 cas parcours-phare-eteint-m15
 carnet j-phare-eteint-m15
 demarrer phare-eteint 99 1790518400000 pc-a m15 0 ok
@@ -2305,7 +2385,7 @@ epreuve phare-eteint 1790582165000 pc-a 1 ok
 etat 1790582165000 dd6f5aad84e4df4f
 choisir phare-eteint 1790582193000 pc-a tour ok
 etat 1790582193000 cd821dc08158e8ca
-messagesh tel-b tel 1 314 e9bebb132afa0dfb
+messagesh tel-b tel 1 329 1e93c7988e0306b4
 choisir phare-eteint 1790583693000 tel-b rentrer ok
 etat 1790583693000 be93e1a83c552855
 etat 1790584611000 d51a41dde8d74bf6
@@ -2342,7 +2422,7 @@ etat 1790621983000 6b33622570bd03c5
 continuer phare-eteint 1790621983000 tel-b ce n'est pas possible maintenant
 etat 1790625852000 6b33622570bd03c5
 etat 1790625894000 d317889e34fae38f
-messagesh tel-b tel 1 266 baea70821bd7ea76
+messagesh tel-b tel 1 294 d2dd7817faeba97b
 choisir phare-eteint 1790625933000 tel-b noir ok
 etat 1790625933000 766269b6aefa9e86
 etat 1790626413000 766269b6aefa9e86
@@ -2379,7 +2459,7 @@ etat 1790654760000 b13405b16c7111c0
 etat 1790655660000 cc4d88d26a9b3cb3
 choisir phare-eteint 1790655748000 tel-b quai ok
 etat 1790655748000 5f4b5476c2575a32
-messagesh tel-b tel 1 372 4cd509606cadb427
+messagesh tel-b tel 1 409 06bdac23a1ec13db
 etat 1790656348000 5f4b5476c2575a32
 continuer phare-eteint 1790656348000 tel-b ce n'est pas possible maintenant
 etat 1790656947000 5f4b5476c2575a32
@@ -2394,7 +2474,7 @@ etat 1790665859000 2fe0edcd9e486d5a
 etat 1790672159000 b190306f9f901433
 filh 150 119 b9b3c124e1ce5fab
 acquis phare-eteint 360 176 fin-sursis
-signatureh 3707058dad2cae28
+signatureh f3c3c5aaf9f873ad
 # parcours complets : petit-nuage
 cas parcours-petit-nuage-m402
 carnet j-petit-nuage-m402
@@ -2427,7 +2507,7 @@ etat 1790117071000 f6d8d84af20b76fe
 etat 1790122891000 9d3a2bb1ac1dda15
 choisir petit-nuage 1790123010000 tel-b ch3-chorale-seul ok
 etat 1790123010000 9aa17602c5dca935
-messagesh pc-a pc 1 287 6b0caa8b6804a249
+messagesh pc-a pc 1 304 1abbbe153b041132
 etat 1790123610000 4f9c1ade8317455f
 choisir petit-nuage 1790123664000 pc-a ch3-toile-refuse ok
 etat 1790123664000 c8a9f0498cba0bdb
@@ -2464,7 +2544,7 @@ choisir petit-nuage 1790136257000 tel-b ch5-minute-promesse ok
 etat 1790136257000 da1ed2bbef13f886
 choisir petit-nuage 1790136289000 tel-b ch5-toit-oui ok
 etat 1790136289000 b33cf2179ea7f97f
-messagesh pc-a pc 1 361 176869a0cb511798
+messagesh pc-a pc 1 387 25188292abbde790
 etat 1790137099000 b33cf2179ea7f97f
 continuer petit-nuage 1790137099000 pc-a ce n'est pas possible maintenant
 etat 1790137908000 b33cf2179ea7f97f
@@ -2504,7 +2584,7 @@ etat 1790160036000 94ebce8d20ef9130
 etat 1790160037000 82a62307be3b58f5
 choisir petit-nuage 1790160577000 pc-a ch10-trop-tard-seul ok
 etat 1790160577000 fdc58c620c624a01
-messagesh pc-a pc 1 349 9ca30c77ca12c61d
+messagesh pc-a pc 1 387 f5d350788ef916f5
 choisir petit-nuage 1790160683000 pc-a ch10-mots-a-tout-a-l-heure ok
 etat 1790160683000 38ddc0d5da2f5a5a
 etat 1790166023000 38ddc0d5da2f5a5a
@@ -2616,7 +2696,7 @@ etat 1790196084000 d46a89c42fbda9b8
 choisir petit-nuage 1790196084000 tel-b ch2-soleil-2-continue ok
 filh 150 107 575fc84c764d0522
 acquis petit-nuage 373 186 ch12-fin-de-loin
-signatureh ae317ae1d7bab616
+signatureh 54b9cd0ecb0bba73
 cas parcours-petit-nuage-m960
 carnet j-petit-nuage-m960
 demarrer petit-nuage 99 1790172800000 pc-a m960 0 ok
@@ -2655,7 +2735,7 @@ etat 1790183510000 40105f80cab869d9
 etat 1790183521000 4286518b2f07a127
 choisir petit-nuage 1790183622000 tel-b ch3-chorale-seul ok
 etat 1790183622000 eb03052fb6ac8057
-messagesh tel-b tel 1 289 c8f05b18376056bb
+messagesh tel-b tel 1 306 d82b2ebbe27c76ef
 etat 1790184277000 f599fdcfd72b9f54
 choisir petit-nuage 1790184378000 tel-b ch3-toile-refuse ok
 etat 1790184378000 0f1a1fdbbba9c4f8
@@ -2687,7 +2767,7 @@ choisir petit-nuage 1790231005000 tel-b ch5-minute-silence ok
 etat 1790231005000 ae137b7fad6e2e80
 choisir petit-nuage 1790231038000 pc-a ch5-toit-oui ok
 etat 1790231038000 7d3d4aa11ea60a19
-messagesh tel-b tel 1 362 c002deb20617c4b1
+messagesh tel-b tel 1 388 21346b4d7c5c06ad
 etat 1790231848000 7d3d4aa11ea60a19
 continuer petit-nuage 1790231848000 tel-b ce n'est pas possible maintenant
 etat 1790232657000 7d3d4aa11ea60a19
@@ -2724,7 +2804,7 @@ etat 1790253254000 0284402fa5de252c
 continuer petit-nuage 1790253254000 pc-a ce n'est pas possible maintenant
 etat 1790258143000 0284402fa5de252c
 etat 1790258262000 8eb5ae2f1634c737
-messagesh pc-a pc 1 318 df0e9d974ac9dbf5
+messagesh pc-a pc 1 357 949e6e216d414084
 choisir petit-nuage 1790258350000 pc-a ch12-adieu-recule ok
 etat 1790258350000 647604dbe79d7d6a
 continuer petit-nuage 1790258443000 tel-b ce n'est pas possible maintenant
@@ -2732,7 +2812,7 @@ choisir petit-nuage 1790258443000 tel-b ch12-apres-plume ok
 etat 1790258443000 8aef62f86c7928ca
 filh 150 117 ba9f57a3243185b8
 acquis petit-nuage 483 241 ch12-fin-deux
-signatureh 8172d010dbb32dc4
+signatureh 16f83d9fe16f3b6d
 cas parcours-petit-nuage-m675
 carnet j-petit-nuage-m675
 demarrer petit-nuage 99 1790259200000 pc-a m675 0 ok
@@ -2764,7 +2844,7 @@ etat 1790300819000 cddbf50ddd95046e
 etat 1790306759000 9f3ba8e5311ebba7
 choisir petit-nuage 1790306873000 pc-a ch3-chorale-seul ok
 etat 1790306873000 30894266ff4de80a
-messagesh pc-a pc 1 290 d2788dd84dd575c5
+messagesh pc-a pc 1 307 a4ce3443f2a67bcb
 etat 1790307203000 30894266ff4de80a
 continuer petit-nuage 1790307203000 pc-a ce n'est pas possible maintenant
 etat 1790307532000 30894266ff4de80a
@@ -2805,7 +2885,7 @@ choisir petit-nuage 1790325094000 pc-a ch5-minute-regrette ok
 etat 1790325094000 4bc75fac647be35f
 choisir petit-nuage 1790350294000 tel-b ch5-toit-non ok
 etat 1790350294000 9a2b9380783b64ea
-messagesh tel-b tel 1 364 5c654ae3522c66b4
+messagesh tel-b tel 1 390 bc338695a8252bca
 etat 1790351914000 4072d39b2f2818a8
 choisir petit-nuage 1790395114000 pc-a ch5-plume-prendre ok
 etat 1790395114000 629594949a0f17ff
@@ -2832,7 +2912,7 @@ etat 1790406481000 41eef4e57b020fff
 etat 1790418601000 600eaf9eb5bb12f7
 choisir petit-nuage 1790418645000 tel-b ch10-trop-tard-plume ok
 etat 1790418645000 24f3234cc7e5919d
-messagesh tel-b tel 1 341 932641c3bcb2a4ea
+messagesh tel-b tel 1 379 3731e678a23a3de2
 etat 1790423415000 24f3234cc7e5919d
 continuer petit-nuage 1790423415000 tel-b ce n'est pas possible maintenant
 etat 1790428184000 24f3234cc7e5919d
@@ -2841,7 +2921,7 @@ choisir petit-nuage 1790428314000 tel-b ch12-adieu-garde ok
 etat 1790428314000 e460f56d46c334d3
 filh 143 111 7b07e739e1d29aaf
 acquis petit-nuage 373 186 ch12-fin-hiver
-signatureh 8bbb93950e8d9c2d
+signatureh 848ec9822acaf683
 cas parcours-petit-nuage-m327
 carnet j-petit-nuage-m327
 demarrer petit-nuage 99 1790345600000 pc-a m327 0 ok
@@ -2875,7 +2955,7 @@ etat 1790424993000 eaf0ba416a74948b
 etat 1790430753000 2fc8a42912068eda
 choisir petit-nuage 1790430777000 tel-b ch3-chorale-seul ok
 etat 1790430777000 ba8f0e061f7514e4
-messagesh tel-b tel 1 288 9b7d6b699c31d67b
+messagesh tel-b tel 1 305 1c6f224860979c3e
 etat 1790431377000 588a9bd0e503ed76
 choisir petit-nuage 1790432997000 pc-a ch3-toile-encre ok
 etat 1790432997000 3deeb49b7a5f0f7c
@@ -2913,7 +2993,7 @@ choisir petit-nuage 1790485575000 tel-b ch5-minute-promesse ok
 etat 1790485575000 b2ee32ca928cc60c
 choisir petit-nuage 1790486955000 pc-a ch5-toit-non ok
 etat 1790486955000 e5169bf0714a0952
-messagesh tel-b tel 1 365 81524a67196c976a
+messagesh tel-b tel 1 391 097794341dac17d0
 etat 1790487855000 e5169bf0714a0952
 continuer petit-nuage 1790487855000 tel-b ce n'est pas possible maintenant
 etat 1790488754000 e5169bf0714a0952
@@ -2947,12 +3027,12 @@ continuer petit-nuage 1790507340000 pc-a ce n'est pas possible maintenant
 choisir petit-nuage 1790507340000 pc-a ch10-trop-tard-ensemble ok
 etat 1790507340000 50fe570d31c64d36
 etat 1790517880000 c8c97f29921362b6
-messagesh tel-b tel 1 312 3313ecc9e34acee7
+messagesh tel-b tel 1 351 6c00c48d947bc1b8
 choisir petit-nuage 1790517949000 tel-b ch12-adieu-recule ok
 etat 1790517949000 9f00f7752bc735dc
 filh 146 114 3b484e6c2019c59c
 acquis petit-nuage 273 136 ch12-fin-manque
-signatureh 8b2805a47258650f
+signatureh 67337b9a072fbd18
 cas parcours-petit-nuage-m816
 carnet j-petit-nuage-m816
 demarrer petit-nuage 99 1790432000000 pc-a m816 0 ok
@@ -2990,7 +3070,7 @@ etat 1790492715000 2b939a671a5021ba
 etat 1790498355000 9190246b30fabef2
 choisir petit-nuage 1790498378000 pc-a ch3-chorale-seul ok
 etat 1790498378000 c0106a717e1bd2cb
-messagesh pc-a pc 1 285 199a8c6635610014
+messagesh pc-a pc 1 302 7a7b9407e40b058a
 etat 1790500598000 d7f64ceca3ddedb4
 choisir petit-nuage 1790502158000 tel-b ch3-toile-refuse ok
 etat 1790502158000 aec387a99d7b212f
@@ -3030,7 +3110,7 @@ choisir petit-nuage 1790515200000 pc-a ch5-minute-silence ok
 etat 1790515200000 4aa2d635c3f684b6
 choisir petit-nuage 1790515238000 pc-a ch5-toit-non ok
 etat 1790515238000 1b189d27ecbbcb3b
-messagesh pc-a pc 1 348 3b4cae299f78b825
+messagesh pc-a pc 1 374 0da1e617ed345213
 etat 1790515988000 1b189d27ecbbcb3b
 continuer petit-nuage 1790515988000 pc-a ce n'est pas possible maintenant
 etat 1790516737000 1b189d27ecbbcb3b
@@ -3061,7 +3141,7 @@ etat 1790535659000 487244379fac6475
 etat 1790546099000 ef892df33c43b81e
 choisir petit-nuage 1790546339000 tel-b ch10-trop-tard-cafe ok
 etat 1790546339000 17a4be4022d24aef
-messagesh pc-a pc 1 334 fd323fb8dd77a871
+messagesh pc-a pc 1 372 c376f19dab28f158
 etat 1790555527000 7a08d75e80bcc3b3
 continuer petit-nuage 1790555598000 pc-a ce n'est pas possible maintenant
 choisir petit-nuage 1790555598000 pc-a ch12-adieu-va ok
@@ -3070,7 +3150,7 @@ choisir petit-nuage 1790555700000 pc-a ch12-apres-rester ok
 etat 1790555700000 18f5b1ebdf02d1c1
 filh 148 115 44f55d934c3ff923
 acquis petit-nuage 453 226 ch12-fin-pluie
-signatureh 20c435bdba49fe8c
+signatureh 7e258fff7a02b2e9
 cas parcours-petit-nuage-m411
 carnet j-petit-nuage-m411
 demarrer petit-nuage 99 1790518400000 pc-a m411 0 ok
@@ -3106,7 +3186,7 @@ etat 1790557276000 8b152da0f3c394d8
 continuer petit-nuage 1790557324000 pc-a ce n'est pas possible maintenant
 choisir petit-nuage 1790557324000 pc-a ch3-chorale-seul ok
 etat 1790557324000 cc8e9145c7d1d545
-messagesh tel-b tel 1 292 e1b40ba8d497594c
+messagesh tel-b tel 1 309 13e367adb834e670
 etat 1790558031000 358f9740fb991324
 choisir petit-nuage 1790558059000 pc-a ch3-toile-encre ok
 etat 1790558059000 e16596cf790e68d2
@@ -3140,7 +3220,7 @@ choisir petit-nuage 1790572316000 pc-a ch5-minute-promesse ok
 etat 1790572316000 08b181866c68a573
 choisir petit-nuage 1790572340000 pc-a ch5-toit-non ok
 etat 1790572340000 47c3303b8524c5c8
-messagesh pc-a pc 1 368 c792ef54bb4eedcc
+messagesh pc-a pc 1 394 43d42781aebafefa
 etat 1790573180000 47c3303b8524c5c8
 continuer petit-nuage 1790573180000 pc-a ce n'est pas possible maintenant
 etat 1790574019000 47c3303b8524c5c8
@@ -3174,7 +3254,7 @@ choisir petit-nuage 1790587259000 tel-b ch10-question-en-bas ok
 etat 1790587259000 426773bb83841464
 choisir petit-nuage 1790587299000 tel-b ch11-emporter-nom ok
 etat 1790587299000 ea7337118a70032c
-messagesh tel-b tel 1 405 dfaf923a073b2625
+messagesh tel-b tel 1 442 2414ce0791888274
 choisir petit-nuage 1790587312000 tel-b ch11-veille-cafe ok
 etat 1790587312000 71cb8d52ef5c4fec
 etat 1790597812000 8ee820b1e37f586f
@@ -3182,4 +3262,4 @@ choisir petit-nuage 1790644612000 tel-b ch12-adieu-recule ok
 etat 1790644612000 ef74487033a1853f
 filh 150 117 281ba42808508d6a
 acquis petit-nuage 394 198 ch12-fin-sans
-signatureh 94b676dcbbeb019d
+signatureh 8fbc541fede89358
