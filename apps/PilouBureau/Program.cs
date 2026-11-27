@@ -48,7 +48,11 @@ public static class Program
         if (tournage.Visite && (args.Length == 0 || args[0].StartsWith("--")
             || Path.GetFullPath(args[0]).TrimEnd('\\', '/').Equals(Path.GetFullPath(Signal.Defaut()).TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase)))
             return 2; // visite guidée : un dossier de démo est obligatoire
-        using var autre = new AutreInstanceWindows(principal ? @"Local\PilouBureau" : @"Local\PilouBureau-essai");
+        // Les captures (--captures=, voir CapturesEssai) quittent seules : leur verrou est à elles, pour tourner à côté d'un
+        // autre essai ouvert (par exemple celui d'une autre session de travail).
+        bool captures_ = args.Any(a => a.StartsWith("--captures=", StringComparison.Ordinal));
+        using var autre = new AutreInstanceWindows(principal ? @"Local\PilouBureau"
+            : captures_ ? $@"Local\PilouBureau-captures-{Environment.ProcessId}" : @"Local\PilouBureau-essai");
         var issue = principal ? Instance.Decider(lancement, autre) : autre.Prendre() ? Issue.Demarrer : Issue.Rendre;
         if (issue == Issue.Rendre) return 0;
         Mise.Nettoyer();
@@ -65,8 +69,12 @@ public static class Program
             double.TryParse(args.FirstOrDefault(a => a.StartsWith($"--{nom}="))?[(nom.Length + 3)..],
                 System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : defaut;
         double duree = Math.Clamp(Nombre("duree", 6), 1, 30), ips = Math.Clamp(Nombre("ips", 15), 5, 30);
+        // --captures=<dossier> [--apres=6] (avec --essai) : chaque fenêtre ouverte rendue en PNG à 100/125/150 %, puis quitte.
+        var captures = essai is null ? null : args.FirstOrDefault(a => a.StartsWith("--captures="))?["--captures=".Length..];
+        double apres = Math.Clamp(Nombre("apres", 6), 2, 60);
         args = args.Where(a => a != "--devant" && !a.StartsWith("--instantane=") && !a.StartsWith("--essai=")
-            && !a.StartsWith("--film=") && !a.StartsWith("--duree=") && !a.StartsWith("--ips=")).ToArray();
+            && !a.StartsWith("--film=") && !a.StartsWith("--duree=") && !a.StartsWith("--ips=")
+            && !a.StartsWith("--captures=") && !a.StartsWith("--apres=")).ToArray();
         var dossier = args.Length > 0 ? args[0] : Signal.Defaut();
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var fenetre = new FenetrePilou(dossier, devant, tournage.Visite);
@@ -123,6 +131,7 @@ public static class Program
             };
             declic.Start();
         }
+        if (captures is not null) CapturesEssai.Programmer(app, captures, apres);
         if (tournage.Visite)
         {
             var depart = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };

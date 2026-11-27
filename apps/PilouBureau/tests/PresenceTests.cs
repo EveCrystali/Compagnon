@@ -633,7 +633,8 @@ public static class PresenceVecteurs
 
         // Cadence du PC : une semaine de présences hachées, d'état en état.
         var cad = PresenceTests.Neuf("pc-7f3a", "pc");
-        long t0 = new DateTimeOffset(new DateTime(2026, 11, 22, 7, 0, 0)).ToUnixTimeMilliseconds();
+        // Décalage fixe (UTC) : le fichier de référence ne dépend pas du fuseau de la machine qui lance le test.
+        long t0 = new DateTimeOffset(new DateTime(2026, 11, 22, 7, 0, 0), TimeSpan.Zero).ToUnixTimeMilliseconds();
         var dl = new DateTime(2026, 11, 22, 7, 0, 0);
         for (int i = 0; i < 500; i++)
         {

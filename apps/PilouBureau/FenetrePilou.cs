@@ -570,6 +570,8 @@ public sealed partial class FenetrePilou : Window
                 FontSize = 12.5,
                 FontStyle = FontStyles.Italic,
                 Foreground = Couleurs.Texte,
+                // Une phrase plus large que la bulle passe à la ligne au lieu d'être coupée net (vu sur un vrai Windows).
+                TextWrapping = TextWrapping.Wrap,
                 Margin = new Thickness(0, 1, 0, 1),
             });
         if (BlocDiagnostics() is { } diag) _lignes.Children.Add(diag);
@@ -643,6 +645,7 @@ public sealed partial class FenetrePilou : Window
         FontFamily = new FontFamily("Segoe UI"),
         FontSize = 11.5,
         Foreground = Couleurs.Pale,
+        TextTrimming = TextTrimming.CharacterEllipsis,
         Margin = new Thickness(0, 1, 0, 1),
     };
 
