@@ -66,5 +66,20 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 - **Charge des animations non mesurée sur appareil** : décors à 4–5,5 images par seconde, portraits, écriture
   lettre à lettre et fond respirant tournent sous Robolectric et en tests, jamais sur un vrai téléphone ni un PC modeste
   (batterie, processeur). Le réglage « ✧ » (complètes, réduites, aucune) existe pour couper.
-- **Captures Android des écrans animés non regardées** : `CapturesCampagnesTest` produit les images `jeu-*` et
-  `aventure-personnage*` dans l'artefact `captures-ui` de la CI, mais personne ne les a encore relues à l'œil.
+- **Captures Android des écrans animés relues le 27 novembre 2026** (artefact `captures-ui`, CI `main` 46076343814) :
+  les 102 images `jeu-*` (4 campagnes × clair, sombre, grande police) et les 8 `aventure-personnage*`, une par une.
+  Robolectric n'est pas un vrai téléphone : polices, densité et animations réelles restent à voir sur appareil. Les
+  ~350 autres captures (accueil, boutique, collection…) n'ont pas été relues une par une. Rien de rouge / vert, aucun
+  état porté par la seule couleur (fins : ★ ◐ ✧, jauges en carrés), sprites nets, aucune donnée personnelle.
+
+  | Capture | Défaut | Gravité | Suite |
+  |---|---|---|---|
+  | Petit écran, scène avec portrait (`*-grande-panne-choix`, `*-phare-eteint-*`, `aventure-personnage*`) | Le portrait (96 dp) remonte jusqu'à la barre du haut et passe **devant** le bouton « ⋯ » et la fin du titre | Moyenne | Corrigé : la barre passe devant (`Lecture.java`) |
+  | Même cas, titre long (« La nuit des six bateaux ») | Le titre reste coupé visuellement par le portrait, même devant lui | Faible | Proposé : portrait plus petit quand la scène descend à 156 dp (choix de design) |
+  | `*-grande-panne-*` chapitre 1 (« 13 h 37 ») | Le titre blanc se pose sur l'afficheur pixel « 1337 » du décor : deux textes superposés | Faible | Décor (`assets/`) ou titre décalé : à trancher |
+  | Titres de chapitre sur décor clair (prologue, `petit-nuage` « Lâcher ») | Blanc + ombre sur ciel crème ou rose : lisible mais contraste faible | Faible | Proposé : voile sombre derrière le titre |
+  | `jeu-petit-grandepolice-*` barre du bas | « Boutique » et « Collection » se touchent, sans espace | Moyenne | Proposé : libellés réduits ou sur deux lignes en grande police (`Principale`) |
+  | `jeu-petit-grandepolice-*` puce de lieu | Nom tronqué (« Au-dessus de l'Abr… », « Le Bigorneau Qui T… ») | Faible | Accepté (points de suspension), ou `maxWidth` plus large |
+  | Toutes, en-tête | « Prochaine rangée : … (enc… » tronqué | Faible | Hors campagnes, à reformuler plus court |
+  | `*-epreuve-jeu` | « ÉPREUVE » en police pixel : très petit, accent non visible | Faible | Proposé : police pixel ×2 pour ce titre |
+  | `*-choix` | Dernière option coupée en bas, en fondu | — | Voulu (dock défilant), rien à faire |
