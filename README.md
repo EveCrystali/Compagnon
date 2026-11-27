@@ -90,6 +90,8 @@ partent, vers Pilou sur ta machine : [docs/EDITEURS.md](docs/EDITEURS.md).
 
 Idées gardées pour plus tard (petits jeux, notifications, vidéo) : [docs/IDEES.md](docs/IDEES.md).
 
+Pour reprendre le projet (personnage, décisions, état du travail) : [docs/LORE.md](docs/LORE.md), [docs/DECISIONS.md](docs/DECISIONS.md), [docs/ETAT.md](docs/ETAT.md).
+
 ## Connecteurs
 
 Clic droit → **Connecteurs…** : tout ce qui nourrit Pilou au même endroit. Chaque connecteur a un
