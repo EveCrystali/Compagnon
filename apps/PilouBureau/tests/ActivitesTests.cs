@@ -183,8 +183,8 @@ public class MetiersTests
         var huit = Activites.Toutes.Take(8).ToDictionary(a => a, _ => 120L);
         Assert.Contains(Succes.Nouveaux(S(huit), Array.Empty<string>()), d => d.Id == "explorateur");
 
-        // Compagnon : 5 h pour un loisir, 20 h pour un métier de travail.
-        var quatre = new Dictionary<string, long> { ["code"] = 20 * 3600, ["tableur"] = 20 * 3600, ["musique"] = 5 * 3600, ["mail"] = 20 * 3600 };
+        // Compagnon : 5 h pour un loisir, 30 h pour un métier de travail.
+        var quatre = new Dictionary<string, long> { ["code"] = 30 * 3600, ["tableur"] = 30 * 3600, ["musique"] = 5 * 3600, ["mail"] = 30 * 3600 };
         Assert.Contains(Succes.Nouveaux(S(quatre), Array.Empty<string>()), d => d.Id == "couteau-suisse");
     }
 
@@ -202,7 +202,7 @@ public class MetiersTests
     [Fact]
     public void Le_telephone_recoit_metiers_et_succes()
     {
-        var p = new Profil { Activites = new() { ["code"] = 24 * 3600 }, Succes = new() { "marathon" } };
+        var p = new Profil { Activites = new() { ["code"] = 36 * 3600 }, Succes = new() { "marathon" } };
         var prog = Telephone.Progression(p, 100, "aucun");
         var metiers = Assert.IsType<Dictionary<string, int>>(prog["metiers"]);
         Assert.Equal(2, metiers["codeur"]);
@@ -211,18 +211,18 @@ public class MetiersTests
     }
 
     [Fact]
-    public void Metiers_de_travail_montent_quatre_fois_moins_vite()
+    public void Metiers_de_travail_montent_six_fois_moins_vite()
     {
         var codeur = Metiers.Tous.First(m => m.Id == "codeur");
         var joueur = Metiers.Tous.First(m => m.Id == "joueur");
         long h = 3600;
         Assert.True(codeur.Travail);
         Assert.False(joueur.Travail);
-        Assert.Equal(1, Metiers.Niveau(codeur, (long)(5.7 * h)));  // Apprenti (Compagnon à 20 h)
+        Assert.Equal(0, Metiers.Niveau(codeur, (long)(5.7 * h)));  // Novice (Apprenti à 6 h)
         Assert.Equal(2, Metiers.Niveau(joueur, (long)(5.7 * h)));  // Compagnon
-        Assert.Equal("5,7 h / 20 h".Replace(",", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator),
+        Assert.Equal("5,7 h / 6 h".Replace(",", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator),
             Metiers.Progres(codeur, (long)(5.7 * h)));
-        Assert.Equal(6, Metiers.Niveau(codeur, 1000 * h));
-        Assert.Equal(5, Metiers.Niveau(codeur, 999 * h));
+        Assert.Equal(6, Metiers.Niveau(codeur, 1500 * h));
+        Assert.Equal(5, Metiers.Niveau(codeur, 1499 * h));
     }
 }

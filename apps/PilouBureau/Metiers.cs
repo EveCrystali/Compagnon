@@ -21,9 +21,10 @@ public static class Metiers
     };
 
     // Heures nécessaires pour chaque niveau de métier (1 à 6). Les métiers de travail (code, tableur, visio,
-    // écriture, mail) se pratiquent des heures chaque jour : leurs paliers sont quatre fois plus hauts.
+    // écriture, mail) se pratiquent des heures chaque jour : leurs paliers sont six fois plus hauts
+    // (Légende ≈ un an à 30 h par semaine).
     public static readonly int[] Paliers = { 1, 5, 15, 40, 100, 250 };
-    public static readonly int[] PaliersTravail = { 4, 20, 60, 160, 400, 1000 };
+    public static readonly int[] PaliersTravail = { 6, 30, 90, 240, 600, 1500 };
     public static readonly string[] Grades = { "Novice", "Apprenti", "Compagnon", "Confirmé", "Expert", "Maître", "Légende" };
 
     public static int[] PaliersDe(Metier m) => m.Travail ? PaliersTravail : Paliers;
