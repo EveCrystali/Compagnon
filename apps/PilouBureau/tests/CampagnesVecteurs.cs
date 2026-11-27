@@ -488,7 +488,57 @@ public sealed class CampagnesVecteurs
         s.Recevoir("pc-x", T0 + 12_000, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"q\":{\"c\":\"Mauvais Id\",\"p\":9},\"h\":{\"x\":[1,0,{},\"zz\"]}}");
         s.Signature();
 
-        // 6. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
+        // 6. Divergence au-delà du délai de grâce : au même choix, chacun prend une route et avance seul pendant des heures ;
+        //    en se retrouvant, la base la plus avancée l'emporte et le fil du perdant repart de cette base.
+        s.Cas("divergence-au-dela-du-delai");
+        var hd = new Hasard(77);
+        long td = T0 + 400 * 86_400_000L;
+        void Pas(string id, string app, ref long tt)
+        {
+            var x = s.EtatH(tt)!;
+            if (!x.EnCours) return;
+            if (x.EnAttente)
+            {
+                tt = x.Fin + 1000;
+                s.EtatH(tt);
+                return;
+            }
+            tt += 30_000;
+            if (x.Phase == Campagnes.Phase.Choix) s.Choisir(id, tt, app, x.Options[hd.Suivant(x.Options.Count)].Id);
+            else if (x.Phase == Campagnes.Phase.Epreuve) s.AuDe(id, tt, app);
+            else s.Continuer(id, tt, app);
+        }
+        s.Carnet("dv-pc");
+        s.Demarrer("phare-eteint", 99, td, "pc-a", "dv");
+        for (int i = 0; i < 60; i++)
+        {
+            var x = s.EtatH(td)!;
+            if (x.Phase == Campagnes.Phase.Choix && x.Options.Count >= 2 && x.ChapitreNumero >= 2) break;
+            Pas("phare-eteint", "pc-a", ref td);
+        }
+        s.Echanger(td, "dv-pc", "dv-tel");
+        var ed = s.EtatH(td)!;
+        s.Carnet("dv-pc");
+        s.Choisir("phare-eteint", td + 10_000, "pc-a", ed.Options[0].Id);
+        s.Carnet("dv-tel");
+        s.Choisir("phare-eteint", td + 70_000, "tel-b", ed.Options[1].Id);
+        long tp = td + 10_000, tq = td + 70_000;
+        for (int i = 0; i < 6; i++)
+        {
+            s.Carnet("dv-pc");
+            Pas("phare-eteint", "pc-a", ref tp);
+            s.Carnet("dv-tel");
+            Pas("phare-eteint", "tel-b", ref tq);
+        }
+        s.Echanger(Math.Max(tp, tq) + 1000, "dv-tel", "dv-pc");
+        foreach (var nom in new[] { "dv-pc", "dv-tel" })
+        {
+            s.Carnet(nom);
+            s.Fil();
+            s.SignatureH();
+        }
+
+        // 7. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
         //    simulateur et jouée par le carnet (choix, épreuves, dés, « vas-y », attentes franchies à l'horloge, échecs,
         //    abandons et reprises, rejeu), états en empreinte, messages et signature en empreinte.
         foreach (var id in ParcoursTests.Ids)

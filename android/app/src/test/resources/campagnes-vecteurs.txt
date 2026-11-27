@@ -669,6 +669,94 @@ recevoir pc-x 1790000012000 0 {"v":2,"a":"pc-z"}
 recevoir pc-x 1790000012000 0 pas du json
 recevoir pc-x 1790000012000 1 {"v":1,"a":"pc-z","k":"pc","q":{"c":"Mauvais Id","p":9},"h":{"x":[1,0,{},"zz"]}}
 signature {"v":1,"a":"","k":"","q":{"c":"essai","p":1,"d":1790000000,"o":"pc-x","g":"gx","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000000,"ici":["XppY",{},"","","",""]},"s":[{"c":"prologue","p":1,"d":1790000003,"o":"tel-y","g":"gy","x":10,"e":1,"r":1,"i":0,"n":0,"t":1790000010,"ici":["nfeZ",{},"","","",""]}],"h":{"essai":[1,0,{},""],"prologue":[1,0,{},""],"x":[1,0,{},""]}}
+cas divergence-au-dela-du-delai
+carnet dv-pc
+demarrer phare-eteint 99 1824560000000 pc-a dv 0 ok
+etat 1824560000000 2a38faf5150fefbc
+etat 1824560000000 2a38faf5150fefbc
+choisir phare-eteint 1824560030000 pc-a bruler ok
+etat 1824560030000 89c37a1b48310725
+etat 1824560030000 89c37a1b48310725
+etat 1824560811000 aab5abdb645fc9f3
+etat 1824560811000 aab5abdb645fc9f3
+etat 1824560811000 aab5abdb645fc9f3
+choisir phare-eteint 1824560841000 pc-a quai ok
+etat 1824560841000 27acd80cb0ac10ba
+etat 1824560841000 27acd80cb0ac10ba
+choisir phare-eteint 1824560871000 pc-a ecouter ok
+etat 1824560871000 28718ed2dd1a263e
+etat 1824560871000 28718ed2dd1a263e
+etat 1824561952000 dbd98adf8490b929
+etat 1824561952000 f04911fbdbe0cc35
+carnet dv-pc
+messages dv-pc pc 1
+m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"]},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+carnet dv-tel
+messages dv-tel pc 0
+carnet dv-pc
+actualiser 1824561952000 phase=Choix|noeud=ch2-soupe|e=3|t=1824561951000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/12|lieu=Le Bigorneau Qui Tousse|decor=auberge-bigorneau|humeur=peur|pendant=|tenue=|options=0:odile,1:basile|jeu=:0:0:0|vars=confiance:1,courage:0|objets=|drapeaux=air-siffle|credits=|issue=:0:0|messages=2:e9127a553450e3cf
+carnet dv-tel
+recevoir dv-tel 1824561952000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":3,"r":1,"i":4,"n":2,"t":1824561951,"ici":["v4Cq",{"NIxc":1},"","hLoN","_kya","Qydx"]},"h":{"phare-eteint":[1,0,{},"JuO5"]}}
+actualiser 1824561952000 phase=Choix|noeud=ch2-soupe|e=3|t=1824561951000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/12|lieu=Le Bigorneau Qui Tousse|decor=auberge-bigorneau|humeur=peur|pendant=|tenue=|options=0:odile,1:basile|jeu=:0:0:0|vars=confiance:1,courage:0|objets=|drapeaux=air-siffle|credits=|issue=:0:0|messages=2:e9127a553450e3cf
+etat 1824561952000 f04911fbdbe0cc35
+carnet dv-pc
+choisir phare-eteint 1824561962000 pc-a odile ok
+carnet dv-tel
+choisir phare-eteint 1824562022000 tel-b basile ok
+carnet dv-pc
+etat 1824561962000 8ee0d8a00fe544a5
+choisir phare-eteint 1824561992000 pc-a hangar ok
+carnet dv-tel
+etat 1824562022000 9541d369712b4fa0
+choisir phare-eteint 1824562052000 tel-b chambre ok
+carnet dv-pc
+etat 1824561992000 a36c2742ba2d9902
+etat 1824562593000 9bbcdfe0e0ee2e73
+carnet dv-tel
+etat 1824562052000 09107654190f7928
+etat 1824562653000 aefe83fcfb32b850
+carnet dv-pc
+etat 1824562593000 9bbcdfe0e0ee2e73
+choisir phare-eteint 1824562623000 pc-a suivre ok
+carnet dv-tel
+etat 1824562653000 aefe83fcfb32b850
+choisir phare-eteint 1824562683000 tel-b loupe ok
+carnet dv-pc
+etat 1824562623000 b5d17e94331a20f0
+aude phare-eteint 1824562653000 pc-a ok
+carnet dv-tel
+etat 1824562683000 80eb2aa994371f8f
+aude phare-eteint 1824562713000 tel-b ok
+carnet dv-pc
+etat 1824562653000 044a0b5266bd1704
+choisir phare-eteint 1824562683000 pc-a laisser ok
+carnet dv-tel
+etat 1824562713000 39b1a3ce895dd471
+choisir phare-eteint 1824562743000 tel-b prendre ok
+carnet dv-pc
+etat 1824562683000 3c740f1a13688e33
+etat 1824571324000 1c0e232a8a10d9d3
+carnet dv-tel
+etat 1824562743000 5f0613e28c9e5890
+etat 1824571384000 9b8bfec9d03914c6
+carnet dv-tel
+messages dv-tel pc 1
+m {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+carnet dv-pc
+messages dv-pc pc 1
+m {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+carnet dv-tel
+recevoir dv-tel 1824571385000 1 {"v":1,"a":"dv-pc","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571323,"ici":["hopp",{"NIxc":1,"vfB3":1},"","hLoNhPJ0","jlUD","47W3"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+actualiser 1824571385000 phase=Choix|noeud=ch3-aube|e=8|t=1824571323000|fin=0|reprise=0|tirages=5|chapitre=ch3:3/12|lieu=Le Passe-Pied|decor=passe-pied|humeur=determine|pendant=|tenue=|options=0:pierres,1:sable|jeu=:0:0:0|vars=confiance:1,courage:1|objets=|drapeaux=air-siffle,trois-coups|credits=|issue=:0:0|messages=2:a0be441877e1c8bd
+carnet dv-pc
+recevoir dv-pc 1824571385000 1 {"v":1,"a":"dv-tel","k":"pc","q":{"c":"phare-eteint","p":1,"d":1824560000,"o":"pc-a","g":"dv","x":0,"e":8,"r":2,"i":3,"n":5,"t":1824571383,"ici":["hopp",{"NIxc":2},"dTFXvnqk","hLoNi8Nk","jlUD","x31C"]},"h":{"phare-eteint":[1,0,{},"JuO5sdZK"]}}
+actualiser 1824571385000 phase=Choix|noeud=ch3-aube|e=8|t=1824571323000|fin=0|reprise=0|tirages=5|chapitre=ch3:3/12|lieu=Le Passe-Pied|decor=passe-pied|humeur=determine|pendant=|tenue=|options=0:pierres,1:sable|jeu=:0:0:0|vars=confiance:1,courage:1|objets=|drapeaux=air-siffle,trois-coups|credits=|issue=:0:0|messages=2:a0be441877e1c8bd
+carnet dv-pc
+fil 38 31 2be2298db8381dc0
+signatureh 62437bfd44a97b28
+carnet dv-tel
+fil 2 2 8f8b3e3aabb010fd
+signatureh 62437bfd44a97b28
 # parcours complets : prologue
 cas parcours-prologue-m12
 carnet j-prologue-m12

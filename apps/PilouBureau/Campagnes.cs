@@ -1681,6 +1681,22 @@ public static class Campagnes
         return change;
     }
 
+    // La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Si mon rejeu passe par la même étape, il doit
+    // y être au même point (même rang, même nœud, même état) ; s'il n'y est pas encore, rien à comparer.
+    private static bool Diverge(Campagne c, Partie mienne, Partie recue, long maintenant)
+    {
+        var points = Rejouer(c, mienne, maintenant).Points.Where(pt => pt.Base.E == recue.E && !pt.Base.Abandonnee).ToList();
+        if (points.Count == 0) return false;
+        string Ici(Partie p)
+        {
+            var b = new StringBuilder();
+            JsonInstantane(b, p.Ici);
+            return p.R.ToString(CultureInfo.InvariantCulture) + b;
+        }
+        var attendu = Ici(recue);
+        return points.All(pt => Ici(pt.Base) != attendu);
+    }
+
     // Fusion d'un message reçu (d'un autre appareil du groupe) : idempotente, insensible à l'ordre et aux doublons.
     // Renvoie true si le carnet a changé. Appeler ensuite Actualiser (et Crediter sur un PC).
     public static bool Recevoir(Carnet k, string json, string moi, Func<string, Campagne?> biblio, long maintenant)
@@ -1713,7 +1729,15 @@ public static class Campagnes
                 else
                 {
                     int c = CompareIdentite(mienne, recue);
-                    if (c == 0) k.Courante = Unir(mienne, recue);
+                    if (c == 0)
+                    {
+                        // Les deux appareils ont avancé chacun de son côté au-delà du délai de grâce, et la base reçue,
+                        // plus avancée, n'est pas sur ma route : ce que mon fil raconte de cette partie n'a pas eu lieu
+                        // (on ne sait pas où les routes se sont séparées). Le fil repart de la base reçue.
+                        if (Avance(recue, mienne) && biblio(mienne.Campagne) is { } cm && Diverge(cm, mienne, recue, maintenant))
+                            k.Fil.RemoveAll(m => m.P == mienne.P);
+                        k.Courante = Unir(mienne, recue);
+                    }
                     else
                     {
                         var (gagne, perd) = c < 0 ? (mienne, recue) : (recue, mienne);
