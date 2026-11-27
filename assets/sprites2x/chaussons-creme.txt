@@ -1,0 +1,23 @@
+# Chaussons crème (ensemble Pâtissier)
+id: chaussons-creme
+slot: pieds
+ancre: pieds
+decalage: -30 -8
+palette: a=#768390 b=#a4d2ff c=#aab2ba d=#6cb6ff e=#f6f8fa f=#626e7d g=#5a96d6 h=#dee2e7 i=#c9d1d9 j=#a5acb7
+images:
+........aaaaaaaaaaabbaaac...............aaaaaaaaaaabbaaac...
+.....aaaaaaaaaaaabbddbbaa............aaaaaaaaaaaabbddbbaa...
+...aaaaaaeeeeeeeeddddddaac.........aaaaaaeeeeeeeeddddddaac..
+..aaaaeeeeeeeeeeddddddddaa........aaaaeeeeeeeeeeddddddddaa..
+.aaaeeeeeeeeeeeeddddddddfaa......aaaeeeeeeeeeeeeddddddddfaa.
+caaeeeeeeeeeeeeeeddddddeeaac....caaeeeeeeeeeeeeeeddddddeeaac
+aaeeeeeeeeeeeeeeeggddggeeeaac..caaeeeeeeeeeeeeeeeggddggeeeaa
+aeeeeeeehhhhhhhhhhhggeeeeeeaa..aaeeeeeeehhhhhhhhhhhggeeeeeea
+aeeeeehhiiiiiiiiiiihhheeeeeaa..aaeeeeehhiiiiiiiiiiihhheeeeea
+aeeeeiiiiiiiiiiiiiiiiiieeeeaa..aaeeeeiiiiiiiiiiiiiiiiiieeeea
+aeeeeiiiiiiiiiiiiiiiiiieeeeaa..aaeeeeiiiiiiiiiiiiiiiiiieeeea
+aaeeeeiiiiiiiiiiiiiiiieeeeaaf..faaeeeeiiiiiiiiiiiiiiiieeeeaa
+faaeeeeejjjjjjjjjjjjeeeeeaaf....faaeeeeejjjjjjjjjjjjeeeeeaaf
+.aaaeeeeeeeeeeeeeeeeeeeeaaa......aaaeeeeeeeeeeeeeeeeeeeeaaa.
+..aaaaeeeeeeeeeeeeeeeeaaaa........aaaaeeeeeeeeeeeeeeeeaaaa..
+...aaaaaaeeeeeeeeeeaaaaaa..........aaaaaaeeeeeeeeeeaaaaaa...

@@ -1,0 +1,28 @@
+id: tenue-mail-enveloppe
+slot: main
+ancre: main
+decalage: -6 -10
+palette: a=#c9d1d9 b=#f6f8fa c=#f9c292 d=#f69d50 e=#ffd8b0 f=#c9824a
+images:
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+ababbbbbbbbbbbbbbbbbbbbbbbbbbaba
+baaabbbbbbbbbbbbbbbbbbbbbbbbaaab
+bbaaabbbbbbbbbbbbbbbbbbbbbbaaabb
+bbbaaaaabbbbbbbbbbbbbbbbbbaaabbb
+bbbbaaaaabbbbbbbbbbbbbbbbaaabbbb
+bbbbbbbaaabbbbbbbbbbbbaaaaabbbbb
+bbbbbbbbaaabbbbbbbbbbaaaaabbbbbb
+bbbbbbbbbaaabbbbbbbbaaabbbbbbbbb
+bbbbbbbbbbaabbbbbbbbaabbbbbbbbbb
+bbbbbbbbbbbbccccddccbbbbbbbbbbbb
+bbbbbbbbbbbbddddddddbbbbbbbbbbbb
+bbbbbbbbbbbbddddeeddbbbbbbbbbbbb
+bbbbbbbbbbbbddddeeddbbbbbbbbbbbb
+bbbbbbbbbbbbddddddddbbbbbbbbbbbb
+bbbbbbbbbbbbffffddffbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb

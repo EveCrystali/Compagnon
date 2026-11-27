@@ -1,0 +1,19 @@
+# Emblème de ton : humour (rond rieur)
+id: ton-humour
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d9803a b=#f69d50 c=#1c2128
+images:
+......a.....
+......a.....
+..a..bb...a.
+...bbbbbba..
+...bbbbbb...
+..bbcbbcbb..
+aabbbbbbbbaa
+...bccbcc...
+...bbcccb...
+...a.bb..a..
+..a...a...a.
+......a.....

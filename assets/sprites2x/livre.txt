@@ -1,0 +1,33 @@
+# Livre ouvert
+id: livre
+slot: main
+ancre: main
+decalage: -8 -16
+palette: a=#857bad b=#3a2a7a c=#f6f8fa d=#a399e0 e=#6a5acd f=#adbac7 g=#594dae
+images:
+.abbb..............................bbba.
+bbbbbbbbbb....................bbbbbbbbbb
+bbccbbbbbbbbbb............bbbbbbbbbbccbb
+bbcccccccbbbbbbbbbb..bbbbbbbbbbcccccccbb
+ddcccccccccccbbbbbbbbbbbbbbcccccccccccdd
+eeccccccccccccccccbbbbccccccccccccccccee
+eeccccffffccccccccccccccccccccccffffccee
+eeccccfffffffffccccccccccccfffffffffccee
+eecccccccfffffffffccccccfffffffffcccccee
+eeccccccccccccffffccccccffffccccccccccee
+eeccccffffccccccccccccccccccccccffffccee
+eeccccfffffffffccccccccccccfffffffffccee
+eecccccccfffffffffccccccfffffffffcccccee
+eeccccccccccccffffccccccffffccccccccccee
+eeccccffffccccccccccccccccccccccffffccee
+eeccccfffffffffccccccccccccfffffffffccee
+eecccccccfffffffffccccccfffffffffcccccee
+eeccccccccccccffffccccccffffccccccccccee
+eeddccccccccccccccccccccccccccccccccddee
+eeeedddddccccccccccccccccccccccdddddeeee
+eeeeeeeeeddddccccccccccccccddddeeeeeeeee
+ggeeeeeeeeeeedddddccccdddddeeeeeeeeeeegg
+bbggeeeeeeeeeeeeeeddddeeeeeeeeeeeeeegbbb
+bbbbbbbggeeeeeeeeeeeeeeeeeeeeeegbbbbbbbb
+.bbbbbbbbbbbgeeeeeeeeeeeeeebbbbbbbbbbb..
+......bbbbbbbbbbbgeeeebbbbbbbbbbb.......

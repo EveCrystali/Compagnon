@@ -1,0 +1,68 @@
+# Hotte de cadeaux (ensemble Fêtes de l'hiver)
+id: hotte-cadeaux
+slot: dos
+ancre: cou
+decalage: -46 -32
+couche: derriere
+palette: a=#1c2128 b=#fff6cc c=#a4d2ff d=#f5d76e e=#9b8cff f=#6cb6ff g=#f9c292 h=#d2caff i=#f69d50 j=#5a96d6 k=#c9824a l=#8a6e4b m=#c4a77d n=#f1e5ce o=#dac8ae p=#e8d5b0 q=#a18a6e r=#beaf96
+images:
+..............................................................aaaaaaaabbbbbbbbbbaa..........
+.............................................................aaaaaaaaabbbbbbbbbbaa..........
+............................................................aaccccccddeeeebbeeeeaa..........
+............................................................aaffffffddeeeebbeeeeaa..........
+............................................................aaffffffddeeeebbeeeeaaaaaaaa....
+............................................................aaffffffddeeeebbeeeeaaaaaaaaa...
+............................................................aaffffffddccccgggggghhggggggaa..
+............................................................aaffffffddffffiiiiiihhiiiiiiaa..
+............................................................aaffffffddffffiiiiiihhiiiiiiaa..
+............................................................aajjjjjjddffffiiiiiihhiiiiiiaa..
+............................................................aaddddddddddddiiiiiihhiiiiiiaa..
+............................................................aaddddddddddddkkkkkkhhkkkkkkaa..
+............................................................aaccccccddcccchhhhhhhhhhhhhhaa..
+............................................................aaffffffddffffhhhhhhhhhhhhhhaa..
+............................................................aaffffffddffffgggggghhggggggaa..
+............................................................aaffffffddffffiiiiiihhiiiiiiaa..
+............................................................aaffffffddffffiiiiiihhiiiiiiaa..
+............................................................aajjjjjjddjjjjiiiiiihhiiiiiiaa..
+.............................................................aaallllllllllllllllllllllllaa..
+.............................................................aaallllllllllllllllllllllllaa..
+..............................................................aallllllllllllllllllllllllaa..
+..............................................................aallllllllllllllllllllllllaa..
+...............................................................aaammnnnnnnnnmmooooooooaaa...
+...............................................................aaammppppppppmmmmmmmmmmaaa...
+..............................................................aaaomnppppppppnmmmmmmmmmoaaa..
+.............................................................aaaomnppppppppppnmmmmmmmmmoaaa.
+............................................................aaaommppppppppppppmmmmmmmmmmoaaa
+............................................................aaommmppppppppppppqmmmmmmmmmmoaa
+............................................................aammmnppppppppppppnmmmmmmmmmmmaa
+............................................................aammqppppppppppppppqmmmmmmmmmmaa
+...........................................................aaammnppppppppppppppnmmmmmmmmmmaa
+...........................................................aaammppppppppppppppppmmmmmmmmmmaa
+..........................................................aaaommppppppppppppppppmmmmmmmmmmoo
+..........................................................aaammmppppppppppppppppmmmmmmmmmmmm
+..........................................................aaommmoppppppppppppppommmmmmmmmmmm
+..........................................................aammmmmrpppppppppppprmmmmmmmmmmmmm
+..........................................................aammmmmoppppppppppppommmmmmmmmmmmm
+..........................................................aammmmmmppppppppppppmmmmmmmmmmmmmm
+..........................................................aammmmmmrpppppppppprmmmmmmmmmmmmmm
+..........................................................aammmmmmorpppppppprommmmmmmmmmmmmm
+..........................................................aammmmmmmorpppppprommmmmmmmmmmmmmm
+..........................................................aaqmmmmmmmorrrrrrommmmmmmmmmmmmmmm
+..........................................................aaammmmmmmmoooooommmmmmmmmmmmmmmmm
+..........................................................aaaqmmmmmmmmmmmmmmmmmmmmmmmmmmmmqq
+...........................................................aaammmmmmmmmmmmmmmmmmmmmmmmmmmmaa
+...........................................................aaammmmmmmmmmmmmmmmmmmmmmmmmmmmaa
+............................................................aammmmmmmmmmmmmmmmmmmmmmmmmmmmaa
+............................................................aammmmmmmmmmmmmmmmmmmmmmmmmmmmaa
+............................................................aaqmmmmmmmmmmmmmmmmmmmmmmmmmmqaa
+............................................................aaaqmmmmmmmmmmmmmmmmmmmmmmmmqaaa
+.............................................................aaaqmmmmmmmmmmmmmmmmmmmmmmqaaa.
+..............................................................aaaqmmmmmmmmmmmmmmmmmmmmqaaa..
+...............................................................aaaqmmmmmmmmmmmmmmmmmmqaaa...
+................................................................aaaqmmmmmmmmmmmmmmmmqaaa....
+.................................................................aaaqmmmmmmmmmmmmmmqaaa.....
+..................................................................aaaqqqmmmmmmmmqqqaaa......
+...................................................................aaaaaqqmmmmqqaaaaa.......
+....................................................................aaaaaaqqqqaaaaaa........
+......................................................................aaaaaaaaaaaa..........
+........................................................................aaaaaaaa............

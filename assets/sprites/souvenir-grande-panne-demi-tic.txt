@@ -1,0 +1,31 @@
+# Souvenir de campagne (grande-panne)
+id: souvenir-grande-panne-demi-tic
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d2caff b=#6a5acd c=#9b8cff d=#ffffff e=#c9a227 f=#f6f1e4 g=#1c2128
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabcccccccccccccccdddbaa
+aabccccccccccccccccdcbaa
+.abccccceeeeeeccccddcba.
+aabccceeffffffeedddccbaa
+aabccceffffgfffecdcccbaa
+.abccefffffgffffddcccba.
+aabccefffffgffffeccccbaa
+aabccefffffgffffeccccbaa
+.abccefffffgffffeccccba.
+aabcceffffffgfffeccccbaa
+aabccefffffffgffeccccbaa
+.abccceffffffffecccccba.
+aabccceeffffffeecccccbaa
+aabccccceeeeeecccccccbaa
+.abccccccccccccccccccba.
+aabccccccccccccccccccbaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

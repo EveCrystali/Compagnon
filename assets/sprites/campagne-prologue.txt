@@ -1,0 +1,39 @@
+# Vignette de campagne : prologue
+id: campagne-prologue
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d9803a b=#9b8cff c=#f2a8c8 d=#0f4a63 e=#4a2e17 f=#fff6cc g=#f5d76e h=#2689b8 i=#f69d50
+images:
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aacbcbcbcbcbcbcbcbcbcbcbcbcbcbaa
+aabcbcbcbcbcddddbcbcbcbcbcbcbcaa
+aaccccccccccddddccccccccccccccaa
+aaccccccccccddddccccccccccccccaa
+aaccccccccccccecccccccccccccccaa
+aacccccccccccceccccffffcccccccaa
+aaccccccccccccecccffffffccccccaa
+aacccccccccgggeggffffffffcccccaa
+aaccccccggghhhehhgggfffffcccccaa
+aaccccgghhhhhhhhhhhhggfffcccccaa
+aaicighhhhhhhhhhhhhhhhgffcicicaa
+aacighhhhhhhhhhhhhhhhhhgciciciaa
+aagghhhhhhhhhhhhhhhhhhhhggiiiiaa
+aahhhhhhhhhhhhhhhhhhhhhhhhgiiiaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhgggaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhhhhaa
+aahhhhhhhhhhhiiiiiihhhhhhhhhhhaa
+aaiihhhhhhiiiddddddiiihhhhhhhiaa
+aaddiiiiiiddddddddddddiiiiiiidaa
+aaddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.

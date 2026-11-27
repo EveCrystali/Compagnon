@@ -43,6 +43,47 @@ SERIE = [
     "voyage-montre",
 ]
 
+
+
+# Seconde série : boutique garnie, tenues d'activité, météo, créatures et trophées d'expédition. Chacun est rejoué en
+# fin ; s'il est fait de pixels posés à la main (le rejeu ne serait qu'un agrandissement au plus proche voisin), sa
+# base est l'agrandissement commun (rendu.agrandir_image). Puis la retouche ajoute liserés, ombres et reflets
+# (retouches_fines.retouche_auto, ou une recette de RETOUCHES_SIMPLES).
+SERIE2 = [
+    "ailes-libellule", "ailes-nuage", "ailes-papillon", "antenne-neon", "aura", "aura-feu", "aureole",
+    "aurore-boreale", "bandana", "bandeau-eponge", "bandeau-ninja", "bandeau-oeil", "baskets", "bonhomme-neige",
+    "bonnet-lune", "bonnet-lutin", "bonnet-oreillettes", "bottes-jardin", "bottes-nuage", "bottes-pluie",
+    "bottines", "canne", "canne-doree", "canne-or", "cape-chauve-souris", "cape-constellation", "casque-chantier",
+    "casquette-pixel", "cerf-volant", "chapeau-champi", "chapeau-plage", "chaussettes-rayees", "chaussons-creme",
+    "chaussons-moumoute", "chauve-souris", "chocolat-chaud", "coiffe-courge", "collier-comete",
+    "collier-coquillages", "collier-perles", "cornes-viking", "couronne-cristal", "couronne-laurier",
+    "crea-bug-geant", "crea-gargouille-latence", "crea-golem-tickets", "crea-hydre-dependances", "crea-slime-cache",
+    "crea-spectre-404", "epee-mousse", "eventail", "fantome", "foulard-vichy", "guitare", "herisson",
+    "hotte-cadeaux", "impermeable", "jetpack", "jumelles", "livre", "loupe", "luciole", "lunettes-3d",
+    "lunettes-kaleido", "lunettes-loupe", "lunettes-pixel", "lunettes-ski", "mariniere", "masque-loup",
+    "masque-sommeil", "meduse", "meteo-averse", "meteo-brouillard", "meteo-eclair", "meteo-givre", "meteo-mouille",
+    "meteo-neige", "meteo-pluie", "meteo-soleil", "meteo-vent", "micro", "mini-goutte", "mini-planete", "moufles",
+    "noeud-geant", "noeud-pois", "ombrelle", "oreilles-chat", "palmes", "panier-dos", "pantoufles-lapin",
+    "parapluie-etoile", "patins", "pendentif-goutte", "perroquet-caramel", "petit-crabe", "phenix", "plaid",
+    "renne", "rollers", "sabots", "sabre-cuillere", "sombrero", "souffleur-bulles", "telescope",
+    "tenue-code-clavier", "tenue-dessin-beret", "tenue-dessin-palette", "tenue-diaporama-pointeur",
+    "tenue-jeu-casque", "tenue-jeu-manette", "tenue-lecture-livre", "tenue-lecture-lunettes",
+    "tenue-mail-casquette", "tenue-mail-enveloppe", "tenue-mmo-bouclier", "tenue-mmo-epee",
+    "tenue-musique-ecouteurs", "tenue-musique-notes", "tenue-tableur-calculatrice", "tenue-tableur-lunettes",
+    "tenue-texte-plume", "tenue-video-popcorn", "tenue-visio-micro", "tongs", "toque-myrtille", "tricorne-moka",
+    "trophee-bug-geant", "trophee-gargouille-latence", "trophee-golem-tickets", "trophee-hydre-dependances",
+    "trophee-slime-cache", "visiere-pilote",
+]
+
+
+def ids_campagnes():
+    """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
+    import campagnes_sprites
+    import decors_campagnes
+    decors_campagnes.charger()
+    return sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS)
+
+
 RETOUCHES = {}
 
 
@@ -69,7 +110,7 @@ def generer(dessiner):
     """Rejoue tous les dessins à l'échelle 2 ; seuls ceux de la série sont écrits (assets/sprites2x, index2x.txt)."""
     import retouches_fines  # noqa: F401  (remplit RETOUCHES)
     toile.ECHELLE = 2
-    toile.FINS = set(SERIE) | set(ids_visage())
+    toile.FINS = set(SERIE) | set(SERIE2) | set(ids_visage()) | set(ids_campagnes())
     toile.RETOUCHES = RETOUCHES
     try:
         dessiner()

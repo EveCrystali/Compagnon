@@ -71,7 +71,8 @@ public sealed partial class FenetrePilou
     private bool HeureCalme => Amis.Calme(DateTime.Now.Hour, _reglages.CalmeDebut, _reglages.CalmeFin);
 
     // En expédition, Pilou n'est pas là pour recevoir (l'ami lit « ne reçoit pas en ce moment »).
-    private PorteAmi PorteOuverte => new(_reglages.AccepterVisites && !EnExpedition, _discret, HeureCalme);
+    // En route pour sa campagne, il ne reçoit pas (« occupé ») : FenetreCampagne.cs.
+    private PorteAmi PorteOuverte => new(_reglages.AccepterVisites && !EnExpedition && !CampagneEnAttente, _discret, HeureCalme);
 
     // Ce que mes amis voient de Pilou : allure, niveau, et (si coché) quelques faits ; rien d'autre.
     private Vitrine MaVitrine()
@@ -252,9 +253,9 @@ public sealed partial class FenetrePilou
             return;
         }
         // Ni pendant l'attente d'une campagne (Pilou est en route, ou se repose) : FenetreCampagne.cs.
-        if (CampagneEnAttente)
+        if (RefusPendantCampagne("visite") is { Length: > 0 } refus)
         {
-            if (!spontanee) Dire("Pilou est en campagne : la visite attendra son retour", 3500);
+            if (!spontanee) Dire(refus, 3500);
             return;
         }
         if (_jeuEnCours != Jeu.Aucun) Arreter("");

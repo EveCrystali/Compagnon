@@ -90,7 +90,7 @@
       "humeur": "determine",
       "effets": [ { "objet": "billet", "donne": true }, { "var": "courage", "plus": 1 } ],
       "texte": [
-        "J'ai retiré la chaise, tourné la poignée en me pendant après, et bondi dans le couloir. Vide. En bas, la porte de la salle se refermait doucement. Je suis descendu : Odile rangeait ses papiers, Basile revissait l'horloge, Tudal finissait son verre, et le ciré jaune n'était plus au portemanteau. Quelqu'un ment très bien dans cette pièce. Je garde le billet : c'est ma deuxième lettre sans timbre de la journée."
+        "J'ai retiré la chaise, tourné la poignée en m'y suspendant de tout mon poids, et bondi dans le couloir. Vide. En bas, la porte de la salle se refermait doucement. Je suis descendu : Odile rangeait ses papiers, Basile revissait l'horloge, Tudal finissait son verre, et le ciré jaune n'était plus au portemanteau. Quelqu'un ment très bien dans cette pièce. Je garde le billet : c'est ma deuxième lettre sans timbre de la journée."
       ],
       "suite": "ch2-guet"
     },
@@ -120,7 +120,7 @@
       "humeur": "determine",
       "effets": [ { "drapeau": "trois-coups" }, { "var": "courage", "plus": 1 } ],
       "texte": [
-        "J'ai couru jusqu'au bout de la jetée, au ras des bittes pour ne pas me faire voir. Tudal a accosté au rocher et monté ses bidons jusqu'à la porte du phare. Et là, il a frappé. Trois coups lents, que l'eau m'a portés : toc, toc, toc. Personne n'a ouvert. Il a posé les bidons sur le seuil et il est reparti. On ne frappe pas chez les gens qu'on cambriole."
+        "J'ai couru jusqu'au bout de la jetée, en me faufilant entre les bornes d'amarrage pour ne pas me faire voir. Tudal a accosté au rocher et monté ses bidons jusqu'à la porte du phare. Et là, il a frappé. Trois coups lents, que l'eau m'a portés : toc, toc, toc. Personne n'a ouvert. Il a posé les bidons sur le seuil et il est reparti. On ne frappe pas chez les gens qu'on cambriole."
       ],
       "suite": "ch2-guet"
     },
@@ -128,7 +128,7 @@
       "type": "recit",
       "humeur": "malice",
       "texte": [
-        "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée jusqu'au retour des six bateaux. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
+        "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée en cette saison : c'est affiché en gros sur la cabane du port. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
       ],
       "suite": "ch2-guet"
     },
@@ -150,7 +150,7 @@
       "type": "choix",
       "humeur": "tendre",
       "texte": [
-        "Soufflée, baissé, invisible. Je suis très fort quand tu m'aides. La silhouette s'est arrêtée sur les pavés, juste en face, et je l'ai vue comme je te vois : petite, une natte, des bottes jaunes trop grandes. Un enfant ! Elle a regardé vers le phare, longtemps. Puis elle a posé quelque chose sur la borne d'en face, bien en vue de mon carreau, et elle a filé.",
+        "Soufflée, baissé, invisible. Je suis très fort quand tu m'aides. La silhouette s'est arrêtée sur les pavés, juste en face, et je l'ai vue comme je te vois : petite, une natte, des bottes jaunes trop grandes. Une enfant ! Elle a regardé vers le phare, longtemps. Puis elle a posé quelque chose sur la borne d'en face, bien en vue de mon carreau, et elle a filé.",
         "C'est un coquillage. Rose, lisse, posé bien droit, exprès. Un cadeau ? Un piège ? Une façon de dire bonjour quand on n'a pas le droit de parler ? Je sors le chercher, ou je le laisse où il est ?"
       ],
       "options": [

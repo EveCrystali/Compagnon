@@ -226,6 +226,20 @@ public sealed partial class FenetrePilou
                 Essai("expedition:journal");
                 Plus(duree - 300, () => _fenetreExp?.Close());
                 break;
+            case "aventure-lecture":
+                // La fenêtre Aventure : Pilou écrit, les options apparaissent ; elle se referme avant l'étape suivante.
+                Essai("campagne:lecture");
+                Plus(duree - 300, () =>
+                {
+                    _fenetreAventure?.Close();
+                    FinEssaiAventure();
+                });
+                break;
+            case "aventure-retour":
+                // Il revient de son attente : un petit saut, une bulle, le signe « ! ».
+                Essai("campagne:retour");
+                Plus(duree - 300, FinEssaiAventure);
+                break;
             case "icone":
                 IconeVisite(duree);
                 break;
@@ -283,6 +297,7 @@ public sealed partial class FenetrePilou
         FenetreBoutique => "boutique",
         FenetreListeAmis => "amis",
         FenetreExpeditions => "expeditions",
+        FenetreAventure => "aventure",
         FenetreDefense => "defense",
         FenetreInvite => "leo",
         _ => "fenetre",

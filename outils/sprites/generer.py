@@ -21,6 +21,8 @@ import expedition_sprites
 import defense_sprites
 import garde_robe
 import voyage_sprites
+import decors_campagnes
+import campagnes_sprites
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1810,6 +1812,8 @@ def dessiner():
     expedition_sprites.tout()
     defense_sprites.tout()
     voyage_sprites.tout()
+    decors_campagnes.tout()
+    campagnes_sprites.tout()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,27 @@
+# Nœud papillon à pois
+id: noeud-pois
+slot: cou
+ancre: cou
+decalage: -18 -4
+palette: a=#a399e0 b=#1c2128 c=#6a5acd d=#f5d76e e=#857bad f=#3a2a7a g=#594dae h=#32266b
+images:
+aabbbb........................bbbbaa
+ccbbbbbb....................bbbbbbcc
+ccaabbbbbb................bbbbbbaacc
+ccccccbbbbbb............bbbbbbcccccc
+ccccccaabbbbbbbbbbbbbbbbbbbbaacccccc
+ccccccccaabbbbbbbbbbbbbbbbaacccccccc
+ccccddccccccaaeeeeeeeeaaccccccddcccc
+ccccddccccccccffffffffccccccccddcccc
+ccccaaccccddccffffffffccddccccaacccc
+ccccccccccddccffffffffccddcccccccccc
+ccccccccccaaccffffffffccaacccccccccc
+ccccccccggccccffffffffccccggcccccccc
+ccccccccddccccffffffffccccddcccccccc
+ccccggccddccgghhhhhhhhggccddccggcccc
+ccccddccccbbbbbbbbbbbbbbbbccccddcccc
+ccccddggbbbbbbbbbbbbbbbbbbbbggddcccc
+ccccccbbbbbb............bbbbbbcccccc
+ccggbbbbbb................bbbbbbggcc
+ccbbbbbb....................bbbbbbcc
+ggbbbb........................bbbbgg

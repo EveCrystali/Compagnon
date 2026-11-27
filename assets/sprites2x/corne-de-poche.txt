@@ -1,0 +1,35 @@
+# Objet exclusif (Le phare éteint) : corne de brume de poche
+id: corne-de-poche
+slot: main
+ancre: main
+decalage: -6 -16
+palette: a=#1c2128 b=#f5d76e c=#7a5a10 d=#fff6cc e=#7a4b26 f=#4a2e17 g=#c9a227 h=@contour i=@ombre
+images:
+................................
+................................
+................................
+................................
+........................aaaaaaa.
+.......................aaaaaaaaa
+.....................aaaabbbccaa
+....................aaaabbbbccaa
+..................aaaabbbbbbccaa
+................aaaaabbbbbdcccca
+.aaaaaaaaaaaa..aaaabbbbbddbcdcca
+aaaaaaaaaaaaaaaaabbbbbddbbbcccca
+aaeefeefeefeaaaabbbbddbbbbbcccca
+aaeefeefeefeaabbbbbdbbbbbggcccca
+aaeefeefeefeabbbbddbbbgggggcccca
+aaeefeefeefebbbddbbggggggggcccca
+aaeefeefeefebbdbgggggggggggcccca
+aaeefeefeefegggggggggggggggcccca
+aaeefeefeefegggggggggggggggcccca
+aaeefeefeefegggggggggggggggcccca
+aaeefeefeefeaggggggggggggggcccca
+aaeefhhhhefeaaaggggggggggggcccca
+aaaahhiihhaaaaaagggggggggggcccca
+.aahhiiiihhaa.aaaagggggggggcccca
+...hiiiiiih....aaaaagggggggcccca
+...hiiiiiih......aaaaaggggggccaa
+...hhiiiihh........aaaagggggccaa
+....hhiihh...........aaaagggccaa

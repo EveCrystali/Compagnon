@@ -1,0 +1,55 @@
+# Souvenir de campagne (grande-panne)
+id: souvenir-grande-panne-point-final
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d2caff b=#6a5acd c=#ffffff d=#adbac7 e=#1c2128 f=#e6ecf2 g=#3a2a7a
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+aaaabbccccddddddddddddddddddddddddddccccccbbaaaa
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+aaaabbccccddddddddddddddddddddddddddccccccbbaaaa
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccddddddddddddddddddddddddddccccccbbaaa.
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+aaaabbccccccccccccccccccccceecccccccccccccbbaaaa
+.aaabbcccccccccccccccccccceeeeccccccccccccbbaaa.
+.aaabbccccccccccccccccccceeeeeecccccccccccbbaaa.
+.aaabbccccddddddddddddddceeeeeecccccccccccbbaaa.
+.aaabbcccccccccccccccccccceeeeccccccccccccbbaaa.
+aaaabbcccccccccccccccccccceeeeccccccccccccbbaaaa
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+.aaabbccccccccccccccccccccbbbffffffffbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbffffffffbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbffffffffbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbffffffffbbbccbbaaa.
+aaaabbccccccccccccccccccccbbbbbbbbbbbbbbccbbaaaa
+aaaabbccccccccccccccccccccbbbggggggggbbbccbbaaaa
+.aaabbccccccccccccccccccccbbbggggggggbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbggggggggbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbggggggggbbbccbbaaa.
+.aaabbccccccccccccccccccccbbbggggggggbbbccbbaaa.
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

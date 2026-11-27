@@ -1,0 +1,63 @@
+# Épée en mousse
+id: epee-mousse
+slot: main
+ancre: main
+decalage: -10 -48
+palette: a=#7492b6 b=#a4d2ff c=#1f4f8a d=#6cb6ff e=#5a96d6 f=#d0e9ff g=#b4dbff h=#94b4d6 i=#1d4478 j=#f9c292 k=#f69d50 l=#c9824a m=#7a4b26
+images:
+....aabbbbbbbbbbaa..
+....ccddddddddddcc..
+....ccddddddddddcc..
+....ccddddddddddcc..
+....ccddddddddddcc..
+....ccddeeeeddddcc..
+....ccddffffddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddggggddddcc..
+....ccddhhhhddddccc.
+ccccccddddddddddcccc
+cccciieeddddeeeeiicc
+jjjjjjjjjjjjjjjjjjjj
+kkkkkkkkkkkkkkkkkkkk
+kkkkkkkkkkkkkkkkkkkk
+kkkkkkkkkkkkkkkkkkkk
+kkkkkkkkkkkkkkkkkkkk
+llllllllllllllllllll
+ccccccaammmmmmaacccc
+ccccccccmmmmmmcccccc
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......ccmmmmmmcc....
+......icmmmmmmci....
+.......icccccci.....
+........cccccc......

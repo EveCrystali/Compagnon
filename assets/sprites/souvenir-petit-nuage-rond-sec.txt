@@ -1,0 +1,31 @@
+# Souvenir de campagne (petit-nuage)
+id: souvenir-petit-nuage-rond-sec
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#e6ecf2 b=#8a79b8 c=#768390 d=#b4dbff e=#0f4a63 f=#f5d76e g=#fff6cc
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccdcccccccccba.
+aabdcccccccdcccdccccdbaa
+aabdccccddcdccdccccdcbaa
+.abdccccddcccccccccccba.
+aabcccccddcccccccccccbaa
+aabccccccccccccccdcccbaa
+.abcccccdcccccccddcccba.
+aabcccccdcccccccdccccbaa
+aabcccccdcccccccdccccbaa
+.abcccccccccccccdccccba.
+aabeeeeeeeeeeeeeeeeeebaa
+aabeeeeeffggggffeeeeebaa
+.abeeeefggggggggfeeeeba.
+aabeeeeffggggggffeeeebaa
+aabeeeeeffffffffeeeeebaa
+.abeeeeeeeeeeeeeeeeeeba.
+aabeeeeeeeeeeeeeeeeeebaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

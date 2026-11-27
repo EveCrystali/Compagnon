@@ -83,7 +83,7 @@
         "Les bols viennent du Bigorneau, c'est écrit dessous. Le papier est de la main de Perrine, l'aubergiste, une écriture ronde, appliquée : « Pour A. Poireaux aujourd'hui. Je passerai jeudi te lire la suite de ton courrier, si tu veux bien m'ouvrir, tête de mule. Je ne dis rien à personne, tu le sais. P. »",
         "Une écriture ronde, appliquée. Je la connais ! C'est celle de mes cartes d'hiver, depuis deux ans. Ce n'était donc plus Anselme qui m'écrivait : c'était elle, pour lui. Et elle lui lit son courrier. On ne lit son courrier qu'à quelqu'un qui ne peut plus le lire tout seul."
       ],
-      "suite": "ch6b-fin"
+      "suite": "ch6b-pas"
     },
     "ch6b-rampe": {
       "type": "recit",
@@ -93,13 +93,45 @@
         "Je me suis approché du mur. Ce sont des gouttes de soudure, posées une à une, bien alignées. Un point à chaque marche. Deux points à chaque palier. Trois points devant chaque porte. Ce n'est pas une décoration : c'est une rampe pour les doigts. Un chemin qu'on suit sans le voir.",
         "Par terre, un petit fer à souder, avec une étiquette au crayon très fin : « B. » Et de la limaille dorée tout autour. Quelqu'un de minutieux est venu ici, en cachette, poser des repères pour une main qui tâtonne. Pourquoi un gardien de phare aurait-il besoin de trouver ses portes avec les doigts ?"
       ],
+      "suite": "ch6b-pas"
+    },
+    "ch6b-pas": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Une lumière descend l'escalier. Marche après marche, avec un petit bruit de bottes trop grandes. Quelqu'un vient voir la cave, une lanterne à la main, et je n'ai qu'une seconde pour décider ce que je suis : une goutte cachée, ou une goutte polie.",
+        "Le tas de charbon est juste là, assez gros pour me cacher tout entier, et de derrière on entend ce que les gens disent quand ils se croient seuls. Ou bien je reste au milieu de la cave, je pose ma lanterne par terre et je montre mes mains vides. Les deux me font un peu peur. Tu choisis ?"
+      ],
+      "options": [
+        { "id": "charbon", "libelle": "Cache-toi derrière le charbon, et écoute", "vers": "ch6b-charbon" },
+        { "id": "montrer", "libelle": "Montre-toi, les mains vides", "vers": "ch6b-montre" }
+      ]
+    },
+    "ch6b-charbon": {
+      "type": "recit",
+      "humeur": "malice",
+      "effets": [ { "drapeau": "c-jeudi" } ],
+      "texte": [
+        "Je me suis enfoui dans le charbon. Pour de l'encre bleue, devenir noire, c'est une petite crise d'identité. La lanterne est arrivée : la natte, les bottes jaunes. Elle a vérifié la trappe, compté les bidons du bout du doigt, puis elle s'est mise à parler toute seule, tout bas, comme on parle quand on a trop de choses à garder.",
+        "« Quatre nuits. Et l'autre qui ose même plus monter. Jeudi, l'horloger est reparti en courant pendant ta sieste, avec un paquet rond sous le bras, et le soir même ton feu a menti. Il dit jamais ce qu'il fabrique, celui-là. » Elle a soupiré et elle est remontée. Je suis ressorti du charbon tout gris, avec une idée très nette : jeudi, un paquet rond."
+      ],
+      "suite": "ch6b-fin"
+    },
+    "ch6b-montre": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "confiance", "plus": 1 }, { "objet": "coquillage", "donne": true } ],
+      "texte": [
+        "Je suis resté au milieu de la cave, la lanterne à mes pieds, les mains en l'air. La lumière s'est arrêtée net au bas des marches. Derrière : une natte, des bottes jaunes, deux yeux ronds. On s'est regardés. Je crois qu'on avait aussi peur l'un que l'autre. J'ai dit « bonsoir », tout doucement, comme on parle à un oiseau.",
+        "Elle n'a pas crié. Elle a reculé d'une marche, puis d'une autre, sans me quitter des yeux, et elle est remontée en courant. Mais en partant, elle a posé sur la dernière marche un coquillage rose, bien droit. Je l'ai ramassé. Je ne sais pas ce que ça veut dire. Ça ne ressemble pas à une déclaration de guerre."
+      ],
       "suite": "ch6b-fin"
     },
     "ch6b-fin": {
       "type": "attente",
       "humeur": "peur",
       "texte": [
-        "Je monte les marches de la cave, puis celles de la tour, qui tournent. Au premier palier, mon pied s'arrête tout seul : un fil est tendu en travers, à hauteur de cheville d'homme, c'est-à-dire à hauteur de mon nez. Avec des coquillages enfilés dessus. Une sonnette ! Quelqu'un a piégé l'escalier avec ce qu'on ramasse sur une plage. Quelqu'un de pas très grand, à en juger par les nœuds, et qui tient beaucoup à savoir qui monte. Je m'arrête. Je souffle. Je réfléchis."
+        "Je monte les marches de la cave, puis celles de la tour, qui tournent. Au premier palier, mon pied s'arrête tout seul : un fil est tendu en travers, à hauteur de cheville d'homme, c'est-à-dire à hauteur de mon nez. Avec des coquillages enfilés dessus. Une sonnette ! Quelqu'un a piégé l'escalier avec ce qu'on ramasse sur une plage. Elle l'a tendu en remontant, j'en suis sûr : des nœuds de petite main, serrés exprès. Elle tient beaucoup à savoir qui monte. Je m'arrête. Je souffle. Je réfléchis."
       ],
       "duree_min": 5,
       "duree_max": 10,

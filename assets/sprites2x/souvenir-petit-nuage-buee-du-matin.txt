@@ -1,0 +1,55 @@
+# Souvenir de campagne (petit-nuage)
+id: souvenir-petit-nuage-buee-du-matin
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#e6ecf2 b=#8a79b8 c=#7a4b26 d=#5c5a9a e=#ffc89a f=#a86f3c
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+aaaabbbbaaaaaddaadadaaaacaaaaaaaaaaaaaaabbbbaaaa
+.aaabbbbaaadaaaaaaaadaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaadaaaaaaaaaadaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaadaaaaaaaaaaadacaaaaaaaaaaaaaaabbbbaaa.
+aaaabbbbaaddddddddddddaacaaaaaaaaaaaaaaabbbbaaaa
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+aaaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaaa
+.aaabbbbaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaabbbbaaa.
+.aaabbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebbaaa.
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+aaaabbffffffffffffffffffffffffffffffffffffbbaaaa
+aaaabbffffffffffffffffffffffffffffffffffffbbaaaa
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+.aaabbffffffffffffffffffffffffffffffffffffbbaaa.
+aaaabbffffffffffffffffffffffffffffffffffffbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

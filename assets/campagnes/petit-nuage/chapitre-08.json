@@ -8,8 +8,8 @@
       "decor": "trou-qui-siffle",
       "humeur": "peur",
       "texte": [
-        "On y est. C'est un trou dans le pied de la montagne, haut comme une porte de grange. Il en sort du vent, tout le temps, et ce vent siffle une note. Une seule, grave, tenue. Tournebise a dit que c'était un la. Quand ça monte au si, on ne bouge plus. Je ne sais pas reconnaître un si. J'espère que ça s'entend.",
-        "Dedans, c'est noir. Pas sombre : noir. Je n'aime pas le noir, tu le sais, je dors à la lueur de ton écran. Brouillon, lui, regarde le trou avec intérêt. Et je remarque une chose : dans le noir, il se voit. Il n'éclaire pas. Mais il est moins noir que le reste, comme un drap dans une chambre, la nuit."
+        "On y est. C'est un trou dans le pied de la montagne, haut comme une porte de grange. Il en sort du vent, tout le temps, et ce vent siffle une note. Une seule, grave, tenue. Le la de Tournebise. Quand ça monte au si, on ne bouge plus. Je ne sais pas reconnaître un si. J'espère que ça s'entend.",
+        "Dedans, c'est noir. Pas sombre : noir. Je n'aime pas le noir, tu le sais : à la maison, je m'arrange toujours pour m'endormir avant que tu éteignes l'écran. Brouillon, lui, regarde le trou avec intérêt. Et je remarque une chose : dans le noir, il se voit. Il n'éclaire pas. Mais il est moins noir que le reste, comme un drap dans une chambre, la nuit."
       ],
       "suite": "ch8-noir"
     },
@@ -64,9 +64,10 @@
     },
     "ch8-rafales": {
       "type": "choix",
+      "checkpoint": true,
       "humeur": "peur",
       "texte": [
-        "Le sifflet a changé. Il est monté, d'un coup, très aigu, et un mur de vent nous est arrivé dessus. Je me suis jeté dans un creux de la paroi en tirant Brouillon par un bord. Ça a duré le temps de compter jusqu'à cinq. Puis la note est redescendue. C'était donc ça, un si. Ça s'entend, finalement.",
+        "Ici, le sifflet change. Sans prévenir, il monte, très aigu, et un mur de vent descend la galerie. La première fois, je me suis jeté dans un creux de la paroi en tirant Brouillon par un bord, et j'ai compté jusqu'à cinq avant que la note redescende. C'est donc ça, un si. Ça s'entend, finalement. Ça s'entend même très bien.",
         "Devant, la galerie est droite, avec des creux de chaque côté, tous les vingt pas. Ça souffle, ça se calme, ça souffle. Il y a un rythme. On peut avancer de creux en creux entre deux rafales, si on compte bien. Ou je plie Brouillon dans le baluchon, je serre le nœud, et je fonce tête baissée. Comment on fait ?"
       ],
       "options": [
@@ -99,7 +100,7 @@
       "humeur": "fatigue",
       "repos_min": 20,
       "texte": [
-        "Je suis parti une seconde trop tôt. Ou trop tard. La rafale nous a cueillis au milieu, entre deux creux, et elle nous a ramenés jusqu'à l'entrée comme deux feuilles. J'ai roulé. Brouillon a volé. On est assis dehors, au soleil, devant le trou, un peu sonnés. Lui, il a de la poussière partout, on dirait un mouton. Moi, j'ai le sifflet dans les oreilles. On souffle, et on y retourne."
+        "Je suis parti une seconde trop tôt. Ou trop tard. La rafale nous a cueillis au milieu, entre deux creux, et elle nous a ramenés en arrière comme deux feuilles, jusqu'au tout premier creux. J'ai roulé. Brouillon a volé. On est assis là, un peu sonnés. Lui, il a de la poussière partout, on dirait un mouton. Moi, j'ai le sifflet dans les oreilles et une bosse de plus à la casserole. On souffle, et on recommence."
       ]
     },
     "ch8-froisseuses": {
@@ -107,7 +108,7 @@
       "lieu": "Sous les Froisseuses",
       "humeur": "surpris",
       "texte": [
-        "Après les rafales, la galerie s'élargit, et le plafond s'est mis à faire du bruit. Un bruit de papier qu'on froisse. Ce sont des chauves-souris, des centaines, pendues là-haut. On les appelle les Froisseuses. Elles connaissent toute la montagne par cœur, sans rien voir, au son.",
+        "Après les rafales, la galerie s'est élargie, et le plafond s'est mis à faire du bruit. Un bruit de papier qu'on froisse. Ce sont des chauves-souris, des centaines, pendues là-haut. On les appelle les Froisseuses. Elles connaissent toute la montagne par cœur, sans rien voir, au son.",
         "Elles nous ont prévenus : plus loin, il y a la Grande Salle, et le vent y est mauvais. Elles veulent bien nous y accompagner demain. Mais pas pour rien. Elles aiment ce qui sonne et ce qui est doux, et elles n'ont ni l'un ni l'autre. Elles regardent beaucoup Brouillon. Très moelleux, disent-elles. Je leur propose quoi ?"
       ],
       "options": [
@@ -150,7 +151,7 @@
       "tenue": "nuit",
       "recompense": { "po": 20, "xp": 10 },
       "texte": [
-        "On dort ici. J'ai trouvé un creux à l'abri du courant d'air et j'ai allumé le réchaud, tout petit, pour voir mes mains. Le sifflet fait son la, tout au fond, comme quelqu'un qui souffle dans une bouteille. Demain, la Grande Salle. Les Froisseuses disent que là-bas, le vent ne siffle plus. Qu'il n'en a pas besoin. Je ne sais pas ce que ça veut dire, et je préfère ne pas y penser avant de dormir. Bonne nuit."
+        "On dort ici. J'ai trouvé un creux à l'abri du courant d'air et j'ai allumé le réchaud, tout petit, pour voir mes mains. Comme à la maison, je m'endormirai avant qu'il s'éteigne. Le sifflet fait son la, tout au fond, comme quelqu'un qui souffle dans une bouteille. Demain, la Grande Salle. Les Froisseuses disent que là-bas, le vent ne siffle plus. Qu'il n'en a pas besoin. Je ne sais pas ce que ça veut dire, et je préfère ne pas y penser avant de dormir. Bonne nuit."
       ],
       "suite": "ch9-salle"
     }

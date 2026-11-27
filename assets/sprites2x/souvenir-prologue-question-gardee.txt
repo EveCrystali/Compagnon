@@ -1,0 +1,55 @@
+# Souvenir de campagne (prologue)
+id: souvenir-prologue-question-gardee
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#ffc89a b=#d9803a c=#0d2a4d d=#b4dbff e=#f5d76e f=#16365e g=#3a2a7a h=#e8d5b0 i=#1f4f8a j=#0f4a63
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccdcccccccbbaaa.
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+aaaabbccccccdccccccccccccccccccceeeeccccccbbaaaa
+.aaabbccccccccccccccccccccccccceecccecccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccecccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccecccccbbaaa.
+.aaabbccccccccccccccccdcccccccccccceecccccbbaaa.
+aaaabbccccccccccccccccccccccccccccceccccccbbaaaa
+aaaabbfcfcfcfcfcfcfcfcfggcfcfcfcfceefcfcfcbbaaaa
+.aaabbcfcfcfcfcfcfcfcfggggcfcfcfcfcfcfcfcfbbaaa.
+.aaabbfcfcfcfcfcfcfcfggggggcfcfcfcfcfcfcfcbbaaa.
+.aaabbcfcfcfcfcfcfcfggggggggcfcfcecfcfcfcfbbaaa.
+.aaabbffffffffffffggggggggggggffffffffdfffbbaaa.
+aaaabbfffffffffffggggggggggggggfffffffffffbbaaaa
+aaaabbffffffffffffhhhhhhhhhhhhffffffffffffbbaaaa
+.aaabbffffffffffffhhhhhhhhhhhhffffffffffffbbaaa.
+.aaabbffffffffffffhhhhhhhhhhhhffffffffffffbbaaa.
+.aaabbffffffffffffhhhhhhheeeehffffffffffffbbaaa.
+.aaabbffffffffffffhhhhhhheeeehffffffffffffbbaaa.
+aaaabbffffffffffffhhhhhhheeeehffffffffffffbbaaaa
+aaaabbffffffffffffhhhhhhheeeehffffffffffffbbaaaa
+.aaabbffffffffffffhhhhhhhhhhhhffffffffffffbbaaa.
+.aaabbiifffffffffihhhhhhhhhhhhiiifffffffffbbaaa.
+.aaabbjjiiiiiiiiijhhhhhhhhhhhhjjjiiiiiiiiibbaaa.
+.aaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaa.
+aaaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaaa
+aaaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaaa
+.aaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaa.
+.aaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaa.
+.aaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaa.
+.aaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaa.
+aaaabbjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

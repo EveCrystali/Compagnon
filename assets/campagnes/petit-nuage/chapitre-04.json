@@ -66,11 +66,11 @@
       "lieu": "L'arbre mort",
       "humeur": "triste",
       "texte": [
-        "On est à l'arbre mort. C'est la moitié. On souffle. Et là, Brouillon a fait une chose que je ne lui avais jamais vue faire : il s'est couché par terre à côté de moi. Bien aligné. Comme je fais, moi, le matin, pour le mesurer. Il a regardé où j'arrivais. Il a regardé où il arrivait, lui.",
+        "On est à l'arbre mort. C'est la moitié. On souffle. Et là, Brouillon a fait une chose que je ne lui avais jamais vu faire : il s'est couché par terre à côté de moi. Bien aligné. Comme je fais, moi, le matin, pour le mesurer. Il a regardé où j'arrivais. Il a regardé où il arrivait, lui.",
         "Et il a demandé : « Brouillon petit ? » Il ne fait plus trois Pilou, et il le voit bien. Il attend. Je pourrais lui dire la vérité. Je pourrais aussi lui dire que c'est moi qui grandis : il le croirait, il croit tout ce que je dis. Qu'est-ce que je réponds ?"
       ],
       "options": [
-        { "id": "ch4-question-vrai", "libelle": "La vérité : oui, il rétrécit, c'est pour ça qu'on se dépêche", "vers": "ch4-vrai", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch4-question-vrai", "libelle": "La vérité : il rétrécit, c'est pour ça qu'on se dépêche", "vers": "ch4-vrai", "effets": [ { "var": "lien", "plus": 1 } ] },
         { "id": "ch4-question-menti", "libelle": "Dis-lui que c'est toi qui grandis", "vers": "ch4-menti", "effets": [ { "drapeau": "a-menti" }, { "var": "lien", "plus": 1 } ] }
       ]
     },
@@ -92,10 +92,11 @@
     },
     "ch4-enclumes": {
       "type": "choix",
+      "checkpoint": true,
       "humeur": "peur",
       "texte": [
-        "Ça y est, ils sont là. Les Enclumes. Ils ont traversé le plateau plus vite que nous et ils sont au-dessus de nos têtes, noirs, et ils grondent. Ça sent le métal. Il y a un vent qui monte du sol, droit vers eux, qui soulève la poussière et mes pieds.",
-        "Et Brouillon monte. Il ne s'envole pas : il est aspiré, et il est content ! Il crie « Grands ! Grands ! » en montant. Il est déjà à hauteur de l'arbre. J'ai vu un éclair là-haut, dans le noir, exactement là où il va. Vite, vite, dis-moi !"
+        "Les Enclumes sont sur nous. Juste au-dessus de nos têtes, noirs, énormes, et ils grondent. Ça sent le métal et la pièce de monnaie. Un vent monte du sol, droit vers eux. Il soulève la poussière, les brindilles, et mes pieds avec.",
+        "Et Brouillon monte. Il ne s'envole pas : il est aspiré. Il crie « Grands ! Grands ! » en montant, et je n'arrive pas à savoir si c'est de la joie ou de la peur. Il est déjà à hauteur de l'arbre. Un éclair vient de passer, là-haut, exactement là où il va. Vite, vite, dis-moi !"
       ],
       "options": [
         { "id": "ch4-enclumes-laine", "libelle": "Tiens bon la laine !", "vers": "ch4-tire", "si": { "drapeau": "ficelle" } },
@@ -122,7 +123,7 @@
       "difficulte": 2,
       "bonus": "lien",
       "texte": [
-        "Je grimpe. Je n'ai jamais grimpé à rien, mais là, je grimpe, la casserole me tape dans le dos. La plus haute branche craque. Il est juste au-dessus, il monte encore, il ne me voit pas. Je n'aurai qu'un seul saut, au moment où il passera le plus près. Trois, deux…"
+        "Je grimpe. Je ne sais pas grimper, mais là, je grimpe, la casserole me tape dans le dos. La plus haute branche craque. Il est juste au-dessus, il monte encore, il ne me voit pas. Je n'aurai qu'un seul saut, au moment où il passera le plus près. Trois, deux…"
       ],
       "reussite": "ch4-rattrape",
       "echec": "ch4-echec-enclumes"
@@ -149,7 +150,7 @@
       "humeur": "triste",
       "repos_min": 30,
       "texte": [
-        "Raté. Il m'a filé entre les doigts et le noir l'a pris. J'ai couru sous l'orage en criant son nom pendant je ne sais pas combien de temps. Ils l'ont recraché plus loin, avec la pluie : trempé, moitié moins gros, et très étonné. Les Enclumes ne sont pas méchants. Ils avalent, c'est tout. Je l'ai ramené dans mes bras jusqu'au bord du plateau, à la pancarte. On se sèche. On se tait. On retraversera quand il aura repris forme."
+        "Raté. Il m'a filé entre les doigts et le noir l'a pris. J'ai couru sous l'orage en criant son nom, longtemps. Ils l'ont recraché plus loin, avec la pluie : trempé, moitié moins gros, et très étonné. Les Enclumes ne sont pas méchants. Ils avalent, c'est tout. Je l'ai ramené sous l'arbre mort. On se sèche, on se tait, il reprend forme. Mais j'entends gronder dans notre dos : ils ont fait demi-tour. Ils reviennent."
       ]
     },
     "ch4-arc": {

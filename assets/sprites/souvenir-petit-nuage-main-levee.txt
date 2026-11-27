@@ -1,0 +1,31 @@
+# Souvenir de campagne (petit-nuage)
+id: souvenir-petit-nuage-main-levee
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#e6ecf2 b=#8a79b8 c=#6cb6ff d=#ffffff e=#b4dbff f=#ffc89a
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabcccccccccddddddcccbaa
+aabccccccccddddddddccbaa
+.abcccccdccddddddddccba.
+aabcccdcdcdaaaaaaaaccbaa
+aabececdcdcecececececbaa
+.abcececececececececeba.
+aabeeeeeeeeeeeeeeeeeebaa
+aabeeeecceeeeeeeeeeeebaa
+.abeeeecceeeeeeeeeeeeba.
+aabeeecccceeeeeeeeeeebaa
+aabeecccccceeeeeeeeeebaa
+.abeecccccceeeeeeeeeeba.
+aabeecccccceefeeefeeebaa
+aabeecccccceeefeeefeebaa
+.abfffccccefffefffeffba.
+aabffefccefffefffefffbaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a
