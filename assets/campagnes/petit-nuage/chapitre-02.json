@@ -106,13 +106,14 @@
     },
     "ch2-soleil": {
       "type": "choix",
+      "checkpoint": true,
       "lieu": "La route blanche",
       "decor": "chemin-creux",
       "humeur": "peur",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
-        "On a repris la route, et ça se gâte. Plus de haies : un chemin tout blanc, en plein soleil. Brouillon a chaud. Ses bords deviennent transparents, je vois les cailloux à travers. Je me suis mesuré contre lui en marchant : il a encore perdu un peu.",
-        "Il y a deux façons d'aller jusqu'à l'étang où on dormira. Tout droit par le chemin blanc, on y est avant le soir. Ou par le petit bois, à l'ombre, mais ça fait un grand détour et on arrivera de nuit. Lui, il ne se plaint pas. Il ne sait pas se plaindre. On passe par où ?"
+        "Ici, ça se gâte. Plus de haies, plus d'ombre : un chemin de craie, tout blanc, sous un soleil d'automne qui cogne encore. Brouillon a chaud. Ses bords deviennent transparents, je vois les cailloux à travers. Je me suis allongé contre lui, vite, à même la poussière : il a encore perdu un peu.",
+        "Il y a deux façons d'aller jusqu'à l'étang où on dormira. Tout droit par le chemin blanc, on y est avant la nuit. Ou par le petit bois, à l'ombre, mais ça fait un grand détour et on arrivera dans le noir. Lui, il ne se plaint pas. Il ne sait pas se plaindre. On passe par où ?"
       ],
       "options": [
         { "id": "ch2-soleil-bois", "libelle": "Par le bois, à l'ombre, tant pis pour le détour", "vers": "ch2-etang" },
@@ -143,7 +144,7 @@
       "humeur": "triste",
       "repos_min": 20,
       "texte": [
-        "Il n'a pas tenu. À mi-chemin, il s'est posé par terre, d'un coup, plat comme une flaque. Il tenait dans mes deux bras. Je l'ai porté en courant jusqu'au dernier coin d'ombre, celui des haies, tout au début du chemin, et j'ai fait de la vapeur avec tout ce que j'avais. Il se regonfle, tout doucement. Je reste à côté. Je n'aurais pas dû insister. On reprendra la route quand il flottera de nouveau."
+        "Il n'a pas tenu. À mi-chemin, il s'est posé par terre, d'un coup, plat comme une flaque. Il tenait dans mes deux bras. Je l'ai porté en courant jusqu'au dernier coin d'ombre, à l'entrée du chemin blanc, et j'ai fait de la vapeur avec tout ce que j'avais, même l'eau de mon thé. Il se regonfle, tout doucement. Je reste à côté. Je n'aurais pas dû insister. On repartira quand il flottera de nouveau, et cette fois, on réfléchira avant."
       ]
     },
     "ch2-etang": {

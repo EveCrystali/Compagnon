@@ -21,7 +21,7 @@
       "type": "choix",
       "humeur": "determine",
       "texte": [
-        "Premier vrai raidillon. Le sentier part à gauche en grands lacets tranquilles, il y en a pour la matinée. Ou alors on coupe tout droit, par un éboulis de gros rochers : c'est trois fois plus court. Il faudrait que je lance mon baluchon par-dessus chaque bloc pour me hisser derrière, et je vise comme une goutte. Brouillon, lui, flotte : il ne voit pas le problème. On prend par où ?"
+        "Premier vrai raidillon. Le sentier part à gauche en grands lacets tranquilles, il y en a pour la journée. Ou alors on coupe tout droit, par un éboulis de gros rochers : c'est trois fois plus court. Il faudrait que je lance mon baluchon par-dessus chaque bloc pour me hisser derrière, et je vise comme une goutte. Brouillon, lui, flotte : il ne voit pas le problème. On prend par où ?"
       ],
       "options": [
         { "id": "ch6-montee-rochers", "libelle": "Coupe par les rochers", "vers": "ch6-grimpe" },
@@ -44,7 +44,7 @@
       "humeur": "joie",
       "effets": [ { "drapeau": "a-traine", "ote": true } ],
       "texte": [
-        "Six rochers, six lancers, six fois dedans ! Je ne sais pas ce qui m'a pris. Au dernier, Brouillon a applaudi, enfin, il a tapé deux de ses bords l'un contre l'autre, ça ne fait aucun bruit, mais j'ai compris l'intention. On est en haut du raidillon et le soleil n'est même pas au milieu du ciel. On a regagné une belle demi-journée. Si on avait du retard, on n'en a plus. J'ai mal partout et je suis très content."
+        "Six rochers, six lancers, six fois dedans ! Je ne sais pas ce qui m'a pris. Au dernier, Brouillon a applaudi, enfin, il a tapé deux de ses bords l'un contre l'autre, ça ne fait aucun bruit, mais j'ai compris l'intention. On est en haut du raidillon et le soleil n'est même pas au milieu du ciel. Par les lacets, on y serait encore demain. Si on avait du retard, on n'en a plus. J'ai mal partout et je suis très content."
       ],
       "suite": "ch6-etageres"
     },
@@ -79,7 +79,7 @@
       "pendant": "Pilou visite quatre cents étagères",
       "tenue": "attend",
       "texte": [
-        "En haut du raidillon, il y a une porte ronde dans le talus, et derrière, une marmotte en tablier : Madame Bocal. Elle ferme pour l'hiver dans deux jours, et elle met tout en conserve avant de dormir. Tout. Elle veut absolument nous montrer. J'ai lu les étiquettes : « Mirabelles. » « Courant d'air du mois d'août. » « Odeur de foin. » « Un fond de sieste. » Il y a quatre cents étagères. Je reviens."
+        "En haut du raidillon, il y a une porte ronde dans le talus, et derrière, une marmotte en tablier : Madame Bocal. Elle ferme pour l'hiver dans deux jours, et elle met tout en conserve avant de dormir. Tout. « Le col, ça se prend à l'aube, d'une traite. En attendant, venez voir. » J'ai lu les étiquettes : « Mirabelles. » « Courant d'air du mois d'août. » « Un fond de sieste. » Il y a quatre cents étagères, et elle les commente toutes. Je reviens."
       ],
       "suite": "ch6-meteo"
     },
@@ -124,9 +124,10 @@
     },
     "ch6-meteo": {
       "type": "choix",
+      "checkpoint": true,
       "humeur": "peur",
       "texte": [
-        "Le soir tombe. Madame Bocal a sorti le museau, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas ce soir. Le ciel a sa tête de couvercle. Il neigera cette nuit. Demain matin, à la première heure, ou pas du tout. » Elle nous offre son paillasson pour dormir. Mais le col est juste là, on le voit, et chaque heure compte. Je l'écoute, ou on tente ?"
+        "Dehors, il fait nuit. Madame Bocal a passé le museau par sa porte ronde, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas cette nuit. Le ciel a sa tête de couvercle. Il va neiger. Demain matin, à la première heure, ou pas du tout. » Elle nous offre son paillasson. Mais le col est juste là, au-dessus de nous, et chaque heure compte. Je l'écoute, ou on tente ?"
       ],
       "options": [
         { "id": "ch6-meteo-dormir", "libelle": "Écoute-la : dors ici, pars à l'aube", "vers": "ch6-bocaux" },
@@ -151,7 +152,7 @@
       "humeur": "triste",
       "repos_min": 30,
       "texte": [
-        "Je ne sais pas où on était. Plus de sentier, plus de haut, plus de bas. Brouillon est tombé dans la neige comme une assiette : gelé, raide, tout léger. J'ai eu très peur. C'est Madame Bocal qui nous a retrouvés, avec une lanterne et beaucoup de reproches. Elle l'a mis à dégeler au-dessus de sa bouilloire, il reprend sa forme goutte à goutte. « Demain matin ou pas du tout. Je l'avais dit ? » Elle l'avait dit. On reprendra la montée du début, et cette fois, on l'écoutera."
+        "Je ne sais pas où on était. Plus de sentier, plus de haut, plus de bas. Brouillon est tombé dans la neige comme une assiette : gelé, raide, tout léger. J'ai eu très peur. C'est Madame Bocal qui nous a retrouvés, avec une lanterne et beaucoup de reproches, et qui nous a ramenés chez elle. Elle l'a mis à dégeler au-dessus de sa bouilloire, il reprend sa forme goutte à goutte. Elle n'a pas dit « je vous l'avais dit ». Elle l'a pensé très fort, en rangeant ses bocaux."
       ]
     },
     "ch6-nuit": {

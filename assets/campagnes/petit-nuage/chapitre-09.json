@@ -15,9 +15,10 @@
     },
     "ch9-traverse": {
       "type": "choix",
+      "checkpoint": true,
       "humeur": "peur",
       "texte": [
-        "Cent pas dans le vent. Moi, je suis lourd, avec ma casserole : je passerai courbé. C'est pour lui que j'ai peur. J'ai envie de le prendre dans mes bras et de le serrer très fort, tout le long. Je me rappelle ce qu'a dit Tournebise, un nuage qu'on serre… Mais c'était facile à dire, sur un toit. Brouillon regarde le fleuve. Il attend que je décide. Comment on traverse ?"
+        "Cent pas dans le vent, sur la corniche. Moi, je suis lourd, avec ma casserole : je passerai courbé. C'est pour lui que j'ai peur. Tout en moi voudrait le prendre dans mes bras et le serrer très fort, tout le long. Je sais ce qu'a dit Tournebise, un nuage qu'on serre… Mais c'est facile à dire, sur un toit. Brouillon regarde le fleuve. Il attend que je décide. Comment on traverse ?"
       ],
       "options": [
         { "id": "ch9-traverse-seul", "libelle": "Qu'il se tienne seul, comme sur le toit : le ventre rentré", "vers": "ch9-tient", "si": { "drapeau": "sait-tenir" }, "effets": [ { "var": "lien", "plus": 2 } ] },
@@ -86,7 +87,7 @@
       "humeur": "triste",
       "repos_min": 40,
       "texte": [
-        "Je n'en ai rattrapé que trois. Les autres, je les ai perdus de vue, j'ai mélangé les endroits, j'ai couru derrière des remous vides. Je suis revenu à l'entrée de la salle avec une demi-casserole de Brouillon, qui ne parlait pas. Les Froisseuses ont rapporté le reste dans la nuit, mèche par mèche, sans rien demander. Il se recolle. Il est tout pâle. On retraversera quand il tiendra en un seul morceau. Je ne le serrerai plus."
+        "Je n'en ai rattrapé que trois. Les autres, je les ai perdus de vue, j'ai mélangé les endroits, j'ai couru derrière des remous vides. Je suis revenu au début de la corniche avec une demi-casserole de Brouillon, qui ne parlait pas. Les Froisseuses ont rapporté le reste, mèche par mèche, sans rien demander. Il se recolle. Il est tout pâle. On retraversera quand il tiendra en un seul morceau. Et cette fois, je réfléchirai avant de serrer quoi que ce soit."
       ]
     },
     "ch9-remonte": {
@@ -128,7 +129,7 @@
       "type": "recit",
       "humeur": "joie",
       "texte": [
-        "Je suis monté dessus. C'est mou, c'est froid, ça s'enfonce un peu, et ça tient. Il a tremblé sous le poids, il a dit « Lourd », et il a décollé. Je suis sur le dos d'un nuage ! Moi ! Je me tiens à ses bords, la casserole serrée entre les genoux, et les parois descendent autour de nous. Il y a une semaine, il était coincé dans des ronces. Il monte doucement, il fait attention à moi. Je crois que je n'ai jamais rien fait d'aussi bien de ma vie."
+        "Je suis monté dessus. C'est mou, c'est froid, ça s'enfonce un peu, et ça tient. Il a tremblé sous le poids, il a dit « Lourd », et il a décollé. Je suis sur le dos d'un nuage ! Moi ! Je me tiens à ses bords, la casserole serrée entre les genoux, et les parois descendent autour de nous. Il n'y a même pas une semaine, il était coincé dans des ronces. Il monte doucement, il fait attention à moi. Je crois que je n'ai jamais rien fait d'aussi bien de ma vie."
       ],
       "suite": "ch9-lumiere"
     },

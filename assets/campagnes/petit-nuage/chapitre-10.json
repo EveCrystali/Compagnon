@@ -33,10 +33,11 @@
       "humeur": "peur",
       "texte": [
         "Pas assez. Le soleil est déjà derrière les crêtes, et le lac est tout en bas : il y a une nuit entière de descente dans les cailloux. Si je descends à mon pas, on sera sur la rive à l'aube. Juste quand ils s'en iront. C'est le jour qu'on a perdu. Il est là, devant nous, exactement de la longueur de cette pente.",
-        "Brouillon, lui, flotte. Seul, sans moi, il serait en bas avant minuit, avec les siens, avec toute la nuit pour boire. Seul. Sans que je sois là. Il ne l'a pas proposé. Il n'y a même pas pensé, il attend que je me mette en route. Qu'est-ce que je fais ?"
+        "Brouillon, lui, flotte. Seul, sans moi, il serait en bas avant minuit, avec les siens, avec toute la nuit pour boire. Seul. Sans que je sois là. Il ne l'a pas proposé. Il n'y a même pas pensé, il attend que je me mette en route. Il me faudrait d'autres jambes que les miennes. Qu'est-ce que je fais ?"
       ],
       "options": [
         { "id": "ch10-trop-tard-ensemble", "libelle": "Descends avec lui, toute la nuit, sans t'arrêter", "vers": "ch10-descente", "effets": [ { "drapeau": "descente-nuit" } ] },
+        { "id": "ch10-trop-tard-cafe", "libelle": "Bois le café de Tournebise, et dévale", "vers": "ch10-cafe", "si": { "objet": "cafe" }, "effets": [ { "objet": "cafe", "donne": false } ] },
         { "id": "ch10-trop-tard-seul", "libelle": "Envoie-le devant, seul. Tu le rejoindras.", "vers": "ch10-mots", "effets": [ { "drapeau": "seul-devant" } ] },
         { "id": "ch10-trop-tard-plume", "libelle": "Fais sonner la plume de fer, là-haut, le plus fort possible", "vers": "ch10-sonne", "si": { "objet": "plume" }, "effets": [ { "drapeau": "ondee" }, { "drapeau": "attendu" }, { "drapeau": "descente-nuit" } ] }
       ]
@@ -46,6 +47,14 @@
       "humeur": "surpris",
       "texte": [
         "J'ai détaché la plume et j'ai cogné dessus avec la casserole, de toutes mes forces. Ding. Ça a roulé sur tout le lac. En bas, rien n'a bougé. Et puis si. Au fond, contre la montagne, quelque chose de gris, que j'avais pris pour un versant, s'est tourné. Lentement. Large comme une vallée. Elle a regardé vers nous. Et elle est venue se coucher en travers du lac, devant tous les autres, comme on se met devant une porte. Je crois qu'elle les fera attendre. Je descends."
+      ],
+      "suite": "ch10-descente"
+    },
+    "ch10-cafe": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai ouvert le sachet de Tournebise et je l'ai vidé d'un coup, à sec, à même la poudre. C'est infect. Ça a le goût d'une gouttière en hiver. Je n'avais pas fini de tousser que mes jambes se sont réveillées avant moi, puis mes yeux, puis mon antenne, qui vibre toute seule. Il avait raison : ça ferait courir un escargot. C'est la dernière nuit, je le bois la dernière nuit. Brouillon m'a regardé, inquiet. J'ai dit : « On ne descend pas. On dévale. »"
       ],
       "suite": "ch10-descente"
     },
@@ -83,7 +92,7 @@
       "tenue": "marche",
       "recompense": { "po": 13, "xp": 6 },
       "texte": [
-        "On descend. Pas de pause, pas de vapeur, pas de mesure du soir. Des cailloux, des cailloux, et le noir. Brouillon vole juste devant mes pieds pour que je voie où les poser : il est ma lanterne. En bas, le lac luit un peu, et le troupeau dessus, comme de la neige qui respire. Il fait de plus en plus froid. J'ai du givre sur l'antenne. Est-ce qu'on y sera avant qu'ils se lèvent ? Je ne m'arrête pas. Je t'écris en bas."
+        "En route. Pas de pause, pas de vapeur, pas de mesure du soir. Des cailloux, des cailloux, et le noir. Brouillon vole juste devant mes pieds pour que je voie où les poser : il est ma lanterne. En bas, le lac luit un peu, et le troupeau dessus, comme de la neige qui respire. Il fait de plus en plus froid. J'ai du givre sur l'antenne. Est-ce qu'on y sera avant qu'ils se lèvent ? Je ne m'arrête pas. Je t'écris en bas."
       ],
       "suite": "ch12-gelee"
     },
