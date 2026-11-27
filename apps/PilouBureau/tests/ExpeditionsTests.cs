@@ -36,20 +36,22 @@ public class ExpeditionsTests
     public void Travail_productif_paie_par_tranches_et_plafonne_par_jour()
     {
         var e = new Energie { Valeur = 0 };
-        // 3 min 59 : rien ; 4 min : +1.
-        for (int i = 0; i < 239; i++) Jauge.Travailler(e, 1, Jour, false);
+        // 5 min 59 : rien ; 6 min : +1.
+        for (int i = 0; i < 359; i++) Jauge.Travailler(e, 1, Jour, false);
         Assert.Equal(0, e.Valeur);
         Assert.Equal(1, Jauge.Travailler(e, 1, Jour, false));
         // Un seul appel compte au plus une minute (un minuteur endormi ne paie pas d'un coup).
         Assert.Equal(0, Jauge.Travailler(e, 10_000, Jour, false));
         Assert.Equal(60, e.Reliquat);
-        // Une journée entière de travail : plafonné à 60.
+        // Une journée entière de travail : plafonné à 40.
         for (int i = 0; i < 24 * 60; i++) Jauge.Travailler(e, 60, Jour.AddSeconds(i), false);
         Assert.Equal(Jauge.PlafondTravail, e.Travail);
-        Assert.Equal(60, e.Valeur, 6);
+        Assert.Equal(Jauge.PlafondTravail, e.Valeur, 6);
         // Le lendemain, le plafond repart.
-        Assert.Equal(1, Jauge.Travailler(e, 60 * 4, Jour.AddDays(1), false) + Jauge.Travailler(e, 60, Jour.AddDays(1), false)
-            + Jauge.Travailler(e, 60, Jour.AddDays(1), false) + Jauge.Travailler(e, 60, Jour.AddDays(1), false));
+        e.Reliquat = 0;
+        double lendemain = 0;
+        for (int i = 0; i < 6; i++) lendemain += Jauge.Travailler(e, 60, Jour.AddDays(1), false);
+        Assert.Equal(1, lendemain);
         // Jamais au-dessus de 100.
         e.Valeur = 99.5;
         for (int i = 0; i < 100; i++) Jauge.Travailler(e, 60, Jour.AddDays(1), false);
@@ -96,8 +98,8 @@ public class ExpeditionsTests
             Jauge.Travailler(a, 60, Jour, false);
             Jauge.Travailler(b, 60, Jour, true);
         }
-        Assert.Equal(15, a.Valeur, 6);
-        Assert.Equal(7, b.Valeur, 6); // 30 min « utiles » : 7 tranches de 4 min
+        Assert.Equal(10, a.Valeur, 6);
+        Assert.Equal(5, b.Valeur, 6); // 30 min « utiles » : 5 tranches de 6 min
         Assert.Equal(15, Jauge.Manger(new Energie { Valeur = 0 }, "jus-etoile", Jour, true));
         Assert.Equal(1, Jauge.Quete(new Energie { Valeur = 0 }, Jour, true));
     }

@@ -178,7 +178,7 @@ public sealed partial class FenetrePilou
         _expSens = _x - _zone.Left < _zone.Right - _x ? -1 : 1;
         _geste = Geste.Rien;
         _expAnime = null;
-        Dire($"en route pour {Expeditions.De(l.Nom)} ! retour vers {Amis.Heure(DateTime.Now.AddMinutes(l.Minutes))}", 4500);
+        Dire($"en route pour {Expeditions.De(l.Nom)} ! −{l.Cout} ⚡ (reste {Jauge.Affiche(Exp.Energie)}) · retour vers {Amis.Heure(DateTime.Now.AddMinutes(l.Minutes))}", 5000);
         return null;
     }
 
