@@ -30,7 +30,7 @@
       "humeur": "malice",
       "effets": [ { "var": "courage", "plus": 1 } ],
       "texte": [
-        "Je me suis aplati derrière le rocher, couleur d'ombre, et j'ai attendu. Les pas ont approché. Et j'ai vu passer, à hauteur de mes yeux, deux bottes jaunes bien trop grandes, puis le bout d'une natte. Un enfant ! Elle s'est arrêtée pile où j'avais disparu, elle a soufflé « zut » tout bas, et elle a fait demi-tour en courant, sans glisser une seule fois. Je reprends, au pas."
+        "Je me suis aplati derrière le rocher, couleur d'ombre, et j'ai attendu. Les pas ont approché. Et j'ai vu passer, à hauteur de mes yeux, deux bottes jaunes bien trop grandes, puis le bout d'une natte. C'est elle, la petite ombre de l'autre nuit : une enfant ! Elle s'est arrêtée pile où j'avais disparu, elle a soufflé « zut » tout bas, et elle a fait demi-tour en courant, sans glisser une seule fois. Je reprends, au pas."
       ],
       "suite": "ch4b-pas"
     },

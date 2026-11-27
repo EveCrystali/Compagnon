@@ -46,7 +46,7 @@
       "lieu": "Le bureau de la maire",
       "humeur": "neutre",
       "texte": [
-        "Odile m'a fait asseoir sur un dictionnaire posé sur une chaise. « Vous n'aimez pas les phares en général. Vous aimez celui-là. Qui vous a fait venir ? » Sur son bureau, un dossier fermé, épais, avec « Dent-Creuse » sur la tranche. Je lui dis la vérité, la lettre sans timbre et tout le reste ? Ou je joue le touriste ?"
+        "Odile m'a fait asseoir sur un dictionnaire posé sur une chaise. « Le petit bleu de l'auberge. Tout Trébrume dit que vous ne quittez pas notre phare des yeux. Qui vous a fait venir ? » Sur son bureau, un dossier fermé, épais, avec « Dent-Creuse » sur la tranche. Je lui dis la vérité, la lettre sans timbre et tout le reste ? Ou je joue le touriste ?"
       ],
       "options": [
         { "id": "vrai", "libelle": "Dis-lui la vérité", "vers": "ch4a-odile-vrai" },

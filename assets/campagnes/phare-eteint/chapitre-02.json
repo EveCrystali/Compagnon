@@ -120,7 +120,7 @@
       "humeur": "determine",
       "effets": [ { "drapeau": "trois-coups" }, { "var": "courage", "plus": 1 } ],
       "texte": [
-        "J'ai couru jusqu'au bout de la jetée, au ras des bittes pour ne pas me faire voir. Tudal a accosté au rocher et monté ses bidons jusqu'à la porte du phare. Et là, il a frappé. Trois coups lents, que l'eau m'a portés : toc, toc, toc. Personne n'a ouvert. Il a posé les bidons sur le seuil et il est reparti. On ne frappe pas chez les gens qu'on cambriole."
+        "J'ai couru jusqu'au bout de la jetée, en me faufilant entre les bornes d'amarrage pour ne pas me faire voir. Tudal a accosté au rocher et monté ses bidons jusqu'à la porte du phare. Et là, il a frappé. Trois coups lents, que l'eau m'a portés : toc, toc, toc. Personne n'a ouvert. Il a posé les bidons sur le seuil et il est reparti. On ne frappe pas chez les gens qu'on cambriole."
       ],
       "suite": "ch2-guet"
     },
@@ -150,7 +150,7 @@
       "type": "choix",
       "humeur": "tendre",
       "texte": [
-        "Soufflée, baissé, invisible. Je suis très fort quand tu m'aides. La silhouette s'est arrêtée sur les pavés, juste en face, et je l'ai vue comme je te vois : petite, une natte, des bottes jaunes trop grandes. Un enfant ! Elle a regardé vers le phare, longtemps. Puis elle a posé quelque chose sur la borne d'en face, bien en vue de mon carreau, et elle a filé.",
+        "Soufflée, baissé, invisible. Je suis très fort quand tu m'aides. La silhouette s'est arrêtée sur les pavés, juste en face, et je l'ai vue comme je te vois : petite, une natte, des bottes jaunes trop grandes. Une enfant ! Elle a regardé vers le phare, longtemps. Puis elle a posé quelque chose sur la borne d'en face, bien en vue de mon carreau, et elle a filé.",
         "C'est un coquillage. Rose, lisse, posé bien droit, exprès. Un cadeau ? Un piège ? Une façon de dire bonjour quand on n'a pas le droit de parler ? Je sors le chercher, ou je le laisse où il est ?"
       ],
       "options": [

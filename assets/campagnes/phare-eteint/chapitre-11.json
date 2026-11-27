@@ -144,9 +144,10 @@
         "Alors ça a éclaté. Tudal grogne que la maire garde dans son tiroir l'offre d'un hôtel, pour le jour où le feu sera éteint. Odile réplique qu'il braconne la nuit et que le noir l'arrange bien. Basile, au fond, regarde ses mains. Puis tout le monde se tait, et c'est moi qu'on regarde. Qu'est-ce que je réponds ?"
       ],
       "options": [
-        { "id": "basile", "libelle": "Tourne-toi vers Basile : c'est lui, jeudi", "vers": "ch8-aveu", "si": { "un": [ { "drapeau": "c-jeudi" }, { "drapeau": "basile-prive" } ] } },
-        { "id": "sans-nom", "libelle": "« Je ne sais pas qui. Mais ce n'est pas la faute d'Anselme »", "vers": "ch8-sans-nom" },
-        { "id": "delai", "libelle": "Demande une nuit de plus pour trouver", "vers": "ch8-sans-nom" }
+        { "id": "basile", "libelle": "Tourne-toi vers Basile : c'est lui, jeudi", "vers": "ch8-aveu", "si": { "un": [ { "drapeau": "c-jeudi" }, { "drapeau": "basile-prive" }, { "drapeau": "c-limaille" } ] } },
+        { "id": "qui-dort", "libelle": "Demande qui monte là-haut quand Anselme dort", "vers": "ch8-qui-dort", "si": { "non": { "un": [ { "drapeau": "c-jeudi" }, { "drapeau": "basile-prive" }, { "drapeau": "c-limaille" } ] } } },
+        { "id": "sans-nom", "libelle": "« Je ne sais pas qui. Mais ce n'est pas la faute d'Anselme »", "vers": "ch8-muet" },
+        { "id": "anselme", "libelle": "Laisse Anselme répondre : c'est son phare", "vers": "ch8-pardon", "si": { "non": { "drapeau": "basile-prive" } } }
       ]
     },
     "ch8-reunion-b": {
@@ -159,6 +160,7 @@
       "options": [
         { "id": "verite", "libelle": "La vérité : le gardien a éteint lui-même, il n'y voit plus", "vers": "ch8-verite-nue" },
         { "id": "accuser", "libelle": "« Je sais qui est responsable »", "vers": "ch8-accuse" },
+        { "id": "machine", "libelle": "« Il a réglé juste : c'est la machine qu'il faut voir »", "vers": "ch8-machine-b" },
         { "id": "silence", "libelle": "« Rien. Ce n'est pas à moi de le dire »", "vers": "ch8-silence" }
       ]
     },
@@ -180,8 +182,51 @@
       "humeur": "tendre",
       "effets": [ { "drapeau": "issue-aveu" } ],
       "texte": [
-        "Je me suis tourné vers Basile. Je n'ai presque rien eu à dire : il s'est levé avant la fin de ma phrase, comme un homme qui attend ce moment depuis cinq jours. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. »",
+        "Je me suis tourné vers Basile, et je n'ai pas eu besoin de finir : il s'est levé, comme un homme qui attend ce moment depuis cinq jours. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. »",
         "« Et après, j'ai eu peur, et j'ai laissé un homme croire qu'il était fini. » Anselme a traversé la salle, la main en avant, jusqu'à lui. « Des repères. Pour mes doigts. » Il a trouvé son épaule. « Imbécile. Fallait me le dire. Tu l'as, mon cadran ? » Basile a fait oui. Vernier a reposé son crayon. « La mer baisse à sept heures et demie. Montrez-moi un phare qui dit vrai, et nous reparlerons de cet ordre. »"
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-qui-dort": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai demandé qui, à part Lison, avait une clef de ce phare et montait là-haut pendant qu'Anselme dormait. Personne n'a répondu. Tudal a regardé Odile, Odile a regardé Perrine, et Perrine, sans le vouloir, a regardé le fond de la salle : un monsieur maigre qui essuyait une loupe déjà propre. Lison me l'avait dit hier soir, en comptant sur ses doigts : l'horloger entre avec sa clef quand Anselme dort."
+      ],
+      "suite": "ch8-aveu"
+    },
+    "ch8-muet": {
+      "type": "hasard",
+      "issues": [
+        { "poids": 1, "vers": "ch8-basile-parle", "si": { "drapeau": "basile-prive" } },
+        { "poids": 1, "vers": "ch8-sans-nom", "si": { "non": { "drapeau": "basile-prive" } } }
+      ]
+    },
+    "ch8-basile-parle": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai dit que je ne savais pas qui, mais que ce n'était pas la faute d'Anselme. Vernier a attendu. Personne n'a parlé. Au fond, Basile a ouvert la bouche, et il l'a refermée. Alors je me suis rappelé notre conversation, seul à seul, et sa main qui tremblait. Je n'avais pas de nom à donner, c'est vrai. Mais j'avais quelqu'un à regarder."
+      ],
+      "suite": "ch8-aveu"
+    },
+    "ch8-pardon": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-auto" } ],
+      "texte": [
+        "J'ai regardé Anselme : c'est son phare, c'est à lui de répondre. Il a mis longtemps. « Qui ? Je ne veux pas le savoir. Celui qui a fait ça voulait m'aider, ça se sentait sous mes doigts. Qu'il garde son nom. » Au fond, Basile a fermé les yeux. Personne n'a rien dit. C'était beau, et je crois que c'était une erreur.",
+        "Vernier a reposé son crayon, très doucement. « Je respecte cela, monsieur. Mais voici ce que j'ai : un cadran de travers, posé par personne, et un gardien qui ne pouvait pas s'en apercevoir. Je ne ferme pas ce phare. Je ne peux plus le laisser à un homme seul. J'ai une balise automatique dans mon fourgon ; nous la montons ce soir. » Anselme a hoché la tête, très digne."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-machine-b": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "drapeau": "issue-sursis" } ],
+      "texte": [
+        "J'ai dit que le gardien avait réglé son feu comme toujours, et que si le feu avait menti, il fallait chercher dans la machine, pas dans l'homme. Vernier a levé un sourcil. « Vous l'avez vue, cette machine ? » J'ai dû dire non : ma chandelle n'était pas allée jusque-là. Au fond, Basile s'est mis à essuyer une loupe déjà propre.",
+        "« Une intuition, donc. Je ne signe pas contre une intuition, monsieur. Ni pour. » Il a rangé ses trois crayons. « Je signerai demain, à la première heure. Sauf si d'ici là ce phare me prouve qu'il sait encore dire son nom. Deux éclats, un long. Toute une nuit. Sans une faute. » Il n'y croit pas. Moi, j'ai une nuit pour lui donner tort. Basile, lui, a regardé ses chaussures jusqu'à la fin."
       ],
       "suite": "ch8-fin"
     },

@@ -165,10 +165,11 @@
       "lieu": "La chambre de veille",
       "decor": "chambre-de-veille",
       "humeur": "triste",
-      "effets": [ { "drapeau": "vu-carnet" } ],
+      "effets": [ { "drapeau": "vu-carnet" }, { "drapeau": "k-odile" } ],
       "texte": [
         "Le carnet de veille. Trente ans de nuits, une ligne par nuit : l'heure d'allumage, le vent, la brume, « rien à signaler ». Au début, l'écriture d'Anselme, droite et serrée, à l'encre bleu-noir. Puis, il y a deux hivers, elle grossit, elle penche. Puis elle s'arrête. Et une autre prend la suite : une écriture d'écolier, bien posée, qui essaie d'imiter la sienne.",
-        "Celle de la lettre sans timbre. C'est Lison qui tient le carnet depuis un an. Les dernières pages sont arrachées, au ras de la couture. Mais il reste le buvard, et un buvard, pour moi, c'est un livre ouvert : je lis à l'envers. « …réglé comme toujours, onze à gauche, deux à droite… rendu trois éclats… feu faux, par ma faute… » Lison me regarde lire, les mâchoires serrées."
+        "Celle de la lettre sans timbre. C'est Lison qui tient le carnet depuis un an. Les dernières pages sont arrachées, au ras de la couture. Mais il reste le buvard, et un buvard, pour moi, c'est un livre ouvert : je lis à l'envers. « …réglé comme toujours, onze à gauche, deux à droite… rendu trois éclats… feu faux, par ma faute… » Lison me regarde lire, les mâchoires serrées.",
+        "Glissé sous la couverture du carnet, il y a encore un double de rapport pour le Service, signé « Anselme » d'une belle encre verte qui n'est pas la sienne. Épinglé dessus : « Parrain, j'ai encore signé pour toi. Je ne dis rien, ne dis rien. O. » O., comme Odile, la maire. Celle qui cache des papiers, d'après Lison. Elle en cache, c'est vrai. Pas ceux qu'on croit."
       ],
       "suite": "ch7-bougie"
     },
@@ -186,10 +187,6 @@
     },
     "ch7-bougie": {
       "type": "hasard",
-      "humeur": "fatigue",
-      "texte": [
-        "Ma chandelle me coule sur les doigts, ce qui est une sensation bizarre quand on est soi-même un peu liquide. Je la tiens bien droite, je protège la flamme du creux de la main, et je regarde ce qu'il en reste : de moins en moins."
-      ],
       "issues": [
         { "poids": 1, "vers": "ch7-promesse", "si": { "drapeau": "deuxieme-bougie" } },
         { "poids": 1, "vers": "ch7-fouille2", "si": { "non": { "drapeau": "deuxieme-bougie" } } }
@@ -202,7 +199,7 @@
       "humeur": "determine",
       "effets": [ { "drapeau": "deuxieme-bougie" } ],
       "texte": [
-        "Il m'en reste un doigt. De quoi regarder encore une chose, pas deux, avant le noir. Lison s'est roulée dans une couverture, mais elle ne dort pas : je vois ses yeux briller. Qu'est-ce que je regarde avec ma dernière flamme ? Ou est-ce que je la souffle, pour la garder ?"
+        "Ma chandelle me coule sur les doigts, ce qui est bizarre quand on est soi-même un peu liquide. Il en reste un doigt : de quoi regarder encore une chose, pas deux, avant le noir. Lison s'est roulée dans une couverture, mais elle ne dort pas : je vois ses yeux briller. Qu'est-ce que je regarde avec ma dernière flamme ? Ou est-ce que je la souffle, pour la garder ?"
       ],
       "options": [
         { "id": "machine", "libelle": "La machine, dans la lanterne", "vers": "ch7-machine", "si": { "non": { "drapeau": "vu-machine" } } },
@@ -221,15 +218,32 @@
         "« Jure-moi que tu diras rien sur ses yeux. Ni à la maire, ni à l'inspecteur. S'ils savent qu'il y voit plus, ils le descendent à terre et ils mettent une machine à sa place. C'est à lui de le dire, s'il veut. Pas à toi. Jure. » Elle me tend son petit doigt, comme pour les serments graves. Je peux jurer. Ou lui dire la vérité : que je ne sais pas encore ce que je devrai dire demain."
       ],
       "options": [
-        { "id": "jurer", "libelle": "Jure, petit doigt contre petit doigt", "vers": "ch7-fin", "effets": [ { "drapeau": "promesse" }, { "var": "confiance", "plus": 2 } ] },
-        { "id": "franchise", "libelle": "Ne jure pas : promets de ne rien faire dans son dos", "vers": "ch7-fin", "effets": [ { "var": "confiance", "plus": 1 } ] }
+        { "id": "jurer", "libelle": "Jure, petit doigt contre petit doigt", "vers": "ch7-confie", "effets": [ { "drapeau": "promesse" }, { "var": "confiance", "plus": 2 } ] },
+        { "id": "franchise", "libelle": "Ne jure pas : promets de ne rien faire dans son dos", "vers": "ch7-confie", "effets": [ { "var": "confiance", "plus": 1 } ] }
       ]
+    },
+    "ch7-confie": {
+      "type": "hasard",
+      "issues": [
+        { "poids": 1, "vers": "ch7-confidence", "si": { "tous": [ { "var": "confiance", "min": 5 }, { "non": { "drapeau": "c-jeudi" } } ] } },
+        { "poids": 1, "vers": "ch7-fin", "si": { "un": [ { "var": "confiance", "max": 4 }, { "drapeau": "c-jeudi" } ] } }
+      ]
+    },
+    "ch7-confidence": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-jeudi" } ],
+      "texte": [
+        "Elle m'a regardé longtemps. Puis, au lieu d'aller se coucher, elle a chuchoté encore : « Je vais te dire un truc que j'ai dit à personne. Jeudi, en rentrant de l'école, j'ai vu l'horloger redescendre du phare en courant, pendant la sieste d'Anselme. Il avait un paquet rond sous le bras, dans un drap, et la marée aux talons. Je l'ai pas dit à Anselme : il aurait cru que je cherche des excuses à ses yeux. »",
+        "Jeudi. La veille de la première nuit noire. Un horloger qui court, un paquet rond, et un feu qui ment le soir même. Je n'ai rien dit. J'ai serré son petit doigt, celui des serments, et elle m'a laissé faire."
+      ],
+      "suite": "ch7-fin"
     },
     "ch7-fin": {
       "type": "attente",
       "humeur": "peur",
       "texte": [
-        "Elle m'a regardé longtemps, puis elle a hoché la tête et elle est allée remonter la couverture d'Anselme. Je vais dormir un peu, roulé dans une chaussette de laine qu'elle m'a prêtée : comme sac de couchage, c'est pile ma taille.",
+        "Lison a hoché la tête, puis elle est allée remonter la couverture d'Anselme. Je vais dormir un peu, roulé dans une chaussette de laine qu'elle m'a prêtée : comme sac de couchage, c'est pile ma taille. Je te dis bonne nuit d'ici. Ne t'inquiète pas, je laisse un œil ouvert. Enfin, une goutte.",
         "Attends. Écoute. En bas. On frappe à la grande porte. Trois coups, lents. Toc. Toc. Toc. À marée haute, en pleine nuit, sur un rocher entouré d'eau. Lison s'est redressée d'un bond. Elle a soufflé : « N'ouvre pas. » Anselme ne s'est pas réveillé. Les coups recommencent. Je descends voir."
       ],
       "duree_min": 150,

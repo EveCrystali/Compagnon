@@ -8,7 +8,7 @@
       "decor": "grotte-souffleur",
       "humeur": "peur",
       "texte": [
-        "La mer est descendue, et moi aussi. Me voilà sur la grève, devant le Souffleur. La grotte respire. Plus un petit ronflement, tout au fond, chaque fois que la vague se retire. Je vais entrer dans quelque chose qui ronfle.",
+        "La mer est descendue, et moi aussi. Me voilà sur la grève, devant le Souffleur. La grotte respire. Elle ronfle même un peu, tout au fond, chaque fois que la vague se retire. Je vais entrer dans quelque chose qui ronfle.",
         "À l'intérieur, sur le sable mouillé : le canot, tiré au sec. Et une lanterne posée sur un rocher, qui éclaire un grand dos. C'est Tudal, le pêcheur. Il décharge des bidons, un sous chaque bras, et il les porte vers le fond de la grotte. Je peux rester caché derrière le canot et regarder ce qu'il fabrique. Ou l'appeler, bien en face, les mains vides. Il est très grand, tu sais."
       ],
       "options": [
@@ -67,6 +67,7 @@
     "ch5b-panier": {
       "type": "recit",
       "humeur": "surpris",
+      "effets": [ { "drapeau": "trois-coups" } ],
       "texte": [
         "« Qui tu veux que ce soit ? Lui. Ou la petite. » Il a soufflé sa fumée vers le trou. « Il est là-haut. Il mange, il sonne sa corne quand la brume tombe, et il boude. Il ouvre plus à personne. Même plus à moi, et pourtant je frappe mes trois coups, comme toujours. »",
         "J'ai demandé qui était la petite. « Lison. La fille du patron de la Tape-Dur. Son père est au large avec les autres, il rentre demain soir. Elle passe par ce boyau-là, comme un furet. Elle te suit depuis hier, t'as pas remarqué ? Si elle t'a pas encore jeté à la mer, c'est que tu lui plais. Mais va pas lui dire que je sais qu'elle monte. Elle se croit la seule. »"
@@ -112,7 +113,7 @@
       "type": "echec",
       "humeur": "triste",
       "texte": [
-        "C'était une grosse. Elle a rempli la grotte d'un coup, et elle m'a emporté avec la caisse, la lanterne et ma dignité. C'est Tudal qui m'a repêché, à la sortie, en jurant. Il m'a posé au sec sur la corniche : « Je t'avais dit de pas traîner. » Je suis bleu ciel, presque transparent. La mer lançait les dés, et je savais bien qu'elle triche."
+        "C'était une grosse. Elle a rempli la grotte d'un coup, et elle m'a emporté avec la caisse, la lanterne et ma dignité. C'est Tudal qui m'a repêché, à la sortie, en jurant. Il m'a posé au sec sur la corniche : « Je t'avais dit de pas traîner. » Je suis bleu ciel, presque transparent. La mer lançait les dés, et je savais bien qu'elle trichait."
       ],
       "repos_min": 45
     },
