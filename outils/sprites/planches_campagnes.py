@@ -16,6 +16,7 @@ import sys
 from PIL import Image, ImageDraw
 
 import campagnes_sprites
+import fin  # noqa: F401
 import planches
 import planches_hd
 import rendu
@@ -124,9 +125,8 @@ def main():
     exclusifs(dossier, B, T, TEN, B2)
     souvenirs(dossier, B, B2)
     vignettes(dossier, B, B2)
-    ids = [l.strip() for l in sys.argv[2:]] if len(sys.argv) > 2 else []
-    if ids:
-        redessines(dossier, B, ids)
+    import fin
+    redessines(dossier, B, fin.SERIE2)
 
 
 if __name__ == "__main__":

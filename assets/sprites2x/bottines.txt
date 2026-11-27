@@ -1,0 +1,27 @@
+# Bottines de marche (ensemble Explorateur)
+id: bottines
+slot: pieds
+ancre: pieds
+decalage: -30 -12
+palette: a=#1c2128 b=#ad8f78 c=#7a4b26 d=#f69d50 e=#664128 f=#7d8185 g=#2d333b
+images:
+aabbbbbbccbbccbbbbbbaa..........aabbbbbbccbbccbbbbbbaa......
+aaccccccccccccccccccaa..........aaccccccccccccccccccaa......
+aaccccccddccddccccccaa..........aaccccccddccddccccccaa......
+aaccccccddccddccccccaa..........aaccccccddccddccccccaa......
+aaccccccccccccccccccaaaaaa......aaccccccccccccccccccaaaaaa..
+aaccccccccccccccccccaaaaaaa.....aaccccccccccccccccccaaaaaaa.
+aaccccccddccddccccccbbbbbbaa....aaccccccddccddccccccbbbbbbaa
+aaccccccddccddccccccccccccaa....aaccccccddccddccccccccccccaa
+aaccccccccccccccccccccccccaa....aaccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccaa....aaccccccccccccccccccccccccaa
+aaccccccddccddccccccccccccaa....aaccccccddccddccccccccccccaa
+aaccccccddccddccccccccccccaa....aaccccccddccddccccccccccccaa
+aaccccccccccccccccccccccccaa....aaccccccccccccccccccccccccaa
+aaeeeeeecceecceeeeeeeeeeeeaa....aaeeeeeecceecceeeeeeeeeeeeaa
+ffffffffffffffffffffffffffffaaaaffffffffffffffffffffffffffff
+ggggggggggggggggggggggggggggaaaagggggggggggggggggggggggggggg
+ggggggggggggggggggggggggggggaaaagggggggggggggggggggggggggggg
+ggggggggggggggggggggggggggggaaaagggggggggggggggggggggggggggg
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa....aaaaaaaaaaaaaaaaaaaaaaaaaaaa

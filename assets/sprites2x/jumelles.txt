@@ -1,0 +1,29 @@
+# Jumelles (ensemble Explorateur)
+id: jumelles
+slot: yeux
+ancre: yeux
+decalage: -28 -4
+palette: a=#1c2128 b=#7d8185 c=#2d333b d=#768390 e=#4a8fdc f=#8fbae9 g=#282e39 h=#d0e9ff i=#858c95 j=#b4dbff k=#3b4654 l=#94b4d6 m=#333d4d n=#3f77ba
+images:
+..aaaaaaaaaaaaaaaaaaaaaa..aaaa..aaaaaaaaaaaaaaaaaaaaaa..
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbccccccccccbbbbbbaaddddaabbbbbbccccccccccbbbbbbaa
+aaccccccccccccccccccccccaaddddaaccccccccccccccccccccccaa
+aaccccccceeeeefffcccccccaaddddaaccccccceeeeefffcccccccaa
+aacccccceeeeeeeeefccccccaaddddaacccccceeeeeeeeefccccccaa
+aaccccgfhhhhhheeeefgcccciiiiiiiiccccgfhhhhhheeeefgccccaa
+aaccccfejjjjjjeeeeefcccckkkkkkkkccccfejjjjjjeeeeefccccaa
+aacccceejjjjjjeeeeeecccckkkkkkkkcccceejjjjjjeeeeeeccccaa
+aaccggeejjjjjjeeeeeegccckkkkkkkkccggeejjjjjjeeeeeegcccaa
+aacceeeejjjjjjeeeeeeeccckkkkkkkkcceeeejjjjjjeeeeeeecccaa
+aacceeeelllllleeeeeeeccckkkkkkkkcceeeelllllleeeeeeecccaa
+aaccbbeeffffffeeeeeebccckkkkkkkkccbbeeffffffeeeeeebcccaa
+aacccceeeeeeeeeeeeeeccccmmmmmmmmcccceeeeeeeeeeeeeeccccaa
+aaccccneeeeeeeeeeeenccccaaaaaaaaccccneeeeeeeeeeeenccccaa
+aaccccbneeeeeeeeeenbccccaaaaaaaaccccbneeeeeeeeeenbccccaa
+aacccccbneeeeeeeenbcccccaa....aacccccbneeeeeeeenbcccccaa
+aacccccccnnnnnnnncccccccaa....aacccccccnnnnnnnncccccccaa
+aaccccccccccccccccccccccaa....aaccccccccccccccccccccccaa
+aagggggccccccccccccgggggaa....aagggggccccccccccccgggggaa
+.aaaaaaaaaaaaaaaaaaaaaaaa......aaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaa........aaaaaaaaaaaaaaaaaaaaaa..

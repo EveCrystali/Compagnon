@@ -1,0 +1,39 @@
+# Icône : canne dorée
+id: canne-doree
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#c9a227 c=#f5d76e d=#adbac7 e=#f9e6a5 f=#f9c292 g=#f69d50 h=#d3dae3 i=#b8c4d2 j=#c9824a k=#97a2b2
+images:
+.......................aaaaa
+......................aaaaaa
+.....................aaabbcc
+....................aaabbccc
+....................aabbddca
+...................aaabbddaa
+..................aaabbcddaa
+.................aaabbecddaa
+.................aabbeccddaa
+................aaabbccaddaa
+...............aaabbcccaddaa
+..............aaabbcccaaddaa
+.............aaabbeccaaaddaa
+.............aabbeccaaaaddaa
+............aaabbccaaaaaddaa
+...........aaabbcccaa.aaddaa
+..........aaabbcccaaaaaaddaa
+.........aaabbeccaaaaaaaddaa
+...aaaaaaaabbeccaaaaaaffffaa
+..aaaaaaaaabbccaaa.aafggggfa
+.aaahhhhaabbcccaa..aagggggga
+aaahiiiihbbeccaaa..aagggggga
+aahiiiiiiheccaaa...aagggggga
+aaiiiiiiiiccaaa....aaajjjjaa
+aaiiiiiiiiccaa......aaaaaaaa
+aaiiiiiiiicaaa.......aaaaaa.
+aaakiiiikcaaa...............
+.aaakkkkcaaa................
+.aaabbccaaa.................
+aaabbcccaa..................
+aabbcccaaa..................
+aabbccaaa...................

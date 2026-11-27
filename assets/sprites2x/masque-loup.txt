@@ -1,0 +1,33 @@
+# Loup de bal (ensemble Nuit des frissons)
+id: masque-loup
+slot: yeux
+ancre: yeux
+decalage: -34 -6
+palette: a=#3a2a7a b=#fff6cc c=#f6f8fa d=#f5d76e e=#a399e0 f=#6a5acd g=#857bad h=#594dae i=#32266b
+images:
+.............aaaaa...............................aaaaaa..........bbc
+.........aaaaaaaaaaaa.........................aaaaaaaaaaaaa......bb.
+.....aaaaaaaaadddaaaaaaa...................aaaaaaaddddaaaaaaaaa.cbb.
+.aaaaaaaaaddddddddddaaaaaaa.............aaaaaaadddddddddddaaaaaacbb.
+aaaaaaddddddddeeeddddddaaaaaaa.......aaaaaaaddddddeeeeddddddddacbbba
+aadddddddddeeeffffffddddddaaaaaaa.aaaaaaaddddddfffffffeeeddddddcbbaa
+dddddddeeeeffffffffffffddddddaaaaaaaaaddddddfffffffffffffeeeedccbbdf
+gdddeeefffffffffffffffffeeddddddaaaddddddeeefffffffffffffffffeccbbfg
+afeeffffffffffaaaaaaaaffffeeedddddddddeeefffffaaaaaaaaffffffffeeeefa
+afffffffffffggaaaaaaaaggfffffeeedddeeeffffffggaaaaaaaaggffffffffffga
+agfffffffffhaaa......aaaffffffffeeefffffffffaaa......aaahfffffffffaa
+aafffffffffaaa........aaaffffffffffffffffffaaa........aaafffffffffaa
+iagffffffffaaa........aaaffffffffffffffffffaaa........aaaffffffffgai
+.aahfffffffeaaa......aaaeffffffffffffffffffeaaa......aaaefffffffhaa.
+.iagffffffffiiaaaaaaaaiiffffffffffffffffffffiiaaaaaaaaiiffffffffgai.
+..aaffffffffeeaaaaaaaaeefffffffffhhfffffffffeeaaaaaaaaeefffffffhaa..
+..aahfffffffffeeeeeeeefffffffffhhaahffffffffffeeeeeeeefffffffffgai..
+..iagfffffffffffffffffffffffffhaaaaahhfffffffffffffffffffffffffaa...
+...aahffffffffffffffffffffffhhaaaaaaaahhffffffffffffffffffffffhaa...
+...iaahhhhffffffffffffffffhhaaaa...aaaaahffffffffffffffffhhhhhaai...
+....aaaaaahhhhhhhhhffffffhaaaaa......aaaahhfffffhhhhhhhhhaaaaaai....
+.....aaaaaaaaaaaaaahhhhhhaaaa..........aaaahhhhhaaaaaaaaaaaaaaa.....
+.........aaaaaaaaaaaaaaaaaa.............aaaaaaaaaaaaaaaaaa..........
+..................aaaaaaaa................aaaaaaa...................
+....................................................................
+....................................................................

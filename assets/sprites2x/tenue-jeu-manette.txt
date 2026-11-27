@@ -1,0 +1,26 @@
+id: tenue-jeu-manette
+slot: main
+ancre: corps
+decalage: -20 8
+palette: a=#1c2128 b=#7d8185 c=#2d333b d=#282e39 e=#768390 f=#6cb6ff g=#adbac7 h=#f5d76e i=#f69d50 j=#9b8cff
+images:
+..aabbbbbbbbaaaaaaaaaaaaaaaabbbbbbbbaa..
+.aaaccccccccaaaaaaaaaaaaaaaaccccccccaaa.
+aaabccccccccbbbbbbbbbbbbbbbbccccccccbaaa
+aabccccccccccccccccccccccccccccccccccbaa
+aaccccccccccccccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccccccddccccccaa
+bbccccccddcccccceecccceeccccccffccccccbb
+cccccccdggdccccceecccceeccddccffccddcccc
+cccccccggggcccccbbccccbbcchhcccccciicccc
+cccccccggggccccccccccccccchhcccccciicccc
+cccccccbggbcccccccccccccccbbccjjccbbcccc
+ccccccccbbccccccccccccccccccccjjcccccccc
+ccccccccccccccccccccccccccccccbbcccccccc
+ddccccccccccccddddddddddddccccccccccccdd
+aaccccccccccccaaaaaaaaaaaaccccccccccccaa
+aaccccccccccccaaaaaaaaaaaaccccccccccccaa
+aadccccccccccdaaa......aaadccccccccccdaa
+aaadccccccccdaaa........aaadccccccccdaaa
+.aaaccccccccaaa..........aaaccccccccaaa.
+..aaddddddddaa............aaddddddddaa..

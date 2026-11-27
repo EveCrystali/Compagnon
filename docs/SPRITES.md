@@ -77,6 +77,12 @@ motifs écrits à la main sont agrandis par la règle commune.
 3. `python3 outils/sprites/generer.py && python3 outils/sprites/planches_hd.py`, regarder
    `planches/hd/cosmetiques-redessines.png`, corriger ; puis `python3 outils/sprites/reference.py`.
 
+Seconde série (`fin.SERIE2` : boutique garnie, tenues d'activité, météo, créatures et trophées d'expédition, 133
+sprites) : rejouée en fin comme la première ; quand un dessin est fait de pixels posés à la main (le rejeu ne serait
+qu'un agrandissement au plus proche voisin), sa base fine est l'agrandissement commun, puis `retouche_auto` pose un
+liseré de lumière et une ombre d'un pixel fin sur ses couleurs principales (ou une recette de `RECETTES2`). Avant /
+après : `python3 outils/sprites/planches_campagnes.py` (`redessines-<n>.png`).
+
 `python3 outils/sprites/fin.py` liste les sprites redessinés et ceux encore agrandis automatiquement
 (`planches/hd/rapport.txt`). Le visage est entièrement dessiné en pixels fins (`visage_sprites.py`).
 

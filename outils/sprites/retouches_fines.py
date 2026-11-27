@@ -209,3 +209,85 @@ def _simple(recette):
 for _id, _recette in RETOUCHES_SIMPLES.items():
     if _recette:
         RETOUCHES[_id] = _simple(_recette)
+
+
+# ---- Seconde série (fin.SERIE2) : base fine, puis liserés et ombres choisis d'après le dessin.
+RECETTES2 = {
+    # Recettes écrites à la main quand la règle automatique ne suffit pas (mêmes mots que RETOUCHES_SIMPLES).
+}
+
+
+def _clarte(c):
+    r, v, b = _rvb(c)
+    return r + v + b
+
+
+def _base_fine(id_, images):
+    """Si le rejeu fin n'est qu'un agrandissement au plus proche voisin (dessin en pixels posés à la main), le remplace
+    par l'agrandissement commun du sprite 1× (rendu.agrandir_image) : mêmes lettres, coins et pentes adoucis."""
+    import os
+    import rendu
+    import toile
+    chemin = os.path.join(toile.SORTIE, id_ + ".txt")
+    if not os.path.exists(chemin):
+        return images
+    with open(chemin, encoding="utf-8") as f:
+        s = rendu.lire(f.read(), id_)
+    if len(s.images) != len(images):
+        return images
+    pleins = differents = 0
+    for k, t in enumerate(images):
+        im = s.images[k]
+        for Y in range(t.H):
+            for X in range(t.W):
+                y, x = Y // 2, X // 2
+                ch = im[y][x] if y < len(im) and x < len(im[y]) else "."
+                a = None if ch == "." else s.palette.get(ch)
+                if t.g[Y][X] is not None or a is not None:
+                    pleins += 1
+                    differents += t.g[Y][X] != a
+    if pleins == 0 or differents / pleins > 0.10:
+        return images  # dessiné de formes : le rejeu fin est un vrai dessin fin
+    for k, t in enumerate(images):
+        gros = rendu.agrandir_image(s.images[k], s.palette)
+        for Y in range(t.H):
+            for X in range(t.W):
+                ch = gros[Y][X] if Y < len(gros) and X < len(gros[Y]) else "."
+                t.g[Y][X] = None if ch == "." else s.palette[ch]
+    return images
+
+
+def retouche_auto(t):
+    """Liseré de lumière en haut et ombre en bas des quatre couleurs les plus présentes (hors cernes, blancs, teinte de
+    Pilou et couleurs transparentes), là où la zone est assez épaisse pour les porter."""
+    compte = {}
+    for r in t.g:
+        for c in r:
+            if c is not None and not c.startswith("@") and len(c) == 7:
+                compte[c] = compte.get(c, 0) + 1
+    choisies = [c for c, n in sorted(compte.items(), key=lambda kv: -kv[1]) if n >= 24 and 150 <= _clarte(c) <= 690][:4]
+    for c in choisies:
+        lisere(t, c)
+    for c in choisies:
+        ombre(t, c)
+
+
+def _serie2(id_):
+    def toutes(images):
+        images = _base_fine(id_, images)
+        for t in images:
+            if id_ in RECETTES2:
+                appliquer(t, RECETTES2[id_])
+            else:
+                retouche_auto(t)
+        return images
+    return toutes
+
+
+def _inscrire_serie2():
+    import fin
+    for i in fin.SERIE2:
+        RETOUCHES[i] = _serie2(i)
+
+
+_inscrire_serie2()
