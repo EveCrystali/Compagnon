@@ -23,6 +23,10 @@ Dernière mise à jour : 27 novembre 2026.
   « Encore agrandis automatiquement : 0 »).
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
+- **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
+  titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
+  (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Le reste des fenêtres reste en police
+  système (chantier suivant).
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 
@@ -45,7 +49,7 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 
 ## Jamais vérifié sur un vrai appareil
 
-- Sous Windows : le dessin fin sur le bureau (charge, netteté à 125 % et 150 %), les extensions d'éditeur, la fenêtre des
+- Sous Windows : la police pixel de la bulle à 125 % et 150 % (vue à 100 % seulement), le dessin fin sur le bureau (charge, netteté à 125 % et 150 %), les extensions d'éditeur, la fenêtre des
   expéditions, la fenêtre Aventure et ses animations.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin, l'onglet Aventure et la notification de retour.
 - La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal, le mot du soir (notification, Doze), le
