@@ -108,7 +108,10 @@ Champs communs à tous les nœuds :
 parle) ; un moteur ancien les ignore. Les personnages et leurs expressions dessinées sont listés dans
 `outils/sprites/portraits_campagnes.py` (et LORE.md) ; `python3 outils/campagnes/personnages.py` propose (et
 `--ecrire` pose, une ligne par nœud, sans toucher aux textes) le champ d'après les noms cités près d'une réplique ou
-d'un verbe de présence.
+d'un verbe de présence. Ce n'est qu'un point de départ : les poses des quatre campagnes ont été relues à la main, nœud
+par nœud (27 novembre 2026), et le script, relancé avec `--ecrire`, **remettrait** sur les nœuds sans `personnage` les
+portraits qu'on y a retirés exprès (personnage seulement évoqué, ou pas encore rencontré). Ne l'utiliser que sur une
+campagne neuve, puis relire.
 
 Les sept types :
 
