@@ -359,16 +359,25 @@ partie = {"c":"<campagne>","p":<n°>,"d":<départ, s>,"o":"<appareil d'origine>"
           "e":<étape>,"r":<rang>,"i":<messages déjà émis>,"n":<tirages faits>,"t":<heure de la base, s>,
           "ici":["<nœud>",{"<variable>":<valeur>},"<objets>","<drapeaux>","<décor>","<nœud du lieu>"],
           "cp":[…le dernier check-point, s'il n'est pas « ici »…],
+          "u":"<route : une lettre par décision consommée depuis le départ>",
           "l":["<appareil>",…],"j":[[<étape>,<secondes depuis la base>,<rang de l'appareil>,"<nœud>",<valeur>],…]}
 ```
 
 Nœuds, variables, objets, drapeaux et décors y sont des **codes courts** de 4 caractères
 (`Campagnes.Code(id)`), mis bout à bout quand il y en a plusieurs. Mesuré (test
 `Messages_sous_la_limite_pour_une_campagne_de_200_noeuds`) sur une campagne de 258 nœuds jouée jusqu'au
-bout, 371 décisions, avec deux autres campagnes finies (six fins chacune) et deux suspendues : 1 854 octets
-de JSON au plus, soit 2 512 chiffrés pour une limite de 3 800 ; le prologue au départ : 192 octets, 296
+bout, 371 décisions, avec deux autres campagnes finies (six fins chacune) et deux suspendues : 2 219 octets
+de JSON au plus (dont la route, une lettre par décision), soit 2 996 chiffrés pour une limite de 3 800 ; le prologue au départ : 192 octets, 296
 chiffrés. Pour comparaison, le message de groupe d'un profil garni fait déjà 3 404 octets chiffrés et celui
 du téléphone est allégé pour tenir en 3 792 : d'où le message à part.
+
+**Divergence.** Deux appareils qui décident chacun au même choix : dans le délai de grâce (10 min), la
+décision la plus ancienne gagne. Au-delà, chacun a pu avancer sa base seul ; la base la plus avancée l'emporte.
+La route (`u`, la lettre de chaque décision consommée : `A` abandon, `B` raté, `C` réussi, `D` « vas-y »,
+`E` la première option…) dit si les deux histoires se sont séparées : l'une doit prolonger l'autre, que le rejeu
+du perdant soit en avance ou en retard sur la base reçue. Sinon, son fil de messages pour cette partie repart de
+la base reçue. Une route absente ou d'une autre longueur que `e` (appareil plus ancien) est inconnue : on compare
+alors l'état du rejeu à la même étape, quand il y passe.
 
 **Récompenses.** L'historique (`h`) dit quels nœuds ont été récompensés ; chaque PC verse ceux qu'il n'a pas
 encore versés (`Campagnes.Crediter`), dans deux compteurs à part que tous les PC du groupe tiennent à

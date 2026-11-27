@@ -59,10 +59,6 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 - L'exe pèse 128 Mo (.NET embarqué) ; la compression le ramènerait vers 60–70 Mo, non faite.
 - Lancer une expédition depuis le téléphone n'est pas possible (lecture seule, voir `EXPEDITIONS.md`) ; seule la
   campagne se lance des deux côtés.
-- **Divergence de campagne entre appareils partiellement détectée** : quand deux appareils décident chacun de leur côté au
-  même choix, la base la plus avancée l'emporte, mais `Campagnes.Diverge` ne compare que si le rejeu de l'appareil perdant
-  passe par la même étape ; s'il est encore en retard, il n'y a rien à comparer et le fil de ses messages n'est pas
-  remis à zéro par cette comparaison (la base, elle, converge). Non couvert par les vecteurs.
 - **Charge des animations non mesurée sur appareil** : décors à 4–5,5 images par seconde, portraits, écriture
   lettre à lettre et fond respirant tournent sous Robolectric et en tests, jamais sur un vrai téléphone ni un PC modeste
   (batterie, processeur). Le réglage « ✧ » (complètes, réduites, aucune) existe pour couper.
