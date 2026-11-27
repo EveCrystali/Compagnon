@@ -1,0 +1,178 @@
+{
+  "chapitre": "ch2",
+  "noeuds": {
+    "ch2-hall": {
+      "type": "recit",
+      "lieu": "Hall des Pas Comptés",
+      "decor": "hall-pas-comptes",
+      "humeur": "neutre",
+      "checkpoint": true,
+      "texte": [
+        "Point de situation. On est dans le Hall des Pas Comptés. Il s'appelait autrement, avant, mais depuis ce matin plus rien n'est compté ici, ni les pas ni les minutes. Dans la file, il y a de tout : des petits programmes en cravate, des fenêtres pliées en deux, un téléchargement très long assis sur sa valise. Ils attendent 13 h 38 comme on attend le bus.",
+        "Un seul guichet est ouvert, tout au bout : « Accueil ». Grumeau dit que c'est normal, l'Accueil ne ferme jamais, « puisqu'il ne sert à rien ». Derrière la vitre, une dame très droite range des trombones par taille. Sa plaque : « Mlle Renvoi ». On y va. Grumeau me conseille de ne jamais prononcer le mot « urgent ». Il paraît que ça rallonge."
+      ],
+      "suite": "ch2-accueil"
+    },
+    "ch2-accueil": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "On est devant la vitre. Mlle Renvoi lève les yeux et dit : « Bonjour*. » Je te jure que j'ai entendu l'astérisque. Grumeau me souffle que c'est comme ça qu'elle parle, avec des petites notes en bas de phrase, et qu'il vaut mieux ne pas demander ce qu'il y a dans la note. Elle attend. Elle a un tampon dans chaque main. Je m'y prends comment ?"
+      ],
+      "options": [
+        { "id": "ch2-accueil-poli", "libelle": "« Bonjour madame. Très beau rangement de trombones. »", "vers": "ch2-ast-poli" },
+        { "id": "ch2-accueil-scandale", "libelle": "« C'est un scandale, l'heure est en panne ! »", "vers": "ch2-ast-scandale", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch2-accueil-grumeau", "libelle": "Laisse parler Grumeau, il connaît la maison", "vers": "ch2-ast-grumeau", "effets": [ { "var": "complicite", "plus": 1 } ] }
+      ]
+    },
+    "ch2-ast-poli": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai dit bonjour, j'ai complimenté les trombones, j'ai même dit « s'il vous plaît » deux fois. Elle a rosi jusqu'au chignon. « Vous êtes poli*. » Puis elle a glissé un petit carton sous la vitre : un coupe-file ! Avec un astérisque. J'ai retourné le carton : « *Non valable dans les files d'attente. » Grumeau assure que c'est le plus beau cadeau qu'elle ait jamais fait à quelqu'un. Je le range précieusement."
+      ],
+      "effets": [ { "objet": "coupe-file", "donne": true } ],
+      "suite": "ch2-liste"
+    },
+    "ch2-ast-scandale": {
+      "type": "recit",
+      "humeur": "colere",
+      "texte": [
+        "J'ai dit que c'était un scandale, que l'heure était en panne et que quelqu'un devait faire quelque chose. Elle a hoché la tête, très compréhensive. « Vous souhaitez déposer une réclamation*. » Elle m'a tendu un formulaire. En bas, en tout petit : « *Les réclamations sont traitées à partir de 13 h 38. » J'ai senti Grumeau sourire dans mon dos. Je ne savais pas qu'un sablier pouvait sourire. Ça fait un bruit de sable satisfait."
+      ],
+      "suite": "ch2-liste"
+    },
+    "ch2-ast-grumeau": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Grumeau s'est avancé, a toussé un grain et a récité : « Matricule 0003. Article 12. Je sollicite un renseignement à titre conservatoire. » Elle a répondu : « Recevable*. » Ils ont échangé des numéros d'articles pendant un bon moment, comme deux joueurs de cartes. À la fin, personne n'avait rien appris, mais ils avaient l'air ravis tous les deux. Grumeau m'a glissé : « Tu vois. Il suffit de parler la langue. »"
+      ],
+      "suite": "ch2-liste"
+    },
+    "ch2-liste": {
+      "type": "epreuve",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai fini par poser ma question : comment on signale un Tic-Tac disparu ? Mlle Renvoi a pris une grande inspiration. « Il vous faut une déclaration de perte de temps*. Avec les pièces suivantes. » Et elle s'est mise à les énumérer, très vite, sans respirer, en tapant du tampon sur chaque mot.",
+        "Grumeau refuse de noter : « Je mesure, je n'écris pas. » Donc c'est à moi de tout retenir, et je n'ai qu'une petite tête pleine d'encre. Aide-moi : écoute bien la liste avec moi et répète-la dans l'ordre. Si on se trompe, elle reprend tout depuis « Bonjour* »."
+      ],
+      "jeu": "memoire",
+      "difficulte": 1,
+      "reussite": "ch2-liste-ok",
+      "echec": "ch2-liste-rate"
+    },
+    "ch2-liste-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "On l'a eue ! Un justificatif d'attente, deux photos de l'heure exacte, un timbre à date de moins de trois minutes, et le formulaire jaune poussin. J'ai tout répété sans une faute. Mlle Renvoi a dit « Exact* » d'un air presque déçu. Grumeau m'a regardé autrement. « Pas mal, pour un pâté. » Puis il a ajouté que les photos de l'heure exacte, en ce moment, ça allait être coton."
+      ],
+      "effets": [ { "drapeau": "liste-retenue" }, { "var": "complicite", "plus": 1 } ],
+      "suite": "ch2-histoire"
+    },
+    "ch2-liste-rate": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "On s'est emmêlés au troisième mot. Mlle Renvoi a posé son tampon. « Bonjour*. » Et elle a tout repris depuis le début, à la même vitesse. Trois fois. À la troisième, Grumeau a craqué : il a récité la liste lui-même, d'une voix de vieux professeur. Justificatif d'attente, photos de l'heure exacte, timbre à date, formulaire jaune poussin. « Je mesure, je n'écris pas. Mais je n'ai jamais dit que je n'écoutais pas. »"
+      ],
+      "suite": "ch2-histoire"
+    },
+    "ch2-histoire": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Résultat : pour déclarer la perte, il faut un timbre à date, et le bureau des timbres rouvre à 13 h 38. Mlle Renvoi nous a priés d'attendre sur le banc qu'on appelle notre numéro. J'ai le 1 338. On appelle le 1 337. J'ai compris tout seul : ici, le numéro appelé, c'est l'heure. Mon tour viendra à 13 h 38. Comme tout le reste.",
+        "On s'est assis. Grumeau fixe quelque chose, là-haut, au-dessus de la grande porte, et il marmonne. Puis il se tourne vers moi : « De mon temps… » Il s'arrête. « Non, rien. Ça ne t'intéresse pas. » Je sens qu'il a une histoire longue comme la file. Je le laisse raconter ?"
+      ],
+      "options": [
+        { "id": "ch2-histoire-ecoute", "libelle": "« Raconte, Grumeau. On a le temps, justement. »", "vers": "ch2-histoire-oui", "effets": [ { "drapeau": "a-ecoute-grumeau" }, { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch2-histoire-coupe", "libelle": "« Plus tard : cherchons plutôt des indices. »", "vers": "ch2-histoire-non", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch2-histoire-oui": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il a raconté. Trente ans à l'écran. Chaque fois que la machine réfléchissait, c'est lui qu'on envoyait : il se retournait, bien droit, et les gens attendaient en le regardant couler. « C'était un métier. On me faisait confiance. Tant que je coulais, les gens savaient qu'on ne les avait pas oubliés. »",
+        "Et un matin, à sa place, il y avait le Rond. Plus jeune. Plus lisse. « On ne m'a pas dit au revoir, petit. On m'a mis à jour. » Il a regardé ailleurs. Moi, j'ai regardé mes pieds. Puis il a grogné que de toute façon le Rond ne mesure rien, qu'il tourne et c'est tout, que c'est du travail de ventilateur. Ça allait mieux."
+      ],
+      "suite": "ch2-attente-banc"
+    },
+    "ch2-histoire-non": {
+      "type": "recit",
+      "humeur": "neutre",
+      "texte": [
+        "J'ai dit « plus tard », gentiment. Il a fait « mmh », ce qui en sablier veut dire beaucoup de choses, toutes désagréables. Il s'est retourné tout seul, d'un coup sec, pour bien montrer qu'il n'avait besoin de personne. Moi, j'ai fait le tour du banc. Dessous, quelqu'un a gravé au couteau : « J'étais le prochain. » Je n'ai pas trouvé d'autre indice. Celui-là m'a suffi."
+      ],
+      "suite": "ch2-attente-banc"
+    },
+    "ch2-attente-banc": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "texte": [
+        "Bon. On attend, puisqu'on nous l'a demandé. Un haut-parleur grésille au plafond : « Votre attente est estimée à : 13 h 38. » Puis une petite musique. Puis de nouveau la phrase. Grumeau annonce qu'il va compter les retournements, pour savoir combien ça dure vraiment, mais que je ne dois surtout pas le prendre pour un minuteur à œufs. Je serre mon ticket. Je te raconte dès qu'il se passe quelque chose."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou attend sur le banc, son ticket à la main",
+      "tenue": "attend",
+      "suite": "ch2-rond"
+    },
+    "ch2-rond": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Trois retournements. Personne n'a été appelé, évidemment. Par contre, j'ai bien regardé au-dessus de la grande porte. Le Rond ! Il est coincé. Arrêté aux trois quarts de son tour, avec écrit dessous « Veuillez patienter ». Il force, il tremble, il n'avance pas d'un cran. De temps en temps, il dit d'une petite voix polie : « Un instant… »",
+        "Grumeau est aux anges. « Regarde-le. Sans Tic-Tac, monsieur ne tourne plus. Moi, je coule. La gravité, petit : ça ne tombe jamais en panne. » Je pourrais grimper pousser le Rond, pour qu'il finisse au moins son tour. Il a l'air d'avoir une crampe. Mais Grumeau le prendrait très mal. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch2-rond-pousse", "libelle": "Grimpe l'aider à finir son tour", "vers": "ch2-rond-aide", "effets": [ { "drapeau": "rond-aide" }, { "var": "complicite", "plus": -1 } ] },
+        { "id": "ch2-rond-reste", "libelle": "Reste sur le banc à rire avec Grumeau", "vers": "ch2-rond-rire", "effets": [ { "var": "complicite", "plus": 1 } ] }
+      ]
+    },
+    "ch2-rond-aide": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai grimpé sur le chambranle et j'ai poussé. Le Rond a fait clac, clac, et il a fini son tour, tout entier, lentement, avec le soupir de quelqu'un qui pose enfin ses courses. Il m'a regardé. « Un instant… », a-t-il dit, et je crois que ça voulait dire merci. En bas, Grumeau avait croisé quelque chose. Les bras, s'il en avait. Il ne m'a pas adressé la parole pendant un retournement entier."
+      ],
+      "suite": "ch2-rumeur"
+    },
+    "ch2-rond-rire": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Je suis resté sur le banc et on a regardé le Rond forcer. Grumeau commentait, comme à un match : « Et il repart… non. Il repart… non plus. » J'ai ri. J'ai un peu honte, mais j'ai ri. Le Rond a dit « Un instant… » et Grumeau a répondu : « Prends ton temps, mon grand, tu n'en as plus. » C'est la première fois que je le vois de bonne humeur. Ça fait presque peur."
+      ],
+      "suite": "ch2-rumeur"
+    },
+    "ch2-rumeur": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Il s'est passé quelque chose. Un tout petit programme, de ceux qui travaillent en fond sans que personne les remarque, s'est glissé jusqu'au banc. Il tremblait. Il a chuchoté qu'à 13 h 37 il avait vu quelqu'un sortir de l'Horloge. Quelqu'un sans nom, sans icône, sans rien. Avec un sac sur le dos. Un sac qui faisait tic d'un côté et tac de l'autre.",
+        "Il a dit : « Le Sans-Titre », et trois personnes dans la file se sont retournées. Il paraît qu'il mesure trois étages. La chose est partie vers la Tour du tampon, et c'est là qu'on doit aller. Sauf que Grumeau refuse de bouger : les tampons, c'est humide, et l'humidité fait des paquets dans son sable. Trouve-moi l'argument qui le décide."
+      ],
+      "options": [
+        { "id": "ch2-rumeur-guichet", "libelle": "« Ton guichet ne rouvrira que si l'heure repart. »", "vers": "ch2-vers-tour" },
+        { "id": "ch2-rumeur-peur", "libelle": "« J'ai peur d'y aller tout seul. »", "vers": "ch2-vers-tour", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch2-rumeur-rond", "libelle": "« Sinon, c'est le Rond qu'on enverra. »", "vers": "ch2-vers-tour", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch2-vers-tour": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Ça a marché. Enfin, il a dit « mmh », il a sauté du banc, et il est parti devant en grommelant que de toute façon il allait dans cette direction. La Tour du tampon est au bout du Hall, derrière la file. On la longe. Tout le monde fixe mon baluchon : je crois qu'ils sentent la galette. Je presse le pas. Grumeau compte les retournements. Je t'écris en arrivant."
+      ],
+      "duree_min": 10,
+      "duree_max": 20,
+      "pendant": "Pilou longe la file d'attente vers la Tour",
+      "tenue": "marche",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch3-pied-tour"
+    }
+  }
+}

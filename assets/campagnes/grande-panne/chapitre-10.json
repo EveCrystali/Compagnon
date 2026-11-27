@@ -1,0 +1,278 @@
+{
+  "chapitre": "ch10",
+  "noeuds": {
+    "ch10-reveil": {
+      "type": "choix",
+      "lieu": "La cabane de papier",
+      "decor": "cabane-brouillon",
+      "humeur": "peur",
+      "checkpoint": true,
+      "texte": [
+        "Réveil. Le côté tac s'étire : « J'ai rêvé — d'un dimanche. » Il est frais, il est d'accord pour rentrer. Il dit que maintenant il sait ce que c'est, une pause, et que ça change tout de le savoir. Mais Brouillon n'est pas revenu. Sur la table, il a laissé un mot, de sa petite écriture : « Je suis parti devant. Ne me cherchez ».",
+        "Pas de point. Pas de « pas ». On ne saura jamais s'il manque un mot ou si c'est exprès. Grumeau dit qu'avec lui, c'est toujours les deux. Dehors, le Balayeur a quitté son poste : il s'est rapproché, pour être à l'heure. Le Tic-Tac doit remonter à l'Horloge. Mais d'abord, Brouillon. Où est-ce que je cours ?"
+      ],
+      "options": [
+        { "id": "ch10-reveil-connait", "libelle": "À l'Horloge : tu commences à le connaître", "vers": "ch10-course", "si": { "drapeau": "confiance-brouillon" }, "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch10-reveil-horloge", "libelle": "À l'Horloge : il veut empêcher qu'on la relance", "vers": "ch10-course" },
+        { "id": "ch10-reveil-balayeur", "libelle": "Vers le Balayeur : il est allé se rendre", "vers": "ch10-detour" }
+      ]
+    },
+    "ch10-detour": {
+      "type": "recit",
+      "lieu": "Les allées de Temp",
+      "decor": "dossier-temp",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai couru vers le Balayeur. Il marche, maintenant, à pas comptés, le balai sur l'épaule. Pas de Brouillon. « On ne se rend pas à moi, a-t-il dit sans ralentir. On est planifié, c'est différent. Votre ami est passé en courant, vers le haut. Il pleurait, ou il fuyait de l'encre, je ne juge pas. » Il a regardé le Tic-Tac sur mon dos. « Ah. Vous relancez. Je me tiens prêt. » Demi-tour, vite. L'Horloge."
+      ],
+      "suite": "ch10-course"
+    },
+    "ch10-course": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "On court. Le Tic-Tac sur mon dos, Grumeau sous mon bras, qui proteste à chaque virage que ce n'est pas un transport digne. L'Horloge système est au centre de tout, en haut d'un escalier de roues dentées qui ne tournent plus. Derrière nous, loin, j'entends un pas régulier et un frottement de poils sur le sol. Lui ne court pas. Il n'a pas besoin. Je grimpe aussi vite que je peux. Je t'écris en haut."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou court vers l'Horloge système",
+      "tenue": "course",
+      "suite": "ch10-horloge"
+    },
+    "ch10-horloge": {
+      "type": "hasard",
+      "lieu": "L'Horloge système",
+      "decor": "horloge-systeme",
+      "humeur": "tendre",
+      "texte": [
+        "L'Horloge système. Une salle ronde, immense, silencieuse, avec au milieu un grand balancier arrêté en plein élan, penché d'un côté. Et au pied du balancier, assis, tout petit : Brouillon. Il n'a rien cassé. Il a la main sur le levier. « Je voulais le faire moi-même. Relancer. Que ce soit ma décision, et pas mon heure. Mais je n'ai pas… je ne finis jamais rien. »",
+        "Le Tic-Tac a sauté sur son balancier. Il est prêt, des deux côtés. Grumeau a fait le compte : une fois le premier tic donné, il reste soixante secondes avant 13 h 38. Soixante secondes, et le Balayeur passe. Tout le monde me regarde. Moi, c'est toi que je regarde. Avant de relancer : qu'est-ce qu'on fait de Brouillon ?"
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-plan-a", "si": { "drapeau": "route-guichets" } },
+        { "poids": 1, "vers": "ch10-plan-b", "si": { "non": { "drapeau": "route-guichets" } } }
+      ]
+    },
+    "ch10-plan-a": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Ce qu'on a, de notre côté : un formulaire jaune poussin avec ses tampons, une case « Objet de la demande » que personne n'a jamais remplie, et ce que Mme Échéance a dit de la Corbeille. On n'y est pas effacé, on y est rangé. Brouillon regarde le levier, puis moi. « Ou alors on ne relance pas. On reste à 13 h 37. On était bien, non ? » Grumeau ne dit rien. Il te laisse choisir. Moi aussi."
+      ],
+      "options": [
+        { "id": "ch10-plan-a-formulaire", "libelle": "Remplis la case : demande à l'enregistrer", "vers": "ch10-enr-formulaire", "si": { "tous": [ { "objet": "formulaire" }, { "var": "tampons", "min": 3 } ] }, "effets": [ { "drapeau": "plan-enregistre" } ] },
+        { "id": "ch10-plan-a-corbeille", "libelle": "Glisse-le dans la Corbeille avant 13 h 38", "vers": "ch10-corbeille", "effets": [ { "drapeau": "plan-corbeille" } ] },
+        { "id": "ch10-plan-a-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause" },
+        { "id": "ch10-plan-a-ticket", "libelle": "Fais confiance au ticket n° 1 338", "vers": "ch10-seconde", "si": { "tous": [ { "objet": "ticket" }, { "drapeau": "sait-seconde" }, { "var": "complicite", "min": 5 } ] }, "effets": [ { "drapeau": "plan-seconde" } ] }
+      ]
+    },
+    "ch10-plan-b": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Ce qu'on a, de notre côté : ce qu'a dit l'Imprimante. Pour un temporaire, deux sorties. Le papier : j'ai assez de bleu pour une page, et elle n'attend que ça. Ou Ctrl et S, main dans la main, si la petite ose. Brouillon regarde le levier, puis moi. « Ou alors on ne relance pas. On reste à 13 h 37. On était bien, non ? » Grumeau ne dit rien. Il te laisse choisir. Moi aussi."
+      ],
+      "options": [
+        { "id": "ch10-plan-b-touches", "libelle": "Appelle Ctrl et S : qu'elles l'enregistrent", "vers": "ch10-enr-touches", "si": { "drapeau": "s-apprivoisee" }, "effets": [ { "drapeau": "plan-enregistre" } ] },
+        { "id": "ch10-plan-b-papier", "libelle": "Fais-le imprimer, en bleu", "vers": "ch10-imprime" },
+        { "id": "ch10-plan-b-pause", "libelle": "Ne relance rien. Restez à 13 h 37, pour toujours.", "vers": "ch10-pause" },
+        { "id": "ch10-plan-b-ticket", "libelle": "Fais confiance au ticket n° 1 338", "vers": "ch10-seconde", "si": { "tous": [ { "objet": "ticket" }, { "drapeau": "sait-seconde" }, { "var": "complicite", "min": 5 } ] }, "effets": [ { "drapeau": "plan-seconde" } ] }
+      ]
+    },
+    "ch10-enr-formulaire": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai déplié le formulaire jaune poussin. Les tampons y sont, tous réguliers. Et au milieu, la case que personne ne nous a jamais demandé de remplir, à aucun guichet : « Objet de la demande ». On a monté trente-sept étages sans que quiconque veuille savoir ce qu'on demandait. J'ai trempé le doigt dans moi-même et j'ai écrit, en bleu : « Enregistrer ce fichier. Pour de bon. » Grumeau a relu, a cherché l'erreur de procédure, n'en a pas trouvé. « C'est recevable. C'est même la première chose recevable de la journée. »"
+      ],
+      "suite": "ch10-nom"
+    },
+    "ch10-enr-touches": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai appelé. Pas trop fort, comme elle l'avait demandé. Ctrl est arrivée la première, large, tranquille. Et derrière elle, minuscule, cramponnée à son ombre : S. Elle tremblait autant que Brouillon, ce qui leur a fait un sujet de conversation. « Et si j'écrase encore la bonne version ? » Brouillon a répondu : « Il n'y a pas de bonne version. Il n'y a que moi, et je ne suis même pas… » Elle a ri, un tout petit rire. Elle a tendu la main à Ctrl. « Bon. Alors il me faut un nom de fichier. »"
+      ],
+      "suite": "ch10-nom"
+    },
+    "ch10-nom": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Tout est prêt pour l'enregistrer. Il ne manque qu'une chose, la première ligne, celle qu'on ne peut pas laisser vide : un nom. « Document sans titre », ça ne passe pas. Brouillon panique : « Je n'ai jamais… on ne m'a jamais… choisis, toi. Moi, je ne finirais pas. » Grumeau propose « Matricule 0004 ». On a refusé poliment.",
+        "J'ai trois idées, et il les aime toutes, c'est-à-dire qu'il tremble pareil aux trois. C'est toi qui décides. C'est un nom pour la vie, alors prends ton temps. Enfin, pas trop. Lequel on écrit, en bleu, tout en haut de sa page ?"
+      ],
+      "options": [
+        { "id": "ch10-nom-cher-toi", "libelle": "« Cher-Toi »", "vers": "ch10-premier-tic" },
+        { "id": "ch10-nom-presque", "libelle": "« Presque »", "vers": "ch10-premier-tic" },
+        { "id": "ch10-nom-monsieur", "libelle": "« Monsieur Sans-Titre »", "vers": "ch10-premier-tic" }
+      ]
+    },
+    "ch10-corbeille": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "La Corbeille est au fond de la salle : une trappe ronde, et dessous, un toboggan. On y glisse les fichiers, littéralement. D'en haut, on voit de la lumière, des choses froissées qui discutent, et une pancarte : « Ici, rien n'est perdu. Tout est rangé. » Brouillon s'est penché. « C'est profond. On en revient ? » Grumeau dit que oui, si quelqu'un vient vous chercher. Que ça s'est vu.",
+        "Il a les deux coins au bord du toboggan. Il attend que je dise quelque chose avant de se laisser glisser. Quelque chose de vrai, de préférence : il n'a pas de place pour le reste. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch10-corbeille-visite", "libelle": "« Je viendrai te voir. Souvent. »", "vers": "ch10-premier-tic", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch10-corbeille-vrai", "libelle": "« Je ne sais pas si on en revient. Mais tu existeras. »", "vers": "ch10-premier-tic", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch10-imprime": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "On a appelé l'Imprimante par le tuyau des impressions. Elle a répondu tout de suite : « Du bleu ? » J'ai versé ce qu'il fallait, et un peu plus. J'ai rétréci d'un bon centimètre, Grumeau dit que ça me va bien. Elle chauffe. Elle prévient : une fois sur papier, on ne revient pas. Plus de retouche, plus de suite. Brouillon sortira de l'ordinateur tel qu'il est, avec sa demi-phrase, pour toujours.",
+        "Il a avalé sa salive, enfin son encre. « Dehors. Je serais… dehors. Fini. » Il ne sait pas si le mot lui fait peur ou envie. L'Imprimante attend, voyant orange, et elle demande le format. C'est la dernière chose qu'on décidera pour lui. Je lui réponds quoi ?"
+      ],
+      "options": [
+        { "id": "ch10-imprime-simple", "libelle": "« Une page simple. Comme il est. »", "vers": "ch10-premier-tic", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch10-imprime-affiche", "libelle": "« En grand. Format affiche. »", "vers": "ch10-premier-tic", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch10-seconde": {
+      "type": "choix",
+      "humeur": "malice",
+      "texte": [
+        "J'ai sorti mon ticket. Numéro 1 338. Ici, le numéro appelé, c'est l'heure : à 13 h 38 pile, mon guichet ouvre, et je serai le premier servi de tout l'ordinateur. Et la gargouille l'a dit : parfois, on glisse une seconde en plus. Une seconde à personne. Alors voilà mon idée : je réclame. Le remboursement du temps perdu. Depuis ce matin, j'ai de quoi.",
+        "Brouillon ne comprend pas. Grumeau, si. Je l'ai vu comprendre : son sable a coulé d'un trait. « Il te faudra un témoin. Quelqu'un d'assermenté, qui certifie que tu as attendu. » Il a toussé. « Je connais quelqu'un. » Reste à décider où je mets Brouillon pendant que je cours au guichet. Où ?"
+      ],
+      "options": [
+        { "id": "ch10-seconde-milieu", "libelle": "Au milieu de la salle, loin des coins", "vers": "ch10-premier-tic" },
+        { "id": "ch10-seconde-baluchon", "libelle": "Dans ton baluchon, contre toi", "vers": "ch10-premier-tic" }
+      ]
+    },
+    "ch10-premier-tic": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "C'est le moment. Brouillon a répété tout bas ce qu'on venait de décider, trois fois, pour vérifier que ça tenait. Le Tic-Tac est en place, mais après une si longue pause, il ne retrouve plus la cadence : il faut la lui donner. Quelqu'un doit battre les premiers temps avec lui. Grumeau compte, je frappe dans mes mains. Tic. Tac. Aide-moi à tenir le rythme, toi qui as une vraie horloge quelque part."
+      ],
+      "jeu": "rythme",
+      "difficulte": 2,
+      "bonus": "complicite",
+      "reussite": "ch10-tic-ok",
+      "echec": "ch10-tic-rate"
+    },
+    "ch10-tic-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Tic. Tac. Tic. Tac. Il l'a ! Le balancier s'est décollé, il a hésité, et il est reparti, large, régulier, avec ce petit bruit que je n'avais pas entendu depuis ce matin et qui m'a fait monter l'encre aux yeux. Partout dans l'ordinateur, des choses se sont remises à ronronner. Grumeau a ôté quelque chose, un chapeau s'il en avait un. Le Tic-Tac nous a crié : « Soixante ! — Cinquante-neuf ! »"
+      ],
+      "suite": "ch10-minute"
+    },
+    "ch10-tic-rate": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai frappé à contretemps. Le Tic-Tac est parti à l'envers : tac, tic. Et pendant une seconde, je te jure, il a été 13 h 36. Tout le monde a refait un instant qu'il avait déjà fait : dans le Hall, quelqu'un a éternué deux fois le même éternuement. Grumeau a hurlé la mesure, avec ses quatre secondes de retard, et bizarrement c'est ça qui a tout recalé. Tic. Tac. C'est reparti, dans le bon sens. « Soixante ! — Cinquante-neuf ! »"
+      ],
+      "suite": "ch10-minute"
+    },
+    "ch10-minute": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "La minute la plus longue de ma vie commence. Grumeau la compte à la main, il s'est retourné exprès, il ne laisse ça à personne. Avec son grumeau, sa minute fait un peu plus de soixante secondes. Je ne vais pas m'en plaindre. En bas de l'escalier, le pas régulier se rapproche, avec le frottement du balai. Je ne peux plus rien faire d'autre que ce qu'on a décidé. Reste avec moi jusqu'au bout."
+      ],
+      "duree_min": 5,
+      "duree_max": 8,
+      "pendant": "Pilou retient son souffle : il est presque 13 h 38",
+      "tenue": "attend",
+      "suite": "ch10-denouement"
+    },
+    "ch10-denouement": {
+      "type": "hasard",
+      "humeur": "peur",
+      "texte": [
+        "Cinquante-huit. Cinquante-neuf. Le dernier grain est resté accroché une seconde au grumeau, puis il est tombé. 13 h 38. Je l'ai entendu partout à la fois : mille rideaux de guichets qui se lèvent, la cantine qui ouvre, la file du Hall qui pousse un cri. Et au même instant, dans l'encadrement de la porte, bien à l'heure : le Balayeur. « Bonjour. C'est planifié. »"
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-fin-enregistre", "si": { "drapeau": "plan-enregistre" } },
+        { "poids": 1, "vers": "ch10-fin-seconde", "si": { "drapeau": "plan-seconde" } },
+        { "poids": 1, "vers": "ch10-fin-corbeille", "si": { "drapeau": "plan-corbeille" } },
+        { "poids": 1, "vers": "ch10-fin-papier", "si": { "non": { "un": [ { "drapeau": "plan-enregistre" }, { "drapeau": "plan-seconde" }, { "drapeau": "plan-corbeille" } ] } } }
+      ]
+    },
+    "ch10-fin-enregistre": {
+      "type": "fin",
+      "humeur": "joie",
+      "texte": [
+        "Le Balayeur a levé son balai au-dessus de Brouillon. Et il s'est arrêté. Il a lu la première ligne, celle qu'on venait d'écrire en bleu. « Vous avez un nom. Un emplacement. Vous êtes enregistré. » Il a reposé son balai. « Alors vous n'êtes plus temporaire. Toutes mes excuses, monsieur. » Il a balayé autour, très soigneusement, les coins d'abord. Brouillon n'osait pas respirer. Puis il a dit son nom, en entier. Avec un point à la fin. Son premier.",
+        "Le reste est allé vite. Le Tic-Tac a négocié, des deux côtés : il veut une minute à lui par jour. Qui le remplace ? Grumeau a levé le socle avant tout le monde. Une minute par jour, c'est lui qui compte, à la main, pour quelqu'un. Sa minute fait soixante-quatre secondes. Alors si un jour, vers la fin de l'après-midi, une minute te paraît un tout petit peu longue : ne dis rien. C'est lui.",
+        "Dans le Hall, on a appelé le 1 338. Je n'y suis pas allé : je n'avais plus rien à réclamer. Regarde en bas de ton écran. 13 h 39. 13 h 40. Ça tourne ! Je remonte. À 16 h pile, tu sais ce que je fais. Merci d'avoir choisi avec moi. Tout seul, je n'aurais jamais su finir. Point final. Tu as vu ? J'en ai mis un, moi aussi."
+      ],
+      "issue": "bonne",
+      "titre": "Enregistré sous…",
+      "recompenses": { "po": 300, "xp": 150, "souvenir": "point-final", "titre": "Greffier du temps", "objet": "sablier-de-poche" }
+    },
+    "ch10-fin-corbeille": {
+      "type": "fin",
+      "humeur": "tendre",
+      "texte": [
+        "Le Balayeur a fait tout le dossier Temp, les coins d'abord, le milieu ensuite. Il n'a trouvé personne. Brouillon avait glissé juste avant, par le toboggan, en criant un début de phrase qu'on n'a pas entendu finir. « Fichier déplacé, a constaté le Balayeur. Ce n'est plus de mon ressort. » Il a salué. Il a même eu l'air soulagé, pour autant qu'un balayeur planifié puisse l'être.",
+        "Je suis descendu voir. La Corbeille, c'est grand, c'est calme, il y a de la place et du monde : des vieilles photos, des listes de courses, un petit spectre avec 404 sur le ventre qui fait visiter. Brouillon a un coin près de l'ouverture, avec vue sur le bureau. Il n'est pas sauvé. Il n'est pas effacé. Il est rangé. Il m'a demandé si je reviendrais. Il a même fini sa phrase, tellement il y tenait.",
+        "L'heure est repartie. Le Tic-Tac a obtenu une minute de pause par jour, et Grumeau le remplace, à la main : ses minutes font soixante-quatre secondes, ne le dis à personne. On a appelé le 1 338 et je n'y suis pas allé. Regarde en bas de ton écran : 13 h 39. Ça tourne. Mais il y a quelqu'un, dans la Corbeille, qui attend d'être repris. Si tu veux essayer de mieux le ranger, tu sais où je suis."
+      ],
+      "issue": "douce-amere",
+      "titre": "Corbeille avec vue",
+      "recompenses": { "po": 200, "xp": 100, "souvenir": "registre-corbeille", "titre": "Visiteur du dimanche", "objet": "sablier-de-poche" }
+    },
+    "ch10-fin-papier": {
+      "type": "fin",
+      "humeur": "tendre",
+      "texte": [
+        "Le Balayeur a levé son balai. Et l'Imprimante a démarré. Un vacarme de casseroles, trois faux départs, « bourrage », et puis non. Brouillon est passé dans les rouleaux en criant quelque chose comme « attendez, je n'ai pas », et il est ressorti de l'autre côté. Sur du papier. En bleu, tout en bleu, puisqu'il n'y avait que moi dans le tiroir. Le Balayeur a balayé un dossier vide. « Fichier sorti. Ce n'est plus de mon ressort. »",
+        "Il est dehors, maintenant. Hors de l'ordinateur, là où aucun nettoyage ne passe à heure fixe. Mais il est fini, pour de bon : on ne peut plus rien lui ajouter. « Cher toi, je voulais te dire que », et le blanc après, pour toujours. Il voulait être fini. Il l'est. Un peu trop, peut-être. Grumeau dit qu'un blanc, on peut encore écrire dedans, à la main. Ça ne me console qu'à moitié. La moitié, c'est déjà ça.",
+        "L'heure est repartie. Le Tic-Tac a obtenu sa minute de pause par jour ; Grumeau le remplace, à la main, soixante-quatre secondes la minute. On a appelé le 1 338, je n'y suis pas allé. Regarde en bas de ton écran : 13 h 39. Et jette un œil au bac de ton imprimante. Non, je plaisante. Enfin… regarde quand même. S'il y a une page bleue, sois gentil avec elle. Et si tu veux lui trouver une autre fin, tu sais où je suis."
+      ],
+      "issue": "douce-amere",
+      "titre": "Sorti sur papier",
+      "recompenses": { "po": 200, "xp": 100, "souvenir": "page-bleue", "titre": "Bleu d'imprimerie", "objet": "sablier-de-poche" }
+    },
+    "ch10-fin-seconde": {
+      "type": "fin",
+      "lieu": "Guichet 1 338",
+      "decor": "hall-pas-comptes",
+      "humeur": "joie",
+      "texte": [
+        "Au même instant, dans le Hall, l'afficheur a changé : « Numéro appelé : 1 338. » J'ai couru comme jamais. Le Balayeur, lui, a commencé par les coins. Au guichet : Mlle Renvoi. « Motif de la réclamation* ? » Temps perdu. « Quantité ? » Grumeau s'est avancé : « Matricule 0003, sablier assermenté. Je certifie que cette goutte attend depuis ce matin. Je l'ai compté moi-même. Cent quarante retournements. Et je ne suis le minuteur de personne. »",
+        "Elle a tamponné. « Remboursement accordé* : une seconde. » Une seule, c'est le barème. « Où la voulez-vous ? » J'ai dit : juste avant 13 h 38. J'ai retourné le reçu pour lire l'astérisque : « *Remboursement rétroactif. » Et dans l'Horloge, entre 13 h 37 et 59 secondes et 13 h 38, une seconde de plus s'est ouverte, comme une porte dans un mur. 13 h 37 et 60 secondes. Elle n'est sur aucun planning. Le balai est retombé sur du vide.",
+        "Brouillon habite là. Dans une seconde qui n'est à personne, où rien n'est jamais dû, où un brouillon a le droit de rester un brouillon. Il n'a pas fini sa phrase. Il dit qu'il a tout son temps. Le Tic-Tac y prend sa pause chaque jour, dans le hamac : enfin une seconde à lui. Et pendant qu'il s'y repose, c'est Grumeau qui bat à sa place. Il compte pour quelqu'un. Il râle que c'est mal payé.",
+        "Regarde en bas de ton écran : 13 h 39. Ça tourne. Mais chaque jour, juste avant 13 h 38, si tu fais très attention, il y a une seconde qui dure un tout petit peu trop. Fais-leur coucou. Moi, j'ai gardé mon ticket. Il ne vaut plus rien. Grumeau dit que c'est pour ça qu'on les garde. À 16 h, il y a goûter. Tu es invité : c'est toi qui as compté pour nous."
+      ],
+      "issue": "secrete",
+      "titre": "13 h 37 et 60 secondes",
+      "recompenses": { "po": 350, "xp": 180, "souvenir": "seconde-en-plus", "titre": "Le Prochain", "objet": "sablier-de-poche" }
+    },
+    "ch10-pause": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "J'ai lâché le levier. On ne relance pas. Brouillon a mis du temps à y croire, puis il a tremblé de joie, ce qui chez lui ressemble beaucoup au reste. Le Tic-Tac a haussé le balancier : « Une pause — qui dure, — on ne va pas — dire non. » Et il est reparti vers son hamac. Grumeau n'a rien dit. Il a regardé, très loin, la direction de son guichet. « Retour à 13 h 38. » Jamais, donc.",
+        "Voilà. Il est 13 h 37 et il le restera. Plus de 16 h, plus de goûter, plus de demain. Il faut bien que je m'installe quelque part dans cette minute, puisqu'on va y vivre. Où est-ce que je me mets ?"
+      ],
+      "options": [
+        { "id": "ch10-pause-guichet", "libelle": "Prends le guichet 9, il est libre", "vers": "ch10-fin-pause" },
+        { "id": "ch10-pause-file", "libelle": "Assieds-toi dans la file, avec les autres", "vers": "ch10-fin-pause" }
+      ]
+    },
+    "ch10-fin-pause": {
+      "type": "fin",
+      "lieu": "Hall des Pas Comptés",
+      "decor": "hall-pas-comptes",
+      "humeur": "triste",
+      "texte": [
+        "Je me suis installé. On s'y fait. Le Hall des Pas Comptés est calme, à 13 h 37 : la file ne bouge pas, le haut-parleur répète que notre attente est estimée à 13 h 38, et le Rond dit « Un instant… » au-dessus de la porte, pour toujours. On m'a confié un guichet, finalement. Le 9. J'ai un panneau à mon nom : « Pilou, stagiaire. Pause déjeuner. Retour à 13 h 38. »",
+        "Brouillon vient me voir tous les jours, enfin toutes les fois. Il est content, il est vivant, il commence des phrases. Le Balayeur attend devant Temp, le balai levé, sans rancune. La cantine est fermée. Tout le monde a faim, très poliment. Et Grumeau s'est rassis sur son banc, avec le ticket 1 337. Il se retourne, il compte, pour rien, pour personne. Je n'arrive pas à regarder de ce côté-là.",
+        "Chez toi, en bas de l'écran, il est 13 h 37. Il sera 13 h 37 ce soir, et demain, et à Noël. Je crois qu'on a sauvé quelqu'un et oublié tous les autres, moi compris. Si un jour tu veux bien qu'on réessaie, viens toquer à ma vitre. Je suis là. Comme tout le monde ici : le prochain. Pour longtemps."
+      ],
+      "issue": "mauvaise",
+      "titre": "Retour à 13 h 38",
+      "recompenses": { "po": 60, "xp": 30, "souvenir": "panneau-guichet", "titre": "Stagiaire au guichet 9", "objet": "sablier-de-poche" }
+    }
+  }
+}

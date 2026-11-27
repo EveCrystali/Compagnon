@@ -1,0 +1,304 @@
+{
+  "chapitre": "ch4",
+  "noeuds": {
+    "ch4-entree": {
+      "type": "hasard",
+      "lieu": "Dans la Tour",
+      "decor": "tour-tampon",
+      "humeur": "joie",
+      "checkpoint": true,
+      "texte": [
+        "Je suis vivant. Le golem voulait seulement remettre un papier à Grumeau : « Rappel. Numéro 1 337, vous êtes attendu à votre guichet. » Grumeau a demandé quand. Le golem a dit : « À 13 h 38. » Puis il est parti faire sa ronde, à sa vitesse, c'est-à-dire qu'on a eu le temps de compter chaque ticket de son dos. Vingt-deux retournements. Grumeau dit vingt. Il y a un grumeau.",
+        "Mais ça y est : la grille est ouverte. Grumeau a plié son rappel en quatre et l'a rangé comme une lettre d'amour, tout en bougonnant que c'était du harcèlement. On y va. J'ai les jambes en coton d'être resté plié si longtemps, et pourtant je n'ai pas de jambes. C'est te dire."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch4a-palier", "si": { "drapeau": "route-guichets" } },
+        { "poids": 1, "vers": "ch4b-porte", "si": { "non": { "drapeau": "route-guichets" } } }
+      ]
+    },
+    "ch4a-palier": {
+      "type": "choix",
+      "lieu": "L'escalier de la Tour",
+      "decor": "etage-guichets",
+      "humeur": "fatigue",
+      "texte": [
+        "Premier problème, au premier palier : Grumeau ne monte pas les marches. Il a essayé. Un sablier, ça n'a pas de genoux. Il est planté en bas, très digne, et il affirme que l'escalier est mal conçu et qu'il écrira à quelqu'un. On a trente-sept paliers à faire. Je vois deux solutions, et il va détester les deux. Laquelle ?"
+      ],
+      "options": [
+        { "id": "ch4a-palier-porte", "libelle": "Porte-le dans tes bras", "vers": "ch4a-escalier", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch4a-palier-roule", "libelle": "Couche-le et pousse-le de marche en marche", "vers": "ch4a-escalier", "effets": [ { "var": "culot", "plus": 1 }, { "var": "complicite", "plus": -1 } ] }
+      ]
+    },
+    "ch4a-escalier": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "C'est décidé, et il a posé ses conditions : « Pas un mot. À personne. Jamais. » J'ai promis. On monte. Il est plus lourd qu'il n'en a l'air, c'est tout ce sable, et à chaque palier il annonce le numéro de l'étage d'une voix de chef de gare, pour garder un peu d'autorité. Je garde mon souffle pour les marches. Je t'écris au premier guichet."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou monte le colimaçon avec Grumeau",
+      "tenue": "grimpe",
+      "suite": "ch4a-etage"
+    },
+    "ch4a-etage": {
+      "type": "choix",
+      "lieu": "Étage des formulaires",
+      "humeur": "surpris",
+      "texte": [
+        "Étage des formulaires. Des casiers jusqu'au plafond, une couleur par demande. Mlle Renvoi l'avait dit : il nous faut le jaune poussin, « Demande exceptionnelle ». Il en reste un seul, sous une cloche en verre. Pour soulever la cloche, il faut remplir un formulaire vert d'eau. Le casier des verts d'eau est vide, avec un mot : « Réassort à 13 h 38. »",
+        "L'employé des casiers est un trombone déplié qui se ronge le bout. Il voudrait bien nous aider, mais il n'a « pas la main ». Dans la corbeille à papier, je vois dépasser un vieux jaune poussin froissé, rempli à moitié par quelqu'un d'autre. Comment on s'y prend ?"
+      ],
+      "options": [
+        { "id": "ch4a-etage-recite", "libelle": "Récite-lui la liste des pièces, par cœur", "vers": "ch4a-form-liste", "si": { "drapeau": "liste-retenue" }, "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch4a-etage-fouille", "libelle": "Récupère le jaune froissé dans la corbeille", "vers": "ch4a-form-corbeille", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch4a-etage-queue", "libelle": "Demande où on fait la queue pour le vert d'eau", "vers": "ch4a-form-queue" }
+      ]
+    },
+    "ch4a-form-liste": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai récité la liste de Mlle Renvoi, d'une traite, avec le ton. Le trombone s'est redressé d'un coup. « Vous connaissez les pièces ? Par cœur ? Personne ne connaît les pièces ! » Il a soulevé la cloche lui-même, en regardant ailleurs, « puisque vous êtes du métier ». J'ai le jaune poussin, tout neuf, tout lisse. Grumeau a fait « mmh » sur un ton que je ne lui connaissais pas. De la fierté, peut-être. Ou un grain de travers."
+      ],
+      "effets": [ { "objet": "formulaire", "donne": true } ],
+      "suite": "ch4a-dateur"
+    },
+    "ch4a-form-corbeille": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai plongé dans la corbeille. Le jaune poussin froissé était rempli jusqu'à la ligne 3 par un certain « Bob (copie) », qui demandait une chaise. J'ai gommé avec le pouce. Ça marche bien, je suis soluble. Le trombone a regardé le plafond pendant toute l'opération, très concentré sur une fissure. On a notre formulaire. Il sent un peu le trognon de pomme, mais il est réglementaire, d'après Grumeau, « à l'odeur près »."
+      ],
+      "effets": [ { "objet": "formulaire", "donne": true } ],
+      "suite": "ch4a-dateur"
+    },
+    "ch4a-form-queue": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "La queue pour le vert d'eau se prend au guichet d'en face. Fermé. Pour savoir quand il rouvre, il faut prendre un ticket à la borne de l'étage. Et pour prendre un ticket à cette borne, il faut un formulaire vert d'eau. J'ai dû pousser un tout petit cri, parce que le trombone a eu pitié : il a soulevé la cloche « pour l'aérer » et s'est retourné. Jaune poussin en poche. Merci, la pitié."
+      ],
+      "effets": [ { "objet": "formulaire", "donne": true } ],
+      "suite": "ch4a-dateur"
+    },
+    "ch4a-dateur": {
+      "type": "choix",
+      "lieu": "Bureau du Dateur",
+      "decor": "etage-guichets",
+      "humeur": "triste",
+      "checkpoint": true,
+      "texte": [
+        "Un formulaire sans tampon, d'après Grumeau, c'est « un chapeau sans tête ». Il en faut trois. Le premier se demande ici, au Dateur. C'est un gros tampon à roulettes de chiffres, assis derrière un bureau, l'air effondré. Il ne sait écrire que la date et l'heure, et depuis ce matin c'est la même. Il soupire : « 13 h 37. 13 h 37. J'avais une œuvre, vous savez. »",
+        "Pire : il est à sec. Plus une goutte d'encre, livraison prévue à 13 h 38. Au mur, une affiche : « Toute contrefaçon sera classée sans suite. Vous aussi. » Grumeau me regarde. Le Dateur me regarde. Je suis bleu, liquide, et je comprends très bien à quoi ils pensent. Ça me fait rapetisser rien que d'y songer. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch4a-dateur-encrier", "libelle": "Sers d'encrier : trempe le pied dans son coussin", "vers": "ch4a-vise" },
+        { "id": "ch4a-dateur-faux", "libelle": "Dessine le tampon toi-même, en douce", "vers": "ch4a-echec-faux" },
+        { "id": "ch4a-dateur-ailleurs", "libelle": "Cherche de l'encre ailleurs dans l'étage", "vers": "ch4a-ailleurs" }
+      ]
+    },
+    "ch4a-vise": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "Bon. J'ai trempé le pied dans son coussin. Ça chatouille, ça pique, et j'ai perdu au moins un millimètre. Le Dateur revit : il roule des épaules, il s'échauffe le manche. Mais il tremble d'émotion, et la case « Visa » est minuscule. C'est moi qui tiens le formulaire. Aide-moi à le placer pile sous le tampon quand il tombe : s'il déborde de la case, c'est refusé."
+      ],
+      "jeu": "visee",
+      "difficulte": 2,
+      "reussite": "ch4a-tampon-net",
+      "echec": "ch4a-tampon-bave"
+    },
+    "ch4a-tampon-net": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "TCHAC. « 13 h 37 », en bleu, pile dans la case, sans une bavure. Il y avait enfin de quoi encrer, et le Dateur a contemplé son travail les larmes aux roulettes. « C'est la même heure que les autres. Mais celle-ci, elle est belle. » Premier tampon ! Grumeau a vérifié les bords à travers son propre verre et n'a rien trouvé à redire, ce qui l'a contrarié. Plus que deux. Ils se demandent plus haut. Évidemment."
+      ],
+      "effets": [ { "var": "tampons", "plus": 1 } ],
+      "suite": "ch4a-montee"
+    },
+    "ch4a-tampon-bave": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Le tampon est tombé de travers. Moitié dans la case, moitié sur « Ne rien inscrire ici ». Le Dateur a regardé la tache, puis moi, puis la tache. « Baveux. Refusé. Je n'ai pas le droit de recommencer sur le même exemplaire, et il n'y en a pas d'autre. » Il s'est effondré de nouveau. Zéro tampon ici. Grumeau dit qu'il en reste à prendre plus haut, et que la prochaine fois je respirerai avant."
+      ],
+      "suite": "ch4a-montee"
+    },
+    "ch4a-echec-faux": {
+      "type": "echec",
+      "lieu": "Au pied de la Tour",
+      "decor": "tour-tampon",
+      "humeur": "peur",
+      "texte": [
+        "J'ai dessiné le tampon moi-même, avec le doigt, pendant que le Dateur se mouchait. Très ressemblant, je trouvais. Une sonnerie a retenti. Une trappe s'est ouverte sous moi, marquée « Sans suite ». J'ai glissé dans un tuyau pendant un temps infini, classé entre un vieux courrier et une facture, jusqu'à un bac tout en bas de la Tour. L'affiche avait prévenu. Je me repose, je me défroisse, et je remonte."
+      ],
+      "repos_min": 20
+    },
+    "ch4a-ailleurs": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Non. Je tiens à mes millimètres. Il doit bien rester de l'encre quelque part dans cet étage : un fond de cartouche, un stylo oublié, un buvard encore humide. Je fouille les tiroirs un par un. Grumeau fait le guet en répétant que c'est du temps perdu, ce qui dans sa bouche est presque un compliment. Le Dateur nous regarde avec des yeux de tampon battu. Je reviens dès que j'ai trouvé."
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou fouille tous les tiroirs de l'étage",
+      "tenue": "marche",
+      "suite": "ch4a-tampon-net"
+    },
+    "ch4a-montee": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Avant qu'on parte, le Dateur m'a retenu par le baluchon. Il a chuchoté que le dernier papier qu'il a tamponné, à 13 h 37 pile, était une autorisation de sortie. Pour qui, il n'a pas eu le temps de lire : la main qui la tenait tremblait trop. Et la phrase du motif s'arrêtait au milieu. Je n'aime pas ça. Les deux autres tampons sont à l'étage 37. On remonte. À tout à l'heure."
+      ],
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou grimpe vers l'étage 37",
+      "tenue": "grimpe",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch5-entree"
+    },
+    "ch4b-porte": {
+      "type": "choix",
+      "lieu": "Caverne des câbles",
+      "decor": "caverne-cables",
+      "humeur": "peur",
+      "texte": [
+        "Alt a ouvert la porte de service avec une épingle, a dit « c'est tout droit, ou alors pas », et nous a plantés là. Elle nous retrouvera au Marais, « ou alors plus loin ». Derrière la porte : la Caverne des câbles. Des câbles partout, gros comme des troncs, emmêlés à perte de vue, et pas une lampe. Ça bourdonne. Ça fait des petits clics. J'ai très peur du noir, je préfère te le dire.",
+        "Grumeau prétend que lui n'a peur de rien, mais il s'est rapproché de mon pied. Son sable luit un tout petit peu dans l'ombre, une lueur de veilleuse. Il faut y aller quand même. Je m'y prends comment, pour ne pas trembler ?"
+      ],
+      "options": [
+        { "id": "ch4b-porte-veilleuse", "libelle": "Serre Grumeau contre toi, comme une veilleuse", "vers": "ch4b-descente", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch4b-porte-chante", "libelle": "Passe devant en chantant très fort", "vers": "ch4b-descente", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch4b-descente": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "On avance. Grumeau a dit : « Si tu racontes ça à quelqu'un, je nie tout. » Je ne sais pas de quoi il parle, on fait semblant tous les deux. Les câbles descendent en pente douce. Il faut les enjamber un par un, et certains sont tièdes, ce que je trouve suspect pour un câble. Je compte mes pas à voix haute. Je t'écris dès qu'il y a de la lumière, ou un problème. Plutôt de la lumière, j'espère."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou enjambe les câbles dans le noir",
+      "tenue": "marche",
+      "suite": "ch4b-bug"
+    },
+    "ch4b-bug": {
+      "type": "choix",
+      "lieu": "Caverne des câbles",
+      "decor": "caverne-cables",
+      "humeur": "peur",
+      "checkpoint": true,
+      "texte": [
+        "C'était un problème. Un bug géant. Six pattes, des antennes, une carapace qui clignote, et il bouche tout le tunnel. J'ai sorti mon épée en bois. Il a levé une patte, très calme : « Avant toute chose : je ne suis pas un bug. Je suis un comportement non documenté. » Il a l'air de l'avoir dit souvent. Et de n'avoir jamais été cru.",
+        "Il ne veut pas bouger : « Je suis ici exprès. » Il y a bien un couloir sur la gauche, mais une affiche à l'entrée dit seulement « Vous êtes ici », sans plan autour, et ça ne m'inspire pas. Grumeau propose de « lui régler son compte », mais il se cache derrière moi en le disant. On fait quoi ?"
+      ],
+      "options": [
+        { "id": "ch4b-bug-defie", "libelle": "Défie-le à l'épée en bois", "vers": "ch4b-duel" },
+        { "id": "ch4b-bug-compliment", "libelle": "Dis-lui que c'est une très belle fonctionnalité", "vers": "ch4b-bug-flatte" },
+        { "id": "ch4b-bug-contourne", "libelle": "Contourne-le par le couloir de gauche", "vers": "ch4b-couloir" }
+      ]
+    },
+    "ch4b-duel": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "En garde ! J'ai dit « en garde », il a dit « si vous voulez », et il s'est mis à clignoter plus vite. Il n'attaque jamais deux fois pareil, c'est ça, un comportement non documenté : un coup à gauche, un coup nulle part, un coup hier. Il faut parer pile quand la patte s'allume. Aide-moi, je ferme un œil sur deux, et pas toujours le bon !"
+      ],
+      "jeu": "reflexe",
+      "difficulte": 2,
+      "bonus": "culot",
+      "reussite": "ch4b-duel-gagne",
+      "echec": "ch4b-duel-perdu"
+    },
+    "ch4b-duel-gagne": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Touché ! Trois parades et une botte que je ne saurais pas refaire. Il est tombé assis, très surpris. « Vous m'avez reproduit. Personne n'arrive jamais à me reproduire. » Il en avait presque les antennes humides. Il s'est rangé contre la paroi pour nous laisser passer, et il m'a demandé de signaler notre duel à quelqu'un, « pour mon dossier ». J'ai promis. Grumeau affirme qu'il a tout vu et qu'il m'a beaucoup aidé."
+      ],
+      "effets": [ { "var": "culot", "plus": 1 } ],
+      "suite": "ch4b-slime"
+    },
+    "ch4b-duel-perdu": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Perdu. Il m'a désarmé d'une patte, sans méchanceté, et mon épée est restée plantée dans un câble. Puis il m'a regardé de près. « Vous êtes trop petit pour être corrigé. Passez. » Il s'est poussé, par pitié. Je déteste la pitié, mais j'ai pris le passage quand même, parce que j'aime encore moins les tunnels bouchés. Grumeau a récupéré mon épée du bout du socle. Il n'a fait aucun commentaire. C'était pire."
+      ],
+      "suite": "ch4b-slime"
+    },
+    "ch4b-bug-flatte": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai dit qu'il était une très belle fonctionnalité. Il s'est arrêté de clignoter. « Vous trouvez ? » J'ai ajouté que ses antennes étaient très bien pensées. Il a rosi de la carapace et s'est aplati contre la paroi pour nous laisser passer. « Enfin quelqu'un qui lit la documentation. » Il n'y a pas de documentation, c'est tout son drame. Grumeau dit que mentir aux insectes, c'est le début de la fin. Mais il est passé aussi."
+      ],
+      "suite": "ch4b-slime"
+    },
+    "ch4b-couloir": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "On a pris le couloir de gauche. Tout droit, facile. Au bout d'un moment, on a croisé une affiche : « Vous êtes ici. » Puis une autre, la même, avec la même tache dans le coin. Puis une troisième. Grumeau s'est arrêté : « On est déjà passés ici. Je reconnais ma mauvaise humeur. » Devant, le couloir continue, bien droit, bien tentant. Derrière, on entend encore le bug clignoter. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch4b-couloir-droit", "libelle": "Continue tout droit, ça finira bien par sortir", "vers": "ch4b-echec-boucle" },
+        { "id": "ch4b-couloir-retour", "libelle": "Demi-tour : cherche un autre passage", "vers": "ch4b-slime" }
+      ]
+    },
+    "ch4b-echec-boucle": {
+      "type": "echec",
+      "humeur": "fatigue",
+      "texte": [
+        "J'ai continué tout droit. Quatrième affiche. Cinquième. À la douzième, j'ai compris, mais mes pieds non : c'est une boucle, et une fois lancé on n'en sort plus qu'en s'écroulant. J'ai tourné jusqu'à avoir le tournis, puis je me suis assis par terre, au pied de l'affiche. « Vous êtes ici. » Oui. Merci. Grumeau m'a tiré dehors par le baluchon. Je reprends mon souffle, et on y retourne. Par ailleurs."
+      ],
+      "repos_min": 25
+    },
+    "ch4b-slime": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Le tunnel repart, et plus loin, à un croisement, il y a de la lumière. Elle vient d'une grosse goutte de gelée verte, collée au plafond, qui luit comme un écran. Grumeau a reculé : « Un slime de cache. Ne touche pas, ça garde tout. » Le slime a une voix de vieux poste de radio : « Bonjour. Chez moi, il est encore hier. Enfin, 13 h 36. C'est tout frais. »",
+        "Il garde l'image des choses comme elles étaient juste avant. Dans sa gelée, on peut regarder un endroit tel qu'il était à 13 h 36 ! Mais une seule image : pour en charger une autre, il faudrait l'essorer, et Grumeau refuse d'essorer qui que ce soit. Je lui demande de montrer quoi ?"
+      ],
+      "options": [
+        { "id": "ch4b-slime-horloge", "libelle": "L'Horloge, juste avant la panne", "vers": "ch4b-slime-hier", "effets": [ { "drapeau": "sait-depart" } ] },
+        { "id": "ch4b-slime-route", "libelle": "Le chemin pour traverser le Marais", "vers": "ch4b-slime-chemin", "effets": [ { "drapeau": "connait-gue" } ] }
+      ]
+    },
+    "ch4b-slime-hier": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "La gelée s'est troublée, puis j'ai vu l'Horloge. Un grand balancier, et dessus une petite chose qui allait d'un côté, tic, de l'autre, tac. Quelqu'un est entré. Flou, tout plat, tremblant. Il a parlé. Le Tic-Tac s'est arrêté pour écouter. Et puis, je te promets, il a sauté de son balancier tout seul, et ils sont partis ensemble. Personne ne tirait personne. Grumeau a dit : « Ça, ce n'est pas un enlèvement. C'est une démission. »"
+      ],
+      "suite": "ch4b-sortie"
+    },
+    "ch4b-slime-chemin": {
+      "type": "recit",
+      "humeur": "neutre",
+      "texte": [
+        "La gelée a montré le Marais, vu d'en haut : de l'eau grise, une barre de chargement dans le ciel, et, en travers, une ligne de pierres plates. Un gué ! « C'est le chemin d'hier, a précisé le slime. Aujourd'hui, je ne garantis rien. Je ne garantis jamais aujourd'hui. » J'ai bien regardé où étaient les pierres. Grumeau dit qu'un gué de la veille, c'est comme du pain de la veille. Mais ça se mange."
+      ],
+      "suite": "ch4b-sortie"
+    },
+    "ch4b-sortie": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Le slime nous a souhaité une bonne journée d'hier. Devant, la caverne remonte et l'air devient humide. Ça sent la vase et le redémarrage. Grumeau a horreur de l'humidité, il me l'a dit onze fois, je les ai comptées pour me venger. Il paraît que le Marais est juste au bout, et que là-bas rien ne finit jamais de charger. On y va. Je t'écris quand je vois le ciel. S'il y en a un."
+      ],
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou remonte vers la sortie de la caverne",
+      "tenue": "marche",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch5-entree"
+    }
+  }
+}
