@@ -1,0 +1,69 @@
+# Icône : du nouveau en boutique
+id: badge-boutique
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 500
+palette: a=#1c2128 b=#8a4a1f c=#d9803a d=#ffc89a e=#f69d50 f=#f5d76e g=#fff6cc h=#ffffff i=#c9d1d9
+images:
+..........aaaaaaaa..........
+........aaaaaaaaaaaa........
+.......aaaabbbbbbaaaa.......
+......aaabbcccbbbbbaaa......
+......aabccbaaaabbbbaa......
+.....aaabcbaaaaaabbbaaa.....
+.aaaaaabccaaaaaaaabbbaaaaaa.
+aaaaaaabcbaaaaaaaabbbaaaaaaa
+aacddddddddddddddddddddddcaa
+aaccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaedeeeeeeeeefgeeeeeecccccaa
+aaedeeeeeeeeeggeeeeeecccccaa
+aaedeeeeeeeefgggeeeeecccccaa
+aaedeeeeeeeehgggeeeeecccccaa
+aaedeeefggggggggggggfcccccaa
+aaedeeeefggggggggggfecccccaa
+aaedeeeeeeggggggggeeecccccaa
+aaedeeeeeeeggggggeeeecccccaa
+aaedeeeeeefgggggggeeecccccaa
+aaedeeeeeeggggggggeeecccccaa
+aaedeeeeeeggeeeeggeeecccccaa
+aaeeeeeeeefeeeeeefeeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaccccccccccccccccccccccccaa
+aaaeeeeeeeeeeeeeeeeeeccccaaa
+---
+..........aaaaaaaa..........
+........aaaaaaaaaaaa........
+.......aaaabbbbbbaaaa.......
+......aaabbcccbbbbbaaa......
+......aabccbaaaabbbbaa......
+.....aaabcbaaaaaabbbaaa.....
+.aaaaaabccaaaaaaaabbbaaaaaa.
+aaaaaaabcbaaaaaaaabbbaaaaaaa
+aacddddddddddddddddddddddcaa
+aaccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccaa
+aaccccccccccccccccccccccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaedeeeeeeeeeiheeeeeecccccaa
+aaedeeeeeeeeehheeeeeecccccaa
+aaedeeeeeeeeihhheeeeecccccaa
+aaedeeeeeeeehhhheeeeecccccaa
+aaedeeeihhhhhhhhhhhhicccccaa
+aaedeeeeihhhhhhhhhhiecccccaa
+aaedeeeeeehhhhhhhheeecccccaa
+aaedeeeeeeehhhhhheeeecccccaa
+aaedeeeeeeihhhhhhheeecccccaa
+aaedeeeeeehhhhhhhheeecccccaa
+aaedeeeeeehheeeehheeecccccaa
+aaeeeeeeeeieeeeeeieeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaeeeeeeeeeeeeeeeeeeecccccaa
+aaccccccccccccccccccccccccaa
+aaaeeeeeeeeeeeeeeeeeeccccaaa

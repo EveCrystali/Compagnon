@@ -7,6 +7,8 @@ Chaque fonction dessine un article et l'écrit (assets/sprites/<id>.txt) ; DESSI
 """
 import math
 
+import toile
+import fins
 from toile import Toile, ecrire
 from boutique_sprites import (ENCRE, NOIR2, BLANC, CREME, CREME_O, GRIS, GRIS_C, ARDOISE, ARGENT, ARGENT_C, B1, B2, B3, B4,
                               NUIT, NUIT2, O1, O2, O3, O4, O5, J1, J2, J3, J4, V1, V2, V3, V4, S1, S2, S3, BR1, BR2, BR3, T1,
@@ -19,7 +21,14 @@ LUEUR = "#fff6cc99"
 
 def dessin(id_):
     def deco(f):
-        DESSINS[id_] = f
+        import fin
+        if id_ in fin.SERIE4:
+            def dans_le_lot():
+                with fins.lot():
+                    return f()
+            DESSINS[id_] = dans_le_lot
+        else:
+            DESSINS[id_] = f
         return f
     return deco
 
@@ -29,12 +38,23 @@ def T(w, h):
 
 
 def etoile(t, x, y, c):
+    if toile.fin() and fins.ACTIF:
+        fins.etincelle(t, x + 0.5, y + 0.5, c, bras=3, coeur=fins.clair(c, 0.6))
+        return
     for dx, dy in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
         t.p(x + dx, y + dy, c)
 
 
 def eclat(t, x, y, c, k=0):
     """Petit scintillement : une croix qui grandit puis se referme selon k."""
+    if toile.fin() and fins.ACTIF:
+        if k % 3 == 0:
+            fins.point_fin(t, x + 0.5, y + 0.5, c)
+        elif k % 3 == 1:
+            fins.etincelle(t, x + 0.5, y + 0.5, c, bras=3, coeur=fins.clair(c, 0.6))
+        else:
+            fins.etincelle(t, x + 0.5, y + 0.5, c, bras=5, coeur=BLANC)
+        return
     if k % 3 == 0:
         t.p(x, y, c)
     elif k % 3 == 1:

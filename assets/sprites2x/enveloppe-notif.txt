@@ -1,0 +1,73 @@
+# Enveloppe brandie (ouverte, une lettre dépasse)
+id: enveloppe-notif
+slot: main
+ancre: tete
+decalage: -14 -34
+duree: 320
+palette: a=#1c2128 b=#ffffff c=#4a8fdc d=#c9d1d9 e=#f6f8fa f=#f9fbfc g=#c9cbd2 h=#f69d50 i=#c9824a
+images:
+......aaaaaaaaaaaaaaaaaaaaaaaa......
+.....aaaaaaaaaaaaaaaaaaaaaaaaaa.....
+....aabbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbccccccccccccccbbbbbbaa....
+...aaabbbbccccccccccccccbbbbbbaaa...
+..aaaabbbbbbbbbbbbbbbbbbbbbbbbaaaa..
+.aaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaa.
+aaddddeeeeeeeeffffffffeeeeeeeeddddaa
+aaddeeddeeeeeeeeeeeeeeeeeeeeddeeddaa
+aaffddddddeeeeeeeeeeeeeeeeddddddffaa
+aaeeffddddddggeeeeeeeeggddddddffeeaa
+aaeeeeffddddddggeeeeggddddddffeeeeaa
+aaeeeeeeffddddddggggddddddffeeeeeeaa
+aaeeeeeeeeffddddddddddddffeeeeeeeeaa
+aaeeeeeeeeeeffddddddddffeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeeiiiiiiiieeeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaggggggggggggeeeeeeeeggggggggggggaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+....................................
+....................................
+---
+....aabbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbccccccccccccccbbbbbbaa....
+...aaabbbbccccccccccccccbbbbbbaaa...
+..aaaabbbbbbbbbbbbbbbbbbbbbbbbaaaa..
+.aaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaa.
+aaddddeeeeeeeeffffffffeeeeeeeeddddaa
+aaddeeddeeeeeeeeeeeeeeeeeeeeddeeddaa
+aaffddddddeeeeeeeeeeeeeeeeddddddffaa
+aaeeffddddddggeeeeeeeeggddddddffeeaa
+aaeeeeffddddddggeeeeggddddddffeeeeaa
+aaeeeeeeffddddddggggddddddffeeeeeeaa
+aaeeeeeeeeffddddddddddddffeeeeeeeeaa
+aaeeeeeeeeeeffddddddddffeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeehhhhhhhheeeeeeeeeeeeaa
+aaeeeeeeeeeeeeiiiiiiiieeeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaggggggggggggeeeeeeeeggggggggggggaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+....................................
+....................................
+....................................
+....................................

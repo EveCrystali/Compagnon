@@ -15,6 +15,7 @@ alors que la fermée porte un cachet rond, la photo se développe de l'ardoise a
 """
 import math
 
+import toile
 from toile import Toile, ecrire
 
 ENCRE = "#1c2128"
@@ -36,6 +37,17 @@ def T(w, h):
 
 
 def etoile(t, x, y, c, centre=None):
+    if toile.fin():
+        # Étincelle fine : croix à branches qui s'effilent (deux pixels fins, puis un), cœur clair.
+        e = t.e
+        X, Y = int(x * e) + 1, int(y * e) + 1
+        for n in range(1, 5):
+            for a, b in ((n, 0), (-n, 0), (0, n), (0, -n)):
+                t.pf(X + a - (1 if a > 0 else 0), Y + b - (1 if b > 0 else 0), c)
+        for a in range(-1, 1):
+            for b in range(-1, 1):
+                t.pf(X + a, Y + b, centre or c)
+        return
     for (u, v) in ((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1)):
         t.p(x + u, y + v, c)
     if centre:
@@ -49,6 +61,17 @@ POUF_POINT = (23, 26)
 
 def boule(t, cx, cy, r):
     """Une volute : disque brume, ombre grise en bas à droite, reflet blanc en haut à gauche."""
+    if toile.fin():
+        # Volute fine : trois tons (brume, gris pâle, gris), croissant de lumière en haut à gauche, bord ombré en bas.
+        t.ell(cx, cy, r, r * 0.9, BRUME)
+        t.ell(cx + r * 0.2, cy + r * 0.25, r * 0.85, r * 0.68, "#d3dbe4", cond=lambda x, y, u, v: v > 0.05)
+        t.ell(cx + r * 0.3, cy + r * 0.4, r * 0.78, r * 0.55, GRIS_C, cond=lambda x, y, u, v: v > 0.3)
+        if r >= 3:
+            t.ell(cx - r * 0.3, cy - r * 0.4, r * 0.5, r * 0.32, BLANC)
+            t.ell(cx - r * 0.12, cy - r * 0.22, r * 0.3, r * 0.14, BRUME)
+        else:
+            t.ell(cx - r * 0.3, cy - r * 0.35, r * 0.35, r * 0.25, BLANC)
+        return
     t.ell(cx, cy, r, r * 0.9, BRUME)
     t.ell(cx + r * 0.25, cy + r * 0.3, r * 0.8, r * 0.6, GRIS_C, cond=lambda x, y, u, v: v > 0.25)
     if r >= 3:
@@ -166,13 +189,57 @@ def photo(t, x, y, dev, penche=0):
         t.rect(x + 5, y + 2, 2, 2, O3)
         t.poly([(x + 1, y + 8), (x + 3.5, y + 4.5), (x + 6, y + 8)], B1)
         t.poly([(x + 4, y + 8), (x + 6.5, y + 5.5), (x + 8, y + 8)], B2)
+    if toile.fin():
+        e = t.e
+        X0, Y0 = int(x * e), int(y * e)
+        # Cadre : lumière en haut et à gauche, ombre à droite ; bande du bas plus grise avec un trait d'écriture.
+        for i in range(9 * e):
+            t.pf(X0 + i, Y0, BLANC)
+        for j in range(9 * e):
+            t.pf(X0, Y0 + j, BLANC)
+            t.pf(X0 + 9 * e - 1, Y0 + j, CREME_O)
+        for i in range(9 * e):
+            t.pf(X0 + i, Y0 + 9 * e - 1, CREME_O)
+        for i in range(3 * e, 7 * e):
+            t.pf(X0 + i, Y0 + 10 * e - 1, GRIS_C)
+        # Fenêtre de la photo : ombre portée du cadre sur le haut et la gauche.
+        W0, V0 = X0 + e, Y0 + e
+        for i in range(7 * e):
+            t.pf(W0 + i, V0, assombrir_(ciel, 0.3))
+        for j in range(7 * e):
+            t.pf(W0, V0 + j, assombrir_(ciel, 0.3))
+        if dev >= 2:
+            # Soleil rond avec un anneau clair ; neige sur le sommet de la grande colline.
+            sx, sy = (x + 6) * e, (y + 3) * e
+            for j in range(-3, 3):
+                for i in range(-3, 3):
+                    r2 = (i + 0.5) ** 2 + (j + 0.5) ** 2
+                    if r2 <= 5.5:
+                        t.pf(sx + i, sy + j, O3 if r2 > 2.0 else O4)
+                    elif r2 <= 8.0 and t.g[sy + j][sx + i] == B3:
+                        t.pf(sx + i, sy + j, B4)
+            # Arête éclairée de la grande colline (liseré de la teinte du ciel, à gauche de son sommet).
+            for n in range(0, 5):
+                if t.g[int((y + 4.5) * e) + n][int((x + 3.5) * e) - n] == B1:
+                    t.pf(int((x + 3.5) * e) - n, int((y + 4.5) * e) + n, B2)
     if penche:
         # léger biais : on décale la moitié basse d'un pixel
+        e = t.e
         g = [r[:] for r in t.g]
-        for j in range(y + 6, y + 11):
-            for i in range(t.w):
-                t.g[j][i] = g[j][i - penche] if 0 <= i - penche < t.w else None
+        for j in range((y + 6) * e, (y + 11) * e):
+            for i in range(t.W):
+                t.g[j][i] = g[j][i - penche * e] if 0 <= i - penche * e < t.W else None
     t.contour(ENCRE)
+
+
+def assombrir_(c, k):
+    from retouches_fines import assombrir
+    return assombrir(c, k)
+
+
+def eclaircir_(c, k):
+    from retouches_fines import eclaircir
+    return eclaircir(c, k)
 
 
 def polaroid():
@@ -188,6 +255,13 @@ def polaroid():
     t.poly([(1, 21), (9, 20), (11, 23), (2, 24)], CREME)
     t.poly([(2.5, 21), (8.5, 20.5), (9.5, 22.5), (3, 23)], B3)
     t.p(7, 21, O3)
+    if toile.fin():
+        # Photo à plat : tranche ombrée en bas, éclat sur le bord du haut, soleil rond, deux collines, reflet.
+        t.poly([(2, 24), (11, 23), (10.5, 22.5), (2.2, 23.4)], CREME_O)
+        t.ligne(1, 21, 9, 20, BLANC)
+        t.ell(7.4, 21.4, 0.95, 0.7, O3)
+        t.ell(7.2, 21.2, 0.45, 0.3, O4)
+        t.poly([(3.2, 22.9), (5.2, 21.9), (7.4, 22.8)], B2)
     t.contour(ENCRE)
     ecrire("polaroid-4", t, slot="effet", ancre="main", point=(2, 10), commentaire="Polaroïd posé au sol")
 

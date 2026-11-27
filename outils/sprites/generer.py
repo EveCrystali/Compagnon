@@ -11,6 +11,7 @@ import os
 import shutil
 
 import toile
+import fins
 from toile import Toile, ecrire, SORTIE, TOUS
 import visage_sprites
 import boutique_sprites
@@ -524,6 +525,9 @@ def tenues():
 
 
 def note(t, x, y, c):
+    if toile.fin() and fins.ACTIF:
+        fins.note_fin(t, x, y, c)
+        return
     t.rect(x, y + 3, 3, 2, c)
     t.rect(x + 2, y - 2, 1, 5, c)
     t.rect(x + 3, y - 2, 2, 1, c)
@@ -817,6 +821,7 @@ def boutique():
     ecrire("petit-poisson-bocal", images, slot="compagnon", ancre="cote", point=(0, 16), duree=260)
 
     # Effets
+    fins.ACTIF = True
     images = []
     for k in range(6):
         t = T(52, 40)
@@ -835,6 +840,7 @@ def boutique():
             note(t, x + int(math.sin(ph * 6 + i) * 2), y, [B3, V3, J3, O3][i])
         images.append(t)
     ecrire("trainee-notes", images, slot="effet", ancre="corps", point=(26, 34), duree=170)
+    fins.ACTIF = False
     images = []
     for k in range(4):
         t = T(44, 40)
@@ -868,6 +874,9 @@ def stades():
 
 
 def etoile_pixel(t, x, y, c):
+    if toile.fin() and fins.ACTIF:
+        fins.etincelle(t, x + 0.5, y + 0.5, c, bras=3, coeur=fins.clair(c, 0.7))
+        return
     for a, b in ((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1)):
         t.p(x + a, y + b, c)
 
@@ -883,6 +892,9 @@ def etoile_grande(t, cx, cy, c, cc):
 
 
 def coeur(t, x, y, c):
+    if toile.fin() and fins.ACTIF:
+        fins.coeur_fin(t, x, y, 7, 6, c, lueur=O5)
+        return
     t.motif(x, y, [".oo.oo.", "oooooooo"[:7], "ooooooo", ".ooooo.", "..ooo..", "...o..."], {"o": c})
     t.p(x + 1, y + 1, O5)
 
@@ -1538,10 +1550,12 @@ def jeux():
     t.rect(1, 1, 10, 10, B4)
     t.motif(2, 3, ["......kk", ".....kk.", "k...kk..", "kk.kk...", ".kkk....", "..k....."], {"k": B1})
     ecrire("bonus-tests", t, slot="objet")
+    fins.ACTIF = True
     t = T(10, 9)
     coeur(t, 1, 1, O3)
     t.contour(O1)
     ecrire("vie", t, slot="objet")
+    fins.ACTIF = False
 
 
 # =====================================================================================================
@@ -1660,6 +1674,7 @@ def soins():
     ecrire("mousse", images, slot="effet", ancre="corps", point=(24, 26), duree=160,
            commentaire="toilette : mousse et bulles")
 
+    fins.ACTIF = True
     # Rayonnant : quelques étincelles discrètes qui scintillent autour de lui.
     images = []
     pts = [(2, 14), (40, 10), (6, 30), (37, 28), (20, 1)]
@@ -1673,6 +1688,7 @@ def soins():
         images.append(t)
     ecrire("rayonnant", images, slot="effet", ancre="corps", point=(22, 19), duree=260,
            commentaire="bien soigné : il rayonne (étincelles discrètes)")
+    fins.ACTIF = False
 
     # Bouderie (Pilou négligé) : petit nuage gris qui bruine au-dessus de lui, en haut à droite (loin des
     # antennes) ; amadoué, le nuage s'éclaircit et un soleil pointe. Gris et bleus, soleil jaune-orangé.
@@ -1734,7 +1750,9 @@ def soins():
         ecrire("variante-calin-%d" % stade, t, slot="visage", ancre="yeux", point=(j, -8),
                commentaire="variante câlin, stade %d : joues roses" % stade)
         t = T(9, 8)
+        fins.ACTIF = True
         coeur(t, 1, 1, O3)
+        fins.ACTIF = False
         t.contour(O1)
         ecrire("variante-calin-%d-tete" % stade, t, slot="tete", ancre="tete",
                point=(-5 if stade != 3 else -8, 4), commentaire="variante câlin, stade %d : petit cœur" % stade)

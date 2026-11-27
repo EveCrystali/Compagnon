@@ -8,7 +8,7 @@ Dernière mise à jour : 27 novembre 2026.
 - Overlay Windows, app Android, mod Claude Code, extensions VS Code et Visual Studio.
 - Boutique garnie, métiers et succès partagés entre appareils, expéditions, Défense du bureau,
   visites entre amis, connecteurs, météo.
-- Dessin fin 2× (visage, 68 cosmétiques, tenues de voyage ; le reste agrandi automatiquement).
+- Dessin fin 2× (visage, cosmétiques, tenues de voyage, boutique, pêche, cuisine, variantes, bonus, particules : tous les sprites hors décors de campagne).
 - Moteur des campagnes (PC et Android, validateur, synchronisation) et quatre histoires : prologue,
   La Grande Panne, Le phare éteint, Petit Nuage. **Aucune interface ne permet encore de les jouer.**
 

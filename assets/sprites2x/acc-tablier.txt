@@ -1,0 +1,42 @@
+id: acc-tablier
+slot: cou
+ancre: cou
+decalage: -20 -8
+palette: a=#768390 b=#c9d1d9 c=#ffffff d=#f6f8fa e=#e1e7ee f=#d9803a g=#ffc89a h=#f69d50
+images:
+....aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa....
+....aacdddddddddddddddddddddeeeebbaa....
+....aacdddddddddddddddddddddeeeebbaa....
+....aacdddddddddddddddddddddeeeebbaa....
+....aacdddddddddddddddddddddeeeebbaa....
+...aaccdddddddddddddddddddddeeeebbbaa...
+...aaccdddddddddddddddddddddeeeebbbaa...
+..aacccdddddddddddddddddddddeeeebbbbaa..
+..aacccdddddddddddddddddddddeeeebbbbaa..
+..aacccdddddddddddddddddddddeeeebbbbaa..
+..aacccdddddddddddddddddddddeeeebbbbaa..
+..aacccdddddffffffffffffffffeeeebbbbaa..
+..aacccdddddfggfggfggfggfggfeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddghhhhhhhffhhhhffeeeebbbbaa..
+..aacccdddddgfffffffffffffffeeeebbbbaa..
+..aacccdddddgfffffffffffffffeeeebbbbaa..
+..aacccdddddddddddddddddddddeeeebbbbaa..
+..aacccdddddddddddddddddddddeeeebbbbaa..
+.aaccccdddddddddddddddddddddeeeebbbbbaa.
+.aaccccdddddddddddddddddddddeeeebbbbbaa.
+aacccccdddddddddddddddddddddeeeebbbbbbaa
+aacccccdddddddddddddddddddddeeeebbbbbbaa
+aacccccdddddddddddddddddddddeeeebbbbbbaa
+aacccccdddddddddddddddddddddeeeebbbbbbaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebbbbbbaa
+.acccccdddddddddddddddddddddeeeebbbbbba.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...
