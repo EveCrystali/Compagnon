@@ -240,6 +240,48 @@ public sealed partial class FenetrePilou
                 Essai("campagne:retour");
                 Plus(duree - 300, FinEssaiAventure);
                 break;
+            case "peche":
+                // Le « ! » vient d'ordinaire entre 3,7 et 15,7 s, au hasard : ici à 2,2 s, puis la prise est ferrée (le
+                // geste du joueur) à 3,1 s ; la meilleure prise de la banque, pour qu'on la voie bien dans son cadre.
+                Essai("peche");
+                Plus(1500, () =>
+                {
+                    if (_jeuEnCours == Jeu.Peche && !_resultat) _mordA = Maintenant + 700;
+                });
+                Plus(3100, () =>
+                {
+                    if (_jeuEnCours == Jeu.Peche && !_resultat) FinPeche(Butin.Prises[^1], false, Maintenant);
+                });
+                Plus(duree - 300, () => { if (_jeuEnCours != Jeu.Aucun) Arreter(""); });
+                break;
+            case "cuisine":
+                // Le plat est prêt à 1,5 s (l'essai saute l'attente) ; on remue d'abord (le geste du joueur) : pas de plat raté.
+                Essai("cuisine");
+                Plus(600, Remuer);
+                Plus(duree - 300, () => { if (_jeuEnCours != Jeu.Aucun) Arreter(""); });
+                break;
+            case "aventure-personnage":
+            case "aventure-epreuve":
+            case "aventure-fin":
+                // La fenêtre Aventure (partie de démonstration en mémoire) ; refermée, et la partie oubliée, avant la suite.
+                if (etape.Scene is { } sceneAventure) Essai(sceneAventure);
+                Plus(duree - 300, () =>
+                {
+                    _fenetreAventure?.Close();
+                    FinEssaiAventure();
+                });
+                break;
+            case "mot":
+                // Un petit mot (présence de démonstration : jamais de prénom) ; l'essai en dit cinq, un toutes les 7 s : un seul ici.
+                Essai("mot");
+                Plus(duree - 300, () => _essaiMots?.Stop());
+                break;
+            case "complicite":
+                // L'annonce du palier, puis (l'essai l'ouvre à 4 s) le Journal de démonstration, feuilleté d'une page.
+                Essai("complicite");
+                Plus(6000, FeuilleterJournalVisite);
+                Plus(duree - 300, () => _fenetreJournal?.Close());
+                break;
             case "icone":
                 IconeVisite(duree);
                 break;
@@ -254,6 +296,14 @@ public sealed partial class FenetrePilou
                 if (etape.Optionnelle) Plus(duree - 300, () => { if (_jeuEnCours != Jeu.Aucun) Arreter(""); });
                 break;
         }
+    }
+
+    // Le Journal de démonstration (présence fictive, sans prénom) : il passe à la page de la veille.
+    private void FeuilleterJournalVisite()
+    {
+        if (_fenetreJournal is not { IsVisible: true } f) return;
+        var pages = Pres.Entrees(Presence.Gabarits);
+        if (pages.Count > 1) f.Aller(pages[1].Jour);
     }
 
     // Ferme ce qui traîne : menus, fenêtres de Pilou (pas Léo, pas le décor).
@@ -300,6 +350,7 @@ public sealed partial class FenetrePilou
         FenetreAventure => "aventure",
         FenetreDefense => "defense",
         FenetreInvite => "leo",
+        FenetreJournal => "journal",
         _ => "fenetre",
     };
 
@@ -329,6 +380,15 @@ public sealed partial class FenetrePilou
                     quoi.Add("bulle");
                 }
             }
+            // La pêche et la cuisine dessinent hors de Pilou (eau, canne, marmite, prise au-dessus de sa tête).
+            bool jeu = false;
+            foreach (var el in new FrameworkElement?[] { _eau, _canne, _marmite, _feu, _trophee })
+                if (el is not null && EnPixels(el) is { } cj)
+                {
+                    zone = zone.Union(cj);
+                    jeu = true;
+                }
+            if (jeu) quoi.Add("jeu");
             var popups = Natif.FenetresPopup();
             if (popups.Count > 0)
             {

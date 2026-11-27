@@ -429,7 +429,7 @@ avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
 - **Récompenses** : versées une fois (`Campagnes.Crediter`) ; po et xp s'envolent au-dessus de Pilou ; un objet
   exclusif est annoncé et rejoint l'inventaire (boutique, « Ce qu'il porte »).
 - **Essais** (en mémoire, profil intact) : `--essai=campagne:lecture`, `campagne:attente`, `campagne:retour`,
-  `campagne:epreuve`, `campagne:fin`, `campagne:personnage` (La Grande Panne jusqu'à un choix où un personnage parle) ; deux étapes de la visite guidée (`aventure-lecture`, `aventure-retour`).
+  `campagne:epreuve`, `campagne:fin`, `campagne:personnage` (La Grande Panne jusqu'à un choix où un personnage parle) ; cinq étapes de la visite guidée (`aventure-lecture`, `aventure-retour`, `aventure-personnage`, `aventure-epreuve`, `aventure-fin`).
 - **Maquettes** hors WPF : `PILOU_PLANCHES_AVENTURE=<dossier>/matiere dotnet test --filter PlanchesAventure`, puis
   `python3 outils/maquettes/aventure.py <dossier>/matiere <dossier>`.
 - **Prudence** : chaque chemin neuf est protégé ; une erreur coupe la présence de la campagne pour la session (ou

@@ -252,7 +252,7 @@ public class TournageJournalTests : IDisposable
         using var d = JsonDocument.Parse(Tournage.Disponibles("0.9.45"));
         double attendu = Tournage.Planifier(Tournage.Disponible).Where(x => x.Jouee).Sum(x => x.Etape.Secondes);
         Assert.Equal(attendu, d.RootElement.GetProperty("duree_s").GetDouble(), 3);
-        Assert.InRange(attendu, 60, 120);
+        Assert.InRange(attendu, 60, 150);
     }
 
     [Fact]
