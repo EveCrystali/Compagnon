@@ -72,8 +72,8 @@ public class TournageTests
     [Fact]
     public void LeDerouleTientEntreUneMinuteEtDemieEtDeuxMinutesSansTempsMort()
     {
-        // Tout joué : 90 à 120 s ; sans les scènes récentes : au moins une minute.
-        Assert.InRange(Tournage.Duree, 90, 120);
+        // Tout joué : 2 à 2 min 30 ; sans les scènes récentes : au moins une minute.
+        Assert.InRange(Tournage.Duree, 120, 150);
         Assert.InRange(Tournage.DureeDeBase, 60, Tournage.Duree);
         var noms = Tournage.Etapes.Select(e => e.Nom).ToList();
         Assert.Equal(noms.Count, noms.Distinct().Count());
@@ -81,7 +81,16 @@ public class TournageTests
             Assert.Contains(n, noms);
         // Des étapes courtes et enchaînées : 2,5 à 4 s, jusqu'à 8 s quand il y a plusieurs choses à montrer.
         Assert.All(Tournage.Etapes, e => Assert.InRange(e.Secondes, 2.5, 8));
-        Assert.True(Tournage.Etapes.Count(e => e.Secondes > 4) <= 6);
+        Assert.True(Tournage.Etapes.Count(e => e.Secondes > 4) <= 12);
+        // Les nouvelles scènes (pêche, cuisine, aventure, mot, complicité et journal) sont optionnelles, avant l'icône.
+        var ordre = Tournage.Etapes.Select(e => e.Nom).ToList();
+        foreach (var n in new[] { "peche", "cuisine", "aventure-personnage", "aventure-epreuve", "aventure-fin", "mot", "complicite" })
+        {
+            Assert.True(Tournage.Etapes.Single(e => e.Nom == n).Optionnelle, n);
+            Assert.True(ordre.IndexOf(n) < ordre.IndexOf("icone"), n);
+        }
+        // Le personnage laisse voir le décor boucler et le texte s'écrire (6 à 7 s).
+        Assert.InRange(Tournage.DureeDe("aventure-personnage"), 6, 7);
         Assert.Equal(8, Tournage.DureeDe("menu"));
         Assert.Equal(0, Tournage.DureeDe("inconnue"));
         // L'évolution laisse finir son animation (4,2 s).
@@ -202,6 +211,17 @@ public class TournageTests
         // Le rayon Ensembles n'est montré que s'il existe dans la boutique de cet exe.
         var ensembles = Tournage.Etapes.Single(e => e.Nom == "boutique-ensembles");
         Assert.Equal(Tournage.RayonEnsembles() is not null, Tournage.Disponible(ensembles));
+    }
+
+    [Fact]
+    public void ChaqueEtapeAEssaiCiteUnEssaiConnu()
+    {
+        // Optionnelle ou non, la scène citée doit exister dans cet exe (sinon l'étape serait sautée à tort).
+        Assert.All(Tournage.Etapes.Where(e => e.Scene is not null), e => Assert.True(Tournage.EssaiConnu(e.Scene!), $"{e.Nom} : {e.Scene}"));
+        Assert.All(Tournage.Etapes.Where(e => e.Optionnelle && e.Scene is not null), e => Assert.True(Tournage.Disponible(e), e.Nom));
+        // Une scène, une étape : pas de doublon.
+        var scenes = Tournage.Etapes.Where(e => e.Scene is not null).Select(e => e.Scene!).ToList();
+        Assert.Equal(scenes.Count, scenes.Distinct().Count());
     }
 
     [Fact]

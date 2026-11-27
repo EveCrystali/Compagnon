@@ -11,10 +11,12 @@
 #   3. réduit cette fenêtre PowerShell, puis remplace pour un moment ton Pilou par un Pilou de démonstration, en
 #      grand, posé en bas de cet écran devant un DÉCOR de tournage (un faux bureau : fond dégradé, fausses fenêtres,
 #      fausse barre des tâches avec horloge et icône de Pilou) qui cache tout ce qui est à toi. Il joue une visite
-#      guidée d'environ 1 min 35 : promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la
-#      boutique, la fenêtre Amis, le clavier, la photo, une visite chez Léo, la pluie, deux petits jeux,
-#      l'évolution, puis (si ta version les a) le rayon Ensembles, la Défense du bureau et les Expéditions, et
-#      enfin le menu de l'icône près de l'horloge. La souris bouge toute seule : n'y touche pas ;
+#      guidée d'environ 1 min 10 (2 min 25 avec les scènes récentes) : promenade, une IA qui attend, le vrai menu
+#      clic droit et ses sous-menus, la boutique, la fenêtre Amis, le clavier, la photo, une visite chez Léo, la
+#      pluie, deux petits jeux, l'évolution, puis (si ta version les a) le rayon Ensembles, la Défense du bureau,
+#      les Expéditions, la pêche et la cuisine, l'Aventure (lecture, retour, personnage qui parle, épreuve, fin),
+#      un petit mot de Pilou, l'annonce d'un palier de complicité avec le Journal, et enfin le menu de l'icône
+#      près de l'horloge. La souris bouge toute seule : n'y touche pas ;
 #   4. attend la fin réelle de la visite (signal de fin), arrête le film, rouvre cette fenêtre, relance ton Pilou
 #      habituel et crée pilou-ecran-gauche.zip sur le Bureau : la vidéo + chronologie.json (pour chaque étape, son
 #      début et sa fin, et les rectangles à cadrer au montage) + erreurs.txt si quelque chose a raté.
@@ -24,7 +26,8 @@
 # Le décor cache l'écran filmé, mais mets quand même « Ne pas déranger » (une notification Windows passerait
 # devant). Arrêter en cours de route : Alt+Tab vers cette fenêtre, puis Échap (ou Ctrl+C).
 # Il faut une version de Pilou qui connaît --visite-guidee (menu de Pilou → Version → Chercher une mise à jour).
-# Les scènes plus récentes (Défense du bureau, Expéditions, rayon Ensembles de la boutique) sont jouées si la
+# Les scènes plus récentes (Défense du bureau, Expéditions, rayon Ensembles, pêche, cuisine, Aventure, mot,
+# complicité et Journal) sont jouées si la
 # version installée les a, sautées sinon : chronologie.json dit pour chaque étape « jouee » vrai ou faux,
 # et donne la version de Pilou (version_pilou) et la liste de ce qui manque (a_venir).
 param(

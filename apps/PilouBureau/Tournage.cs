@@ -131,8 +131,9 @@ public static class Tournage
             .Select(x => x.i).DefaultIfEmpty(PlusAGauche(ecrans)).First(),
     };
 
-    // Le déroulé de la visite guidée (secondes) : ~1 min 35 en tout, des étapes courtes et enchaînées (2,5 à 4 s ;
-    // un peu plus quand il y a plusieurs choses à voir : menu et sous-menus, boutique, Défense, jeu avec Léo).
+    // Le déroulé de la visite guidée (secondes) : ~1 min 10 sans les scènes récentes, ~2 min 25 avec, des étapes courtes
+    // et enchaînées (2,5 à 4 s ; un peu plus quand il y a plusieurs choses à voir : menu et sous-menus, boutique,
+    // Défense, jeu avec Léo, pêche, personnage qui parle, Journal).
     // Les étapes « optionnelles » montrent des scènes qui n'existent peut-être pas encore dans cet exe : jouées si
     // l'exe les connaît (EssaiConnu, RayonEnsembles), sautées sinon (sans temps mort), et notées jouee: false pour
     // le montage. Elles viennent vers la fin, après les menus et la boutique.
@@ -159,8 +160,15 @@ public static class Tournage
         new("expedition-retour", 4, "expedition:retour", true),
         new("expedition-defaite", 3.5, "expedition:defaite", true),
         new("expedition-journal", 4, "expedition:journal", true),
+        new("peche", 7, "peche", true),                         // la canne : il lance, ça mord (« ! »), la prise s'affiche
+        new("cuisine", 5.5, "cuisine", true),                   // la marmite sur son feu : on remue, le plat est servi
         new("aventure-lecture", 4, "campagne:lecture", true),   // la fenêtre Aventure : Pilou écrit, on choisit
         new("aventure-retour", 3.5, "campagne:retour", true),   // il revient de son attente : une annonce, un signe
+        new("aventure-personnage", 7, "campagne:personnage", true), // décor animé, portrait qui parle, texte lettre à lettre
+        new("aventure-epreuve", 4, "campagne:epreuve", true),   // la carte d'épreuve : Jouer ou laisser faire les dés
+        new("aventure-fin", 5, "campagne:fin", true),           // la fin : récompenses qui tombent, souvenir, emblème
+        new("mot", 5, "mot", true),                             // un petit mot de Pilou dans sa bulle
+        new("complicite", 8, "complicite", true),               // annonce de palier, puis le Journal s'ouvre et se feuillette
         new("icone", 3.5),                     // le menu de l'icône près de l'horloge
         new("fin", 2.5),                       // au revoir
     };
