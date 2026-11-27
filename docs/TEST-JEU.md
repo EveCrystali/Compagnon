@@ -52,7 +52,9 @@ regarder de ses yeux sur un vrai Windows et un vrai téléphone. Le contrat du m
   des retards : carnets identiques à la fin, une fin, versé une fois.
 - **Divergence** au même choix : dans le délai de grâce (10 min), le plus ancien gagne ; au-delà, la base
   la plus avancée l'emporte. Dans les deux cas les carnets se retrouvent identiques et aucun fil ne garde
-  le choix perdant.
+  le choix perdant. Même quand le perdant est **en retard** (son rejeu n'atteint pas l'étape de la base
+  reçue) : la route des décisions montre la séparation et son fil repart de la base reçue (test
+  `Divergence_quand_le_perdant_est_en_retard`, vecteur `divergence-perdant-en-retard`).
 - **Taille des messages au pire** : 20 fins dans l'historique, trois parties suspendues, la plus longue
   marche de chaque campagne mesurée pas à pas.
 
