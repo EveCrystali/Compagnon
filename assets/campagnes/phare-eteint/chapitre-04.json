@@ -50,6 +50,7 @@
       ],
       "options": [
         { "id": "vrai", "libelle": "Dis-lui la vérité", "vers": "ch4a-odile-vrai" },
+        { "id": "lettre", "libelle": "Pose la lettre sans timbre sur son bureau", "vers": "ch4a-odile-vrai", "si": { "objet": "lettre" } },
         { "id": "faux", "libelle": "Joue le touriste", "vers": "ch4a-odile-faux" }
       ]
     },

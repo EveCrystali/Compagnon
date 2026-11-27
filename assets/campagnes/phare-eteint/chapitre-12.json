@@ -12,9 +12,9 @@
       ],
       "issues": [
         { "poids": 1, "vers": "ch9-g-passe", "si": { "drapeau": "issue-aveu" } },
-        { "poids": 1, "vers": "ch9-a-caisse", "si": { "drapeau": "issue-auto" } },
-        { "poids": 1, "vers": "ch9-s-retour", "si": { "drapeau": "issue-sursis" } },
-        { "poids": 1, "vers": "ch9-f-scelles", "si": { "drapeau": "issue-faux" } }
+        { "poids": 1, "vers": "ch9-a-caisse", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "drapeau": "issue-auto" } ] } },
+        { "poids": 1, "vers": "ch9-s-retour", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "non": { "drapeau": "issue-auto" } }, { "drapeau": "issue-sursis" } ] } },
+        { "poids": 1, "vers": "ch9-f-scelles", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "non": { "drapeau": "issue-auto" } }, { "non": { "drapeau": "issue-sursis" } } ] } }
       ]
     },
     "ch9-g-passe": {
@@ -328,7 +328,8 @@
       ],
       "options": [
         { "id": "corne", "libelle": "La corne, sur la jetée, toute la nuit", "vers": "ch9-f-corne" },
-        { "id": "rallumer", "libelle": "Le Souffleur : on monte, et on rallume", "vers": "ch9-f-trois" }
+        { "id": "rallumer", "libelle": "Le Souffleur : on monte, et on rallume", "vers": "ch9-f-trois" },
+        { "id": "clef", "libelle": "La porte du charbon : tu as gardé la clef. On rallume", "vers": "ch9-f-trois", "si": { "objet": "clef-service" } }
       ]
     },
     "ch9-f-corne": {
@@ -364,7 +365,7 @@
       "decor": "lanterne-du-phare",
       "humeur": "peur",
       "texte": [
-        "On est passés par le Souffleur, Lison devant, moi accroché à sa natte comme à une corde de rappel. Elle a allumé la lampe et réglé le cadran en lisant les chiffres à voix haute, avec ses yeux tout neufs : onze à gauche, deux à droite. Je l'ai regardée faire, il n'y a pas d'erreur. La grande lentille tourne. Je suis sur la galerie, face à la nuit, et je compte. Un éclat. Deux éclats. Trois éclats. Le noir.",
+        "On est entrés par en bas, Lison devant, moi accroché à sa natte comme à une corde de rappel. Elle a allumé la lampe et réglé le cadran en lisant les chiffres à voix haute, avec ses yeux tout neufs : onze à gauche, deux à droite. Je l'ai regardée faire, il n'y a pas d'erreur. La grande lentille tourne. Je suis sur la galerie, face à la nuit, et je compte. Un éclat. Deux éclats. Trois éclats. Le noir.",
         "Trois. Je recompte. Un, deux, trois. Lison a tout fait juste, et le feu dit le nom d'un autre phare. Alors ce n'étaient pas les yeux d'Anselme. Ni ses doigts. C'est la machine. Quelqu'un a touché à la machine ! Et moi, cet après-midi, j'ai montré du doigt… Là-bas, dans la brume, un premier feu de mât vient d'apparaître. Il cherche la Dent. Il va trouver trois éclats."
       ],
       "suite": "fin-eteint"

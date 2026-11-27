@@ -28,12 +28,12 @@
     { "id": "coquillage", "nom": "Coquillage rose" },
     { "id": "clef-service", "nom": "Clef de service du phare" },
     { "id": "pages-carnet", "nom": "Pages arrachées du carnet de veille" },
-    { "id": "casquette-gardien", "nom": "Casquette de gardien" },
-    { "id": "corne-de-poche", "nom": "Corne de brume de poche" },
-    { "id": "cire-jaune", "nom": "Petit ciré jaune" },
-    { "id": "sifflet-lison", "nom": "Sifflet de Lison" },
-    { "id": "galet-machoire", "nom": "Galet de la Mâchoire" },
-    { "id": "eteignoir", "nom": "Éteignoir de cuivre" }
+    { "id": "casquette-gardien", "nom": "Casquette de gardien", "portable": true, "emplacement": "tete" },
+    { "id": "corne-de-poche", "nom": "Corne de brume de poche", "portable": true, "emplacement": "main" },
+    { "id": "cire-jaune", "nom": "Petit ciré jaune", "portable": true, "emplacement": "dos" },
+    { "id": "sifflet-lison", "nom": "Sifflet de Lison", "portable": true, "emplacement": "cou" },
+    { "id": "galet-machoire", "nom": "Galet de la Mâchoire", "portable": true, "emplacement": "main" },
+    { "id": "eteignoir", "nom": "Éteignoir de cuivre", "portable": true, "emplacement": "tete" }
   ],
   "souvenirs": [
     { "id": "tout-le-monde-savait", "nom": "Tout le monde savait", "texte": "Un phare, un gardien, et un village entier pour lui tenir la main." },

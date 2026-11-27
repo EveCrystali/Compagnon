@@ -14,7 +14,7 @@
         { "id": "dessous", "libelle": "Passe dessous sans un bruit", "vers": "ch7-seau", "effets": [ { "var": "courage", "plus": 1 } ] },
         { "id": "tinter", "libelle": "Fais tinter les coquillages", "vers": "ch7-seau", "effets": [ { "var": "confiance", "plus": 1 } ] },
         { "id": "rappel", "libelle": "Appelle : « C'est moi, je t'avais dit que je viendrais ! »", "vers": "ch7-seau", "si": { "drapeau": "rdv-lison" }, "effets": [ { "var": "confiance", "plus": 1 } ] },
-        { "id": "pages", "libelle": "Pose les pages sur une marche, bien en vue, et sonne", "vers": "ch7-seau", "si": { "drapeau": "pages-volees" }, "effets": [ { "objet": "pages-carnet", "donne": false }, { "var": "confiance", "plus": 2 } ] }
+        { "id": "pages", "libelle": "Pose les pages sur une marche, bien en vue, et sonne", "vers": "ch7-seau", "si": { "objet": "pages-carnet" }, "effets": [ { "objet": "pages-carnet", "donne": false }, { "var": "confiance", "plus": 2 } ] }
       ]
     },
     "ch7-seau": {
@@ -222,7 +222,7 @@
       ],
       "options": [
         { "id": "jurer", "libelle": "Jure, petit doigt contre petit doigt", "vers": "ch7-fin", "effets": [ { "drapeau": "promesse" }, { "var": "confiance", "plus": 2 } ] },
-        { "id": "franchise", "libelle": "Ne jure pas : promets seulement de ne rien faire dans son dos", "vers": "ch7-fin", "effets": [ { "var": "confiance", "plus": 1 } ] }
+        { "id": "franchise", "libelle": "Ne jure pas : promets de ne rien faire dans son dos", "vers": "ch7-fin", "effets": [ { "var": "confiance", "plus": 1 } ] }
       ]
     },
     "ch7-fin": {

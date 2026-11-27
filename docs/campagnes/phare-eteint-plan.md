@@ -152,7 +152,8 @@ check-points juste avant les passages dangereux.
 
 | Posé | Où | Paie |
 |---|---|---|
-| lettre brûlée / objet `lettre` | ch1 | confiance +1 si elle est brûlée |
+| lettre brûlée / objet `lettre` | ch1 | confiance +1 si elle est brûlée ; gardée, on peut la poser sur le bureau d'Odile (ch4a) |
+| objet `clef-service` | ch5a | ch9 (« Celui qui éteint ») : entrer par la porte du charbon |
 | `air-siffle` | ch1 (écouter le suiveur) | ch7 : option « siffle son air » face au seau |
 | objet `coquillage` | ch2 (épreuve réussie, aller le chercher) | ch7 : option « montre-lui le coquillage » |
 | `trois-coups` | ch2 (hangar, suivre Tudal) | ch8 : reconnaître son signal et ouvrir sans fâcher Lison |
@@ -164,7 +165,7 @@ check-points juste avant les passages dangereux.
 | `c-came` | ch7 (machine) | ch8 : Anselme vient à la réunion (version A) ; ch9 : adieu à Lison |
 | `promesse` | ch7 | ch9 : fin « Le feu automatique », pardon demandé à Lison |
 | `k-…` (les quatre) | partout | ch9 : option de la fin secrète |
-| `issue-aveu`, `issue-auto`, `issue-sursis`, `issue-faux` | ch8 | ch9 : laquelle des quatre nuits |
+| `issue-aveu`, `issue-auto`, `issue-sursis` | ch8 | ch9 : laquelle des quatre nuits (aucun des trois : celle du faux coupable) |
 | `vu-machine`, `vu-carnet`, `vu-lettres`, `deuxieme-bougie` | ch7 | ch7 : la seconde fouille ne repropose pas la première |
 
 Variables : `courage` (bonus des épreuves d'audace), `confiance` (celle de Lison ; bonus de la dernière
@@ -229,8 +230,9 @@ perdre le compte de la signature (ch9).
 300/150 (secrète), 240/120 (bonne), 160/80 (douces-amères), 80/40 (mauvaises). Meilleur parcours :
 500 po et 246 xp. Chaque fin donne un titre, un objet à porter et un souvenir.
 
-## Chiffres (script de vérification de l'auteur, hors dépôt)
+## Chiffres
 
-186 nœuds, 19 500 mots environ, 52 choix, 42 attentes (dont 9 longues), 8 épreuves, 10 échecs, 6 fins.
-Par parcours sans échec : 32 à 34 choix, 17 à 19 attentes dont 4 ou 5 longues, 7 200 à 8 800 mots lus,
-11 à 15 heures d'attente réelle.
+186 nœuds, 52 choix, 42 attentes (dont 9 longues), 8 épreuves, 10 échecs, 6 fins ; 18 500 mots selon
+`outils/campagnes/valider.py`, 19 500 en comptant chaque signe de ponctuation isolé. Par parcours, sans
+recompter ce qui est rejoué après un échec : 32 à 34 choix, 17 à 19 attentes dont 4 ou 5 longues,
+7 000 à 8 800 mots lus, 11 à 15 heures d'attente réelle (jusqu'à 25 avec beaucoup d'échecs).

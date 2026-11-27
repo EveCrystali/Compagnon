@@ -14,7 +14,7 @@
       "options": [
         { "id": "ouvrir", "libelle": "Fais glisser la barre : ouvre", "vers": "ch8-tudal-entre", "effets": [ { "var": "confiance", "plus": -1 } ] },
         { "id": "ecouter", "libelle": "N'ouvre pas : écoute à travers la porte", "vers": "ch8-tudal-porte" },
-        { "id": "signal", "libelle": "Rassure Lison : trois coups, c'est le signal de Tudal. Puis ouvre", "vers": "ch8-tudal-entre", "si": { "drapeau": "trois-coups" }, "effets": [ { "var": "confiance", "plus": 1 } ] }
+        { "id": "signal", "libelle": "Rassure Lison : c'est le signal de Tudal. Puis ouvre", "vers": "ch8-tudal-entre", "si": { "drapeau": "trois-coups" }, "effets": [ { "var": "confiance", "plus": 1 } ] }
       ]
     },
     "ch8-tudal-entre": {
@@ -198,7 +198,6 @@
     "ch8-faux-tudal": {
       "type": "recit",
       "humeur": "triste",
-      "effets": [ { "drapeau": "issue-faux" } ],
       "texte": [
         "J'ai dit Tudal. Les bidons, les nuits sans lanterne, la coque éraflée. Il ne s'est pas défendu. Il a décroisé ses grands bras et il a dit : « Les bidons, c'est de l'huile de lampe. Je la paie avec des homards que j'ai pas le droit de pêcher. Voilà, c'est dit, verbalisez. » Et il est sorti. La porte a claqué si fort que le ciré jaune est tombé du portemanteau.",
         "Vernier a noté le braconnage. Puis il m'a regardé, presque triste. « Un homme qui paie l'huile d'un phare ne l'éteint pas, monsieur. Vous m'avez donné un coupable. Pas une explication. » Il a ouvert sa serviette, sorti l'ordre, et signé. Dans la salle, plus personne ne me regardait. J'aurais préféré qu'on me crie dessus."
@@ -208,7 +207,6 @@
     "ch8-faux-odile": {
       "type": "recit",
       "humeur": "triste",
-      "effets": [ { "drapeau": "issue-faux" } ],
       "texte": [
         "J'ai dit la maire. L'ordre de fermeture, l'hôtel, les papiers cachés. Odile s'est levée, toute droite. Elle a sorti de son sac une feuille pliée et l'a lue : « Messieurs de l'Hôtel du Grand Large : le phare de Trébrume n'est pas à vendre, ni éteint, ni allumé. » Datée du printemps. Puis l'ordre d'inspection, tamponné deux fois REPORTÉE. « Voilà ce que je cachais. »",
         "Elle a retiré son écharpe et l'a posée sur la table. Vernier a regardé les tampons, puis moi, presque triste. « Une maire qui retarde une fermeture de six mois n'éteint pas son phare, monsieur. Vous m'avez donné un coupable. Pas une explication. » Il a sorti l'ordre et il a signé. Dans la salle, plus personne ne me regardait. J'aurais préféré qu'on me crie dessus."
