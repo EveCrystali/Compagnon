@@ -45,7 +45,11 @@ public sealed partial class FenetrePilou
         Soins.Ajouter(_profil.Soins, Soins.Action(type, Epoque, objet));
         _profil.Ecrire(DossierPartage);
         SoinsChanges();
-        if (type is "soin" or "nourrir" or "laver" or "calin") Signaler("soin", 1);
+        if (type is "soin" or "nourrir" or "laver" or "calin")
+        {
+            Signaler("soin", 1);
+            Vecu(f => f.So++, "soins");
+        }
     }
 
     // Le meilleur en-cas possédé (consommé), sinon des croquettes gratuites.

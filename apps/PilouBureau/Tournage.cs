@@ -180,6 +180,7 @@ public static class Tournage
         "visite:depart", "visite:arrivee", "visite:jeu", "visite:retour",
         "expedition:depart", "expedition:retour", "expedition:defaite", "expedition:journal",
         "campagne:lecture", "campagne:attente", "campagne:retour", "campagne:epreuve", "campagne:fin",
+        "mot", "journal", "complicite",
     };
 
     // Familles à paramètre (--essai=stade:3, tenue:code, objet:cape, soins:faim, meteo:pluie:parapluie, campagne:prologue).
