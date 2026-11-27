@@ -1,0 +1,62 @@
+{
+  "name": "pilou-vscode",
+  "displayName": "Pilou — erreurs du fichier ouvert",
+  "description": "Montre à Pilou, ton compagnon de bureau, combien d'erreurs et d'avertissements a le fichier ouvert. Rien ne quitte la machine (API locale 127.0.0.1).",
+  "version": "0.9.0",
+  "publisher": "pilou",
+  "license": "SEE LICENSE IN README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EveCrystali/Compagnon.git",
+    "directory": "integrations/vscode"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Pilou",
+      "properties": {
+        "pilou.actif": {
+          "type": "boolean",
+          "default": true,
+          "description": "Envoyer à Pilou le compte d'erreurs et d'avertissements du fichier actif."
+        },
+        "pilou.port": {
+          "type": "number",
+          "default": 0,
+          "description": "Port de l'API locale de Pilou (0 : celui de reglages.json, sinon 47821)."
+        },
+        "pilou.jeton": {
+          "type": "string",
+          "default": "",
+          "description": "Jeton de l'API locale (vide : lu dans %USERPROFILE%\\.claude\\compagnon\\reglages.json). Pilou → Connecteurs… → Copier le jeton."
+        },
+        "pilou.envoyerMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Envoyer aussi le premier message d'erreur (chemins retirés, 160 caractères au plus). Pilou ne l'affiche que si sa case « Premier message d'erreur » est cochée."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node --test test/pilou.test.js",
+    "package": "vsce package --no-dependencies --skip-license -o pilou-vscode.vsix"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "@types/vscode": "1.80.0",
+    "@vscode/vsce": "3.9.2",
+    "typescript": "5.9.3"
+  }
+}
