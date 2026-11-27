@@ -40,10 +40,10 @@ final class PageReglages extends Page {
         // ---- Appairage
         corps.addView(Ui.titreSection(a, "Appairage avec le PC"));
         LinearLayout c = Ui.carte(a);
-        statut = Ui.texte(a, "", 15, p.texte, true);
+        statut = Ui.texte(a, "", Ui.T_CORPS, p.texte, true);
         c.addView(statut);
         TextView aide = Ui.texte(a, "Sur le PC : clic droit sur Pilou → Intégrations → Android : appairer. Vise le QR code avec l'appareil photo, "
-                + "ou tape le code ici. Le même code relie tous tes appareils (XP partagée).", 13, p.doux, false);
+                + "ou tape le code ici. Le même code relie tous tes appareils (XP partagée).", Ui.T_DETAIL, p.doux, false);
         aide.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 6));
         c.addView(aide);
         champCode = champ(a, "XXXX-XXXX-XXXX-XXXX", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -79,7 +79,7 @@ final class PageReglages extends Page {
         LinearLayout taille = Ui.rangee(a);
         taille.setPadding(Ui.dp(a, 4), Ui.dp(a, 8), 0, 0);
         LinearLayout gauche = Ui.pile(a);
-        gauche.addView(Ui.texte(a, "Taille", 16, p.texte, false));
+        gauche.addView(Ui.texte(a, "Taille", Ui.T_CORPS, p.texte, false));
         SeekBar curseur = new SeekBar(a);
         int min = Math.round(Prefs.TAILLE_MIN * 100), max = Math.round(Prefs.TAILLE_MAX * 100);
         curseur.setMax(max - min);
@@ -144,7 +144,14 @@ final class PageReglages extends Page {
         Ui.interrupteur(a, c, "Une session a fini", "Fin de tour ou erreur", Prefs.alerteFin(a),
                 oui -> Prefs.de(a).edit().putBoolean("alerteFin", oui).apply());
         c.addView(Ui.separateur(a));
+        Ui.interrupteur(a, c, "Retours de Pilou (aventures)", "Une seule notification quand il revient d'une étape, jamais de relance",
+                Prefs.alerteAventure(a), oui -> {
+                    Prefs.de(a).edit().putBoolean("alerteAventure", oui).apply();
+                    new Thread(() -> Retour.programmer(a.getApplicationContext()), "pilou-retour").start();
+                });
+        c.addView(Ui.separateur(a));
         Ui.interrupteur(a, c, "Mises à jour de Pilou", "Une fois par jour au plus", Prefs.alerteMaj(a),
+
                 oui -> Prefs.de(a).edit().putBoolean("alerteMaj", oui).apply());
         c.addView(Ui.separateur(a));
         autoriser = Ui.bouton(a, "Autoriser les notifications", true, v -> a.demanderNotifications());
@@ -186,13 +193,13 @@ final class PageReglages extends Page {
         // ---- Diagnostic
         corps.addView(Ui.titreSection(a, "Diagnostic"));
         c = Ui.carte(a);
-        dernier = Ui.texte(a, "", 14, p.texte, false);
+        dernier = Ui.texte(a, "", Ui.T_CORPS, p.texte, false);
         c.addView(dernier);
         c.addView(Ui.ligne(a, "Copier le diagnostic", "À coller dans un message pour signaler un souci", 0, v -> copier("Diagnostic de Pilou", diagnostic())));
         blocPlantage = Ui.pile(a);
         blocPlantage.addView(Ui.separateur(a));
-        blocPlantage.addView(Ui.texte(a, "Dernier plantage", 15, p.orange, true));
-        plantage = Ui.texte(a, "", 12, p.doux, false);
+        blocPlantage.addView(Ui.texte(a, "Dernier plantage", Ui.T_CORPS, p.orange, true));
+        plantage = Ui.texte(a, "", Ui.T_ETIQUETTE, p.doux, false);
         plantage.setTypeface(Typeface.MONOSPACE);
         plantage.setTextIsSelectable(true);
         plantage.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 8));
@@ -217,12 +224,12 @@ final class PageReglages extends Page {
         c.addView(Ui.texte(a, "Pilou, un petit compagnon qui vit en bas de ton écran. Il mène sa petite vie sans te déranger, "
                 + "grandit pendant que tu travailles, joue, mange, pêche, cuisine et chasse les bugs avec toi ; "
                 + "tout le reste est en option, pour le personnaliser. Et au passage, branché à tes applis "
-                + "(IA de code, Discord, musique, agenda…), il te prévient de ce qui compte.", 14, p.texte, false));
+                + "(IA de code, Discord, musique, agenda…), il te prévient de ce qui compte.", Ui.T_CORPS, p.texte, false));
         c.addView(Ui.ligne(a, "Code source", "github.com/EveCrystali/Compagnon", 0,
                 v -> a.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(DEPOT)))));
         c.addView(Ui.separateur(a));
         TextView lic = Ui.texte(a, "Logiciel libre. Aucune bibliothèque tierce : seulement le framework Android. "
-                + "Relais : ntfy (logiciel libre), messages chiffrés de bout en bout (AES-256-GCM).", 12, p.doux, false);
+                + "Relais : ntfy (logiciel libre), messages chiffrés de bout en bout (AES-256-GCM).", Ui.T_ETIQUETTE, p.doux, false);
         lic.setPadding(Ui.dp(a, 4), Ui.dp(a, 6), Ui.dp(a, 4), 0);
         c.addView(lic);
         corps.addView(c, Ui.large());

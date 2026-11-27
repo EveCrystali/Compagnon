@@ -30,4 +30,15 @@ abstract class Page extends FrameLayout {
     void montree() {
         rafraichir();
     }
+
+    /** Touche « retour » : vrai si la page l'a prise pour elle (revenir d'un sous-écran). */
+    boolean retour() {
+        return false;
+    }
+
+    /** On touche l'onglet déjà ouvert : retour en haut de la page. */
+    void retourHaut() {
+        defile.smoothScrollTo(0, 0);
+    }
+
 }

@@ -148,6 +148,20 @@ public final class PilouVue extends View {
         debutSaut = SystemClock.uptimeMillis();
     }
 
+    private boolean marque;
+    private final android.graphics.Paint pinceauMarque = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+
+    /** Un petit « ! » orange en haut à droite : Pilou est revenu de son aventure et attend (bulle flottante). */
+    public void marque(boolean oui) {
+        if (oui == marque) return;
+        marque = oui;
+        invalidate();
+    }
+
+    public boolean marque() {
+        return marque;
+    }
+
     public void animer(boolean oui) {
         anime = oui;
         invalidate();
@@ -196,7 +210,22 @@ public final class PilouVue extends View {
         } else {
             Dessin.dessiner(cv, 0, 0, p, a);
         }
+        if (marque) {
+            // Pastille orange, texte sombre (contraste ≥ 4,5:1), qui bat doucement.
+            float r = Math.max(p * 3.2f, getWidth() * 0.11f), cx = getWidth() - r - p * 0.5f, cy = r + p * 0.5f;
+            float k = anime ? 1 + 0.08f * (float) Math.sin(t / 260.0) : 1;
+            pinceauMarque.setColor(0xff1c2128);
+            cv.drawCircle(cx, cy, r * k + p * 0.6f, pinceauMarque);
+            pinceauMarque.setColor(0xfff69d50);
+            cv.drawCircle(cx, cy, r * k, pinceauMarque);
+            pinceauMarque.setColor(0xff1c2128);
+            pinceauMarque.setTextAlign(android.graphics.Paint.Align.CENTER);
+            pinceauMarque.setTextSize(r * 1.5f);
+            pinceauMarque.setFakeBoldText(true);
+            cv.drawText("!", cx, cy + r * 0.52f, pinceauMarque);
+        }
         if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
+
     }
 
     /** Il boude (comme sur le PC) : moue et sourcils au repos, nuage gris, bras croisés du Nimbus, dos tourné

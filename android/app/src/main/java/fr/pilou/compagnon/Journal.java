@@ -11,6 +11,7 @@ import java.util.Locale;
 /** Garde la trace du dernier plantage (affichée dans l'app, à copier pour un rapport de bug). */
 public final class Journal {
     private static boolean pose;
+    private static Context appli;
 
     private Journal() {
     }
@@ -19,6 +20,7 @@ public final class Journal {
         if (pose) return;
         pose = true;
         Context app = c.getApplicationContext();
+        appli = app;
         Thread.UncaughtExceptionHandler avant = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler((fil, e) -> {
             try {
@@ -38,6 +40,26 @@ public final class Journal {
             }
             if (avant != null) avant.uncaughtException(fil, e);
         });
+    }
+
+    /** Une erreur rattrapée (l'app continue) : gardée pour le diagnostic, sans rien montrer au joueur. */
+    public static void noter(String quoi, Throwable e) {
+        Context app = appli;
+        if (app == null) return;
+        try {
+            String quand = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT).format(new Date());
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String texte = quand + " · " + quoi + " · " + sw;
+            Prefs.de(app).edit().putString("erreur", texte.length() > 3000 ? texte.substring(0, 3000) : texte).apply();
+        } catch (Throwable ignore) {
+            // le journal ne doit jamais faire tomber l'app
+        }
+    }
+
+    /** La dernière erreur rattrapée ("" : aucune). */
+    public static String erreur(Context c) {
+        return Prefs.de(c).getString("erreur", "");
     }
 
     public static String dernier(Context c) {

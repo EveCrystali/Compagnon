@@ -37,7 +37,209 @@ public final class CampagnesTel {
     private static String lu = null;
     private static Campagnes.Carnet cache;
 
+    /** L'horloge des campagnes (ms Unix) : les tests l'avancent à la main pour traverser une attente. */
+    static volatile java.util.function.LongSupplier horloge = System::currentTimeMillis;
+
     private CampagnesTel() {
+    }
+
+    public static long maintenant() {
+        return horloge.getAsLong();
+    }
+
+    /** Les campagnes embarquées sont-elles lues ? (la première lecture se fait hors du fil d'interface : precharger) */
+    private static volatile boolean pretes;
+
+    public static boolean pretes() {
+        return pretes;
+    }
+
+    /** Lit toutes les campagnes embarquées, une fois ; puis fait (sur le fil d'interface) ce qu'on lui donne. */
+    public static void precharger(Runnable ensuite) {
+        if (pretes) {
+            if (ensuite != null) ensuite.run();
+            return;
+        }
+        android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
+        new Thread(() -> {
+            try {
+                for (String id : Campagnes.disponibles()) Campagnes.charger(id);
+            } catch (RuntimeException e) {
+                Journal.noter("campagnes", e);
+            }
+            pretes = true;
+            if (ensuite != null) h.post(ensuite);
+        }, "pilou-campagnes-lecture").start();
+    }
+
+    /** Pour les tests : lit tout de suite, sur ce fil. */
+    static void prechargerMaintenant() {
+        for (String id : Campagnes.disponibles()) Campagnes.charger(id);
+        pretes = true;
+    }
+
+    /** Pour les tests : la graine des prochaines parties (null : tirée au hasard). */
+    static volatile String graineEssai;
+
+    /** Les campagnes à proposer, dans l'ordre du joueur : le prologue d'abord, puis par niveau requis. */
+    public static List<Campagnes.Campagne> catalogue() {
+        List<Campagnes.Campagne> l = new java.util.ArrayList<>();
+        for (String id : Campagnes.disponibles()) {
+            Campagnes.Campagne x = Campagnes.charger(id);
+            if (x != null) l.add(x);
+        }
+        java.util.Collections.sort(l, (a, b) -> a.id.equals("prologue") ? -1 : b.id.equals("prologue") ? 1
+                : a.niveau != b.niveau ? Integer.compare(a.niveau, b.niveau) : a.titre.compareTo(b.titre));
+        return l;
+    }
+
+    /** Nombre de fins d'une campagne. */
+    public static int nombreFins(Campagnes.Campagne c) {
+        int n = 0;
+        for (Campagnes.Noeud x : c.noeuds.values()) if (x.type.equals("fin")) n++;
+        return n;
+    }
+
+    /** Les nœuds de fin, dans l'ordre des chapitres puis des identifiants (pour la grille des fins « ? ? ? »). */
+    public static List<Campagnes.Noeud> finsDe(Campagnes.Campagne c) {
+        List<Campagnes.Noeud> l = new java.util.ArrayList<>();
+        for (Campagnes.Noeud x : c.noeuds.values()) if (x.type.equals("fin")) l.add(x);
+        java.util.Collections.sort(l, (a, b) -> {
+            int ia = rangChapitre(c, a.chapitre), ib = rangChapitre(c, b.chapitre);
+            return ia != ib ? Integer.compare(ia, ib) : a.id.compareTo(b.id);
+        });
+        return l;
+    }
+
+    static int rangChapitre(Campagnes.Campagne c, String chapitre) {
+        for (int i = 0; i < c.chapitres.size(); i++) if (c.chapitres.get(i).id.equals(chapitre)) return i;
+        return -1;
+    }
+
+    /** La partie en cours (ou null), telle que le carnet la garde. */
+    public static synchronized Campagnes.Partie courante(Context c) {
+        return carnet(c).courante;
+    }
+
+    /** Le lieu où Pilou reprendra après un repos ou une partie mise de côté : celui du dernier check-point. */
+    /** L'état au dernier check-point (là où Pilou reprendra) : le dernier point naturel du rejeu, sinon la base. */
+    public static Campagnes.Instantane pointReprise(Campagnes.Partie p, Campagnes.Etat e) {
+        Campagnes.Instantane x = null;
+        if (e != null) for (Campagnes.Point pt : e.points) if (pt.naturel) x = pt.base.ici;
+        if (x == null && p != null) x = p.cp != null && !p.abandonnee ? p.cp : p.ici;
+        return x;
+    }
+
+    /** Le numéro du chapitre (à partir de 1) où Pilou reprendra ; 0 s'il est inconnu. */
+    public static int chapitreReprise(Campagnes.Campagne c, Campagnes.Partie p, Campagnes.Etat e) {
+        Campagnes.Instantane x = pointReprise(p, e);
+        String id = x == null ? null : c.decode('n', x.n);
+        Campagnes.Noeud n = id == null ? null : c.noeud(id);
+        return n == null ? 0 : rangChapitre(c, n.chapitre) + 1;
+    }
+
+    public static synchronized String lieuReprise(Campagnes.Campagne c, Campagnes.Partie p, Campagnes.Etat e) {
+        Campagnes.Instantane x = pointReprise(p, e);
+        if (x == null) return "";
+        String noeud = c.decode('n', x.n);
+        Campagnes.Noeud n = noeud == null ? null : c.noeud(noeud);
+        if (n != null && !n.lieu.isEmpty()) return n.lieu;
+        String de = x.lieu.isEmpty() ? null : c.decode('n', x.lieu);
+        Campagnes.Noeud l = de == null ? null : c.noeud(de);
+        return l == null ? "" : l.lieu;
+    }
+
+    /** Le lieu de reprise d'une partie mise de côté (son « ici » est le check-point). */
+    public static String lieuReprise(Campagnes.Campagne c, Campagnes.Partie p) {
+        return lieuReprise(c, p, null);
+    }
+
+    /** Le tirage des dés de l'épreuve en cours (0 à 99) : celui que fera auDe ; réussi s'il est sous e.chance. */
+    public static synchronized int tirageDe(Context c, Campagnes.Etat e) {
+        Campagnes.Partie p = carnet(c).courante;
+        if (p == null || e == null) return 0;
+        return Campagnes.tirage(p.graine, e.tirages).suivant(100);
+    }
+
+    /**
+     * Le fil de la campagne courante : ses messages (et ceux des parties qu'elle reprend, à la suite), les plus anciens
+     * d'abord. Le carnet ne dit pas à quelle campagne appartient une partie passée : le téléphone le note au passage.
+     */
+    public static synchronized List<Campagnes.Message> fil(Context c, String campagne) {
+        Campagnes.Carnet k = carnet(c);
+        noterParties(c, k);
+        java.util.Set<Integer> parties = new java.util.HashSet<>();
+        String chaine = p(c).getString("campParties", "");
+        // « p:campagne:r » ; r = 1 si la partie en reprend une autre (même fil), 0 si elle repart du début.
+        java.util.List<String[]> l = new java.util.ArrayList<>();
+        for (String s : chaine.split(";")) {
+            String[] x = s.split(":");
+            if (x.length == 3) l.add(x);
+        }
+        java.util.Collections.sort(l, (a, b) -> Integer.compare(entier(b[0]), entier(a[0])));
+        for (String[] x : l) {
+            if (!x[1].equals(campagne)) continue;
+            parties.add(entier(x[0]));
+            if (x[2].equals("0")) break;
+        }
+        List<Campagnes.Message> r = new java.util.ArrayList<>();
+        for (Campagnes.Message m : k.fil) if (parties.contains(m.p)) r.add(m);
+        return r;
+    }
+
+    private static int entier(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private static void noterParties(Context c, Campagnes.Carnet k) {
+        Campagnes.Partie q = k.courante;
+        if (q == null) return;
+        String chaine = p(c).getString("campParties", "");
+        String cle = q.p + ":";
+        if (chaine.startsWith(cle) || chaine.contains(";" + cle)) return;
+        String neuve = q.p + ":" + q.campagne + ":" + (q.reprise ? 1 : 0);
+        // Les 40 dernières parties suffisent (le fil n'en garde pas plus).
+        String[] avant = chaine.isEmpty() ? new String[0] : chaine.split(";");
+        StringBuilder b = new StringBuilder(neuve);
+        for (int i = 0; i < Math.min(39, avant.length); i++) b.append(';').append(avant[i]);
+        p(c).edit().putString("campParties", b.toString()).apply();
+    }
+
+    /** Messages de Pilou pas encore lus. */
+    public static synchronized int nonLus(Context c) {
+        return carnet(c).nonLus();
+    }
+
+    /** Ce message est-il nouveau (pas encore lu) ? */
+    public static synchronized boolean nonLu(Context c, Campagnes.Message m) {
+        return Campagnes.nonLu(carnet(c), m);
+    }
+
+    /** Pilou attend le joueur (il a écrit et rien n'est lu, ou il a besoin d'une décision) : le « ! » de l'onglet et de la bulle. */
+    public static boolean attendJoueur(Context c, Campagnes.Etat e) {
+        if (e == null) return false;
+        boolean geste = e.phase == Campagnes.Phase.Choix || e.phase == Campagnes.Phase.Depart || e.phase == Campagnes.Phase.Epreuve;
+        return geste || (e.phase == Campagnes.Phase.Fin && nonLus(c) > 0);
+    }
+
+    /** « Pilou longe la falaise · retour vers 15 h 40 », en plus court pour la bulle : « en route · retour 15 h 40 ». */
+    public static String heure(long ms) {
+        java.util.Calendar k = java.util.Calendar.getInstance();
+        k.setTimeInMillis(ms);
+        return k.get(java.util.Calendar.HOUR_OF_DAY) + " h " + String.format(java.util.Locale.ROOT, "%02d", k.get(java.util.Calendar.MINUTE));
+    }
+
+    /** « 12 min », « 1 h 05 », « moins d'une minute » : ce qu'il reste avant ms. */
+    public static String reste(long ms) {
+        long s = Math.max(0, ms) / 1000;
+        if (s < 60) return "moins d'une minute";
+        long m = (s + 59) / 60;
+        if (m < 60) return m + " min";
+        return (m / 60) + " h " + String.format(java.util.Locale.ROOT, "%02d", m % 60);
     }
 
     private static SharedPreferences p(Context c) {
@@ -57,6 +259,8 @@ public final class CampagnesTel {
     private static String garde = "";
 
     private static synchronized void garder(Context c, Campagnes.Carnet k) {
+        noterParties(c, k);
+
         // L'interface demande l'état souvent : on ne réécrit le carnet que s'il a changé.
         String empreinte = Campagnes.signature(k) + "|" + k.fil.size() + "|" + k.lu + "|" + k.payesPc.size();
         if (k == cache && empreinte.equals(garde)) return;
@@ -81,7 +285,7 @@ public final class CampagnesTel {
     /** L'état courant : le temps passe (attente finie, repos fini), l'historique et le fil se complètent. */
     public static synchronized Campagnes.Etat etat(Context c) {
         Campagnes.Carnet k = carnet(c);
-        Campagnes.Etat e = Campagnes.actualiser(k, Campagnes::charger, System.currentTimeMillis());
+        Campagnes.Etat e = Campagnes.actualiser(k, Campagnes::charger, maintenant());
         garder(c, k);
         return e;
     }
@@ -119,10 +323,11 @@ public final class CampagnesTel {
         Campagnes.Carnet k = carnet(c);
         Campagnes.Campagne campagne = id != null ? Campagnes.charger(id) : k.courante == null ? null : Campagnes.charger(k.courante.campagne);
         if (campagne == null) return id == null ? "aucune partie en cours" : "campagne inconnue";
-        String r = d.sur(k, campagne, System.currentTimeMillis(), appareil(c));
+        String r = d.sur(k, campagne, maintenant(), appareil(c));
         if (r == null) {
             garder(c, k);
             Context app = c.getApplicationContext();
+            Retour.programmer(app); // la notification de retour suit l'attente qui commence (ou s'annule)
             new Thread(() -> synchroniser(app), "pilou-campagnes").start(); // les PC du groupe l'apprennent sans attendre
         }
         return r;
@@ -131,7 +336,8 @@ public final class CampagnesTel {
     /** Démarre la campagne, ou la reprend à son dernier check-point (neuf : depuis le début quand même). */
     public static String demarrer(Context c, String id, boolean neuf) {
         int niveau = Gains.niveau(c, Prefs.etat(c));
-        return decider(c, id, false, (k, campagne, t, a) -> Campagnes.demarrer(k, campagne, niveau, t, a, Campagnes::charger, null, neuf));
+        return decider(c, id, false, (k, campagne, t, a) -> Campagnes.demarrer(k, campagne, niveau, t, a, Campagnes::charger, graineEssai, neuf));
+
     }
 
     public static String choisir(Context c, String option) {
@@ -197,6 +403,8 @@ public final class CampagnesTel {
     public static void synchroniser(Context c) {
         String code = Prefs.code(c);
         if (!Chiffre.valide(code)) return;
+        if ("robolectric".equals(android.os.Build.FINGERPRINT)) return; // tests : jamais de relais réel
+
         String base;
         try {
             base = Prefs.relais(c).replaceAll("/+$", "") + "/" + Campagnes.sujet(code);
@@ -216,14 +424,15 @@ public final class CampagnesTel {
                         JSONObject ev = new JSONObject(ligne);
                         if (!"message".equals(ev.optString("event"))) continue;
                         if (!ev.optString("id").isEmpty()) dernier = ev.optString("id");
-                        Campagnes.recevoir(k, Chiffre.dechiffrer(code, ev.optString("message")), moi, Campagnes::charger, System.currentTimeMillis());
+                        Campagnes.recevoir(k, Chiffre.dechiffrer(code, ev.optString("message")), moi, Campagnes::charger, maintenant());
                     } catch (Exception illisible) {
                         // pas pour nous (autre code, message altéré) : ignoré
                     }
                 }
-                Campagnes.actualiser(k, Campagnes::charger, System.currentTimeMillis());
+                Campagnes.actualiser(k, Campagnes::charger, maintenant());
                 garder(c, k);
             }
+            Retour.programmer(c); // un autre appareil a peut-être fait partir Pilou
             if (!dernier.equals(depuis)) p(c).edit().putString("campDernierId", dernier).apply();
         } catch (Exception horsLigne) {
             // relais injoignable : on publiera quand même si possible, on relira plus tard
@@ -235,7 +444,7 @@ public final class CampagnesTel {
             signature = Campagnes.signature(k);
             messages = Campagnes.messages(k, moi, "tel");
         }
-        long maintenant = System.currentTimeMillis();
+        long maintenant = maintenant();
         boolean change = !signature.equals(p(c).getString("campEnvoyee", ""));
         if (messages.isEmpty() || (!change && maintenant - p(c).getLong("campEnvoi", 0) < BATTEMENT)) return;
         try {

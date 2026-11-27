@@ -187,7 +187,9 @@ public final class Veille extends Service {
         if (veut && bulle == null) {
             bulle = new Bulle(this);
             bulle.montrer();
+            principal.post(this::aventure);
         }
+
         if (veut && ramener) {
             ramener = false;
             bulle.ramener();
@@ -283,11 +285,28 @@ public final class Veille extends Service {
         prevenir();
     }
 
-    // Toutes les 30 s : durées à jour, « le PC dort » s'il se tait.
+    // Toutes les 30 s : durées à jour, « le PC dort » s'il se tait ; l'aventure pour Pilou flottant.
     private void battre() {
         reglerBulle();
         afficher();
+        aventure();
         principal.postDelayed(this::battre, 30_000);
+    }
+
+    // L'aventure se calcule hors du fil principal (la campagne se lit la première fois), puis Pilou flottant la montre.
+    private void aventure() {
+        if (bulle == null) return;
+        new Thread(() -> {
+            try {
+                Campagnes.Etat e = CampagnesTel.etat(this);
+                boolean attend = CampagnesTel.attendJoueur(this, e);
+                principal.post(() -> {
+                    if (bulle != null) bulle.aventure(e, attend);
+                });
+            } catch (RuntimeException ex) {
+                Journal.noter("bulle : aventure", ex);
+            }
+        }, "pilou-bulle-aventure").start();
     }
 
     private void afficher() {
