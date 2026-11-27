@@ -89,6 +89,7 @@
     "ch5a-prio-coupe": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "grumeau",
       "texte": [
         "J'ai sorti le coupe-file. L'employé a lu l'astérisque : « Non valable dans les files d'attente. » Il a regardé à gauche. À droite. Pas de file. Pas l'ombre d'une file. « C'est donc valable ici. C'est même le seul endroit de la maison où ça l'est. » Il a tamponné, ému : en trente ans, personne n'avait trouvé le guichet de ce carton. Grumeau jure qu'il le savait. Il ne le savait pas."
       ],
@@ -111,6 +112,7 @@
     "ch5a-prio-ok": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "grumeau",
       "texte": [
         "La bleue ! Elle a roulé le long de la rigole et elle est tombée dans la coupelle avec un petit bruit de bille. « Priorité haute », a annoncé l'employé, presque jaloux. TCHAC. Un tampon de plus sur le jaune poussin. Grumeau a rouvert les yeux et a déclaré que le hasard, quand il tombe bien, s'appelle de la compétence. Je le laisse dire. J'ai gagné à une loterie. C'est la première fois de ma vie."
       ],
@@ -120,6 +122,7 @@
     "ch5a-prio-perdu": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "grumeau",
       "texte": [
         "La bleue est restée au fond. C'est une grise qui est sortie, numéro 12. « Priorité basse, a dit l'employé. On vous rappellera. » J'ai demandé quand. Il a eu la délicatesse de ne pas répondre. Pas de tampon ici. Grumeau a marmonné que la roue penchait à gauche, qu'il avait l'œil pour les choses qui penchent, et qu'on ne confie pas des priorités à un saladier. Ça m'a un peu consolé."
       ],
@@ -129,7 +132,7 @@
       "type": "choix",
       "lieu": "Devant la dernière porte",
       "humeur": "tendre",
-      "personnage": "mme-echeance",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "Il reste une porte, tout au fond, la seule sans panneau. La trente-septième. Grumeau a retiré sa réclamation contre la plaque, très digne, « sous réserve ». Derrière, c'est l'antichambre de la Planificatrice. Devant, une file. Courte : nous. Et le haut-parleur : « Votre attente est estimée à : 13 h 38. » On s'est assis par terre, dos au mur. Grumeau se retourne, se retourne encore. Il compte pour nous deux.",
         "Au bout d'un moment, sans me regarder, il a demandé : « Et toi, petit ? Pourquoi tu y tiens tant, à ce que l'heure reparte ? Tu n'as pas de guichet, toi. » C'est une vraie question. Je crois que c'est la première qu'il me pose. Je lui réponds quoi ?"
@@ -179,7 +182,7 @@
     "ch5b-approche": {
       "type": "attente",
       "humeur": "neutre",
-      "personnage": "raccourcis",
+      "personnage": "grumeau",
       "texte": [
         "La barque nous a vus. Elle vient. Lentement. Très lentement. À bord, trois silhouettes carrées : je reconnais le chapeau d'Alt. Grumeau dit que ce sont les Raccourcis, des passeurs qui connaissent tous les chemins absents des plans, et qu'il faudra surveiller nos poches. Je n'ai pas de poches. Lui, il a des grumeaux : l'humidité lui en a fait trois de plus. Il annonce sept secondes de retard, et que c'est ma faute. Je t'écris quand ils accostent. D'ici là, je regarde la barre. Elle ne bouge pas. Moi non plus."
       ],
@@ -215,7 +218,7 @@
     "ch5b-prix-grumeau": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "raccourcis",
+      "personnage": "grumeau", "expression": "colere",
       "texte": [
         "J'ai proposé Grumeau comme minuteur de bord. Ctrl l'a soulevé, retourné, écouté couler. « Régulier ? » J'ai dit : « À sept secondes près, avec l'humidité. » Affaire conclue : pendant toute la traversée, il chronométrera les coups de rame. Grumeau est blême, pour autant qu'on puisse l'être en verre. « Un minuteur. À œufs. Trente ans de carrière. » Il s'est installé à la proue et il coule avec une rage que je ne lui avais jamais vue. On embarque."
       ],

@@ -85,6 +85,7 @@
     "ch1-il-boit": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "Ça bout. Et lui, il s'est jeté dans la vapeur comme toi sur un croissant. Il la boit, il la mange, je ne sais pas le mot. Il s'est arrondi, il est devenu plus blanc, il ne grelotte plus. Moi, je n'ai plus d'eau pour mon thé, mais ça va. Il fait un bruit nouveau : un petit ronron de bouilloire contente.",
         "Je l'ai mesuré. Je n'ai pas de mètre, alors je me suis couché par terre à côté de lui, trois fois de suite. Il fait trois Pilou de large. C'est officiel. Et je lui ai donné un nom : Brouillon. Parce qu'il a l'air d'un nuage pas fini. J'aime bien les brouillons, moi : tout peut encore arriver."
@@ -122,6 +123,7 @@
     "ch1-retrecit": {
       "type": "choix",
       "humeur": "triste",
+      "personnage": "bergeronnette",
       "texte": [
         "Mauvaise nouvelle. Ce matin, je me suis recouché à côté de lui pour vérifier : il ne fait plus tout à fait trois Pilou. Il lui manque un bord. J'ai recompté deux fois. Il a rétréci pendant la nuit, sans rien dire, et il n'a pas l'air de le savoir.",
         "Une bergeronnette qui passait me l'a expliqué, très vite, elles sont toujours pressées. Un petit nuage tout seul, ça s'use. Les siens, les blancs, se rassemblent loin derrière les montagnes, et ils repartent à la première gelée. « Les blancs, hein. Pas les noirs : les noirs avalent. » Chaque jour compte, elle a dit. Puis elle a filé. Qu'est-ce qu'on fait ?"

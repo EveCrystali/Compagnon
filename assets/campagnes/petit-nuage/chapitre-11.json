@@ -16,6 +16,7 @@
     "ch11-sac": {
       "type": "hasard",
       "humeur": "neutre",
+      "personnage": "brouillon",
       "texte": [
         "J'ai tout étalé devant moi, pour compter. La casserole, cabossée. Le réchaud. La gourde. Des miettes. Un caillou plat que je ne me rappelle pas avoir ramassé. Brouillon a tout reniflé, objet par objet, comme s'il faisait l'inventaire avec moi. Il s'est arrêté plus longtemps sur la casserole."
       ],
@@ -67,6 +68,7 @@
     "ch11-perle": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "J'ai déroulé la feuille. La perle de Dentelle n'avait pas séché, pas d'un cheveu. Je la lui ai tendue et, pour une fois, quelque chose ne lui est pas passé à travers : il l'a bue. D'un coup. Il a gonflé comme un soufflé, un bord, deux bords, trois. Il s'est regardé dans le lac, il n'en revenait pas. Je me suis couché à côté de lui pour vérifier. Je ne te donne pas le chiffre, je compte mal la nuit. Mais il dépasse. De partout."
       ],

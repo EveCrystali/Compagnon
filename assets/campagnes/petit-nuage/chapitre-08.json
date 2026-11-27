@@ -40,7 +40,7 @@
     "ch8-derriere": {
       "type": "attente",
       "humeur": "peur",
-      "personnage": "brouillon", "expression": "peur",
+      "personnage": "brouillon",
       "duree_min": 10,
       "duree_max": 15,
       "pendant": "Pilou avance à tâtons, un nuage dans le dos",
@@ -53,7 +53,7 @@
     "ch8-echo": {
       "type": "choix",
       "humeur": "joie",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "joie",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "On a fait une découverte. J'ai éternué, à cause du courant d'air, et la galerie a éternué après moi. Trois fois. Brouillon s'est figé. Puis il a essayé : « Goutte ! » Et le noir a répondu : « outte… outte… outte… » Il a été fou de joie pendant dix secondes. Puis inquiet : « Qui ? »",
@@ -110,6 +110,7 @@
       "type": "choix",
       "lieu": "Sous les Froisseuses",
       "humeur": "surpris",
+      "personnage": "froisseuses",
       "texte": [
         "Après les rafales, la galerie s'est élargie, et le plafond s'est mis à faire du bruit. Un bruit de papier qu'on froisse. Ce sont des chauves-souris, des centaines, pendues là-haut. On les appelle les Froisseuses. Elles connaissent toute la montagne par cœur, sans rien voir, au son.",
         "Elles nous ont prévenus : plus loin, il y a la Grande Salle, et le vent y est mauvais. Elles veulent bien nous y accompagner demain. Mais pas pour rien. Elles aiment ce qui sonne et ce qui est doux, et elles n'ont ni l'un ni l'autre. Elles regardent beaucoup Brouillon. Très moelleux, disent-elles. Je leur propose quoi ?"
@@ -124,6 +125,7 @@
     "ch8-troc-chanson": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "froisseuses",
       "texte": [
         "J'ai chanté. Coâ, coâ, co-coâ. Tu aurais dû entendre ça : avec l'écho, j'étais quarante. Les Froisseuses se sont tues d'un coup, puis elles l'ont reprise, toutes, la tête en bas. Elles ne l'oublieront jamais, elles n'oublient aucun son. Mi-Bémol serait furieuse du tempo. Marché conclu : demain, elles viennent avec nous. Brouillon a chanté aussi. Il ne connaît que le dernier coâ, mais il le place très bien."
       ],

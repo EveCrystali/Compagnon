@@ -7,7 +7,6 @@
       "lieu": "La place de Trébrume",
       "decor": "place-mairie",
       "humeur": "neutre",
-      "personnage": "vernier",
       "texte": [
         "La place de Trébrume : une fontaine, un banc, quatre goélands, et une mairie si petite qu'on dirait une boîte aux lettres avec un drapeau. Sur le panneau d'affichage, une feuille toute neuve : « Réunion publique mercredi à 17 h, au Bigorneau. En présence de M. Vernier, du Service des Feux. Objet : avenir du phare de la Dent-Creuse. » Mercredi, c'est demain.",
         "Par la fenêtre, je vois Odile, la maire, à son bureau, derrière ses piles de papiers. Je peux entrer par la grande porte et lui parler en face, comme un visiteur honnête. Ou attendre qu'elle sorte et aller lire ses papiers sans elle, comme un visiteur moins honnête mais mieux renseigné. Qu'est-ce que tu en dis ?"
@@ -21,7 +20,6 @@
       "type": "attente",
       "lieu": "La mairie",
       "humeur": "neutre",
-      "personnage": "odile",
       "texte": [
         "J'ai frappé. Une voix a crié : « Un instant ! » et j'attends dans le couloir, sur une chaise beaucoup trop haute, les jambes dans le vide. Au mur, les portraits de tous les maires de Trébrume. Le dernier cadre est une photo, plus petite : une fillette à couettes sur la galerie du phare, et un grand gaillard en casquette qui lui montre la mer. Dessous, au crayon : « Odile et son parrain. »"
       ],
@@ -34,6 +32,7 @@
     "ch4a-guette": {
       "type": "attente",
       "humeur": "malice",
+      "personnage": "odile", "expression": "triste",
       "texte": [
         "Je me suis posté derrière la fontaine, avec l'air d'une tache qui a toujours été là. Odile finira bien par sortir : les maires, ça va chercher du pain comme tout le monde. En attendant, je regarde sa fenêtre. Elle ne travaille pas vraiment. À un moment, elle a mis sa tête dans ses mains. Les gens qui manigancent n'ont pas cet air-là. Ou alors ils manigancent très mal."
       ],
@@ -60,6 +59,7 @@
     "ch4a-odile-vrai": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "odile", "expression": "triste",
       "effets": [ { "drapeau": "k-odile" } ],
       "texte": [
         "J'ai tout dit : la lettre, le maquereau, « ne te fie à personne ». Elle est devenue blanche. Puis elle a ouvert le dossier, lentement. Dedans, un ordre d'inspection du Service des Feux, daté du printemps, tamponné deux fois : REPORTÉE. « La première fois, j'ai invoqué une tempête. La seconde, une épidémie de varicelle chez les goélands. Ils ont fini par envoyer quelqu'un. »",
@@ -111,6 +111,7 @@
       "type": "choix",
       "lieu": "La place de Trébrume",
       "humeur": "peur",
+      "personnage": "vernier",
       "texte": [
         "Sur la place, j'ai failli rentrer dans une paire de bottes. Au-dessus des bottes, un ciré jaune. Au-dessus du ciré, des jumelles, et tout en haut, un visage long qui me regardait de très loin. « Vous regardez beaucoup ce phare, vous aussi », a dit l'homme. Je peux lui demander en face qui il est. Ou filer entre ses bottes."
       ],
@@ -133,7 +134,6 @@
     "ch4a-midi": {
       "type": "choix",
       "humeur": "neutre",
-      "personnage": "perrine",
       "texte": [
         "Midi. L'horloger a fermé boutique jusqu'à deux heures. Et c'est chez lui que je veux aller ensuite : un phare, c'est de la mécanique, et la mécanique, à Trébrume, c'est lui. Perrine m'a fait signe par la fenêtre de sa cuisine. Et sur le quai, Tudal mange des sardines, tout seul, à côté de sa barque éraflée. Je déjeune avec qui ?"
       ],
@@ -165,7 +165,7 @@
       "lieu": "Le quai",
       "decor": "port-trebrume",
       "humeur": "surpris",
-      "personnage": "tudal", "expression": "colere",
+      "personnage": "tudal",
       "effets": [ { "drapeau": "c-temoin" } ],
       "texte": [
         "Tudal m'a regardé grimper sur le plat-bord de la Puce, puis il a poussé vers moi une sardine, ce qui chez lui doit valoir un discours. Il a fini par grogner : « Demande, puisque t'en crèves. » J'ai demandé. « Jeudi, dans la nuit. J'étais dehors, peu importe pourquoi. Brume à couper. Je cherche la Dent : deux éclats, un long. Et qu'est-ce que je vois ? Trois éclats. »",

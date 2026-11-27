@@ -39,7 +39,6 @@
       "lieu": "La cave du phare",
       "decor": "cave-du-phare",
       "humeur": "surpris",
-      "personnage": "lison",
       "effets": [ { "var": "courage", "plus": 1 } ],
       "texte": [
         "Dans l'anneau ! Sans un bruit. Je me suis hissé nœud après nœud, j'ai soulevé la trappe avec ma tête, et me voilà dans la cave du phare, entre un tas de charbon et des bidons. Personne ne m'a entendu. La preuve : on parle, là-haut, dans l'escalier.",
@@ -79,7 +78,6 @@
     "ch6b-bols": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "perrine",
       "effets": [ { "drapeau": "k-perrine" } ],
       "texte": [
         "Les bols viennent du Bigorneau, c'est écrit dessous. Le papier est de la main de Perrine, l'aubergiste, une écriture ronde, appliquée : « Pour A. Poireaux aujourd'hui. Je passerai jeudi te lire la suite de ton courrier, si tu veux bien m'ouvrir, tête de mule. Je ne dis rien à personne, tu le sais. P. »",
@@ -112,6 +110,7 @@
     "ch6b-charbon": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "lison",
       "effets": [ { "drapeau": "c-jeudi" } ],
       "texte": [
         "Je me suis enfoui dans le charbon. Pour de l'encre bleue, devenir noire, c'est une petite crise d'identité. La lanterne est arrivée : la natte, les bottes jaunes. Elle a vérifié la trappe, compté les bidons du bout du doigt, puis elle s'est mise à parler toute seule, tout bas, comme on parle quand on a trop de choses à garder.",

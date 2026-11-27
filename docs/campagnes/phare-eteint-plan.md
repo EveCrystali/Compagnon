@@ -211,7 +211,12 @@ soupçons (`c-jeudi` ou `c-limaille`, sans `basile-prive`) ne donne qu'un sursis
 | `ch4b-fin` (mer) | 150 à 180 min | idem, sur la corniche | le canot entré dans la grotte n'est pas ressorti : qui m'y attend ? |
 | `ch7-fin` | 150 à 180 min | la marée haute enferme tout le monde pour la nuit | trois coups à la porte : qui frappe chez un phare qui n'ouvre plus ? |
 | `ch8-fin` | 100 à 130 min | la dernière basse mer avant les bateaux | ai-je dit ce qu'il fallait ? |
-| veille du ch9 (`ch9-g-veille`, `ch9-a-veille`, `ch9-s-veille`, `ch9-f-corne`) | 60 à 90 min | compter les feux de mât qui rentrent | il en manque un : où est la Tape-Dur ? |
+| veille du ch9 (`ch9-s-veille`, `ch9-f-corne`) | 60 à 90 min | compter les feux de mât qui rentrent | il en manque un : où est la Tape-Dur ? |
+| veille du ch9, versions « tous réunis » et « balise » (`ch9-g-veille`, `ch9-a-veille`) | 20 à 30 min | idem | idem |
+
+Dans ces deux dernières versions, la veille est suivie d'un choix (le verdict de Vernier, le matin de Lison) : elle ne
+ferme pas le chapitre, donc elle reste courte comme les attentes de milieu de chapitre (5 à 30 min). Les deux autres
+mènent directement à une fin et gardent leurs 60 à 90 min.
 
 (« Celui qui éteint » n'a pas de veille : la nuit est racontée dans la fin.) Jamais deux attentes de
 suite : l'allumage (`ch9-g-lison-allume`, `ch9-g-anselme-allume`) et les derniers boulons de la balise

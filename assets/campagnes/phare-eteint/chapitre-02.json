@@ -30,6 +30,7 @@
     "ch2-table-basile": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "basile", "expression": "peur",
       "texte": [
         "Basile travaille avec des gestes de moineau. Il a un crayon très fin derrière l'oreille et de la poussière dorée plein les manches : on dirait qu'il a serré la main d'un trésor. Je lui ai demandé si l'horloge de l'auberge était très malade. « Elle retarde par timidité. »",
         "Alors j'ai dit le mot phare, juste pour voir. Sa vis lui a sauté des doigts et a roulé sous la table. Il s'est mis à quatre pattes pour la chercher, longtemps, et d'en dessous il a dit : « La mécanique de là-haut, c'est du solide. Ça ne se dérègle pas tout seul. » Personne ne lui avait parlé de mécanique déréglée. Moi, j'avais juste dit phare."
@@ -131,7 +132,6 @@
     "ch2-bidons-fouille": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "tudal",
       "texte": [
         "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée en cette saison : c'est affiché en gros sur la cabane du port. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
       ],

@@ -7,7 +7,7 @@
       "lieu": "L'Étang-qui-fume",
       "decor": "etang-qui-fume",
       "humeur": "malice",
-      "personnage": "brouillon",
+      "personnage": "mi-bemol",
       "texte": [
         "C'étaient des grenouilles. Enfin, des rainettes, elles y tiennent. Elles répétaient. Un, deux, trois, et puis toutes ensemble : coâ. C'est le chœur de l'étang, et il répète la nuit parce que le jour, il y a les hérons. J'ai eu peur pour rien pendant deux heures. Mais j'ai bien écouté.",
         "Leur cheffe s'appelle Mi-Bémol. Elle est grande comme mon pouce et elle fait plus peur que l'orage. Ce matin, elle a regardé Brouillon traverser la brume sans en garder une miette, et elle a levé les yeux au ciel. « Un nuage qui ne sait pas boire. On aura tout vu. Ça boit comme ça chante, mon petit : en mesure. »"
@@ -41,7 +41,7 @@
     "ch3-il-boit": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "mi-bemol", "expression": "joie",
+      "personnage": "mi-bemol",
       "effets": [ { "drapeau": "sait-boire" }, { "drapeau": "chanson" }, { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ],
       "texte": [
         "Il a bu ! Sur le quatrième coâ, il s'est gonflé au bon moment et la brume est entrée d'un coup, comme du lait dans un bol. Il a repris un bon bord en trois mesures. Tout le chœur a applaudi avec les pattes de derrière. Mi-Bémol a dit « pas mal » sans sourire, ce qui est énorme, paraît-il. Et moi, à force, j'ai la chanson dans la tête. Je la connais par cœur. Coâ, coâ, co-coâ."
@@ -51,7 +51,7 @@
     "ch3-hoquet": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "mi-bemol",
+      "personnage": "brouillon", "expression": "joie",
       "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "J'ai accéléré. Je crois. Ou ralenti. Brouillon s'est gonflé à contretemps, il a avalé de travers, et maintenant il a le hoquet. Tu sais ce que c'est, un hoquet de nuage ? Un tout petit éclair. Il a roussi un nénuphar et fait sursauter trois ténors. Mi-Bémol nous a mis dehors, enfin, sur la rive. On a ri tous les deux pendant dix minutes, lui par éclairs. Il n'a rien bu, mais ça valait le coup."
@@ -61,6 +61,7 @@
     "ch3-seul": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon", "expression": "joie",
       "effets": [ { "drapeau": "sait-boire" }, { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ],
       "texte": [
         "J'ai dit non merci, il va chercher. Mi-Bémol a haussé ce qui lui sert d'épaules. Il a cherché toute la matinée. Il a essayé par en dessous, à l'envers, en tournant. Et il a fini par trouver un truc à lui : il boit de côté, en se penchant, comme un chat à un robinet. Ce n'est pas en mesure, ce n'est même pas joli. Mais c'est lui qui l'a trouvé, et il a repris un bord. Il est venu me le montrer quatre fois."
@@ -117,7 +118,7 @@
     "ch3-gouttes": {
       "type": "choix",
       "humeur": "surpris",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "Il s'est passé une chose incroyable. On quittait les toiles, et Brouillon s'est arrêté juste au-dessus de moi. Il est devenu gris. Il s'est tout plissé, comme quelqu'un qui va éternuer. Et là : ploc. Une goutte. Sur mon antenne. Il pleut ! Il est en train de pleuvoir, pour la première fois de sa vie !",
         "Sauf qu'il pleut sur moi. Sur moi qui suis en encre. Il a l'air tellement concentré, tellement fier, et moi, j'ai une goutte qui me coule dans le cou et qui me délaie. Il y en a deux autres qui arrivent, je les vois se former. Vite, je fais quoi ?"
@@ -141,6 +142,7 @@
     "ch3-parapluie": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "J'ai ouvert mon parapluie de poche. Tu vois que j'ai bien fait de le prendre ! Ploc, ploc, ploc : trois gouttes sur la toile, trois petits tambours. J'ai crié bravo de là-dessous. Brouillon est descendu regarder le parapluie de très près, puis moi, bien au sec, puis encore le parapluie. Il a compris quelque chose : que sa pluie, je l'aime bien, mais pas sur moi. Il a touché la toile mouillée du bout d'un bord. Très doucement."
       ],
@@ -189,7 +191,7 @@
     "ch3-depart": {
       "type": "attente",
       "humeur": "neutre",
-      "personnage": "mi-bemol",
+      "personnage": "brouillon",
       "duree_min": 15,
       "duree_max": 20,
       "pendant": "Pilou marche vers le plateau",

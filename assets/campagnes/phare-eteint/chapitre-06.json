@@ -44,6 +44,7 @@
     "ch6a-vernier-parle": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "c-feu-faux" }, { "var": "confiance", "plus": -1 } ],
       "texte": [
         "Il est arrivé tout essoufflé, le ciré trempé jusqu'aux genoux. « Vous allez chez lui. » Ce n'était pas une question. Il a regardé ma clef. « La clef du Service. Elle était en dépôt chez l'horloger, qui m'a juré ce matin n'être pas monté là-haut depuis l'été. » Il a soupiré. « Je n'entre pas chez un homme qui ne m'a pas ouvert. Je suis inspecteur, pas cambrioleur. »",
@@ -92,7 +93,6 @@
     "ch6a-bidons": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "tudal",
       "effets": [ { "drapeau": "k-tudal" } ],
       "texte": [
         "Sur chaque bidon, un dessin à la craie : une petite puce. La Puce, la barque de Tudal. Et dessous, à chaque fois : « payé ». Vingt-deux bidons, vingt-deux puces. Cloué au mur, un vieux bon de livraison du Service des Feux, barré d'un tampon : « Fournitures suspendues. Phare en instance de fermeture. » Il date du printemps.",

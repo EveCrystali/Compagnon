@@ -30,7 +30,7 @@
     "ch2-ast-poli": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "grumeau",
+      "personnage": "mlle-renvoi", "expression": "joie",
       "texte": [
         "J'ai dit bonjour, j'ai complimenté les trombones, j'ai même dit « s'il vous plaît » deux fois. Elle a rosi jusqu'au chignon. « Vous êtes poli*. » Puis elle a glissé un petit carton sous la vitre : un coupe-file ! Avec un astérisque. J'ai retourné le carton : « *Non valable dans les files d'attente. » Grumeau assure que c'est le plus beau cadeau qu'elle ait jamais fait à quelqu'un. Je le range précieusement."
       ],
@@ -40,7 +40,7 @@
     "ch2-ast-scandale": {
       "type": "recit",
       "humeur": "colere",
-      "personnage": "grumeau",
+      "personnage": "mlle-renvoi",
       "texte": [
         "J'ai dit que c'était un scandale, que l'heure était en panne et que quelqu'un devait faire quelque chose. Elle a hoché la tête, très compréhensive. « Vous souhaitez déposer une réclamation*. » Elle m'a tendu un formulaire. En bas, en tout petit : « *Les réclamations sont traitées à partir de 13 h 38. » J'ai senti Grumeau sourire dans mon dos. Je ne savais pas qu'un sablier pouvait sourire. Ça fait un bruit de sable satisfait."
       ],
@@ -81,7 +81,7 @@
     "ch2-liste-rate": {
       "type": "recit",
       "humeur": "fatigue",
-      "personnage": "mlle-renvoi",
+      "personnage": "grumeau",
       "texte": [
         "On s'est emmêlés au troisième mot. Mlle Renvoi a posé son tampon. « Bonjour*. » Et elle a tout repris depuis le début, à la même vitesse. Trois fois. À la troisième, Grumeau a craqué : il a récité la liste lui-même, d'une voix de vieux professeur. Justificatif d'attente, photos de l'heure exacte, timbre à date, formulaire jaune poussin. « Je mesure, je n'écris pas. Mais je n'ai jamais dit que je n'écoutais pas. »"
       ],
@@ -90,7 +90,7 @@
     "ch2-histoire": {
       "type": "choix",
       "humeur": "neutre",
-      "personnage": "mlle-renvoi",
+      "personnage": "grumeau",
       "texte": [
         "Résultat : pour déclarer la perte, il faut un timbre à date, et le bureau des timbres rouvre à 13 h 38. Mlle Renvoi nous a priés d'attendre sur le banc qu'on appelle notre numéro. J'ai le 1 338. On appelle le 1 337. J'ai compris tout seul : ici, le numéro appelé, c'est l'heure. Mon tour viendra à 13 h 38. Comme tout le reste. Grumeau a ajouté, sans me regarder : « Et quand ton numéro sort, tu as droit à une réclamation. Une seule. Choisis-la bien. »",
         "On s'est assis. Grumeau fixe quelque chose, là-haut, au-dessus de la grande porte, et il marmonne. Puis il se tourne vers moi : « De mon temps… » Il s'arrête. « Non, rien. Ça ne t'intéresse pas. » Je sens qu'il a une histoire longue comme la file. Je le laisse raconter ?"
@@ -103,7 +103,7 @@
     "ch2-histoire-oui": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "le-rond",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "Il a raconté. Trente ans à l'écran. Chaque fois que la machine réfléchissait, c'est lui qu'on envoyait : il se retournait, bien droit, et les gens attendaient en le regardant couler. « C'était un métier. On me faisait confiance. Tant que je coulais, les gens savaient qu'on ne les avait pas oubliés. »",
         "Et un matin, à sa place, il y avait le Rond. Plus jeune. Plus lisse. « On ne m'a pas dit au revoir, petit. On m'a mis à jour. » Il a regardé ailleurs. Moi, j'ai regardé mes pieds. Puis il a grogné que de toute façon le Rond ne mesure rien, qu'il tourne et c'est tout, que c'est du travail de ventilateur. Ça allait mieux."
@@ -133,7 +133,7 @@
     "ch2-rond": {
       "type": "choix",
       "humeur": "surpris",
-      "personnage": "le-rond",
+      "personnage": "grumeau",
       "texte": [
         "Trois retournements. Personne n'a été appelé, évidemment. Par contre, j'ai bien regardé au-dessus de la grande porte. Le Rond ! Il est coincé. Arrêté aux trois quarts de son tour, avec écrit dessous « Veuillez patienter ». Il force, il tremble, il n'avance pas d'un cran. De temps en temps, il dit d'une petite voix polie : « Un instant… »",
         "Grumeau est aux anges. « Regarde-le. Sans Tic-Tac, monsieur ne tourne plus. Moi, je coule. La gravité, petit : ça ne tombe jamais en panne. » Je pourrais grimper pousser le Rond, pour qu'il finisse au moins son tour. Il a l'air d'avoir une crampe. Mais Grumeau le prendrait très mal. Je fais quoi ?"
@@ -155,7 +155,7 @@
     "ch2-rond-rire": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "le-rond",
+      "personnage": "grumeau",
       "texte": [
         "Je suis resté sur le banc et on a regardé le Rond forcer. Grumeau commentait, comme à un match : « Et il repart… non. Il repart… non plus. » J'ai ri. J'ai un peu honte, mais j'ai ri. Le Rond a dit « Un instant… » et Grumeau a répondu : « Prends ton temps, mon grand, tu n'en as plus. » C'est la première fois que je le vois de bonne humeur. Ça fait presque peur."
       ],

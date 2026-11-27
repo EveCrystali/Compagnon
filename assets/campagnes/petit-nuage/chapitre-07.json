@@ -7,6 +7,7 @@
       "lieu": "La Gencive",
       "decor": "col-blanc",
       "humeur": "surpris",
+      "personnage": "madame-bocal",
       "texte": [
         "Tout est blanc. Madame Bocal n'avait pas menti. Il a neigé toute la nuit, et ce matin, on ne sait plus où finit la montagne et où commence le ciel. Elle nous a mis dehors à l'aube avec une tartine et un conseil : suivre les cairns, les petits tas de cailloux, un par un, sans jamais lâcher le dernier des yeux.",
         "Elle a dit aussi que ce n'était pas encore la vraie gelée. Juste un avertissement. La vraie, elle la sent pour la nuit prochaine, dans ses moustaches. « Alors pas de détours, là-haut. Chaque détour, c'est la gelée qui gagne. » On monte. La neige crisse. Et juste devant, posé sur le col comme un couvercle, il y a un nuage. Un vrai. Un énorme, immobile, blanc."
@@ -28,7 +29,7 @@
     "ch7-bocal-brouillard": {
       "type": "choix",
       "humeur": "triste",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "triste",
       "texte": [
         "Dans le bocal, sous mon bras, Brouillon s'est collé à la vitre. Il a fait de la buée de l'intérieur, et dans la buée, il a appuyé un bord, bien à plat. On aurait dit une main. Il regarde le grand nuage, tout autour de nous. Il dit quelque chose, je vois le verre vibrer, mais le couvercle est vissé et je n'entends rien.",
         "Si j'ouvre, il ira. Dans ce blanc, je risque de le perdre de vue, et il prendra le froid en plein. Si je n'ouvre pas, il aura traversé le premier des siens derrière une vitre. J'ai la main sur le couvercle. Je fais quoi ?"
@@ -86,7 +87,6 @@
     "ch7-vapeur": {
       "type": "attente",
       "humeur": "peur",
-      "personnage": "madame-bocal",
       "duree_min": 20,
       "duree_max": 25,
       "pendant": "Pilou fait de la vapeur dans le brouillard, et attend",
@@ -116,6 +116,7 @@
     "ch7-vitre": {
       "type": "attente",
       "humeur": "triste",
+      "personnage": "brouillon", "expression": "triste",
       "duree_min": 15,
       "duree_max": 20,
       "pendant": "Pilou grimpe, un bocal serré contre lui",
@@ -156,6 +157,7 @@
     "ch7-leger": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "brouillon", "expression": "triste",
       "texte": [
         "J'ai détaché la plume. Je l'ai plantée dans la neige au bord de la faille, bien droite, pour qu'on la voie de loin. Le vent l'a fait sonner, une fois : ding. J'ai passé le pont en trois pas, léger, sans un craquement. De l'autre côté, je me suis retourné. Elle brillait encore. J'avais dit que je la porterais. Brouillon a regardé la plume, puis moi, et il n'a rien demandé. J'aurais préféré qu'il demande."
       ],
@@ -164,7 +166,7 @@
     "ch7-pont": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "Il s'est étalé sur le pont comme du beurre sur une tartine. Il a serré très fort, il est devenu gris, et la neige sous lui a blanchi, durci, craqué. Quand il s'est relevé, il lui manquait un bord, et le pont était de la glace. J'ai traversé à quatre pattes avec tout mon barda. Ça n'a pas bougé. De l'autre côté, il m'attendait, plus petit et très fier : « Brouillon sert. » Oui. Tu sers. Tu n'imagines pas à quel point."
       ],
@@ -186,7 +188,6 @@
       "type": "attente",
       "lieu": "Sous le col",
       "humeur": "determine",
-      "personnage": "tournebise",
       "duree_min": 150,
       "duree_max": 180,
       "pendant": "Pilou franchit le col",
