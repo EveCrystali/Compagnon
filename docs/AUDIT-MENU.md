@@ -457,13 +457,48 @@ Ordre de mise en œuvre suggéré (chantier séparé, lancé par le pilote aprè
 
 | # | Question | Réponse |
 |---|---|---|
-| 1 | Quelle proposition : A + zone du moment, A seule, B ou C ? | **En attente** (question reformulée) |
+| 1 | Quelle proposition : A + zone du moment, A seule, B ou C ? | **A + zone « En ce moment »** (la recommandation) |
 | 2 | Pêcher et Cuisiner dans Jouer (+1 geste) ? | **Oui** : ils entrent dans Jouer ▸ |
 | 3 | Deux portes vers la boutique ou une seule ? | **Une seule.** Laquelle garder (bandeau ou ligne 🛒) reste à confirmer ; à défaut, le bandeau, qui montre déjà les po |
 | 4 | « Afficher Claude » ? | **Retiré du menu** |
 | 5 | Partage d'XP par dossier ? | **Retiré du menu principal** ; il vit seulement dans Réglages ▸ |
 | 6 | Discrétion : un long sous-menu ou deux ? | **Deux sous-menus** : « Il se montre » (bulle, il me parle, il bouge, retour d'aventure) et « Il se cache » (se cacher 10 min, plein écran, présentation, visio, vacances) |
 
-Conséquence pour A : le premier niveau perd « Afficher Claude » (il était dans Réglages) et la ligne 🛒 si le bandeau
-reste la porte ; Discrétion devient deux portes ◌ « Il se montre » et ◌ « Il se cache ». Le compte reste à 14 lignes.
-Les maquettes montrent encore la version d'avant ces réponses.
+### Le menu retenu
+
+A, avec la zone « En ce moment » de C et les réponses 2 à 6. C'est la cible du chantier d'implémentation.
+Maquette : [`maquettes/menu/retenu.html`](maquettes/menu/retenu.html).
+
+```
+[Bandeau : niveau · XP · po]                        → boutique (seule porte ; les nouveautés de la boutique restent à y afficher)
+ ── En ce moment ──   0 à 2 lignes, place fixe, seulement si quelque chose se passe :
+   ✉ Il t'attend : lui répondre…   ⚔ En expédition · voir / rappeler   ↩ Rappeler Pilou de chez X
+   ♥ Prendre soin · il a faim      ■ Arrêter le jeu
+ ── Toujours là ──
+♥  Prendre soin                                      (état en clair : « tout va bien », « il a faim »)
+✉  Aventure…                                         → fenêtre Aventure, directement
+⚔  Expédition ▸                                      lieux · équipement… · en-cas · journal d'expédition…
+►  Jouer ▸         Petit jeu au hasard · Défense du bureau · Pêcher · Cuisiner
+                   ── Carnets ── Carnet de pêche ▸ · Livre de recettes ▸ · ── Réglages de Défense ▸
+📖 Journal…                                          → fenêtre Journal
+ ── ── ──
+◐  Apparence ▸     Accessoire ▸ · Couleur ▸ · Ce qu'il porte ▸ · ☐ Traînée · Forme affichée ▸ · Taille · ☐ Dessin fin
+◌  Il se montre ▸  ── Bulle ── · ── Il me parle ── · ── Il bouge ── · ── Retour d'aventure ──
+◌  Il se cache ▸   ☐ en plein écran · ☐ en présentation · ☐ en visio · ☐ Vacances (tout est figé)
+★  Progrès ▸       Niveau et titres ▸ · Évolution ▸ · Quêtes ▸ · Métiers ▸ · Succès ▸ · ⓘ complicité
+⇄  Amis et appareils ▸   Amis… · Groupe d'appareils ▸ · Connecteurs… · Intégrations ▸ · Notifications Windows ▸
+⚙  Réglages ▸      Mon prénom… · ☐ Tenir son journal · Activités observées ▸ · ☐ Clavier · ☐ Photo
+                   · Thème de la bulle ▸ · ☐ Démarrer avec Windows · ☐ Icône près de l'horloge
+                   · Partager l'XP par un dossier… · Version ▸ · Redémarrer Pilou
+ ── ── ──
+◌  Se cacher 10 min
+   Quitter
+```
+
+- 14 lignes stables (bandeau compris), plus 0 à 2 lignes du moment.
+- Retirés : la ligne 🛒 (le bandeau est la porte), « Afficher Claude », les entrées conditionnelles qui faisaient bouger
+  le menu (elles passent dans la zone du moment).
+- Les gestes du tableau de la section 3 (colonne A) restent valables, sauf : suivre ou rappeler l'expédition passe
+  de 3 à 2 (zone du moment) ; rappeler Pilou d'une visite reste à 2 ; régler la discrétion reste à 3.
+- À confirmer pendant l'implémentation : le bandeau doit avoir l'air cliquable (infobulle « Ouvrir la boutique »
+  déjà là ; un survol visible le dira mieux).
