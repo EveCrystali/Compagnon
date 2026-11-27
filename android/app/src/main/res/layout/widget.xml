@@ -39,6 +39,17 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/mot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#FFCDD9E5"
+            android:textSize="11sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/lignes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

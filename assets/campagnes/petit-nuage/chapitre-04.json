@@ -7,6 +7,7 @@
       "lieu": "Le Plateau Râpé",
       "decor": "plateau-rape",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "Je t'écris du bord. Devant nous, c'est plat, jaune, et ça ne s'arrête pas. Pas une haie, pas une flaque. Un seul arbre, mort, très loin, au milieu. Le vent est chaud et sec, on dirait un sèche-cheveux. Il y a une pancarte : « Plateau Râpé. Rien avant longtemps. » Au moins, c'est honnête.",
         "Les montagnes sont de l'autre côté. On voit bien leurs pointes, maintenant, blanches et alignées : par ici, on les appelle les Dents-de-Lait. Et à droite, loin, au ras du plateau, il y a autre chose. Des nuages. Énormes, noirs, plats du dessus comme des enclumes. Brouillon ne regarde que ça."
@@ -16,6 +17,7 @@
     "ch4-noirs": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "brouillon",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "Il s'est tourné vers eux, tout entier, et il a dit : « Grands. » Puis, plus bas : « Brouillon après ? » Il croit que c'est ce qu'il deviendra. Il a peut-être raison, je n'y connais rien. Mais je me rappelle la bergeronnette : pas les noirs, les noirs avalent. Ils sont encore loin. Il est heureux de les voir. Et le vent sec lui a déjà pris un bord depuis ce matin. Je lui dis, pour les noirs ?"
@@ -65,6 +67,7 @@
       "type": "choix",
       "lieu": "L'arbre mort",
       "humeur": "triste",
+      "personnage": "brouillon",
       "texte": [
         "On est à l'arbre mort. C'est la moitié. On souffle. Et là, Brouillon a fait une chose que je ne lui avais jamais vu faire : il s'est couché par terre à côté de moi. Bien aligné. Comme je fais, moi, le matin, pour le mesurer. Il a regardé où j'arrivais. Il a regardé où il arrivait, lui.",
         "Et il a demandé : « Brouillon petit ? » Il ne fait plus trois Pilou, et il le voit bien. Il attend. Je pourrais lui dire la vérité. Je pourrais aussi lui dire que c'est moi qui grandis : il le croirait, il croit tout ce que je dis. Qu'est-ce que je réponds ?"
@@ -94,6 +97,7 @@
       "type": "choix",
       "checkpoint": true,
       "humeur": "peur",
+      "personnage": "enclumes",
       "texte": [
         "Les Enclumes sont sur nous. Juste au-dessus de nos têtes, noirs, énormes, et ils grondent. Ça sent le métal et la pièce de monnaie. Un vent monte du sol, droit vers eux. Il soulève la poussière, les brindilles, et mes pieds avec.",
         "Et Brouillon monte. Il ne s'envole pas : il est aspiré. Il crie « Grands ! Grands ! » en montant, et je n'arrive pas à savoir si c'est de la joie ou de la peur. Il est déjà à hauteur de l'arbre. Un éclair vient de passer, là-haut, exactement là où il va. Vite, vite, dis-moi !"
@@ -131,6 +135,7 @@
     "ch4-revient": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "J'ai crié « Brouillon ! » Une seule fois, de toutes mes forces. Il s'est arrêté. Là-haut, dans le courant, il s'est retourné vers moi, puis vers eux, les grands, les magnifiques. Puis encore vers moi. Et il est redescendu. Tout seul, contre le vent, en ramant avec ses bords. Ça lui a pris une éternité. Il s'est posé sur ma tête, sur la casserole, et il a dit : « Pas les miens. » Je n'ai rien eu à faire. Rien. Il a choisi."
@@ -156,6 +161,7 @@
     "ch4-arc": {
       "type": "choix",
       "humeur": "joie",
+      "personnage": "brouillon",
       "texte": [
         "L'orage est passé. Il a plu dix minutes sur le plateau, j'étais sous la casserole, et maintenant tout brille. Et regarde ce qu'il y a derrière : un arc-en-ciel. Un vrai, énorme, avec toutes les couleurs dans l'ordre. Brouillon n'en avait jamais vu. Il a demandé qui l'avait fait. J'ai dit : la pluie et le soleil.",
         "Alors il a voulu m'en faire un. Pour moi. Il s'est mis dos au soleil, il s'est concentré, il est devenu tout rose d'effort. Et il a fait… un arc. Petit. D'une seule couleur. Beige. Un arc-en-beige. Il me regarde, il attend mon avis. J'ai les joues qui tremblent. Qu'est-ce que je fais ?"

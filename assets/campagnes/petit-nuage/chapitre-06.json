@@ -7,6 +7,7 @@
       "lieu": "Le sentier des mélèzes",
       "decor": "sentier-des-melezes",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "On monte. Le sentier fait des lacets entre des mélèzes tout jaunes qui perdent leurs aiguilles, ça fait un tapis qui glisse. Là-haut, entre deux Dents-de-Lait, on voit le col : la Gencive. Je n'ai pas choisi le nom. Il fait froid, un froid propre, qui sent le caillou.",
         "Et il m'arrive un truc. Quand je souffle, ça fait de la buée. Brouillon a poussé un cri : « Goutte fait des petits ! » Il croit que ce sont des bébés nuages. Il essaie d'en adopter un à chaque fois que je respire, il lui parle, et le petit disparaît en deux secondes. Il les cherche derrière moi, un par un. Il vient de demander : « Partis où ? » Je lui réponds quoi ?"
@@ -31,6 +32,7 @@
     "ch6-grimpe": {
       "type": "epreuve",
       "humeur": "determine",
+      "personnage": "brouillon",
       "jeu": "visee",
       "difficulte": 2,
       "texte": [
@@ -60,6 +62,7 @@
     "ch6-lacets": {
       "type": "attente",
       "humeur": "malice",
+      "personnage": "brouillon",
       "duree_min": 20,
       "duree_max": 25,
       "pendant": "Pilou monte les lacets, un par un",
@@ -74,6 +77,7 @@
       "lieu": "Chez Madame Bocal",
       "decor": "terrier-aux-bocaux",
       "humeur": "surpris",
+      "personnage": "madame-bocal",
       "duree_min": 10,
       "duree_max": 15,
       "pendant": "Pilou visite quatre cents étagères",
@@ -88,6 +92,7 @@
       "lieu": "Chez Madame Bocal",
       "decor": "terrier-aux-bocaux",
       "humeur": "neutre",
+      "personnage": "madame-bocal",
       "texte": [
         "On dort chez elle, finalement. Avant d'éteindre sa lampe, Madame Bocal s'est plantée devant Brouillon, les pattes sur les hanches. « Il ne passera pas le col comme ça, votre petit. Il va geler en route, ça fera de la neige, c'est joli, mais ce ne sera plus lui. » Elle a sorti son plus grand bocal. « Mettez-le là-dedans. Je vous le prête. Il ne perdra pas une miette jusqu'au lac. »",
         "Elle a raison, il ne perdrait rien. Il ne verrait rien non plus. Ni le col, ni le vent, ni la neige. Un nuage en conserve. Je regarde le bocal, je regarde Brouillon, qui renifle le couvercle. Je ne sais pas ce qui est le mieux pour lui. Toi, tu sais ?"
@@ -109,6 +114,7 @@
     "ch6-bocal-non": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "madame-bocal",
       "texte": [
         "J'ai dit non merci. Qu'il n'est pas une mirabelle. Madame Bocal n'a pas été vexée : « C'est vous qui voyez. Moi, je conserve. Chacun son métier. » Elle nous a donné un petit pot de vapeur de tilleul pour la route, étiqueté de sa main. Brouillon n'a pas compris de quoi on parlait, mais il a compris qu'il restait dehors, à côté de moi, et il a fait trois tours autour de ma casserole."
       ],
@@ -117,6 +123,7 @@
     "ch6-bocal-lui": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "madame-bocal",
       "texte": [
         "Je me suis accroupi et je lui ai expliqué. Dans le bocal, tu ne perds rien, mais tu ne vois rien. Dehors, tu vois tout, mais tu peux fondre. C'est toi qui choisis. Personne ne lui avait jamais demandé ça. Il a regardé le bocal. Il a regardé la porte ronde, et la nuit derrière. Il a mis un temps fou. Puis il a dit : « Dehors. Avec Goutte. » Madame Bocal a haussé les épaules et lui a donné une mirabelle, pour l'odeur."
       ],
@@ -126,6 +133,7 @@
       "type": "choix",
       "checkpoint": true,
       "humeur": "peur",
+      "personnage": "madame-bocal",
       "texte": [
         "Dehors, il fait nuit. Madame Bocal a passé le museau par sa porte ronde, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas cette nuit. Le ciel a sa tête de couvercle, il neigera jusqu'au matin. Demain, à la première heure, ou pas du tout. » Elle nous offre son paillasson. Mais le col est juste là, au-dessus de nous, et chaque heure compte. Je l'écoute, ou on tente ?"
       ],
@@ -139,6 +147,7 @@
       "lieu": "Sous le col, dans la neige",
       "decor": "sentier-des-melezes",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "On est partis quand même. Au bout d'une heure, la neige tombait si serré que je ne voyais plus mes pieds. Et Brouillon s'est mis à craquer. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
       ],
@@ -150,6 +159,7 @@
     "ch6-echec-tourmente": {
       "type": "echec",
       "humeur": "triste",
+      "personnage": "madame-bocal",
       "repos_min": 30,
       "texte": [
         "Je ne sais pas où on était. Plus de sentier, plus de haut, plus de bas. Brouillon est tombé dans la neige comme une assiette : gelé, raide, tout léger. J'ai eu très peur. C'est Madame Bocal qui nous a retrouvés, avec une lanterne et beaucoup de reproches, et qui nous a ramenés chez elle. Elle l'a mis à dégeler au-dessus de sa bouilloire, il reprend sa forme goutte à goutte. Elle n'a pas dit « je vous l'avais dit ». Elle l'a pensé très fort, en rangeant ses bocaux."

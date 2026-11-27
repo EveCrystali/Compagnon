@@ -13,20 +13,14 @@ import java.util.List;
 /**
  * Accueil : Pilou en grand (on le caresse ; en tenue de voyage quand il est parti en aventure), son niveau et sa barre
  * d'XP ; la carte « Aventure » en tête quand une campagne est en cours (compte à rebours, ou « il t'attend ! ») ; puis
- * l'essentiel (quêtes, sessions, vitrine, métiers) ; le reste (nouvelles, groupe, mot du jour) est replié.
+ * l'essentiel (quêtes, sessions, vitrine, métiers, « Pilou et moi » et son journal) ; le reste (nouvelles, groupe) est replié.
+ * Le mot du jour de Pilou (docs/PRESENCE.md) est en tête, sous son nom.
  * Pas encore appairé : qui est Pilou, puis un guide en trois étapes.
  */
 final class PageAccueil extends Page {
-    private static final String[] MOTS = {
-            "Un commit par jour éloigne les bugs pour toujours.", "Pilou a rangé tes onglets. Enfin, presque.",
-            "Une pause café ? Les tests tournent tout seuls.", "Les meilleurs bugs sont ceux qu'on trouve avant la prod.",
-            "Pilou te rappelle de boire un verre d'eau.", "Pêche du jour : peut-être une perle ?",
-            "Une recette jamais faite t'attend dans la marmite.", "Respire. La CI finira bien par passer.",
-            "Petit pas, petit commit, grand projet.", "Pilou a battu son record de sieste.",
-            "Lire le message d'erreur jusqu'au bout : la moitié de la solution.", "Les bugs détestent les tests unitaires.",
-            "Aujourd'hui est un bon jour pour supprimer du code mort.", "Une session finie, une étincelle de plus pour Pilou."};
 
-    private final TextView salut, nom, niveau, xp, etatPc, mot, titreSessions;
+    private final TextView salut, nom, niveau, xp, etatPc, titreSessions, motDuJour;
+    private final PresenceVue presence;
     private final Ui.Barre barre;
     private final PilouVue pilou;
     private final TextView coeur;
@@ -50,7 +44,7 @@ final class PageAccueil extends Page {
     private TextView aventureCompte, legende;
     private Ui.Barre aventureBarre;
     private Campagnes.Etat aventure;
-    // Le reste, replié : nouvelles, groupe, mot du jour.
+    // Le reste, replié : nouvelles, groupe.
     private final LinearLayout plus;
     private final TextView plusTitre;
     // Décor acheté (derrière Pilou) et carte « Vitrine » : l'offre du jour et la prochaine rangée de la boutique.
@@ -75,6 +69,9 @@ final class PageAccueil extends Page {
         nom = Ui.titrePage(a, "Pilou");
         nom.setPadding(Ui.dp(a, 2), 0, 0, Ui.dp(a, 10));
         corps.addView(nom);
+        // Le mot du jour, en tête : le même que celui du soir, du widget et de la bulle.
+        motDuJour = PresenceVue.motTete(a);
+        corps.addView(motDuJour, Ui.large(a, 14));
 
         // L'aventure en cours, en tête : il t'attend, ou il revient à telle heure.
         carteAventure = Ui.pile(a);
@@ -220,6 +217,10 @@ final class PageAccueil extends Page {
         carteMetiers.setVisibility(View.GONE);
         corps.addView(carteMetiers, Ui.large(a, 14));
 
+        // Pilou et moi : complicité, prénom (demandé une fois), journal feuilletable.
+        presence = new PresenceVue(a);
+        corps.addView(presence, Ui.large(a, 14));
+
         // Le reste, replié : un toucher l'ouvre (le choix est gardé).
         plusTitre = Ui.texte(a, "", Ui.T_CORPS, p.bleu, true);
         plusTitre.setGravity(Gravity.CENTER);
@@ -238,20 +239,13 @@ final class PageAccueil extends Page {
         // Groupe.
         groupe = Ui.pile(a);
         plus.addView(groupe, Ui.large());
-        // Mot du jour.
-        plus.addView(Ui.titreSection(a, "Le mot de Pilou"));
-        LinearLayout carteMot = Ui.carte(a);
-        carteMot.setBackground(Ui.arrondi(a, p.voile | 0x11000000, 18, 0));
-        mot = Ui.texte(a, "", Ui.T_CORPS, p.texte, false);
-        carteMot.addView(mot);
-        plus.addView(carteMot, Ui.large());
         deplier(false);
     }
 
     private void deplier(boolean anime) {
         boolean ouvert = Prefs.de(app).getBoolean("accueilPlus", false);
-        plusTitre.setText(ouvert ? "Moins de choses  ▴" : "Nouvelles, groupe, mot du jour  ▾");
-        plusTitre.setContentDescription(ouvert ? "Replier les nouvelles, le groupe et le mot du jour" : "Déplier les nouvelles, le groupe et le mot du jour");
+        plusTitre.setText(ouvert ? "Moins de choses  ▴" : "Nouvelles et groupe  ▾");
+        plusTitre.setContentDescription(ouvert ? "Replier les nouvelles et le groupe" : "Déplier les nouvelles et le groupe");
         plus.setVisibility(ouvert ? View.VISIBLE : View.GONE);
         if (anime && ouvert && Vitrine.anime(app)) {
             plus.setAlpha(0);
@@ -527,7 +521,26 @@ final class PageAccueil extends Page {
         if (appaire) sessions(e, maintenant, p);
         quetes(e, p);
         groupe(e, maintenant, p);
-        mot.setText("« " + MOTS[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % MOTS.length] + " »");
+        presenceDuJour();
+    }
+
+    // Le mot du jour en tête, la carte « Pilou et moi » ; et, la première fois du jour, un petit signe de Pilou (Copain).
+    private void presenceDuJour() {
+        try {
+            String m = PresenceTel.motDuJour(app);
+            motDuJour.setVisibility(m.isEmpty() ? View.GONE : View.VISIBLE);
+            motDuJour.setText(m.isEmpty() ? "" : "« " + m + " »");
+            motDuJour.setContentDescription(m.isEmpty() ? null : "Pilou dit : " + m);
+            presence.rafraichir();
+            Presence.Etat e = PresenceTel.etat(app);
+            String jour = Presence.jourTexte(java.time.LocalDateTime.now());
+            if (e.gestes && !jour.equals(Prefs.de(app).getString("presenceSigne", "")) && e.totaux().palier >= 1) {
+                Prefs.de(app).edit().putString("presenceSigne", jour).apply();
+                pilou.jouer("joie", 1600);
+            }
+        } catch (RuntimeException ex) {
+            Journal.noter("présence : accueil", ex);
+        }
     }
 
     // Expédition du Pilou du PC : une carte seulement quand il y a quelque chose à dire.

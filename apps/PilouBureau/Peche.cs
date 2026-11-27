@@ -236,6 +236,7 @@ public sealed partial class FenetrePilou
         Gagner(Butin.XpPrise(p, nouvelle), new Point(TeteX - 18, TeteY - 52));
         Signaler("peche", 1);
         if (p.Rarete >= Rarete.Rare) Signaler("peche:rare", 1);
+        VecuPrise(p);
         _salueJusque = t + 1800;
         _tSaut = t;
     }
@@ -436,6 +437,7 @@ public sealed partial class FenetrePilou
         if (!MontrerTropheeHd(Banque.Commune.Plat(plat.Inventee ? "" : plat.Id, false), rangAffiche))
             MontrerTrophee(MotifAssiette, palette, rangAffiche);
         Dire(plat.Decouverte ? $"✦ nouveau plat : {plat.Nom} !" : $"{plat.Nom}, encore un régal", 3800);
+        VecuPlat(plat.Id, plat.Nom, plat.Inventee);
         Gagner(plat.Xp, new Point(TeteX - 18, TeteY - 52));
         Signaler("cuisine", 1);
         if (plat.Decouverte) Signaler("cuisine:nouveau", 1);

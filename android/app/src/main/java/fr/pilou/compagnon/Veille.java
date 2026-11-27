@@ -83,7 +83,14 @@ public final class Veille extends Service {
     // Campagnes : le carnet du groupe (sujet à part du relais), relu et publié toutes les 5 min. Une décision prise sur
     // le téléphone part tout de suite (CampagnesTel) ; l'histoire, elle, avance sans réseau.
     private void synchroniserCampagnes() {
-        new Thread(() -> CampagnesTel.synchroniser(this), "pilou-campagnes").start();
+        new Thread(() -> {
+            CampagnesTel.synchroniser(this);
+            PresenceTel.synchroniser(this); // complicité, journal et prénom du groupe (sujet à part)
+            String mot = PresenceTel.motDuJour(this);
+            principal.post(() -> {
+                if (bulle != null) bulle.mot(mot);
+            });
+        }, "pilou-campagnes").start();
         principal.postDelayed(this::synchroniserCampagnes, 5 * 60_000L);
     }
 

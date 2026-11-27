@@ -50,6 +50,10 @@ final class Lecture extends FrameLayout {
     private Ui.Barre barreAttente;
     private boolean finMontree;
     private final int largeurBulle;
+    // Animations (ScenesAnimees.java) : le personnage du message, l'écriture en cours, le fond qui respire.
+    private final ScenesAnimees.Portrait perso;
+    private final ScenesAnimees.Fond fond;
+    private ScenesAnimees.Ecriture enCours;
 
     Lecture(Principale a, PageAventure page) {
         super(a);
@@ -61,6 +65,9 @@ final class Lecture extends FrameLayout {
         setBackgroundColor(p.fond);
         setClickable(true);
 
+        fond = new ScenesAnimees.Fond(a);
+        fond.base(p.fond);
+        addView(fond, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         LinearLayout colonne = Ui.pile(a);
         addView(colonne, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -68,6 +75,7 @@ final class Lecture extends FrameLayout {
         tete = new FrameLayout(a);
         tete.setClipChildren(true);
         scene = new Aventure.Scene(a);
+        scene.plein(true);
         tete.addView(scene, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         pilou = new PilouVue(a, Aventure.pixelPour(a, 104), true);
         pilou.setContentDescription("Pilou");
@@ -100,6 +108,14 @@ final class Lecture extends FrameLayout {
         menu.setOnClickListener(v -> menu());
         barreHaut.addView(menu);
         tete.addView(barreHaut, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP));
+
+        // Le personnage que le message fait parler ou décrit : au bord droit de la scène, au-dessus du lieu.
+        perso = new ScenesAnimees.Portrait(a);
+        perso.setVisibility(View.GONE);
+        LayoutParams lpp = new LayoutParams(Ui.dp(a, 96), Ui.dp(a, 96), Gravity.BOTTOM | Gravity.END);
+        lpp.rightMargin = Ui.dp(a, 14);
+        lpp.bottomMargin = Ui.dp(a, 40);
+        tete.addView(perso, lpp);
 
         lieu = Ui.puceScene(a, "");
         LayoutParams ll = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
@@ -198,7 +214,9 @@ final class Lecture extends FrameLayout {
         fil.removeAllViews();
         points = null;
         ecrit = false;
-        vite = !Vitrine.anime(app);
+        vite = ScenesAnimees.texteInstantane(app);
+        enCours = null;
+        perso.montrer(null, "");
         dockCle = chapitreVu = lieuVu = "";
         dernierT = 0;
         repriseVue = false;
@@ -237,6 +255,7 @@ final class Lecture extends FrameLayout {
         lieu.setText(Aventure.signeTon(campagne.ton) + "  " + l);
         lieu.setContentDescription("Lieu : " + l);
         scene.regler(campagne.id, campagne.ton, etat.decor);
+        fond.ton(campagne.ton);
         jauge.setBackgroundColor(Aventure.cielTon(campagne.ton)[4]);
         float part = (float) Math.max(0.02, Math.min(1, etat.progression + (etat.phase == Campagnes.Phase.Fin ? 0 : 0.5 / Math.max(1, etat.chapitreTotal))));
         ((LinearLayout.LayoutParams) jauge.getLayoutParams()).weight = part;
@@ -309,7 +328,7 @@ final class Lecture extends FrameLayout {
 
     private long delai(Campagnes.Message m) {
         if (vite) return 60;
-        return Math.max(650, Math.min(2300, 380 + m.texte.length() * 12L));
+        return Animations.attente(m.texte);
     }
 
     private void ecrire() {
@@ -349,10 +368,18 @@ final class Lecture extends FrameLayout {
             fil.removeView(r);
             points = null;
             Campagnes.Message x = aEcrire.pollFirst();
-            if (x != null) ajouter(x, true);
-            postDelayed(() -> {
+            TextView t = x != null ? ajouter(x, true) : null;
+            Runnable suite = () -> postDelayed(() -> {
                 if (g == gen) ecrire();
             }, vite ? 40 : 420);
+            if (t != null && !vite && x.qui.equals("pilou")) {
+                // Lettre à lettre (la bulle a déjà sa taille) ; le personnage parle pendant ses répliques.
+                perso.parle(Animations.parle(x.texte));
+                enCours = new ScenesAnimees.Ecriture(t, x.texte, () -> {
+                    perso.parle(false);
+                    if (g == gen) suite.run();
+                });
+            } else suite.run();
         }, delai(m));
     }
 
@@ -374,6 +401,11 @@ final class Lecture extends FrameLayout {
         if (!ecrit && aEcrire.isEmpty()) return;
         vite = true;
         gen++;
+        if (enCours != null) {
+            enCours.terminer();
+            enCours = null;
+        }
+        perso.parle(false);
         if (points != null) {
 
             fil.removeView(points);
@@ -463,7 +495,7 @@ final class Lecture extends FrameLayout {
         fil.addView(r, Ui.large());
     }
 
-    private void ajouter(Campagnes.Message m, boolean anime) {
+    private TextView ajouter(Campagnes.Message m, boolean anime) {
         boolean joueur = m.qui.equals("joueur");
         if (!joueur) dividers(m);
         LinearLayout r = rangee(joueur);
@@ -484,10 +516,24 @@ final class Lecture extends FrameLayout {
             if (anime && (humeur.equals("joie") || humeur.equals("surpris") || humeur.equals("peur"))) pilou.sauter();
             pilou.tenue("");
             pilou.montrer(humeur, Prefs.etat(app).couleur);
+            personnage(m);
         }
         if (anime) {
             apparaitre(r, joueur);
             defiler();
+        }
+        return t;
+    }
+
+    /** Le personnage du nœud de ce message (champ « personnage ») ; personne : le portrait s'efface. */
+    private void personnage(Campagnes.Message m) {
+        try {
+            Campagnes.Noeud n = campagne == null ? null : campagne.noeud(m.noeud);
+            Sprites.Sprite s = n == null ? null : Animations.portrait(Sprites.banque(), campagne.id, n.personnage, n.expression, 2);
+            perso.montrer(s, s == null ? "" : ScenesAnimees.nomPersonnage(n.personnage));
+        } catch (RuntimeException x) {
+            Journal.noter("lecture : personnage", x);
+            perso.montrer(null, "");
         }
     }
 
@@ -732,6 +778,19 @@ final class Lecture extends FrameLayout {
         if (!etat.rejeu && r.po > 0) gains.addView(puce("◉  +" + r.po + " po", p.orange));
         if (!etat.rejeu && r.xp > 0) gains.addView(puce("✦  +" + r.xp + " xp", p.bleu));
         if (gains.getChildCount() > 0) c.addView(gains);
+        for (int i = 0; i < gains.getChildCount(); i++) ScenesAnimees.tomber(gains.getChildAt(i), Animations.delaiRecompense(i));
+        // Le souvenir se pose avec un petit éclat, puis l'emblème du ton.
+        LinearLayout vitrine = Ui.rangee(app);
+        vitrine.setGravity(Gravity.CENTER);
+        View vs = ScenesAnimees.vignette(app, Sprites.souvenir(Sprites.banque(), campagne.id, r.souvenir, 2), 72);
+        if (vs != null) vitrine.addView(ScenesAnimees.eclat(app, vs, couleur, Animations.delaiRecompense(gains.getChildCount())));
+        View tv = ScenesAnimees.vignette(app, Sprites.ton(Sprites.banque(), campagne.ton, 2), 36);
+        if (tv != null) vitrine.addView(ScenesAnimees.eclat(app, tv, Aventure.accentTon(app, campagne.ton), Animations.delaiRecompense(gains.getChildCount() + 1)));
+        if (vitrine.getChildCount() > 0) {
+            LinearLayout.LayoutParams lv = Ui.large();
+            lv.topMargin = Ui.dp(app, 8);
+            c.addView(vitrine, lv);
+        }
         int[] attente = CampagnesTel.enAttente(app);
         String note = etat.rejeu ? "Rejouer ne redonne ni pièces ni xp : seulement ce que tu n'avais pas encore."
                 : attente[0] + attente[1] > 0 ? "Ces gains attendent ton PC : il les versera dès qu'il sera allumé." : "";
@@ -866,6 +925,18 @@ final class Lecture extends FrameLayout {
                     page.ouvrirCarnet();
                 },
                 "Mettre l'aventure de côté…", false, (View.OnClickListener) v -> confirmerSuspension(),
+                "Animations : " + ScenesAnimees.nomNiveau(ScenesAnimees.reglage(app)) + "  ›", false, (View.OnClickListener) v -> {
+                    String n = ScenesAnimees.reglage(app);
+                    ScenesAnimees.regler(app, Animations.COMPLETES.equals(n) ? Animations.REDUITES : Animations.REDUITES.equals(n) ? Animations.AUCUNE : Animations.COMPLETES);
+                    fermerCouche();
+                    post(this::menu);
+                },
+                "Texte instantané : " + (Prefs.de(app).getBoolean("texteInstantane", false) ? "oui" : "non"), false, (View.OnClickListener) v -> {
+                    ScenesAnimees.texteInstantane(app, !Prefs.de(app).getBoolean("texteInstantane", false));
+                    vite = ScenesAnimees.texteInstantane(app);
+                    fermerCouche();
+                    post(this::menu);
+                },
                 "Continuer la lecture", true, (View.OnClickListener) v -> fermerCouche()));
     }
 

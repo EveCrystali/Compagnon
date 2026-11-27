@@ -76,6 +76,45 @@ SERIE2 = [
 ]
 
 
+# Troisième série : fonds de boutique, prises et plats, défense du bureau, variantes, gestes, bonus, en-cas, soins,
+# objets d'interface. Même mécanique que la seconde (base fine, puis finition.py : lumière commune + détails propres).
+SERIE3 = [
+    "encas-croquettes", "encas-gateau", "encas-pomme", "encas-soupe", "plat-assiette", "plat-bol", "plat-brochette",
+    "plat-friture", "plat-invente", "plat-papillote", "plat-plateau", "plat-poelon", "plat-ramen", "plat-rate",
+    "plat-souffle", "plat-sushi", "plat-tarte", "plat-tartine", "prise-ablette", "prise-algue", "prise-anguille",
+    "prise-baleineau", "prise-botte", "prise-bouteille", "prise-caillou", "prise-carpe", "prise-cle",
+    "prise-coffre", "prise-comete", "prise-crabe", "prise-ecrevisse", "prise-goujon", "prise-hippocampe",
+    "prise-lanterne", "prise-perche", "prise-perle", "prise-pieuvre", "prise-raie", "prise-saumon", "prise-spirale",
+    "prise-truite", "soin-faim", "soin-moral", "soin-proprete", "fond-arcade", "fond-aurore", "fond-automne",
+    "fond-bibliotheque", "fond-cerisiers", "fond-espace", "fond-fetes", "fond-foret", "fond-frissons",
+    "fond-mer-cafe", "fond-montagne", "fond-nuit", "fond-observatoire", "fond-patisserie", "fond-plage",
+    "fond-potager", "fond-ville", "bug-araignee", "bug-prod", "bug-scarabee", "bug-ver", "defense-blinde",
+    "defense-blinde-fele", "defense-bonus-bouclier", "defense-bonus-double", "defense-bonus-ralenti",
+    "defense-diviseur", "defense-etincelle", "defense-mini", "defense-rapide", "defense-tir"
+]
+
+
+# Quatrième série : ce qui restait agrandi automatiquement (variantes, poufs, polaroïds, bonus d'ensemble, icônes,
+# accessoires, particules). Dessin fin propre à chaque sprite (finition_lot3.py), sans finition générique.
+SERIE4 = [
+    "acc-chapeaupeche", "acc-etoilemer", "acc-feuille", "acc-tablier", "appareil-photo", "arrosoir", "badge-boutique",
+    "ballon", "bonus-arcade", "bonus-astronome", "bonus-cafe", "bonus-explorateur", "bonus-fetes", "bonus-frissons",
+    "bonus-hiver", "bonus-jardinier", "bonus-patissier", "bonus-pirate", "bonus-plage", "bonus-tests", "bouchon",
+    "boude-bras", "boude-eclaircie", "boude-nuage", "bulle", "bulles-savon", "cadenas", "carapace", "cercle-glyphes",
+    "clavier-mini", "clochette", "coeurs-amitie", "coffre-expedition-ouvert", "coffre-quete", "confettis",
+    "cube-pixel", "eclaboussure", "eclair-energie", "enveloppe-close", "enveloppe-notif", "etincelles", "etoile",
+    "feu", "feuilles-tourbillon", "fouet", "fourchette-geante", "guirlande", "jeton-arcade", "lampe-poche",
+    "lanterne-courge", "macaron", "main", "manette", "marmite", "marmite-cuivre", "mousse", "nid-oiseau",
+    "orbite-lunes", "pancarte", "parchemin-quete", "pelle-seau", "photo-flash", "pierre-calme", "pinceau",
+    "pluie-petales", "po", "po-tourne", "polaroid-1", "polaroid-2", "polaroid-3", "polaroid-4", "pouf-1", "pouf-2",
+    "pouf-3", "pouf-4", "pouf-5", "rayonnant", "sucette", "sucre-orge", "trainee-coeurs", "trainee-notes",
+    "trainee-prisme", "vapeur", "variante-calin-2", "variante-calin-2-tete", "variante-calin-3",
+    "variante-calin-3-tete", "variante-calin-4", "variante-calin-4-tete", "variante-espiegle-2",
+    "variante-espiegle-2-tete", "variante-espiegle-3", "variante-espiegle-3-tete", "variante-espiegle-4",
+    "variante-espiegle-4-tete", "vie",
+]
+
+
 def ids_campagnes():
     """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
     import campagnes_sprites
@@ -109,8 +148,10 @@ def ids_visage():
 def generer(dessiner):
     """Rejoue tous les dessins à l'échelle 2 ; seuls ceux de la série sont écrits (assets/sprites2x, index2x.txt)."""
     import retouches_fines  # noqa: F401  (remplit RETOUCHES)
+    import finition
+    finition.inscrire()
     toile.ECHELLE = 2
-    toile.FINS = set(SERIE) | set(SERIE2) | set(ids_visage()) | set(ids_campagnes())
+    toile.FINS = set(SERIE) | set(SERIE2) | set(SERIE3) | set(SERIE4) | set(ids_visage()) | set(ids_campagnes())
     toile.RETOUCHES = RETOUCHES
     try:
         dessiner()

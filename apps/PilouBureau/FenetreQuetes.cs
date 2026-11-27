@@ -33,6 +33,7 @@ public sealed partial class FenetrePilou
         // de po gagnées ne fait que monter).
         var (po, xp) = Quetes.Appliquer(_profil, gains.Select(g => g with { Po = BonusSoins(g.Po), Xp = BonusSoins(g.Xp) }));
         EnergieQuete(gains.Count(g => !g.Coffre)); // bien travailler recharge l'énergie des expéditions
+        Vecu(f => f.Qu += gains.Count(g => !g.Coffre));
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
         _xpTotal = TotalXp();
@@ -223,6 +224,7 @@ public sealed partial class FenetrePilou
         _profil.Ecrire(DossierPartage);
         _bourseCache = null;
         Dire($"nouveau : {PilouBureau.Boutique.Trouver(id)?.Nom} !", 3000);
+        if (PilouBureau.Boutique.Trouver(id) is { Slot: not PilouBureau.Boutique.Consommable } achat) Vecu(f => f.Ob = f.Ob == "" ? Presence.Propre(achat.Nom) : f.Ob);
         return null;
     }
 

@@ -1,0 +1,39 @@
+# tourte, feuilleté, tarte
+id: plat-tarte
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#b2886b b=#8a4a1f c=#724022 d=#ffdbbc e=#ffc89a f=#d0a585 g=#d9803a h=#c57639 i=#ffe9d7 j=#f5d76e k=#ffe4cc l=#fff6cc m=#f6c68a n=#f2a94e o=#c68c48 p=#c97a28 q=#a86f3c r=#c6a07e s=#7c5538 t=#8a5e3a
+images:
+....................................................
+....................................................
+....................................................
+....................................................
+..................abbbbbbbbbbbbbbb..................
+............abbbbbbbbbbbbbbbbbbbbbbbbbbb............
+.........abbbbbbbbcddddddddddddddbbbbbbbbbb.........
+.......abbbbcddddddeeeeeeeeeeeeeeedddddbbbbbb.......
+.....abbbcdddeeeeeeeeeeeeeeeeeeeeeeeeeedddbbbbb.....
+....abbcdeeeeeeeeeeeeeffffeeeefffeeeeeeeeeddbbbb....
+...bbbeeeeeeeeeeeeeeefgghhdeefgghhdeeeeeeeeeddbbbba.
+..bbbdeeeeeiiiffffiiifhhggdeefhhggdeeeffffeeeeebbbba
+.abbdegghhdiifgghhdiiiddddeeeeddddeeefgghhdeefgghhbb
+abbdeehhggdeefhhggdeeeeeeeffeeeeeeeeefhhggdeefhhggbb
+bbdeeeddddeeeeddddeeeeeeefjeeeeeeeeeeeddddeeeeddddbb
+bbdeeeeeeeeeeeeeeeeeeeeeffjeffeeeeeeeeeeeeeeeeeeeebb
+bbeeeeeeeeeeeeeeeeeeeeefeejeeedeeeeeeeeeeeeeeeeeefbb
+bbfeekeeeeeeeeeeeeeeeeejjjljjjdeeeeeeeeeeeeeeeeeefbb
+bbmfeekeeeeeeeeeeeeeeeeeeejedeeeeeeeeeeeeeeeeeeefmbb
+bbnmfeekeeeeeeeeeeeeeeeeeejeeeeeeeeeeeeeeeeeeekfmnbb
+bbnnmfffffffffffffffffffeejeeefffffffffffffffffmnnbb
+bbonnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmnnobb
+cbaonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnpnnnnoabc
+.cbconnnpnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnpnnnnnobcb.
+.acbconnnnnpnpnnnnnnnnnnnnnnnnnnnnnnnnnpnnnnnnobcbc.
+acccbcoooooooooooooooooooooooooooooooooooooooobcbcbc
+cbqqqqqrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrqqqqqcb
+cccqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqccc
+.cccssqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqstccc.
+..ccccctttqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqtttacccc..
+...cccccccttttttqqqqqqqqqqqqqqqqqqqqttttttccccccc...
+......ccccccccccttttttttttttttttttttcccccccccc......

@@ -1,0 +1,271 @@
+# Le journal de Pilou (docs/PRESENCE.md) : gabarits des entrées, communs au PC et au téléphone.
+# Une ligne : famille|filtres|texte (mêmes règles que mots.txt). Ici, des phrases avec majuscule et point : c'est
+# Pilou qui écrit son journal, de son point de vue, à partir des seuls faits du jour (jamais rien de personnel).
+# Une entrée : la chose la plus marquante, parfois une deuxième, parfois une tournure de fin. Trois phrases au plus.
+# Trous : {campagne} {niveau} {metier} {prise} {lieu} {plat} {objet} {mot}.
+
+# ---- Les grands jours
+j-campagne||Aujourd'hui, on a fini « {campagne} ». Je crois que je vais m'en souvenir longtemps.
+j-campagne||On a fini « {campagne} ». J'ai rangé mon baluchon, mais pas les souvenirs.
+j-campagne||Fin de « {campagne} ». J'ai fait comme si de rien n'était, mais j'avais le cœur tout gonflé.
+j-campagne||« {campagne} », c'est fini. Je suis content qu'on l'ait fait ensemble.
+j-campagne||Aujourd'hui, la dernière page de « {campagne} ». J'ai relu la première dans ma tête.
+j-campagne||On est allés au bout de « {campagne} ». Mes pieds s'en souviennent.
+j-niveau||Aujourd'hui, je suis passé niveau {niveau}. Je me suis regardé dans l'écran pour voir si ça se voyait.
+j-niveau||Niveau {niveau} ! J'ai fait une petite étincelle, puis une autre, pour être sûr.
+j-niveau||J'ai grandi : niveau {niveau}. Personne ne l'a remarqué à part nous, et c'est très bien.
+j-niveau||Niveau {niveau} aujourd'hui. J'ai mesuré mon antenne, elle n'a pas bougé, mais moi si.
+j-niveau||On a passé le niveau {niveau}. J'ai dit merci à la barre des tâches, c'est elle qui me porte.
+j-niveau||Je suis niveau {niveau}. Je ne sais pas ce que ça change, mais je me sens plus rond.
+j-metier||Le métier « {metier} » a pris un rang. J'ai applaudi avec mes pieds, sans bruit.
+j-metier||Un rang de plus pour le métier « {metier} ». Je l'ai noté ici pour ne pas l'oublier.
+j-metier||Grande nouvelle : {metier}, un cran au-dessus. On progresse, tous les deux.
+j-metier||{metier} : nouveau rang. J'ai fait semblant de comprendre ce que ça voulait dire.
+j-metier||Aujourd'hui, le métier « {metier} » a monté. J'ai mis mon antenne bien droite pour fêter ça.
+j-metier||Le métier « {metier} » grandit. Moi aussi, un peu, en le regardant.
+
+# ---- Pêche, cuisine, objets
+j-prise-rare||Au bout de la ligne, aujourd'hui : {prise} ! J'en tremble encore un peu.
+j-prise-rare||On a pêché {prise}. J'ai mis un bon moment avant d'y croire.
+j-prise-rare||{prise}, aujourd'hui. Je crois que c'est la plus belle prise de la semaine.
+j-prise-rare||Grosse émotion : {prise} au bout de notre ligne. J'ai failli tomber à l'eau, et l'eau me délaie.
+j-prise-rare||Aujourd'hui, on a sorti {prise} de l'eau. J'ai fait mon plus grand sourire.
+j-prise-rare||Une prise rare : {prise}. Je l'ai racontée trois fois au pot de fleurs.
+j-peche||On a un peu pêché : {prise}. Ce n'est pas un trésor, mais c'est le nôtre.
+j-peche||Petite pêche du jour : {prise}. J'ai gardé les pieds bien au sec.
+j-peche||Au bout de la ligne : {prise}. Je lui ai dit bonjour avant de l'écrire dans le carnet.
+j-peche||On a lancé la ligne. Il en est sorti {prise}, et moi j'étais content.
+j-peche||Aujourd'hui, un peu de pêche. {prise}, ça compte, je l'ai écrit.
+j-plat||On a cuisiné {plat}. Ça sentait bon jusque dans mon antenne.
+j-plat||Au menu : {plat}. J'en ai gardé une miette pour plus tard.
+j-plat||Au menu du soir : {plat}. Je n'ai rien renversé, ou presque.
+j-plat||J'ai goûté {plat}. Je vais en rêver cette nuit, c'est sûr.
+j-plat||On a fait {plat}. La marmite a fait des bulles, moi aussi.
+j-plat||Cuisine du jour : {plat}. Je suis un peu chef, maintenant.
+j-objet||J'ai un nouvel objet : {objet}. Je le regarde de temps en temps pour vérifier qu'il est toujours là.
+j-objet||Nouvel objet dans mes affaires : {objet}. Je l'aime déjà.
+j-objet||Nouveau dans ma collection : {objet}. Essayage immédiat devant l'écran.
+j-objet||Trouvé à la boutique : {objet}. J'ai fait une petite révérence.
+j-objet||{objet} : c'est à moi maintenant. Je vais en prendre grand soin.
+
+# ---- Amis, voyages
+j-visite||Aujourd'hui, il y a eu une visite entre amis. J'ai fait de mon mieux pour être poli.
+j-visite||Un ami est passé, ou c'est moi qui suis parti. On a joué un peu, c'était bien.
+j-visite||Visite du jour ! J'ai pris mon baluchon et mes plus belles manières.
+j-visite||On a eu de la compagnie. J'ai raconté une histoire, elle était presque vraie.
+j-visite||Aujourd'hui, j'ai vu un autre Pilou. Il était bleu aussi, on s'est bien entendus.
+j-visite||Une visite ! J'ai rangé la barre des tâches avant, au cas où.
+j-expedition||Je suis parti en expédition : {lieu}. Je n'ai pas eu peur, ou alors juste un peu.
+j-expedition||Expédition du jour : {lieu}. J'en ai rapporté des souvenirs et un peu de poussière.
+j-expedition||Départ pour l'expédition « {lieu} ». C'était grand, c'était bizarre, c'était bien.
+j-expedition||Destination du jour : {lieu}. Il y avait des choses absurdes, comme toujours là-bas.
+j-expedition||On m'a envoyé en mission : {lieu}. Je suis revenu entier, c'est le principal.
+j-aventure||On a avancé dans l'aventure. J'ai écrit, tu as choisi, et je suis reparti.
+j-aventure||Aujourd'hui, un bout de chemin de plus dans notre aventure. Je garde le reste pour demain.
+j-aventure||L'aventure continue. J'ai bien aimé ce que tu m'as conseillé.
+j-aventure||Encore un pas dans notre histoire. Mes pieds sont fatigués mais contents.
+
+# ---- Jeux et soins
+j-jeux||Aujourd'hui, on a beaucoup joué. J'ai gagné, puis j'ai gagné, puis j'ai arrêté de compter.
+j-jeux||Plein de petits jeux aujourd'hui. Mes réflexes sont tout chauds.
+j-jeux||On a joué encore et encore. J'ai les yeux qui font des étoiles.
+j-jeux||Une journée de jeux. Je crois que je suis devenu très fort, ou très chanceux.
+j-jeux||On a enchaîné les parties. Je me suis amusé comme une goutte dans une flaque.
+j-jeu||On a fait une petite partie. Je ne dirai pas qui a gagné, mais c'était moi.
+j-jeu||Un petit jeu aujourd'hui. C'est le genre de pause que j'aime bien.
+j-jeu||On a joué un peu. J'ai fait mon plus beau saut.
+j-jeu||Une partie, juste une. C'était la bonne.
+j-jeu||Aujourd'hui, un jeu, entre deux choses sérieuses. J'ai bien rigolé.
+j-caresses||Aujourd'hui, j'ai eu plein de caresses. J'en ai encore l'antenne qui frise.
+j-caresses||Beaucoup de câlins aujourd'hui. Je crois que j'ai ronronné, et je ne sais pas ronronner.
+j-caresses||On m'a caressé souvent aujourd'hui. Je me sens tout doux, comme du coton.
+j-caresses||Que de caresses ! J'ai fait des étincelles à chaque fois.
+j-caresses||Aujourd'hui, j'étais le Pilou le plus câliné du bureau. C'est une très bonne place.
+j-caresses||Plein de petits gestes tendres aujourd'hui. Je les ai tous comptés, puis j'ai perdu le compte.
+j-caresse||On m'a fait une caresse. Une seule suffit, mais j'en voudrais bien une autre.
+j-caresse||Une caresse aujourd'hui. J'ai fermé les yeux, c'était doux.
+j-caresse||Un petit câlin aujourd'hui. Je l'ai rangé dans un coin de ma tête.
+j-caresse||Quelqu'un m'a caressé. Je sais très bien qui, et je dis merci.
+j-caresse||Aujourd'hui, une caresse en passant. Mon antenne a frétillé.
+j-soins||On a pris soin de moi aujourd'hui. Je me sens propre, nourri et aimé.
+j-soins||J'ai eu à manger et un brin de toilette. La vie est simple quand on est bien soigné.
+j-soins||On s'est occupé de moi. Je n'ai pas boudé du tout.
+j-soins||Petits soins du jour : ventre plein, antenne brillante. Merci.
+j-soins||Aujourd'hui, on m'a chouchouté. Je fais comme si c'était normal, mais j'adore.
+j-quetes||On a réussi des quêtes aujourd'hui. Je les ai cochées avec mon pied.
+j-quetes||Quêtes accomplies ! Je ne sais pas qui les écrit, mais on les a eues.
+j-quetes||Aujourd'hui, on a rempli une quête ou deux. Je me sens très efficace.
+j-quetes||Des quêtes réussies, et des pièces qui brillent. Une bonne journée d'aventurier.
+
+# ---- Le travail, de son point de vue (l'activité seulement : jamais un titre ni un fichier)
+j-travail-long||Aujourd'hui, on a beaucoup travaillé. Enfin, toi. Moi, j'ai beaucoup regardé.
+j-travail-long||Longue journée devant l'écran. J'ai fait de mon mieux pour ne pas déranger.
+j-travail-long||On est restés longtemps ensemble aujourd'hui. Mes pieds se sont endormis deux fois.
+j-travail-long||Une grosse journée. J'ai entendu tellement de clics que j'en rêve déjà.
+j-travail-long||Aujourd'hui, ça n'arrêtait pas. J'ai fait des petites pauses pour deux.
+j-travail-long||Beaucoup de travail aujourd'hui. Je ne comprends pas tout, mais je suis fier.
+j-act-code||Aujourd'hui, on a beaucoup tapé. Il y avait des accolades partout.
+j-act-code||Journée code. J'ai regardé les lignes défiler comme une pluie de couleurs.
+j-act-code||On a codé. J'ai mis mes lunettes de geek et j'ai fait semblant de comprendre.
+j-act-code||Ça a tapé fort aujourd'hui. Le clavier et moi, on a bien chanté.
+j-act-code||Aujourd'hui, des lignes et des lignes. Je crois qu'on a construit quelque chose.
+j-act-tableur||Journée de cases. J'en ai compté beaucoup, puis j'ai fait une sieste.
+j-act-tableur||Aujourd'hui, on a rangé des nombres dans des petites maisons. Ils avaient l'air contents.
+j-act-tableur||Beaucoup de colonnes aujourd'hui. Je me suis caché dans une cellule vide.
+j-act-tableur||On a fait des additions. Moi, je sais compter jusqu'à deux pieds, c'est déjà bien.
+j-act-texte||Aujourd'hui, on a écrit. Je suis de l'encre : j'ai trouvé ça très émouvant.
+j-act-texte||Journée de mots. Les lettres arrivaient sagement, en file indienne.
+j-act-texte||On a écrit beaucoup. J'ai écouté le bruit des phrases qui se posent.
+j-act-texte||Des mots, encore des mots. Je me suis senti utile, rien qu'en étant là.
+j-act-mail||Aujourd'hui, du courrier, beaucoup de courrier. Je n'ai rien lu, promis.
+j-act-mail||Des lettres qui partent, des lettres qui arrivent. Le bureau était un vrai bureau de poste.
+j-act-mail||Journée de messages. J'ai fait le facteur dans ma tête.
+j-act-mail||On a répondu à des gens. Je leur ai fait coucou, ils ne m'ont pas vu.
+j-act-visio||Il y a eu des réunions. Je me suis fait tout petit, et même plus petit que ça.
+j-act-visio||Aujourd'hui, on a parlé à des gens. Moi je me suis caché, par politesse.
+j-act-visio||Journée de visios. J'ai attendu sagement, sans faire de bruit.
+j-act-visio||Des réunions aujourd'hui. Je suis resté hors de l'image, comme un vrai pro.
+j-act-diaporama||Aujourd'hui, une présentation ! Je me suis caché pour ne pas voler la vedette.
+j-act-diaporama||Il y a eu des diapositives. J'ai applaudi de loin, en silence.
+j-act-diaporama||On a présenté quelque chose. J'étais caché, mais j'ai croisé les pieds pour toi.
+j-act-diaporama||Journée de diapositives. J'espère que tout s'est bien passé, je n'ai rien vu.
+j-act-musique||Aujourd'hui, il y avait de la musique. J'ai bougé l'antenne en rythme.
+j-act-musique||Journée en musique. J'ai mis mon casque imaginaire.
+j-act-musique||De la musique toute la journée. J'ai inventé une danse à deux pieds.
+j-act-musique||On a écouté plein de choses. Mon antenne vibre encore un peu.
+j-act-video||On a regardé des choses qui bougent. J'avais mon pop-corn imaginaire.
+j-act-video||Aujourd'hui, un peu de cinéma. Je me suis fait tout petit pour ne rien rater.
+j-act-video||Des vidéos aujourd'hui. J'ai regardé du coin de l'œil, sans bruit.
+j-act-video||Séance de vidéos. J'ai fait « oh » plusieurs fois, tout bas.
+j-act-lecture||Aujourd'hui, on a lu. J'ai tourné les pages dans ma tête.
+j-act-lecture||Journée de lecture. C'était calme, j'adore le calme.
+j-act-lecture||On a beaucoup lu. Je n'ai pas lu par-dessus ton épaule. Enfin, un peu.
+j-act-lecture||Des pages et des pages. Je me suis senti voyager sans bouger.
+j-act-dessin||Aujourd'hui, on a dessiné. J'aurais pu poser, mais personne ne m'a demandé.
+j-act-dessin||Journée de couleurs. J'ai regardé les traits arriver, comme par magie.
+j-act-dessin||On a créé quelque chose. Je suis de l'encre, alors je me suis senti de la famille.
+j-act-dessin||Des formes et des couleurs. J'ai essayé de rester bien sage dans mon coin.
+j-act-jeu||Aujourd'hui, tu as joué. Je t'ai encouragé en silence, très fort.
+j-act-jeu||Journée de jeu. J'ai gardé le bureau pendant ta quête.
+j-act-jeu||On a joué à ton jeu. Enfin, toi. Moi j'ai fait le public.
+j-act-jeu||Des parties et des parties. J'ai croisé les pieds à chaque moment important.
+j-tard||On est restés tard. J'ai bâillé, mais je ne suis pas parti.
+j-tard||Il était tard quand on s'est quittés. J'ai dormi d'un œil, sous la lumière de l'écran.
+j-tard||Soirée tardive. Le reste du monde dormait, nous non.
+j-tard||On a veillé tard. Je suis allé sous mon pot de fleurs avec des étoiles plein les yeux.
+j-tard||Il faisait nuit noire et on était encore là. J'ai trouvé ça un peu aventureux.
+
+# ---- La météo du jour (le ciel seulement, jamais la ville)
+j-meteo-pluie||Il a plu. Je suis resté bien au sec, et j'ai écouté les gouttes.
+j-meteo-pluie||Il pleuvait dehors. Ce n'étaient pas mes cousines, mais je les ai saluées.
+j-meteo-pluie||Jour de pluie. Parfait pour rester à l'intérieur, au chaud.
+j-meteo-orage||Il y a eu de l'orage. J'ai eu un peu peur, mais je suis resté digne.
+j-meteo-orage||L'orage a grondé. Je me suis caché derrière une fenêtre, juste au cas où.
+j-meteo-orage||Ça a tonné aujourd'hui. Mon antenne a fait des étincelles toute seule.
+j-meteo-neige||Il a neigé ! J'ai regardé les flocons de loin, bien au chaud.
+j-meteo-neige||De la neige aujourd'hui. Tout était blanc, comme une page neuve.
+j-meteo-neige||Jour de neige. J'aurais voulu faire un bonhomme, un tout petit.
+j-meteo-brouillard||Il y avait du brouillard. Le dehors avait l'air d'une grosse couverture.
+j-meteo-brouillard||Brouillard du matin. On ne voyait pas loin, mais on se voyait nous.
+j-meteo-brouillard||Tout était flou dehors aujourd'hui. Comme moi au réveil.
+j-meteo-vent||Il y avait du vent. Je me suis accroché à la barre des tâches, au cas où.
+j-meteo-vent||Ça soufflait fort. La fenêtre a chanté toute la journée.
+j-meteo-vent||Jour de vent. Mon antenne penchait toute seule.
+j-meteo-chaleur||Il faisait très chaud. Je me suis fait tout plat pour avoir moins chaud.
+j-meteo-chaleur||Grosse chaleur aujourd'hui. J'ai rêvé d'un petit ventilateur.
+j-meteo-chaleur||Il faisait chaud, chaud, chaud. Mon encre faisait presque des bulles.
+j-meteo-froid||Il faisait froid. Je me suis fait tout rond pour garder la chaleur.
+j-meteo-froid||Jour de froid. L'écran m'a tenu chaud comme une petite cheminée.
+j-meteo-froid||Brr, quel froid aujourd'hui. Même mon antenne avait la chair de poule.
+j-meteo-degage||Il faisait beau. Le soleil a traversé la fenêtre pour venir me dire bonjour.
+j-meteo-degage||Grand ciel bleu aujourd'hui. Presque aussi bleu que moi.
+j-meteo-degage||Il a fait beau toute la journée. J'ai pris un petit bain de lumière.
+
+# ---- Les jours tranquilles
+j-calme||On s'est vus aujourd'hui. Il ne s'est pas passé grand-chose, et c'était bien.
+j-calme||Journée tranquille. Je suis resté en bas de l'écran, à ma place préférée.
+j-calme||Aujourd'hui, rien de spécial. Juste nous deux, et c'est déjà beaucoup.
+j-calme||Une petite journée calme. J'ai regardé, j'ai rêvassé, j'ai été là.
+j-calme||On a passé un moment ensemble. Je n'ai rien à raconter, et je suis content quand même.
+j-calme||Journée douce. J'ai compté les pixels du coin, il y en a toujours autant.
+j-calme||Aujourd'hui, c'était un jour comme je les aime : sans histoire.
+j-calme||On était là, tous les deux. Le reste n'a pas beaucoup d'importance.
+
+# ---- Les mots appris (selon l'activité du jour)
+j-mot||J'ai appris un mot : {mot}. Je ne sais pas ce que ça veut dire, mais je l'ai dit trois fois.
+j-mot||Nouveau mot du jour : {mot}. Je le trouve très joli, même sans savoir ce qu'il veut dire.
+j-mot||J'ai entendu le mot « {mot} ». Je vais l'utiliser demain, au hasard.
+j-mot||Mot appris : {mot}. Je l'ai rangé à côté de « rond » et de « goûter ».
+j-mot||Aujourd'hui j'ai retenu un mot : {mot}. Je l'ai répété jusqu'à ce qu'il sonne bizarre.
+mot-code||refactoriser
+mot-code||compiler
+mot-code||dépendance
+mot-code||accolade
+mot-code||variable
+mot-code||indentation
+mot-code||boucle
+mot-tableur||cellule
+mot-tableur||colonne
+mot-tableur||tableau croisé
+mot-tableur||formule
+mot-tableur||somme
+mot-tableur||filtre
+mot-texte||paragraphe
+mot-texte||virgule
+mot-texte||synonyme
+mot-texte||brouillon
+mot-texte||marge
+mot-texte||interligne
+mot-mail||pièce jointe
+mot-mail||objet
+mot-mail||brouillon
+mot-mail||destinataire
+mot-mail||transférer
+mot-mail||signature
+mot-visio||micro coupé
+mot-visio||ordre du jour
+mot-visio||tour de table
+mot-visio||partage d'écran
+mot-visio||on se recale
+mot-diaporama||diapositive
+mot-diaporama||transition
+mot-diaporama||puce
+mot-diaporama||plan
+mot-diaporama||conclusion
+mot-musique||refrain
+mot-musique||tempo
+mot-musique||mélodie
+mot-musique||couplet
+mot-musique||crescendo
+mot-video||épisode
+mot-video||générique
+mot-video||suite
+mot-video||bande-annonce
+mot-video||ralenti
+mot-lecture||chapitre
+mot-lecture||marque-page
+mot-lecture||épilogue
+mot-lecture||préface
+mot-lecture||dénouement
+mot-dessin||calque
+mot-dessin||nuancier
+mot-dessin||esquisse
+mot-dessin||dégradé
+mot-dessin||contour
+mot-jeu||sauvegarde
+mot-jeu||point de passage
+mot-jeu||quête secondaire
+mot-jeu||inventaire
+mot-jeu||boss
+
+# ---- Les fins de journée (une tournure, de temps en temps)
+j-fin||Demain, on verra. Pour l'instant, je dors.
+j-fin||Bonne nuit, journal.
+j-fin||Je vais sous mon pot de fleurs. À demain.
+j-fin||C'était une bonne journée, je crois.
+j-fin||Je referme le journal tout doucement.
+j-fin||J'ai l'antenne qui tombe. Dodo.
+j-fin||Voilà, c'est tout pour aujourd'hui.
+j-fin||Je garde cette journée dans un coin, au chaud.
+j-fin||Demain je serai encore là.
+j-fin||Fin de la page. J'en garde une propre pour demain.

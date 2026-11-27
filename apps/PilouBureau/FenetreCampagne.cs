@@ -230,14 +230,15 @@ public sealed partial class FenetrePilou
     // ---- Démonstrations : --essai=campagne:lecture|attente|retour|epreuve|fin. Une partie du prologue jouée d'avance en
     // mémoire (choix, attentes passées), puis la fenêtre Aventure ou l'overlay à l'heure réelle ; les décisions qu'on y
     // prend restent en mémoire. Le profil n'est pas touché, rien n'est publié.
-    public static readonly string[] EssaisAventure = { "lecture", "attente", "retour", "epreuve", "fin" };
+    // « personnage » : La Grande Panne jouée jusqu'au premier choix où un personnage parle (portrait animé, décor animé).
+    public static readonly string[] EssaisAventure = { "lecture", "attente", "retour", "epreuve", "fin", "personnage" };
 
     private void EssaiAventure(string quoi) => Prudemment(() =>
     {
-        var c = Campagnes.Charger("prologue");
+        var c = Campagnes.Charger(quoi == "personnage" ? "grande-panne" : "prologue");
         if (c is null)
         {
-            Dire("le prologue est introuvable dans cet exe", 6000);
+            Dire("la campagne de démonstration est introuvable dans cet exe", 6000);
             return;
         }
         const string appareil = "essai";
@@ -256,6 +257,8 @@ public sealed partial class FenetrePilou
                 "attente" => e.Phase == Campagnes.Phase.Attente,
                 "retour" or "lecture" => e.Phase == Campagnes.Phase.Choix && k.Fil.Any(m => m.Qui == "joueur"),
                 "epreuve" => e.Phase == Campagnes.Phase.Epreuve,
+                "personnage" => e.Phase == Campagnes.Phase.Choix && k.Fil.LastOrDefault(m => m.Qui == "pilou") is { } dm
+                                && c.Noeud(dm.Noeud) is { Personnage.Length: > 0 } && k.Fil.Count(m => m.Qui == "joueur") >= 2,
                 _ => !e.EnCours,
             };
             if (arrete || !e.EnCours) break;
@@ -280,7 +283,7 @@ public sealed partial class FenetrePilou
         var etat = Campagnes.Actualiser(k, Campagnes.Charger, Math.Max(t, maintenant))!;
         // Lu jusqu'à l'avant-dernier passage : ce que Pilou vient d'écrire s'écrit lettre à lettre (ou s'annonce, au retour).
         var pilou = k.Fil.Where(m => m.Qui == "pilou").ToList();
-        int garder = quoi switch { "retour" => 3, "lecture" or "fin" => 2, _ => 0 };
+        int garder = quoi switch { "retour" => 3, "lecture" or "fin" or "personnage" => 2, _ => 0 };
         var lu = pilou.Count > garder ? pilou[^(garder + 1)] : null;
         k.Lu = lu is null ? "" : string.Create(System.Globalization.CultureInfo.InvariantCulture, $"{lu.P}.{lu.E}.{lu.I}");
         if (garder == 0) Campagnes.MarquerLu(k);

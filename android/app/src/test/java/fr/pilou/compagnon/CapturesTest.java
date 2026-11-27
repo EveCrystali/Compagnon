@@ -69,10 +69,14 @@ public class CapturesTest {
                 appairer();
                 essayer("metiers", this::metiers);
                 appairer();
+                essayer("presence", this::presence);
+                appairer();
                 appairer();
                 essayer("aventure", this::aventure);
                 appairer();
                 essayer("aventure-suspendue", this::aventureSuspendue);
+                appairer();
+                essayer("aventure-personnages", this::aventurePersonnages);
                 essayer("epreuves", this::epreuves);
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
@@ -165,6 +169,45 @@ public class CapturesTest {
         attendre();
         ecran(a, "metiers");
         contenu(a.page(Principale.COLLECTION), "metiers-long");
+        c.pause().stop().destroy();
+    }
+
+    // Présence au quotidien (docs/PRESENCE.md) : mot du jour en tête de l'Accueil, carte « Pilou et moi » (complicité,
+    // question du prénom, journal feuilletable), section des Réglages. Données de démonstration, rien de personnel.
+    private void presence() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Presence.Etat e = new Presence.Etat();
+        e.moi.id = CampagnesTel.appareil(ctx);
+        e.moi.sorte = "tel";
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        for (int d = 30; d >= 0; d--) e.marquer(Presence.jour(now.minusDays(d)));
+        e.moi.caresses = 120;
+        e.moi.minutes = 900;
+        String[] acts = {"code", "texte", "musique"};
+        for (int d = 6; d >= 0; d--) {
+            Presence.FaitsDuJour f = e.aujourdhui(Presence.jourTexte(now.minusDays(d)));
+            f.mn = 120 + d * 10;
+            f.ac = acts[d % 3];
+            f.am = 90;
+            f.tv = 100;
+            f.ca = d;
+            if (d == 2) {
+                f.px = "une truite argentée";
+                f.pq = 2;
+                f.pc = 1;
+            }
+            if (d == 4) f.nv = 12;
+        }
+        Prefs.de(ctx).edit().putString("presence", e.texte()).commit();
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = c.get();
+        a.aller(Principale.ACCUEIL, false);
+        attendre();
+        ecran(a, "presence-accueil");
+        contenu(a.page(Principale.ACCUEIL), "presence-accueil-long");
+        a.aller(Principale.REGLAGES, false);
+        attendre();
+        contenu(a.page(Principale.REGLAGES), "presence-reglages-long");
         c.pause().stop().destroy();
     }
 
@@ -342,6 +385,56 @@ public class CapturesTest {
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             CampagnesTel.graineEssai = null;
+            sansAnimations(false);
+        }
+    }
+
+    // Les animations des campagnes (ScenesAnimees) : La Grande Panne jouée jusqu'à un choix où un personnage parle ;
+    // le décor animé, son portrait au bord de la scène, le fond teinté ; puis la même scène sans animations.
+    private void aventurePersonnages() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().remove("campagnes").remove("campParties").commit();
+        sansAnimations(false);
+        horloge[0] = System.currentTimeMillis();
+        CampagnesTel.horloge = () -> horloge[0];
+        CampagnesTel.prechargerMaintenant();
+        try {
+            CampagnesTel.demarrer(ctx, "grande-panne", false);
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            int choix = 0;
+            for (int pas = 0; pas < 300; pas++) {
+                Campagnes.Etat e = CampagnesTel.etat(ctx);
+                if (e == null || !e.enCours()) break;
+                Campagnes.Noeud n = gp.noeud(e.noeud);
+                if (e.phase == Campagnes.Phase.Choix && choix >= 2 && n != null && !n.personnage.isEmpty()) break;
+                switch (e.phase) {
+                    case Choix: CampagnesTel.choisir(ctx, e.options.get(0).id); choix++; break;
+                    case Depart: CampagnesTel.continuer(ctx); break;
+                    case Epreuve: CampagnesTel.epreuve(ctx, true); break;
+                    default: avancer(Math.max(60_000, e.fin - horloge[0] + 60_000));
+                }
+            }
+            ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+            Principale a = c.get();
+            a.ouvrirLecture();
+            attendre();
+            PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+            Lecture l = pa.lecture();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-personnage");
+            ScenesAnimees.regler(ctx, Animations.AUCUNE);
+            pa.fermerLecture();
+            attendre();
+            a.ouvrirLecture();
+            attendre();
+            pa.lecture().accelerer();
+            attendre();
+            ecran(a, "aventure-personnage-sans-animation");
+            ScenesAnimees.regler(ctx, Animations.COMPLETES);
+            c.pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
             sansAnimations(false);
         }
     }

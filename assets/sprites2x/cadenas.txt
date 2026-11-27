@@ -1,0 +1,31 @@
+# Icône : rangée fermée
+id: cadenas
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#b8c4d2 c=#e6ecf2 d=#8a94a5 e=#3b4654
+images:
+.....aaaaaaaaaa.....
+....aaaabbbbaaaa....
+...aaabcccbbbbaaa...
+..aaabccbbbbddbaaa..
+..aabccbbaabbddbaa..
+.aaabcbaaaaaabdbaaa.
+.aabcbbaaaaaabbdbaa.
+.aabcbaaa..aaabdbaa.
+aaabcbaaaaaaaabdbaaa
+aaabbbaaaaaaaabdbaaa
+abbbbbbbbbbbbbbdbbba
+bcccccccccccccccccbb
+bcccccccccccccccccbb
+bccbbbbbbaabbbdbbbbb
+bccbbbbbeaaabbbbbbbb
+bccbbbbbaaaabbbbbbbb
+bccbbbbbaaaabbbbbbbb
+bccbbbbbbaabbbbbbbbb
+bccbbbbbbaabbbbbbbbb
+bccbbbbbaaaabbbbbbbb
+dccbbbbbbbbbbbbbbbbd
+dddddddddddddddddddd
+dddddddddddddddddddd
+adddddddddddddddddda

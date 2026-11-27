@@ -86,6 +86,11 @@
             android:name=".Retour"
             android:exported="false" />
 
+        <!-- Le mot du soir (docs/PRESENCE.md) : au plus une notification silencieuse par jour, réglable. -->
+        <receiver
+            android:name=".MotDuSoir"
+            android:exported="false" />
+
         <receiver
             android:name=".Demarrage"
             android:exported="false">

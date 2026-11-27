@@ -7,6 +7,7 @@
       "lieu": "L'Étang-qui-fume",
       "decor": "etang-qui-fume",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "C'étaient des grenouilles. Enfin, des rainettes, elles y tiennent. Elles répétaient. Un, deux, trois, et puis toutes ensemble : coâ. C'est le chœur de l'étang, et il répète la nuit parce que le jour, il y a les hérons. J'ai eu peur pour rien pendant deux heures. Mais j'ai bien écouté.",
         "Leur cheffe s'appelle Mi-Bémol. Elle est grande comme mon pouce et elle fait plus peur que l'orage. Ce matin, elle a regardé Brouillon traverser la brume sans en garder une miette, et elle a levé les yeux au ciel. « Un nuage qui ne sait pas boire. On aura tout vu. Ça boit comme ça chante, mon petit : en mesure. »"
@@ -27,6 +28,7 @@
     "ch3-rythme": {
       "type": "epreuve",
       "humeur": "peur",
+      "personnage": "mi-bemol",
       "jeu": "rythme",
       "difficulte": 1,
       "bonus": "lien",
@@ -39,6 +41,7 @@
     "ch3-il-boit": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "mi-bemol", "expression": "joie",
       "effets": [ { "drapeau": "sait-boire" }, { "drapeau": "chanson" }, { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ],
       "texte": [
         "Il a bu ! Sur le quatrième coâ, il s'est gonflé au bon moment et la brume est entrée d'un coup, comme du lait dans un bol. Il a repris un bon bord en trois mesures. Tout le chœur a applaudi avec les pattes de derrière. Mi-Bémol a dit « pas mal » sans sourire, ce qui est énorme, paraît-il. Et moi, à force, j'ai la chanson dans la tête. Je la connais par cœur. Coâ, coâ, co-coâ."
@@ -48,6 +51,7 @@
     "ch3-hoquet": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "mi-bemol",
       "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "J'ai accéléré. Je crois. Ou ralenti. Brouillon s'est gonflé à contretemps, il a avalé de travers, et maintenant il a le hoquet. Tu sais ce que c'est, un hoquet de nuage ? Un tout petit éclair. Il a roussi un nénuphar et fait sursauter trois ténors. Mi-Bémol nous a mis dehors, enfin, sur la rive. On a ri tous les deux pendant dix minutes, lui par éclairs. Il n'a rien bu, mais ça valait le coup."
@@ -66,6 +70,7 @@
     "ch3-tour": {
       "type": "attente",
       "humeur": "neutre",
+      "personnage": "mi-bemol",
       "duree_min": 10,
       "duree_max": 15,
       "pendant": "Pilou fait le tour de l'étang par les roseaux",
@@ -79,6 +84,7 @@
       "type": "choix",
       "lieu": "Le marché de la rosée",
       "humeur": "surpris",
+      "personnage": "dentelle",
       "texte": [
         "C'est très beau, chez Dentelle. Des toiles grandes comme des fenêtres, et sur chaque fil, des gouttes de rosée rangées par taille. La plus grosse, au centre, c'est une perle : de la rosée qui ne sèche pas. Un petit nuage qui l'avale reprend d'un coup une bonne part de ce qu'il a perdu. Il n'y en a qu'une.",
         "Dentelle m'a regardé avec plusieurs yeux. « Ici, on paie en fil. Du fin, du vrai, pas de la ficelle ni de la laine. Tu n'en as pas ? Alors en couleur. Je n'ai jamais eu de bleu. » Elle veut de mon encre. Une bonne cuillerée de moi. Brouillon regarde la perle, puis moi, puis la perle. Qu'est-ce que je fais ?"
@@ -93,6 +99,7 @@
     "ch3-pale": {
       "type": "recit",
       "humeur": "fatigue",
+      "personnage": "brouillon",
       "texte": [
         "J'ai payé. Elle a trempé un fil dans mon épaule, enfin, là où j'aurais une épaule, et elle a tiré une longue mèche bleue qu'elle a tissée tout de suite. C'est joli, dans sa toile. Ça ne fait pas mal. Mais je me suis vu dans l'étang : je suis bleu layette. Bleu de pyjama. Brouillon me trouve très bien comme ça, il l'a dit : « Goutte ciel. » La perle est dans le baluchon, roulée dans une feuille. Mais il ne faudra plus que j'en donne, du bleu : il m'en reste juste assez pour moi."
       ],
@@ -101,6 +108,7 @@
     "ch3-troc": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "dentelle",
       "texte": [
         "J'ai dit : je n'ai pas de fil fin, mais j'ai autre chose, et j'ai proposé. Dentelle a réfléchi longtemps, les huit pattes croisées. « Ce n'est pas du fil. Ce n'est pas de la couleur. Mais on ne m'en avait jamais offert, et à mon âge, c'est rare. Marché conclu. » Elle a décroché la perle elle-même et l'a roulée dans une feuille. Elle est dans le baluchon. Je suis assez fier de moi, je te le dis."
       ],
@@ -109,6 +117,7 @@
     "ch3-gouttes": {
       "type": "choix",
       "humeur": "surpris",
+      "personnage": "brouillon",
       "texte": [
         "Il s'est passé une chose incroyable. On quittait les toiles, et Brouillon s'est arrêté juste au-dessus de moi. Il est devenu gris. Il s'est tout plissé, comme quelqu'un qui va éternuer. Et là : ploc. Une goutte. Sur mon antenne. Il pleut ! Il est en train de pleuvoir, pour la première fois de sa vie !",
         "Sauf qu'il pleut sur moi. Sur moi qui suis en encre. Il a l'air tellement concentré, tellement fier, et moi, j'ai une goutte qui me coule dans le cou et qui me délaie. Il y en a deux autres qui arrivent, je les vois se former. Vite, je fais quoi ?"
@@ -123,6 +132,7 @@
     "ch3-dessous": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "texte": [
         "Je suis resté. Trois gouttes. Ploc, ploc, et une troisième, plus petite, qui a hésité. Ça m'a fait trois taches claires sur la tête, trois taches de rousseur à l'envers. Je ne me suis pas dilué. Je ne suis pas mort. Brouillon est redescendu voir de près ce qu'il m'avait fait, très inquiet, et j'ai dit : « C'est bien. C'est très bien. Ça pique un peu. » Il a retenu les deux choses, je crois : que c'est bien, et que ça me pique."
       ],
@@ -179,6 +189,7 @@
     "ch3-depart": {
       "type": "attente",
       "humeur": "neutre",
+      "personnage": "mi-bemol",
       "duree_min": 15,
       "duree_max": 20,
       "pendant": "Pilou marche vers le plateau",

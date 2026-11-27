@@ -4,6 +4,8 @@ ni de vert (le cœur d'amitié est orange, le cœur « reçu » bleu)."""
 
 import math
 
+import toile
+import fins
 from toile import Toile, ecrire
 
 ENCRE = "#1c2128"
@@ -20,6 +22,9 @@ def T(w, h):
 
 
 def coeur(t, x, y, c, clair):
+    if toile.fin():
+        fins.coeur_fin(t, x, y, 7, 6, c, lueur=clair)
+        return
     t.motif(x, y, [".oo.oo.", "ooooooo", "ooooooo", ".ooooo.", "..ooo..", "...o..."], {"o": c})
     t.p(x + 1, y + 1, clair)
 

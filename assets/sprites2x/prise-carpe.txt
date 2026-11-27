@@ -1,0 +1,43 @@
+# prise de pêche
+id: prise-carpe
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#b2886b b=#8a4a1f c=#4a8fdc d=#4583cb e=#724022 f=#f9be8c g=#f69d50 h=#c9824a i=#f9ba84 j=#d2884b k=#fac69a l=#ffffff m=#1c2128 n=#ecedee o=#b27546
+images:
+....................abbbbbbbbccddcbb..........................
+...............abbbbbbbbbbbccddcddbbbbb...................bba.
+............abbbbbbbefffffccdcddccbbbbbbbb...............abbba
+..........abbbbefffffgggggffffcccccfffbbbbbb............bbbgbb
+........abbbefffgggggggggggggggggffgggfffbbbbb.........bbbggbb
+.......abbeffggggggggggggggggggggggggggggffbbbb.......bbbggabe
+......bbbffgggggggghhgghhhhhhhgggggggggggggffbbb.....bbbggibb.
+.....bbbfggggggggghjjhhkkkkkkkkkkhhhhggggggggfbbb...bbbggigbb.
+....bbbfgggggggggghjkkkkkkkkkkkkkkkkkgggggggggfbbb.abbggiggbb.
+...bbbfgggggggggghjjfggfggffffffffggghhggggggggfbbbbeggigggbb.
+..abbfggggghhgggghjggggggggggggggggllllhggggggggfbbbggigggabe.
+.abbfggggghllhggghjgggggggggggggghlcclllfggggggggfbegiggggbb..
+.bbfggggghllllhggjgllllhccfgggggghlcllllfggggggggggghiggggbb..
+abefgggghlllmmlggjlcclllccfggggghhllllllfgggggggggggigggiibb..
+bbfggggghllmmmlggjlcllllffggggghccllllllfggggggggghiggiiggbb..
+bbfggggggflmmlfggjllllllfgggggghccfllllfggggggggghigiigggabe..
+bbfgggggggfllfgghjllllllfggggggggggggggggggggggghiiigggggbb...
+bbfggggggggffggghjfllllgggggggggggggggggggggggghiigggggggbb...
+bbfghghghghghghghjffffhghhhhhhhhhghghghhhhhhhhhiiiiiiiiiibb...
+bbfhghghghghghghhjfhghnnnnnnnnnnnnnnnnnnnnnnnngfiigggggggbb...
+bbhghhhghghghghghjfghgffffcllllgffffffhghghgffhgfiiigggggeba..
+bbhhoofhhhhhhhhhhjfhhhhhhhlcclllfhhhhhhhhhhhhhhhhfigiiggggbb..
+ebaofhhhhhhhhhhhhjhhhhhhhhlcllllhhhhhhhllllhhhhhhhhiggiiggbb..
+.bbhhhhhhhhhhhhhhjhhhhhhhhllllllhhhhhhlcclllhhhhhhhhigggiibb..
+.ebbhllllllllllllljllllllllllllllllllllclllllllllhbagiggggbb..
+..eebllllllllllllljllllllllllllllllllllllllllllllebegiggggeea.
+...beblllllllllllljjllllllllllllllllllllllllllllabebegiggggbe.
+....beblllllllllllljlllllllllllllllllllllllllllebe.ebegigggeb.
+.....bebglllllllllljjllllllllllllllllllllllllgebe...ebegiggbe.
+......eeeggllllllllllllllllllllllllllllllllggeee.....eeegigee.
+.......eeeeggllllllllllllllllllllllllllllggaeee.......eeegieea
+........eeeeeggggllllllllllllllllllllggggaeeee.........eeegiee
+..........eeeeeeggggggggggggggggggggggaeeeee............eeegee
+............eeeeeeeeeggggggggggggaeeeeeeee...............eeeee
+...............eeeeeeeeeeeeeeeeeeeeeeee...................eee.
+....................eeeeeeeeeeeeee............................

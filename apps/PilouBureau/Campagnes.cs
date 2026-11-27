@@ -86,6 +86,8 @@ public static class Campagnes
     {
         public string Id = "", Chapitre = "", Type = "", Lieu = "", Humeur = "neutre", Decor = "", Suite = "", Pendant = "", Tenue = "",
             Jeu = "", Bonus = "", Reussite = "", Echec = "", Issue = "", Titre = "";
+        // Facultatifs (interfaces seulement) : le personnage que le message fait parler ou décrit, et son expression.
+        public string Personnage = "", Expression = "";
         public List<string> Texte = new();
         public bool Checkpoint;
         public List<Effet> Effets = new();
@@ -256,6 +258,7 @@ public static class Campagnes
             Reussite = S(o, "reussite"), Echec = S(o, "echec"), Issue = S(o, "issue"), Titre = S(o, "titre"),
             Checkpoint = B(o, "checkpoint"), Effets = LireEffets(o), DureeMin = N(o, "duree_min"), DureeMax = N(o, "duree_max"),
             Difficulte = N(o, "difficulte", 1), ReposMin = N(o, "repos_min"),
+            Personnage = S(o, "personnage"), Expression = S(o, "expression"),
         };
         if (!Humeurs.Contains(n.Humeur)) n.Humeur = "neutre";
         if (o.TryGetProperty("texte", out var t))

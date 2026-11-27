@@ -1,0 +1,25 @@
+# Défense du bureau : étincelle de Pilou (trait orange)
+id: defense-etincelle
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#ffffff b=#d9803a c=#f69d50 d=#ffc89a
+images:
+......
+..aa..
+.aaaa.
+.aaaa.
+bcaacb
+bcddcb
+bddddb
+bcddcb
+bcddcb
+.cddc.
+.bccb.
+.bccb.
+.bccb.
+..bb..
+..bb..
+..bb..
+......
+......

@@ -19,6 +19,7 @@
     "ch5b-observe": {
       "type": "attente",
       "humeur": "malice",
+      "personnage": "tudal",
       "texte": [
         "Je me cache derrière le canot. Au fond de la grotte, il y a un conduit dans le plafond, un trou noir d'où pend une corde, avec un panier au bout. Tudal y pose deux bidons, tire trois fois sur une ficelle, et attend. Il grommelle : « Quatre nuits que tu boudes, vieille bernique. » Puis il s'assoit sur un bidon et sort sa pipe. J'attends aussi, sans bouger un cil. Le problème, c'est l'iode : ça me chatouille le nez. Si j'éternue, tu ne m'en voudras pas ?"
       ],
@@ -31,6 +32,7 @@
     "ch5b-appelle": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "tudal",
       "effets": [ { "var": "courage", "plus": 1 } ],
       "texte": [
         "J'ai dit : « Bonsoir ! » Tudal a sursauté, lâché un bidon sur son pied, et dit un mot que je ne répéterai pas. Puis il m'a regardé, tout petit sur le sable, les mains en l'air. « La tache d'encre. Évidemment. » Il a pointé un doigt gros comme moi. « Tu bouges pas. Je finis, et après on cause. » Il porte ses bidons vers un trou du plafond, d'où pend un panier au bout d'une corde. J'attends, assis sur un galet."
@@ -67,6 +69,7 @@
     "ch5b-panier": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "lison",
       "effets": [ { "drapeau": "trois-coups" } ],
       "texte": [
         "« Qui tu veux que ce soit ? Lui. Ou la petite. » Il a soufflé sa fumée vers le trou. « Il est là-haut. Il mange, il sonne sa corne quand la brume tombe, et il boude. Il ouvre plus à personne. Même plus à moi, et pourtant je frappe mes trois coups, comme toujours. »",
@@ -78,6 +81,7 @@
       "type": "choix",
       "checkpoint": true,
       "humeur": "peur",
+      "personnage": "tudal",
       "texte": [
         "Tudal remet son canot à l'eau : « La mer remonte dans une demi-heure. Après, la grotte se remplit. Moi je file avec. » Il m'a montré le conduit : « Le boyau. Trop étroit pour un homme. Pour toi, c'est un boulevard. Traîne pas. » Et il est parti à la rame, en me laissant sa lanterne.",
         "Au pied du conduit, il y a une caisse en bois que la marée a poussée dans un coin. Sur le couvercle, une étiquette, et dedans quelque chose qui brille. Elle est à moitié dans l'eau, et l'eau revient. Fouiller cette caisse, c'est jouer contre la mer, et c'est elle qui lance les dés. Sinon, je grimpe tout de suite. Qu'est-ce que tu en dis ?"
@@ -102,6 +106,7 @@
     "ch5b-caisse": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "basile",
       "effets": [ { "drapeau": "c-jeudi" }, { "var": "courage", "plus": 1 } ],
       "texte": [
         "Une petite ! J'ai eu le temps. L'étiquette dit : « Basile, horlogerie. Fragile. » Et dedans, dans la paille mouillée, il reste des copeaux dorés, du laiton, et un bon de travail au crayon très fin : « Jeudi. Dent-Creuse. Cadran de réglage démonté pour gravure. Posé cadran de rechange, fer-blanc. Pas essayé le feu : la marée. »",
@@ -112,6 +117,7 @@
     "ch5b-echec-maree": {
       "type": "echec",
       "humeur": "triste",
+      "personnage": "tudal",
       "texte": [
         "C'était une grosse. Elle a rempli la grotte d'un coup, et elle m'a emporté avec la caisse et ma dignité. C'est Tudal qui m'a repêché, à la sortie, en jurant. Il m'a posé au sec sur la corniche : « Je t'avais dit de pas traîner. » Je suis bleu ciel, presque transparent. La mer lançait les dés, et je savais bien qu'elle trichait."
       ],

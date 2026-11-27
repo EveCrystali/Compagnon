@@ -1,0 +1,21 @@
+# variante espiègle, stade 3 : mèche rebelle
+id: variante-espiegle-3-tete
+slot: tete
+ancre: tete
+decalage: -24 -12
+palette: a=@contour b=@base c=@clair
+images:
+..........a.......
+......aa.ab.......
+.....aa..ba.......
+....aba.aba.....a.
+...abb..aba....aa.
+...aba.abba...aba.
+..abba.acba..aba..
+..acba.acba.abba..
+..bcba.acba.abba..
+.abcba.acba.acba..
+.abcba.acbbabcba..
+.abcba.bcbbabcba..
+.abcbbabbbbabcbaa.
+.abbbbabbbbabbbba.

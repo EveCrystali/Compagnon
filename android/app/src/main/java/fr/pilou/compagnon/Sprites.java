@@ -235,6 +235,14 @@ public final class Sprites {
         /** Sprites redessinés pour le rendu fin (assets/sprites2x). */
         public final Map<String, Sprite> fins = new HashMap<>();
         private final Map<String, Sprite> agrandis = new HashMap<>();
+        /** Grands dessins fins (décors animés, portraits) : lus à la demande, gardés dans un cache borné. */
+        final java.util.Set<String> aLire = new java.util.HashSet<>();
+        private final Map<String, Sprite> lus = new java.util.LinkedHashMap<String, Sprite>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, Sprite> e) {
+                return size() > 12;
+            }
+        };
 
         public Sprite get(String id) {
             return id == null ? null : sprites.get(id);
@@ -245,6 +253,19 @@ public final class Sprites {
             if (id == null) return null;
             Sprite s = fins.get(id);
             if (s != null) return s;
+            if (aLire.contains(id)) {
+                synchronized (lus) {
+                    s = lus.get(id);
+                    if (s == null) {
+                        String t = ressource("/sprites2x/" + id + ".txt");
+                        if (!t.isEmpty()) {
+                            s = lire(t, id);
+                            lus.put(id, s);
+                        }
+                    }
+                }
+                if (s != null) return s;
+            }
             synchronized (agrandis) {
                 s = agrandis.get(id);
                 if (s == null) {
@@ -287,6 +308,11 @@ public final class Sprites {
         }
         for (String id : lignes(ressource("/index2x.txt"))) {
             if (id.isEmpty() || id.startsWith("#")) continue;
+            // Les décors animés et les portraits fins sont gros : lus seulement quand on les montre.
+            if (id.startsWith("decor-") || id.startsWith("portrait-")) {
+                b.aLire.add(id);
+                continue;
+            }
             String t = ressource("/sprites2x/" + id + ".txt");
             if (!t.isEmpty()) b.fins.put(id, lire(t, id));
         }

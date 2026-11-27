@@ -8,7 +8,7 @@ Dernière mise à jour : 27 novembre 2026.
 - Overlay Windows, app Android, mod Claude Code, extensions VS Code et Visual Studio.
 - Boutique garnie, métiers et succès partagés entre appareils, expéditions, Défense du bureau,
   visites entre amis, connecteurs, météo.
-- Dessin fin 2× (visage, 68 cosmétiques, tenues de voyage ; le reste agrandi automatiquement).
+- Dessin fin 2× (visage, cosmétiques, tenues de voyage, boutique, pêche, cuisine, variantes, bonus, particules : tous les sprites hors décors de campagne).
 - Moteur des campagnes (PC et Android, validateur, synchronisation) et quatre histoires : prologue,
   La Grande Panne, Le phare éteint, Petit Nuage. **Aucune interface ne permet encore de les jouer.**
 
@@ -21,12 +21,14 @@ Dernière mise à jour : 27 novembre 2026.
 | `relecture-petit-nuage` | Relecture de tous les parcours, orthographe, dosage des fins |
 | `relecture-grande-panne` | Idem, plus le prologue |
 | `relecture-phare-eteint` | Idem, plus la loyauté de l'enquête |
+| `animations-campagnes` | Décors animés en boucle, portraits animés de 29 personnages (champ `personnage` des nœuds), écriture lettre à lettre, volet entre décors, fond selon le ton et l'heure, réglage des animations (PC et Android) |
 | `illustrations-campagnes` | Décors `decor-<campagne>-<id>`, objets exclusifs des fins, vignettes de souvenirs, 80 sprites de plus en fin |
+| `presence` | Présence au quotidien (docs/PRESENCE.md) : 573 petits mots, cadence (3 par jour sur PC, 1 le soir sur téléphone), complicité, dates, journal identique des deux côtés, prénom, « Pilou et moi » |
 
 ## Ensuite
 
-1. **Présence de Pilou hors campagnes** : petits mots rares et justes, mémoire de ce qu'on a vécu,
-   complicité qui grandit, sur PC et téléphone, sans jamais spammer.
+1. **Présence au quotidien, la suite** : relire les mots et le journal sur une vraie semaine (PC et téléphone),
+   ajuster les seuils de complicité si les paliers arrivent trop vite ou trop lentement.
 2. **Test de jeu complet** (branche `test-jeu`, voir `TEST-JEU.md`) : parcours entiers rejoués par le moteur des deux côtés, synchronisation
    entre appareils, revue des captures de chaque écran.
 3. **Vidéo de promo** avec les campagnes. Il faut tourner sur le PC d'Antoine
@@ -38,6 +40,8 @@ Dernière mise à jour : 27 novembre 2026.
 - Sous Windows : le dessin fin sur le bureau (charge, netteté à 125 % et 150 %), les extensions
   d'éditeur, la fenêtre des expéditions, tout ce qui touche aux campagnes.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin.
+- La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal, le mot du soir (notification,
+  Doze), le widget et la bulle avec le mot, la synchronisation entre deux appareils réels.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 
 ## Points connus
