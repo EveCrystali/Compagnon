@@ -6,7 +6,7 @@
 # Ce que fait le script, dans l'ordre :
 #   1. trouve l'écran le plus à gauche (pixels physiques, mise à l'échelle comprise), te le montre (cadre
 #      « ÉCRAN FILMÉ » quelques secondes) et te demande de confirmer : c'est lui, et lui seul, qui est filmé ;
-#   2. vérifie ffmpeg (sinon l'installe avec winget : Gyan.FFmpeg) et filme cet écran (gdigrab, 30 i/s, souris
+#   2. vérifie ffmpeg (sinon l'installe avec winget : Gyan.FFmpeg) et filme cet écran (ddagrab, sinon gdigrab, 30 i/s, souris
 #      visible, H.264, sans son) en arrière-plan ;
 #   3. réduit cette fenêtre PowerShell, puis remplace pour un moment ton Pilou par un Pilou de démonstration, en
 #      grand, posé en bas de cet écran devant un DÉCOR de tournage (un faux bureau : fond dégradé, fausses fenêtres,
@@ -168,6 +168,34 @@ if (-not $Ffmpeg) {
 }
 Write-Host "ffmpeg : $Ffmpeg"
 
+# ---- 2 bis. Comment filmer. ddagrab (Desktop Duplication, sur la carte graphique) d'abord : gdigrab recopie l'écran
+# par BitBlt 30 fois par seconde, et sur un vrai Windows (2560 × 1440, novembre 2026) cela a figé l'interface de Pilou
+# près de deux minutes en pleine visite. ddagrab numérote les sorties à sa façon : on garde celle qui a la taille de
+# l'écran filmé, et seulement s'il n'y en a qu'une (deux écrans identiques : on ne sait pas lequel, retour à gdigrab).
+function SortieDdagrab {
+    $essai = Join-Path $env:TEMP ('pilou-sortie-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.png')
+    $trouvees = @()
+    Add-Type -AssemblyName System.Drawing
+    for ($i = 0; $i -lt 6; $i++) {
+        $p = Start-Process -FilePath $Ffmpeg -PassThru -WindowStyle Hidden -ArgumentList @('-hide_banner', '-loglevel', 'error', '-y',
+            '-f', 'lavfi', '-i', "ddagrab=output_idx=${i}:framerate=5,hwdownload,format=bgra", '-frames:v', '1', ('"{0}"' -f $essai))
+        if (-not $p.WaitForExit(8000)) { try { $p.Kill() } catch { } }
+        if (-not (Test-Path $essai)) { break }   # plus de sortie (ou pas de ddagrab dans ce ffmpeg)
+        try {
+            $image = [System.Drawing.Image]::FromFile($essai)
+            if ($image.Width -eq $ecran.Largeur -and $image.Height -eq $ecran.Hauteur) { $trouvees += $i }
+            $image.Dispose()
+        } catch { }
+        Remove-Item $essai -Force -ErrorAction SilentlyContinue   # une image du vrai bureau : jamais gardée
+    }
+    if ($trouvees.Count -eq 1) { return $trouvees[0] }
+    return -1
+}
+$sortieDda = SortieDdagrab
+$nvenc = [bool](& $Ffmpeg -hide_banner -encoders 2>$null | Select-String 'h264_nvenc')
+if ($sortieDda -ge 0) { Write-Host ("Capture : ddagrab (sortie {0}){1}" -f $sortieDda, $(if ($nvenc) { ', encodage NVENC' } else { '' })) }
+else { Write-Host 'Capture : gdigrab (ddagrab indisponible pour cet écran)' }
+
 $racine = Join-Path $env:TEMP ('pilou-tournage-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
 $demo = Join-Path $racine 'demo'
 New-Item -ItemType Directory -Force $demo | Out-Null
@@ -237,6 +265,14 @@ try {
     $info.FileName = $Ffmpeg
     $modele = '-hide_banner -loglevel error -nostats -y -f gdigrab -framerate {0} -draw_mouse 1 -offset_x {1} -offset_y {2} ' +
         '-video_size {3}x{4} -i desktop -an -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart "{5}"'
+    if ($sortieDda -ge 0 -and $nvenc) {
+        $modele = '-hide_banner -loglevel error -nostats -y -f lavfi -i ddagrab=output_idx=' + $sortieDda + ':framerate={0}:draw_mouse=1 ' +
+            '-an -c:v h264_nvenc -preset p5 -rc vbr -cq 18 -movflags +faststart "{5}"'
+    }
+    elseif ($sortieDda -ge 0) {
+        $modele = '-hide_banner -loglevel error -nostats -y -f lavfi -i ddagrab=output_idx=' + $sortieDda + ':framerate={0}:draw_mouse=1,hwdownload,format=bgra ' +
+            '-an -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart "{5}"'
+    }
     $info.Arguments = $modele -f $Ips, $ecran.X, $ecran.Y, $l, $h, $video
     $info.UseShellExecute = $false
     $info.RedirectStandardInput = $true
