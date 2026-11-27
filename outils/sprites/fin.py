@@ -85,7 +85,12 @@ SERIE3 = [
     "prise-baleineau", "prise-botte", "prise-bouteille", "prise-caillou", "prise-carpe", "prise-cle",
     "prise-coffre", "prise-comete", "prise-crabe", "prise-ecrevisse", "prise-goujon", "prise-hippocampe",
     "prise-lanterne", "prise-perche", "prise-perle", "prise-pieuvre", "prise-raie", "prise-saumon", "prise-spirale",
-    "prise-truite", "soin-faim", "soin-moral", "soin-proprete"
+    "prise-truite", "soin-faim", "soin-moral", "soin-proprete", "fond-arcade", "fond-aurore", "fond-automne",
+    "fond-bibliotheque", "fond-cerisiers", "fond-espace", "fond-fetes", "fond-foret", "fond-frissons",
+    "fond-mer-cafe", "fond-montagne", "fond-nuit", "fond-observatoire", "fond-patisserie", "fond-plage",
+    "fond-potager", "fond-ville", "bug-araignee", "bug-prod", "bug-scarabee", "bug-ver", "defense-blinde",
+    "defense-blinde-fele", "defense-bonus-bouclier", "defense-bonus-double", "defense-bonus-ralenti",
+    "defense-diviseur", "defense-etincelle", "defense-mini", "defense-rapide", "defense-tir"
 ]
 
 

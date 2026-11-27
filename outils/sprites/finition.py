@@ -295,5 +295,7 @@ def _serie3(id_):
 def inscrire():
     import fin
     import finition_cuisine  # noqa: F401  (inscrit les finitions de chaque famille)
+    import finition_fonds  # noqa: F401
+    import finition_defense  # noqa: F401
     for i in fin.SERIE3:
         fin.RETOUCHES[i] = _serie3(i)

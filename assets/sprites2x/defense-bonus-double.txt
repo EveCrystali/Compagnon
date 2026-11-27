@@ -1,0 +1,31 @@
+# Défense du bureau : bonus tir double (carré orange)
+id: defense-bonus-double
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a4a1f b=#b2886b c=#ffe5cb d=#ffffff e=#ffd8b0 f=#d0b296 g=#f69d50 h=#ffc89a i=#724022
+images:
+..aaaaaaaaaaaaaaaaaaaa..
+.baaaaaaaaaaaaaaaaaaaab.
+baccccddddccccddddccccab
+aaceeeeeeeeeeeeeeeeeeeaa
+aaceefddddceefddddceefaa
+aaceefddddceefddddceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefghggceefghggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceefggggceefggggceefaa
+aaceffggggceffggggceffaa
+aicfefggggcfefggggcfefai
+iacfffccccffffccccffffia
+iicfffffffffffffffffffii
+iiffffffffffffffffffffii
+iiffffffffffffffffffffii
+.iiiiiiiiiiiiiiiiiiiiii.
+..iiiiiiiiiiiiiiiiiiii..
