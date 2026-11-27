@@ -45,9 +45,11 @@ namespace PilouVisualStudio
         protected override async Task InitializeAsync(CancellationToken ct, IProgress<ServiceProgressData> progres)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(ct);
-            _dte = await GetServiceAsync(typeof(DTE)) as DTE2;
-            _liste = await GetServiceAsync(typeof(SVsErrorList)) as IErrorList;
-            if (_dte == null || _liste == null) return; // rien à lire : Pilou n'en saura rien, Visual Studio non plus
+            // Rien à lire : Pilou n'en saura rien, Visual Studio non plus.
+            if (!(await GetServiceAsync(typeof(DTE)) is DTE2 dte)) return;
+            if (!(await GetServiceAsync(typeof(SVsErrorList)) is IErrorList liste)) return;
+            _dte = dte;
+            _liste = liste;
 
             _attente = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(750) };
             _attente.Tick += (s, e) =>
@@ -96,7 +98,7 @@ namespace PilouVisualStudio
             var r = Lire();
             // Pas de document (page de démarrage, outil) : Pilou garde le dernier fichier, rien à envoyer.
             if (r == null || (!battement && r.Meme(_dernier))) return;
-            _ = JoinableTaskFactory.RunAsync(() => Poster(r));
+            _ = JoinableTaskFactory.RunAsync(() => PosterAsync(r));
         }
 
         private Rapport Lire()
@@ -143,7 +145,7 @@ namespace PilouVisualStudio
             Rapport.LireAcces(json, Options.Jeton, Options.Port, out _jeton, out _port);
         }
 
-        private async Task<int> PosterUneFois(Rapport r)
+        private async Task<int> PosterUneFoisAsync(Rapport r)
         {
             if (string.IsNullOrEmpty(_jeton)) return 0; // Pilou pas installé : silence
             try
@@ -162,14 +164,14 @@ namespace PilouVisualStudio
             }
         }
 
-        private async Task Poster(Rapport r)
+        private async Task PosterAsync(Rapport r)
         {
             Acces(false);
-            int code = await PosterUneFois(r);
+            int code = await PosterUneFoisAsync(r);
             if (code == 401)
             {
                 Acces(true); // jeton renouvelé dans Pilou : relu une fois
-                code = await PosterUneFois(r);
+                code = await PosterUneFoisAsync(r);
             }
             if (code == 202) _dernier = r;
         }
@@ -186,7 +188,7 @@ namespace PilouVisualStudio
                     try
                     {
 #pragma warning disable VSTHRD002 // une seconde au plus, à la fermeture, sans revenir sur le fil de l'interface
-                        Task.Run(() => PosterUneFois(Rapport.Fermeture())).Wait(1000);
+                        Task.Run(() => PosterUneFoisAsync(Rapport.Fermeture())).Wait(1000);
 #pragma warning restore VSTHRD002
                     }
                     catch (Exception)
