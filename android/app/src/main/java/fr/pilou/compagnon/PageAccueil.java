@@ -284,14 +284,18 @@ final class PageAccueil extends Page {
             legende.setVisibility(View.GONE);
         }
         boolean attend = c != null && CampagnesTel.attendJoueur(app, e);
-        String emp = c == null ? "" : c.id + "|" + e.phase + "|" + e.noeud + "|" + attend;
+        // Jamais joué : une invitation discrète au prologue (une seule carte, qui disparaît dès la première partie).
+        Campagnes.Carnet k = CampagnesTel.pretes() ? CampagnesTel.carnet(app) : null;
+        boolean inviter = c == null && k != null && k.courante == null && k.historique.isEmpty() && Campagnes.charger("prologue") != null;
+        String emp = c == null ? (inviter ? "invitation" : "") : c.id + "|" + e.phase + "|" + e.noeud + "|" + attend;
         if (!emp.equals(empreinteAventure)) {
             empreinteAventure = emp;
             carteAventure.removeAllViews();
             aventureCompte = null;
             aventureBarre = null;
-            carteAventure.setVisibility(c == null ? View.GONE : View.VISIBLE);
+            carteAventure.setVisibility(c == null && !inviter ? View.GONE : View.VISIBLE);
             if (c != null) carteAventure(c, e, attend, pc, p);
+            else if (inviter) invitation(Campagnes.charger("prologue"), p);
         }
         if (aventureCompte != null && e != null && e.enAttente()) {
             long reste = e.fin - CampagnesTel.maintenant();
@@ -301,7 +305,27 @@ final class PageAccueil extends Page {
         }
     }
 
+    private void invitation(Campagnes.Campagne c, Ui.Palette p) {
+        carteAventure.setBackground(Ui.touchable(app, Ui.arrondi(app, p.surface, 18, p.bord), 18));
+        carteAventure.setClipToOutline(true);
+        carteAventure.setElevation(Ui.dp(app, 1));
+        LinearLayout r = Ui.rangee(app);
+        r.setPadding(Ui.dp(app, 16), Ui.dp(app, 14), Ui.dp(app, 12), Ui.dp(app, 14));
+        r.addView(Ui.pastille(app, Aventure.signeTon(c.ton), Aventure.accentTon(app, c.ton)));
+        LinearLayout t = Ui.pile(app);
+        t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+        t.addView(Ui.texte(app, "Sa première aventure", Ui.T_CORPS, p.texte, true));
+        t.addView(Ui.texte(app, c.titre + " · " + c.duree + " · il t'écrira", Ui.T_DETAIL, p.doux, false));
+        r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        r.addView(Ui.texte(app, "›", 26, p.doux, false));
+        carteAventure.addView(r, Ui.large());
+        carteAventure.setOnClickListener(v -> app.aller(Principale.AVENTURE, true));
+        carteAventure.setContentDescription("Sa première aventure : " + c.titre + ". Toucher pour la découvrir.");
+        Ui.enfoncer(carteAventure);
+    }
+
     private void carteAventure(Campagnes.Campagne c, Campagnes.Etat e, boolean attend, Etat pc, Ui.Palette p) {
+
         int accent = Aventure.accentTon(app, c.ton);
         carteAventure.setBackground(Ui.touchable(app, Ui.arrondi(app, p.surface, 18, attend ? accent : p.bord), 18));
         carteAventure.setClipToOutline(true);

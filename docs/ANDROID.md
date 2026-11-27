@@ -184,7 +184,7 @@ L'interface se relit régulièrement, sur captures plutôt que de mémoire.
 **Les captures.** `CapturesTest` (Robolectric, rendu graphique natif) photographie chaque écran : Accueil
 (neuf et appairé : sessions, quêtes, groupe), Jouer, Boutique (vitrine, rayons Dos / Tête / Décors avec essayage,
 fenêtre « Rangées débloquées »), Collection (Carnet, Recettes, Niveaux, Style),
-Réglages, Atelier (pêche, cuisine), Chasse aux bugs (accueil, partie, pause) et la mise à jour, en thème
+Réglages, **Aventure** (liste neuve, en cours, mise de côté ; lecture : choix, retour, épreuve, repos, reprise, fin ; confirmation ; carnet ; accueil pendant une attente et quand Pilou attend), les cinq épreuves (au départ et en cours de partie), Atelier (pêche, cuisine), Chasse aux bugs (accueil, partie, pause) et la mise à jour, en thème
 **clair et sombre**, sur un **petit** (360 × 640 dp) et un **grand** téléphone (412 × 915 dp). Les pages qui
 défilent sont aussi prises en entier (`…-long.png`).
 
@@ -199,7 +199,7 @@ défilent sont aussi prises en entier (`…-long.png`).
 | Point | Seuil |
 |---|---|
 | Contraste du texte | ≥ 4,5:1 (WCAG AA) ; ≥ 3:1 pour les signes et icônes |
-| Taille du texte | ≥ 12 sp ; titres de page 28 sp, sections 12 sp en capitales espacées |
+| Taille du texte | échelle `Ui.T_*` : 28 (page), 19 (carte), 15 (corps), 13 (détail), 12 (étiquette en capitales espacées) ; 16 pour les messages des campagnes ; jamais sous 12 sp |
 | Zones tactiles | ≥ 48 × 48 dp (lignes de réglage, boutons, onglets) |
 | Marges | grille de 4 / 8 dp ; pages à 18 dp des bords, cartes à 16 dp de padding |
 | Débordements | aucun texte coupé au milieu d'un mot, aucun bloc hors de l'écran sur petit téléphone |
