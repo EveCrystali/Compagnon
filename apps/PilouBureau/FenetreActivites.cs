@@ -261,8 +261,9 @@ public sealed partial class FenetrePilou
 
     private string TenueAffichee => !_reglages.Activites ? "" : Maintenant < _tenuePreteeJusque ? _tenuePretee : _tenue;
 
+    // En route pour sa campagne : ni danse ni sueur (réactions cosmétiques coupées, il est occupé).
     private string ReactionAffichee =>
-        !_reglages.Activites ? ""
+        !_reglages.Activites || CampagneOccupe ? ""
         : _tenue == "musique" && (_crete > Activites.SeuilSon || ConnecteurSpotify.Lecture is { EnCours: true }) ? "danse"
         : _tenue == "code" && _cpu > 0.8 ? "sueur"
         : "";

@@ -4,11 +4,12 @@ using System.Windows.Threading;
 
 namespace PilouBureau;
 
-// Campagnes (Campagnes.cs, docs/CAMPAGNES.md) : ce que la fenêtre fait du moteur, SANS interface encore. Le carnet vit
-// dans le profil ; cette partie le tient à jour (attentes qui finissent, récompenses versées une fois), le publie sur le
-// sujet des campagnes du relais et y lit celui des autres appareils du groupe (PC et téléphone).
+// Campagnes (Campagnes.cs, docs/CAMPAGNES.md) : ce que la fenêtre fait du moteur. Le carnet vit dans le profil ; cette
+// partie le tient à jour (attentes qui finissent, récompenses versées une fois), le publie sur le sujet des campagnes
+// du relais et y lit celui des autres appareils du groupe (PC et téléphone). L'interface : PresenceCampagne.cs (Pilou
+// occupé, retour, menus) et FenetreAventure.cs (la fenêtre « Aventure »).
 //
-// Pour l'interface à venir :
+// Façade :
 //   EtatCampagne                 l'état courant (null : aucune partie), rafraîchi à chaque lecture des sessions
 //   CarnetCampagnes              le carnet (fil des messages, non lus, historique) ; CampagneOuverte : la campagne en cours
 //   CampagneEnAttente            Pilou est parti (attente) ou se repose : pas d'expédition ni de visite pendant ce temps
@@ -16,6 +17,8 @@ namespace PilouBureau;
 //   CampagneAbandonner()         chacune renvoie null si c'est fait, sinon la raison (à montrer telle quelle)
 //   CampagneMarquerLu()          le fil est lu (CarnetCampagnes.NonLus retombe à zéro)
 //   --essai=campagne:<id>        déroule la campagne en accéléré dans la bulle (rien n'est écrit, rien n'est publié)
+//   --essai=campagne:lecture|attente|retour|epreuve|fin : la fenêtre Aventure et Pilou sur une partie de démonstration
+//                                (le prologue, en mémoire : le profil n'est ni lu pour elle ni écrit)
 public sealed partial class FenetrePilou
 {
     private Campagnes.Carnet? _essaiCamp;
@@ -31,25 +34,32 @@ public sealed partial class FenetrePilou
     internal Campagnes.Campagne? CampagneOuverte => CarnetCamp.Courante is { } p ? Campagnes.Charger(p.Campagne) : null;
 
     // Pilou est parti pour sa campagne (attente) ou s'en remet (repos) : il n'est pas là pour autre chose.
-    internal bool CampagneEnAttente => _essaiCamp is null && _campEtat is { EnAttente: true } e && Epoque < e.Fin;
+    internal bool CampagneEnAttente => !_essaiCampRapide && _campEtat is { EnAttente: true } e && Epoque < e.Fin;
 
-    private string OccupationCampagne() =>
-        CampagneEnAttente && _campEtat is { } e ? $"Pilou est en campagne ({Campagnes.Ligne(e, DateTimeOffset.FromUnixTimeMilliseconds(e.Fin).LocalDateTime)})" : "";
+    // Pourquoi Pilou ne peut pas faire « quoi » (expedition, visite, defense, jeu) pendant sa campagne ; "" s'il le peut.
+    private string RefusPendantCampagne(string quoi) => _essaiCampRapide ? "" : Aventure.RefusPendant(quoi, _campEtat, (long)Epoque) ?? "";
 
-    // Pourquoi Pilou ne peut pas répondre à sa campagne maintenant (expédition, visite), null s'il le peut.
-    internal string? RefusCampagne() =>
-        EnExpedition ? "Pilou est en expédition : la campagne attendra son retour"
-        : _visites.Sortie is not null ? "Pilou est en visite chez un ami : la campagne attendra son retour"
-        : null;
+    private string OccupationCampagne() => RefusPendantCampagne("expedition");
+
+    // Pourquoi Pilou ne peut pas répondre à sa campagne maintenant (expédition, visite, Défense), null s'il le peut.
+    internal string? RefusCampagne() => Aventure.RefusDecision(EnExpedition, _visites.Sortie is not null, _defense is not null);
 
     // Appelé à chaque lecture des sessions : le temps passe (une attente finit), les récompenses se versent, la synchro suit.
     private void SuivreCampagne(double epoque)
     {
-        if (_essaiCamp is not null || epoque - _campVu < 1000) return;
+        if (_essaiCampRapide || epoque - _campVu < 1000) return;
         _campVu = epoque;
+        if (_essaiCamp is { } essai)
+        {
+            // Démonstration (--essai=campagne:lecture…) : le carnet en mémoire, à l'heure réelle ; rien n'est versé ni publié.
+            _campEtat = Prudemment(() => Campagnes.Actualiser(essai, Campagnes.Charger, (long)epoque), _campEtat);
+            SuivrePresence();
+            return;
+        }
         ActualiserCampagne(epoque);
         PublierCampagnes(epoque);
         LireCampagnes(epoque);
+        SuivrePresence();
     }
 
     private void ActualiserCampagne(double epoque)
@@ -66,6 +76,9 @@ public sealed partial class FenetrePilou
             _xpTotal = TotalXp();
             if (v.Po > 0) FlotterPo($"+{v.Po} po");
             if (_xpTotal > xpAvant) Flotter($"+{_xpTotal - xpAvant} xp");
+            // Un objet exclusif gagné à une fin : il rejoint ses affaires (boutique, « Ce qu'il porte »).
+            if (v.Objets.Count > 0)
+                Dire($"✦ {string.Join(", ", v.Objets.Select(o => PilouBureau.Boutique.Trouver(o)?.Nom ?? o))} : objet exclusif, à porter depuis la boutique", 7000);
             VerifierNiveau();
         }
         if (verse || Campagnes.Signature(k) != avant) _profil.Ecrire(DossierPartage);
@@ -155,6 +168,8 @@ public sealed partial class FenetrePilou
             finally
             {
                 _campLectureEnCours = false;
+                // Première lecture du groupe faite (ou impossible) : le retour peut s'annoncer, à jour (PresenceCampagne.cs).
+                _ = Dispatcher.BeginInvoke(() => _campPret = true);
             }
         });
     }
@@ -174,11 +189,13 @@ public sealed partial class FenetrePilou
             _profil.Ecrire(DossierPartage);
             _campChange = Epoque - 3000; // publier sans attendre
         }
+        else if (r is null && !_essaiCampRapide) _campEtat = Campagnes.Actualiser(k, Campagnes.Charger, (long)Epoque);
+        if (r is null) ApresDecision();
         return r;
     }
 
     internal string? CampagneDemarrer(string id, bool neuf = false) =>
-        DeciderCampagne((k, c, t) => Campagnes.Demarrer(k, c, Niveau, t, IdAppareil, Campagnes.Charger, null, neuf), id);
+        DeciderCampagne((k, c, t) => Campagnes.Demarrer(k, c, _essaiCamp is not null ? int.MaxValue : Niveau, t, IdAppareil, Campagnes.Charger, null, neuf), id);
 
     internal string? CampagneChoisir(string option) => DeciderCampagne((k, c, t) => Campagnes.Choisir(k, c, t, IdAppareil, option));
 
@@ -187,6 +204,15 @@ public sealed partial class FenetrePilou
     internal string? CampagneEpreuve(bool reussie) => DeciderCampagne((k, c, t) => Campagnes.Epreuve(k, c, t, IdAppareil, reussie));
 
     internal string? CampagneAuDe() => DeciderCampagne((k, c, t) => Campagnes.EpreuveAuDe(k, c, t, IdAppareil));
+
+    // Ce que les dés vont dire (pour animer le tirage avant de décider) ; null hors épreuve.
+    internal bool? CampagneDeVa()
+    {
+        var k = CarnetCamp;
+        if (k.Courante is not { } p || Campagnes.Charger(p.Campagne) is not { } c) return null;
+        var e = Campagnes.Rejouer(c, p, (long)Epoque);
+        return e.Phase == Campagnes.Phase.Epreuve ? Campagnes.DeDe(c, p, e) : null;
+    }
 
     // Abandonner reste possible quand Pilou est occupé ailleurs.
     internal string? CampagneAbandonner() => DeciderCampagne((k, c, t) => Campagnes.Abandonner(k, c, t, IdAppareil), memeOccupe: true);
@@ -201,8 +227,78 @@ public sealed partial class FenetrePilou
     // ---- Essai sans attendre : --essai=campagne:<id> déroule la campagne en accéléré dans la bulle. Le carnet d'essai
     // vit en mémoire (rien n'est écrit, rien n'est publié) ; l'horloge de l'essai saute par-dessus les attentes.
 
+    // ---- Démonstrations : --essai=campagne:lecture|attente|retour|epreuve|fin. Une partie du prologue jouée d'avance en
+    // mémoire (choix, attentes passées), puis la fenêtre Aventure ou l'overlay à l'heure réelle ; les décisions qu'on y
+    // prend restent en mémoire. Le profil n'est pas touché, rien n'est publié.
+    public static readonly string[] EssaisAventure = { "lecture", "attente", "retour", "epreuve", "fin" };
+
+    private void EssaiAventure(string quoi) => Prudemment(() =>
+    {
+        var c = Campagnes.Charger("prologue");
+        if (c is null)
+        {
+            Dire("le prologue est introuvable dans cet exe", 6000);
+            return;
+        }
+        const string appareil = "essai";
+        var k = new Campagnes.Carnet();
+        long maintenant = (long)Epoque;
+        long t = quoi == "attente" ? maintenant - 30_000 : maintenant - 20 * 3_600_000L;
+        Campagnes.Demarrer(k, c, int.MaxValue, t, appareil, Campagnes.Charger, "vitrine");
+        // Le premier choix mène, par la première attente, à la mare ; on y saute (épreuve) ou on s'arrête là (lecture).
+        bool VersEpreuve(Campagnes.Etat e, Campagnes.OptionVue o) =>
+            c.Noeud(c.Noeud(e.Noeud)?.Options.FirstOrDefault(x => x.Id == o.Id)?.Vers ?? "")?.Type == "epreuve";
+        for (int pas = 0; pas < 400; pas++)
+        {
+            var e = Campagnes.Actualiser(k, Campagnes.Charger, t)!;
+            bool arrete = quoi switch
+            {
+                "attente" => e.Phase == Campagnes.Phase.Attente,
+                "retour" or "lecture" => e.Phase == Campagnes.Phase.Choix && k.Fil.Any(m => m.Qui == "joueur"),
+                "epreuve" => e.Phase == Campagnes.Phase.Epreuve,
+                _ => !e.EnCours,
+            };
+            if (arrete || !e.EnCours) break;
+            switch (e.Phase)
+            {
+                case Campagnes.Phase.Choix:
+                    var o = quoi == "epreuve" ? e.Options.FirstOrDefault(x => VersEpreuve(e, x)) ?? e.Options[0] : e.Options[0];
+                    Campagnes.Choisir(k, c, t += 3000, appareil, o.Id);
+                    break;
+                case Campagnes.Phase.Epreuve:
+                    Campagnes.Epreuve(k, c, t += 3000, appareil, true);
+                    break;
+                case Campagnes.Phase.Depart:
+                    Campagnes.Continuer(k, c, t += 3000, appareil);
+                    break;
+                default:
+                    // Une attente : l'heure de l'essai saute à son retour (sans dépasser l'heure réelle pour l'attente montrée).
+                    t = quoi == "attente" ? t + 1000 : e.Fin + 60_000;
+                    break;
+            }
+        }
+        var etat = Campagnes.Actualiser(k, Campagnes.Charger, Math.Max(t, maintenant))!;
+        // Lu jusqu'à l'avant-dernier passage : ce que Pilou vient d'écrire s'écrit lettre à lettre (ou s'annonce, au retour).
+        var pilou = k.Fil.Where(m => m.Qui == "pilou").ToList();
+        int garder = quoi switch { "retour" => 3, "lecture" or "fin" => 2, _ => 0 };
+        var lu = pilou.Count > garder ? pilou[^(garder + 1)] : null;
+        k.Lu = lu is null ? "" : string.Create(System.Globalization.CultureInfo.InvariantCulture, $"{lu.P}.{lu.E}.{lu.I}");
+        if (garder == 0) Campagnes.MarquerLu(k);
+        _essaiCamp = k;
+        _essaiCampRapide = false;
+        _essaiAnnoncee = "";
+        _campEtat = etat;
+        _campVu = -1e12;
+        if (quoi != "retour") OuvrirAventure();
+    });
+
     private void EssaiCampagne(string id)
     {
+        if (Array.IndexOf(EssaisAventure, id) >= 0)
+        {
+            EssaiAventure(id);
+            return;
+        }
         var c = Campagnes.Charger(id);
         if (c is null)
         {
@@ -210,6 +306,7 @@ public sealed partial class FenetrePilou
             return;
         }
         _essaiCamp = new Campagnes.Carnet();
+        _essaiCampRapide = true;
         long t = (long)Epoque;
         const string appareil = "essai";
         if (Campagnes.Demarrer(_essaiCamp, c, int.MaxValue, t, appareil, Campagnes.Charger, "essai") is { } refus)

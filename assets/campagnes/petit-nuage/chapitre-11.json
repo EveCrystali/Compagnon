@@ -80,7 +80,7 @@
       ],
       "options": [
         { "id": "ch11-veille-cafe", "libelle": "Bois le café de gland, tant pis pour le goût", "vers": "ch11-nuit", "si": { "objet": "cafe" } },
-        { "id": "ch11-veille-goutte", "libelle": "Demande à Brouillon une goutte sur le nez, de temps en temps", "vers": "ch11-nuit", "si": { "tous": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "min": 14 } ] } },
+        { "id": "ch11-veille-goutte", "libelle": "Demande-lui une goutte sur le nez, de temps en temps", "vers": "ch11-nuit", "si": { "tous": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "min": 14 } ] } },
         { "id": "ch11-veille-seul", "libelle": "Tiens bon tout seul : marche, compte, chante", "vers": "ch11-tenir" },
         { "id": "ch11-veille-dormir", "libelle": "Dors une heure, juste une, pour être en forme à l'aube", "vers": "ch11-une-minute", "si": { "non": { "drapeau": "promesse-veille" } } }
       ]
@@ -120,7 +120,7 @@
       "tenue": "nuit",
       "recompense": { "po": 20, "xp": 10 },
       "texte": [
-        "Je veille. Je marche en rond, je souffle dans mes mains, je recompte les nuages : il en manque toujours un, c'est le mien, il est à part, à la lisière, tourné vers ici. Le feu baisse. L'herbe blanchit par plaques, et le bord de l'eau se met à faire de la dentelle. Les grands se sont encore serrés. Je ne m'assieds pas. Je te le promets, je ne m'assieds pas. Il reste des heures. Qu'est-ce qu'il fera, lui, quand ils se lèveront ? Je te dis au matin."
+        "Je veille. Je marche en rond, je souffle dans mes mains, je recompte les nuages : il en manque toujours un, c'est le mien, il est à part, à la lisière, tourné vers ici. Le feu baisse. L'herbe blanchit par plaques, et le bord de l'eau se met à faire de la dentelle. Il y a beaucoup de dehors, comme la première nuit à l'étang, mais je le trouve moins grand. Je ne m'assieds pas. Je te le promets, je ne m'assieds pas. Qu'est-ce qu'il fera, lui, quand ils se lèveront ? Je te dis au matin."
       ],
       "suite": "ch12-gelee"
     }

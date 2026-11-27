@@ -81,7 +81,7 @@
       "humeur": "surpris",
       "texte": [
         "C'est très beau, chez Dentelle. Des toiles grandes comme des fenêtres, et sur chaque fil, des gouttes de rosée rangées par taille. La plus grosse, au centre, c'est une perle : de la rosée qui ne sèche pas. Un petit nuage qui l'avale reprend d'un coup une bonne part de ce qu'il a perdu. Il n'y en a qu'une.",
-        "Dentelle m'a regardé avec plusieurs yeux. « Ici, on paie en fil. Tu n'as pas de fil ? Alors en couleur. Je n'ai jamais eu de bleu. » Elle veut de mon encre. Une bonne cuillerée de moi. Brouillon regarde la perle, puis moi, puis la perle. Qu'est-ce que je fais ?"
+        "Dentelle m'a regardé avec plusieurs yeux. « Ici, on paie en fil. Du fin, du vrai, pas de la ficelle ni de la laine. Tu n'en as pas ? Alors en couleur. Je n'ai jamais eu de bleu. » Elle veut de mon encre. Une bonne cuillerée de moi. Brouillon regarde la perle, puis moi, puis la perle. Qu'est-ce que je fais ?"
       ],
       "options": [
         { "id": "ch3-toile-encre", "libelle": "Paie avec ton encre", "vers": "ch3-pale", "effets": [ { "drapeau": "pale" }, { "objet": "perle", "donne": true } ] },
@@ -102,7 +102,7 @@
       "type": "recit",
       "humeur": "malice",
       "texte": [
-        "J'ai dit : je n'ai pas de fil, mais j'ai autre chose, et j'ai proposé. Dentelle a réfléchi longtemps, les huit pattes croisées. « Ce n'est pas du fil. Ce n'est pas de la couleur. Mais on ne m'en avait jamais offert, et à mon âge, c'est rare. Marché conclu. » Elle a décroché la perle elle-même et l'a roulée dans une feuille. Elle est dans le baluchon. Je suis assez fier de moi, je te le dis."
+        "J'ai dit : je n'ai pas de fil fin, mais j'ai autre chose, et j'ai proposé. Dentelle a réfléchi longtemps, les huit pattes croisées. « Ce n'est pas du fil. Ce n'est pas de la couleur. Mais on ne m'en avait jamais offert, et à mon âge, c'est rare. Marché conclu. » Elle a décroché la perle elle-même et l'a roulée dans une feuille. Elle est dans le baluchon. Je suis assez fier de moi, je te le dis."
       ],
       "suite": "ch3-gouttes"
     },

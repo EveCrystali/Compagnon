@@ -67,10 +67,13 @@ Tronc commun : chapitres 1 à 5. À la halte, Tournebise décrit deux passages.
 
 - **Route du col** (ch. 6 et 7) : la Gencive, entre deux Dents-de-Lait. Longue, froide, sûre si on
   écoute Madame Bocal. On arrive **le dernier soir**, à condition de n'avoir perdu aucun jour. Avec un
-  jour perdu (`a-traine`), on arrive pour voir le troupeau partir.
+  jour perdu (`a-traine`), on arrive en haut de la pente au crépuscule, une nuit de descente devant
+  soi : il reste trois façons de rattraper l'adieu, toutes annoncées plus tôt (la plume de fer que
+  Tournebise destinait à Ondée, son café de gland « qui ferait courir un escargot », ou envoyer le
+  petit devant, seul). Madame Bocal prévient au matin du col : « Chaque détour, c'est la gelée qui gagne. »
 - **Route du trou** (ch. 8 et 9) : le Trou-qui-Siffle, sous la montagne. Courte, noire, dangereuse
-  (le vent déchire). On arrive **à midi**, avec un après-midi entier devant soi ; ou le dernier soir
-  si un jour a été perdu.
+  (le vent déchire). On arrive **à midi**, avec un après-midi entier devant soi (une demi-journée
+  d'avance sur le col) ; ou le dernier soir si un jour a été perdu.
 
 Les chapitres 10 à 12 sont communs, avec trois heures d'arrivée possibles (midi, soir, trop tard).
 Un parcours traverse 9 ou 10 chapitres sur 12 (arrivé trop tard, on saute le chapitre 11 : il n'y a
@@ -93,7 +96,7 @@ plus de dernière soirée).
 |---|---|---|
 | `pelote`, `gouter` ou `parapluie` | ch. 1, on n'en prend qu'un | attacher Brouillon (ch. 2) ; payer Dentelle (ch. 3) ; rester sous sa première pluie (ch. 3) |
 | `perle` (perle de rosée) | ch. 3, chez Dentelle | à lui faire boire le dernier soir (ch. 11) : taille +3 |
-| `cafe` (café de gland) | ch. 5, si on reste près de Tournebise ou qu'on promet | tenir la dernière nuit sans épreuve |
+| `cafe` (café de gland) | ch. 5, si on reste près de Tournebise ou qu'on promet | tenir la dernière nuit sans épreuve ; ou, arrivé tard par le col, dévaler la pente à temps (ch. 10, `ch10-cafe`) |
 | `plume` (plume de fer) | ch. 5, si on accepte | lourde ; faire signe à Ondée ; fin secrète |
 | `bocal` | ch. 6, si on accepte | Brouillon ne perd rien au col, mais n'apprend pas le vent |
 
@@ -102,7 +105,7 @@ plus de dernière soirée).
 | Drapeau | Posé | Paie |
 |---|---|---|
 | `tache-bleue` | ch. 1 (le laisser dormir contre soi : l'encre ne part pas) ou ch. 11 | ch. 7 : le retrouver dans le blanc ; ch. 11 : option retirée |
-| `a-traine` | ch. 1 (attendre un jour), ch. 2 (l'après-midi dans les draps), ch. 7 (vapeur, grand tour) ; ôté ch. 4 (traverser tout de suite) et ch. 6 (couper par les rochers) | ch. 5 : on peut demander à Tournebise si le col passe encore ; ch. 10 : heure d'arrivée |
+| `a-traine` | ch. 1 (attendre un jour), ch. 2 (l'après-midi dans les draps), ch. 7 (vapeur, grand tour : annoncés par Madame Bocal et par les options) ; ôté ch. 4 (traverser tout de suite) et ch. 6 (couper par les rochers) | ch. 5 : on peut demander à Tournebise si le col passe encore (`ch5-temps`, un choix) ; ch. 10 : heure d'arrivée, rattrapable par la plume ou le café |
 | `ficelle` | ch. 2 (avec la pelote) | ch. 4 : tenir la laine face aux Enclumes ; ch. 7 : suivre la laine dans le blanc ; ch. 12 : défaire le nœud |
 | `voix-des-draps` | ch. 2 (faire parler les draps) | ch. 10 : l'avouer (« Goutte parle drap très mal ») |
 | `sait-boire` | ch. 3 (les rainettes, ou le laisser trouver seul) | ch. 3 : il boit pour deux avant le plateau |
@@ -117,7 +120,7 @@ plus de dernière soirée).
 | `route-col` / `route-gorge` | ch. 5 | ch. 10 : heure d'arrivée |
 | `couve` | ch. 7 (bocal gardé fermé) ou ch. 8 (dans le baluchon) | ch. 12 : sans `sait-tenir`, il ne sait pas monter |
 | `guide` | ch. 8 (chanson, plume ou oreiller) | ch. 9 : les Froisseuses rassemblent les morceaux |
-| `descente-nuit`, `seul-devant`, `attendu` | ch. 10 (trop tard) | ch. 12 |
+| `descente-nuit`, `seul-devant`, `attendu` | ch. 10 (trop tard ; le café n'en pose aucun : on arrive avant l'aube) | ch. 12 |
 | `ondee` | ch. 10 ou 11 (faire sonner la plume) | ch. 12 : fin secrète |
 | `endormi` | ch. 11 | ch. 12 |
 
@@ -129,7 +132,7 @@ par l'état. Chacun porte un vrai message de transition.
 
 | Nœud | Issue | Titre | Comment |
 |---|---|---|---|
-| `ch12-fin-pluie` | bonne | La pluie autour | Éveillé, on dit « va » ; lien ≥ 16, taille ≥ 2. S'il sait pleuvoir : il pleut partout sauf sur Pilou (le rond sec). Sinon : ses trois premières gouttes, sur la tête de Pilou, qui ne se sauve pas. |
+| `ch12-fin-pluie` | bonne | La pluie autour | Éveillé et à temps (ou rattrapé par la plume ou le café), on dit « va » ; lien ≥ 16, taille ≥ 2. S'il sait pleuvoir : il pleut partout sauf sur Pilou (le rond sec). Sinon : ses trois premières gouttes, sur la tête de Pilou, qui ne se sauve pas. |
 | `ch12-fin-sans` | douce-amère | Sans se retourner | Comme ci-dessus, lien < 16 : il monte droit, sans un regard. C'est ce qu'on voulait. |
 | `ch12-fin-hiver` | douce-amère | Un hiver à deux | On le retient ; ou il est trop petit ; ou trop couvé pour savoir monter. Le troupeau part. Une cabane, un poêle, et le printemps promis. |
 | `ch12-fin-de-loin` | douce-amère | De loin | Arrivé trop tard par le col, on l'envoie seul devant. Il rejoint les siens ; l'adieu se voit du haut de la pente. |
@@ -140,16 +143,18 @@ Chaque fin donne un titre, un objet à porter et un souvenir.
 
 ## Échecs (retour au dernier check-point)
 
-Tous sont annoncés, et tous ont une sortie prudente.
+Tous sont annoncés, et tous ont une sortie prudente. Chacun ramène à un check-point posé juste avant
+la décision (et non au début du chapitre) : rien de long n'est à refaire, et le texte du check-point
+se relit naturellement après le repos (au présent, ou raccordé par le texte de l'échec).
 
-| Nœud | Cause | Ce qui l'annonçait |
-|---|---|---|
-| `ch2-echec-soleil` | continuer au soleil deux fois | il devient transparent, puis il siffle |
-| `ch4-echec-enclumes` | épreuve ratée face à l'orage | la bergeronnette (ch. 1), son regard vers les noirs ; on peut le prévenir |
-| `ch6-echec-tourmente` | monter le soir malgré Madame Bocal, puis insister | « demain matin ou pas du tout » ; il se met à craquer |
-| `ch7-echec-blanc` | épreuve ratée dans le brouillard | « blanc sur blanc » ; jusqu'à trois autres options sans épreuve (tache, laine, vapeur) |
-| `ch8-echec-rafale` | épreuve ratée entre les rafales | le sifflet qui passe au si ; l'option du baluchon |
-| `ch9-echec-salle` | l'avoir serré, puis épreuve ratée | « dans le vent, le serre pas » ; deux autres options |
+| Nœud | Cause | Ce qui l'annonçait | Retour à |
+|---|---|---|---|
+| `ch2-echec-soleil` | continuer au soleil deux fois | il devient transparent, puis il siffle | `ch2-soleil` (l'entrée du chemin blanc) |
+| `ch4-echec-enclumes` | épreuve ratée face à l'orage | la bergeronnette (ch. 1), son regard vers les noirs ; on peut le prévenir | `ch4-enclumes` (ils ont fait demi-tour) |
+| `ch6-echec-tourmente` | monter le soir malgré Madame Bocal, puis insister | « demain matin ou pas du tout » ; il se met à craquer | `ch6-meteo` (ramenés au terrier) |
+| `ch7-echec-blanc` | épreuve ratée dans le brouillard | « blanc sur blanc » ; jusqu'à trois autres options sans épreuve (tache, laine, vapeur) | `ch7-perdu` (il repart dire bonjour) |
+| `ch8-echec-rafale` | épreuve ratée entre les rafales | le sifflet qui passe au si ; l'option du baluchon | `ch8-rafales` (le premier creux) |
+| `ch9-echec-salle` | l'avoir serré, puis épreuve ratée | « dans le vent, le serre pas » ; deux autres options | `ch9-traverse` (le début de la corniche) |
 
 ## Épreuves
 
@@ -195,14 +200,20 @@ sous les plafonds (600 / 300).
 
 | | |
 |---|---|
-| Nœuds | 198 (86 récits, 49 choix, 35 attentes, 8 épreuves, 8 aiguillages, 6 échecs, 6 fins) |
-| Mots | ≈ 17 000 ; 252 messages, 68 mots en moyenne, tous entre 33 et 104 |
+| Nœuds | 199 (86 récits, 50 choix, 35 attentes, 8 épreuves, 8 aiguillages, 6 échecs, 6 fins) |
+| Mots | ≈ 17 000 ; 253 messages, 69 mots en moyenne, tous entre 37 et 98 |
 | Choix par parcours | 31 · 35 · 39 (min · médiane · max, hors reprises après échec) |
-| Attentes par parcours | 15 · 17 · 22, dont 4 longues sur tous les parcours |
-| Temps réel par parcours | 11 h 15 · 12 h 35 · 14 h 40 sans échec (médiane de 13 h avec les repos après échec) |
+| Attentes par parcours | 15 · 17 · 20, dont 4 longues sur tous les parcours |
+| Temps réel par parcours | 11 h 18 · 12 h 51 · 16 h 36 (repos après échec compris) |
 | Chapitres par parcours | 9 ou 10 |
-| Fins, au hasard | hiver à deux 30 %, adieu manqué 28 %, de loin 15 %, sans se retourner 14 %, pluie autour 11 %, deux adieux 2 % |
+| Fins, au hasard | hiver à deux 32 %, adieu manqué 25 %, sans se retourner 17 %, pluie autour 13 %, de loin 12 %, deux adieux 1,6 % |
+| Fins, joueur attentif | pluie autour 50 %, sans se retourner 25 %, adieu manqué 13 %, deux adieux 6 %, hiver à deux 5 %, de loin 2 % |
 
 Jouer au hasard, c'est traîner, mentir et s'endormir une fois sur trois : les fins lumineuses
-demandent de l'attention, pas de la chance. Le parcours attentif de référence (vérité, rire, le
-laisser essayer, la plume portée jusqu'au bout) finit à lien 27 et ouvre la fin secrète.
+demandent de l'attention, pas de la chance. Le « joueur attentif » (script de relecture) évite
+seulement ce que le texte déconseille en toutes lettres (le soleil, la tourmente, les détours du
+col, serrer le petit, dormir, le retenir) et choisit au hasard parmi le reste, avec trois épreuves
+sur quatre réussies : il obtient la bonne fin une fois sur deux, et 43 % par le col seul (36 % avant
+la relecture). S'il ne se méfie pas des détours du col, la route du col reste la plus dure (20 % de
+bonnes fins contre 13 % avant le café et les rattrapages). Le parcours attentif de référence (vérité,
+rire, le laisser essayer, la plume portée jusqu'au bout) finit à lien 25 et ouvre la fin secrète.

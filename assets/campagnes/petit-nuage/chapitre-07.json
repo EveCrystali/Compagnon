@@ -9,7 +9,7 @@
       "humeur": "surpris",
       "texte": [
         "Tout est blanc. Madame Bocal n'avait pas menti. Il a neigé toute la nuit, et ce matin, on ne sait plus où finit la montagne et où commence le ciel. Elle nous a mis dehors à l'aube avec une tartine et un conseil : suivre les cairns, les petits tas de cailloux, un par un, sans jamais lâcher le dernier des yeux.",
-        "Elle a dit aussi que ce n'était pas encore la vraie gelée. Juste un avertissement. La vraie, c'est pour dans deux ou trois nuits. On monte. La neige crisse. Et juste devant, posé sur le col comme un couvercle, il y a un nuage. Un vrai. Un énorme, immobile, blanc."
+        "Elle a dit aussi que ce n'était pas encore la vraie gelée. Juste un avertissement. La vraie, elle la sent pour la nuit prochaine, dans ses moustaches. « Alors pas de détours, là-haut. Chaque détour, c'est la gelée qui gagne. » On monte. La neige crisse. Et juste devant, posé sur le col comme un couvercle, il y a un nuage. Un vrai. Un énorme, immobile, blanc."
       ],
       "suite": "ch7-blanc"
     },
@@ -38,17 +38,18 @@
     },
     "ch7-perdu": {
       "type": "choix",
+      "checkpoint": true,
       "humeur": "peur",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
-        "Il est parti dire bonjour. Je l'ai vu entrer dans le blanc, tout content, et puis je ne l'ai plus vu. Je cherche un petit nuage blanc, dans un grand nuage blanc, au-dessus de la neige. Tu vois le problème. J'ai appelé. Le brouillard avale tout, même son nom.",
+        "Il est parti dire bonjour. Il est entré dans le blanc, tout content, et je ne l'ai plus vu. Je cherche un petit nuage blanc, dans un grand nuage blanc, au-dessus de la neige. Tu vois le problème. J'ai appelé. Le brouillard avale tout, même son nom.",
         "Je suis au sixième cairn, je n'ose plus le lâcher. Il fait très froid, et le froid, il ne faut pas qu'il y reste longtemps. J'entends des pff, parfois, à gauche, puis derrière, puis plus rien. Qu'est-ce que je fais ? Vite !"
       ],
       "options": [
         { "id": "ch7-perdu-tache", "libelle": "Cherche du bleu : sa tache", "vers": "ch7-tache", "si": { "drapeau": "tache-bleue" }, "effets": [ { "var": "lien", "plus": 1 } ] },
-        { "id": "ch7-perdu-laine", "libelle": "Tire tout doucement sur la laine", "vers": "ch7-laine", "si": { "drapeau": "ficelle" } },
+        { "id": "ch7-perdu-laine", "libelle": "Tire tout doucement sur la laine", "vers": "ch7-laine", "si": { "drapeau": "ficelle" }, "effets": [ { "var": "lien", "plus": 1 } ] },
         { "id": "ch7-perdu-ecoute", "libelle": "Ne bouge plus. Écoute d'où viennent les pff.", "vers": "ch7-memoire" },
-        { "id": "ch7-perdu-vapeur", "libelle": "Allume le réchaud : il viendra à la vapeur", "vers": "ch7-vapeur", "effets": [ { "drapeau": "a-traine" } ] }
+        { "id": "ch7-perdu-vapeur", "libelle": "Allume le réchaud et attends-le, le temps qu'il faudra", "vers": "ch7-vapeur", "effets": [ { "drapeau": "a-traine" } ] }
       ]
     },
     "ch7-tache": {
@@ -63,7 +64,7 @@
       "type": "recit",
       "humeur": "malice",
       "texte": [
-        "La laine ! J'ai un brin de laine au poignet depuis le deuxième jour, et je l'avais oublié. Il était raide de givre, tendu vers la gauche. J'ai tiré dessus très doucement, de peur qu'il casse, en avançant d'un pas à chaque fois. Dix pas. Vingt. Au bout du fil, il y avait Brouillon, en grande conversation avec un nuage qui ne lui répondait pas. Il a regardé la laine, puis moi : « Goutte triche. » Oui. Et alors ?"
+        "La laine ! J'ai un brin de laine au poignet depuis le chemin creux, et je l'avais oublié. Il était raide de givre, tendu vers la gauche. J'ai tiré dessus très doucement, de peur qu'il casse, en avançant d'un pas à chaque fois. Dix pas. Vingt. Au bout du fil, il y avait Brouillon, en grande conversation avec un nuage qui ne lui répondait pas. Il a regardé la laine, puis moi : « Goutte triche. » Oui. Et alors ?"
       ],
       "suite": "ch7-neige"
     },
@@ -87,13 +88,14 @@
       "pendant": "Pilou fait de la vapeur dans le brouillard, et attend",
       "tenue": "attend",
       "texte": [
-        "J'allume le réchaud, là, au pied du cairn, les doigts gourds. La casserole, de la neige dedans, et tout ce qu'il me reste de tilleul. S'il sent la vapeur, il viendra : c'est sa cantine, il la reconnaîtrait entre mille. Ça va prendre du temps, et du temps, on n'en a pas de reste. Mais je ne pars pas d'ici sans lui. Je souffle sur la vapeur pour l'envoyer loin. J'attends."
+        "J'allume le réchaud, là, au pied du cairn, les doigts gourds. La casserole, de la neige dedans, et ma dernière pincée de thé, pour l'odeur. S'il sent la vapeur, il viendra : c'est sa cantine, il la reconnaîtrait entre mille. Ça va prendre du temps, et Madame Bocal l'a dit, chaque détour, c'est la gelée qui gagne. Mais je ne pars pas d'ici sans lui. Je souffle sur la vapeur pour l'envoyer loin. J'attends."
       ],
       "suite": "ch7-retrouve"
     },
     "ch7-retrouve": {
       "type": "recit",
       "humeur": "joie",
+      "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "Il est sorti du blanc d'un seul coup, à deux pas de moi, comme quelqu'un qui pousse une porte. Couvert de givre, tout raide, avec des paillettes partout. Et ravi. Il a dit : « Grand dit rien. Grand dort. » Il lui a parlé tout ce temps, et l'autre n'a pas répondu, les très grands sont comme ça. Je l'ai frotté avec mon baluchon pour le dégeler. Je n'ai rien dit. J'avais la voix qui faisait n'importe quoi."
       ],
@@ -104,7 +106,7 @@
       "humeur": "triste",
       "repos_min": 30,
       "texte": [
-        "Je me suis trompé de sens. J'ai marché sur un pff qui n'était qu'un écho, j'ai lâché le cairn, et je nous ai perdus tous les deux. C'est lui qui m'a retrouvé, à la nuit, en suivant le bruit de ma casserole. Il était dur comme une meringue. On est redescendus à tâtons jusqu'au premier cairn, à la sortie du terrier. Madame Bocal a remis la bouilloire sans un mot. On remontera au matin."
+        "Je me suis trompé de sens. J'ai marché sur un pff qui n'était qu'un écho, j'ai lâché le cairn, et je me suis perdu à mon tour. C'est lui qui m'a retrouvé, au bout d'une heure, en suivant le bruit de ma casserole. Il était dur comme une meringue. On s'est dégelés tous les deux au pied du sixième cairn, contre le réchaud. Et puis le grand nuage a soupiré, quelque part, et Brouillon est reparti lui dire bonjour avant que j'aie pu dire ouf."
       ]
     },
     "ch7-vitre": {
@@ -115,7 +117,7 @@
       "pendant": "Pilou grimpe, un bocal serré contre lui",
       "tenue": "grimpe",
       "texte": [
-        "Je n'ai pas ouvert. On est sortis du nuage par le haut, et Brouillon est resté tourné vers l'arrière, contre la vitre, jusqu'à ce qu'on ne voie plus rien. Maintenant, il s'est mis en boule au fond. Il reste la dernière pente, et un pont de neige que je vais passer à plat ventre, en poussant le bocal devant moi. Je rouvrirai de l'autre côté, quand le vent sera tombé. Il arrivera entier. Je me le répète à chaque cairn. À tout à l'heure."
+        "Je n'ai pas ouvert. On est sortis du nuage par le haut, et Brouillon est resté tourné vers l'arrière, contre la vitre, jusqu'à ce qu'on ne voie plus rien. Maintenant, il s'est mis en boule au fond. Il reste la dernière pente, et un pont de neige que je vais passer à plat ventre, en poussant le bocal devant moi. Je rouvrirai le bocal tout en haut, au bord du col, quand le vent sera tombé. Il arrivera entier. Je me le répète à chaque cairn. À tout à l'heure."
       ],
       "suite": "ch7-col"
     },

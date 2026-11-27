@@ -10,7 +10,7 @@
       "texte": [
         "Ce matin, il y avait une lettre contre mon encrier. Pas de timbre, pas de tampon : quelqu'un l'a portée jusqu'ici à la main. Et elle sent le maquereau. Je l'ai ouverte quand même, parce que je suis curieux et que le maquereau ne m'a jamais rien fait.",
         "Dedans, six lignes : « Pilou. Le phare de la Dent-Creuse est éteint depuis trois nuits. Anselme ne répond plus. Viens. Viens seul. Ne te fie à personne au village. Brûle cette lettre. » Pas de signature.",
-        "Anselme, c'est le gardien. Un soir de brouillard, il y a longtemps, sa lumière m'a ramené chez moi : deux éclats, un long. Depuis, il m'envoie une carte chaque hiver. L'encre de cette lettre, c'est la sienne, je la reconnaîtrais au goût. Mais l'écriture, non. Je pars, c'est décidé. Seulement, la lettre : je la brûle, comme elle le demande, ou je la garde ?"
+        "Anselme, c'est le gardien. Un soir de brouillard, il y a longtemps, sa lumière m'a ramené chez moi : deux éclats, un long. Depuis, il m'envoie une carte chaque hiver. L'encre de cette lettre, c'est la sienne, je la reconnaîtrais au goût. Mais l'écriture, non. Je pars, c'est décidé. Seul, comme elle dit. Enfin, avec toi : toi, ça ne compte pas, tu es dans ma poche. Seulement, la lettre : je la brûle, comme elle le demande, ou je la garde ?"
       ],
       "options": [
         { "id": "bruler", "libelle": "Brûle-la : elle te le demande", "vers": "ch1-brule" },
@@ -66,7 +66,7 @@
       "humeur": "surpris",
       "texte": [
         "Celui qui cogne s'appelle Tudal. Il est large comme une porte de grange et il goudronne la coque d'une barque, la Puce, tirée au sec. Sur le flanc, une longue éraflure toute fraîche. Je demande, poliment, ce qui lui est arrivé. « Un tronc qui flottait. » Il ne me regarde pas en le disant.",
-        "Alors je demande pour le phare. Il crache dans le goudron. « Trois nuits qu'il est noir. Et la nuit d'avant, mieux aurait valu qu'il le soit. » Puis il serre les dents, comme quelqu'un qui vient de laisser tomber une phrase et voudrait la ramasser. Il reprend son marteau. Et je crois qu'un tronc ne laisse pas des traces de rocher."
+        "Alors je demande pour le phare. Il crache dans le goudron. « Trois nuits qu'il est noir. Et la nuit d'avant, mieux aurait valu qu'il le soit. » Puis il serre les dents, comme quelqu'un qui vient de laisser tomber une phrase et voudrait la ramasser. Il reprend son marteau. Et je crois qu'un tronc ne laisse pas de traces de rocher."
       ],
       "suite": "ch1-pas"
     },
@@ -77,7 +77,7 @@
       "humeur": "surpris",
       "texte": [
         "L'auberge s'appelle Le Bigorneau Qui Tousse. Je n'ai pas osé demander pourquoi. La patronne, Perrine, a les joues rouges et un torchon sur l'épaule. Quand j'ai poussé la porte, à deux mains, elle a vite rabattu ce torchon sur un paquet de lettres posé sur le comptoir. Pas assez vite : j'ai lu « M. Anselme, gardien » sur celle du dessus. Ouverte.",
-        "« Le phare ? Oh, Anselme a ses têtes », elle dit en essuyant un verre déjà sec. « Jeudi encore, je lui ai monté sa soupe, il allait comme un charme. » Je me demande ce qu'une aubergiste fabrique avec le courrier ouvert d'un gardien de phare. Je ressors prendre l'air, pour réfléchir."
+        "« Le phare ? Oh, Anselme a ses têtes », a-t-elle dit en essuyant un verre déjà sec. « Jeudi encore, je lui ai monté sa soupe, il allait comme un charme. » Je me demande ce qu'une aubergiste fabrique avec le courrier ouvert d'un gardien de phare. Je ressors prendre l'air, pour réfléchir."
       ],
       "suite": "ch1-pas"
     },

@@ -368,6 +368,54 @@ montre ce qui attend un PC (`Campagnes.EnAttente`), comme pour les achats. L'obj
 ne voyage pas dans les messages du groupe ni du téléphone, chaque appareil le tient de l'historique
 (`Campagnes.ObjetsGagnes`). Souvenirs et titres se lisent dans l'historique.
 
+## Sur Windows
+
+L'interface du PC : `PresenceCampagne.cs` (overlay, menus), `FenetreAventure.cs` et `VueEpreuve.cs` (la fenêtre),
+avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
+
+- **Pilou occupé** : pendant une attente il reste à sa place, en tenue `voyage-<tenue>` (il marche sur place, rame,
+  grimpe, dort…) ; ni promenade, ni petits jeux spontanés, ni réactions cosmétiques ; l'humeur du dernier message
+  quand il est au calme. Une IA qui attend le fait encore courir sous la souris (en tenue de course). Pendant un
+  repos : tenue de nuit et pansement. La bulle garde les sessions en premier ; dessous, une ligne discrète
+  « ⚑ Pilou longe la falaise · retour vers 15 h 40 » (au survol : chapitre et lieu ; mode « seulement quand on
+  t'attend » : au survol seulement). Un clic sur cette ligne ouvre la fenêtre.
+- **Retour** : quand Pilou t'attend (choix, épreuve, « vas-y », fin) avec des messages pas encore lus, UNE annonce :
+  petit saut, antenne qui salue, bulle « ✉ je suis arrivé ! j'ai besoin de toi · ▸ La jetée » (ou « me revoilà,
+  reposé ! on reprend ? », « viens voir comment ça finit ») ; puis un signe « ! » orange en forme d'étiquette près
+  de Pilou, et « Aventure… (! il t'attend) » dans le menu de l'icône (et son info-bulle) tant que la fenêtre n'a
+  pas été ouverte. Le retour annoncé est noté (`reglages.json`, `CampagneAnnoncee`) : jamais deux fois, même après
+  un redémarrage. Heures calmes (celles des amis), plein écran, présentation, visio, Pilou caché ou absent
+  (expédition, visite) : l'annonce attend, le signe reste. Au démarrage, rien n'est annoncé avant la première
+  lecture du groupe (25 s au plus) : le PC rattrape ce que le téléphone a fait et n'annonce qu'une fois, à jour.
+  Réglage (clic droit → Aventure) : « un petit saut et une bulle » ou « seulement le signe ». Un clic sur la
+  bulle, le signe ou Pilou qui t'attend ouvre la fenêtre ; aucune fenêtre ne s'ouvre seule.
+- **Fenêtre Aventure** : bibliothèque (le prologue d'abord ; ton avec son signe ☺ ◈ ♥ ⚔, accroche, durée, verrou
+  ▣ niveau, progression, fins « ★ ◐ ? ? ? ? », Commencer / Reprendre / Rejouer, une seule à la fois) ; lecture en
+  conversation (messages nouveaux écrits lettre à lettre, « Pilou écrit… » entre deux, un clic ou Espace accélère,
+  deux clics : tout ; portrait fin avec l'humeur ; bande de décor `decor-<campagne>-<decor>` si le sprite existe,
+  sinon un ciel au ton de la campagne et le nom du lieu ; options en boutons, touches 1 à 4 ; ce que Pilou redit
+  après un échec est replié en « ↺ Bon. On reprend ici. ») ; attente (Pilou en tenue de voyage, compte à rebours,
+  heure de retour, « tu peux fermer cette fenêtre ») ; épreuves ; fin (issue et son signe ★ ◐ ✕ ✦, titre,
+  récompenses, fins restantes) ; carnet (fins, souvenirs, titres, objets exclusifs) ; « mettre de côté » avec
+  confirmation. Pas de réponse depuis la bulle : la bulle est recomposée plusieurs fois par seconde dans une
+  fenêtre qui ne s'active pas, des boutons y seraient peu fiables ; un clic ouvre la fenêtre.
+- **Épreuves** (10 à 25 s, souris ou clavier, difficulté 1 à 3, la variable `bonus` élargit un peu les
+  tolérances) : `reflexe` (cinq étoiles, 3 ou 4 à attraper ; trop tôt = manquée), `memoire` (4 à 6 signes ◆ ● ▲ ■
+  à refaire, une seconde chance en difficulté 1 et 2), `rythme` (huit notes sur une ligne), `visee` (une luciole à
+  toucher, ou Espace au viseur), `des` (le dé du moteur, animé : il tombe sur un nombre ≤ la chance si c'est
+  réussi). Toujours « ⚄ laisser faire les dés » (ou Échap).
+- **Refus croisés** : pendant une attente ou un repos, pas d'expédition, de visite (rendue ou reçue), de Défense
+  ni de petit jeu ; pendant une expédition, une visite ou une partie de Défense, pas de décision de campagne (sauf
+  la mettre de côté).
+- **Récompenses** : versées une fois (`Campagnes.Crediter`) ; po et xp s'envolent au-dessus de Pilou ; un objet
+  exclusif est annoncé et rejoint l'inventaire (boutique, « Ce qu'il porte »).
+- **Essais** (en mémoire, profil intact) : `--essai=campagne:lecture`, `campagne:attente`, `campagne:retour`,
+  `campagne:epreuve`, `campagne:fin` ; deux étapes de la visite guidée (`aventure-lecture`, `aventure-retour`).
+- **Maquettes** hors WPF : `PILOU_PLANCHES_AVENTURE=<dossier>/matiere dotnet test --filter PlanchesAventure`, puis
+  `python3 outils/maquettes/aventure.py <dossier>/matiere <dossier>`.
+- **Prudence** : chaque chemin neuf est protégé ; une erreur coupe la présence de la campagne pour la session (ou
+  referme la fenêtre), jamais Pilou.
+
 ## Les campagnes
 
 | Id | Titre | Ton | Niveau |
