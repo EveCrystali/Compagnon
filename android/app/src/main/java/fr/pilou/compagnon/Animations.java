@@ -135,6 +135,11 @@ final class Animations {
 
     /** Une particule du fond : {x, y} en dix-millièmes, opacité 0–150 ; elle naît, traverse lentement, s'efface. */
     static int[] particuleFond(String ton, int i, long t) {
+        return particuleFond(ton, i, t, new int[3]);
+    }
+
+    /** Même chose, dans un tableau gardé par l'appelant (aucune allocation par image). */
+    static int[] particuleFond(String ton, int i, long t, int[] r) {
         int vie, dx, dy, bal;
         switch (ton == null ? "" : ton) {
             case "humour": vie = 16000; dx = 600; dy = -3200; bal = 250; break;
@@ -152,7 +157,10 @@ final class Animations {
         x = Math.floorMod(x, 10000L);
         y = Math.floorMod(y, 10000L);
         long a = Math.min(Math.min(u, 10000 - u) * 255 * 3 / 10000, 150);
-        return new int[]{(int) x, (int) y, (int) a};
+        r[0] = (int) x;
+        r[1] = (int) y;
+        r[2] = (int) a;
+        return r;
     }
 
     static int delaiRecompense(int i) {

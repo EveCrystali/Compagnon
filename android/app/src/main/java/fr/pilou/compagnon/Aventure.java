@@ -155,13 +155,22 @@ final class Aventure {
         private final Matrix m = new Matrix();
         private final boolean anime;
         private final long t0 = SystemClock.uptimeMillis();
+        /** Le décor dessiné, animé en boucle (ScenesAnimees.Decor : volet entre deux décors, ralenti dans les listes). */
+        private final ScenesAnimees.Decor vivant = new ScenesAnimees.Decor();
+        private String niveau = Animations.COMPLETES;
 
         Scene(Context c) {
             super(c);
             pt.setAntiAlias(false);
             pt.setFilterBitmap(false);
             anime = Vitrine.anime(c);
+            vivant.ralenti = true;
             setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        }
+
+        /** Lecture : le décor vit à sa vitesse, et change par un volet ; ailleurs (listes, accueil), au ralenti. */
+        void plein(boolean oui) {
+            vivant.ralenti = !oui;
         }
 
         /** Le décor courant (décor vide : celui du ton seul). */
@@ -188,7 +197,7 @@ final class Aventure {
 
         boolean illustree() {
             preparer();
-            return image != null;
+            return image != null || vivant.sprite() != null;
         }
 
         private void preparer() {
@@ -197,9 +206,17 @@ final class Aventure {
             String k = campagne + "|" + ton + "|" + decor + "|" + w + "|" + h + "|" + nuit;
             if (k.equals(cle)) return;
             cle = k;
-            image = decor.isEmpty() ? null : Vitrine.sprite("decor-" + campagne + "-" + decor, 1, 0, false);
+            niveau = ScenesAnimees.niveau(getContext());
+            Sprites.Sprite dessin = null;
+            try {
+                dessin = decor.isEmpty() ? null : Sprites.decor(Sprites.banque(), campagne, decor, 2);
+            } catch (RuntimeException x) {
+                Journal.noter("scène : décor animé", x);
+            }
+            vivant.regler(dessin, SystemClock.uptimeMillis() - t0, niveau);
+            image = dessin == null ? (decor.isEmpty() ? null : Vitrine.sprite("decor-" + campagne + "-" + decor, 1, 0, false)) : null;
             ciel = loin = pres = null;
-            if (image != null) return;
+            if (image != null || dessin != null) return;
             bloc = Math.max(2, Math.round(3 * getResources().getDisplayMetrics().density));
             int cols = w / bloc + 2, rangs = h / bloc + 1;
             int[] t = cielTon(ton);
@@ -261,7 +278,25 @@ final class Aventure {
             if (w <= 0 || h <= 0) return;
             float t = anime ? (SystemClock.uptimeMillis() - t0) / 1000f : 0;
             boolean bouge = anime && vitesse > 0;
-            if (image != null) {
+            if (vivant.sprite() != null) {
+                // Décor animé (dessin fin) : agrandi d'un nombre entier de pixels, posé au sol ; il défile quand Pilou marche.
+                long ms = SystemClock.uptimeMillis() - t0;
+                Sprites.Sprite sp = vivant.sprite();
+                int k = Math.max(1, (int) Math.ceil(h / (float) sp.h()));
+                float iw = sp.w() * k, ih = sp.h() * k;
+                float x0 = bouge ? -((t * vitesse * k / 2) % iw) : (w - iw) / 2;
+                if (!bouge && iw < w) x0 = 0;
+                try {
+                    for (float x = x0; x < w; x += iw) {
+                        vivant.dessiner(cv, pt, ms, niveau, Math.round(x), Math.round(h - ih), k);
+                        if (!bouge && iw >= w) break;
+                    }
+                } catch (RuntimeException x) {
+                    Journal.noter("scène : dessin du décor", x);
+                }
+                long pas = vivant.prochain(ms, niveau);
+                if (isShown() && !bouge && pas > 0) postInvalidateDelayed(pas);
+            } else if (image != null) {
                 // Décor illustré : agrandi d'un nombre entier de pixels pour couvrir la hauteur, posé au sol.
                 int k = Math.max(1, (int) Math.ceil(h / (float) image.getHeight()));
                 float iw = image.getWidth() * k, ih = image.getHeight() * k;
@@ -291,7 +326,7 @@ final class Aventure {
                     }
                 }
             }
-            if (anime && isShown() && (bouge || image == null)) postInvalidateDelayed(bouge ? 66 : 400);
+            if (anime && isShown() && (bouge || (image == null && vivant.sprite() == null))) postInvalidateDelayed(bouge ? 66 : 400);
         }
 
         private void dessinerCouche(Canvas cv, Bitmap b, float decalage) {
