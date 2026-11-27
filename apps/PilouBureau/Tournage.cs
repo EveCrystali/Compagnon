@@ -159,6 +159,8 @@ public static class Tournage
         new("expedition-retour", 4, "expedition:retour", true),
         new("expedition-defaite", 3.5, "expedition:defaite", true),
         new("expedition-journal", 4, "expedition:journal", true),
+        new("aventure-lecture", 4, "campagne:lecture", true),   // la fenêtre Aventure : Pilou écrit, on choisit
+        new("aventure-retour", 3.5, "campagne:retour", true),   // il revient de son attente : une annonce, un signe
         new("icone", 3.5),                     // le menu de l'icône près de l'horloge
         new("fin", 2.5),                       // au revoir
     };
@@ -177,6 +179,7 @@ public static class Tournage
         "clavier", "photo", "notif", "notif:masque", "defense",
         "visite:depart", "visite:arrivee", "visite:jeu", "visite:retour",
         "expedition:depart", "expedition:retour", "expedition:defaite", "expedition:journal",
+        "campagne:lecture", "campagne:attente", "campagne:retour", "campagne:epreuve", "campagne:fin",
     };
 
     // Familles à paramètre (--essai=stade:3, tenue:code, objet:cape, soins:faim, meteo:pluie:parapluie, campagne:prologue).

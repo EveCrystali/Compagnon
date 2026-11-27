@@ -11,6 +11,7 @@ public enum ChoixNotification
     Quitter = 5,
     Expedition = 6,
     Defense = 7,
+    Aventure = 8,
 }
 
 public static class MenuNotification
@@ -22,6 +23,7 @@ public static class MenuNotification
     {
         (ChoixNotification.Afficher, "Afficher / ramener Pilou"),
         (ChoixNotification.OuvrirMenu, "Ouvrir le menu de Pilou"),
+        (ChoixNotification.Aventure, "Aventure…"),
         (ChoixNotification.Expedition, "Partir en expédition…"),
         (ChoixNotification.Defense, "Jouer à Défense du bureau"),
         (null, ""),
@@ -30,6 +32,11 @@ public static class MenuNotification
         (null, ""),
         (ChoixNotification.Quitter, "Quitter Pilou"),
     };
+
+    // Le texte d'une entrée : celui de la liste, ou l'état de l'aventure (« Aventure… (en route · 12 min) »,
+    // « Aventure… (! il t'attend) ») que donne Pilou. Jamais de « & » (il soulignerait une lettre).
+    public static string Texte(ChoixNotification choix, string texte, string? aventure) =>
+        (choix == ChoixNotification.Aventure && !string.IsNullOrWhiteSpace(aventure) ? aventure! : texte).Replace("&", "et");
 
     // Le numéro rendu par TrackPopupMenu (0 : menu fermé sans choix).
     public static ChoixNotification? Lire(int id) =>

@@ -24,6 +24,8 @@ internal sealed class ZoneNotification : IDisposable
     public event Action? QuitterDemande;
     // Clic gauche sur l'icône, ou un choix de son menu.
     public event Action<ChoixNotification>? Choix;
+    // L'état de l'aventure pour l'entrée « Aventure… » du menu (lu à chaque ouverture) ; null : le texte fixe.
+    public Func<string>? TexteAventure;
 
     private readonly Dispatcher _dispatcher;
     private readonly HwndSource _source;
@@ -174,8 +176,18 @@ internal sealed class ZoneNotification : IDisposable
         if (menu == IntPtr.Zero) return;
         try
         {
+            string? aventure = null;
+            try
+            {
+                aventure = TexteAventure?.Invoke();
+            }
+            catch (Exception e) when (e is not OutOfMemoryException)
+            {
+                // le menu s'ouvre quand même, avec le texte fixe
+            }
             foreach (var (choix, texte) in MenuNotification.Entrees)
-                AppendMenuW(menu, choix is null ? MfSeparator : MfString, choix is { } c ? (IntPtr)(int)c : IntPtr.Zero, choix is null ? null : texte);
+                AppendMenuW(menu, choix is null ? MfSeparator : MfString, choix is { } c ? (IntPtr)(int)c : IntPtr.Zero,
+                    choix is { } ch ? MenuNotification.Texte(ch, texte, aventure) : null);
             SetMenuDefaultItem(menu, (int)ChoixNotification.Afficher, 0);
             SetForegroundWindow(_source.Handle);
             int alignement = GetSystemMetrics(SmMenuDropAlignment) != 0 ? TpmRightAlign : TpmLeftAlign;
@@ -187,6 +199,15 @@ internal sealed class ZoneNotification : IDisposable
         {
             DestroyMenu(menu);
         }
+    }
+
+    // Info-bulle de l'icône (« Pilou t'attend pour son aventure ! ») ; NIM_MODIFY, sans effet si l'icône n'est pas posée.
+    public void Infobulle(string texte)
+    {
+        if (!_posee) return;
+        var d = Donnees(NifTip | NifShowTip);
+        d.Infobulle = texte.Length > 127 ? texte[..127] : texte;
+        Shell_NotifyIconW(NimModify, ref d);
     }
 
     // Visite guidée (FenetreVisite.cs) : le même menu, ouvert sans clic, refermé par FermerMenu.
@@ -214,7 +235,7 @@ internal sealed class ZoneNotification : IDisposable
 
     // ---- Win32
 
-    private const int NimAdd = 0, NimDelete = 2, NimSetVersion = 4, NotifyIconVersion4 = 4;
+    private const int NimAdd = 0, NimModify = 1, NimDelete = 2, NimSetVersion = 4, NotifyIconVersion4 = 4;
     private const int NifMessage = 0x1, NifIcon = 0x2, NifTip = 0x4, NifShowTip = 0x80;
     private const int NinSelect = 0x400, NinKeySelect = 0x401, WmContextMenu = 0x7b;
     private const int MfString = 0x0, MfSeparator = 0x800;

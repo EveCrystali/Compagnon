@@ -43,6 +43,12 @@ public sealed partial class FenetrePilou
             Dire("je suis en visite, on jouera à mon retour", 3000);
             return;
         }
+        // En route pour sa campagne (ou au repos) : on jouera à son retour (FenetreCampagne.cs).
+        if (!demo && RefusPendantCampagne("defense") is { Length: > 0 } refus)
+        {
+            Dire(refus, 3000);
+            return;
+        }
         if (_nous == IntPtr.Zero) return;
         Arreter("");
         if (!_zoneConnue) PlacerAuDepart();

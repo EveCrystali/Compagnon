@@ -465,6 +465,12 @@ public sealed partial class FenetrePilou
             Dire("Pilou est en expédition : on jouera à son retour", 3000);
             return;
         }
+        // Ni pendant l'attente d'une campagne : il est en route, ou se repose.
+        if (jeu != Jeu.Aucun && RefusPendantCampagne("jeu") is { Length: > 0 } refus)
+        {
+            Dire(refus, 3000);
+            return;
+        }
         if (jeu != Jeu.Aucun && !Acces.JeuOuvert(IdJeu(jeu), Niveau))
         {
             Dire($"{Acces.Jeux.First(x => x.Id == IdJeu(jeu)).Nom} : niveau {Acces.NiveauJeu(IdJeu(jeu))}", 3000);

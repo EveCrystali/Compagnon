@@ -54,6 +54,10 @@ public sealed class Reglages
     public string RetourDepuis { get; set; } = "";
     // Dernier message lu sur le sujet des campagnes (identifiant ntfy).
     public string CampagnesDepuis { get; set; } = "";
+    // Campagnes : annonce du retour de Pilou (« bulle » : un petit saut et une bulle, une fois ; « signe » : seulement
+    // le « ! » discret) et clé du dernier retour annoncé sur ce PC (jamais deux fois le même, même après un redémarrage).
+    public string AnnonceAventure { get; set; } = "bulle";
+    public string CampagneAnnoncee { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
     // Icône près de l'horloge (zone de notification) : la porte de secours si l'overlay ne répond plus.
