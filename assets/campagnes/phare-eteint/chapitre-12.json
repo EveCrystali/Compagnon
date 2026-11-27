@@ -84,7 +84,7 @@
       "humeur": "joie",
       "texte": [
         "Un éclat. Deux éclats. Un long. Le noir. Un éclat. Deux éclats. Un long. Je n'ai jamais rien vu d'aussi beau, et pourtant j'ai vu des goûters. Le pinceau de lumière passe sur la brume, sur la Mâchoire toute blanche d'écume, sur le quai où Trébrume entier s'est mis à crier. Anselme ne voit rien de tout ça. Il écoute la machine, la tête penchée, et il dit : « Elle dit vrai. »",
-        "Maintenant, on veille. Dix heures. Sur la galerie, Lison compte les feux de mât qui sortent de la brume et s'alignent sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Elle attend. Elle se penche. Elle ne dit plus rien. Il en manque un. « La Tape-Dur passe toujours en dernier », elle répète, tout bas, comme une prière. Je reste à côté d'elle. On regarde le noir."
+        "Maintenant, on veille. Dix heures. Sur la galerie, Lison compte les feux de mât qui sortent de la brume et s'alignent sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Elle attend. Elle se penche. Elle ne dit plus rien. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas, comme une prière. Je reste à côté d'elle. On regarde le noir."
       ],
       "duree_min": 60,
       "duree_max": 90,
@@ -133,7 +133,7 @@
       "issue": "bonne",
       "titre": "Deux éclats, un long",
       "texte": [
-        "Vernier a écouté. Il a regardé la lumière tourner, deux éclats, un long, une fois, dix fois. Puis Lison, plantée devant lui, les poings sur les hanches. « Un gardien de soixante-quinze ans et une vigie de onze », il a dit. « Cela fait une moyenne acceptable. » Il a plié l'ordre. « Je reviendrai au printemps. Avec un brevet d'apprentie à signer, si la demoiselle sait toujours compter jusqu'à onze. »",
+        "Vernier a écouté. Il a regardé la lumière tourner, deux éclats, un long, une fois, dix fois. Puis Lison, plantée devant lui, les poings sur les hanches. « Un gardien de soixante-quinze ans et une vigie de onze », a-t-il dit. « Cela fait une moyenne acceptable. » Il a plié l'ordre. « Je reviendrai au printemps. Avec un brevet d'apprentie à signer, si la demoiselle sait toujours compter jusqu'à onze. »",
         "Basile a promis de finir ses points en relief avant dimanche. Lison a recollé les pages arrachées dans le carnet, et sous la dernière ligne, Anselme a dicté : « Feu juste. Six bateaux rentrés. Rien à signaler. » Puis il m'a donné une toute petite corne de brume, en cuivre : « Si tu te perds encore. »",
         "Je suis reparti à la marée du matin. Je me suis retourné une fois : en plein jour, pour rien, pour moi, le phare a fait deux éclats, un long. Ses doigts n'avaient jamais menti. Il fallait juste que quelqu'un regarde du côté de la machine, et pas seulement du côté du vieil homme. Merci d'avoir cherché avec moi. Dis, je me demande encore ce qu'ils savaient vraiment, les autres, au village. Pas toi ?"
       ],
@@ -178,7 +178,7 @@
       "humeur": "triste",
       "texte": [
         "La balise s'est allumée toute seule, à l'heure, sans allumette. Une lumière blanche, plate, exacte : deux éclats, un long, découpés au couteau. Elle ne se trompera jamais. Elle ne reconnaîtra jamais personne non plus. Sur le quai, les gens ont applaudi un peu, puis ils ont arrêté, parce qu'on n'applaudit pas une machine.",
-        "Je suis redescendu sur la jetée avec Lison. Dix heures. Les feux de mât sortent de la brume et s'alignent sur la balise. Un. Deux. Trois, quatre ensemble. Cinq. Lison attend. Elle se penche. Il en manque un. « La Tape-Dur passe toujours en dernier », elle répète, tout bas. Elle ne me regarde pas. Je reste à côté d'elle quand même. On regarde le noir."
+        "Je suis redescendu sur la jetée avec Lison. Dix heures. Les feux de mât sortent de la brume et s'alignent sur la balise. Un. Deux. Trois, quatre ensemble. Cinq. Lison attend. Elle se penche. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas. Elle ne me regarde pas. Je reste à côté d'elle quand même. On regarde le noir."
       ],
       "duree_min": 60,
       "duree_max": 90,
@@ -237,7 +237,7 @@
       "humeur": "determine",
       "texte": [
         "Lison m'a ouvert la petite porte avant que je frappe. « Alors ? » J'ai raconté : l'inspecteur signera demain matin, sauf si le phare dit son nom cette nuit. Deux éclats, un long, sans une faute. Anselme était dans son fauteuil, la corne sur les genoux. Il a tout écouté sans bouger.",
-        "« Non », il a dit. « Je ne touche plus à ce cadran. La dernière fois que je l'ai réglé, j'ai failli tuer un homme. » Lison s'est mise à pleurer de rage. « Mon père rentre dans deux heures ! » Il a tourné la tête vers elle, et j'ai vu sa barbe trembler. Il ne dira pas oui tout seul. Il faut que je trouve la phrase. Laquelle ?"
+        "« Non », a-t-il dit. « Je ne touche plus à ce cadran. La dernière fois que je l'ai réglé, j'ai failli tuer un homme. » Lison s'est mise à pleurer de rage. « Mon père rentre dans deux heures ! » Il a tourné la tête vers elle, et j'ai vu sa barbe trembler. Il ne dira pas oui tout seul. Il faut que je trouve la phrase. Laquelle ?"
       ],
       "options": [
         { "id": "bateaux", "libelle": "Parle-lui des six bateaux qui le cherchent", "vers": "ch9-s-bateaux" },
@@ -282,7 +282,7 @@
       "humeur": "fatigue",
       "texte": [
         "On tient. Deux éclats, un long. Deux éclats, un long. J'ai compté jusqu'à ne plus savoir ce que veulent dire les nombres. Lison a des crampes dans les bras et elle refuse de lâcher le plateau ; Anselme lui masse les épaules entre deux éclats.",
-        "Dix heures. Par la vitre, je vois les feux de mât sortir du noir et s'aligner sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Je compte les éclats d'une moitié de ma tête et les bateaux de l'autre. Lison les compte aussi, je le vois à ses lèvres. Cinq. Toujours cinq. « La Tape-Dur passe en dernier », elle souffle. « Toujours. » Montre. Cache. Il en manque un. On continue."
+        "Dix heures. Par la vitre, je vois les feux de mât sortir du noir et s'aligner sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Je compte les éclats d'une moitié de ma tête et les bateaux de l'autre. Lison les compte aussi, je le vois à ses lèvres. Cinq. Toujours cinq. « La Tape-Dur passe en dernier », souffle-t-elle. « Toujours. » Montre. Cache. Il en manque un. On continue."
       ],
       "duree_min": 60,
       "duree_max": 90,
@@ -341,7 +341,7 @@
       "texte": [
         "La Tape-Dur est rentrée à l'aube, au bruit, à tâtons. Elle a touché la Mâchoire en passant : une planche ouverte, de l'eau dans la cale, personne de blessé. Le père de Lison a sauté sur le quai et il a serré sa fille sans rien dire, longtemps. Les six sont au port. On n'a perdu que le phare.",
         "Le phare, lui, est fermé pour de bon. Et dans le village, des gens ne se parlent plus, par ma faute : j'ai montré quelqu'un du doigt devant tout le monde, et ce n'était pas le bon. J'avais des pièces plein mon baluchon et je les ai montées de travers.",
-        "Lison m'a donné un galet de la Mâchoire, gris, troué au milieu. « Pour que tu te rappelles de regarder dedans avant de dire. » C'est dur, mais c'est juste. Je repars par la patache. Anselme était à la fenêtre de l'auberge ; il a tourné la tête vers le bruit des roues, un peu à côté. S'il y a une prochaine fois, toi et moi, on écoutera jusqu'au bout avant de montrer du doigt."
+        "Lison m'a donné un galet de la Mâchoire, gris, troué au milieu. « Pour que tu te souviennes de regarder dedans avant de dire. » C'est dur, mais c'est juste. Je repars par la patache. Anselme était à la fenêtre de l'auberge ; il a tourné la tête vers le bruit des roues, un peu à côté. S'il y a une prochaine fois, toi et moi, on écoutera jusqu'au bout avant de montrer du doigt."
       ],
       "recompenses": { "po": 80, "xp": 40, "souvenir": "mauvais-coupable", "titre": "Limier trop pressé", "objet": "galet-machoire" }
     },

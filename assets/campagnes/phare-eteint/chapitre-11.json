@@ -128,7 +128,7 @@
       "type": "hasard",
       "humeur": "peur",
       "texte": [
-        "Cinq heures. L'horloge du Bigorneau, réparée de l'avant-veille, sonne juste, et ça fait sursauter tout le monde. Vernier se lève. « Mesdames, messieurs. Le phare de la Dent-Creuse est éteint depuis cinq nuits. Jeudi, il a donné la signature d'un autre. Son gardien ne répond à personne. J'ai un ordre de fermeture dans cette serviette. Dites-moi pourquoi je ne le signerais pas. »"
+        "Cinq heures. L'horloge du Bigorneau, réparée l'avant-veille, sonne juste, et ça fait sursauter tout le monde. Vernier se lève. « Mesdames, messieurs. Le phare de la Dent-Creuse est éteint depuis cinq nuits. Jeudi, il a donné la signature d'un autre. Son gardien ne répond à personne. J'ai un ordre de fermeture dans cette serviette. Dites-moi pourquoi je ne le signerais pas. »"
       ],
       "issues": [
         { "poids": 1, "vers": "ch8-reunion-a", "si": { "drapeau": "c-came" } },

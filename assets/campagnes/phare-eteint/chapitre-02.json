@@ -90,7 +90,7 @@
       "humeur": "determine",
       "effets": [ { "objet": "billet", "donne": true }, { "var": "courage", "plus": 1 } ],
       "texte": [
-        "J'ai retiré la chaise, tourné la poignée en me pendant après, et bondi dans le couloir. Vide. En bas, la porte de la salle se refermait doucement. Je suis descendu : Odile rangeait ses papiers, Basile revissait l'horloge, Tudal finissait son verre, et le ciré jaune n'était plus au portemanteau. Quelqu'un ment très bien dans cette pièce. Je garde le billet : c'est ma deuxième lettre sans timbre de la journée."
+        "J'ai retiré la chaise, tourné la poignée en m'y suspendant de tout mon poids, et bondi dans le couloir. Vide. En bas, la porte de la salle se refermait doucement. Je suis descendu : Odile rangeait ses papiers, Basile revissait l'horloge, Tudal finissait son verre, et le ciré jaune n'était plus au portemanteau. Quelqu'un ment très bien dans cette pièce. Je garde le billet : c'est ma deuxième lettre sans timbre de la journée."
       ],
       "suite": "ch2-guet"
     },
@@ -128,7 +128,7 @@
       "type": "recit",
       "humeur": "malice",
       "texte": [
-        "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée jusqu'au retour des six bateaux. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
+        "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée en cette saison : c'est affiché en gros sur la cabane du port. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
       ],
       "suite": "ch2-guet"
     },
