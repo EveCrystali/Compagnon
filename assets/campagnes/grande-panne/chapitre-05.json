@@ -25,23 +25,31 @@
       "options": [
         { "id": "ch5a-exceptions-regle", "libelle": "« Oui, tout est en règle, c'était prévu. »", "vers": "ch5a-exc-non" },
         { "id": "ch5a-exceptions-rien", "libelle": "« Non : plus rien n'est prévu, le planning est arrêté. »", "vers": "ch5a-exc-ok" },
-        { "id": "ch5a-exceptions-urgent", "libelle": "« C'est urgent ! »", "vers": "ch5a-exc-non" }
+        { "id": "ch5a-exceptions-urgent", "libelle": "« C'est urgent ! »", "vers": "ch5a-exc-urgent" }
       ]
     },
     "ch5a-exc-ok": {
       "type": "recit",
       "humeur": "joie",
       "texte": [
-        "« Plus rien n'est prévu ? » Il a répété la phrase lentement, comme on goûte un plat. « Mais alors… tout est une exception. Tout ! » Il s'est mis à tamponner : mon formulaire, puis son bureau, puis sa propre main. Trente ans qu'il attendait un cas. Un tampon de plus sur le jaune poussin ! Grumeau a essuyé une tache sur son verre et a jugé que le raisonnement se tenait, « pour un raisonnement de pâté »."
+        "« Plus rien n'est prévu ? » Il a répété la phrase lentement, comme on goûte un plat. « Mais alors… tout est une exception. Tout ! » Il s'est mis à tamponner : mon formulaire, puis son bureau, puis sa propre main. Trente ans qu'il attendait un cas. Un tampon de plus sur le jaune poussin ! La case « Objet de la demande », il ne l'a même pas regardée. Grumeau a essuyé une tache sur son verre et a jugé que le raisonnement se tenait, « pour un raisonnement de pâté »."
       ],
       "effets": [ { "var": "tampons", "plus": 1 } ],
+      "suite": "ch5a-couloir"
+    },
+    "ch5a-exc-urgent": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai crié « C'est urgent ! », et derrière moi Grumeau a gémi. Le mot a fait le tour de l'étage. Le guichet a reculé d'un mètre, employé compris, sans que personne bouge les pieds. « Urgent ? Alors c'est le guichet 12, au rez-de-chaussée. Délai de traitement : allongé. » Le couloir du fond s'est étiré d'un coup, comme un élastique. Grumeau m'a rappelé, très calme, ce qu'il m'avait dit dans le Hall : ce mot-là, ça rallonge. Pas de tampon. Beaucoup plus de couloir."
+      ],
       "suite": "ch5a-couloir"
     },
     "ch5a-exc-non": {
       "type": "recit",
       "humeur": "triste",
       "texte": [
-        "Son tampon est resté en l'air, puis il est redescendu tout doucement, sans rien toucher. « Alors ce n'est pas une exception. Ce qui est prévu, ou urgent, c'est le guichet 12. Au rez-de-chaussée. » Il a baissé son rideau avec un regard de chien qu'on ne promène pas. Pas de tampon ici. Grumeau n'a rien dit. Il a juste relu à voix haute la phrase à la craie, très lentement. J'ai compris. Trop tard, mais j'ai compris."
+        "Son tampon est resté en l'air, puis il est redescendu tout doucement, sans rien toucher. « Alors ce n'est pas une exception. Ce qui est prévu, c'est le guichet 12. Au rez-de-chaussée. » Il a baissé son rideau avec un regard de chien qu'on ne promène pas. Pas de tampon ici. Grumeau n'a rien dit. Il a juste relu à voix haute la phrase à la craie, très lentement. J'ai compris. Trop tard, mais j'ai compris."
       ],
       "suite": "ch5a-couloir"
     },
@@ -49,7 +57,7 @@
       "type": "attente",
       "humeur": "fatigue",
       "texte": [
-        "Le deuxième guichet de l'étage est au bout d'un couloir. Un long couloir. Avec, d'après la plaque, trente-sept portes, toutes fermées, toutes avec leur petit panneau « Retour à 13 h 38 ». Grumeau veut qu'on les compte, pour vérifier la plaque. Je lui ai dit qu'on pouvait faire confiance à la plaque. Il m'a demandé depuis quand on faisait confiance à quoi que ce soit, ici. On compte. À tout de suite."
+        "Le deuxième guichet de l'étage est au bout d'un couloir. Un long couloir : trente-sept portes, d'après la plaque. Toutes fermées, chacune avec son panneau. « Retour à 13 h 38. » « Retour à 13 h 38 (promis). » « Parti chercher un tampon, retour à 13 h 38. » Et une seule : « Je suis là, mais je fais comme si. » Grumeau veut compter les portes, pour vérifier la plaque. Je lui ai dit qu'on pouvait faire confiance à une plaque. Il m'a demandé depuis quand. On compte. À tout de suite."
       ],
       "duree_min": 10,
       "duree_max": 15,
@@ -62,7 +70,7 @@
       "lieu": "Service des Priorités",
       "humeur": "surpris",
       "texte": [
-        "Trente-six portes. Grumeau exulte, il veut déposer une réclamation contre la plaque. Au bout : le « Service des Priorités ». Pas de file du tout, parce que personne n'est prioritaire. Au guichet, une grande roue de loterie pleine de boules numérotées, et un employé rond qui la caresse. « Ici, la priorité se tire au sort. C'est plus juste. Vous tentez votre chance ? Les gagnants ont un tampon. »",
+        "Trente-six portes. Grumeau exulte, il veut déposer une réclamation contre la plaque. Au bout : le « Service des Priorités ». Pas de file du tout, parce que personne n'est prioritaire. Au guichet, une grande roue de loterie pleine de boules numérotées, et un employé tout rond qui la caresse comme un chat. « Ici, la priorité se tire au sort. C'est plus juste. Vous tentez votre chance ? Les gagnants ont un tampon. »",
         "Les perdants, eux, sont classés « priorité basse » et on les rappelle plus tard, c'est-à-dire tu sais quand. Grumeau trouve le procédé scandaleux et meurt d'envie d'essayer. Moi, je n'ai jamais rien gagné de ma vie, à part un rhume. Alors, on joue ?"
       ],
       "options": [
@@ -114,7 +122,7 @@
       "lieu": "Devant la dernière porte",
       "humeur": "tendre",
       "texte": [
-        "Il reste une porte, au bout de l'étage, la seule sans panneau. D'après le plan, derrière, c'est l'antichambre de la Planificatrice. Devant, une file. Courte : nous. Et le haut-parleur : « Votre attente est estimée à : 13 h 38. » On s'est assis par terre, dos au mur. Grumeau se retourne, se retourne encore. Il compte pour nous deux.",
+        "Il reste une porte, tout au fond, la seule sans panneau. La trente-septième. Grumeau a retiré sa réclamation contre la plaque, très digne, « sous réserve ». Derrière, c'est l'antichambre de la Planificatrice. Devant, une file. Courte : nous. Et le haut-parleur : « Votre attente est estimée à : 13 h 38. » On s'est assis par terre, dos au mur. Grumeau se retourne, se retourne encore. Il compte pour nous deux.",
         "Au bout d'un moment, sans me regarder, il a demandé : « Et toi, petit ? Pourquoi tu y tiens tant, à ce que l'heure reparte ? Tu n'as pas de guichet, toi. » C'est une vraie question. Je crois que c'est la première qu'il me pose. Je lui réponds quoi ?"
       ],
       "options": [
@@ -126,7 +134,7 @@
       "type": "attente",
       "humeur": "peur",
       "texte": [
-        "Il a écouté ma réponse et il a fait « mmh », un « mmh » long, qui voulait dire qu'il la gardait. Et là, la porte s'est entrouverte. Une fente. Une voix de femme, basse, pressée : « C'est vous qui posez des questions sur le Sans-Titre ? Ne bougez pas. Ne prononcez plus ce nom dans le couloir. » Et la porte s'est refermée. Depuis, plus rien. On attend. Je ne bouge pas. J'ai l'impression que même les trente-six portes écoutent."
+        "Il a écouté ma réponse et il a fait « mmh », un « mmh » long, qui voulait dire qu'il la gardait. Et là, la porte s'est entrouverte. Une fente. Une voix de femme, basse, pressée : « C'est vous qui posez des questions sur le Sans-Titre ? Ne bougez pas. Ne prononcez plus ce nom dans le couloir. » Et la porte s'est refermée. Depuis, plus rien. On attend. Je ne bouge pas. J'ai l'impression que même les trente-sept portes écoutent."
       ],
       "duree_min": 90,
       "duree_max": 150,
@@ -162,7 +170,7 @@
       "type": "attente",
       "humeur": "neutre",
       "texte": [
-        "La barque nous a vus. Elle vient. Lentement. Très lentement. À bord, trois silhouettes carrées : je reconnais le chapeau d'Alt. Grumeau dit que ce sont les Raccourcis, des passeurs, qu'ils connaissent tous les chemins qui ne sont sur aucun plan, et qu'il faudra surveiller nos poches. Je n'ai pas de poches, j'ai un baluchon. Je le serre. Je t'écris quand ils accostent. D'ici là, je regarde la barre. Elle ne bouge pas. Moi non plus."
+        "La barque nous a vus. Elle vient. Lentement. Très lentement. À bord, trois silhouettes carrées : je reconnais le chapeau d'Alt. Grumeau dit que ce sont les Raccourcis, des passeurs qui connaissent tous les chemins absents des plans, et qu'il faudra surveiller nos poches. Je n'ai pas de poches. Lui, il a des grumeaux : l'humidité lui en a fait trois de plus. Il annonce sept secondes de retard, et que c'est ma faute. Je t'écris quand ils accostent. D'ici là, je regarde la barre. Elle ne bouge pas. Moi non plus."
       ],
       "duree_min": 10,
       "duree_max": 15,
@@ -195,7 +203,7 @@
       "type": "recit",
       "humeur": "malice",
       "texte": [
-        "J'ai proposé Grumeau comme minuteur de bord. Ctrl l'a soulevé, retourné, écouté couler. « Régulier ? » J'ai dit : « À quatre secondes près. » Affaire conclue : pendant toute la traversée, il chronométrera les coups de rame. Grumeau est blême, pour autant qu'on puisse l'être en verre. « Un minuteur. À œufs. Trente ans de carrière. » Il s'est installé à la proue et il coule avec une rage que je ne lui avais jamais vue. On embarque."
+        "J'ai proposé Grumeau comme minuteur de bord. Ctrl l'a soulevé, retourné, écouté couler. « Régulier ? » J'ai dit : « À sept secondes près, avec l'humidité. » Affaire conclue : pendant toute la traversée, il chronométrera les coups de rame. Grumeau est blême, pour autant qu'on puisse l'être en verre. « Un minuteur. À œufs. Trente ans de carrière. » Il s'est installé à la proue et il coule avec une rage que je ne lui avais jamais vue. On embarque."
       ],
       "suite": "ch5b-suppr"
     },

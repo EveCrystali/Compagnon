@@ -95,7 +95,7 @@
       "type": "recit",
       "humeur": "determine",
       "texte": [
-        "J'ai pris le visa. Mme Échéance a tamponné, sec, précis, sans une goutte de trop. Grumeau a dit « très bien » d'une voix parfaitement normale, et il a regardé la pile où dort son dossier, tout en bas, sous trente ans de poussière. Je lui ai promis qu'on reviendrait. Il a répondu qu'il ne fallait rien promettre à 13 h 37, que ça n'engageait à rien. Mais il a retenu que j'avais promis."
+        "J'ai pris le visa. Mme Échéance a tamponné, sec, précis, sans une goutte de trop, et sans lire la case « Objet de la demande », elle non plus. Grumeau a dit « très bien » d'une voix parfaitement normale, et il a regardé la pile où dort son dossier, tout en bas, sous trente ans de poussière. Je lui ai promis qu'on reviendrait. Il a répondu qu'il ne fallait rien promettre à 13 h 37, que ça n'engageait à rien. Mais il a retenu que j'avais promis."
       ],
       "suite": "ch6a-ascenseur"
     },
@@ -111,7 +111,7 @@
       "type": "attente",
       "humeur": "determine",
       "texte": [
-        "Dernière chose. Le dossier Temp est immense, et il change de forme toutes les minutes, enfin, toutes les anciennes minutes. Pour savoir où s'y cache quelqu'un, Mme Échéance ne connaît qu'une adresse : la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Il y a un monte-charge derrière son bureau. Il est lent, il grince, et il s'arrête à chaque nuage. On monte. Je t'écris d'en haut."
+        "Dernière chose. Le dossier Temp est immense, et il change de forme toutes les minutes, enfin, toutes les anciennes minutes. Pour savoir où s'y cache quelqu'un, Mme Échéance ne connaît qu'une adresse : la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Il y a un monte-charge derrière son bureau. Il est lent, il grince, il s'arrête à chaque nuage. Grumeau y est entré le premier : « J'allais dans cette direction. » On monte. Je t'écris d'en haut."
       ],
       "duree_min": 15,
       "duree_max": 25,
@@ -140,7 +140,7 @@
       "type": "epreuve",
       "humeur": "determine",
       "texte": [
-        "D'accord. Alt bat la mesure avec son cure-dent. Il faut poser la question à la 1, puis à la 4, la 6, la 2, la 7, pile sur le temps, sans en laisser une réfléchir, sinon elle redemande l'avis d'une autre et tout repart. Grumeau compte à voix basse, avec quatre secondes de retard, ce qui n'aide personne. Suis le rythme avec moi. Et si je bafouille, continue sans moi."
+        "D'accord. Alt bat la mesure avec son cure-dent. Il faut poser la question à la 1, puis à la 4, la 6, la 2, la 7, pile sur le temps, sans en laisser une réfléchir, sinon elle redemande l'avis d'une autre et tout repart. Grumeau compte à voix basse, avec sept secondes de retard depuis l'humidité, ce qui n'aide personne. Suis le rythme avec moi. Et si je bafouille, continue sans moi."
       ],
       "jeu": "rythme",
       "difficulte": 2,
@@ -198,7 +198,7 @@
       "humeur": "surpris",
       "texte": [
         "L'hydre est loin derrière. La barque a accosté à un quai de papier. Du papier partout : des rames, des piles, des feuilles qui attendent debout, en rang, depuis si longtemps que certaines ont jauni. C'est la file d'impression. Tout au bout, sur une estrade, trône l'Imprimante. Énorme, beige, un voyant orange. Elle répète à tout le monde, sans regarder personne : « Plus de cyan. »",
-        "Ctrl dit que le Sans-Titre est passé par ici, et que l'Imprimante sait tout ce qui a demandé à sortir. Mais elle ne reçoit que dans l'ordre de la file, et le premier document attend depuis trois ans. Les Raccourcis nous laissent là : ils n'aiment pas le papier. Comment j'arrive jusqu'à elle ?"
+        "Ctrl dit que le Sans-Titre est passé par ici, et que l'Imprimante sait tout ce qui a demandé à sortir. Mais elle ne reçoit que dans l'ordre, et le premier document attend depuis trois ans. Les Raccourcis nous laissent là : ils n'aiment pas le papier. Alt m'a montré l'estrade : « C'est par là. » Rien après. Pas de « ou alors ». Ctrl l'a regardée, très inquiète. Comment j'arrive jusqu'à l'Imprimante ?"
       ],
       "options": [
         { "id": "ch6b-quai-carton", "libelle": "Brandis le coupe-file de Mlle Renvoi", "vers": "ch6b-impr-coupe", "si": { "objet": "coupe-file" } },
@@ -258,7 +258,7 @@
       "type": "attente",
       "humeur": "determine",
       "texte": [
-        "L'Imprimante nous a donné une dernière adresse. Le dossier Temp est immense et il change de forme sans arrêt : pour savoir où s'y cache une page, il faut demander à la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Un câble monte depuis l'arrière de l'estrade, droit dans la brume. Grumeau a dit non. Puis il a regardé la file d'impression, et il est monté dans mon baluchon. On grimpe. Je t'écris d'en haut."
+        "L'Imprimante nous a donné une dernière adresse. Le dossier Temp est immense et il change de forme sans arrêt : pour savoir où s'y cache une page, il faut demander à la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Un câble monte depuis l'arrière de l'estrade, droit dans la brume. Grumeau a dit non. Puis il a regardé la file d'impression, et il est monté dans mon baluchon, « parce que c'est la même direction ». La chaleur de l'Imprimante l'a séché : il est revenu à quatre secondes. Il refuse de la remercier. On grimpe. Je t'écris d'en haut."
       ],
       "duree_min": 15,
       "duree_max": 25,
