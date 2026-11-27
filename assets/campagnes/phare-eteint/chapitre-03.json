@@ -63,7 +63,7 @@
       "type": "recit",
       "humeur": "surpris",
       "texte": [
-        "J'ai tout regardé de près, et de près, c'est ma spécialité. Sur le bois, à hauteur d'homme, des traces de doigts au goudron : de gros doigts, qui ont frappé souvent. Sur le seuil, deux ronds gras, de la largeur d'un bidon. La cire de la serrure, je l'ai goûtée : bougie de ménage, trois jours à peine.",
+        "J'ai tout regardé de près, et de près, c'est ma spécialité. Sur le bois, à hauteur d'homme, des traces de doigts au goudron : de gros doigts, qui ont frappé souvent. Sur le seuil, deux ronds gras, de la largeur d'un bidon. La cire de la serrure, je l'ai goûtée : bougie de ménage, posée il y a quatre jours, pas plus.",
         "Et il y a autre chose. Dans le sable collé aux marches, des empreintes. Petites. Des semelles de bottes trop grandes pour le pied qui est dedans. Elles n'entrent pas par la porte : elles contournent la tour et descendent vers les rochers, côté large, là où ça souffle. Quelqu'un de petit a une autre façon d'entrer."
       ],
       "suite": "ch3-maree"
@@ -92,7 +92,7 @@
       "humeur": "peur",
       "texte": [
         "Mauvaise nouvelle : la mer rentre. Je croyais avoir une heure, mais les flaques du Passe-Pied se rejoignent déjà et l'eau lèche les premières pierres claires. Il faut repartir. Maintenant, pas dans cinq minutes.",
-        "Sauf que. En me retournant une dernière fois, j'ai vu un bout de papier coincé sous la porte du phare, côté intérieur, dont un coin dépasse. Un coin écrit. Pour l'attraper sans le déchirer, il me faut cinq minutes, peut-être plus. Si je reste, je devrai courir devant la marée. Je rentre sagement, ou je reste pour ce papier ?"
+        "Sauf que. En me retournant une dernière fois, j'ai vu un bout de papier coincé sous la porte du phare, côté intérieur, dont un coin dépasse. Un coin écrit. Pour l'attraper sans le déchirer, il me faut cinq minutes, peut-être plus. Si je reste, je devrai courir devant la marée. Je rentre sagement, ou je reste pour ce papier ? Décide, toi : mes jambes ont déjà voté pour rentrer."
       ],
       "options": [
         { "id": "rentrer", "libelle": "Rentre tout de suite", "vers": "ch3-retour" },
