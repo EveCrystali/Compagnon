@@ -112,7 +112,7 @@
     "ch1-reponse": {
       "type": "choix",
       "humeur": "neutre",
-      "personnage": "le-rond",
+      "personnage": "grumeau",
       "texte": [
         "Je te présente la voix : un sablier. Un vieux, en bois verni, avec un grain de sable resté collé dans le col, comme une miette au coin de la bouche. Il s'appelle Grumeau. Sablier d'attente, matricule 0003, en préretraite. Avant, c'est lui qui apparaissait à l'écran quand il fallait patienter. On l'a remplacé par un rond qui tourne. Il dit « le Rond » comme on dit « la grippe ».",
         "Il a le ticket 1 337. Le numéro appelé, c'est lui ! Sauf que son guichet a fermé pile quand il arrivait : « Retour à 13 h 38. » Il attend depuis ce matin d'être reçu à la minute d'après. Il me regarde de haut en bas, ce qui est vite fait. Je lui dis quoi ?"
@@ -134,7 +134,7 @@
     "ch1-rep-gaffe": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "grumeau",
+      "personnage": "grumeau", "expression": "colere",
       "texte": [
         "J'ai montré le grain collé. Il y a eu un silence. « Ça, a dit Grumeau, c'est un grumeau. Il est là depuis trente ans. Il me donne quatre secondes de retard, et je t'interdis d'en reparler. » Puis, plus bas : « Quatre secondes. On ne met pas quelqu'un à la retraite pour quatre secondes. » Je crois que j'ai mis le doigt sur quelque chose. Enfin, le pied."
       ],
@@ -143,6 +143,7 @@
     "ch1-rep-direct": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "grumeau",
       "texte": [
         "« Le Tic-Tac ? J'étais aux premières loges. 13 h 37 pile : un tic. Et puis pas de tac. Tu sais ce que ça fait, à mon âge, d'attendre un tac qui ne vient pas ? On reste penché. » Il s'est redressé, vexé d'en avoir trop dit. « Et non, je ne sais pas où il est. Sinon je ne serais pas assis sur un banc à causer avec un pâté d'encre. » Le pâté d'encre, c'est moi."
       ],

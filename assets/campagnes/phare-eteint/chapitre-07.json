@@ -62,7 +62,6 @@
     "ch4b-boite": {
       "type": "recit",
       "humeur": "surpris",
-      "personnage": "tudal",
       "effets": [ { "objet": "pages-carnet", "donne": true }, { "drapeau": "pages-volees" }, { "var": "confiance", "plus": -1 } ],
       "texte": [
         "J'ai retiré l'élastique. Dedans : quatre pages arrachées à un gros carnet, pliées avec soin. Une écriture d'écolier, bien posée sur les lignes. « Jeudi soir. Allumé à l'heure. Réglé comme toujours, onze à gauche, deux à droite. » Puis : « Vendredi, aube. Tudal crie sous la tour. Le feu a rendu trois éclats cette nuit. Feu faux, par ma faute. Un phare qui ment est pire qu'un phare éteint. J'éteins. Je ne suis plus gardien. »",
@@ -94,6 +93,7 @@
     "ch4b-cache": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "c-feu-faux" } ],
       "texte": [
         "Je suis devenu un pli de couverture. Il est entré, il a regardé le phare avec ses jumelles, longtemps, et il s'est mis à dicter tout haut, pour son carnet : « Mardi. Feu éteint : quatrième nuit. Feu faux : une nuit, celle de jeudi, d'après la plainte du caboteur. Trois éclats au lieu de deux éclats et un long. Gardien : invisible. »",

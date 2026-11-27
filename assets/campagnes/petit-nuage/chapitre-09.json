@@ -47,7 +47,7 @@
     "ch9-dechire": {
       "type": "recit",
       "humeur": "peur",
-      "personnage": "tournebise",
+      "personnage": "brouillon", "expression": "peur",
       "texte": [
         "Je l'ai serré de toutes mes forces et je suis entré dans le vent. Au trentième pas, j'ai senti que mes bras se refermaient sur rien. Il filait. Entre mes doigts, par les côtés, par en dessous, en longues mèches. Plus je serrais, plus il filait. Quand j'ai rouvert les bras, il n'y avait plus personne dedans. Et dans la salle, partout, des petits bouts de lui qui tournaient, blancs dans le noir. Tournebise l'avait dit. Je l'avais entendu."
       ],
@@ -88,6 +88,7 @@
     "ch9-echec-salle": {
       "type": "echec",
       "humeur": "triste",
+      "personnage": "brouillon", "expression": "triste",
       "repos_min": 40,
       "texte": [
         "Je n'en ai rattrapé que trois. Les autres, je les ai perdus de vue, j'ai mélangé les endroits, j'ai couru derrière des remous vides. Je suis revenu au début de la corniche avec une demi-casserole de Brouillon, qui ne parlait pas. Les Froisseuses ont rapporté le reste, mèche par mèche, sans rien demander. Il se recolle. Il est tout pâle. On retraversera quand il tiendra en un seul morceau. Et cette fois, je réfléchirai avant de serrer quoi que ce soit."

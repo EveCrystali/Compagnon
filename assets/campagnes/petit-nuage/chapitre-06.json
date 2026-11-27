@@ -7,7 +7,7 @@
       "lieu": "Le sentier des mélèzes",
       "decor": "sentier-des-melezes",
       "humeur": "malice",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "On monte. Le sentier fait des lacets entre des mélèzes tout jaunes qui perdent leurs aiguilles, ça fait un tapis qui glisse. Là-haut, entre deux Dents-de-Lait, on voit le col : la Gencive. Je n'ai pas choisi le nom. Il fait froid, un froid propre, qui sent le caillou.",
         "Et il m'arrive un truc. Quand je souffle, ça fait de la buée. Brouillon a poussé un cri : « Goutte fait des petits ! » Il croit que ce sont des bébés nuages. Il essaie d'en adopter un à chaque fois que je respire, il lui parle, et le petit disparaît en deux secondes. Il les cherche derrière moi, un par un. Il vient de demander : « Partis où ? » Je lui réponds quoi ?"
@@ -44,6 +44,7 @@
     "ch6-grimpe-ok": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "brouillon", "expression": "joie",
       "effets": [ { "drapeau": "a-traine", "ote": true } ],
       "texte": [
         "Six rochers, six lancers, six fois dedans ! Je ne sais pas ce qui m'a pris. Au dernier, Brouillon a applaudi, enfin, il a tapé deux de ses bords l'un contre l'autre, ça ne fait aucun bruit, mais j'ai compris l'intention. On est en haut du raidillon et le soleil n'est même pas au milieu du ciel. Par les lacets, on y serait encore demain. Si on avait du retard, on n'en a plus. J'ai mal partout et je suis très content."
@@ -53,6 +54,7 @@
     "ch6-grimpe-rate": {
       "type": "recit",
       "humeur": "fatigue",
+      "personnage": "brouillon",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "Au troisième rocher, j'ai visé à côté. Le baluchon est redescendu, moi derrière, sur le dos, jusqu'en bas de l'éboulis. Rien de cassé, la casserole a une bosse. Brouillon est venu me pousser pour m'aider à remonter, de toutes ses forces, rocher après rocher, et un nuage qui pousse, ça transpire : il y a laissé un bord. On est en haut à la même heure que par le sentier. Je vise comme une goutte, je te l'avais dit."
@@ -123,7 +125,7 @@
     "ch6-bocal-lui": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "madame-bocal",
+      "personnage": "brouillon",
       "texte": [
         "Je me suis accroupi et je lui ai expliqué. Dans le bocal, tu ne perds rien, mais tu ne vois rien. Dehors, tu vois tout, mais tu peux fondre. C'est toi qui choisis. Personne ne lui avait jamais demandé ça. Il a regardé le bocal. Il a regardé la porte ronde, et la nuit derrière. Il a mis un temps fou. Puis il a dit : « Dehors. Avec Goutte. » Madame Bocal a haussé les épaules et lui a donné une mirabelle, pour l'odeur."
       ],
@@ -147,7 +149,7 @@
       "lieu": "Sous le col, dans la neige",
       "decor": "sentier-des-melezes",
       "humeur": "peur",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "peur",
       "texte": [
         "On est partis quand même. Au bout d'une heure, la neige tombait si serré que je ne voyais plus mes pieds. Et Brouillon s'est mis à craquer. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
       ],

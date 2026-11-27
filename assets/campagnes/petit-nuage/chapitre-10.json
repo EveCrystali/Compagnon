@@ -17,7 +17,6 @@
     "ch10-heure": {
       "type": "hasard",
       "humeur": "neutre",
-      "personnage": "bergeronnette",
       "texte": [
         "J'ai regardé le soleil, et j'ai fait le compte des jours sur mes doigts, ce qui est vite fait. La bergeronnette avait dit : ils repartent à la première gelée. Tournebise avait dit : la veille, ils se serrent. Ils sont serrés. C'est pour cette nuit. On est arrivés le bon jour, de justesse, avec une casserole cabossée et un nuage qui tient debout. Reste à savoir combien d'heures on a devant nous."
       ],
@@ -64,6 +63,7 @@
     "ch10-mots": {
       "type": "choix",
       "humeur": "triste",
+      "personnage": "brouillon", "expression": "triste",
       "texte": [
         "Je lui ai expliqué. Qu'il descend plus vite que moi. Que les siens sont là, et qu'il ne faut pas les rater. Que je le rejoindrai en bas, au matin. Il a mis du temps à comprendre que je ne venais pas tout de suite. Il a dit : « Goutte après ? » J'ai dit oui. Après. Il attend, tourné vers moi. C'est maintenant qu'il faut lui dire quelque chose, et je n'aurai peut-être pas d'autre occasion. Je lui dis quoi ?"
       ],
@@ -89,6 +89,7 @@
     "ch10-descente": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "brouillon",
       "duree_min": 150,
       "duree_max": 180,
       "pendant": "Pilou descend vers le lac, toute la nuit",
@@ -103,7 +104,7 @@
       "type": "choix",
       "lieu": "La rive de l'Abreuvoir",
       "humeur": "joie",
-      "personnage": "brouillon", "expression": "peur",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "On a le temps ! Il est midi, on sera sur la rive dans une heure, et ils ne partent que demain à l'aube. Tu te rends compte ? Tout un après-midi. Je n'ai jamais eu tout un après-midi devant moi de ma vie, sans route à faire, avec quelqu'un.",
         "Brouillon a voulu aller au troupeau tout de suite, puis il a eu peur, puis il a dit : « D'abord Goutte. » D'abord moi. Alors voilà : on a un rocher plat au bord de l'eau, du soleil, et quelques heures. Une seule chose à faire, pas deux. On fait quoi de notre dernier après-midi ?"

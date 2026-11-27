@@ -16,7 +16,7 @@
     "ch3-spectre": {
       "type": "choix",
       "humeur": "tendre",
-      "personnage": "spectre-404",
+      "personnage": "spectre-404", "expression": "triste",
       "texte": [
         "Un petit fantôme pâle, avec « 404 » écrit en gris sur le ventre. Je n'ai même pas eu le temps d'avoir peur : c'est lui qui s'est excusé. Il passe de l'un à l'autre dans la file en demandant : « Vous n'auriez pas vu ma… mon… » Il ne retrouve jamais le mot. Il soupire : « Introuvable. » Puis il recommence avec le suivant.",
         "Grumeau dit que c'est un spectre 404, qu'il cherche quelque chose depuis des années, et que personne ne sait quoi, lui compris. Le spectre s'est arrêté devant moi. Il me regarde avec des yeux de page blanche. « Toi, tu cherches aussi. Ça se voit. Tu m'aiderais à chercher, après ? » Je lui réponds quoi ?"
@@ -29,6 +29,7 @@
     "ch3-spectre-promesse": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "spectre-404",
       "texte": [
         "J'ai promis. Il a eu l'air si étonné qu'il en est devenu presque opaque. « Personne ne promet jamais. D'habitude, on dit : je regarderai. » Il m'a serré la main, enfin il est passé à travers, ça fait comme un courant d'air qui a de bonnes intentions. Il dit qu'il me retrouvera. Grumeau marmonne qu'une promesse à un introuvable, c'est malin, et qu'on verra bien si j'ai de la mémoire."
       ],
@@ -37,7 +38,7 @@
     "ch3-spectre-non": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "grumeau",
+      "personnage": "spectre-404", "expression": "triste",
       "texte": [
         "J'ai dit que je ne pouvais rien promettre, que j'avais déjà une horloge entière sur les bras. Il a hoché la tête. « C'est honnête. D'habitude, on dit : je regarderai. Et on ne regarde pas. » Il est reparti le long de la file, un peu plus pâle. Grumeau a dit : « Tu as bien fait. Personne n'a le temps. C'est même tout le problème. » J'ai quand même un petit pincement."
       ],
@@ -46,7 +47,7 @@
     "ch3-revendeur": {
       "type": "choix",
       "humeur": "malice",
-      "personnage": "golem",
+      "personnage": "grumeau",
       "texte": [
         "On remonte la file vers l'entrée. Au deuxième virage, quelqu'un nous a fait « psst ». Une vieille fenêtre surgissante, de celles qu'on ferme sans lire, avec un manteau plein de poches. Il a vu mon ticket. « Le 1 338 ? Le prochain numéro ? Petit, tu tiens une fortune. Je te l'échange contre un passe prioritaire. Avec ça, le golem de l'entrée te salue. »",
         "Il m'a montré le passe : doré, avec un ruban. Très tentant. Grumeau a serré son propre ticket contre lui et a dit, sans regarder personne : « Un ticket, ça se garde. Même inutile. Surtout inutile. » Mais Grumeau attend depuis ce matin avec le sien, et ça ne lui a pas rapporté grand-chose. J'échange ?"
@@ -69,7 +70,7 @@
     "ch3-rev-vend": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "grumeau",
+      "personnage": "grumeau", "expression": "surpris",
       "texte": [
         "J'ai échangé. Le passe doré brille dans ma main, et mon ticket a disparu dans une des quarante poches du revendeur, qui a filé aussitôt. Grumeau s'est arrêté net. « Tu as vendu ta place. » Il a répété « vendu sa place » trois fois, de plus en plus bas, comme on annonce un décès. Moi, je trouve que j'ai fait une affaire. Je crois. Le ruban est très joli, en tout cas."
       ],
@@ -119,7 +120,7 @@
       "lieu": "Hall des Pas Comptés",
       "decor": "hall-pas-comptes",
       "humeur": "triste",
-      "personnage": "grumeau",
+      "personnage": "golem",
       "texte": [
         "J'ai essayé de me faufiler. Il n'a même pas tourné la tête. Une main en tickets m'a soulevé par le baluchon, et une voix a dit : « Doublon détecté. Fermé. » Il m'a collé une étiquette sur le front et m'a renvoyé d'une pichenette jusqu'au début du Hall. J'ai rebondi sur trois valises. Grumeau m'attend là-bas, je le sens d'ici. Je me repose un peu, je décolle l'étiquette, et je reviens."
       ],
@@ -160,7 +161,7 @@
     "ch3-choix-guichets": {
       "type": "recit",
       "humeur": "determine",
-      "personnage": "raccourcis",
+      "personnage": "grumeau",
       "texte": [
         "On monte. Alt a haussé les épaules : « Ou alors non. » Grumeau est content, c'est-à-dire qu'il râle sur un ton plus léger. Il m'explique que là-haut tout se demande par écrit, avec des tampons, et que les tampons sont une chose sérieuse. Moi, ce sont les trente-sept paliers qui m'inquiètent. Mais on fait les choses dans l'ordre. Il paraît que ça rassure, à la longue."
       ],
@@ -169,7 +170,7 @@
     "ch3-choix-coulisses": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "raccourcis",
+      "personnage": "grumeau",
       "texte": [
         "On suit Alt. Grumeau est outré : « Les coulisses. À mon âge. » Alt promet un raccourci, « ou alors deux ». Je ne suis pas rassuré : derrière la porte de service, il fait noir, et ça sent le câble chaud. Mais pas de tampons, pas de files. Et j'avoue que voir Grumeau outré me donne du courage, je ne sais pas pourquoi."
       ],

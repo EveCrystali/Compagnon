@@ -75,7 +75,7 @@
       "type": "recit",
       "lieu": "La mairie",
       "humeur": "tendre",
-      "personnage": "odile",
+      "personnage": "odile", "expression": "triste",
       "effets": [ { "drapeau": "k-odile" } ],
       "texte": [
         "Odile m'a ouvert elle-même ; elle n'avait pas dormi non plus. Sans que je demande rien, elle a posé sur le bureau l'ordre d'inspection, tamponné deux fois REPORTÉE, et une pile de rapports signés « Anselme » à l'encre verte. Son encre à elle. « Je signe à sa place depuis un an. Je l'ai su le jour où il a signé à côté de la feuille, sur mon buvard. C'est mon parrain : il m'a appris à nager au pied de sa tour. Personne d'autre ne sait. » Elle a tout rangé. « Ce soir, je ne pourrai plus mentir pour lui. »"
@@ -87,6 +87,7 @@
       "lieu": "L'atelier de Basile",
       "decor": "atelier-basile",
       "humeur": "tendre",
+      "personnage": "basile", "expression": "triste",
       "effets": [ { "drapeau": "c-jeudi" }, { "drapeau": "k-basile" }, { "drapeau": "basile-prive" } ],
       "texte": [
         "Les volets étaient clos. Basile était assis dans le noir, au milieu de ses pendules arrêtées. Sur l'établi, un grand cadran de laiton, un petit point en relief à côté de chaque cran. « Des repères au toucher. J'avais deviné, pour ses yeux. Jeudi, j'ai emporté son cadran et j'en ai posé un de rechange. La marée montait, je n'ai pas essayé le feu. Et le soir, trois éclats. » J'ai dit qu'à cinq heures, il pourrait le dire lui-même. « Si quelqu'un me regarde à ce moment-là, je crois que j'y arriverai. »"
@@ -122,7 +123,6 @@
       "lieu": "Le Bigorneau Qui Tousse",
       "decor": "auberge-bigorneau",
       "humeur": "peur",
-      "personnage": "odile",
       "texte": [
         "Cinq heures moins vingt. Je suis au Bigorneau, perché sur le rebord de la fenêtre, et la salle se remplit. Odile a mis son écharpe. Basile s'est assis au fond, contre l'horloge. Tudal reste debout près de la porte, les bras croisés. Perrine sert de la soupe à des gens qui n'osent pas la manger. Et M. Vernier, sans son ciré, aligne trois crayons sur la table, bien parallèles. Moi, j'ai les jambes en papier buvard. Reste avec moi, d'accord ?"
       ],
@@ -147,7 +147,7 @@
     "ch8-reunion-a": {
       "type": "choix",
       "humeur": "determine",
-      "personnage": "lison",
+      "personnage": "anselme",
       "texte": [
         "C'est là que la porte s'est ouverte. Anselme. Au bras de Lison, en casquette, la barbe peignée. Ils sont venus par la mer, dans la plate, Lison aux avirons. Trente ans qu'il n'était pas descendu à une réunion. « Le gardien répond, monsieur. C'est moi qui ai éteint. Je n'y vois plus, depuis deux hivers. J'ai cru que mes mains s'étaient trompées de cran. »",
         "Il m'a cherché de la tête. J'ai raconté le reste, debout sur la table : le cadran de fer-blanc, la vis neuve, le zéro posé un cran trop loin. Ses doigts ont compté juste ; c'est le cadran qui était faux. Vernier a noté, longtemps. « Soit. Quelqu'un a donc changé ce cadran, l'a mal posé, et s'est tu pendant qu'un homme se croyait fini. Qui ? »",
@@ -163,7 +163,7 @@
     "ch8-reunion-b": {
       "type": "choix",
       "humeur": "peur",
-      "personnage": "tudal", "expression": "colere",
+      "personnage": "vernier",
       "texte": [
         "Personne ne répond. Puis tout le monde, en même temps. Tudal grogne que la maire garde dans son tiroir l'offre d'un hôtel, pour le jour où le feu sera « officiellement éteint ». Odile réplique qu'il braconne la nuit et que le noir l'arrange bien. Basile, au fond, regarde ses mains. Et Vernier lève un crayon : silence.",
         "« Monsieur l'encre. Vous avez passé la nuit là-bas, on vous a vu revenir ce matin. Vous savez quelque chose. » Anselme n'est pas venu : il est resté là-haut, avec sa corne. Lison non plus. Je suis seul sur ma table, avec ce que je sais, ce que j'ai promis ou pas, et ce que je n'ai pas réussi à comprendre. Qu'est-ce que je dis ?"
@@ -192,7 +192,7 @@
     "ch8-aveu": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "basile",
+      "personnage": "basile", "expression": "triste",
       "effets": [ { "drapeau": "issue-aveu" } ],
       "texte": [
         "Je me suis tourné vers Basile, et je n'ai pas eu besoin de finir : il s'est levé, comme un homme qui attend ce moment depuis cinq jours. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. »",
@@ -203,7 +203,6 @@
     "ch8-qui-dort": {
       "type": "recit",
       "humeur": "determine",
-      "personnage": "anselme",
       "texte": [
         "J'ai demandé qui, à part Lison, avait une clef de ce phare et montait là-haut pendant qu'Anselme dormait. Personne n'a répondu. Tudal a regardé Odile, Odile a regardé Perrine, et Perrine, sans le vouloir, a regardé le fond de la salle : un monsieur maigre qui essuyait une loupe déjà propre. Lison me l'avait dit hier soir, en comptant sur ses doigts : l'horloger entre avec sa clef quand Anselme dort."
       ],
@@ -227,7 +226,7 @@
     "ch8-pardon": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "anselme",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "issue-auto" } ],
       "texte": [
         "J'ai regardé Anselme : c'est son phare, c'est à lui de répondre. Il a mis longtemps. « Qui ? Je ne veux pas le savoir. Celui qui a fait ça voulait m'aider, ça se sentait sous mes doigts. Qu'il garde son nom. » Au fond, Basile a fermé les yeux. Personne n'a rien dit. C'était beau, et je crois que c'était une erreur.",
@@ -249,7 +248,7 @@
     "ch8-aveu-b": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "basile",
+      "personnage": "basile", "expression": "triste",
       "effets": [ { "drapeau": "issue-aveu" } ],
       "texte": [
         "J'ai dit Basile. Et je l'ai regardé bien en face, comme on tient une lampe à quelqu'un. Il s'est levé avant la fin de ma phrase. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. Et le soir, trois éclats. »",
@@ -280,7 +279,7 @@
     "ch8-sans-nom": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "basile",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "issue-auto" } ],
       "texte": [
         "Je n'avais pas de nom à donner. Je l'ai dit comme j'ai pu : que ce n'était pas la faute d'Anselme, qu'il me fallait du temps. Vernier a attendu. Il a regardé la salle, visage après visage. Personne n'a parlé. Basile a ouvert la bouche, je l'ai vu, et il l'a refermée. Une horloge peut sonner juste et son horloger rester muet.",
@@ -291,7 +290,7 @@
     "ch8-verite-nue": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "odile", "expression": "triste",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "issue-auto" } ],
       "texte": [
         "Je l'ai dit. Que le gardien était là-haut, vivant. Qu'il avait éteint lui-même, parce que son feu avait menti jeudi. Et qu'il n'y voyait plus, depuis deux hivers. Il y a eu un grand silence, et dans ce silence j'ai vu quatre personnes baisser les yeux en même temps : Odile, Tudal, Perrine, Basile. Comme si chacune venait de perdre quelque chose qu'elle croyait être seule à porter.",
@@ -302,7 +301,7 @@
     "ch8-basile-faible": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "basile",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "issue-sursis" } ],
       "texte": [
         "J'ai dit Basile. Qu'il avait touché à la machine. Il est devenu gris. Vernier a levé un sourcil : « Vous avez une preuve ? Vous avez vu cette machine de vos yeux ? » J'ai dû dire non. J'avais des paillettes de laiton, des choses lues, des choses entendues. « Des paillettes et des on-dit », a résumé Vernier. Basile a bredouillé qu'il graissait la mécanique, comme toujours, et il est sorti sans son chapeau.",

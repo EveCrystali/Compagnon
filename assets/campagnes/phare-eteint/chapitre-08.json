@@ -7,6 +7,7 @@
       "lieu": "Le Souffleur",
       "decor": "grotte-souffleur",
       "humeur": "peur",
+      "personnage": "tudal",
       "texte": [
         "La mer est descendue, et moi aussi. Me voilà sur la grève, devant le Souffleur. La grotte respire. Elle ronfle même un peu, tout au fond, chaque fois que la vague se retire. Je vais entrer dans quelque chose qui ronfle.",
         "À l'intérieur, sur le sable mouillé : le canot, tiré au sec. Et une lanterne posée sur un rocher, qui éclaire un grand dos. C'est Tudal, le pêcheur. Il décharge des bidons, un sous chaque bras, et il les porte vers le fond de la grotte. Je peux rester caché derrière le canot et regarder ce qu'il fabrique. Ou l'appeler, bien en face, les mains vides. Il est très grand, tu sais."
@@ -46,6 +47,7 @@
     "ch5b-tudal": {
       "type": "choix",
       "humeur": "surpris",
+      "personnage": "tudal",
       "effets": [ { "drapeau": "k-tudal" } ],
       "texte": [
         "Nous voilà face à face : lui assis sur un bidon, moi debout sur un galet pour gagner dix centimètres. Il a parlé le premier. « C'est de l'huile de lampe. Le Service a coupé les livraisons au printemps, vu qu'ils veulent le fermer. Alors c'est moi qui paie. Et pour payer, je pêche des homards que j'ai pas le droit de pêcher. Voilà. T'iras le dire aux gendarmes ? » J'ai fait non de la tête.",
@@ -69,7 +71,7 @@
     "ch5b-panier": {
       "type": "recit",
       "humeur": "surpris",
-      "personnage": "lison",
+      "personnage": "tudal",
       "effets": [ { "drapeau": "trois-coups" } ],
       "texte": [
         "« Qui tu veux que ce soit ? Lui. Ou la petite. » Il a soufflé sa fumée vers le trou. « Il est là-haut. Il mange, il sonne sa corne quand la brume tombe, et il boude. Il ouvre plus à personne. Même plus à moi, et pourtant je frappe mes trois coups, comme toujours. »",
@@ -106,7 +108,6 @@
     "ch5b-caisse": {
       "type": "recit",
       "humeur": "surpris",
-      "personnage": "basile",
       "effets": [ { "drapeau": "c-jeudi" }, { "var": "courage", "plus": 1 } ],
       "texte": [
         "Une petite ! J'ai eu le temps. L'étiquette dit : « Basile, horlogerie. Fragile. » Et dedans, dans la paille mouillée, il reste des copeaux dorés, du laiton, et un bon de travail au crayon très fin : « Jeudi. Dent-Creuse. Cadran de réglage démonté pour gravure. Posé cadran de rechange, fer-blanc. Pas essayé le feu : la marée. »",

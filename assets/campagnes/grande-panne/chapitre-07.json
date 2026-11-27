@@ -20,6 +20,7 @@
     "ch7-montee": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "grumeau",
       "texte": [
         "À pied. Je pose le pied dans le vide, j'attends, et la marche arrive dessous. Presque toujours à temps. Grumeau, dans mon baluchon, annonce chaque marche avant qu'elle existe, pour se rendre utile, et il se trompe une fois sur trois. Il ne faut surtout pas courir : une marche pas finie, c'est du brouillard avec des bords. Il y en a beaucoup. Je monte, j'attends, je monte. Je t'écris du sommet."
       ],
@@ -46,7 +47,7 @@
       "type": "choix",
       "lieu": "Le donjon",
       "humeur": "malice",
-      "personnage": "grumeau", "expression": "colere",
+      "personnage": "grumeau",
       "texte": [
         "Je suis en haut, entier, en un seul exemplaire. La gargouille de latence est assise au bord du vide, en pierre grise, immobile. En arrivant, Grumeau a grogné : « Il fait toujours aussi froid, ici ? » Elle n'a rien dit. Alors j'ai demandé : « Où se cache le Sans-Titre ? » Elle a répondu : « Seulement depuis ce matin. » On a mis un moment à comprendre. Elle répond toujours à la question d'avant.",
         "Donc ma question est partie, et sa réponse viendra avec la suivante. Grumeau dit qu'on n'aura droit qu'à une vraie question de plus : elle se rendort entre deux, et ça prend des heures. Après, lui posera une question pour rien, pour faire sortir la dernière réponse. Il m'en reste une seule. Laquelle ?"
@@ -88,7 +89,7 @@
       "type": "choix",
       "lieu": "Au bord du donjon",
       "humeur": "tendre",
-      "personnage": "grumeau",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "On a attendu sa dernière réponse, celle à « ça va ? », par politesse. Elle ne venait pas. Alors Grumeau est allé jusqu'au bord du donjon. D'ici, on voit le Hall, tout en bas, minuscule, avec la file comme un fil. Il a cherché son banc des yeux. Il a dit, sans se retourner : « Trente ans que je les fais patienter. Tu crois qu'ils se souviennent de moi, en bas ? »",
         "Il a posé la question au vide, mais c'est moi qui suis à côté. Et il n'y a pas de gargouille pour répondre à ma place, avec une question de retard. Il attend, lui qui déteste attendre quand ce n'est pas lui qui compte. Je lui dis quoi ?"
