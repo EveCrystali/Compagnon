@@ -1,0 +1,62 @@
+{
+  "v": 1,
+  "id": "phare-eteint",
+  "titre": "Le phare éteint",
+  "ton": "mystere",
+  "accroche": "Le phare de la Dent-Creuse s'est éteint il y a trois nuits et son gardien ne répond plus. Une lettre sans timbre demande à Pilou de venir. Seul.",
+  "niveau": 8,
+  "duree": "≈ 10 jours",
+  "depart": "ch1-lettre",
+  "chapitres": [
+    { "id": "ch1", "titre": "Une lettre sans timbre", "fichier": "chapitre-01.json" },
+    { "id": "ch2", "titre": "Le Bigorneau Qui Tousse", "fichier": "chapitre-02.json" },
+    { "id": "ch3", "titre": "Le Passe-Pied", "fichier": "chapitre-03.json" },
+    { "id": "ch4a", "titre": "Madame la Maire", "fichier": "chapitre-04.json" },
+    { "id": "ch5a", "titre": "L'atelier de Basile", "fichier": "chapitre-05.json" },
+    { "id": "ch6a", "titre": "La porte du charbon", "fichier": "chapitre-06.json" },
+    { "id": "ch4b", "titre": "Le sentier des douaniers", "fichier": "chapitre-07.json" },
+    { "id": "ch5b", "titre": "Le Souffleur", "fichier": "chapitre-08.json" },
+    { "id": "ch6b", "titre": "Sous la trappe", "fichier": "chapitre-09.json" },
+    { "id": "ch7", "titre": "Le gardien", "fichier": "chapitre-10.json" },
+    { "id": "ch8", "titre": "À huis clos", "fichier": "chapitre-11.json" },
+    { "id": "ch9", "titre": "La nuit des six bateaux", "fichier": "chapitre-12.json" }
+  ],
+  "variables": { "courage": 0, "confiance": 0 },
+  "objets": [
+    { "id": "lettre", "nom": "Lettre sans timbre" },
+    { "id": "billet", "nom": "Billet glissé sous la porte" },
+    { "id": "coquillage", "nom": "Coquillage rose" },
+    { "id": "clef-service", "nom": "Clef de service du phare" },
+    { "id": "pages-carnet", "nom": "Pages arrachées du carnet de veille" },
+    { "id": "casquette-gardien", "nom": "Casquette de gardien", "portable": true, "emplacement": "tete" },
+    { "id": "corne-de-poche", "nom": "Corne de brume de poche", "portable": true, "emplacement": "main" },
+    { "id": "cire-jaune", "nom": "Petit ciré jaune", "portable": true, "emplacement": "dos" },
+    { "id": "sifflet-lison", "nom": "Sifflet de Lison", "portable": true, "emplacement": "cou" },
+    { "id": "galet-machoire", "nom": "Galet de la Mâchoire", "portable": true, "emplacement": "main" },
+    { "id": "eteignoir", "nom": "Éteignoir de cuivre", "portable": true, "emplacement": "tete" }
+  ],
+  "souvenirs": [
+    { "id": "tout-le-monde-savait", "nom": "Tout le monde savait", "texte": "Un phare, un gardien, et un village entier pour lui tenir la main." },
+    { "id": "deux-eclats-un-long", "nom": "Deux éclats, un long", "texte": "Tu as prouvé que les doigts d'Anselme n'avaient jamais menti." },
+    { "id": "feu-automatique", "nom": "Le feu automatique", "texte": "Une lumière qui ne se trompe pas, et qui ne connaît personne." },
+    { "id": "un-sursis", "nom": "Un sursis", "texte": "Une nuit entière à compter les éclats à la main. Jusqu'au printemps." },
+    { "id": "mauvais-coupable", "nom": "Le mauvais coupable", "texte": "Tu as trouvé un coupable. Pas le bon." },
+    { "id": "celui-qui-eteint", "nom": "Celui qui éteint", "texte": "Trois éclats. Tu as compris, une nuit trop tard, pourquoi on éteint un phare." }
+  ],
+  "decors": [
+    { "id": "chez-pilou", "nom": "Chez Pilou", "description": "Un coin de bureau en bois au petit matin : un encrier ouvert, une bougie, une enveloppe sans timbre appuyée contre l'encrier, lumière dorée et calme." },
+    { "id": "port-trebrume", "nom": "Le quai de Trébrume", "description": "Un petit quai de pierre au crépuscule dans une brume épaisse : barques tirées au sec, casiers à homards, filets ; au large, la silhouette noire d'un phare éteint sur son rocher." },
+    { "id": "auberge-bigorneau", "nom": "Le Bigorneau Qui Tousse", "description": "Salle basse d'une auberge de pêcheurs : poutres, comptoir, marmite de soupe fumante, grande horloge, fenêtres jaunes embuées, un ciré jaune pendu à une patère." },
+    { "id": "guet-de-nuit", "nom": "Le guet", "description": "Vue de nuit à travers un petit carreau : au premier plan le rebord et une bougie éteinte, dehors la brume bleu sombre et, très loin, une minuscule lueur à une fenêtre du phare noir." },
+    { "id": "passe-pied", "nom": "Le Passe-Pied", "description": "Une chaussée de pierres claires et de goémon à marée basse, entre des flaques et de la vase luisante, filant dans la brume de l'aube vers un rocher surmonté d'un phare." },
+    { "id": "pied-du-phare", "nom": "Au pied de la Dent-Creuse", "description": "Le bas d'une tour de phare en granit gris vue de tout près : une lourde porte cloutée sans poignée, des marches mouillées, des traces de goudron, la mer qui remonte autour du rocher." },
+    { "id": "place-mairie", "nom": "La place de Trébrume", "description": "Une placette pavée par temps gris : une mairie minuscule à volets bleus et drapeau mouillé, un panneau d'affichage, une fontaine, un banc, des goélands sur le toit." },
+    { "id": "atelier-basile", "nom": "L'atelier de Basile", "description": "Une boutique d'horloger encombrée : des dizaines de pendules qui n'indiquent pas la même heure, un établi avec loupe et limes, de la poussière dorée de laiton, une forme sous un drap." },
+    { "id": "sentier-douaniers", "nom": "Le sentier des douaniers", "description": "Un sentier étroit en haut d'une falaise dans le brouillard : ajoncs, bord incertain, une cabane de guet en planches grises avec une petite fenêtre tournée vers le phare." },
+    { "id": "grotte-souffleur", "nom": "Le Souffleur", "description": "Une grotte marine à marée basse : sable mouillé, goémon, une barque à sec, des bidons alignés, une lanterne posée sur un rocher, un conduit sombre qui monte dans la pierre." },
+    { "id": "cave-du-phare", "nom": "La cave du phare", "description": "Le sous-sol rond d'un phare à la lueur d'une lanterne : tas de charbon, rangées de bidons d'huile, un panier pendu à une poulie, un escalier de pierre en colimaçon qui monte dans le noir." },
+    { "id": "chambre-de-veille", "nom": "La chambre de veille", "description": "Une pièce ronde et chaude dans le phare : poêle, lit étroit, fauteuil, table avec un gros carnet relié et une boîte en fer, une corne de brume à soufflet, une bougie, la nuit derrière la meurtrière." },
+    { "id": "lanterne-du-phare", "nom": "La lanterne", "description": "Le sommet du phare : une grande lentille de verre à échelons, une machine d'horlogerie en laiton avec cadran et manivelle, un poids au bout de sa chaîne, des vitres tout autour ouvertes sur la brume." },
+    { "id": "jetee-nuit", "nom": "La jetée, la nuit", "description": "Le bout d'une jetée de pierre en pleine nuit de brume : des silhouettes qui attendent, des petits feux de mât flous qui approchent sur l'eau noire, le phare au loin." }
+  ]
+}

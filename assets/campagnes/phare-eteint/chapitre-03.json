@@ -1,0 +1,190 @@
+{
+  "chapitre": "ch3",
+  "noeuds": {
+    "ch3-aube": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le Passe-Pied",
+      "decor": "passe-pied",
+      "humeur": "determine",
+      "texte": [
+        "6 h 10. La mer est partie pendant que j'avais le dos tourné, et elle a laissé derrière elle un chemin : le Passe-Pied. Quatre cents mètres de pierres plates, de flaques et de goémon qui brille, jusqu'au rocher de la Dent-Creuse. La brume est rose. Ce serait joli si je n'avais pas si peur.",
+        "Au départ, un écriteau peint à la main : « Pierres claires, pied sûr. Pierres vertes, bain sûr. Hors des pierres, la vase garde ce qu'elle prend. » Et dessous, d'une autre main : « Une heure, pas plus. » Les pierres claires zigzaguent beaucoup. Tout droit par le sable mouillé, ce serait deux fois plus court. Je passe par où ?"
+      ],
+      "options": [
+        { "id": "pierres", "libelle": "Par les pierres claires, sans te presser", "vers": "ch3-pierres" },
+        { "id": "sable", "libelle": "Tout droit par le sable : c'est plus court", "vers": "ch3-echec-vase" }
+      ]
+    },
+    "ch3-echec-vase": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "Le sable n'était pas du sable. J'ai compris l'écriteau au moment exact où je m'enfonçais jusqu'au ventre dans une vase froide qui sentait l'œuf. Un ramasseur de coques m'a sorti de là avec son râteau, sans un mot, comme on enlève une feuille d'un caniveau. On reprendra par les pierres. L'écriteau avait pourtant prévenu."
+      ],
+      "repos_min": 30
+    },
+    "ch3-pierres": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "Sage décision. Les pierres claires ne sont pas en ligne. Il y en a une à gauche, deux à droite, une cachée sous le goémon, et entre elles des vertes, luisantes, traîtresses comme du savon. Je vais repérer le chemin d'ici, pierre après pierre, et le retenir avant de partir. Regarde bien avec moi, et aide-moi à me souvenir de l'ordre."
+      ],
+      "jeu": "memoire",
+      "difficulte": 1,
+      "reussite": "ch3-rocher",
+      "echec": "ch3-glisse"
+    },
+    "ch3-glisse": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "var": "courage", "plus": -1 } ],
+      "texte": [
+        "J'en ai oublié une. Une seule. La verte m'a envoyé valser dans une flaque et j'ai trempé jusqu'à la ceinture. Je suis ressorti délavé : bleu marine en haut, bleu layette en bas, comme un drapeau raté. J'ai fini la traversée à quatre pattes, pierre par pierre, en leur parlant poliment. Me voilà quand même sur le rocher. Ne dis à personne que j'ai parlé aux pierres."
+      ],
+      "suite": "ch3-rocher"
+    },
+    "ch3-rocher": {
+      "type": "choix",
+      "lieu": "Au pied de la Dent-Creuse",
+      "decor": "pied-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "Je suis au pied du phare. De près, il est énorme, gris, froid, et il se penche sur moi comme pour me demander ce que je veux. La porte est en chêne clouté. J'ai frappé. Rien. J'ai poussé. Elle ne bouge pas d'un cheveu : barrée de l'intérieur. Et le trou de la serrure est bouché avec de la cire.",
+        "Barrée de l'intérieur. Tu comprends ce que ça veut dire ? Qu'il y a un intérieur, avec quelqu'un dedans. Je peux examiner la porte et son seuil. Faire le tour de la tour. Ou appeler Anselme de toutes mes forces. Une seule chose, mais bien faite. Laquelle ?"
+      ],
+      "options": [
+        { "id": "porte", "libelle": "Examine la porte et le seuil", "vers": "ch3-porte" },
+        { "id": "tour", "libelle": "Fais le tour de la tour", "vers": "ch3-tour" },
+        { "id": "appel", "libelle": "Appelle Anselme", "vers": "ch3-appel" }
+      ]
+    },
+    "ch3-porte": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai tout regardé de près, et de près, c'est ma spécialité. Sur le bois, à hauteur d'homme, des traces de doigts au goudron : de gros doigts, qui ont frappé souvent. Sur le seuil, deux ronds gras, de la largeur d'un bidon. La cire de la serrure, je l'ai goûtée : bougie de ménage, trois jours à peine.",
+        "Et il y a autre chose. Dans le sable collé aux marches, des empreintes. Petites. Des semelles de bottes trop grandes pour le pied qui est dedans. Elles n'entrent pas par la porte : elles contournent la tour et descendent vers les rochers, côté large, là où ça souffle. Quelqu'un de petit a une autre façon d'entrer."
+      ],
+      "suite": "ch3-maree"
+    },
+    "ch3-tour": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai fait le tour en me tenant au mur, parce que côté large le vent me décoiffe la goutte. Derrière, il y a une seconde porte, basse, en fer : « Porte du charbon », dit la plaque. Mais sa serrure à elle n'est pas bouchée. Elle est propre et elle sent l'huile fine. Quelqu'un la graisse. Quelqu'un qui a donc une clef.",
+        "Plus bas, des marches taillées dans le rocher descendent vers une fente noire où la mer respire. Vraiment : ça inspire, ça expire, et de temps en temps ça éternue de l'écume. Dans la roche, on a gravé un nom : le Souffleur. Je n'ai pas osé descendre. Mais des petites traces de bottes y vont, elles."
+      ],
+      "suite": "ch3-maree"
+    },
+    "ch3-appel": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "J'ai mis mes mains en porte-voix et j'ai crié : « ANSELME ! C'EST PILOU ! » Ma voix a grimpé le long de la tour et elle est retombée sans personne. Silence. Un goéland m'a regardé avec pitié. J'ai crié encore : « Deux éclats, un long ! Tu te souviens ? »",
+        "Et là, le phare a répondu. Pas une voix. Le son d'hier soir : long, grave, à me faire trembler les semelles. De si près, j'ai compris ce que c'était. Une corne de brume, une vieille, à soufflet, de celles qu'on actionne à la main. Il y a donc une main là-dedans. Elle m'a entendu. Elle ne veut pas ouvrir, mais elle a quand même dit quelque chose."
+      ],
+      "suite": "ch3-maree"
+    },
+    "ch3-maree": {
+      "type": "choix",
+      "checkpoint": true,
+      "humeur": "peur",
+      "texte": [
+        "Mauvaise nouvelle : la mer rentre. Je croyais avoir une heure, mais les flaques du Passe-Pied se rejoignent déjà et l'eau lèche les premières pierres claires. Il faut repartir. Maintenant, pas dans cinq minutes.",
+        "Sauf que. En me retournant une dernière fois, j'ai vu un bout de papier coincé sous la porte du phare, côté intérieur, dont un coin dépasse. Un coin écrit. Pour l'attraper sans le déchirer, il me faut cinq minutes, peut-être plus. Si je reste, je devrai courir devant la marée. Je rentre sagement, ou je reste pour ce papier ?"
+      ],
+      "options": [
+        { "id": "rentrer", "libelle": "Rentre tout de suite", "vers": "ch3-retour" },
+        { "id": "rester", "libelle": "Reste : ce papier vaut une course", "vers": "ch3-reste" }
+      ]
+    },
+    "ch3-retour": {
+      "type": "attente",
+      "decor": "passe-pied",
+      "humeur": "fatigue",
+      "texte": [
+        "Je rentre. Le papier restera sous sa porte, et moi je resterai une goutte d'encre entière, ce qui a aussi son intérêt. Je me retourne une fois : le phare me regarde partir de toutes ses fenêtres noires. J'ai eu l'impression, mais la brume joue des tours, qu'un rideau bougeait au deuxième étage."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou regagne la rive par les pierres claires",
+      "tenue": "marche",
+      "suite": "ch3-rive"
+    },
+    "ch3-reste": {
+      "type": "epreuve",
+      "decor": "passe-pied",
+      "humeur": "peur",
+      "texte": [
+        "Je l'ai ! Pas le temps de lire : l'eau m'arrive aux chevilles et le Passe-Pied n'est plus qu'un pointillé de pierres avec de la mer entre. Il va falloir sauter de pierre en pierre et, à chaque vague, lever les pieds pile au bon moment. Si je me trompe d'un rien, je bois la tasse. Et quand on est une goutte d'encre, c'est plutôt la tasse qui vous boit. Aide-moi !"
+      ],
+      "jeu": "reflexe",
+      "difficulte": 2,
+      "bonus": "courage",
+      "reussite": "ch3-retour-juste",
+      "echec": "ch3-echec-maree"
+    },
+    "ch3-retour-juste": {
+      "type": "attente",
+      "humeur": "joie",
+      "effets": [ { "drapeau": "coin-de-page" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Ça passe ! J'ai trouvé le rythme des vagues. Je me suis perché une seconde sur la grosse pierre du milieu pour lire, je n'y tenais plus. Trois bouts de lignes, d'une écriture d'écolier bien posée sur ses lignes : « …feu faux cette n… », puis « …par ma faute. Je ne… », puis « …plus gardien. »",
+        "Ce n'est pas une lettre de menace, ça. C'est quelqu'un qui s'accuse. Je replie le coin de page au plus sec de mon baluchon et je repars en courant : il me reste deux cents mètres et la mer n'a pas dit son dernier mot."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou court devant la marée",
+      "tenue": "course",
+      "suite": "ch3-rive"
+    },
+    "ch3-echec-maree": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "J'ai sauté une demi-seconde trop tard. La vague m'a pris par le travers, roulé, rincé, essoré. Un monsieur en ciré jaune m'a repêché au bout du quai avec une épuisette et a noté quelque chose dans son carnet. Je suis bleu pâle, je grelotte, et j'ai du goémon derrière l'oreille. La mer avait prévenu. Elle prévient toujours."
+      ],
+      "repos_min": 45
+    },
+    "ch3-rive": {
+      "type": "choix",
+      "lieu": "La rive",
+      "decor": "port-trebrume",
+      "humeur": "determine",
+      "texte": [
+        "Me voilà au sec, et le Passe-Pied a disparu sous l'eau comme s'il n'avait jamais existé. Prochaine basse mer : 18 h 40. Ce que je sais : le phare est barré de l'intérieur, donc habité. La nuit, quelqu'un y promène une bougie. Et ce quelqu'un n'ouvre à personne.",
+        "Le village se réveille : la maire hisse le drapeau, l'horloger ouvre ses volets, et dans un endroit pareil, quelqu'un a forcément une clef. Mais la lettre dit de ne me fier à personne. Ou alors je reste seul : là-haut, un sentier longe la falaise jusqu'au-dessus du rocher, loin des regards. Je fais confiance au village, ou à la lettre ?"
+      ],
+      "recompense": { "po": 25, "xp": 12 },
+      "options": [
+        { "id": "village", "libelle": "Va au village : quelqu'un a une clef", "vers": "ch3-vers-village" },
+        { "id": "mer", "libelle": "Reste seul : prends le sentier de la falaise", "vers": "ch3-vers-mer" }
+      ]
+    },
+    "ch3-vers-village": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Va pour le village. Je vais désobéir à une lettre anonyme, ce qui, dit comme ça, me paraît raisonnable. Mais je garde la consigne dans un coin : écouter tout le monde, ne croire personne tout de suite. Je commence par la mairie : c'est là que vont les papiers, les clefs et les décisions pénibles. Si tu vois quelqu'un me suivre, tu me le dis."
+      ],
+      "duree_min": 10,
+      "duree_max": 12,
+      "pendant": "Pilou remonte la rue du village",
+      "tenue": "marche",
+      "suite": "ch4a-place"
+    },
+    "ch3-vers-mer": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Va pour la falaise. La lettre a dit seul, je serai seul, et tant pis si mes jambes ne sont pas d'accord. Derrière la dernière maison, un chemin monte dans les ajoncs : le sentier des douaniers. Aujourd'hui c'est moi qui guette, et je ne sais même pas quoi. Je contourne le village par les jardins, pour que personne ne me voie partir."
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou contourne le village par les jardins",
+      "tenue": "marche",
+      "suite": "ch4b-sentier"
+    }
+  }
+}

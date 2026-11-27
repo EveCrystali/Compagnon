@@ -1,0 +1,149 @@
+{
+  "chapitre": "ch4b",
+  "noeuds": {
+    "ch4b-sentier": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le sentier des douaniers",
+      "decor": "sentier-douaniers",
+      "humeur": "peur",
+      "texte": [
+        "Le sentier des douaniers est large comme mes deux pieds. À gauche, des ajoncs qui piquent. À droite, rien : de la brume, et dessous, très loin, le bruit de la mer qui mâche des cailloux. Un écriteau penche au premier virage : « Par brouillard : au pas. Le bord n'est pas toujours où l'on croit. »",
+        "Et bien sûr, les petits pas sont là. Derrière moi, à vingt mètres, dans la brume. J'ai trois idées. Avancer au pas, comme dit l'écriteau, et tant pis pour mon ombre. Courir pour la semer une bonne fois. Ou me cacher derrière ce gros rocher et attendre de voir qui passe. Laquelle est la bonne ?"
+      ],
+      "options": [
+        { "id": "pas", "libelle": "Avance au pas, comme dit l'écriteau", "vers": "ch4b-pas" },
+        { "id": "courir", "libelle": "Cours pour semer ton ombre", "vers": "ch4b-echec-falaise" },
+        { "id": "guetter", "libelle": "Cache-toi et guette qui te suit", "vers": "ch4b-guet-suiveur" }
+      ]
+    },
+    "ch4b-echec-falaise": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "J'ai couru. Dix pas. Au onzième, le sentier a tourné et moi non. Le bord n'était pas où je croyais, exactement comme c'était écrit. J'ai fait une chute de deux mètres, et j'ai atterri dans un ajonc qui poussait là, sur une corniche, sans doute exprès. L'ajonc a gagné. J'ai des épines partout où une goutte peut en avoir. Je me les retire une par une, et je repars. Au pas, cette fois."
+      ],
+      "repos_min": 40
+    },
+    "ch4b-guet-suiveur": {
+      "type": "recit",
+      "humeur": "malice",
+      "effets": [ { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Je me suis aplati derrière le rocher, couleur d'ombre, et j'ai attendu. Les pas ont approché. Et j'ai vu passer, à hauteur de mes yeux, deux bottes jaunes bien trop grandes, puis le bout d'une natte. Un enfant ! Elle s'est arrêtée pile où j'avais disparu, elle a soufflé « zut » tout bas, et elle a fait demi-tour en courant, sans glisser une seule fois. Je reprends, au pas."
+      ],
+      "suite": "ch4b-pas"
+    },
+    "ch4b-pas": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Au pas, donc. Un pied, puis l'autre, la main gauche dans les ajoncs pour savoir où est le bon côté. Ça pique, mais ce qui pique est solide, je préfère. Plus loin sur la falaise, il y a une cabane en planches, avec une petite fenêtre. J'y serai dans un quart d'heure, si le bord reste où il est."
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou suit le sentier des douaniers, au pas",
+      "tenue": "marche",
+      "suite": "ch4b-cabane"
+    },
+    "ch4b-cabane": {
+      "type": "choix",
+      "lieu": "La cabane du guetteur",
+      "humeur": "surpris",
+      "texte": [
+        "La cabane du guetteur. Les douaniers n'y viennent plus, mais quelqu'un d'autre, si : il y a une couverture pliée, un bocal de crayons, des coquillages rangés par taille sur une planche. Par la fenêtre, on voit tout : le phare, le Passe-Pied sous l'eau, le quai. C'est le poste de guet de quelqu'un de petit et d'organisé.",
+        "Sous la couverture, une boîte à biscuits en fer, fermée par un élastique. Elle n'est pas à moi. Je peux l'ouvrir. Ou ne toucher à rien et laisser un mot, avec un des crayons : la personne qui vit ici me suit depuis hier, elle le lira. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "boite", "libelle": "Ouvre la boîte", "vers": "ch4b-boite" },
+        { "id": "mot", "libelle": "Ne touche à rien, laisse un mot", "vers": "ch4b-mot" }
+      ]
+    },
+    "ch4b-boite": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "objet": "pages-carnet", "donne": true }, { "drapeau": "pages-volees" }, { "var": "confiance", "plus": -1 } ],
+      "texte": [
+        "J'ai retiré l'élastique. Dedans : quatre pages arrachées à un gros carnet, pliées avec soin. Une écriture d'écolier, bien posée sur les lignes. « Jeudi soir. Allumé à l'heure. Réglé comme toujours, onze à gauche, deux à droite. » Puis : « Vendredi, aube. Tudal crie sous la tour. Le feu a rendu trois éclats cette nuit. Feu faux, par ma faute. Un phare qui ment est pire qu'un phare éteint. J'éteins. Je ne suis plus gardien. »",
+        "C'est Anselme qui parle, et ce n'est pas lui qui écrit. Quelqu'un a tenu la plume pour lui, puis a arraché les pages et les a cachées ici. Je les ai glissées dans mon baluchon. Oui, je sais : ce n'est pas à moi. Je me suis senti mal tout de suite, et je les ai gardées quand même."
+      ],
+      "suite": "ch4b-jaune"
+    },
+    "ch4b-mot": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "confiance", "plus": 1 } ],
+      "texte": [
+        "J'ai pris le crayon le plus court et j'ai écrit sur le bois de la planche, à côté des coquillages : « Je suis venu seul. Je n'ai rien touché. P. » J'ai hésité, puis j'ai ajouté : « Jolie collection. » La boîte est restée sous sa couverture. Je ne saurai pas ce qu'il y a dedans. Mais si quelqu'un fouillait mon encrier, je n'aimerais pas ça du tout."
+      ],
+      "suite": "ch4b-jaune"
+    },
+    "ch4b-jaune": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Quelqu'un monte le sentier. Pas les petits pas : des grands, réguliers, des bottes neuves qui grincent. Par la fente de la porte, je vois du jaune : un grand monsieur en ciré, des jumelles autour du cou. Il vient droit sur la cabane, et il n'y a qu'une porte.",
+        "Je peux me glisser sous la couverture et faire le pli. Ou sortir sur le seuil, me planter devant lui et lui demander ce qu'il veut, à la fin, à ce phare et à moi. La lettre dit de ne me fier à personne. Elle ne dit pas de me cacher de tout le monde. Vite, il est à dix mètres !"
+      ],
+      "options": [
+        { "id": "cache", "libelle": "Cache-toi sous la couverture", "vers": "ch4b-cache" },
+        { "id": "face", "libelle": "Sors et fais-lui face", "vers": "ch4b-face" }
+      ]
+    },
+    "ch4b-cache": {
+      "type": "recit",
+      "humeur": "peur",
+      "effets": [ { "drapeau": "c-feu-faux" } ],
+      "texte": [
+        "Je suis devenu un pli de couverture. Il est entré, il a regardé le phare avec ses jumelles, longtemps, et il s'est mis à dicter tout haut, pour son carnet : « Mardi. Feu éteint : quatrième nuit. Feu faux : une nuit, celle de jeudi, d'après la plainte du caboteur. Trois éclats au lieu de deux éclats et un long. Gardien : invisible. »",
+        "Il a soupiré. « Mercredi, 17 heures, je tranche. Service des Feux ou pas, je n'aime pas fermer un phare sans savoir. » Puis il a vu les coquillages, les crayons, et il a dit, moins sec : « Tiens. Une vigie. » Un inspecteur, donc. Et un feu qui a menti, la nuit de jeudi, juste avant de s'éteindre. J'ai attendu longtemps avant de redevenir une goutte."
+      ],
+      "suite": "ch4b-descente"
+    },
+    "ch4b-face": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "drapeau": "c-feu-faux" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Je suis sorti sur le seuil, les poings sur les hanches. Il s'est arrêté net. Puis il a sorti une carte et s'est plié en trois pour me la tendre : « Achille Vernier. Inspecteur. Service des Feux. » Et tout de suite : « Demain, 17 heures, au Bigorneau. Si personne ne m'explique, je signe la fermeture. »",
+        "J'ai dit qu'un phare avait le droit d'être en panne. « Un feu éteint, je peux comprendre. Mais la nuit de jeudi, la Dent-Creuse a donné trois éclats, au lieu de deux éclats et un long. Un feu qui ment, monsieur, c'est pire qu'un feu éteint. » Il a regardé la cabane, puis moi. « Si vous voyez le gardien, dites-lui que je préférerais l'entendre, lui. »"
+      ],
+      "suite": "ch4b-descente"
+    },
+    "ch4b-descente": {
+      "type": "choix",
+      "lieu": "Le bout du sentier",
+      "humeur": "peur",
+      "texte": [
+        "Après la cabane, le sentier s'arrête au bord du vide. En bas, à vingt mètres, une petite grève de galets, et au fond, la gueule noire d'une grotte : le Souffleur, juste sous le phare. Deux façons de descendre. Une échelle de fer, celle des douaniers : il lui manque trois barreaux, et ceux qui restent me regardent de travers. Ou une corde à nœuds toute neuve, attachée à un piquet. Une corde d'enfant. Je prends quoi ?"
+      ],
+      "options": [
+        { "id": "corde", "libelle": "La corde à nœuds", "vers": "ch4b-fin" },
+        { "id": "echelle", "libelle": "L'échelle des douaniers", "vers": "ch4b-echec-echelle" }
+      ],
+      "checkpoint": true
+    },
+    "ch4b-echec-echelle": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "Le premier barreau a tenu. Le deuxième aussi, par politesse. Le troisième m'est resté dans la main, et j'ai descendu les sept suivants beaucoup plus vite que prévu, sur le dos. Un tas de goémon m'a reçu, sur une corniche, à mi-hauteur. Il était mou, froid et habité : un crabe m'a pincé pour le principe. Une échelle à qui il manque trois barreaux, pourtant, ça prévient."
+      ],
+      "repos_min": 30
+    },
+    "ch4b-fin": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "La corde, c'est bien : un nœud tous les deux pieds, pile pour des petites jambes. Je suis descendu jusqu'à une corniche, à mi-hauteur, et je n'irai pas plus bas pour l'instant : la mer est haute, et dans la grotte il y en a jusqu'à la taille d'un homme, c'est-à-dire bien au-dessus de ma tête. Elle ne s'ouvrira pour moi qu'à la basse mer, ce soir.",
+        "Mais écoute ce que j'ai vu en descendant. Un canot, deux rames, un grand bonhomme dedans. Il est entré dans la grotte, tout droit, en baissant la tête. Et il n'est pas ressorti. Alors de deux choses l'une : ou la grotte est plus grande qu'elle n'en a l'air, ou quelqu'un m'attend dedans."
+      ],
+      "duree_min": 150,
+      "duree_max": 180,
+      "pendant": "Pilou guette la marée depuis la corniche",
+      "tenue": "cache",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch5b-greve"
+    }
+  }
+}

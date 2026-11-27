@@ -1,0 +1,386 @@
+{
+  "chapitre": "ch9",
+  "noeuds": {
+    "ch9-nuit": {
+      "type": "hasard",
+      "checkpoint": true,
+      "lieu": "Le Passe-Pied, la nuit",
+      "decor": "passe-pied",
+      "humeur": "determine",
+      "texte": [
+        "Sept heures et demie. La mer s'est retirée, et le Passe-Pied est là, une dernière fois, tout luisant sous la brume. Il fait nuit. Derrière moi, chaque fenêtre de Trébrume a sa lampe. Devant, la tour noire. Dans deux heures et demie, les six bateaux seront devant la Mâchoire. Je pose le pied sur la première pierre claire."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch9-g-passe", "si": { "drapeau": "issue-aveu" } },
+        { "poids": 1, "vers": "ch9-a-caisse", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "drapeau": "issue-auto" } ] } },
+        { "poids": 1, "vers": "ch9-s-retour", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "non": { "drapeau": "issue-auto" } }, { "drapeau": "issue-sursis" } ] } },
+        { "poids": 1, "vers": "ch9-f-scelles", "si": { "tous": [ { "non": { "drapeau": "issue-aveu" } }, { "non": { "drapeau": "issue-auto" } }, { "non": { "drapeau": "issue-sursis" } } ] } }
+      ]
+    },
+    "ch9-g-passe": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "La lanterne",
+      "decor": "lanterne-du-phare",
+      "humeur": "determine",
+      "texte": [
+        "On a traversé en procession. Tudal devant, une lanterne dans une main, un bidon dans l'autre. Basile, le vrai cadran serré contre lui comme un nouveau-né. Odile, son écharpe en travers. Vernier, raide, les bottes trempées. Et moi sur l'épaule de Perrine, qui a refusé de rester à terre. Là-haut, la grande porte était ouverte, pour la première fois depuis cinq nuits : Anselme et Lison nous attendaient sur le seuil.",
+        "Dans la lanterne, Basile dévisse le cadran de fer-blanc. Ses mains tremblent si fort que Lison lui tient la lampe. Anselme a posé la sienne sur son épaule, et il l'y laisse. Le vrai cadran se présente : le laiton brille, le zéro tombe pile en face du trait rouge. Basile serre la vis, recule d'un pas, et dit, pour la première fois depuis jeudi : « C'est vérifié. » J'ai laissé une petite trace bleue sur le bâti, en me penchant. Elle tournera avec le feu."
+      ],
+      "suite": "ch9-g-cadence"
+    },
+    "ch9-g-cadence": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "Le cadran est en place. Anselme pose ses doigts dessus. Il trouve les points en relief. « Mes doigts n'avaient pas menti », il dit tout bas, pour lui seul. Puis, plus fort : « Onze à gauche. » Clac, clac, clac. « Deux à droite. » Clac, clac. Personne ne respire. Même Vernier a oublié de noter.",
+        "Reste le poids : cinq nuits qu'il est tout en bas. Il faut le remonter à la manivelle, à quatre, et pour ça il faut une cadence, sinon la chaîne saute. « Toi, l'encre, tu comptes », dit Anselme. « Quatre temps, toujours pareils. Si tu perds le fil, tu cries stop et tout le monde lâche. On ne se cramponne jamais à une manivelle. » Je vais compter pour Tudal, Basile, Odile et Perrine. Bats la mesure avec moi !"
+      ],
+      "jeu": "rythme",
+      "difficulte": 2,
+      "bonus": "courage",
+      "reussite": "ch9-g-allumette",
+      "echec": "ch9-echec-poids"
+    },
+    "ch9-echec-poids": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "J'ai perdu le fil au vingtième tour. J'aurais dû crier stop. Au lieu de ça, je me suis cramponné à la manivelle, exactement ce qu'il ne fallait pas faire, et quand la chaîne a sauté, la manivelle est repartie à l'envers avec moi dessus. Trois tours complets, puis un vol plané jusqu'au drap de la lentille. Depuis, j'ai la tête qui tourne dans le sens des aiguilles. Anselme avait prévenu : on ne se cramponne jamais."
+      ],
+      "repos_min": 20
+    },
+    "ch9-g-allumette": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Le poids est en haut. La chaîne tient. Lison a rempli la lampe, retiré le drap de la lentille : elle brille comme un diamant grand comme une armoire. Il ne manque plus que la flamme. Anselme sort de sa poche une boîte d'allumettes, la secoue contre son oreille, et s'arrête. « Trente ans que c'est moi. » Il tend la boîte dans le vide, à mi-chemin entre Lison et lui. « Dis-moi, petit. Qui l'allume, ce soir ? »"
+      ],
+      "options": [
+        { "id": "lison", "libelle": "Lison : ce sera son phare, un jour", "vers": "ch9-g-lison-allume" },
+        { "id": "anselme", "libelle": "Anselme : ses mains savent", "vers": "ch9-g-anselme-allume" }
+      ]
+    },
+    "ch9-g-lison-allume": {
+      "type": "attente",
+      "humeur": "joie",
+      "texte": [
+        "Lison a pris la boîte comme on prend un oiseau. Elle a craqué l'allumette, protégé la flamme du creux de la main, exactement comme il fait, et elle l'a approchée de la mèche. Anselme lui tenait le coude, sans guider : juste là. La flamme a pris. Bleue, puis jaune, puis blanche. Basile a libéré le cran, le poids a commencé à descendre, et la grande lentille s'est mise à tourner, lentement, avec un ronron de chat énorme. J'ai peur de regarder. Je regarde."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou compte les éclats",
+      "tenue": "attend",
+      "suite": "ch9-g-veille"
+    },
+    "ch9-g-anselme-allume": {
+      "type": "attente",
+      "humeur": "joie",
+      "texte": [
+        "Anselme a gardé la boîte. Il a craqué l'allumette sans la voir, il l'a écoutée grésiller, et il a trouvé la mèche du premier coup : à la chaleur, à l'odeur, à trente ans d'habitude. « Regarde bien, Lison. Demain, c'est toi. » La flamme a pris. Bleue, puis jaune, puis blanche. Basile a libéré le cran, le poids a commencé à descendre, et la grande lentille s'est mise à tourner, lentement, avec un ronron de chat énorme. J'ai peur de regarder. Je regarde."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou compte les éclats",
+      "tenue": "attend",
+      "suite": "ch9-g-veille"
+    },
+    "ch9-g-veille": {
+      "type": "attente",
+      "lieu": "La galerie du phare",
+      "humeur": "joie",
+      "texte": [
+        "Un éclat. Deux éclats. Un long. Le noir. Un éclat. Deux éclats. Un long. Je n'ai jamais rien vu d'aussi beau, et pourtant j'ai vu des goûters. Le pinceau de lumière passe sur la brume, sur la Mâchoire toute blanche d'écume, sur le quai où Trébrume entier s'est mis à crier. Anselme ne voit rien de tout ça. Il écoute la machine, la tête penchée, et il dit : « Elle dit vrai. »",
+        "Maintenant, on veille. Dix heures. Sur la galerie, Lison compte les feux de mât qui sortent de la brume et s'alignent sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Elle attend. Elle se penche. Elle ne dit plus rien. Il en manque un. « La Tape-Dur passe toujours en dernier », elle répète, tout bas, comme une prière. Je reste à côté d'elle. On regarde le noir."
+      ],
+      "duree_min": 60,
+      "duree_max": 90,
+      "pendant": "Pilou veille sur la galerie avec Lison",
+      "tenue": "nuit",
+      "suite": "ch9-g-verdict"
+    },
+    "ch9-g-verdict": {
+      "type": "choix",
+      "lieu": "La lanterne",
+      "humeur": "tendre",
+      "texte": [
+        "Onze heures passées, et un sixième feu est sorti de la brume, tout seul, loin derrière les autres : la Tape-Dur, lourde de poisson, qui avait pris son temps. Lison a dévalé l'escalier en hurlant « PAPA ! » et je ne l'ai revue qu'une heure plus tard, trempée d'embruns et de larmes.",
+        "Dans la lanterne, Vernier a sorti l'ordre de fermeture. Il le tient à deux mains. « Le feu dit vrai. L'erreur est expliquée. Mais mon règlement est formel : il faut à ce phare un gardien capable d'en répondre, et M. Anselme n'y voit plus. Donnez-moi une raison de ne pas signer. Une vraie. » Tout le monde est là, dans la lumière qui tourne : Odile, Tudal, Perrine, Basile. C'est moi qu'il regarde."
+      ],
+      "options": [
+        { "id": "lison", "libelle": "« Il a Lison : elle est ses yeux depuis un an »", "vers": "fin-bonne" },
+        { "id": "doigts", "libelle": "« Ses doigts n'ont jamais menti : jugez-le sur sa lumière »", "vers": "fin-bonne" },
+        { "id": "tous", "libelle": "« Il n'a jamais été seul. Regardez autour de vous »", "vers": "ch9-g-tous", "si": { "tous": [ { "drapeau": "k-tudal" }, { "drapeau": "k-perrine" }, { "drapeau": "k-odile" }, { "drapeau": "k-basile" } ] } }
+      ]
+    },
+    "ch9-g-tous": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai dit : « Il n'a jamais été seul. Regardez autour de vous. » Et j'ai tout déballé, debout sur le bâti. Tudal, qui paie l'huile depuis le printemps avec ses homards. Perrine, qui lui lit son courrier chaque jeudi et fait semblant de croire aux lunettes cassées. Odile, qui signe ses rapports et invente des varicelles de goélands. Basile, qui soudait des points pour ses doigts.",
+        "Ils se sont regardés, tous les quatre. « Tu savais ? » a dit Odile à Perrine. « Depuis deux hivers. Et toi ? » « Un an. » Tudal a grogné : « Moi, je croyais être le seul. » « Moi aussi », a dit Basile. « Moi aussi », ont dit les deux autres. Et Anselme, au milieu, tournait la tête de voix en voix. « Tout le monde savait ? Depuis tout ce temps ? Et moi qui me cachais comme un voleur. » Il riait. Perrine pleurait dans son torchon."
+      ],
+      "suite": "fin-secrete"
+    },
+    "fin-secrete": {
+      "type": "fin",
+      "humeur": "joie",
+      "issue": "secrete",
+      "titre": "Tout le monde savait",
+      "texte": [
+        "Vernier a regardé ces gens un par un. Puis son ordre. Puis il l'a plié en quatre. « Mon règlement exige un gardien capable de répondre du feu. Il ne dit nulle part combien de mains il doit avoir. » Il a écrit dans le carnet de veille, à l'encre : « Phare de la Dent-Creuse. Gardien : Anselme. Vigie : Lison. Huile : Tudal. Écritures : Odile. Mécanique : Basile. Courrier et soupe : Perrine. » Et c'est cela qu'il a signé.",
+        "Lison a recollé les pages arrachées, une par une : un carnet de veille ne ment pas, même les nuits où le feu a menti. Sous la dernière ligne, Anselme a dicté : « Feu juste. Six bateaux rentrés. Rien à signaler. » Puis il a cherché ma tête de la main et il y a posé sa vieille casquette. Elle me tombe jusqu'aux pieds. « Pour l'encre, qui est venue quand on l'a appelée. »",
+        "Je suis reparti à la marée du matin. Je me suis retourné une fois : en plein jour, pour rien, pour moi, le phare a fait deux éclats, un long. Je sais maintenant combien ils sont, derrière cette lumière. Merci d'avoir cherché avec moi. Sans toi, j'aurais trouvé un coupable. Avec toi, j'ai trouvé un village."
+      ],
+      "recompenses": { "po": 300, "xp": 150, "souvenir": "tout-le-monde-savait", "titre": "Gardien parmi les gardiens", "objet": "casquette-gardien" }
+    },
+    "fin-bonne": {
+      "type": "fin",
+      "humeur": "joie",
+      "issue": "bonne",
+      "titre": "Deux éclats, un long",
+      "texte": [
+        "Vernier a écouté. Il a regardé la lumière tourner, deux éclats, un long, une fois, dix fois. Puis Lison, plantée devant lui, les poings sur les hanches. « Un gardien de soixante-quinze ans et une vigie de onze », il a dit. « Cela fait une moyenne acceptable. » Il a plié l'ordre. « Je reviendrai au printemps. Avec un brevet d'apprentie à signer, si la demoiselle sait toujours compter jusqu'à onze. »",
+        "Basile a promis de finir ses points en relief avant dimanche. Lison a recollé les pages arrachées dans le carnet, et sous la dernière ligne, Anselme a dicté : « Feu juste. Six bateaux rentrés. Rien à signaler. » Puis il m'a donné une toute petite corne de brume, en cuivre : « Si tu te perds encore. »",
+        "Je suis reparti à la marée du matin. Je me suis retourné une fois : en plein jour, pour rien, pour moi, le phare a fait deux éclats, un long. Ses doigts n'avaient jamais menti. Il fallait juste que quelqu'un regarde du côté de la machine, et pas seulement du côté du vieil homme. Merci d'avoir cherché avec moi. Dis, je me demande encore ce qu'ils savaient vraiment, les autres, au village. Pas toi ?"
+      ],
+      "recompenses": { "po": 240, "xp": 120, "souvenir": "deux-eclats-un-long", "titre": "Rallumeur de phare", "objet": "corne-de-poche" }
+    },
+    "ch9-a-caisse": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "La lanterne",
+      "decor": "lanterne-du-phare",
+      "humeur": "triste",
+      "texte": [
+        "On a monté la caisse à quatre. « Balise automatique, modèle 4. Ne nécessite aucune présence. » C'est écrit dessus, au pochoir. Vernier la visse sur la galerie, dehors, face au large, avec des gestes propres. Il ne fait pas ça méchamment. Il fait ça bien, et c'est presque pire.",
+        "Anselme est dans la lanterne, debout près de la grande lentille sous son drap. Il ne dit rien. Lison est assise dans l'escalier et refuse de regarder. Vernier me demande de lui tenir la lampe pendant qu'il serre les derniers boulons. Et Anselme, sans se retourner, dit : « Reste un peu, l'encre. » Je ne peux pas être aux deux endroits. Je vais où ?"
+      ],
+      "options": [
+        { "id": "anselme", "libelle": "Reste près d'Anselme", "vers": "ch9-a-anselme" },
+        { "id": "vernier", "libelle": "Aide Vernier : que ce soit bien fait", "vers": "ch9-a-vernier" }
+      ]
+    },
+    "ch9-a-anselme": {
+      "type": "attente",
+      "humeur": "triste",
+      "texte": [
+        "Je suis resté. Il a passé la main sous le drap, sur le verre de la lentille, comme on flatte un cheval. « Elle est froide. En trente ans, je ne l'avais jamais sentie froide plus d'un jour. » Il a retiré sa main. « Tu sais ce qui me manquera ? Pas la lumière : je ne la voyais plus. Le bruit. Le ronron de la machine. On dort bien, avec ça. » Dehors, Vernier a dit : « C'est prêt. » Anselme a redressé sa casquette. « Eh bien. Allons écouter une machine qui n'a besoin de personne. »"
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou reste près d'Anselme",
+      "tenue": "attend",
+      "suite": "ch9-a-veille"
+    },
+    "ch9-a-vernier": {
+      "type": "attente",
+      "lieu": "La galerie du phare",
+      "humeur": "triste",
+      "texte": [
+        "J'ai tenu la lampe. Vernier serre ses boulons en croix, un quart de tour chacun, comme dans le manuel. Au bout d'un moment il a parlé, sans me regarder. « Je ne ferme pas les phares par plaisir, vous savez. J'ai grandi sous un phare. Mon père en était le gardien. Un soir, il s'est trompé, lui aussi. Personne n'a jamais su pourquoi. » Il a donné un dernier tour de clef. « Une machine ne se trompe pas. C'est tout ce qu'elle a pour elle. C'est prêt. »"
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou tient la lampe pour Vernier",
+      "tenue": "attend",
+      "suite": "ch9-a-veille"
+    },
+    "ch9-a-veille": {
+      "type": "attente",
+      "lieu": "La jetée",
+      "decor": "jetee-nuit",
+      "humeur": "triste",
+      "texte": [
+        "La balise s'est allumée toute seule, à l'heure, sans allumette. Une lumière blanche, plate, exacte : deux éclats, un long, découpés au couteau. Elle ne se trompera jamais. Elle ne reconnaîtra jamais personne non plus. Sur le quai, les gens ont applaudi un peu, puis ils ont arrêté, parce qu'on n'applaudit pas une machine.",
+        "Je suis redescendu sur la jetée avec Lison. Dix heures. Les feux de mât sortent de la brume et s'alignent sur la balise. Un. Deux. Trois, quatre ensemble. Cinq. Lison attend. Elle se penche. Il en manque un. « La Tape-Dur passe toujours en dernier », elle répète, tout bas. Elle ne me regarde pas. Je reste à côté d'elle quand même. On regarde le noir."
+      ],
+      "duree_min": 60,
+      "duree_max": 90,
+      "pendant": "Pilou veille sur la jetée avec Lison",
+      "tenue": "nuit",
+      "suite": "ch9-a-matin"
+    },
+    "ch9-a-matin": {
+      "type": "choix",
+      "lieu": "Le quai, au matin",
+      "decor": "port-trebrume",
+      "humeur": "triste",
+      "texte": [
+        "Le sixième feu est sorti de la brume un peu après onze heures : la Tape-Dur, lourde de poisson, qui avait pris son temps. Lison a couru vers son père et je ne l'ai plus revue de la nuit. Les six bateaux sont rentrés. Personne n'a touché la Mâchoire. C'est bien. C'est ce qu'il fallait.",
+        "Ce matin, Anselme emménage au Bigorneau, dans la chambre sous le toit ; Perrine y a déjà mis une deuxième couverture. La patache, la carriole qui fait la côte, part dans une heure. Il me reste une chose à faire, ou à ne pas faire, avant de monter dedans."
+      ],
+      "options": [
+        { "id": "adieu", "libelle": "Va dire au revoir à Lison", "vers": "ch9-a-adieu", "si": { "un": [ { "drapeau": "c-came" }, { "non": { "drapeau": "promesse" } } ] } },
+        { "id": "pardon", "libelle": "Va demander pardon à Lison", "vers": "ch9-a-trahie", "si": { "tous": [ { "drapeau": "promesse" }, { "non": { "drapeau": "c-came" } } ] } },
+        { "id": "partir", "libelle": "Pars sans bruit", "vers": "fin-automatique" }
+      ]
+    },
+    "ch9-a-adieu": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je l'ai trouvée sur le quai, assise sur un casier. Elle regardait la balise, là-bas, qui clignotait en plein jour pour personne. « Elle fait pas de ronron. Et elle sait pas quand la brume arrive. Lui, il le sent une heure avant, au bruit de la mer. » Elle a reniflé. « Je serai ses yeux à terre. C'est pareil. » Ce n'est pas pareil, et on le savait tous les deux. Elle m'a serré la main, très fort. « T'es venu. C'est déjà ça. »"
+      ],
+      "suite": "fin-automatique"
+    },
+    "ch9-a-trahie": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Je l'ai trouvée sur le quai, assise sur un casier, le dos tourné. J'ai dit pardon. Elle n'a pas bougé. « T'avais juré. Petit doigt. » J'ai dit que les six bateaux étaient rentrés. « Je sais. Mon père est rentré. Grâce à toi, peut-être. Mais t'avais juré, et tu l'as dit devant tout le monde, et maintenant il a une machine à sa place. » Elle a sauté du casier, les yeux rouges et secs. « Je te déteste pas. Mais je t'écrirai plus. »"
+      ],
+      "suite": "fin-automatique"
+    },
+    "fin-automatique": {
+      "type": "fin",
+      "humeur": "triste",
+      "issue": "douce-amere",
+      "titre": "Le feu automatique",
+      "texte": [
+        "Je suis reparti par la patache de midi. Vernier était sur le quai, son ciré plié sous le bras. Il m'a tendu quelque chose : un tout petit ciré jaune, taillé dans une chute. « Je l'ai cousu cette nuit. On ne dort pas, après ces soirs-là. » Puis : « Vous avez fait ce qu'il fallait pour les bateaux. » Pour les bateaux, oui.",
+        "Trois semaines plus tard, j'ai reçu un paquet. Dedans, un grand cadran de laiton, avec un point en relief à côté de chaque cran, et un mot au crayon très fin : « Trop tard, je sais. C'est moi qui l'avais mal posé, ce jeudi-là. Ses doigts n'ont jamais menti. Je n'ai pas eu le courage de le dire. B. » Je l'ai lu debout, longtemps.",
+        "Là-bas, la balise fait deux éclats, un long, toutes les nuits, sans faute et sans personne. Et un vieil homme dort mal dans une chambre sous un toit, parce qu'il n'entend plus ronronner sa machine. J'ai gardé le cadran. Je me dis qu'une vérité arrivée trop tard, on peut peut-être encore la porter à quelqu'un. Tu viendrais avec moi ?"
+      ],
+      "recompenses": { "po": 160, "xp": 80, "souvenir": "feu-automatique", "titre": "Témoin du dernier feu", "objet": "cire-jaune" }
+    },
+    "ch9-s-retour": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "La chambre de veille",
+      "decor": "chambre-de-veille",
+      "humeur": "determine",
+      "texte": [
+        "Lison m'a ouvert la petite porte avant que je frappe. « Alors ? » J'ai raconté : l'inspecteur signera demain matin, sauf si le phare dit son nom cette nuit. Deux éclats, un long, sans une faute. Anselme était dans son fauteuil, la corne sur les genoux. Il a tout écouté sans bouger.",
+        "« Non », il a dit. « Je ne touche plus à ce cadran. La dernière fois que je l'ai réglé, j'ai failli tuer un homme. » Lison s'est mise à pleurer de rage. « Mon père rentre dans deux heures ! » Il a tourné la tête vers elle, et j'ai vu sa barbe trembler. Il ne dira pas oui tout seul. Il faut que je trouve la phrase. Laquelle ?"
+      ],
+      "options": [
+        { "id": "bateaux", "libelle": "Parle-lui des six bateaux qui le cherchent", "vers": "ch9-s-bateaux" },
+        { "id": "main", "libelle": "Dis-lui qu'il n'aura pas à toucher au cadran", "vers": "ch9-s-bateaux" }
+      ]
+    },
+    "ch9-s-bateaux": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Il m'a écouté jusqu'au bout. Puis il a fermé ses yeux qui ne voient plus, ce qui chez lui doit servir à réfléchir. « Je peux allumer une flamme. Fixe, sans la machine : ça, je ne peux pas le rater. Mais un feu fixe ne dit aucun nom. Il faudrait le cacher, le montrer, le cacher. À la main. Toute une nuit. »",
+        "Lison a relevé la tête d'un coup. « Avec le plateau à soupe ! Il est en fer, il est grand comme la vitre ! » Anselme a ri, pour la première fois depuis que je le connais. « Deux éclats, un long, au plateau à soupe. Sans une faute. Vous êtes fous tous les deux. » Il s'est levé de son fauteuil, en cherchant le mur. « D'accord. »"
+      ],
+      "suite": "ch9-s-volet"
+    },
+    "ch9-s-volet": {
+      "type": "epreuve",
+      "lieu": "La lanterne",
+      "decor": "lanterne-du-phare",
+      "humeur": "determine",
+      "texte": [
+        "La flamme brûle, blanche et droite, derrière la grande lentille immobile. Lison tient le plateau à deux mains devant la vitre du large. Moi, je suis debout sur le rebord, face à la nuit, et je compte : c'est moi la machine. Montre, cache. Montre, cache. Montre longtemps, cache longtemps. Anselme bat la mesure du pied, les yeux fermés.",
+        "Il a prévenu : « Si l'un de vous perd le compte, on masque tout et on reprend au début. Jamais un éclat de travers. Un phare qui hésite, les marins savent lire ça. Un phare qui ment, non. » Quelque part sur le quai, un homme sans ciré regarde avec un chronomètre. Et plus loin, six bateaux. Compte avec moi. Ne me lâche pas : la nuit sera longue."
+      ],
+      "jeu": "rythme",
+      "difficulte": 3,
+      "bonus": "confiance",
+      "reussite": "ch9-s-veille",
+      "echec": "ch9-echec-volet"
+    },
+    "ch9-echec-volet": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "J'ai perdu le compte. Un instant, un seul : j'ai dit « montre » quand il fallait dire « cache », et trois éclats sont partis vers le large avant que Lison ne plaque le plateau contre la vitre. Anselme a soufflé la flamme lui-même, d'un coup, sans un mot. Dans le noir, il a dit : « On reprend. Mais d'abord tu t'assois et tu respires. » Il avait prévenu : au premier doute, on masque tout. J'ai voulu rattraper au lieu de m'arrêter."
+      ],
+      "repos_min": 20
+    },
+    "ch9-s-veille": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "texte": [
+        "On tient. Deux éclats, un long. Deux éclats, un long. J'ai compté jusqu'à ne plus savoir ce que veulent dire les nombres. Lison a des crampes dans les bras et elle refuse de lâcher le plateau ; Anselme lui masse les épaules entre deux éclats.",
+        "Dix heures. Par la vitre, je vois les feux de mât sortir du noir et s'aligner sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Je compte les éclats d'une moitié de ma tête et les bateaux de l'autre. Lison les compte aussi, je le vois à ses lèvres. Cinq. Toujours cinq. « La Tape-Dur passe en dernier », elle souffle. « Toujours. » Montre. Cache. Il en manque un. On continue."
+      ],
+      "duree_min": 60,
+      "duree_max": 90,
+      "pendant": "Pilou compte les éclats, toute la nuit",
+      "tenue": "nuit",
+      "suite": "fin-sursis"
+    },
+    "fin-sursis": {
+      "type": "fin",
+      "humeur": "fatigue",
+      "issue": "douce-amere",
+      "titre": "Un sursis",
+      "texte": [
+        "La Tape-Dur est rentrée à onze heures passées, toute seule, lourde de poisson. Lison a pleuré en comptant, sans lâcher le plateau. On a tenu jusqu'à l'aube. C'est Vernier qui nous a trouvés, endormis en tas sous la lentille immobile, près du plateau noir de fumée. « Deux éclats, un long. Sept heures durant, pas une faute. Et la machine n'a pas tourné une seule fois. » Il n'a rien demandé de plus. « Un phare que trois personnes tiennent à bout de bras toute une nuit, je ne le ferme pas le lendemain. Je reviendrai au printemps. D'ici là, trouvez pourquoi cette machine a menti. »",
+        "En redescendant, on a vu quelqu'un assis au bout du Passe-Pied, sur la dernière pierre claire. Un monsieur maigre, un paquet rond sous le bras, enveloppé dans un drap. Il avait dû attendre la marée toute la nuit. Il a ouvert la bouche, et il n'a pas osé. Pas encore. Moi, j'ai pensé : le printemps, c'est peut-être plus tôt qu'on ne croit.",
+        "Lison m'a donné son sifflet, celui des cinq notes. « Pour quand tu reviendras. » Rien n'est réglé : Anselme n'y voit pas mieux, la machine garde son secret, et un plateau à soupe n'est pas un avenir. Mais six bateaux sont au port, et il nous reste un hiver. Tu sais quoi ? Je crois qu'on a manqué quelque chose, là-haut, dans cette machine. On y retournera."
+      ],
+      "recompenses": { "po": 160, "xp": 80, "souvenir": "un-sursis", "titre": "Veilleur en sursis", "objet": "sifflet-lison" }
+    },
+    "ch9-f-scelles": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Au pied de la Dent-Creuse",
+      "decor": "pied-du-phare",
+      "humeur": "triste",
+      "texte": [
+        "Au bout des pierres claires, il y a deux rubans de toile en croix sur la grande porte, et un cachet de cire rouge : « Service des Feux. Phare fermé. » Vernier est passé avant moi, en canot, avec les gendarmes. Anselme est à l'auberge, dans la chambre sous le toit ; il n'a pas dit un mot depuis qu'on l'a descendu.",
+        "Lison m'attend sur le seuil, la vieille corne à soufflet dans les bras. « On peut aller au bout de la jetée et sonner toute la nuit. Ça porte pas loin, mais ça dit où est la terre. » Elle regarde les scellés, puis moi. « Ou alors on passe par le Souffleur, on monte, et on rallume. Je sais régler : onze à gauche, deux à droite. J'ai des yeux, moi. » Dans deux heures, les bateaux. Je choisis quoi ?"
+      ],
+      "options": [
+        { "id": "corne", "libelle": "La corne, sur la jetée, toute la nuit", "vers": "ch9-f-corne" },
+        { "id": "rallumer", "libelle": "Le Souffleur : on monte, et on rallume", "vers": "ch9-f-trois" },
+        { "id": "clef", "libelle": "La porte du charbon : tu as gardé la clef. On rallume", "vers": "ch9-f-trois", "si": { "objet": "clef-service" } }
+      ]
+    },
+    "ch9-f-corne": {
+      "type": "attente",
+      "lieu": "La jetée",
+      "decor": "jetee-nuit",
+      "humeur": "triste",
+      "texte": [
+        "On est au bout de la jetée. Lison pompe le soufflet, je tiens la corne tournée vers le large, et à chaque coup le son me traverse comme un train. C'est la voix du premier soir, celle de la Dent qui a mal. Maintenant je sais ce qu'elle disait : je suis là, je n'y vois rien, mais je suis là.",
+        "Dix heures. Dans la brume, des feux de mât apparaissent, hésitent, tournent en rond. Ils cherchent une lumière et ne trouvent qu'un bruit. Un. Deux. Trois. Quatre. Cinq. Lison a les mains en sang sur le soufflet et ne veut pas me le laisser. Cinq. Il en manque un. On sonne."
+      ],
+      "duree_min": 60,
+      "duree_max": 90,
+      "pendant": "Pilou sonne la corne sur la jetée",
+      "tenue": "nuit",
+      "suite": "fin-faux"
+    },
+    "fin-faux": {
+      "type": "fin",
+      "humeur": "triste",
+      "issue": "mauvaise",
+      "titre": "Le mauvais coupable",
+      "texte": [
+        "La Tape-Dur est rentrée à l'aube, au bruit, à tâtons. Elle a touché la Mâchoire en passant : une planche ouverte, de l'eau dans la cale, personne de blessé. Le père de Lison a sauté sur le quai et il a serré sa fille sans rien dire, longtemps. Les six sont au port. On n'a perdu que le phare.",
+        "Le phare, lui, est fermé pour de bon. Et dans le village, des gens ne se parlent plus, par ma faute : j'ai montré quelqu'un du doigt devant tout le monde, et ce n'était pas le bon. J'avais des pièces plein mon baluchon et je les ai montées de travers.",
+        "Lison m'a donné un galet de la Mâchoire, gris, troué au milieu. « Pour que tu te rappelles de regarder dedans avant de dire. » C'est dur, mais c'est juste. Je repars par la patache. Anselme était à la fenêtre de l'auberge ; il a tourné la tête vers le bruit des roues, un peu à côté. S'il y a une prochaine fois, toi et moi, on écoutera jusqu'au bout avant de montrer du doigt."
+      ],
+      "recompenses": { "po": 80, "xp": 40, "souvenir": "mauvais-coupable", "titre": "Limier trop pressé", "objet": "galet-machoire" }
+    },
+    "ch9-f-trois": {
+      "type": "recit",
+      "lieu": "La lanterne",
+      "decor": "lanterne-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "On est entrés par en bas, Lison devant, moi accroché à sa natte comme à une corde de rappel. Elle a allumé la lampe et réglé le cadran en lisant les chiffres à voix haute, avec ses yeux tout neufs : onze à gauche, deux à droite. Je l'ai regardée faire, il n'y a pas d'erreur. La grande lentille tourne. Je suis sur la galerie, face à la nuit, et je compte. Un éclat. Deux éclats. Trois éclats. Le noir.",
+        "Trois. Je recompte. Un, deux, trois. Lison a tout fait juste, et le feu dit le nom d'un autre phare. Alors ce n'étaient pas les yeux d'Anselme. Ni ses doigts. C'est la machine. Quelqu'un a touché à la machine ! Et moi, cet après-midi, j'ai montré du doigt… Là-bas, dans la brume, un premier feu de mât vient d'apparaître. Il cherche la Dent. Il va trouver trois éclats."
+      ],
+      "suite": "fin-eteint"
+    },
+    "fin-eteint": {
+      "type": "fin",
+      "humeur": "triste",
+      "issue": "mauvaise",
+      "titre": "Celui qui éteint",
+      "texte": [
+        "Je n'ai pas réfléchi. Le temps de courir à la lampe, le feu de mât virait déjà vers le nord, comme un bateau qui se croit devant Roche-Douce : droit sur la Mâchoire. J'ai coiffé la flamme avec l'éteignoir. Le noir est revenu d'un coup. C'est moi qui ai éteint le phare de la Dent-Creuse. Moi. Et je comprends, une nuit trop tard : Anselme n'a pas éteint par honte. Il a éteint pour eux.",
+        "On a sonné la corne depuis la galerie jusqu'à l'aube, Lison les mains en sang sur le soufflet. Les six sont rentrés, au bruit, à tâtons. À la basse mer, Vernier nous attendait avec les gendarmes. J'ai tout raconté : Lison a réglé juste, et le feu a rendu trois éclats. C'est la machine. « C'est possible. Mais hier vous avez accusé un innocent, monsieur, et cette nuit vous êtes entré dans un phare fermé. Qui vous croira ? » Il n'était pas en colère. Il était désolé, ce qui est pire.",
+        "J'ai gardé l'éteignoir. Et dans la patache, j'ai écrit une lettre. Sans timbre : je l'ai confiée au marchand de maquereaux. « Basile. Lison a réglé juste, et le feu a rendu trois éclats. Quelqu'un a touché à la machine, et vous êtes le seul mécanicien de la côte. Montez voir. Dites-le. Il n'est pas trop tard pour lui. » Je ne sais pas s'il la lira. Mais toi et moi, on sait, maintenant. C'est déjà une lumière."
+      ],
+      "recompenses": { "po": 80, "xp": 40, "souvenir": "celui-qui-eteint", "titre": "Celui qui éteint", "objet": "eteignoir" }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "chapitre": "ch6b",
+  "noeuds": {
+    "ch6b-puits": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le haut du boyau",
+      "decor": "grotte-souffleur",
+      "humeur": "peur",
+      "texte": [
+        "Le boyau finit dans un puits. Tout rond, tout droit, trois mètres de haut, et la trappe est au-dessus. Trois mètres : six fois moi. Mais j'ai un anneau de fer scellé là-haut, près de la trappe, ma ficelle de baluchon, et un hameçon ramassé dans la grotte. Ça fait un grappin. Sinon, il y a les joints entre les pierres : mais ils suintent, et la pierre est grasse de sel. Je monte comment ?"
+      ],
+      "options": [
+        { "id": "grappin", "libelle": "Lance le grappin dans l'anneau", "vers": "ch6b-anneau" },
+        { "id": "joints", "libelle": "Grimpe à mains nues par les joints", "vers": "ch6b-echec-chute" }
+      ]
+    },
+    "ch6b-echec-chute": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "J'ai tenu quatre joints. Au cinquième, la pierre grasse a fait ce que font les pierres grasses, et je suis redescendu d'un trait, les doigts écartés, en laissant une longue traînée bleue sur le mur. Je me suis reçu sur mon baluchon, ce qui a écrasé mon goûter. Je suis sonné, endolori et sans goûter. La pierre suintait pourtant sous mon nez. La prochaine fois, le grappin."
+      ],
+      "repos_min": 30
+    },
+    "ch6b-anneau": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "Le grappin, donc. Je fais tourner l'hameçon au bout de la ficelle. L'anneau est gros comme un bracelet. Il faut que l'hameçon passe dedans et morde. Si je le manque, il cognera le fer de la trappe, et tout le phare saura qu'il y a quelqu'un dans son puits. Respire avec moi. Vise. Et lance quand je ne tremble plus."
+      ],
+      "jeu": "visee",
+      "difficulte": 2,
+      "reussite": "ch6b-cave-ok",
+      "echec": "ch6b-cave-bruit"
+    },
+    "ch6b-cave-ok": {
+      "type": "attente",
+      "lieu": "La cave du phare",
+      "decor": "cave-du-phare",
+      "humeur": "surpris",
+      "effets": [ { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Dans l'anneau ! Sans un bruit. Je me suis hissé nœud après nœud, j'ai soulevé la trappe avec ma tête, et me voilà dans la cave du phare, entre un tas de charbon et des bidons. Personne ne m'a entendu. La preuve : on parle, là-haut, dans l'escalier.",
+        "Une voix très vieille, lente comme une marée basse : « Mes doigts ne se trompent pas, Lison. Trente ans que je compte les crans. Onze à gauche, deux à droite. » Une voix toute jeune : « C'est pas tes doigts, c'est tes yeux, et on s'en fiche. » La vieille, plus bas : « Et pourtant le feu a menti. » Je ne bouge plus. J'attends que mon cœur redescende de ma gorge."
+      ],
+      "duree_min": 5,
+      "duree_max": 8,
+      "pendant": "Pilou reprend son souffle derrière le charbon",
+      "tenue": "cache",
+      "suite": "ch6b-cave"
+    },
+    "ch6b-cave-bruit": {
+      "type": "attente",
+      "lieu": "La cave du phare",
+      "decor": "cave-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "Raté. L'hameçon a sonné contre la trappe comme une cuillère sur une casserole. Au deuxième lancer, il a mordu, et je me suis hissé, mais le mal était fait : quand j'ai soulevé la trappe avec ma tête, un seau d'eau m'attendait, posé pile au bord. Je l'ai pris sur l'épaule. J'ai maintenant une rayure bleu pâle en travers, comme un maillot de bain. Je suis dans la cave du phare, trempé d'un côté, et quelqu'un vient de filer dans l'escalier. Je m'égoutte, et je te raconte."
+      ],
+      "duree_min": 5,
+      "duree_max": 8,
+      "pendant": "Pilou s'égoutte dans la cave",
+      "tenue": "attend",
+      "suite": "ch6b-cave"
+    },
+    "ch6b-cave": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "La cave. Du charbon, des bidons marqués à la craie d'une petite puce, et le panier de Tudal au bout de sa corde. À côté, sur une caisse, une pile de bols propres, avec un papier plié dans celui du dessus. Et le long du mur de l'escalier, à hauteur de main d'homme, quelque chose brille à la lueur de ma lanterne : une rangée de petits points de métal, tout neufs, qui monte avec les marches. Je n'ai le temps de regarder de près qu'une chose avant de monter. Les bols, ou les points ?"
+      ],
+      "options": [
+        { "id": "bols", "libelle": "Les bols et le papier plié", "vers": "ch6b-bols" },
+        { "id": "points", "libelle": "Les points brillants du mur", "vers": "ch6b-rampe" }
+      ]
+    },
+    "ch6b-bols": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-perrine" } ],
+      "texte": [
+        "Les bols viennent du Bigorneau, c'est écrit dessous. Le papier est de la main de Perrine, l'aubergiste, une écriture ronde, appliquée : « Pour A. Poireaux aujourd'hui. Je passerai jeudi te lire la suite de ton courrier, si tu veux bien m'ouvrir, tête de mule. Je ne dis rien à personne, tu le sais. P. »",
+        "Une écriture ronde, appliquée. Je la connais ! C'est celle de mes cartes d'hiver, depuis deux ans. Ce n'était donc plus Anselme qui m'écrivait : c'était elle, pour lui. Et elle lui lit son courrier. On ne lit son courrier qu'à quelqu'un qui ne peut plus le lire tout seul."
+      ],
+      "suite": "ch6b-fin"
+    },
+    "ch6b-rampe": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "k-basile" } ],
+      "texte": [
+        "Je me suis approché du mur. Ce sont des gouttes de soudure, posées une à une, bien alignées. Un point à chaque marche. Deux points à chaque palier. Trois points devant chaque porte. Ce n'est pas une décoration : c'est une rampe pour les doigts. Un chemin qu'on suit sans le voir.",
+        "Par terre, un petit fer à souder, avec une étiquette au crayon très fin : « B. » Et de la limaille dorée tout autour. Quelqu'un de minutieux est venu ici, en cachette, poser des repères pour une main qui tâtonne. Pourquoi un gardien de phare aurait-il besoin de trouver ses portes avec les doigts ?"
+      ],
+      "suite": "ch6b-fin"
+    },
+    "ch6b-fin": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Je monte les marches de la cave, puis celles de la tour, qui tournent. Au premier palier, mon pied s'arrête tout seul : un fil est tendu en travers, à hauteur de cheville d'homme, c'est-à-dire à hauteur de mon nez. Avec des coquillages enfilés dessus. Une sonnette ! Quelqu'un a piégé l'escalier avec ce qu'on ramasse sur une plage. Quelqu'un de pas très grand, à en juger par les nœuds, et qui tient beaucoup à savoir qui monte. Je m'arrête. Je souffle. Je réfléchis."
+      ],
+      "duree_min": 5,
+      "duree_max": 10,
+      "pendant": "Pilou reprend son souffle devant le fil à coquillages",
+      "tenue": "attend",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch7-fil",
+      "lieu": "L'escalier du phare"
+    }
+  }
+}
