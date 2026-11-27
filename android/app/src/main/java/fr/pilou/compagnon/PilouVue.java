@@ -45,7 +45,8 @@ public final class PilouVue extends View {
      *  de pixels de l'écran (dessin net, sans pixels inégaux). */
     private void regler(float pixel) {
         int n = Dessin.pixelFin(pixel);
-        if (finDemande && n >= 2) {
+        // Au moins 2 pixels de l'écran par pixel fin (1,75 arrondi à 2 : la vue grandit alors de 14 % au plus).
+        if (finDemande && n >= 2 && pixel / 2 >= 1.75f) {
             p = 2 * n;
             if (fine == null) fine = new Dessin.ImageFine();
         } else {

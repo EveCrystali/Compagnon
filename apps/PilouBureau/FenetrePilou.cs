@@ -240,7 +240,12 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
             v => { _reglages.Taille = v; AppliquerTaille(); }));
-        var fin = Case("Dessin fin", _reglages.DessinFin, v => { _reglages.DessinFin = v; AppliquerTaille(); });
+        var fin = Case("Dessin fin", _reglages.DessinFin, v =>
+        {
+            _reglages.DessinFin = v;
+            if (_jeuEnCours != Jeu.Aucun) Arreter(""); // ce qui est posé autour de Pilou a été mesuré pour l'autre dessin
+            AppliquerTaille();
+        });
         fin.ToolTip = "Pilou dessiné deux fois plus fin, en pixels nets à toutes les mises à l'échelle. Décoché : le dessin d'origine.\n"
                       + MesuresDessin();
         menu.Items.Add(fin);
