@@ -122,6 +122,12 @@ public sealed partial class FenetrePilou : Window
         };
         _bulle.MouseLeftButtonUp += (_, e) =>
         {
+            // Pilou demande ton prénom (une seule fois) : un clic ouvre la petite fenêtre, où refuser est aussi simple.
+            if (ClicPrenom(e.OriginalSource))
+            {
+                e.Handled = true;
+                return;
+            }
             // Ce qui parle de l'aventure (ligne d'attente, annonce du retour) ouvre la fenêtre Aventure.
             if (ClicAventure(e.OriginalSource))
             {
@@ -205,7 +211,11 @@ public sealed partial class FenetrePilou : Window
             DemarrerGestes();
             Bienvenue();
         };
-        Closed += (_, _) => ArreterGestes();
+        Closed += (_, _) =>
+        {
+            ArreterGestes();
+            Quotidien(EcrirePresence);
+        };
     }
 
     private static Brush Gel(byte a, byte r, byte g, byte b)
@@ -250,6 +260,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(Entree("♥ Caresser", Caresser));
         menu.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
         menu.Items.Add(MenuSoins());
+        menu.Items.Add(MenuPilouEtMoi());
         menu.Items.Add(Entree("Afficher Claude", () => Natif.Activer(Natif.TrouverClaude())));
         menu.Items.Add(new Separator());
         menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
@@ -467,6 +478,7 @@ public sealed partial class FenetrePilou : Window
             SuivreSoins();
             SuivreExpedition();
             SuivreCampagne(epoque);
+            SuivreQuotidien();
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
@@ -608,23 +620,21 @@ public sealed partial class FenetrePilou : Window
         t.Start();
     }
 
-    // Phrases liées à l'heure, une fois par jour chacune.
+    // Phrase liée à l'heure, une fois par jour. Le bonjour, le lundi, le vendredi et le soir sont devenus les petits mots
+    // de la présence au quotidien (FenetrePresence.cs) : au plus trois par jour, aux moments calmes.
     private void Heure()
     {
         var n = DateTime.Now;
         string jour = n.ToString("yyyyMMdd");
-        // Une fois par jour chacune, sans couper une saisie ni suivre de trop près une autre réaction.
         void Une(string cle, bool quand, string texte)
         {
             if (_demo || CampagneOccupe || !quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
+            if (!PresenceCoupee && _presence is { Parle: "jamais" }) return;
             _dit.Add($"{cle}-{jour}");
             Dosage.Noter(Maintenant);
             Dire(texte, 6000);
         }
         Une("midi", n.Hour == 12 && n.Minute < 20, "bon appétit !");
-        Une("weekend", n.DayOfWeek == DayOfWeek.Friday && n.Hour >= 17, "bon week-end !");
-        Une("tard", n.Hour >= 19 && n.DayOfWeek != DayOfWeek.Friday, "il se fait tard…");
-        Une("matin", n.Hour >= 7 && n.Hour < 10, n.DayOfWeek == DayOfWeek.Monday ? "bonne semaine !" : "bonjour !");
     }
 
     private TextBlock Discret(string texte) => new()
@@ -731,6 +741,7 @@ public sealed partial class FenetrePilou : Window
         _inactif = Natif.InactifMs();
         Observer(t);
         expr = Sommeil(expr, t);
+        expr = NuitTardive(expr, t);
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
@@ -1163,6 +1174,7 @@ public sealed partial class FenetrePilou : Window
     {
         Signaler("caresse", 1);
         SoinCaresse();
+        Vecu(f => f.Ca++, "caresses");
         _tCaresse = Maintenant;
         _geste = Geste.Rien;
         try

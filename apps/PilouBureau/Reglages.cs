@@ -54,6 +54,9 @@ public sealed class Reglages
     public string RetourDepuis { get; set; } = "";
     // Dernier message lu sur le sujet des campagnes (identifiant ntfy).
     public string CampagnesDepuis { get; set; } = "";
+    // Présence au quotidien (docs/PRESENCE.md) : dernier message lu sur le sujet de la présence du groupe.
+    // L'état (complicité, journal, prénom) est dans presence.txt, à côté de ce fichier, jamais dans le dossier partagé.
+    public string PresenceDepuis { get; set; } = "";
     // Campagnes : annonce du retour de Pilou (« bulle » : un petit saut et une bulle, une fois ; « signe » : seulement
     // le « ! » discret) et clé du dernier retour annoncé sur ce PC (jamais deux fois le même, même après un redémarrage).
     public string AnnonceAventure { get; set; } = "bulle";

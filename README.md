@@ -17,6 +17,9 @@ au fil de tes journées. Tout le reste est optionnel : de quoi le personnaliser 
 Gratuit, sur Windows et Android, avec une progression partagée entre PC et téléphone.
 
 - **vit en bas de l'écran sans déranger** : petites réactions discrètes, il bouge moins quand tu travailles ;
+- **un petit ami qui te suit, sur PC et dans la poche** : quelques mots rares et justes (trois par jour au plus sur
+  PC, un le soir sur le téléphone, jamais pendant que tu tapes), une complicité qui grandit et ne baisse jamais, des
+  dates fêtées une fois, et son journal, qu'il écrit de son point de vue ([docs/PRESENCE.md](docs/PRESENCE.md)) ;
 - **grandit pendant que tu travailles** : niveaux, évolutions, titres ;
 - **hauts faits, mini-jeux, quêtes, expéditions** : il joue, pêche, cuisine, part à l'aventure ;
 - **boutique et ensembles** pour le personnaliser ;
@@ -223,6 +226,9 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   son allure, son niveau et quelques anecdotes (cochable) ; tout est chiffré. Voir
   [docs/AMIS.md](docs/AMIS.md) ;
 - **Connecteurs…** : voir plus haut (météo, services, API locale) ;
+- **♥ Pilou et moi** : complicité (palier, jours ensemble), **Journal de Pilou** (une page par jour, feuilletable),
+  « Pilou me parle » (peu, normalement, jamais), tenir son journal, petits gestes de complicité, ton prénom ou un
+  surnom (facultatif, entre tes appareils seulement, jamais chez tes amis) ;
 - **Démarrer avec Windows**, icône près de l'horloge, se cacher 10 min, redémarrer, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.

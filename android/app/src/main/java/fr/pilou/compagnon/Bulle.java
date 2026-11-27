@@ -44,6 +44,12 @@ final class Bulle {
     private Etat etat = Etat.vide();
     private Campagnes.Etat aventure;
     private boolean attendAventure;
+    /** Le mot du jour de Pilou (Veille le calcule hors du fil principal) ; vide : rien. */
+    private String motDuJour = "";
+
+    void mot(String m) {
+        motDuJour = m == null ? "" : m;
+    }
 
     Bulle(Context c) {
         ctx = c;
@@ -231,6 +237,9 @@ final class Bulle {
             panneau.addView(t);
         }
         panneau.addView(texte(etat.nom + " · niv " + etat.niveau + "   " + etat.resume(maintenant), sombre ? 0xffadbac7 : PALE, true));
+        // Le mot du jour (docs/PRESENCE.md), discret, sous l'en-tête.
+        String mot = motDuJour;
+        if (!mot.isEmpty()) panneau.addView(texte("« " + mot + " »", sombre ? 0xffcdd9e5 : TEXTE, true));
         List<Etat.Ligne> lignes = etat.lignes(maintenant, (int) (maintenant / 300));
         for (int i = 0; i < Math.min(6, lignes.size()); i++) {
             Etat.Ligne l = lignes.get(i);

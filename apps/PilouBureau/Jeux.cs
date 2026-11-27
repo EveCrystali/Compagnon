@@ -230,6 +230,8 @@ public sealed partial class FenetrePilou
             AppliquerTaille();
         }
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
+        // --essai=mot, journal, complicite : la présence au quotidien, sur des données de démonstration (rien n'est écrit).
+        if (nom is "mot" or "journal" or "complicite") EssaiPresence(nom);
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
@@ -354,6 +356,7 @@ public sealed partial class FenetrePilou
             if (PilouBureau.Boutique.Debloques(_dernierNiveau, n).Count > 0) MontrerRangees(_dernierNiveau, n);
             _nouveautesLu = -1e12;
             Flotter($"NIVEAU {n}", 1.6, new Point(TeteX - 50, TeteY - 70));
+            Vecu(f => f.Nv = Math.Max(f.Nv, n));
             _salueJusque = Maintenant + 2500;
             _tSaut = Maintenant;
         }
@@ -387,6 +390,7 @@ public sealed partial class FenetrePilou
     {
         xp = BonusSoins(xp);
         SoinJeu();
+        Vecu(f => f.Jx++, "jeux");
         _profil.Xp += xp;
         _profil.JeuxGagnes++;
         _profil.Ecrire(DossierPartage);
@@ -421,7 +425,8 @@ public sealed partial class FenetrePilou
         {
             _dortBureau = false;
             _tSaut = t;
-            Dire("bien dormi !", 2500);
+            // Un bonjour l'attend (petit mot du jour, FenetrePresence.cs) : c'est lui qui parlera.
+            if (!MotEnAttente) Dire("bien dormi !", 2500);
         }
         return _dortBureau && expr is Expr.Repos or Expr.Inquiet ? Expr.Dort : expr;
     }

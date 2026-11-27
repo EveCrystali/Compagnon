@@ -40,6 +40,15 @@ public final class Widget extends AppWidgetProvider {
             b.append(lignes.get(i).toString());
         }
         v.setTextViewText(R.id.lignes, b.toString());
+        // Le mot du jour de Pilou (docs/PRESENCE.md), quand il y en a un.
+        String mot = "";
+        try {
+            mot = PresenceTel.motDuJour(c);
+        } catch (RuntimeException ignore) {
+            // le mot est un plus
+        }
+        v.setTextViewText(R.id.mot, mot.isEmpty() ? "" : "« " + mot + " »");
+        v.setViewVisibility(R.id.mot, mot.isEmpty() ? android.view.View.GONE : android.view.View.VISIBLE);
         v.setOnClickPendingIntent(R.id.racine, PendingIntent.getActivity(c, 1,
                 new Intent(c, Principale.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_IMMUTABLE));
         m.updateAppWidget(ids, v);

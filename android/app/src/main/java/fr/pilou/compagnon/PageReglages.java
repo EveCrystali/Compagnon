@@ -135,6 +135,9 @@ final class PageReglages extends Page {
         c.addView(actions, Ui.large());
         corps.addView(c, Ui.large());
 
+        // ---- Pilou et moi (docs/PRESENCE.md) : ses petits mots, le mot du soir, son journal, mon prénom
+        PresenceVue.reglages(a, corps);
+
         // ---- Notifications
         corps.addView(Ui.titreSection(a, "Notifications"));
         c = Ui.carte(a);

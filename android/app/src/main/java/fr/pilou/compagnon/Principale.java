@@ -420,6 +420,10 @@ public final class Principale extends Activity {
             new Thread(() -> {
                 CampagnesTel.synchroniser(app);
                 Retour.programmer(app);
+                // Présence au quotidien : un jour ensemble de plus, le groupe relu, le mot du soir reprogrammé.
+                PresenceTel.vecu(app, null, "");
+                PresenceTel.synchroniser(app);
+                MotDuSoir.programmer(app);
             }, "pilou-retour").start();
 
         });
@@ -438,6 +442,7 @@ public final class Principale extends Activity {
         if (!actif) return;
         if (courant >= 0) pages[courant].rafraichir();
         majBandeau();
+        PresenceTel.seconde(this, 1000); // le temps passé ensemble, l'app ouverte
         h.postDelayed(this::tic, 1000);
     }
 

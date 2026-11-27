@@ -69,6 +69,8 @@ public class CapturesTest {
                 appairer();
                 essayer("metiers", this::metiers);
                 appairer();
+                essayer("presence", this::presence);
+                appairer();
                 appairer();
                 essayer("aventure", this::aventure);
                 appairer();
@@ -167,6 +169,45 @@ public class CapturesTest {
         attendre();
         ecran(a, "metiers");
         contenu(a.page(Principale.COLLECTION), "metiers-long");
+        c.pause().stop().destroy();
+    }
+
+    // Présence au quotidien (docs/PRESENCE.md) : mot du jour en tête de l'Accueil, carte « Pilou et moi » (complicité,
+    // question du prénom, journal feuilletable), section des Réglages. Données de démonstration, rien de personnel.
+    private void presence() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Presence.Etat e = new Presence.Etat();
+        e.moi.id = CampagnesTel.appareil(ctx);
+        e.moi.sorte = "tel";
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        for (int d = 30; d >= 0; d--) e.marquer(Presence.jour(now.minusDays(d)));
+        e.moi.caresses = 120;
+        e.moi.minutes = 900;
+        String[] acts = {"code", "texte", "musique"};
+        for (int d = 6; d >= 0; d--) {
+            Presence.FaitsDuJour f = e.aujourdhui(Presence.jourTexte(now.minusDays(d)));
+            f.mn = 120 + d * 10;
+            f.ac = acts[d % 3];
+            f.am = 90;
+            f.tv = 100;
+            f.ca = d;
+            if (d == 2) {
+                f.px = "une truite argentée";
+                f.pq = 2;
+                f.pc = 1;
+            }
+            if (d == 4) f.nv = 12;
+        }
+        Prefs.de(ctx).edit().putString("presence", e.texte()).commit();
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = c.get();
+        a.aller(Principale.ACCUEIL, false);
+        attendre();
+        ecran(a, "presence-accueil");
+        contenu(a.page(Principale.ACCUEIL), "presence-accueil-long");
+        a.aller(Principale.REGLAGES, false);
+        attendre();
+        contenu(a.page(Principale.REGLAGES), "presence-reglages-long");
         c.pause().stop().destroy();
     }
 

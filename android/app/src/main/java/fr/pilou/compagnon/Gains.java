@@ -120,6 +120,7 @@ public final class Gains {
         }
         p(c).edit().putString("carnetLocal", carnet.toString()).putString("stock", stock.toString()).apply();
         ajouter(c, xp, x.id, null, 0);
+        PresenceTel.prise(c, x);
         return xp;
     }
 
@@ -141,6 +142,7 @@ public final class Gains {
         p(c).edit().putString("stock", stock.toString()).apply();
         int xp = ajuste(c, pl.xp);
         ajouter(c, xp, null, pl.rate ? null : pl.id, 0);
+        PresenceTel.plat(c, pl);
         return xp;
     }
 
@@ -151,6 +153,7 @@ public final class Gains {
             g.put("xp", g.optInt("xp") + xp);
             g.put("jeux", g.optInt("jeux") + 1);
         });
+        PresenceTel.vecu(c, f -> f.jx++, "jeux");
         return xp;
     }
 
@@ -162,6 +165,7 @@ public final class Gains {
             g.put("jeux", g.optInt("jeux") + 1);
             g.put("chasse", Math.max(g.optInt("chasse"), score));
         });
+        PresenceTel.vecu(c, f -> f.jx++, "jeux");
     }
 
     /** Achat demandé à la boutique : le PC vérifie le solde et l'applique (il reste l'arbitre). */
@@ -235,11 +239,14 @@ public final class Gains {
 
     public static void caresse(Context c) {
         ajouter(c, 1, null, null, 1);
+        PresenceTel.vecu(c, f -> f.ca++, "caresses");
     }
 
     /** Un soin fait sur le téléphone (nourrir, laver, calin, soin, vacances) : il part au PC. */
     public static void soin(Context c, String type, String objet) {
         Soins.Action a = new Soins.Action(nouvelId(), type, System.currentTimeMillis(), objet);
+        if (type.equals("soin") || type.equals("nourrir") || type.equals("laver") || type.equals("calin"))
+            PresenceTel.vecu(c, f -> f.so++, "soins");
         modifier(c, g -> {
             JSONArray s = g.optJSONArray("soins");
             if (s == null) g.put("soins", s = new JSONArray());

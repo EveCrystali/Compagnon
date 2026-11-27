@@ -200,6 +200,7 @@ public sealed partial class FenetrePilou
         foreach (var x in Metiers.Monter(niveaux, _niveauxMetiers, _profil.MetiersPayes, cumul.PayesAutres))
         {
             var texte = $"{x.Metier.Nom} : {Metiers.Grades[x.Niveau]}";
+            VecuMetier(x.Metier.Nom, x.Niveau);
             if (x.Discret) Flotter(texte);
             else
             {
