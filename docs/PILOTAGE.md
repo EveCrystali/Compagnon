@@ -90,22 +90,20 @@ Trois lignes de résumé, puis :
 
 ## Chantiers
 
-Tenu par le pilote. Dernière mise à jour : 27 novembre 2026.
+Tenu par le pilote. Dernière mise à jour : 27 novembre 2026, 23 h.
 
 | Chantier | Branche / PR | Périmètre | État |
 |---|---|---|---|
-| Tournage de la promo (capture ddagrab, Défense visible en démo) | `claude/tournage-windows`, PR #80 | `outils/tourner-ecran-gauche.ps1`, `FenetreDefense.cs` | PR ouverte, CI verte |
-| Montage de la promo | `claude/outil-montage`, PR #78 | `outils/video/`, `docs/VIDEO.md` | PR ouverte, CI en cours |
-| Boutons du journal, taille « Petit » | `claude/button-text-font-size-windows-d5242c`, PR #79 | `FenetreJournal.cs`, `FenetreAventure.cs`, `FenetrePilou.cs`, `Placement.cs` | PR ouverte, CI en cours |
-| Animations des campagnes en pixel art | `claude/campaign-animations-pixel-art-66992c` | à préciser | Démarré, rien de commité |
-| Pilotage (ce fichier) | `claude/pilotage` | `docs/PILOTAGE.md`, `CLAUDE.md` | En cours |
+| Animations des campagnes en pixel art | `claude/campaign-animations-pixel-art-66992c` | à préciser par son compte rendu ; présumé `assets/`, `outils/sprites/` | En cours, rien de modifié ni commité à 23 h |
+| Relecture des captures Android | `claude/relecture-captures` | lecture seule ; correction Android seulement pour un défaut évident, hors moteur des campagnes | Lancé par le pilote |
+| Liste de contrôle Windows (`TEST-JEU.md`) | `claude/controle-windows` | `apps/PilouBureau/` hors moteur des campagnes, `docs/TEST-JEU.md` | Lancé par le pilote |
+| Divergence de campagne entre appareils | `claude/divergence-campagne` | moteur des campagnes PC et Android, vecteurs partagés, leurs tests | Lancé par le pilote |
+| Pilotage (ce fichier) | `claude/pilotage`, PR #81 | `docs/PILOTAGE.md`, `CLAUDE.md` | PR ouverte |
 
-Attention : les PR #78 et #79 modifient toutes deux `CLAUDE.md`. La première fusionnée passe, l'autre fusionne `main`
-et garde les deux côtés.
+Fusionnés le 27 novembre : tournage de la promo (#80), montage de la promo (#78), boutons du journal et taille
+« Petit » (#79).
 
-### File d'attente (lancés par le pilote, dans cet ordre)
+### File d'attente
 
-1. Relecture à l'œil des captures Android `captures-ui` de la dernière CI de `main` (priorité 3).
-2. Liste de contrôle Windows de `TEST-JEU.md` sur le PC d'Antoine, session locale (priorité 2).
-3. Divergence de campagne entre appareils : couvrir le cas « rejeu encore en retard » par un vecteur partagé
-   (priorité 4).
+Vide. Prochain candidat : tournage et montage réels de la promo sur le PC d'Antoine (priorité 1), une fois la liste
+de contrôle Windows passée, pour filmer une version vérifiée.
