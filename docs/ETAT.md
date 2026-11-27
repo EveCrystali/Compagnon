@@ -34,7 +34,10 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 ## Ensuite
 
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
-   fictif), puis monter (cartons, caméra qui suit les rectangles de `chronologie.json`).
+   fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir
+   [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage (Pilou 0.9.45, sans pêche, cuisine,
+   Aventure, mot ni complicité) : après le nouveau tournage, regarder la planche et ajuster sous-plages, durées et
+   cadrages des scènes récentes, puis remplacer `docs/promo/`.
 2. **Liste de contrôle manuelle de `TEST-JEU.md`** sur un vrai Windows et un vrai téléphone (fenêtre Aventure à 100, 125
    et 150 %, notification de retour en veille, jeu PC éteint puis allumé, décision au même choix sur deux appareils).
 3. **Ajuster les seuils de complicité** après une semaine d'usage réel (PC et téléphone) : les paliers arrivent-ils trop
