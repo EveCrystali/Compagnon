@@ -76,6 +76,24 @@ SERIE2 = [
 ]
 
 
+# Troisième série : fonds de boutique, prises et plats, défense du bureau, variantes, gestes, bonus, en-cas, soins,
+# objets d'interface. Même mécanique que la seconde (base fine, puis finition.py : lumière commune + détails propres).
+SERIE3 = [
+    "encas-croquettes", "encas-gateau", "encas-pomme", "encas-soupe", "plat-assiette", "plat-bol", "plat-brochette",
+    "plat-friture", "plat-invente", "plat-papillote", "plat-plateau", "plat-poelon", "plat-ramen", "plat-rate",
+    "plat-souffle", "plat-sushi", "plat-tarte", "plat-tartine", "prise-ablette", "prise-algue", "prise-anguille",
+    "prise-baleineau", "prise-botte", "prise-bouteille", "prise-caillou", "prise-carpe", "prise-cle",
+    "prise-coffre", "prise-comete", "prise-crabe", "prise-ecrevisse", "prise-goujon", "prise-hippocampe",
+    "prise-lanterne", "prise-perche", "prise-perle", "prise-pieuvre", "prise-raie", "prise-saumon", "prise-spirale",
+    "prise-truite", "soin-faim", "soin-moral", "soin-proprete", "fond-arcade", "fond-aurore", "fond-automne",
+    "fond-bibliotheque", "fond-cerisiers", "fond-espace", "fond-fetes", "fond-foret", "fond-frissons",
+    "fond-mer-cafe", "fond-montagne", "fond-nuit", "fond-observatoire", "fond-patisserie", "fond-plage",
+    "fond-potager", "fond-ville", "bug-araignee", "bug-prod", "bug-scarabee", "bug-ver", "defense-blinde",
+    "defense-blinde-fele", "defense-bonus-bouclier", "defense-bonus-double", "defense-bonus-ralenti",
+    "defense-diviseur", "defense-etincelle", "defense-mini", "defense-rapide", "defense-tir"
+]
+
+
 def ids_campagnes():
     """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
     import campagnes_sprites
@@ -109,8 +127,10 @@ def ids_visage():
 def generer(dessiner):
     """Rejoue tous les dessins à l'échelle 2 ; seuls ceux de la série sont écrits (assets/sprites2x, index2x.txt)."""
     import retouches_fines  # noqa: F401  (remplit RETOUCHES)
+    import finition
+    finition.inscrire()
     toile.ECHELLE = 2
-    toile.FINS = set(SERIE) | set(SERIE2) | set(ids_visage()) | set(ids_campagnes())
+    toile.FINS = set(SERIE) | set(SERIE2) | set(SERIE3) | set(ids_visage()) | set(ids_campagnes())
     toile.RETOUCHES = RETOUCHES
     try:
         dessiner()

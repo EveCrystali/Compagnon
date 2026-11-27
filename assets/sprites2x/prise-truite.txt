@@ -1,0 +1,35 @@
+# prise de pêche
+id: prise-truite
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7e858e b=#3b4654 c=#374150 d=#333d4d e=#d0d8e1 f=#b8c4d2 g=#97a2b2 h=#cdd6e0 i=#9ea8b8 j=#d6dde5 k=#ffffff l=#e8e8ea m=#1c2128 n=#ecedee o=#8790a1
+images:
+................abbbbbbbbbbccbbbb.................bba.
+............abbbbbbbbbbbbccbcccbbbb..............abbba
+.........abbbbbbdeeeeebbcbccbbbbbbbbbb..........bbbfbb
+.......abbbbdeeeffffffffffbbbbbeeebbbbbb.......bbbffbb
+.....abbbdeeefffffffffffffffffffffeeebbbb.....bbbffabd
+....abbdeefffffffgggggfffffffffffffffeebbbb..bbbffhbb.
+...bbbeefffffffgiijjjjjjjjjjjjjffgfffffebbbbbbdffhfbb.
+..abbefffffffffgieijjiijjiijjiiggiefffffeebbbdffhffbb.
+.abbeffffggfffgiifeibbfiiffiiffiieffffffffebbffhffabd.
+.bbeffffgkkgffgieffebbffffffffffefffffffffffffhfffbb..
+abdefffgkkkkgffiffffiffilfflbbfleffffffffffffhffhhbb..
+bbefffgkkkmmkffifgfffiiffllfbblefffffffffffghfhhffbb..
+bbefffgkkmmmkffibbffffffffffffffffffffffffghhhfffabd..
+bbeffffekmmkeffibbggffffffffffffgggggggffghhfffffbb...
+bbefffffekkeffgiffinniinniinniinninnnnnffhhhhhhhhbb...
+bbffggffffffffgifffiiffiiffiiffiieffffffffhhfffffdba..
+bbggooffffffffgiffffffbbfffffffffffffffffffhhhffffbb..
+dbaoffgggffggggiffffifbblffllfflfffffffggfffhfhhffbb..
+.bbfkkkkkkkkkkkikkkkkkkkkkkkkkkkkkkkkkkkkkkffhffhhbb..
+.dbdkkkkkkkkkkkiikkkkkkkkkkkkkkkkkkkkkkkkkfdbfhfffdda.
+..dbdkkkkkkkkkkkikkkkkkkkkkkkkkkkkkkkkkkkfabdbfhfffbd.
+...dbdfkkkkkkkkkiikkkkkkkkkkkkkkkkkkkkkkadbdbdbfhffdb.
+....dbdbfkkkkkkkkkkkkkkkkkkkkkkkkkkkkkfadbd..bdbfhfbd.
+.....dddddffkkkkkkkkkkkkkkkkkkkkkkkffaddd.....dddfhdda
+.......ddddddfffffkkkkkkkkkkkfffffaddddd.......dddfhdd
+.........ddddddddfffffffffffffaddddddd..........dddfdd
+............ddddddddddddddddddddddd..............ddddd
+................ddddddddddddddd...................ddd.

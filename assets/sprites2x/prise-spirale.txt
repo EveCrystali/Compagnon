@@ -1,0 +1,43 @@
+# prise de pêche
+id: prise-spirale
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#a5adb6 b=#768390 c=#a1a8b4 d=#f6f8fa e=#c9d1d9 f=#626e7d g=#ffffff h=#ffdbbc i=#ffc89a j=#d0a585 k=#ffd8b0
+images:
+..........abbbbcccccccccccccbbbbbb..
+........abbbcdddddeeeeedddddddcbbbb.
+.......abbfdddddddeeeeedddddddddcbbb
+......bbbcdddddddddeeeeedddddddddcbb
+.....bbbcddddddddabbbbbbbadddddddddb
+....abbcdddddddaabbbbbbbbbaadddddddd
+...abbcgdddddaabbf.......abbaadddddd
+...bbcgggdddabbbbbbbbbbbbbbbbbbbdddd
+..abfddgddaabbbbbfbbbbbbbfbbbbbbbddd
+..bbcdddddabbbbffcceedddccffbf.bbadd
+.abfdddddabbbbfcddeeeddddddcfbb.bbad
+.bbcddddabfbbfcdddeeddddddddcfbb.bbd
+abfdddddbb.bbcddddeeeddddddddcbbabbb
+bbcddddabfabfdddddddbbadddddddcbbbfb
+bbcddddbb.bbddddhhiibbbaaddddddcbb..
+bbdddddababfdddhiiiihbbbbaadddddfba.
+bbedddabfbfcddhiiiiiihbbbbbdddddcbb.
+bbeeeebb.bbdddhiijkkiiffbbbadddddbb.
+bbeeeebb.bbdddiiikkkiiieabfbadeeebb.
+bbeeeebb.bbeddjiikkkiiidbb.bbeeeefba
+bbeeeefbabfceeejiiiiiijdfbbbfeeeecbb
+bbeeeedabfbaeeedjiiiijddcabbfeddecbb
+bbcddddbb.bbcdddddiijeddabbbfddddcbb
+bbcddddfbafbaddddddddedcbb.bbddddabf
+fbadddddbb.bbcdddddddedabfabfddddbb.
+.fbcddddfbbbbbacdddddcabf.bbdddddbb.
+.ffadddddffbfbfbacccabff.bffddddcbf.
+..bfcdddddbfb.afbaaabff.bffdddddaff.
+..fbaddddddffbf.abfbf.abffdddddcfb..
+...ffcddddddffbfbfbfbfbffddddddfbf..
+...fffcdddddddfffffffffdddddddfff...
+....fffcdddddddddeeeeddddddddfff....
+.....fffcdddddddddeeeeddddddfff.....
+......ffffcdddddddeeeeddddcfff......
+.......fffffcdddddeeeeddcffff.......
+.........ffffffcceeeccffffff........

@@ -1,0 +1,27 @@
+# prise de pêche
+id: prise-ablette
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7e858e b=#3b4654 c=#768390 d=#6c7886 e=#333d4d f=#c9d1da g=#adbac7 h=#8e9aa9 i=#95a0af j=#cfd7df k=#c6cfd8 l=#ffffff m=#1c2128 n=#d1d7df o=#d5dbe2 p=#7f899a q=#e6ecf2
+images:
+..............abbbbbbbbbcddccbb.............bba.
+..........abbbbbbbbbbbccdccddbbbbb.........abbbb
+.......abbbbbbefgggggccdcddccbbbbbbb.....abbegbb
+......abbbeffffggggggggggcccccfffbbbbb..abbegabb
+....abbeggggggghiijjjjjjjjjggfgggffbbbbbbeggkbb.
+...abbefgggggghiiijjiijjiijjifgggggffbbbegkkgbb.
+..abbffgllllgghiffiiffiiffiifgggggggggbbgkggabe.
+..bbfgghllmmggiifgggggggggggggggggggggggkgggbb..
+.abefgghlmmmggifgggggggggggggghgggggghkkgkkkbb..
+.bbgggghlmmlggifgghihhinhhnnhhnhhhhghkkkkggbbb..
+.bbgggggggggghigggooiioonnoonnooooogkkkkkkkbbb..
+.ebahhhhggggghihgggggggggggggggggggggkkkkgggbb..
+..bbppppgggghhiihhggggggggggggggggghggkkgkkkbb..
+..ebbgqqqqqqqqqiqqqqqqqqqqqqqqqqqqqqqqbbkgggeba.
+...eebeqqqqqqqqiiqqqqqqqqqqqqqqqqqqqqaebekgggbe.
+....bebegqqqqqqqiiqqqqqqqqqqqqqqqqqabebebekkgeb.
+......eeeeeggqqqqqqqqqqqqqqqqqgggaeeee..eeeekeee
+.......eeeeeeeegggggggggggggaeeeeeee.....eeeekee
+..........eeeeeeeeeeeeeeeeeeeeeeee.........eeeee
+..............eeeeeeeeeeeeeee...............eee.
