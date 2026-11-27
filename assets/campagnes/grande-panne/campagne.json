@@ -1,0 +1,52 @@
+{
+  "v": 1,
+  "id": "grande-panne",
+  "titre": "La Grande Panne",
+  "ton": "humour",
+  "accroche": "Ce matin, toutes les horloges du bureau disent 13 h 37. Dix minutes plus tard aussi. Pilou descend dans l'ordinateur chercher le Tic-Tac, flanqué d'un vieux sablier grognon.",
+  "niveau": 3,
+  "duree": "≈ 8 jours",
+  "depart": "ch1-reveil",
+  "chapitres": [
+    { "id": "ch1", "titre": "13 h 37", "fichier": "chapitre-01.json" },
+    { "id": "ch2", "titre": "Prenez un ticket", "fichier": "chapitre-02.json" },
+    { "id": "ch3", "titre": "La Tour du tampon", "fichier": "chapitre-03.json" },
+    { "id": "ch4", "titre": "Plus haut, plus bas", "fichier": "chapitre-04.json" },
+    { "id": "ch5", "titre": "Trente-sept", "fichier": "chapitre-05.json" },
+    { "id": "ch6", "titre": "Ce qui était prévu", "fichier": "chapitre-06.json" },
+    { "id": "ch7", "titre": "La Citadelle du nuage", "fichier": "chapitre-07.json" },
+    { "id": "ch8", "titre": "Le dossier Temp", "fichier": "chapitre-08.json" },
+    { "id": "ch9", "titre": "Une seconde à soi", "fichier": "chapitre-09.json" },
+    { "id": "ch10", "titre": "13 h 38", "fichier": "chapitre-10.json" }
+  ],
+  "variables": { "complicite": 0, "culot": 0, "tampons": 0 },
+  "objets": [
+    { "id": "ticket", "nom": "Ticket n° 1 338" },
+    { "id": "gouter", "nom": "Galette de route" },
+    { "id": "coupe-file", "nom": "Coupe-file*" },
+    { "id": "formulaire", "nom": "Formulaire jaune poussin" },
+    { "id": "sablier-de-poche", "nom": "Sablier de poche (quatre secondes de retard)", "portable": true, "emplacement": "cou" }
+  ],
+  "souvenirs": [
+    { "id": "point-final", "nom": "Le point final", "texte": "Brouillon a un nom, un emplacement, et une phrase qui se termine. Tu l'as enregistré juste avant 13 h 38." },
+    { "id": "registre-corbeille", "nom": "Le registre des visites", "texte": "Brouillon n'est ni sauvé ni effacé : il est rangé dans la Corbeille, avec vue sur le bureau. Tu as signé le registre." },
+    { "id": "page-bleue", "nom": "La page bleue", "texte": "Brouillon est sorti de l'ordinateur sur une feuille, imprimé en bleu Pilou, avec sa demi-phrase pour toujours." },
+    { "id": "panneau-guichet", "nom": "Le panneau du guichet 9", "texte": "« Pilou, stagiaire. Pause déjeuner. Retour à 13 h 38. » Tu as choisi de ne jamais relancer l'heure." },
+    { "id": "demi-tic", "nom": "Le demi-tic", "texte": "Tu as relancé l'horloge avec un Tic-Tac à moitié endormi. Depuis, le goûter de 16 h tombe à 32 h." },
+    { "id": "seconde-en-plus", "nom": "La seconde en plus", "texte": "13 h 37 et 60 secondes : une seconde remboursée, qui n'est sur aucun planning. Brouillon y habite, le Tic-Tac y fait la sieste." }
+  ],
+  "decors": [
+    { "id": "bureau-1337", "nom": "Le bureau, 13 h 37", "description": "Le bas d'un écran d'ordinateur vu de près, au petit matin : une barre des tâches bleu nuit, une grande horloge numérique figée sur 13:37 dont le 7 penche un peu, lumière pâle et froide de début de journée." },
+    { "id": "hall-pas-comptes", "nom": "Le Hall des Pas Comptés", "description": "Un hall de gare immense en pixels beiges et gris, bordé de guichets aux rideaux baissés portant chacun un petit panneau « Retour à 13 h 38 », une file d'attente en serpentin, un afficheur lumineux « 1 337 » et un banc de bois au premier plan." },
+    { "id": "tour-tampon", "nom": "Le pied de la Tour du tampon", "description": "Une tour de pierre grise qui se perd dans la brume, une file d'attente enroulée trois fois autour de sa base, une porte basse gardée par un tabouret trop petit, lumière jaune de néon administratif." },
+    { "id": "etage-guichets", "nom": "Les étages de la Tour", "description": "Un palier d'escalier en colimaçon donnant sur un bureau encombré : casiers de formulaires de toutes les couleurs jusqu'au plafond, guichet vitré, tampons, affiches réglementaires, poussière dorée dans un rai de lumière." },
+    { "id": "bureau-echeance", "nom": "Le bureau de la Planificatrice", "description": "Une pièce haute dont un mur entier est couvert de petites cartes épinglées en rangs serrés, cochées à gauche et vierges à droite, un grand bureau gris avec une réussite en cours, lampe verte, ambiance feutrée de fin d'après-midi qui n'arrive pas." },
+    { "id": "caverne-cables", "nom": "La Caverne des câbles", "description": "Un tunnel sombre envahi de câbles épais comme des troncs, emmêlés du sol au plafond, quelques diodes qui clignotent au loin, une lueur verte de gelée lumineuse à un croisement." },
+    { "id": "marais-majs", "nom": "Le Marais des mises à jour", "description": "Une étendue d'eau grise et de roseaux qui clignotent sous un ciel bas où flotte, à la place du soleil, une immense barre de chargement arrêtée à 37 % ; une barque carrée glisse entre les roseaux, brume froide." },
+    { "id": "file-impression", "nom": "La file d'impression", "description": "Un quai fait de rames de papier où des feuilles jaunies attendent debout en rang, devant une estrade où trône une énorme imprimante beige au voyant orange ; lumière de réserve à fournitures." },
+    { "id": "citadelle-nuage", "nom": "La Citadelle du nuage", "description": "Des remparts blancs posés sur une mer de brume, un donjon avec une gargouille de pierre grise au bord du vide, un escalier dont les dernières marches sont encore à moitié transparentes, et très loin en dessous les lumières de l'ordinateur comme une ville la nuit." },
+    { "id": "dossier-temp", "nom": "Le dossier Temp", "description": "Un grenier grand comme une ville : des piles de dossiers étiquetés « Nouveau dossier (7) » ou « Vraiment final » qui montent jusqu'au ciel, des allées poussiéreuses, des mots raturés sur les murs, lumière grise et provisoire." },
+    { "id": "cabane-brouillon", "nom": "La cabane de papier", "description": "L'intérieur d'une petite cabane faite de brouillons froissés et collés, éclairée par une lampe chaude, avec un hamac en ruban adhésif, une table basse, des cartes à jouer et une fenêtre en papier calque." },
+    { "id": "horloge-systeme", "nom": "L'Horloge système", "description": "Une vaste salle ronde et silencieuse aux murs de roues dentées immobiles, avec au centre un grand balancier doré arrêté, penché d'un côté, un levier à son pied et une trappe ronde au fond ; lumière bleutée qui tombe d'en haut." }
+  ]
+}

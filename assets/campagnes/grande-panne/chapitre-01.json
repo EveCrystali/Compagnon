@@ -1,0 +1,160 @@
+{
+  "chapitre": "ch1",
+  "noeuds": {
+    "ch1-reveil": {
+      "type": "recit",
+      "lieu": "Le bureau",
+      "decor": "bureau-1337",
+      "humeur": "surpris",
+      "checkpoint": true,
+      "texte": [
+        "Coucou, c'est moi. Il se passe un truc bizarre. Je me suis réveillé avec une faim de petit-déjeuner, le jour est encore tout pâle sur ton bureau, et pourtant l'horloge en bas de l'écran dit 13 h 37. Bon. Les horloges se trompent, ça arrive. Moi-même, je confonds souvent mardi et jeudi.",
+        "Sauf que j'ai vérifié les autres. L'horloge du calendrier : 13 h 37. Celle de la météo : 13 h 37. Le minuteur que tu avais lancé pour des pâtes, il y a des semaines, et qui clignotait sur zéro depuis : 13 h 37. Même lui. J'ai attendu dix minutes en me rongeant un pied. Il est toujours 13 h 37. Je n'aime pas ça du tout."
+      ],
+      "suite": "ch1-que-faire"
+    },
+    "ch1-que-faire": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Dis-moi ce que tu ferais, toi. J'hésite entre trois méthodes scientifiques, et j'ai un peu peur des trois. Je précise que mon ventre, lui, est formel : il est l'heure des tartines, pas 13 h 37. C'est la seule horloge de ce bureau en qui j'ai encore confiance."
+      ],
+      "options": [
+        { "id": "ch1-que-faire-tapote", "libelle": "Tapote l'horloge, pour voir", "vers": "ch1-tapote", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch1-que-faire-ecoute", "libelle": "Colle ton oreille dessus", "vers": "ch1-ecoute" },
+        { "id": "ch1-que-faire-minute", "libelle": "Assieds-toi devant et attends une minute", "vers": "ch1-minute" }
+      ]
+    },
+    "ch1-tapote": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai tapoté. Poliment d'abord, puis moins poliment. Le 7 s'est mis un tout petit peu de travers, comme un tableau mal accroché, et c'est tout. J'ai dit pardon au 7. Il est toujours 13 h 37, mais maintenant c'est 13 h 37 penché, et j'ai l'impression que c'est ma faute."
+      ],
+      "suite": "ch1-entree"
+    },
+    "ch1-ecoute": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "J'ai collé mon oreille contre les chiffres. D'habitude, si on écoute bien, il y a un tout petit bruit là-dessous. Tic. Tac. Tic. Tac. Je m'endors souvent dessus. Là, j'ai écouté longtemps. Tu connais le silence d'un frigo qui s'arrête d'un coup, et on se rend compte qu'il ronronnait depuis toujours ? Pareil. Mais en plus grand."
+      ],
+      "suite": "ch1-entree"
+    },
+    "ch1-minute": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "D'accord. Je m'assois devant l'horloge et je ne la quitte pas des yeux pendant une minute entière. Si elle passe à 13 h 38, je me serai inquiété pour rien et on n'en parlera plus jamais. Petit problème : sans horloge, je ne sais pas quand une minute est finie. Je vais compter large. Ne bouge pas."
+      ],
+      "duree_min": 5,
+      "pendant": "Pilou fixe l'horloge sans cligner des yeux",
+      "tenue": "attend",
+      "suite": "ch1-entree"
+    },
+    "ch1-entree": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Verdict : pas un tic, pas un tac, et toujours 13 h 37. J'ai compris d'un coup, et j'ai eu froid. Ce n'est pas l'horloge qui est cassée : c'est le Tic-Tac qui n'est plus dedans. Et sans Tic-Tac, il ne sera jamais 13 h 38. Ni 16 h. Tu te rends compte ? Le goûter est à 16 h.",
+        "Alors j'ai fait mon baluchon. Mon épée en bois, parce qu'on ne sait jamais. Une galette de route, parce qu'on sait toujours. Je descends dans l'ordinateur chercher le Tic-Tac. J'ai trouvé deux entrées, et aucune ne me rassure : une petite trappe sous les chiffres, marquée « Réglages », ou l'espace entre le 3 et le 7, pile de ma largeur. Par où je passe ?"
+      ],
+      "effets": [ { "objet": "gouter", "donne": true } ],
+      "options": [
+        { "id": "ch1-entree-trappe", "libelle": "Par la trappe des Réglages", "vers": "ch1-descente" },
+        { "id": "ch1-entree-chiffres", "libelle": "Entre le 3 et le 7, en rentrant le ventre", "vers": "ch1-descente", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch1-descente": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "J'y suis, j'y vais. Derrière, c'est sombre, ça sent la poussière tiède, et il y a une échelle qui descend beaucoup plus bas que ce qu'un écran devrait contenir. Je compte les barreaux pour me donner du courage. Si tu n'as pas de nouvelles pendant un moment, c'est normal : j'ai les deux mains prises, et un peu le vertige. À tout à l'heure. Enfin, à tout à 13 h 37."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou descend à l'intérieur de l'horloge",
+      "tenue": "grimpe",
+      "suite": "ch1-borne"
+    },
+    "ch1-borne": {
+      "type": "epreuve",
+      "lieu": "Hall des Pas Comptés",
+      "decor": "hall-pas-comptes",
+      "humeur": "surpris",
+      "texte": [
+        "Je suis en bas. C'est immense. Un hall grand comme une gare, avec des guichets tout le long, et devant chaque guichet le même petit panneau : « Pause déjeuner. Retour à 13 h 38. » Une file d'attente fait des virages jusqu'au fond. Personne ne bouge. Tout le monde regarde un afficheur géant : « Numéro appelé : 1 337 ».",
+        "À l'entrée, une borne clignote : « Prenez un ticket. » J'ai appuyé. Elle a fait un bruit de grille-pain contrarié, et maintenant elle crache des tickets dans tous les sens. Un seul a un numéro dessus, et il vole droit vers une grille d'aération. Aide-moi à l'attraper, vite !"
+      ],
+      "jeu": "reflexe",
+      "difficulte": 1,
+      "reussite": "ch1-ticket-attrape",
+      "echec": "ch1-ticket-tombe"
+    },
+    "ch1-ticket-attrape": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Je l'ai eu ! En plein vol, du bout du pied, comme un vrai. Numéro 1 338. Tu as vu l'afficheur ? Il appelle le 1 337. Je suis le prochain ! Je l'ai dit tout haut, très content, et dans la file personne n'a ri. Une voix sèche, derrière moi, a seulement lâché : « Félicitations. Tu vas l'être longtemps. »"
+      ],
+      "effets": [ { "objet": "ticket", "donne": true }, { "var": "culot", "plus": 1 } ],
+      "suite": "ch1-reponse"
+    },
+    "ch1-ticket-tombe": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Raté. Le ticket a glissé entre deux barreaux de la grille. J'étais à plat ventre, le bras dedans jusqu'à l'épaule, quand quelqu'un a soupiré très fort au-dessus de moi. Il a repêché mon ticket d'un coup sec, sans se lever de son banc. « Numéro 1 338. Tu es le prochain. » J'ai dit merci. Une voix sèche a répondu : « Ne te réjouis pas. Tu vas l'être longtemps. »"
+      ],
+      "effets": [ { "objet": "ticket", "donne": true } ],
+      "suite": "ch1-reponse"
+    },
+    "ch1-reponse": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Je te présente la voix : un sablier. Un vieux, en bois verni, avec un grain de sable resté collé dans le col, comme une miette au coin de la bouche. Il s'appelle Grumeau. Sablier d'attente, matricule 0003, en préretraite. Avant, c'est lui qui apparaissait à l'écran quand il fallait patienter. On l'a remplacé par un rond qui tourne. Il dit « le Rond » comme on dit « la grippe ».",
+        "Il a le ticket 1 337. Le numéro appelé, c'est lui ! Sauf que son guichet a fermé pile quand il arrivait : « Retour à 13 h 38. » Il attend depuis ce matin d'être reçu à la minute d'après. Il me regarde de haut en bas, ce qui est vite fait. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch1-reponse-poli", "libelle": "« Vous attendez depuis longtemps ? »", "vers": "ch1-rep-poli", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch1-reponse-gaffe", "libelle": "« C'est quoi, ce grain collé, là ? »", "vers": "ch1-rep-gaffe", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch1-reponse-direct", "libelle": "« Vous savez où est passé le Tic-Tac ? »", "vers": "ch1-rep-direct" }
+      ]
+    },
+    "ch1-rep-poli": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "« Longtemps ? » Il a ricané. « Petit, j'ai compté. Je me suis retourné quatorze fois depuis 13 h 37. Quatorze retournements. Personne d'autre ne sait ça, dans ce hall. » Il a eu l'air content que quelqu'un demande. Presque. Chez lui, ça se voit au sable, qui coule un peu plus rond. Puis il a précisé qu'il ne comptait pas pour moi, et qu'il n'était le minuteur de personne."
+      ],
+      "suite": "ch1-en-route"
+    },
+    "ch1-rep-gaffe": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai montré le grain collé. Il y a eu un silence. « Ça, a dit Grumeau, c'est un grumeau. Il est là depuis trente ans. Il me donne quatre secondes de retard, et je t'interdis d'en reparler. » Puis, plus bas : « Quatre secondes. On ne met pas quelqu'un à la retraite pour quatre secondes. » Je crois que j'ai mis le doigt sur quelque chose. Enfin, le pied."
+      ],
+      "suite": "ch1-en-route"
+    },
+    "ch1-rep-direct": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "« Le Tic-Tac ? J'étais aux premières loges. 13 h 37 pile : un tic. Et puis pas de tac. Tu sais ce que ça fait, à mon âge, d'attendre un tac qui ne vient pas ? On reste penché. » Il s'est redressé, vexé d'en avoir trop dit. « Et non, je ne sais pas où il est. Sinon je ne serais pas assis sur un banc à causer avec un pâté d'encre. » Le pâté d'encre, c'est moi."
+      ],
+      "suite": "ch1-en-route"
+    },
+    "ch1-en-route": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "Grumeau m'a expliqué, en râlant, mais il a expliqué. Le temps passe encore : la preuve, lui se vide. Seulement, sans Tic-Tac, plus personne ne le compte. Donc officiellement il est 13 h 37 pour tout le monde, donc la pause déjeuner n'est pas finie, donc les guichets restent fermés. Et la cantine rouvre à 13 h 38. Toute la file a faim. J'ai poussé ma galette au fond du baluchon.",
+        "Je lui ai dit que je descendais chercher le Tic-Tac. Il a répondu : « Je ne t'accompagne pas. Je vais dans la même direction, et tu marches à côté. Nuance. Si l'heure repart, mon guichet rouvre. C'est tout. » Puis il a sauté du banc avec un bruit de maracas. On est deux. Enfin : un, et quelqu'un qui va dans la même direction."
+      ],
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch2-hall"
+    }
+  }
+}

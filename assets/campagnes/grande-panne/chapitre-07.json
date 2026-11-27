@@ -1,0 +1,169 @@
+{
+  "chapitre": "ch7",
+  "noeuds": {
+    "ch7-pied": {
+      "type": "choix",
+      "lieu": "Au pied du donjon",
+      "decor": "citadelle-nuage",
+      "humeur": "surpris",
+      "checkpoint": true,
+      "texte": [
+        "On est au-dessus de tout. La Citadelle du nuage : des remparts blancs posés sur de la brume, et en dessous, très loin, les lumières de l'ordinateur comme une ville la nuit. Il fait frais. Tout ici arrive avec un petit retard : j'ai vu mon ombre me rejoindre deux secondes après moi. Grumeau trouve que c'est « enfin un endroit civilisé ». Quatre secondes de retard, ici, c'est de l'avance.",
+        "La gargouille est tout en haut du donjon. Pour y monter, il y a un escalier dont les marches se chargent une par une, quand elles veulent. Ou alors un petit nuage, à l'entrée, avec une pancarte : « Synchronisation. Soyez là-haut sans bouger. » Je me méfie des deux. Toi, tu prendrais quoi ?"
+      ],
+      "options": [
+        { "id": "ch7-pied-marches", "libelle": "Monte à pied, marche après marche", "vers": "ch7-montee" },
+        { "id": "ch7-pied-nuage", "libelle": "Essaie la synchronisation", "vers": "ch7-sync", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch7-montee": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "À pied. Je pose le pied dans le vide, j'attends, et la marche arrive dessous. Presque toujours à temps. Grumeau, dans mon baluchon, annonce chaque marche avant qu'elle existe, pour se rendre utile, et il se trompe une fois sur trois. Il ne faut surtout pas courir : une marche pas finie, c'est du brouillard avec des bords. Il y en a beaucoup. Je monte, j'attends, je monte. Je t'écris du sommet."
+      ],
+      "duree_min": 20,
+      "duree_max": 30,
+      "pendant": "Pilou attend que chaque marche se charge",
+      "tenue": "grimpe",
+      "suite": "ch7-gargouille"
+    },
+    "ch7-sync": {
+      "type": "attente",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai posé le pied sur le petit nuage. Il a fait « bloup ». Et maintenant, là-haut, sur le donjon, il y a un deuxième moi qui me fait coucou. Même baluchon, même épée. Il s'appelle « Pilou (1) », c'est écrit au-dessus de sa tête. Le nuage dit que le reste de moi arrive, et qu'il ne faut surtout pas fermer la fenêtre. Grumeau regarde les deux Pilou et déclare qu'un seul suffisait largement. J'attends d'être entier là-haut."
+      ],
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou se synchronise : 1 Pilou sur 2",
+      "tenue": "attend",
+      "suite": "ch7-gargouille"
+    },
+    "ch7-gargouille": {
+      "type": "choix",
+      "lieu": "Le donjon",
+      "humeur": "malice",
+      "texte": [
+        "Je suis en haut, entier, en un seul exemplaire. La gargouille de latence est assise au bord du vide, en pierre grise, immobile. En arrivant, Grumeau a grogné : « Il fait toujours aussi froid, ici ? » Elle n'a rien dit. Alors j'ai demandé : « Où se cache le Sans-Titre ? » Elle a répondu : « Seulement depuis ce matin. » On a mis un moment à comprendre. Elle répond toujours à la question d'avant.",
+        "Donc ma question est partie, et sa réponse viendra avec la suivante. Grumeau dit qu'on n'aura droit qu'à une vraie question de plus : elle se rendort entre deux, et ça prend des heures. Après, lui posera une question pour rien, pour faire sortir la dernière réponse. Il m'en reste une seule. Laquelle ?"
+      ],
+      "options": [
+        { "id": "ch7-gargouille-heure", "libelle": "« Quelle heure est-il, exactement ? »", "vers": "ch7-rep-heure", "effets": [ { "drapeau": "sait-seconde" } ] },
+        { "id": "ch7-gargouille-danger", "libelle": "« Le Sans-Titre, il est dangereux ? »", "vers": "ch7-rep-peur", "effets": [ { "drapeau": "sait-peur" } ] },
+        { "id": "ch7-gargouille-chemin", "libelle": "« Y a-t-il un chemin sûr dans le dossier Temp ? »", "vers": "ch7-rep-chemin", "effets": [ { "drapeau": "sait-chemin" } ] }
+      ]
+    },
+    "ch7-rep-heure": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai demandé l'heure exacte. Elle a répondu à la question d'avant : « Au fond du dossier Temp. Derrière les ratures. Une cabane en vieux papier. » Puis Grumeau a demandé : « Et vous, ça va ? », et ma réponse est sortie : « 13 h 37 et 59 secondes. Depuis ce matin. La suivante, ce sera 13 h 38. Ou alors 60. Parfois, d'ici, on glisse une seconde en plus. Elle n'est sur aucun planning. Elle n'est à personne. » Une seconde à personne. Je note ça quelque part."
+      ],
+      "suite": "ch7-grumeau"
+    },
+    "ch7-rep-peur": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai demandé s'il était dangereux. Elle a répondu à la question d'avant : « Au fond du dossier Temp. Derrière les ratures. Une cabane en vieux papier. » Puis Grumeau a demandé : « Et vous, ça va ? », et ma réponse est sortie : « Dangereux ? Il a peur. Les brouillons ont toujours peur. Si tu veux qu'il t'ouvre, ne lui dis pas ce que tu veux. Dis-lui que tu ne lui veux rien. » Je me sens moins seul à trembler, d'un coup."
+      ],
+      "suite": "ch7-grumeau"
+    },
+    "ch7-rep-chemin": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai demandé un chemin sûr. Elle a répondu à la question d'avant : « Au fond du dossier Temp. Derrière les ratures. Une cabane en vieux papier. » Puis Grumeau a demandé : « Et vous, ça va ? », et ma réponse est sortie : « Dans Temp, méfie-toi de ce qui porte un joli nom. Suis les dossiers que personne n'a rangés : À trier, puis Divers, puis Divers 2. Les pièges, eux, sont toujours bien étiquetés. » J'ai tout répété à Grumeau. Il avait déjà retenu."
+      ],
+      "suite": "ch7-grumeau"
+    },
+    "ch7-grumeau": {
+      "type": "choix",
+      "lieu": "Au bord du donjon",
+      "humeur": "tendre",
+      "texte": [
+        "On a attendu sa dernière réponse, celle à « ça va ? », par politesse. Elle ne venait pas. Alors Grumeau est allé jusqu'au bord du donjon. D'ici, on voit le Hall, tout en bas, minuscule, avec la file comme un fil. Il a cherché son banc des yeux. Il a dit, sans se retourner : « Trente ans que je les fais patienter. Tu crois qu'ils se souviennent de moi, en bas ? »",
+        "Il a posé la question au vide, mais c'est moi qui suis à côté. Et il n'y a pas de gargouille pour répondre à ma place, avec une question de retard. Il attend, lui qui déteste attendre quand ce n'est pas lui qui compte. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch7-grumeau-moi", "libelle": "« Moi, en tout cas, je me souviendrai de toi. »", "vers": "ch7-vue", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch7-grumeau-rond", "libelle": "« Le Rond, lui, pense à toi tous les jours. »", "vers": "ch7-vue", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch7-vue": {
+      "type": "choix",
+      "lieu": "Au bord du donjon",
+      "decor": "citadelle-nuage",
+      "humeur": "peur",
+      "checkpoint": true,
+      "texte": [
+        "Il n'a rien répondu. Avec lui, c'est bon signe ou mauvais signe, ça fait le même bruit. Maintenant, il faut traverser le vide jusqu'à la grande rampe, celle qui descend vers le dossier Temp : on le voit d'ici, une tache sombre qui change de forme. Il y a trois façons. Un pont de lumière, tout droit, rapide, mais il n'a pas fini de charger : il lui manque des morceaux, et ils arrivent quand ils veulent.",
+        "La passerelle de secours : sûre, étroite, en pente, sans rampe. Grumeau la sent très mal. Ou alors la gargouille. Elle a tourné la tête et répondu à une question que personne n'a posée : « Je vous porte de l'autre côté. Contre quelque chose qui attend. Je collectionne les attentes. » Je choisis quoi ?"
+      ],
+      "options": [
+        { "id": "ch7-vue-pont", "libelle": "Le pont de lumière, en sautant les trous", "vers": "ch7-pont" },
+        { "id": "ch7-vue-passerelle", "libelle": "La passerelle de secours, Grumeau dans les bras", "vers": "ch7-passerelle", "effets": [ { "var": "complicite", "plus": -1 } ] },
+        { "id": "ch7-vue-ticket", "libelle": "Donne ton ticket n° 1 338 à la gargouille", "vers": "ch7-vol", "si": { "objet": "ticket" }, "effets": [ { "objet": "ticket", "donne": false } ] }
+      ]
+    },
+    "ch7-pont": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "texte": [
+        "Le pont. Je suis dessus. C'est de la lumière un peu molle, et devant moi il y a des trous qui se bouchent et d'autres qui s'ouvrent, sans prévenir. Grumeau est dans mon baluchon. Il dit qu'il ne veut pas voir, et il commente quand même. Il faut sauter au bon moment : quand le morceau arrive, pas avant. Aide-moi à choisir l'instant. Et ne regarde pas en bas. Moi, j'ai regardé."
+      ],
+      "jeu": "reflexe",
+      "difficulte": 2,
+      "bonus": "culot",
+      "reussite": "ch7-pont-ok",
+      "echec": "ch7-echec-pont"
+    },
+    "ch7-pont-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Passé ! Le dernier morceau est arrivé sous mon pied au moment où je commençais à tomber. De l'autre côté, je me suis assis par terre, tout mou, comme une tache. Grumeau a sorti la tête du baluchon. « C'est fini ? J'ai tout suivi au bruit. Tu as crié onze fois. » Sept. J'ai crié sept fois. La grande rampe est devant nous, large, solide, avec des bords. Je l'adore déjà."
+      ],
+      "effets": [ { "var": "culot", "plus": 1 } ],
+      "suite": "ch7-descente"
+    },
+    "ch7-echec-pont": {
+      "type": "echec",
+      "humeur": "peur",
+      "texte": [
+        "J'ai sauté trop tôt. Le morceau n'était pas là. Je suis tombé dans le brouillard, longtemps, mollement, comme dans du coton mouillé, et un filet m'a rattrapé : « Fichiers tombés du nuage ». On y est nombreux. Une photo de vacances m'a expliqué qu'on nous remonte tous les soirs, sauf qu'il n'y a plus de soir. Grumeau a secoué son sable jusqu'à ce qu'on nous repêche à la main. Je me repose là-haut, au bord. Et je choisirai mieux."
+      ],
+      "repos_min": 30
+    },
+    "ch7-vol": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai tendu mon ticket. La gargouille l'a pris entre deux griffes, délicatement, et l'a rangé sous son aile avec des centaines d'autres : des tickets, des « je reviens tout de suite », des « on se rappelle ». « Une belle attente. Presque neuve. » Puis elle nous a portés de l'autre côté d'un seul battement d'ailes. Je ne suis plus le prochain de rien. Ça fait un vide que je n'attendais pas. Grumeau n'a pas dit un mot. Il a seulement touché son propre ticket."
+      ],
+      "suite": "ch7-descente"
+    },
+    "ch7-passerelle": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "La passerelle de secours. J'ai porté Grumeau pendant douze pas. Au treizième, il m'a glissé des bras, et il a fait tout le reste tout seul, en roulant, comme une bille dans une gouttière, en criant son matricule. Il est arrivé de l'autre côté bien avant moi, la tête en bas. Il n'est pas cassé. Il est vexé, ce qui chez lui dure plus longtemps. Depuis, il ne me parle plus. Il me fait des « mmh »."
+      ],
+      "suite": "ch7-descente"
+    },
+    "ch7-descente": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "La grande rampe descend en tournant autour de rien, pendant des heures. Des vraies : Grumeau les a pesées d'un coup d'œil. Tout en bas, on voit déjà la porte du dossier Temp. Et devant la porte, il y a quelqu'un. Grand, maigre, immobile. Il tient un balai levé au-dessus de sa tête, arrêté en plein geste, comme s'il attendait un signal pour l'abattre. Grumeau ne grommelle plus du tout. Ça m'inquiète plus que le balai. On descend quand même. Je te dirai qui c'est."
+      ],
+      "duree_min": 100,
+      "duree_max": 160,
+      "pendant": "Pilou descend la grande rampe vers le dossier Temp",
+      "tenue": "marche",
+      "recompense": { "po": 30, "xp": 15 },
+      "suite": "ch8-porte"
+    }
+  }
+}

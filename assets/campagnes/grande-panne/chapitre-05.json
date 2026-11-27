@@ -1,0 +1,237 @@
+{
+  "chapitre": "ch5",
+  "noeuds": {
+    "ch5-entree": {
+      "type": "hasard",
+      "humeur": "fatigue",
+      "checkpoint": true,
+      "texte": [
+        "Petit bilan avant la suite. Il est 13 h 37. J'ai faim. Grumeau affirme qu'on a fait soixante retournements depuis ce matin, et qu'il ne les a pas comptés pour moi mais « par principe ». On n'a toujours pas vu le Tic-Tac, ni celui qui l'a emmené. Et devant nous, en très grand, il y a un nombre que je commence à bien connaître : trente-sept. Je t'explique."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch5a-exceptions", "si": { "drapeau": "route-guichets" } },
+        { "poids": 1, "vers": "ch5b-marais", "si": { "non": { "drapeau": "route-guichets" } } }
+      ]
+    },
+    "ch5a-exceptions": {
+      "type": "choix",
+      "lieu": "Étage 37",
+      "decor": "etage-guichets",
+      "humeur": "neutre",
+      "texte": [
+        "Étage 37. Le nombre est peint sur le mur, haut comme trois Pilou. Il y a deux guichets. Le premier : « Service des Exceptions. Ouvert uniquement en cas d'exception. » Et dessous, à la craie : « Une exception est un cas que le planning n'a pas prévu. » Derrière la vitre, un employé maigre comme une marge me demande, plein d'espoir : « Votre cas était-il prévu ? »",
+        "Grumeau me cogne le pied : « Attention. C'est une question à tampon. Une seule réponse, pas de rattrapage. » L'employé a déjà levé son tampon. Il n'attend que ça, il s'ennuie depuis des années, et il me fixe comme un chien fixe une balle. Qu'est-ce que je réponds ?"
+      ],
+      "options": [
+        { "id": "ch5a-exceptions-regle", "libelle": "« Oui, tout est en règle, c'était prévu. »", "vers": "ch5a-exc-non" },
+        { "id": "ch5a-exceptions-rien", "libelle": "« Non : plus rien n'est prévu, le planning est arrêté. »", "vers": "ch5a-exc-ok" },
+        { "id": "ch5a-exceptions-urgent", "libelle": "« C'est urgent ! »", "vers": "ch5a-exc-non" }
+      ]
+    },
+    "ch5a-exc-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "« Plus rien n'est prévu ? » Il a répété la phrase lentement, comme on goûte un plat. « Mais alors… tout est une exception. Tout ! » Il s'est mis à tamponner : mon formulaire, puis son bureau, puis sa propre main. Trente ans qu'il attendait un cas. Un tampon de plus sur le jaune poussin ! Grumeau a essuyé une tache sur son verre et a jugé que le raisonnement se tenait, « pour un raisonnement de pâté »."
+      ],
+      "effets": [ { "var": "tampons", "plus": 1 } ],
+      "suite": "ch5a-couloir"
+    },
+    "ch5a-exc-non": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Son tampon est resté en l'air, puis il est redescendu tout doucement, sans rien toucher. « Alors ce n'est pas une exception. Ce qui est prévu, ou urgent, c'est le guichet 12. Au rez-de-chaussée. » Il a baissé son rideau avec un regard de chien qu'on ne promène pas. Pas de tampon ici. Grumeau n'a rien dit. Il a juste relu à voix haute la phrase à la craie, très lentement. J'ai compris. Trop tard, mais j'ai compris."
+      ],
+      "suite": "ch5a-couloir"
+    },
+    "ch5a-couloir": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "texte": [
+        "Le deuxième guichet de l'étage est au bout d'un couloir. Un long couloir. Avec, d'après la plaque, trente-sept portes, toutes fermées, toutes avec leur petit panneau « Retour à 13 h 38 ». Grumeau veut qu'on les compte, pour vérifier la plaque. Je lui ai dit qu'on pouvait faire confiance à la plaque. Il m'a demandé depuis quand on faisait confiance à quoi que ce soit, ici. On compte. À tout de suite."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou compte les portes du couloir",
+      "tenue": "marche",
+      "suite": "ch5a-priorites"
+    },
+    "ch5a-priorites": {
+      "type": "choix",
+      "lieu": "Service des Priorités",
+      "humeur": "surpris",
+      "texte": [
+        "Trente-six portes. Grumeau exulte, il veut déposer une réclamation contre la plaque. Au bout : le « Service des Priorités ». Pas de file du tout, parce que personne n'est prioritaire. Au guichet, une grande roue de loterie pleine de boules numérotées, et un employé rond qui la caresse. « Ici, la priorité se tire au sort. C'est plus juste. Vous tentez votre chance ? Les gagnants ont un tampon. »",
+        "Les perdants, eux, sont classés « priorité basse » et on les rappelle plus tard, c'est-à-dire tu sais quand. Grumeau trouve le procédé scandaleux et meurt d'envie d'essayer. Moi, je n'ai jamais rien gagné de ma vie, à part un rhume. Alors, on joue ?"
+      ],
+      "options": [
+        { "id": "ch5a-priorites-carton", "libelle": "Présente le coupe-file de Mlle Renvoi", "vers": "ch5a-prio-coupe", "si": { "objet": "coupe-file" } },
+        { "id": "ch5a-priorites-roue", "libelle": "Fais tourner la roue", "vers": "ch5a-loterie" },
+        { "id": "ch5a-priorites-passe", "libelle": "Passe ton tour : tant pis pour ce tampon", "vers": "ch5a-dernier" }
+      ]
+    },
+    "ch5a-prio-coupe": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai sorti le coupe-file. L'employé a lu l'astérisque : « Non valable dans les files d'attente. » Il a regardé à gauche. À droite. Pas de file. Pas l'ombre d'une file. « C'est donc valable ici. C'est même le seul endroit de la maison où ça l'est. » Il a tamponné, ému : en trente ans, personne n'avait trouvé le guichet de ce carton. Grumeau jure qu'il le savait. Il ne le savait pas."
+      ],
+      "effets": [ { "var": "tampons", "plus": 1 } ],
+      "suite": "ch5a-dernier"
+    },
+    "ch5a-loterie": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "J'ai dit oui. L'employé a lancé la roue, qui grince comme une porte de grenier. Les boules sautent dans tous les sens. Il y en a une bleue, la mienne, qu'il a ajoutée en soufflant dessus « pour la chance ». Grumeau a mis tout son sable en haut pour ne pas voir. Il faut que la bleue sorte. Je ne peux rien faire d'autre que regarder. Croise les doigts pour moi, tu en as plus que moi."
+      ],
+      "jeu": "des",
+      "difficulte": 2,
+      "bonus": "culot",
+      "reussite": "ch5a-prio-ok",
+      "echec": "ch5a-prio-perdu"
+    },
+    "ch5a-prio-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "La bleue ! Elle a roulé le long de la rigole et elle est tombée dans la coupelle avec un petit bruit de bille. « Priorité haute », a annoncé l'employé, presque jaloux. TCHAC. Un tampon de plus sur le jaune poussin. Grumeau a rouvert les yeux et a déclaré que le hasard, quand il tombe bien, s'appelle de la compétence. Je le laisse dire. J'ai gagné à une loterie. C'est la première fois de ma vie."
+      ],
+      "effets": [ { "var": "tampons", "plus": 1 } ],
+      "suite": "ch5a-dernier"
+    },
+    "ch5a-prio-perdu": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "La bleue est restée au fond. C'est une grise qui est sortie, numéro 12. « Priorité basse, a dit l'employé. On vous rappellera. » J'ai demandé quand. Il a eu la délicatesse de ne pas répondre. Pas de tampon ici. Grumeau a marmonné que la roue penchait à gauche, qu'il avait l'œil pour les choses qui penchent, et qu'on ne confie pas des priorités à un saladier. Ça m'a un peu consolé."
+      ],
+      "suite": "ch5a-dernier"
+    },
+    "ch5a-dernier": {
+      "type": "choix",
+      "lieu": "Devant la dernière porte",
+      "humeur": "tendre",
+      "texte": [
+        "Il reste une porte, au bout de l'étage, la seule sans panneau. D'après le plan, derrière, c'est l'antichambre de la Planificatrice. Devant, une file. Courte : nous. Et le haut-parleur : « Votre attente est estimée à : 13 h 38. » On s'est assis par terre, dos au mur. Grumeau se retourne, se retourne encore. Il compte pour nous deux.",
+        "Au bout d'un moment, sans me regarder, il a demandé : « Et toi, petit ? Pourquoi tu y tiens tant, à ce que l'heure reparte ? Tu n'as pas de guichet, toi. » C'est une vraie question. Je crois que c'est la première qu'il me pose. Je lui réponds quoi ?"
+      ],
+      "options": [
+        { "id": "ch5a-dernier-gouter", "libelle": "« Pour le goûter de 16 h, évidemment. »", "vers": "ch5a-file", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch5a-dernier-dehors", "libelle": "« Parce que quelqu'un m'attend, dehors. »", "vers": "ch5a-file", "effets": [ { "var": "complicite", "plus": 1 } ] }
+      ]
+    },
+    "ch5a-file": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Il a écouté ma réponse et il a fait « mmh », un « mmh » long, qui voulait dire qu'il la gardait. Et là, la porte s'est entrouverte. Une fente. Une voix de femme, basse, pressée : « C'est vous qui posez des questions sur le Sans-Titre ? Ne bougez pas. Ne prononcez plus ce nom dans le couloir. » Et la porte s'est refermée. Depuis, plus rien. On attend. Je ne bouge pas. J'ai l'impression que même les trente-six portes écoutent."
+      ],
+      "duree_min": 90,
+      "duree_max": 150,
+      "pendant": "Pilou attend sans bouger devant la dernière porte",
+      "tenue": "attend",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch6-entree"
+    },
+    "ch5b-marais": {
+      "type": "choix",
+      "lieu": "Marais des mises à jour",
+      "decor": "marais-majs",
+      "humeur": "surpris",
+      "texte": [
+        "Le Marais des mises à jour. De l'eau grise jusqu'à l'horizon, des roseaux qui clignotent, et dans le ciel, à la place du soleil, une barre de chargement immense. Arrêtée. Dessous, en lettres hautes comme trois Pilou : « 37 % ». Grumeau dit qu'elle est à 37 % depuis toujours, et que c'est même pour ça qu'on a construit le reste de l'ordinateur ailleurs.",
+        "Sur la rive, un panneau rouillé : « NE PAS ÉTEINDRE PENDANT LA MISE À JOUR. » Et juste à côté, un gros levier : « Redémarrer maintenant ». Il brille, il est à ma hauteur, il n'attend que moi. Grumeau : « Touche à ça et on recommence tout. Depuis le début. » Au loin, une barque approche, sans se presser. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch5b-marais-levier", "libelle": "Tire le levier : ça débloquera peut-être tout", "vers": "ch5b-echec-levier" },
+        { "id": "ch5b-marais-signes", "libelle": "Fais de grands signes à la barque", "vers": "ch5b-approche", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch5b-marais-assis", "libelle": "Assieds-toi sur la rive et attends-la", "vers": "ch5b-approche", "effets": [ { "var": "complicite", "plus": 1 } ] }
+      ]
+    },
+    "ch5b-echec-levier": {
+      "type": "echec",
+      "humeur": "peur",
+      "texte": [
+        "J'ai tiré le levier. Il y a eu un grand silence, puis une voix dans le ciel : « Redémarrage. » La barre est repartie de zéro. Le Marais s'est vidé comme une baignoire, moi avec, et je me suis retrouvé tout au bord, à l'envers, trempé, pendant que là-haut ça remontait tout doucement vers 37 %. Grumeau est plein de buée et ne me parle plus. Il avait prévenu. Le panneau aussi. Je sèche, et je reviens."
+      ],
+      "repos_min": 30
+    },
+    "ch5b-approche": {
+      "type": "attente",
+      "humeur": "neutre",
+      "texte": [
+        "La barque nous a vus. Elle vient. Lentement. Très lentement. À bord, trois silhouettes carrées : je reconnais le chapeau d'Alt. Grumeau dit que ce sont les Raccourcis, des passeurs, qu'ils connaissent tous les chemins qui ne sont sur aucun plan, et qu'il faudra surveiller nos poches. Je n'ai pas de poches, j'ai un baluchon. Je le serre. Je t'écris quand ils accostent. D'ici là, je regarde la barre. Elle ne bouge pas. Moi non plus."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou attend la barque au bord du Marais",
+      "tenue": "attend",
+      "suite": "ch5b-raccourcis"
+    },
+    "ch5b-raccourcis": {
+      "type": "choix",
+      "humeur": "malice",
+      "texte": [
+        "Ils ont accosté. Trois touches de clavier dans une barque qui s'appelle « Échap », enfin c'est ce que prétend Alt : la coque est toute nue. Il y a Ctrl, la plus large, qui commande : elle parle peu et tout le monde obéit. Alt, qu'on connaît : « Ou alors… » Et une toute petite, assise à l'avant, les pieds dans le vide : Suppr. Les roseaux s'écartent quand elle les regarde.",
+        "Ctrl a dit : « La traversée se paie. Qu'est-ce que tu as ? » J'ai une épée en bois, un sablier grognon, et moi-même. Alt suggère qu'on pourrait payer autrement, « ou alors pas du tout », et Ctrl lui a dit de se taire. Je propose quoi ?"
+      ],
+      "options": [
+        { "id": "ch5b-raccourcis-peint", "libelle": "Peins le nom de la barque sur la coque, en bleu", "vers": "ch5b-prix-encre", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch5b-raccourcis-minuteur", "libelle": "Propose Grumeau comme minuteur de bord", "vers": "ch5b-prix-grumeau", "effets": [ { "var": "culot", "plus": 1 }, { "var": "complicite", "plus": -1 } ] },
+        { "id": "ch5b-raccourcis-bluff", "libelle": "Bluffe : tu connais le gué, tu n'as besoin de personne", "vers": "ch5b-prix-bluff", "si": { "drapeau": "connait-gue" }, "effets": [ { "var": "culot", "plus": 2 } ] }
+      ]
+    },
+    "ch5b-prix-encre": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai trempé le doigt dans moi-même et j'ai écrit « Échap » sur la coque, en belles lettres bleues, avec l'accent. Ça m'a coûté un demi-millimètre. Ctrl a reculé de trois pas pour juger. Longtemps. Puis : « On embarque. » Alt dit que c'est la première fois que la barque a un nom qui se voit. Suppr a touché une lettre du bout du doigt, et tout le monde a crié. La lettre a tenu. Grumeau a dit : « Joli tracé. » Pardon ?"
+      ],
+      "suite": "ch5b-suppr"
+    },
+    "ch5b-prix-grumeau": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai proposé Grumeau comme minuteur de bord. Ctrl l'a soulevé, retourné, écouté couler. « Régulier ? » J'ai dit : « À quatre secondes près. » Affaire conclue : pendant toute la traversée, il chronométrera les coups de rame. Grumeau est blême, pour autant qu'on puisse l'être en verre. « Un minuteur. À œufs. Trente ans de carrière. » Il s'est installé à la proue et il coule avec une rage que je ne lui avais jamais vue. On embarque."
+      ],
+      "suite": "ch5b-suppr"
+    },
+    "ch5b-prix-bluff": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai pris mon air le plus dégagé et j'ai dit qu'on connaissait le gué, celui des pierres plates, et qu'on demandait par politesse. Ctrl a plissé les yeux. Alt a sifflé : « Il connaît le gué. Ou alors il bluffe. » J'ai décrit les pierres, une par une, comme le slime les montrait. Silence. « Montez, a dit Ctrl. Gratuit. Et vous oubliez où est ce gué. » Grumeau me regarde comme si j'avais grandi. Ce qui, vu ma taille, reste modeste."
+      ],
+      "suite": "ch5b-suppr"
+    },
+    "ch5b-suppr": {
+      "type": "choix",
+      "lieu": "À bord de la barque Échap",
+      "humeur": "peur",
+      "texte": [
+        "On glisse sur l'eau grise. Ctrl rame, Alt propose des caps que personne ne suit. Et la petite Suppr est venue s'asseoir à côté de moi. Les autres se sont poussés jusqu'au bord. Elle a une voix minuscule : « Tout le monde croit que j'efface les gens. Je n'ai jamais effacé personne. Enfin. Pas exprès. » Elle balance ses pieds. Un roseau qu'elle a frôlé n'est plus là.",
+        "Elle me regarde par en dessous. « Toi aussi, tu as peur de moi ? » Derrière elle, Grumeau me fait signe de dire non. Très fort. Avec tout son sable. Mais elle a l'air de quelqu'un à qui on a beaucoup dit non, justement. Je lui réponds quoi ?"
+      ],
+      "options": [
+        { "id": "ch5b-suppr-franc", "libelle": "« Un peu, oui. Mais reste quand même. »", "vers": "ch5b-traversee", "effets": [ { "drapeau": "suppr-amie" } ] },
+        { "id": "ch5b-suppr-brave", "libelle": "« Pas du tout ! »", "vers": "ch5b-traversee", "effets": [ { "var": "culot", "plus": 1 } ] }
+      ]
+    },
+    "ch5b-traversee": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Suppr a réfléchi à ma réponse en regardant l'eau, et elle est restée à côté de moi. Et puis la barque s'est arrêtée. Net, au milieu du Marais. Sous la coque, quelque chose de très grand a bougé, et plusieurs voix ont dit en même temps, de très loin en dessous : « Qui a autorisé cette traversée ? » Ctrl a soufflé la lanterne. Plus personne ne rame, on se laisse dériver sans un bruit. Ça peut durer. Je me tais aussi."
+      ],
+      "duree_min": 90,
+      "duree_max": 150,
+      "pendant": "Pilou dérive en silence sur le Marais",
+      "tenue": "bateau",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch6-entree"
+    }
+  }
+}

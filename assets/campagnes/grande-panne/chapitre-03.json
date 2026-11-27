@@ -1,0 +1,179 @@
+{
+  "chapitre": "ch3",
+  "noeuds": {
+    "ch3-pied-tour": {
+      "type": "recit",
+      "lieu": "Au pied de la Tour",
+      "decor": "tour-tampon",
+      "humeur": "surpris",
+      "checkpoint": true,
+      "texte": [
+        "On y est. La Tour du tampon. Elle monte si haut que le dernier étage se perd dans une espèce de brume. À chaque étage, un guichet. Sur la porte, la règle de la maison, gravée dans la pierre : « Chaque étage attend que le précédent se vide. » La file fait trois fois le tour du bâtiment avant d'arriver à l'entrée. Grumeau appelle ça une petite journée.",
+        "Tout en haut, il paraît qu'il y a le bureau de la Planificatrice, celle qui sait ce qui est prévu à chaque minute. Si quelqu'un sait qui a emmené le Tic-Tac, c'est elle. Et pendant que je regardais en l'air, quelque chose de froid m'a traversé l'épaule. Traversé pour de vrai. Il y a un fantôme dans la file."
+      ],
+      "suite": "ch3-spectre"
+    },
+    "ch3-spectre": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Un petit fantôme pâle, avec « 404 » écrit en gris sur le ventre. Je n'ai même pas eu le temps d'avoir peur : c'est lui qui s'est excusé. Il passe de l'un à l'autre dans la file en demandant : « Vous n'auriez pas vu ma… mon… » Il ne retrouve jamais le mot. Il soupire : « Introuvable. » Puis il recommence avec le suivant.",
+        "Grumeau dit que c'est un spectre 404, qu'il cherche quelque chose depuis des années, et que personne ne sait quoi, lui compris. Le spectre s'est arrêté devant moi. Il me regarde avec des yeux de page blanche. « Toi, tu cherches aussi. Ça se voit. Tu m'aiderais à chercher, après ? » Je lui réponds quoi ?"
+      ],
+      "options": [
+        { "id": "ch3-spectre-oui", "libelle": "« Promis : dès que j'ai retrouvé le Tic-Tac. »", "vers": "ch3-spectre-promesse", "effets": [ { "drapeau": "promesse-spectre" } ] },
+        { "id": "ch3-spectre-refus", "libelle": "« Désolé, je ne peux rien te promettre. »", "vers": "ch3-spectre-non" }
+      ]
+    },
+    "ch3-spectre-promesse": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai promis. Il a eu l'air si étonné qu'il en est devenu presque opaque. « Personne ne promet jamais. D'habitude, on dit : je regarderai. » Il m'a serré la main, enfin il est passé à travers, ça fait comme un courant d'air qui a de bonnes intentions. Il dit qu'il me retrouvera. Grumeau marmonne qu'une promesse à un introuvable, c'est malin, et qu'on verra bien si j'ai de la mémoire."
+      ],
+      "suite": "ch3-revendeur"
+    },
+    "ch3-spectre-non": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai dit que je ne pouvais rien promettre, que j'avais déjà une horloge entière sur les bras. Il a hoché la tête. « C'est honnête. D'habitude, on dit : je regarderai. Et on ne regarde pas. » Il est reparti le long de la file, un peu plus pâle. Grumeau a dit : « Tu as bien fait. Personne n'a le temps. C'est même tout le problème. » J'ai quand même un petit pincement."
+      ],
+      "suite": "ch3-revendeur"
+    },
+    "ch3-revendeur": {
+      "type": "choix",
+      "humeur": "malice",
+      "texte": [
+        "On remonte la file vers l'entrée. Au deuxième virage, quelqu'un nous a fait « psst ». Une vieille fenêtre surgissante, de celles qu'on ferme sans lire, avec un manteau plein de poches. Il a vu mon ticket. « Le 1 338 ? Le prochain numéro ? Petit, tu tiens une fortune. Je te l'échange contre un passe prioritaire. Avec ça, le golem de l'entrée te salue. »",
+        "Il m'a montré le passe : doré, avec un ruban. Très tentant. Grumeau a serré son propre ticket contre lui et a dit, sans regarder personne : « Un ticket, ça se garde. Même inutile. Surtout inutile. » Mais Grumeau attend depuis ce matin avec le sien, et ça ne lui a pas rapporté grand-chose. J'échange ?"
+      ],
+      "options": [
+        { "id": "ch3-revendeur-garde", "libelle": "Garde ton ticket : tu es le prochain", "vers": "ch3-rev-refus", "effets": [ { "var": "complicite", "plus": 1 } ] },
+        { "id": "ch3-revendeur-echange", "libelle": "Échange-le contre le passe doré", "vers": "ch3-rev-vend", "effets": [ { "objet": "ticket", "donne": false }, { "drapeau": "passe-achete" }, { "var": "culot", "plus": 1 } ] },
+        { "id": "ch3-revendeur-rumeur", "libelle": "Demande-lui plutôt ce qu'il sait du Sans-Titre", "vers": "ch3-rev-question" }
+      ]
+    },
+    "ch3-rev-refus": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai gardé mon ticket. Le revendeur a haussé les épaules et l'a proposé au suivant, qui n'en a pas voulu non plus : ici, tout le monde tient à sa place, même mauvaise. Grumeau n'a rien dit, mais il a marché plus près de moi après. Je crois que j'ai réussi un examen sans savoir que j'en passais un. Numéro 1 338. Je suis le prochain, et j'y tiens."
+      ],
+      "suite": "ch3-file"
+    },
+    "ch3-rev-vend": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai échangé. Le passe doré brille dans ma main, et mon ticket a disparu dans une des quarante poches du revendeur, qui a filé aussitôt. Grumeau s'est arrêté net. « Tu as vendu ta place. » Il a répété « vendu sa place » trois fois, de plus en plus bas, comme on annonce un décès. Moi, je trouve que j'ai fait une affaire. Je crois. Le ruban est très joli, en tout cas."
+      ],
+      "suite": "ch3-file"
+    },
+    "ch3-rev-question": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "Le Sans-Titre ? Le revendeur a baissé la voix et ouvert son manteau : il vend aussi des rumeurs. La première est gratuite. « Trois étages ? Cinq, petit. Il n'a pas de visage, pas de nom, pas d'extension. Là où il passe, les phrases s'arrêtent au milieu. Et il est entré dans la Tour. » J'ai serré mon ticket très fort. Grumeau dit que les rumeurs grossissent toujours de deux étages. Ça en laisse trois."
+      ],
+      "suite": "ch3-file"
+    },
+    "ch3-file": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "texte": [
+        "Il reste un tour et demi de Tour avant l'entrée. On remonte la file en disant pardon à chaque personne, et il y a beaucoup de personnes. Un vieux fichier dort debout. Deux onglets se disputent la même place depuis ce matin. Tout le monde me demande si je sais quelle heure il est, je réponds 13 h 37, et tout le monde soupire. J'en ai pour un moment. À tout de suite."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou remonte la file autour de la Tour",
+      "tenue": "marche",
+      "suite": "ch3-golem"
+    },
+    "ch3-golem": {
+      "type": "choix",
+      "lieu": "L'entrée de la Tour",
+      "decor": "tour-tampon",
+      "humeur": "peur",
+      "checkpoint": true,
+      "texte": [
+        "L'entrée. Devant la porte, assis sur un tabouret trop petit, il y a un golem fait de tickets collés les uns sur les autres, des milliers, du sol au plafond. Il lit chaque papier qu'on lui tend, très lentement, puis il dit : « Statut : en attente. » Au-dessus de lui, un panneau : « Les resquilleurs seront renvoyés au début. Du Hall. »",
+        "Grumeau me souffle : « On ne double pas un golem de tickets. Jamais. Il te rouvre. » Je ne sais pas ce que ça veut dire et je ne veux pas le savoir. Mais il est tellement lent, et la porte est juste là, entrouverte, pendant qu'il lit… Il a aussi un ventre qui gargouille comme une imprimante. Qu'est-ce que je tente ?"
+      ],
+      "options": [
+        { "id": "ch3-golem-faufile", "libelle": "Faufile-toi pendant qu'il lit", "vers": "ch3-echec-resquille" },
+        { "id": "ch3-golem-galette", "libelle": "Offre-lui ta galette de route", "vers": "ch3-golem-ok", "si": { "objet": "gouter" }, "effets": [ { "objet": "gouter", "donne": false } ] },
+        { "id": "ch3-golem-passe", "libelle": "Montre le passe doré", "vers": "ch3-golem-ok", "si": { "drapeau": "passe-achete" } },
+        { "id": "ch3-golem-patiente", "libelle": "Attends ton tour, comme tout le monde", "vers": "ch3-golem-attend", "effets": [ { "var": "complicite", "plus": 1 } ] }
+      ]
+    },
+    "ch3-echec-resquille": {
+      "type": "echec",
+      "lieu": "Hall des Pas Comptés",
+      "decor": "hall-pas-comptes",
+      "humeur": "triste",
+      "texte": [
+        "J'ai essayé de me faufiler. Il n'a même pas tourné la tête. Une main en tickets m'a soulevé par le baluchon, et une voix a dit : « Doublon détecté. Fermé. » Il m'a collé une étiquette sur le front et m'a renvoyé d'une pichenette jusqu'au début du Hall. J'ai rebondi sur trois valises. Grumeau m'attend là-bas, je le sens d'ici. Je me repose un peu, je décolle l'étiquette, et je reviens."
+      ],
+      "repos_min": 20
+    },
+    "ch3-golem-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Il a regardé ce que je lui tendais. Longtemps. Il l'a retourné, reniflé, comparé à quelque chose dans sa mémoire de papier, puis rangé entre deux tickets. « Statut : accepté. » Il s'est poussé de la largeur d'un ticket, ce qui suffit pile pour moi. Grumeau a dû rentrer le ventre, enfin le verre. Le golem nous a même souhaité quelque chose : « Bonne résolution. » Je crois que c'était gentil."
+      ],
+      "suite": "ch3-route"
+    },
+    "ch3-golem-attend": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "On a attendu. Debout, sagement, pendant que le golem lisait les numéros des gens de devant, un par un, à voix haute, avec les zéros. Grumeau s'est retourné deux fois. À la fin, il n'y avait plus personne devant nous : pas parce que la file avançait, mais parce que les autres étaient partis s'asseoir. Le golem m'a regardé. « Patient. Statut : rare. » Et il s'est poussé."
+      ],
+      "suite": "ch3-route"
+    },
+    "ch3-route": {
+      "type": "choix",
+      "lieu": "Dans la Tour",
+      "humeur": "surpris",
+      "texte": [
+        "On est passés ! Et tout de suite, derrière la porte, deux chemins. À gauche, l'escalier officiel : un colimaçon avec un guichet à chaque palier, trente-sept paliers d'après le plan. À droite, une petite porte grise, « Service », et, adossée contre elle, une touche de clavier qui mâchonne un cure-dent. Sur son chapeau : « Alt ». Elle a dit : « Psst. Ou alors… »",
+        "D'après Alt, il y a toujours une autre solution. La sienne : descendre par les coulisses, la Caverne des câbles puis le Marais, sur les traces du Sans-Titre. Sans guichet, sans tampon, sans personne pour dire non. Grumeau, lui, veut monter : « On fait les choses dans l'ordre. » Je choisis quoi ?"
+      ],
+      "options": [
+        { "id": "ch3-route-monte", "libelle": "Monte par les guichets, étage par étage", "vers": "ch3-choix-guichets", "effets": [ { "drapeau": "route-guichets" } ] },
+        { "id": "ch3-route-descend", "libelle": "Suis Alt par la porte de service", "vers": "ch3-choix-coulisses" }
+      ]
+    },
+    "ch3-choix-guichets": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "On monte. Alt a haussé les épaules : « Ou alors non. » Grumeau est content, c'est-à-dire qu'il râle sur un ton plus léger. Il m'explique que là-haut tout se demande par écrit, avec des tampons, et que les tampons sont une chose sérieuse. Moi, ce sont les trente-sept paliers qui m'inquiètent. Mais on fait les choses dans l'ordre. Il paraît que ça rassure, à la longue."
+      ],
+      "suite": "ch3-releve"
+    },
+    "ch3-choix-coulisses": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "On suit Alt. Grumeau est outré : « Les coulisses. À mon âge. » Alt promet un raccourci, « ou alors deux ». Je ne suis pas rassuré : derrière la porte de service, il fait noir, et ça sent le câble chaud. Mais pas de tampons, pas de files. Et j'avoue que voir Grumeau outré me donne du courage, je ne sais pas pourquoi."
+      ],
+      "suite": "ch3-releve"
+    },
+    "ch3-releve": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Mauvaise nouvelle : une grille ferme tout, l'escalier comme la porte de service. Un écriteau : « Ouverture à la prochaine ronde du gardien. » Grumeau estime la ronde à vingt retournements. On s'est assis contre le mur. Et là, le golem s'est levé de son tabouret. Sauf qu'il ne va pas vers la grille. Il vient droit sur nous, lentement, et il tient quelque chose dans son poing de papier. Je me fais tout petit. Je te raconte après. Si je peux."
+      ],
+      "duree_min": 90,
+      "duree_max": 120,
+      "pendant": "Pilou se fait tout petit contre le mur de la Tour",
+      "tenue": "cache",
+      "recompense": { "po": 20, "xp": 10 },
+      "suite": "ch4-entree"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "chapitre": "ch9",
+  "noeuds": {
+    "ch9-cabane": {
+      "type": "recit",
+      "lieu": "La cabane de papier",
+      "decor": "cabane-brouillon",
+      "humeur": "surpris",
+      "checkpoint": true,
+      "texte": [
+        "Quoi que j'aie fait à cette porte, le résultat a été le même : elle s'est ouverte, quelqu'un a crié « Ah ! », j'ai crié « Ah ! », et Grumeau a dit « Ah. » Le Sans-Titre est devant moi. Il m'arrive à l'épaule. C'est une feuille. Une seule page, un peu cornée, avec deux yeux inquiets et une ligne d'écriture en haut. Il tremble tellement qu'il fait du vent.",
+        "Et derrière lui, dans un hamac en ruban adhésif : le Tic-Tac. Un petit balancier à pattes. Il se balance, d'un côté, tic, de l'autre, tac, mais lentement, comme on se balance en vacances. Il a un chapeau de plage sur la tête et des cartes à jouer plein les mains. Il nous a fait coucou. Des deux côtés."
+      ],
+      "suite": "ch9-face"
+    },
+    "ch9-face": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "La feuille s'est mise entre le hamac et nous, les bras écartés, enfin les marges. « Je ne l'ai pas… il n'est pas… vous ne pouvez pas le… » Il ne finit aucune phrase. Je crois que ce n'est pas la peur : il est comme ça. Sur sa première ligne, je lis : « Document sans titre (récupéré) ». Grumeau me pousse du socle : c'est à moi de parler. Je commence par quoi ?"
+      ],
+      "options": [
+        { "id": "ch9-face-purge", "libelle": "« Je sais ce qui est prévu pour toi à 13 h 38. »", "vers": "ch9-doux", "si": { "drapeau": "sait-purge" }, "effets": [ { "drapeau": "confiance-brouillon" } ] },
+        { "id": "ch9-face-depart", "libelle": "« Il t'a suivi tout seul. Je le sais. »", "vers": "ch9-doux", "si": { "drapeau": "sait-depart" }, "effets": [ { "drapeau": "confiance-brouillon" } ] },
+        { "id": "ch9-face-rends", "libelle": "« Rends-nous le Tic-Tac ! »", "vers": "ch9-brusque", "effets": [ { "var": "culot", "plus": 1 } ] },
+        { "id": "ch9-face-pourquoi", "libelle": "« Pourquoi 13 h 37 ? »", "vers": "ch9-pourquoi" }
+      ]
+    },
+    "ch9-doux": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il a arrêté de trembler d'un coup. Il m'a regardé comme si j'avais lu par-dessus son épaule, ce qui, pour un document, est très intime. « Tu sais ? » J'ai dit que je savais un bout. Ses marges sont retombées. « Alors tu sais que je ne suis pas un… que je n'ai jamais voulu… » Il s'est assis par terre, à plat. « On m'appelle Brouillon. Enfin, personne ne m'appelle. Mais si quelqu'un m'appelait. »"
+      ],
+      "suite": "ch9-partie"
+    },
+    "ch9-brusque": {
+      "type": "recit",
+      "humeur": "colere",
+      "texte": [
+        "J'ai crié « Rends-nous le Tic-Tac ! » en levant mon épée en bois. Il a reculé jusqu'au mur. « N'approchez pas ! Ou je… je me mets en gras ! » Et il l'a fait. Sa ligne est devenue toute noire, toute épaisse. C'était sa pire menace. On s'est regardés, lui en gras, moi avec mon bout de bois. Le Tic-Tac a soupiré : « Vous êtes — ridicules — tous — les deux. » J'ai baissé mon épée. Il a repris sa graisse normale. Il s'appelle Brouillon."
+      ],
+      "suite": "ch9-partie"
+    },
+    "ch9-pourquoi": {
+      "type": "recit",
+      "humeur": "neutre",
+      "texte": [
+        "« Pourquoi 13 h 37 ? » Il a ouvert la bouche, l'a refermée. « Parce qu'après, il y a… parce qu'à 13 h 38, moi, je… » Il a regardé le Tic-Tac pour qu'on l'aide. Le Tic-Tac a posé une carte. « Laisse-le — arriver. — Il met — du temps. » La feuille a soufflé un grand coup. « Je m'appelle Brouillon. C'est tout ce que j'arrive à dire d'une traite. Pour le reste, il faudrait qu'on s'asseye. »"
+      ],
+      "suite": "ch9-partie"
+    },
+    "ch9-partie": {
+      "type": "attente",
+      "humeur": "neutre",
+      "texte": [
+        "On s'est assis. Mais avant de parler, le Tic-Tac veut finir sa partie. Il insiste, des deux côtés : « On n'a — jamais fini — une partie — de rien. » Il joue contre lui-même, le côté tic contre le côté tac, et il triche des deux mains. Brouillon sert une tisane tiède. Grumeau refuse la tasse, puis la prend. Je n'ose pas presser l'heure en personne. On attend la fin de la partie. Je te raconte tout après."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou regarde le Tic-Tac finir sa partie de cartes",
+      "tenue": "attend",
+      "suite": "ch9-aveu"
+    },
+    "ch9-aveu": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Voilà l'histoire. À 13 h 30, quelqu'un a commencé à écrire Brouillon. Une ligne : « Cher toi, je voulais te dire que ». Puis ce quelqu'un est parti déjeuner, sans enregistrer. Brouillon est resté seul dans le dossier Temp, avec sa demi-phrase. Et il a lu l'affiche : Grand Nettoyage à 13 h 38. Huit minutes. Il n'a volé personne. Il est monté à l'Horloge et il a demandé au Tic-Tac, poliment, s'il voulait faire une pause.",
+        "« Personne — ne nous l'avait — jamais — demandé », a dit le Tic-Tac. « On bat — depuis toujours. — On n'a jamais eu — une seconde — à nous. — Elles sont toutes — aux autres. » Grumeau n'a pas grogné. Il regardait Brouillon. Un vieux sablier qu'on a remplacé, une page qu'on va effacer : ils se sont reconnus, je crois. Il a juste dit : « Huit minutes. Ils ne lui ont même pas laissé le quart d'heure. »"
+      ],
+      "suite": "ch9-tac"
+    },
+    "ch9-tac": {
+      "type": "choix",
+      "lieu": "La cabane de papier",
+      "decor": "cabane-brouillon",
+      "humeur": "surpris",
+      "checkpoint": true,
+      "texte": [
+        "Problème. Le côté tic veut rentrer : il est ponctuel, il se ronge, il dit qu'on a « un retard — impossible — à mesurer ». Mais pendant qu'on parlait, le côté tac s'est endormi. D'un seul côté. Sa première sieste, en plein hamac, avec un petit ronflement à contretemps. Le côté tic chuchote : « Ne le réveille pas — en sursaut. — La dernière fois, — ça a donné — un 29 février. »",
+        "Brouillon, lui, regarde le dormeur avec un espoir terrible : tant que ça dort, il n'est pas 13 h 38. Le côté tic propose de venir seul, tout de suite, à moitié. Grumeau grimace : « Une demi-horloge. Bravo. » Qu'est-ce qu'on fait ?"
+      ],
+      "options": [
+        { "id": "ch9-tac-attend", "libelle": "Attends la fin de la sieste, le temps qu'il faudra", "vers": "ch9-veille" },
+        { "id": "ch9-tac-secoue", "libelle": "Secoue-le : debout, on a une heure à relancer !", "vers": "ch9-echec-reveil" },
+        { "id": "ch9-tac-moitie", "libelle": "Emmène le Tic-Tac tout de suite, à moitié endormi", "vers": "ch9-demi-1" }
+      ]
+    },
+    "ch9-echec-reveil": {
+      "type": "echec",
+      "humeur": "peur",
+      "texte": [
+        "Je l'ai secoué. Le côté tac s'est réveillé en sursaut, a crié « TAC ! » sans son tic, et il a sonné minuit. Partout. D'un coup. Tout l'ordinateur a cru que la journée était finie : les lumières se sont éteintes, les dossiers se sont fermés, et une voix a dit « à demain » pendant qu'on nous poussait dehors avec les chaises. Il a fallu tout rallumer. On m'avait prévenu, pour le 29 février. Je me repose, et je le laisse dormir."
+      ],
+      "repos_min": 30
+    },
+    "ch9-veille": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "On le laisse dormir. Le côté tic s'est résigné : il compte les ronflements, pour s'occuper. Brouillon a baissé la lumière. Dehors, par la fenêtre en papier calque, on devine le dossier Temp tout gris, et très loin la silhouette du Balayeur, à son poste, qui attend son heure. La sieste va durer : il paraît qu'une première sieste dure toujours. J'ai le temps de faire une chose avant de m'endormir aussi. Laquelle ?"
+      ],
+      "options": [
+        { "id": "ch9-veille-phrase", "libelle": "Demande à Brouillon de te lire sa phrase", "vers": "ch9-phrase", "effets": [ { "drapeau": "confiance-brouillon" } ] },
+        { "id": "ch9-veille-galette", "libelle": "Sors ta galette et partage-la en quatre", "vers": "ch9-gouter", "si": { "objet": "gouter" }, "effets": [ { "objet": "gouter", "donne": false }, { "var": "complicite", "plus": 1 }, { "drapeau": "confiance-brouillon" } ] },
+        { "id": "ch9-veille-grumeau", "libelle": "Demande à Grumeau la fin de son histoire", "vers": "ch9-confie", "si": { "drapeau": "a-ecoute-grumeau" }, "effets": [ { "var": "complicite", "plus": 2 } ] },
+        { "id": "ch9-veille-dort", "libelle": "Rien : dors, tu en as besoin", "vers": "ch9-sieste" }
+      ]
+    },
+    "ch9-phrase": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il me l'a lue, à voix basse, pour ne pas réveiller le côté tac. « Cher toi, je voulais te dire que ». Et il s'arrête là. Il ne sait pas à qui c'était adressé. Il ne sait pas ce qu'on voulait dire. « C'est peut-être une très belle phrase. C'est peut-être une réclamation pour une chaise. Je ne le saurai jamais si on m'… si je suis… » Il a replié son coin. Moi, je trouve que ça commençait bien."
+      ],
+      "suite": "ch9-sieste"
+    },
+    "ch9-gouter": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai sorti ma galette. Je la garde depuis ce matin, à travers tout. Je l'ai coupée en quatre : Brouillon, le côté tic, une part pour le côté tac à son réveil, et moi. Grumeau ne mange que du sable. Le côté tic a goûté et il a arrêté de battre, une seconde entière, de surprise. « C'est ça — un goûter ? — On en a sonné — des milliers. — On n'en avait — jamais mangé. » Il n'était même pas 16 h. C'était le meilleur."
+      ],
+      "suite": "ch9-sieste"
+    },
+    "ch9-confie": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je lui ai demandé la fin de son histoire, celle du banc. Il a mis du temps. « La vérité, petit, c'est que je ne veux pas mon ancien poste. Faire patienter les gens… Je les voyais, tu sais, de l'autre côté de l'écran. Ils soupiraient en me regardant. Trente ans de soupirs. Ce que je voudrais, c'est compter pour quelqu'un. Pas contre. » Il a toussé un grain. « Tu répètes ça, je te noie dans mon sable. » Je ne répète rien. Sauf à toi."
+      ],
+      "suite": "ch9-sieste"
+    },
+    "ch9-sieste": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Je m'installe contre Grumeau, qui fait semblant de ne pas veiller. Le hamac se balance d'un seul côté. Juste avant de fermer les yeux, j'ai vu Brouillon se lever, sans bruit. Il a chuchoté qu'il sortait « juste vérifier un »… et il n'a pas fini. La porte s'est refermée. Par la fenêtre, je regarde l'endroit où se tenait le Balayeur. Il n'y est plus. Je voudrais rester éveillé. Je n'y arrive pas. Si tu lis ça, pense à moi très fort."
+      ],
+      "duree_min": 90,
+      "duree_max": 150,
+      "pendant": "Pilou dort pendant la première sieste du Tic-Tac",
+      "tenue": "nuit",
+      "recompense": { "po": 30, "xp": 15 },
+      "suite": "ch10-reveil"
+    },
+    "ch9-demi-1": {
+      "type": "choix",
+      "humeur": "fatigue",
+      "texte": [
+        "On l'emmène comme ça. J'ai décroché le hamac avec le Tic-Tac dedans, un côté éveillé, un côté qui ronfle. Brouillon nous a regardés partir depuis sa porte, sans un mot, même pas un début. Le côté tic est inquiet : « Tout seul, — je ne fais — que la moitié — du travail. » Grumeau répète « une demi-horloge » à chaque pas.",
+        "Il faudra bien que quelqu'un fasse le tac, là-haut, pendant que le vrai dort. Le côté tic nous regarde, Grumeau et moi, à tour de rôle. Ce n'est pas une bonne idée, je le sens. On n'a fait que vingt pas : il est encore temps de raccrocher le hamac et d'attendre. Sinon, qui s'y colle ?"
+      ],
+      "options": [
+        { "id": "ch9-demi-moi", "libelle": "Toi : tu diras tac entre chaque tic", "vers": "ch9-demi-montee" },
+        { "id": "ch9-demi-grumeau", "libelle": "Grumeau : il a trente ans de métier", "vers": "ch9-demi-montee" },
+        { "id": "ch9-demi-retour", "libelle": "Personne : fais demi-tour, raccroche le hamac", "vers": "ch9-veille" }
+      ]
+    },
+    "ch9-demi-montee": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "texte": [
+        "C'est décidé, et personne n'est content, ce qui d'après Grumeau est la marque des vrais compromis. On grimpe vers l'Horloge système par l'escalier de service, en portant le hamac à deux. Le côté tac ronfle. Le côté tic compte les marches, une sur deux seulement : il ne peut pas faire mieux. J'ai un mauvais pressentiment, mais j'ai aussi très faim, et les deux se mélangent. Je t'écris quand on relance."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou porte le hamac jusqu'à l'Horloge",
+      "tenue": "grimpe",
+      "suite": "ch9-fin-demi-temps"
+    },
+    "ch9-fin-demi-temps": {
+      "type": "fin",
+      "lieu": "L'Horloge système",
+      "decor": "horloge-systeme",
+      "humeur": "fatigue",
+      "texte": [
+        "On a relancé l'horloge. Enfin, la moitié. Le côté tic a battu, et à la place du tac, il y a eu nous, en retard, à côté, jamais au même endroit. Le balancier est reparti, mais il boite : tic… rien… tic… rien. Regarde en bas de ton écran. Ça avance ? Oui. Une seconde sur deux. Il a fallu deux minutes pour arriver à 13 h 38. Les guichets ont rouvert à moitié : un rideau sur deux.",
+        "Tout marche au ralenti, maintenant. La file avance d'un demi-pas. Le Balayeur est entré dans Temp à demi-vitesse, et Brouillon court devant lui, deux fois moins vite aussi, ce qui fait une poursuite très longue et très polie. Personne ne rattrape personne. Le côté tac dort toujours. Il paraît qu'une première sieste, ça peut durer des années.",
+        "Grumeau a fait le calcul : à ce rythme, le goûter de 16 h tombe à 32 h. Il dit que c'est ma faute, puis que c'est la sienne, puis il se retourne, par habitude. On aurait dû attendre. Pour une fois qu'attendre servait à quelque chose. Je te laisse, on m'appelle. Enfin, on m'appelle à moitié. Si tu veux essayer autrement, tu sais où me trouver : à 13 h 38 et demie."
+      ],
+      "issue": "mauvaise",
+      "titre": "Le demi-temps",
+      "recompenses": { "po": 60, "xp": 30, "souvenir": "demi-tic", "titre": "Mi-temps", "objet": "sablier-de-poche" }
+    }
+  }
+}
