@@ -219,7 +219,7 @@ public class CapturesTest {
                 + "{\"id\":\"b\",\"source\":\"codex\",\"libelle\":\"site-vitrine\",\"etat\":\"permission\",\"depuis\":" + (t - 40_000) + ",\"outil\":\"\"},"
                 + "{\"id\":\"a\",\"source\":\"claude\",\"libelle\":\"refonte du module de facturation\",\"etat\":\"travail\",\"depuis\":" + (t - 95_000) + ",\"outil\":\"Bash\"},"
                 + "{\"id\":\"c\",\"source\":\"claude\",\"libelle\":\"docs\",\"etat\":\"fini\",\"depuis\":" + (t - 180_000) + ",\"outil\":\"\"}],"
-                + "\"xp\":3600,\"accessoire\":\"feuille\",\"carnet\":[\"truite\",\"carpe\",\"botte\"],\"plats\":[],\"recus\":[],"
+                + "\"xp\":3900,\"accessoire\":\"feuille\",\"carnet\":[\"truite\",\"carpe\",\"botte\"],\"plats\":[],\"recus\":[],"
                 + "\"po\":240,\"objets\":[\"echarpe\",\"petit-chat\"],\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\"},"
                 + "\"offres\":[\"cape\",\"monocle\",\"aura\",\"parapluie\"],\"promo\":\"cape\",\"serie\":3,\"stade\":2,"
                 + "\"quetes\":[[0,\"Pêcher 3 poissons\",1,3,30,0],[0,\"Finir 5 tours de Claude\",5,5,40,1],[1,\"Cuisiner 4 plats\",2,4,120,0]],"

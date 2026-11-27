@@ -52,7 +52,7 @@ final class Epreuves {
             LinearLayout titres = Ui.pile(c);
             titres.setPadding(Ui.dp(c, 12), 0, 0, 0);
             titres.addView(new Vitrine.Pixel(c, nom.equals("des") ? "LES DES" : "EPREUVE", 2.2f, Vitrine.ORANGE, Vitrine.VIOLET_FONCE, false));
-            TextView sous = Ui.texte(c, nom.equals("des") ? "Chance de réussir : " + chance + " %" : Aventure.nomJeu(nom) + "  ·  " + Aventure.difficulte(difficulte), Ui.T_DETAIL, Vitrine.ARGENT, true);
+            TextView sous = Ui.texte(c, nom.equals("des") ? "Chance de réussir : " + chance + "\u00a0%" : Aventure.nomJeu(nom) + "  ·  " + Aventure.difficulte(difficulte), Ui.T_DETAIL, Vitrine.ARGENT, true);
             sous.setPadding(0, Ui.dp(c, 6), 0, 0);
             titres.addView(sous);
             haut.addView(titres, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -80,7 +80,7 @@ final class Epreuves {
             statut.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
             colonne.addView(statut, Ui.large());
             if (!nom.equals("des")) {
-                TextView des = Ui.texte(c, "Laisser faire les dés · " + chance + " %", Ui.T_CORPS, Vitrine.BLEU, true);
+                TextView des = Ui.texte(c, "Laisser faire les dés · " + chance + "\u00a0%", Ui.T_CORPS, Vitrine.BLEU, true);
                 des.setGravity(Gravity.CENTER);
                 des.setMinHeight(Ui.dp(c, 48));
                 des.setBackground(Ui.touchable(c, Ui.arrondi(c, 0x00000000, 12, 0), 12));

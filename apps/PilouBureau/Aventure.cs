@@ -108,8 +108,24 @@ public static class Aventure
     }
 
     // La ligne de la bulle pendant une attente ou un repos : « ⚑ Pilou longe la falaise · retour vers 15 h 40 ».
-    public static string LigneBulle(Etat? e) =>
-        e is { EnAttente: true } ? "⚑ " + Ligne(e, DateTimeOffset.FromUnixTimeMilliseconds(e.Fin).LocalDateTime) : "";
+    // La bulle coupe ce qui dépasse en fin de ligne : un long « pendant » (jusqu'à 60 caractères) y cachait l'heure de
+    // retour. Au-delà de LongueurLigneBulle, c'est le « pendant » qui se raccourcit, au mot, jamais l'heure.
+    public const int LongueurLigneBulle = 58;
+
+    public static string LigneBulle(Etat? e)
+    {
+        if (e is not { EnAttente: true }) return "";
+        var ligne = "⚑ " + Ligne(e, DateTimeOffset.FromUnixTimeMilliseconds(e.Fin).LocalDateTime);
+        int i = ligne.LastIndexOf(" · ", StringComparison.Ordinal);
+        if (ligne.Length <= LongueurLigneBulle || i < 0) return ligne;
+        string heure = ligne[i..], debut = ligne[..i];
+        int place = Math.Max(10, LongueurLigneBulle - heure.Length - 1);
+        if (debut.Length <= place) return ligne;
+        var coupe = debut[..place];
+        int espace = coupe.LastIndexOf(' ');
+        if (espace > 8) coupe = coupe[..espace];
+        return coupe.TrimEnd(' ', ';', ',', '.', ':') + "…" + heure;
+    }
 
     // Au survol de cette ligne : le chapitre et le lieu.
     public static string DetailBulle(Etat? e)

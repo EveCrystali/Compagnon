@@ -162,6 +162,42 @@ public sealed class CampagnesVecteurs
         return e;
     }
 
+    // Version courte pour les parcours complets (docs/TEST-JEU.md) : l'empreinte de l'état au lieu de son texte.
+    // Sans la prose (textes des messages, lieu, ligne « pendant ») : une relecture d'orthographe des campagnes ne change pas
+    // ces empreintes ; tout le reste (nœuds, phases, heures, tirages, variables, humeurs, décors, nombre de messages) compte.
+    public Campagnes.Etat? EtatH(long t)
+    {
+        var e = Campagnes.Actualiser(K, Biblio, t);
+        L.Add($"etat {F(t)} {(e is null ? "rien" : Empreinte(SansProse(e)))}");
+        return e;
+    }
+
+    public static string SansProse(Campagnes.Etat e)
+    {
+        var champs = e.Texte().Split('|').Where(c => !c.StartsWith("lieu=", StringComparison.Ordinal) && !c.StartsWith("pendant=", StringComparison.Ordinal)
+                                                       && !c.StartsWith("messages=", StringComparison.Ordinal));
+        var b = new StringBuilder();
+        foreach (var m in e.Messages) b.Append($"{m.E}.{m.I}.{m.Qui}.{m.Noeud}.{m.Humeur}.{m.Decor}.{m.T}.{(m.Reprise ? 1 : 0)}\n");
+        return string.Join("|", champs) + "|messages=" + F(e.Messages.Count) + ":" + Empreinte(b.ToString());
+    }
+
+    public void FilH()
+    {
+        var b = new StringBuilder();
+        foreach (var m in K.Fil) b.Append($"{m.P}.{m.E}.{m.I}.{m.Qui}.{m.Noeud}\n");
+        L.Add($"filh {F(K.Fil.Count)} {F(K.NonLus)} {Empreinte(b.ToString())}");
+    }
+
+    // Les messages publiés, en empreinte, avec la taille du plus gros (octets de JSON).
+    public List<string> MessagesH(string appareil, string sorte)
+    {
+        var l = Campagnes.Messages(K, appareil, sorte);
+        L.Add($"messagesh {appareil} {sorte} {F(l.Count)} {F(l.Count == 0 ? 0 : l.Max(Campagnes.Octets))} {Empreinte(string.Join("\n", l))}");
+        return l;
+    }
+
+    public void SignatureH() => L.Add("signatureh " + Empreinte(Campagnes.Signature(K)));
+
     public List<string> Messages(string appareil, string sorte)
     {
         var l = Campagnes.Messages(K, appareil, sorte);
@@ -213,7 +249,12 @@ public sealed class CampagnesVecteurs
     }
 
     // Échange complet : chaque carnet nommé reçoit les messages des autres, dans l'ordre donné.
-    public void Echanger(long t, params string[] ordre)
+    public void Echanger(long t, params string[] ordre) => Echanger(t, true, ordre);
+
+    // Le même, avec les états sans la prose (vraies campagnes : la relecture d'orthographe ne change pas les vecteurs).
+    public void EchangerH(long t, params string[] ordre) => Echanger(t, false, ordre);
+
+    private void Echanger(long t, bool prose, string[] ordre)
     {
         var envois = new Dictionary<string, List<string>>();
         foreach (var nom in ordre.Distinct())
@@ -226,7 +267,8 @@ public sealed class CampagnesVecteurs
             Carnet(nom);
             foreach (var autre in ordre.Where(a => a != nom))
                 foreach (var m in envois[autre]) Recevoir(nom, t, m);
-            Actualiser(t);
+            if (prose) Actualiser(t);
+            else EtatH(t);
         }
     }
 
@@ -469,6 +511,65 @@ public sealed class CampagnesVecteurs
         s.Recevoir("pc-x", T0 + 12_000, "pas du json");
         s.Recevoir("pc-x", T0 + 12_000, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"q\":{\"c\":\"Mauvais Id\",\"p\":9},\"h\":{\"x\":[1,0,{},\"zz\"]}}");
         s.Signature();
+
+        // 6. Divergence au-delà du délai de grâce : au même choix, chacun prend une route et avance seul pendant des heures ;
+        //    en se retrouvant, la base la plus avancée l'emporte et le fil du perdant repart de cette base.
+        s.Cas("divergence-au-dela-du-delai");
+        var hd = new Hasard(77);
+        long td = T0 + 400 * 86_400_000L;
+        void Pas(string id, string app, ref long tt)
+        {
+            var x = s.EtatH(tt)!;
+            if (!x.EnCours) return;
+            if (x.EnAttente)
+            {
+                tt = x.Fin + 1000;
+                s.EtatH(tt);
+                return;
+            }
+            tt += 30_000;
+            if (x.Phase == Campagnes.Phase.Choix) s.Choisir(id, tt, app, x.Options[hd.Suivant(x.Options.Count)].Id);
+            else if (x.Phase == Campagnes.Phase.Epreuve) s.AuDe(id, tt, app);
+            else s.Continuer(id, tt, app);
+        }
+        s.Carnet("dv-pc");
+        s.Demarrer("phare-eteint", 99, td, "pc-a", "dv");
+        for (int i = 0; i < 60; i++)
+        {
+            var x = s.EtatH(td)!;
+            if (x.Phase == Campagnes.Phase.Choix && x.Options.Count >= 2 && x.ChapitreNumero >= 2) break;
+            Pas("phare-eteint", "pc-a", ref td);
+        }
+        s.EchangerH(td, "dv-pc", "dv-tel");
+        var ed = s.EtatH(td)!;
+        s.Carnet("dv-pc");
+        s.Choisir("phare-eteint", td + 10_000, "pc-a", ed.Options[0].Id);
+        s.Carnet("dv-tel");
+        s.Choisir("phare-eteint", td + 70_000, "tel-b", ed.Options[1].Id);
+        long tp = td + 10_000, tq = td + 70_000;
+        for (int i = 0; i < 6; i++)
+        {
+            s.Carnet("dv-pc");
+            Pas("phare-eteint", "pc-a", ref tp);
+            s.Carnet("dv-tel");
+            Pas("phare-eteint", "tel-b", ref tq);
+        }
+        s.EchangerH(Math.Max(tp, tq) + 1000, "dv-tel", "dv-pc");
+        foreach (var nom in new[] { "dv-pc", "dv-tel" })
+        {
+            s.Carnet(nom);
+            s.FilH();
+            s.SignatureH();
+        }
+
+        // 7. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
+        //    simulateur et jouée par le carnet (choix, épreuves, dés, « vas-y », attentes franchies à l'horloge, échecs,
+        //    abandons et reprises, rejeu), états en empreinte, messages et signature en empreinte.
+        foreach (var id in ParcoursTests.Ids)
+        {
+            s.Note($"parcours complets : {id}");
+            ParcoursTests.Rejouer(id, s);
+        }
         return string.Join("\n", s.L) + "\n";
     }
 }

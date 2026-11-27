@@ -1977,6 +1977,25 @@ public final class Campagnes {
     }
 
     /** Ce qu'un message apporte au carnet (sans regarder qui l'envoie). */
+    /**
+     * La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Si mon rejeu passe par la même étape, il doit y
+     * être au même point (même rang, même nœud, même état) ; s'il n'y est pas encore, rien à comparer.
+     */
+    private static boolean diverge(Campagne c, Partie mienne, Partie recue, long maintenant) {
+        StringBuilder b = new StringBuilder();
+        jsonInstantane(b, recue.ici);
+        String attendu = recue.r + b.toString();
+        boolean vu = false;
+        for (Point pt : rejouer(c, mienne, maintenant).points) {
+            if (pt.base.e != recue.e || pt.base.abandonnee) continue;
+            vu = true;
+            StringBuilder x = new StringBuilder();
+            jsonInstantane(x, pt.base.ici);
+            if ((pt.base.r + x.toString()).equals(attendu)) return false;
+        }
+        return vu;
+    }
+
     private static void fusionner(Carnet k, JSONObject r, Biblio biblio, long maintenant) {
         JSONObject h = objet(r.opt("h"));
         if (h != null) {
@@ -2001,8 +2020,17 @@ public final class Campagnes {
             if (mienne == null) k.courante = recue;
             else {
                 int c = compareIdentite(mienne, recue);
-                if (c == 0) k.courante = unir(mienne, recue);
-                else {
+                if (c == 0) {
+                    // Les deux appareils ont avancé chacun de son côté au-delà du délai de grâce, et la base reçue, plus
+                    // avancée, n'est pas sur ma route : ce que mon fil raconte de cette partie n'a pas eu lieu (on ne sait
+                    // pas où les routes se sont séparées). Le fil repart de la base reçue.
+                    Campagne cm = avance(recue, mienne) ? biblio.charger(mienne.campagne) : null;
+                    if (cm != null && diverge(cm, mienne, recue, maintenant)) {
+                        int p = mienne.p;
+                        k.fil.removeIf(m -> m.p == p);
+                    }
+                    k.courante = unir(mienne, recue);
+                } else {
                     Partie gagne = c < 0 ? mienne : recue, perd = c < 0 ? recue : mienne;
                     k.courante = gagne.copie();
                     if (!perd.campagne.equals(gagne.campagne)) ranger(k, perd, biblio, maintenant);

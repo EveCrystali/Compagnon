@@ -29,7 +29,7 @@ Dernière mise à jour : 27 novembre 2026.
 
 1. **Présence au quotidien, la suite** : relire les mots et le journal sur une vraie semaine (PC et téléphone),
    ajuster les seuils de complicité si les paliers arrivent trop vite ou trop lentement.
-2. **Test de jeu complet** : parcours entiers rejoués par le moteur des deux côtés, synchronisation
+2. **Test de jeu complet** (branche `test-jeu`, voir `TEST-JEU.md`) : parcours entiers rejoués par le moteur des deux côtés, synchronisation
    entre appareils, revue des captures de chaque écran.
 3. **Vidéo de promo** avec les campagnes. Il faut tourner sur le PC d'Antoine
    (`outils/tourner-ecran-gauche.ps1`) puis monter (scripts dans l'historique : cartons, caméra qui
