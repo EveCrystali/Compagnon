@@ -272,6 +272,27 @@ boutique ou un trophée, parfois bredouille et cabossé. Un petit coffre près d
 - Équipement léger (un outil, un talisman), téléphone en lecture, trois quêtes. Détails, chiffres d'équilibre et
   `--essai=expedition:depart|retour|defaite|journal` : [docs/EXPEDITIONS.md](docs/EXPEDITIONS.md).
 
+## Aventures (campagnes)
+
+Clic droit → **✉ Aventure…** (ou l'icône près de l'horloge) : de longs récits où Pilou t'écrit, te demande de
+choisir, puis **part pour de vrai** — quelques minutes, parfois une heure ou deux — avant de revenir. Le prologue
+(« La colline d'en face ») d'abord, puis les campagnes que le niveau ouvre.
+
+- **Fenêtre Aventure** (même habit que la boutique) : la bibliothèque (ton, durée, progression, fins trouvées),
+  la **lecture en conversation** (messages écrits lettre à lettre, un clic accélère ; portrait de Pilou selon son
+  humeur ; bande de décor du lieu ; options en boutons, touches 1 à 4), les **épreuves** (réflexe, mémoire, rythme,
+  visée, dés ; toujours « laisser faire les dés »), la fin et ses récompenses, le carnet des souvenirs.
+- **Pendant une attente**, Pilou reste en bas de l'écran, en tenue de voyage, occupé : il marche sur place, grimpe
+  ou dort ; ni promenade ni petits jeux ; une ligne discrète « ⚑ Pilou traverse le jardin · retour vers 15 h 40 »
+  sous les sessions. Tu peux fermer la fenêtre.
+- **À son retour**, une seule annonce (petit saut, bulle), puis un petit « ! » orange près de lui et dans le menu de
+  l'icône tant que tu n'as pas ouvert la fenêtre. Jamais de relance ; aux heures calmes, en plein écran ou en visio,
+  l'annonce attend. Réglage : clic droit → Aventure → Annonce de son retour.
+- Une seule aventure à la fois ; pas d'expédition, de visite ni de Défense pendant une attente (et inversement).
+  Le téléphone peut continuer PC éteint : au démarrage, le PC rattrape et n'annonce qu'une fois l'état à jour.
+- Essayer : `--essai=campagne:lecture` (ou `attente`, `retour`, `epreuve`, `fin`), en mémoire.
+  Détails : [docs/CAMPAGNES.md](docs/CAMPAGNES.md#sur-windows).
+
 ## Activités
 
 Pilou devine ce que tu fais d'après la fenêtre au premier plan, et en tire une tenue :
