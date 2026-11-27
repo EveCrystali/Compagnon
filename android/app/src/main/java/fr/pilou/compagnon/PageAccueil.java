@@ -74,7 +74,7 @@ final class PageAccueil extends Page {
         decor.setVisibility(View.GONE);
         decor.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         scene.addView(decor, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        pilou = new PilouVue(a, 5.2f * a.getResources().getDisplayMetrics().density);
+        pilou = new PilouVue(a, 5.2f * a.getResources().getDisplayMetrics().density, true);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
         scene.addView(pilou, lp);
         coeur = Ui.texte(a, "♥", 22, p.orange, true);

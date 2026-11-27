@@ -1,0 +1,12 @@
+# bouche d'humeur (campagnes), centrée sur l'axe de Pilou
+id: bouche-surpris
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3a2a2f
+images:
+.aa.
+abba
+abba
+abba
+.aa.

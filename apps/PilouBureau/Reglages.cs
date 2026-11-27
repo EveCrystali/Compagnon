@@ -12,6 +12,9 @@ public enum Accessoire { Saison, Aucun, Bonnet, Casque, Noeud, Feuille, Lunettes
 public sealed class Reglages
 {
     public double Taille { get; set; } = 1.0;
+    // Dessin fin : Pilou sur la grille fine 96 × 112, un pixel fin sur un nombre entier de pixels physiques
+    // (Placement.Echelle). Décoché : le rendu d'origine (grille 48 × 56, taille libre).
+    public bool DessinFin { get; set; } = true;
     public ModeBulle Bulle { get; set; } = ModeBulle.Compacte;
     public ThemeBulle Theme { get; set; } = ThemeBulle.Auto;
     public Accessoire Accessoire { get; set; } = Accessoire.Saison;

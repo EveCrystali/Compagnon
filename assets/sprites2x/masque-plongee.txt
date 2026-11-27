@@ -1,0 +1,46 @@
+id: masque-plongee
+slot: yeux
+ancre: yeux
+decalage: -34 -16
+palette: a=#1f4f8a b=#f9c292 c=#f69d50 d=#ffd8b0 e=#8fbae9 f=#4a8fdc g=#ffffff h=#1c2128 i=#d8ecff j=#3f77ba
+images:
+......................................................aabbccbbbbbbaa
+......................................................aaccccccccccaa
+......................................................aaccddccccccaa
+......................................................aaccddccccccaa
+......................................................aaccddccaaaaaa
+......................................................aaccddccaaaaa.
+......................................................aaccddccaa....
+......................................................aaccddccaa....
+......................................................aaccddccaa....
+......................................................aaccddccaa....
+...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccddccaaa...
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaccddccaaaa..
+..aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeecccccceeaa..
+..aaffffffffffffffffffffffffffffffffffffffffffffffffffffccccccffaa..
+..aaffffffffffffffffffffffffffffffffffffffffffffffffffffffffeeffaa..
+..aaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaa..
+aaaaffffggggggggggggggggggggggggffffggggggggggggggggggggggggffffaaaa
+aaaaffffggggggggggggggggggggggggffffggggggggggggggggggggggggffffaaaa
+hhhhffffggggggggggggggggggggggggffffggggggggggggggggggggggggffffhhhh
+hhhhffffggggggggggggggggggggggggffffggggggggggggggggggggggggffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+hhhhffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffhhhh
+aaaaffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffaaaa
+aaaaffffiiiiiiiiiiiiiiiiiiiiiiiiffffiiiiiiiiiiiiiiiiiiiiiiiiffffaaaa
+..aaffffeeeeeeeeeeeeeeeeeeeeeeeeffffeeeeeeeeeeeeeeeeeeeeeeeeffffaa..
+..aaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaa..
+..aaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaa..
+..aajjjjffffffffffffffffffffffffjjjjffffffffffffffffffffffffjjjjaa..
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...
+....................................................................
+....................................................................
+....................................................................
+....................................................................

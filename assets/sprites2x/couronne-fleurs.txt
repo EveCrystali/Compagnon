@@ -1,0 +1,26 @@
+id: couronne-fleurs
+slot: tete
+ancre: tete
+decalage: -34 -14
+palette: a=#0f4a63 b=#a4d2ff c=#c1b8ff d=#ffc89a e=#6cb6ff f=#9b8cff g=#f9e6a5 h=#f5d76e i=#f9c292 j=#b4dbff k=#f69d50 l=#fff6cc m=#2689b8
+images:
+....................................................................
+....................aaaaaaaa..aaaaaaaa..aaaaaaaa....................
+...................aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...................
+..........aaaaaaaaaaabbbbbbaaaaccccccaaaaddddddaaaaaaaaaaa..........
+.........aaaaaaaaaaabeeeeeebaacffffffcaaddddddddaaaaaaaaaaa.........
+aaaaaaaaaaaggggggaabeeeeeeeebcffffffffcddddddddddaaggggggaaaaaaaaaaa
+aaaaaaaaaaghhhhhhgaeeeeeeeeeeffffffffffddddddddddaghhhhhhgaaaaaaaaaa
+aiiiiiiaaghhhhhhhhgeeeeeeeeeeffffffffffddddddddddghhhhhhhhgaajjjjjja
+ikkkkkkiahhhhhhhhhheeeeelleeefffffllfffdddddlldddhhhhhhhhhhajjjjjjjj
+kkkkkkkkihhhhhhhhhheeeeelleeefffffllfffdddddlldddhhhhhhhhhhjjjjjjjjj
+kkkkkkkkkhhhhhkkhhheeeeeeeeeeffffffffffddddddddddhhhhhkkhhhjjjjjjjjj
+kkkkkkkkkhhhhhkkhhhmeeeeeeeeaaffffffffaaddddddddahhhhhkkhhhjjjjjjjjj
+kkkkllkkkhhhhhhhhhhmaeeeeeeaaaaffffffaaaaddddddaahhhhhhhhhhjjjjjlljj
+kkkkllkkkmhhhhhhhhmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhmjjjjjlljj
+kkkkkkkkkmahhhhhhmaaaaaaaaaa..aaaaaaaa..aaaaaaaaaaahhhhhhmajjjjjjjjj
+kkkkkkkkmaaaaaaaaaaa.............................aaaaaaaaaaajjjjjjjj
+akkkkkkmaaaaaaaaaaa...............................aaaaaaaaaaajjjjjjm
+aaaaaaaaaa.................................................aaaaaaaaa
+aaaaaaaaa...................................................aaaaaaaa
+....................................................................

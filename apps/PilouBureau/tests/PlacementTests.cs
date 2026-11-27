@@ -37,6 +37,93 @@ public class PlacementTests
         return Placement.Peche(aGauche, Geo(stade), m.GetLength(1), Placement.ReperesCanne(m));
     }
 
+    // ---- Dessin fin : un pixel fin de Pilou = un nombre entier de pixels physiques
+
+    public static readonly double[] Echelles = { 1, 1.25, 1.5, 1.75, 2, 2.5, 3 };
+    public static readonly double[] TaillesMenu = { 0.75, 1, 1.3 };
+
+    [Fact]
+    public void Dessin_fin_pixels_entiers_a_toutes_les_echelles()
+    {
+        foreach (double dpi in Echelles)
+        foreach (double taille in TaillesMenu)
+        {
+            int n = Placement.PixelsParPixelFin(taille, dpi);
+            Assert.True(n >= 1);
+            double k = Placement.Echelle(taille, dpi, true);
+            // Un pixel fin (PX / 2 unités de la fenêtre) fait exactement n pixels physiques ; la grille, 96 × n.
+            Assert.Equal(n, Placement.PX / 2 * k * dpi, 9);
+            Assert.Equal(96 * n, Placement.LargeurPhysique(taille, dpi, true), 9);
+            Assert.Equal(96.0 * n, RenduPilou.W * Placement.PX * k * dpi, 9);
+            // Dessin d'origine : la Taille telle quelle, 104 unités de large.
+            Assert.Equal(taille, Placement.Echelle(taille, dpi, false));
+            Assert.Equal(104 * taille * dpi, Placement.LargeurPhysique(taille, dpi, false), 9);
+        }
+        // À 100 % et Taille 1 : un pixel physique par pixel fin (Pilou sur 96 pixels au lieu de 104).
+        Assert.Equal(1, Placement.PixelsParPixelFin(1, 1));
+        Assert.Equal(1, Placement.PixelsParPixelFin(1, 1.25));
+        Assert.Equal(2, Placement.PixelsParPixelFin(1, 1.5));
+        Assert.Equal(2, Placement.PixelsParPixelFin(1, 1.75));
+        Assert.Equal(2, Placement.PixelsParPixelFin(1, 2));
+        Assert.Equal(1, Placement.PixelsParPixelFin(1, 0));    // échelle inconnue : 100 %
+    }
+
+    [Fact]
+    public void Dessin_fin_les_trois_tailles_restent_ordonnees()
+    {
+        foreach (double dpi in Echelles)
+        {
+            int petit = Placement.PixelsParPixelFin(0.75, dpi), normal = Placement.PixelsParPixelFin(1, dpi), grand = Placement.PixelsParPixelFin(1.3, dpi);
+            Assert.True(petit <= normal && normal < grand, $"{dpi} : {petit} {normal} {grand}");
+            if (normal > 1) Assert.True(petit < normal, $"{dpi} : {petit} {normal}");
+        }
+    }
+
+    [Fact]
+    public void Dessin_fin_tailles_nettes_et_positions_alignees()
+    {
+        foreach (double dpi in Echelles)
+        foreach (double taille in TaillesMenu)
+        {
+            double physique = Placement.Echelle(taille, dpi, true) * dpi;
+            foreach (double t in new[] { 1.5, 1.6, 2, 2.2, Placement.TailleCanne, Placement.PX, 3, 3.4 })
+            {
+                double net = Placement.TailleNette(t, physique);
+                double moitie = net / 2 * physique;   // un pixel fin du dessin posé près de Pilou
+                Assert.Equal(Math.Round(moitie), moitie, 9);
+                Assert.True(moitie >= 1);
+            }
+            // Le pixel de Pilou est déjà net : il ne bouge pas.
+            Assert.Equal(Placement.PX, Placement.TailleNette(Placement.PX, physique), 9);
+            foreach (double x in new[] { -1280.4, -3.5, 0, 17, 250.3, 1919.6 })
+            {
+                double a = Placement.Aligner(x, dpi);
+                Assert.Equal(Math.Round(a * dpi), a * dpi, 9);
+                Assert.True(Math.Abs(a - x) <= 0.5 / dpi + 1e-9);
+            }
+        }
+        Assert.Equal(3.4, Placement.TailleNette(3.4, 0));
+        Assert.Equal(12.5, Placement.Aligner(12.5, 0));
+        // Réglage coupé : rien n'est arrondi.
+        bool avant = Finesse.Active;
+        try
+        {
+            Finesse.Active = false;
+            Assert.Equal(1.6, Finesse.Net(1.6));
+            Assert.Equal(3.4, Finesse.ZoomNet(3.4));
+            Assert.Equal(1, Finesse.Echelle);
+            Finesse.Active = true;
+            Finesse.Dpi = 1.25;
+            Assert.Equal(3.2, Finesse.ZoomNet(3.4), 9);   // 2 pixels physiques par pixel fin à 125 %
+            Assert.Equal(2, Finesse.Echelle);
+        }
+        finally
+        {
+            Finesse.Active = avant;
+            Finesse.Dpi = 1;
+        }
+    }
+
     [Fact]
     public void ReperesDeLaCanne()
     {

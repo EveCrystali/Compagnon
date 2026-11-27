@@ -1,0 +1,39 @@
+# Boussole (ensemble Explorateur)
+id: boussole
+slot: main
+ancre: main
+decalage: -8 -22
+palette: a=#7a5a10 b=#dec579 c=#c9a227 d=#a58629 e=#f6f8fa f=#768390 g=#f69d50 h=#c9cbd2 i=#1c2128 j=#4a8fdc
+images:
+..........aabbbbbbaa..........
+..........aaccccccaa..........
+..........aaccccccaa..........
+........aaaaccccccaaaa........
+......aaaaaccccccccaaaaa......
+.....aaaaccccccccccccaaaa.....
+....aaabccccddddddccccbaaa....
+...aaabcccceeeeeeeeccccbaaa...
+..aaabccceeeeeffeeeeecccbaaa..
+.aaabccceeeeeeffeeeeeecccbaaa.
+.aabccceeeeeeeggeeeeeeecccbaa.
+aaaccceeeeeeeeggeeeeeeeecccaaa
+aabcceeeeeeeehggheeeeeeeeccbaa
+aaccdeeeeeeeeggggeeeeeeeedccaa
+abcceeeeeeeeeggggeeeeeeeeeccba
+accceeeeeeeehggggheeeeeeeeccca
+accceeeeeeeeggiiggeeeeeeeeccca
+accceehheeeeggiiggeeeeeehhccca
+accceeffeeeejjjjjjeeeeeeffccca
+accceeffeeeejjjjjjeeeeeeffccca
+accceeeeeeeeejjjjeeeeeeeeeccca
+adccheeeeeeeejjjjeeeeeeeeeccda
+aaccbeeeeeeeejjjjeeeeeeeebccaa
+aadccheeeeeeeejjeeeeeeeehccdaa
+aaaccbheeeeeeejjeeeeeeehbccaaa
+.aadccbheeeeeejjeeeeeehbccdaa.
+.aaadccbheeeeeffeeeeehbccdaaa.
+..aaacccchheeeffeeehhccccaaa..
+...aaaccccchhheehhhcccccaaa...
+....aaaccccccccccccccccaaa....
+.....aaaaccccccccccccaaaa.....
+......aaaaaccccccccaaaaa......
