@@ -11,8 +11,10 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Accueil : Pilou en grand (on le caresse), son niveau et sa barre d'XP, l'état du PC, les sessions
- * en cours, les appareils du groupe, un mot du jour. Pas encore appairé : qui est Pilou, puis un guide en trois étapes.
+ * Accueil : Pilou en grand (on le caresse ; en tenue de voyage quand il est parti en aventure), son niveau et sa barre
+ * d'XP ; la carte « Aventure » en tête quand une campagne est en cours (compte à rebours, ou « il t'attend ! ») ; puis
+ * l'essentiel (quêtes, sessions, vitrine, métiers) ; le reste (nouvelles, groupe, mot du jour) est replié.
+ * Pas encore appairé : qui est Pilou, puis un guide en trois étapes.
  */
 final class PageAccueil extends Page {
     private static final String[] MOTS = {
@@ -42,6 +44,15 @@ final class PageAccueil extends Page {
     private final LinearLayout carteMeteo, carteNouvelles, nouvelles;
     private String empreinteNouvelles = "";
     private final TextView meteoTitre, meteoTexte;
+    // Aventure (campagnes) : la carte en tête, et Pilou en tenue de voyage pendant une attente.
+    private final LinearLayout carteAventure;
+    private String empreinteAventure = "";
+    private TextView aventureCompte, legende;
+    private Ui.Barre aventureBarre;
+    private Campagnes.Etat aventure;
+    // Le reste, replié : nouvelles, groupe, mot du jour.
+    private final LinearLayout plus;
+    private final TextView plusTitre;
     // Décor acheté (derrière Pilou) et carte « Vitrine » : l'offre du jour et la prochaine rangée de la boutique.
     private final android.widget.ImageView decor;
     private final FrameLayout scene;
@@ -58,7 +69,7 @@ final class PageAccueil extends Page {
     PageAccueil(Principale a) {
         super(a);
         Ui.Palette p = Ui.p(a);
-        salut = Ui.texte(a, "", 15, p.doux, false);
+        salut = Ui.texte(a, "", Ui.T_DETAIL, p.doux, false);
         salut.setPadding(Ui.dp(a, 2), Ui.dp(a, 14), 0, 0);
         corps.addView(salut);
         nom = Ui.titrePage(a, "Pilou");
@@ -88,14 +99,21 @@ final class PageAccueil extends Page {
         heros.addView(scene, Ui.large());
         pilou.setOnClickListener(v -> caresser());
         pilou.setContentDescription("Pilou : toucher pour le caresser");
-        niveau = Ui.texte(a, "", 18, p.texte, true);
+        // Pendant une aventure : ce qu'il fait, sous lui (« en route · retour vers 15 h 40 »).
+        legende = Ui.puceTexte(a, "", Aventure.accentTon(a, "humour"));
+        legende.setVisibility(View.GONE);
+        LinearLayout.LayoutParams lle = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lle.gravity = Gravity.CENTER_HORIZONTAL;
+        lle.bottomMargin = Ui.dp(a, 8);
+        heros.addView(legende, lle);
+        niveau = Ui.texte(a, "", Ui.T_CARTE, p.texte, true);
         niveau.setGravity(Gravity.CENTER_HORIZONTAL);
         heros.addView(niveau, Ui.large());
         barre = new Ui.Barre(a);
         LinearLayout.LayoutParams lb = Ui.large();
         lb.topMargin = Ui.dp(a, 10);
         heros.addView(barre, lb);
-        xp = Ui.texte(a, "", 13, p.doux, false);
+        xp = Ui.texte(a, "", Ui.T_DETAIL, p.doux, false);
         xp.setGravity(Gravity.CENTER_HORIZONTAL);
         xp.setPadding(0, Ui.dp(a, 6), 0, 0);
         heros.addView(xp, Ui.large());
@@ -111,14 +129,13 @@ final class PageAccueil extends Page {
         heros.addView(etatPc, le);
         corps.addView(heros, Ui.large(a, 14));
 
+        carteAventure = Ui.pile(a);
+        carteAventure.setVisibility(View.GONE);
+        corps.addView(carteAventure, Ui.large(a, 14));
+
         carteExpedition = Ui.carte(a);
         carteExpedition.setVisibility(View.GONE);
         corps.addView(carteExpedition, Ui.large(a, 14));
-
-        // Vitrine : l'offre du jour et la prochaine rangée ; un toucher ouvre la boutique.
-        carteVitrine = Ui.carte(a);
-        carteVitrine.setVisibility(View.GONE);
-        corps.addView(carteVitrine, Ui.large(a, 14));
 
         // Météo (connecteur météo du PC) : le temps chez toi et ce que Pilou en pense.
         carteMeteo = Ui.carte(a);
@@ -130,39 +147,23 @@ final class PageAccueil extends Page {
         carteMeteo.setVisibility(View.GONE);
         corps.addView(carteMeteo, Ui.large(a, 14));
 
-        // Nouvelles (connecteurs du PC : Discord, mail, GitHub…) : cachée tant qu'il n'y a rien.
+        // Nouvelles (connecteurs du PC : Discord, mail, GitHub…) : cachée tant qu'il n'y a rien ; dans « Plus ».
         carteNouvelles = Ui.carte(a);
-        carteNouvelles.addView(Ui.texte(a, "✉  Nouvelles", 17, p.texte, true), Ui.large());
+        carteNouvelles.addView(Ui.texte(a, "✉  Nouvelles", Ui.T_CARTE, p.texte, true), Ui.large());
         nouvelles = new LinearLayout(a);
         nouvelles.setOrientation(LinearLayout.VERTICAL);
         carteNouvelles.addView(nouvelles, Ui.large());
         carteNouvelles.setVisibility(View.GONE);
-        corps.addView(carteNouvelles, Ui.large(a, 14));
-
-        carteMetiers = Ui.carte(a);
-        carteMetiers.addView(Ui.texte(a, Metiers.TRAVAIL + "  Métiers et succès", 17, p.texte, true), Ui.large());
-        metiersTexte = Ui.texte(a, "", 14, p.doux, false);
-        metiersTexte.setPadding(0, Ui.dp(a, 4), 0, 0);
-        carteMetiers.addView(metiersTexte, Ui.large());
-        TextView voir = Ui.texte(a, "Voir les métiers et les succès ›", 14, p.bleu, true);
-        voir.setPadding(0, Ui.dp(a, 8), 0, 0);
-        carteMetiers.addView(voir, Ui.large());
-        carteMetiers.setBackground(Ui.touchable(a, Ui.arrondi(a, p.surface, 18, p.bord), 18));
-        carteMetiers.setClickable(true);
-        carteMetiers.setOnClickListener(v -> a.allerMetiers());
-        carteMetiers.setVisibility(View.GONE);
-        corps.addView(carteMetiers, Ui.large(a, 14));
 
         // Pas appairé : le guide.
         guide = Ui.carte(a);
-        guide.addView(Ui.texte(a, "Un petit compagnon qui vit en bas de ton écran", 17, p.texte, true));
-        TextView intro = Ui.texte(a, "Pilou mène sa petite vie sans te déranger : il joue, mange, pêche, cuisine, et grandit pendant que tu "
-                + "travailles. Le reste est en option, pour le personnaliser. Et s'il est branché à tes applis, il te prévient "
-                + "quand une IA t'attend.",
-                14, p.doux, false);
+        guide.addView(Ui.texte(a, "Un petit compagnon qui vit en bas de ton écran", Ui.T_CARTE, p.texte, true));
+        TextView intro = Ui.texte(a, "Pilou mène sa petite vie sans te déranger : il joue, mange, pêche, part à l'aventure, et grandit "
+                + "pendant que tu travailles. S'il est branché à tes applis, il te prévient quand une IA t'attend.",
+                Ui.T_CORPS, p.doux, false);
         intro.setPadding(0, Ui.dp(a, 6), 0, 0);
         guide.addView(intro, Ui.large());
-        TextView relier = Ui.texte(a, "Pour le retrouver ici, relie-le à ton PC :", 14, p.texte, true);
+        TextView relier = Ui.texte(a, "Pour le retrouver ici, relie-le à ton PC :", Ui.T_CORPS, p.texte, true);
         relier.setPadding(0, Ui.dp(a, 12), 0, 0);
         guide.addView(relier, Ui.large());
         String[] etapes = {"Sur le PC, clic droit sur Pilou → Intégrations → Android : appairer.",
@@ -174,7 +175,7 @@ final class PageAccueil extends Page {
             r.setPadding(0, Ui.dp(a, 10), 0, 0);
             TextView n = Ui.pastille(a, String.valueOf(i + 1), p.bleu);
             r.addView(n);
-            TextView t = Ui.texte(a, etapes[i], 14, p.texte, false);
+            TextView t = Ui.texte(a, etapes[i], Ui.T_CORPS, p.texte, false);
             t.setPadding(Ui.dp(a, 12), Ui.dp(a, 8), 0, 0);
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             guide.addView(r, Ui.large());
@@ -188,7 +189,7 @@ final class PageAccueil extends Page {
         titreQuetes = Ui.titreSection(a, "Quêtes");
         corps.addView(titreQuetes);
         quetes = Ui.carte(a);
-        corps.addView(quetes, Ui.large(a, 6));
+        corps.addView(quetes, Ui.large(a, 14));
 
         // Sessions.
         titreSessions = Ui.titreSection(a, "Sessions");
@@ -196,19 +197,176 @@ final class PageAccueil extends Page {
         carteSessions = Ui.carte(a);
         sessions = Ui.pile(a);
         carteSessions.addView(sessions, Ui.large());
-        corps.addView(carteSessions, Ui.large(a, 6));
+        corps.addView(carteSessions, Ui.large(a, 14));
 
+        // Vitrine : l'offre du jour et la prochaine rangée ; un toucher ouvre la boutique.
+        carteVitrine = Ui.carte(a);
+        carteVitrine.setVisibility(View.GONE);
+        corps.addView(carteVitrine, Ui.large(a, 14));
+
+        carteMetiers = Ui.carte(a);
+        carteMetiers.addView(Ui.texte(a, Metiers.TRAVAIL + "  Métiers et succès", Ui.T_CARTE, p.texte, true), Ui.large());
+        metiersTexte = Ui.texte(a, "", Ui.T_DETAIL, p.doux, false);
+        metiersTexte.setPadding(0, Ui.dp(a, 4), 0, 0);
+        carteMetiers.addView(metiersTexte, Ui.large());
+        TextView voir = Ui.texte(a, "Voir les métiers et les succès ›", Ui.T_DETAIL, p.bleu, true);
+        voir.setPadding(0, Ui.dp(a, 8), 0, 0);
+        carteMetiers.addView(voir, Ui.large());
+        carteMetiers.setBackground(Ui.touchable(a, Ui.arrondi(a, p.surface, 18, p.bord), 18));
+        carteMetiers.setClickable(true);
+        carteMetiers.setOnClickListener(v -> a.allerMetiers());
+        carteMetiers.setVisibility(View.GONE);
+        corps.addView(carteMetiers, Ui.large(a, 14));
+
+        // Le reste, replié : un toucher l'ouvre (le choix est gardé).
+        plusTitre = Ui.texte(a, "", Ui.T_CORPS, p.bleu, true);
+        plusTitre.setGravity(Gravity.CENTER);
+        plusTitre.setMinHeight(Ui.dp(a, 48));
+        plusTitre.setBackground(Ui.touchable(a, Ui.arrondi(a, 0x00000000, 14, 0), 14));
+        plusTitre.setOnClickListener(v -> {
+            Prefs.de(a).edit().putBoolean("accueilPlus", !Prefs.de(a).getBoolean("accueilPlus", false)).apply();
+            deplier(true);
+        });
+        LinearLayout.LayoutParams lpt = Ui.large();
+        lpt.topMargin = Ui.dp(a, 8);
+        corps.addView(plusTitre, lpt);
+        plus = Ui.pile(a);
+        corps.addView(plus, Ui.large());
+        plus.addView(carteNouvelles, Ui.large(a, 14));
         // Groupe.
         groupe = Ui.pile(a);
-        corps.addView(groupe, Ui.large());
-
+        plus.addView(groupe, Ui.large());
         // Mot du jour.
-        corps.addView(Ui.titreSection(a, "Le mot de Pilou"));
+        plus.addView(Ui.titreSection(a, "Le mot de Pilou"));
         LinearLayout carteMot = Ui.carte(a);
         carteMot.setBackground(Ui.arrondi(a, p.voile | 0x11000000, 18, 0));
-        mot = Ui.texte(a, "", 15, p.texte, false);
+        mot = Ui.texte(a, "", Ui.T_CORPS, p.texte, false);
         carteMot.addView(mot);
-        corps.addView(carteMot, Ui.large());
+        plus.addView(carteMot, Ui.large());
+        deplier(false);
+    }
+
+    private void deplier(boolean anime) {
+        boolean ouvert = Prefs.de(app).getBoolean("accueilPlus", false);
+        plusTitre.setText(ouvert ? "Moins de choses  ▴" : "Nouvelles, groupe, mot du jour  ▾");
+        plusTitre.setContentDescription(ouvert ? "Replier les nouvelles, le groupe et le mot du jour" : "Déplier les nouvelles, le groupe et le mot du jour");
+        plus.setVisibility(ouvert ? View.VISIBLE : View.GONE);
+        if (anime && ouvert && Vitrine.anime(app)) {
+            plus.setAlpha(0);
+            plus.setTranslationY(-Ui.dp(app, 8));
+            plus.animate().alpha(1).translationY(0).setDuration(200).start();
+            defile.post(() -> defile.smoothScrollBy(0, Ui.dp(app, 160)));
+        }
+    }
+
+    // ---- Aventure
+
+    private void aventure(Etat pc) {
+        Ui.Palette p = Ui.p(app);
+        Campagnes.Etat e = CampagnesTel.pretes() ? CampagnesTel.etat(app) : null;
+        aventure = e;
+        boolean enCours = e != null && (e.enCours() || e.phase == Campagnes.Phase.Fin && CampagnesTel.nonLus(app) > 0);
+        Campagnes.Partie q = enCours ? CampagnesTel.courante(app) : null;
+        Campagnes.Campagne c = q == null ? null : Campagnes.charger(q.campagne);
+        // Pilou en tenue de voyage pendant l'attente ; la légende dit où il en est.
+        if (c != null && e.phase == Campagnes.Phase.Attente) {
+            pilou.tenue("voyage-" + e.tenue);
+            legende.setText("⟶  " + (e.pendant.isEmpty() ? "en route" : e.pendant) + " · retour vers " + CampagnesTel.heure(e.fin));
+            legende.setVisibility(View.VISIBLE);
+        } else if (c != null && e.phase == Campagnes.Phase.Repos) {
+            pilou.tenue("voyage-nuit");
+            legende.setText("☾  il se repose · reprise vers " + CampagnesTel.heure(e.fin));
+            legende.setVisibility(View.VISIBLE);
+        } else {
+            pilou.tenue("");
+            legende.setVisibility(View.GONE);
+        }
+        boolean attend = c != null && CampagnesTel.attendJoueur(app, e);
+        String emp = c == null ? "" : c.id + "|" + e.phase + "|" + e.noeud + "|" + attend;
+        if (!emp.equals(empreinteAventure)) {
+            empreinteAventure = emp;
+            carteAventure.removeAllViews();
+            aventureCompte = null;
+            aventureBarre = null;
+            carteAventure.setVisibility(c == null ? View.GONE : View.VISIBLE);
+            if (c != null) carteAventure(c, e, attend, pc, p);
+        }
+        if (aventureCompte != null && e != null && e.enAttente()) {
+            long reste = e.fin - CampagnesTel.maintenant();
+            aventureCompte.setText(Aventure.compte(reste));
+            aventureCompte.setContentDescription("Retour dans " + CampagnesTel.reste(reste));
+            if (aventureBarre != null) aventureBarre.part(1 - reste / (float) Math.max(1, e.fin - e.t));
+        }
+    }
+
+    private void carteAventure(Campagnes.Campagne c, Campagnes.Etat e, boolean attend, Etat pc, Ui.Palette p) {
+        int accent = Aventure.accentTon(app, c.ton);
+        carteAventure.setBackground(Ui.touchable(app, Ui.arrondi(app, p.surface, 18, attend ? accent : p.bord), 18));
+        carteAventure.setClipToOutline(true);
+        carteAventure.setElevation(Ui.dp(app, attend ? 3 : 1));
+        // Bande de décor, Pilou dedans (il marche s'il est en route).
+        FrameLayout bande = new FrameLayout(app);
+        Aventure.Scene sc = new Aventure.Scene(app);
+        sc.regler(c.id, c.ton, e.decor);
+        bande.addView(sc, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        TextView etiquette = Ui.puceScene(app, Aventure.signeTon(c.ton) + "  " + c.titre + (e.chapitreTotal > 0 ? "  ·  " + e.chapitreNumero + "/" + e.chapitreTotal : ""));
+        FrameLayout.LayoutParams le = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
+        le.setMargins(Ui.dp(app, 12), Ui.dp(app, 10), Ui.dp(app, 12), 0);
+        etiquette.setMaxWidth(Ui.dp(app, 230));
+        bande.addView(etiquette, le);
+        PilouVue pv = new PilouVue(app, Aventure.pixelPour(app, 66), true);
+        pv.equipe(Gains.porte(app, pc));
+        pv.accessoire(pc.accessoire);
+        if (e.phase == Campagnes.Phase.Attente) {
+            pv.tenue("voyage-" + e.tenue);
+            sc.marcher(Aventure.vitesse(e.tenue), e.tenue.equals("nuit"));
+            pv.montrer("repos", pc.couleur);
+        } else if (e.phase == Campagnes.Phase.Repos) {
+            pv.tenue("voyage-nuit");
+            sc.marcher(0, true);
+            pv.montrer("fatigue", pc.couleur);
+        } else pv.montrer("joie", pc.couleur);
+        pv.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.START);
+        lp.leftMargin = Ui.dp(app, 12);
+        bande.addView(pv, lp);
+        carteAventure.addView(bande, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Ui.dp(app, 84)));
+        LinearLayout b = Ui.pile(app);
+        b.setPadding(Ui.dp(app, 16), Ui.dp(app, 12), Ui.dp(app, 16), Ui.dp(app, 14));
+        if (e.enAttente()) {
+            boolean repos = e.phase == Campagnes.Phase.Repos;
+            LinearLayout r = Ui.rangee(app);
+            LinearLayout t = Ui.pile(app);
+            t.addView(Ui.texte(app, repos ? "Pilou se repose" : e.pendant.isEmpty() ? "Pilou est en route" : e.pendant, Ui.T_CORPS, p.texte, true));
+            t.addView(Ui.texte(app, (repos ? "reprise" : "retour") + " vers " + CampagnesTel.heure(e.fin) + " · je te préviens", Ui.T_DETAIL, p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            aventureCompte = Ui.texte(app, "", 22, accent, true);
+            aventureCompte.setTypeface(android.graphics.Typeface.create("monospace", android.graphics.Typeface.BOLD));
+            aventureCompte.setPadding(Ui.dp(app, 10), 0, 0, 0);
+            r.addView(aventureCompte);
+            b.addView(r, Ui.large());
+            aventureBarre = new Ui.Barre(app);
+            LinearLayout.LayoutParams lb = Ui.large();
+            lb.topMargin = Ui.dp(app, 10);
+            b.addView(aventureBarre, lb);
+        } else {
+            LinearLayout r = Ui.rangee(app);
+            LinearLayout t = Ui.pile(app);
+            String titre = e.phase == Campagnes.Phase.Fin ? "★  Le dénouement t'attend !" : attend ? "●  Il t'attend !" : "Une aventure en cours";
+            t.addView(Ui.texte(app, titre, Ui.T_CARTE, attend ? p.orange : p.texte, true));
+            t.addView(Ui.texte(app, e.lieu.isEmpty() ? "Il a besoin de toi pour la suite." : e.lieu + " · il a besoin de toi", Ui.T_DETAIL, p.doux, false));
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            r.addView(Ui.texte(app, "›", 26, p.doux, false));
+            b.addView(r, Ui.large());
+        }
+        carteAventure.addView(b, Ui.large());
+        carteAventure.setOnClickListener(v -> app.ouvrirLecture());
+        carteAventure.setContentDescription("Aventure : " + c.titre + ". " + (attend ? "Pilou t'attend. Toucher pour lire." : "Toucher pour la lire."));
+        Ui.enfoncer(carteAventure);
+        if (Vitrine.anime(app)) {
+            carteAventure.setAlpha(0);
+            carteAventure.animate().alpha(1).setDuration(220).start();
+        }
     }
 
     private void caresser() {
@@ -312,8 +470,10 @@ final class PageAccueil extends Page {
                 : Soins.boudeur(s) ? "\n☁  Pilou boude : gains ×0,6" : "";
         String energie = e.expedition != null && e.expedition.energie >= 0 ? "   ·   ⚡ " + e.expedition.energie : "";
         // Même lecture que le bandeau (et le PC) : l'XP dans le niveau, puis ce qu'il manque pour le suivant.
-        String dansNiveau = Math.max(0, total - bas) + " / " + Math.max(1, haut - bas) + " xp · niv " + (n + 1) + " dans " + Math.max(0, haut - total) + " xp";
+        String dansNiveau = "niveau " + (n + 1) + " dans " + Math.max(0, haut - total) + " xp";
+
         xp.setText(dansNiveau + energie + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
+        aventure(e);
         expedition(e, appaire, maintenant, p);
         boolean metiers = appaire && Metiers.connus(e);
         carteMetiers.setVisibility(metiers ? View.VISIBLE : View.GONE);

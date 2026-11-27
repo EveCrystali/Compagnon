@@ -46,6 +46,11 @@ public final class Prefs {
         return de(c).getBoolean("alerteSoins", false);
     }
 
+    /** Retour de Pilou d'une étape de campagne : une notification à la fin d'une attente ou d'un repos. */
+    public static boolean alerteAventure(Context c) {
+        return de(c).getBoolean("alerteAventure", true);
+    }
+
     public static boolean alerteMaj(Context c) {
         return de(c).getBoolean("alerteMaj", true);
     }

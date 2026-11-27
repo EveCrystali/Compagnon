@@ -52,7 +52,63 @@ final class Ui {
     static final Palette SOMBRE = new Palette(0xff161b22, 0xff22272e, 0xff2d333b, 0xff373e47, 0xffcdd9e5, 0xff909dab,
             0xff6cb6ff, 0xfff69d50, 0xffadbac7, 0xff1c2128, 0x226cb6ff);
 
+    /**
+     * Échelle typographique (sp) : titre de page, titre de carte, corps, détail ; plus l'étiquette de section (capitales
+     * espacées). Rien d'autre dans les pages : la hiérarchie se lit d'un coup d'œil.
+     */
+    static final float T_PAGE = 28, T_CARTE = 19, T_CORPS = 15, T_DETAIL = 13, T_ETIQUETTE = 12;
+
     private Ui() {
+    }
+
+    /** Fond arrondi aux quatre coins choisis (dp) : bulles de conversation (la pointe a un petit rayon). */
+    static GradientDrawable coins(Context c, int fond, float hg, float hd, float bd, float bg, int bord) {
+        GradientDrawable g = new GradientDrawable();
+        g.setColor(fond);
+        float a = dp(c, hg), b = dp(c, hd), d = dp(c, bd), e = dp(c, bg);
+        g.setCornerRadii(new float[]{a, a, b, b, d, d, e, e});
+        if (bord != 0) g.setStroke(Math.max(1, dp(c, 1)), bord);
+        return g;
+    }
+
+    /** Petit enfoncement au toucher (bouton, carte, option) : la vue répond sous le doigt. */
+    static void enfoncer(View v) {
+        v.setOnTouchListener((x, e) -> {
+            switch (e.getActionMasked()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    x.animate().scaleX(0.97f).scaleY(0.97f).setDuration(70).start();
+                    break;
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    x.animate().scaleX(1).scaleY(1).setDuration(120).start();
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        });
+    }
+
+    /** Vibration très légère (réglage « Vibrations » des jeux). */
+    @SuppressWarnings("deprecation")
+    static void vibrer(Context c, int ms) {
+        if (!Prefs.vibrations(c)) return;
+        try {
+            android.os.Vibrator v = c.getSystemService(android.os.Vibrator.class);
+            if (v != null && v.hasVibrator()) v.vibrate(android.os.VibrationEffect.createOneShot(ms, Math.min(255, 40 + ms * 3)));
+        } catch (RuntimeException e) {
+            // pas de vibreur : tant pis
+        }
+    }
+
+    /** Puce d'information sur fond sombre (scènes d'aventure) : texte clair sur voile. */
+    static TextView puceScene(Context c, CharSequence s) {
+        TextView t = texte(c, s, T_ETIQUETTE, Vitrine.ARGENT_CLAIR, true);
+        t.setBackground(arrondi(c, 0x8c0d1117, 10, 0));
+        t.setPadding(dp(c, 9), dp(c, 4), dp(c, 9), dp(c, 4));
+        t.setSingleLine(true);
+        t.setEllipsize(TextUtils.TruncateAt.END);
+        return t;
     }
 
     static boolean sombre(Context c) {
@@ -298,7 +354,11 @@ final class Ui {
 
     static final String[] ACCUEIL = {"000001100000", "000011110000", "000111111000", "001111111100", "011111111110", "111111111111",
             "001111111100", "001100011100", "001100011100", "001100011100", "001111111100", "000000000000"};
-    static final String[] JOUER = {"000000000000", "000000000000", "011111111110", "111111111111", "110111111011", "100011110101",
+    // Un fanion planté sur une colline : l'aventure.
+    static final String[] AVENTURE = {"000110000000", "000111100000", "000111111000", "000111100000", "000110000000", "000100000000",
+            "000100000000", "000100000000", "001110001100", "011111011110", "111111111111", "000000000000"};
+    static final String[] JOUER = {
+"000000000000", "000000000000", "011111111110", "111111111111", "110111111011", "100011110101",
             "110111111011", "111111111111", "111100001111", "011000000110", "000000000000", "000000000000"};
     // Sac de boutique (anse, sac, étoile découpée).
     static final String[] BOUTIQUE = {"000011110000", "000100001000", "000100001000", "011111111110", "011111111110", "011111011110",

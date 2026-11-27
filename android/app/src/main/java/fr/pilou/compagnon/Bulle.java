@@ -20,6 +20,11 @@ import java.util.List;
 /**
  * Niveau 3 : Pilou flottant par-dessus les autres applis. Glisser : le déplacer (il se range au bord) ;
  * toucher : la bulle des sessions ; appui long : il se cache 10 min.
+ * Aventure (campagnes) : pendant une attente, Pilou porte sa tenue de voyage et la bulle commence par « en route ·
+ * retour 15 h 40 » ; à son retour, un petit « ! » orange jusqu'à ce qu'on ouvre l'aventure ; le toucher y mène alors.
+ *
+ * Règles vitales : Pilou n'est jamais retiré de sa fenêtre (il peut être en train de recevoir un toucher) ; tout ce qui
+ * change la fenêtre après un toucher passe par h.post ; borner() garde Pilou entièrement visible.
  */
 final class Bulle {
     private static final int BLEU = 0xff2f7ed8, ORANGE = 0xffc86a1c, TEXTE = 0xff1c2128, PALE = 0xff57606a;
@@ -37,6 +42,8 @@ final class Bulle {
     private boolean pose, ouvert;
     private long ouvertJusque;
     private Etat etat = Etat.vide();
+    private Campagnes.Etat aventure;
+    private boolean attendAventure;
 
     Bulle(Context c) {
         ctx = c;
@@ -121,6 +128,27 @@ final class Bulle {
         }
     }
 
+    /** L'aventure (Veille la calcule hors du fil principal) : tenue de voyage, « ! » au retour, ligne de la bulle. */
+    void aventure(Campagnes.Etat e, boolean attend) {
+        aventure = e;
+        boolean revenu = attend && !attendAventure;
+        attendAventure = attend;
+        pilou.tenue(e != null && e.phase == Campagnes.Phase.Attente ? "voyage-" + e.tenue : e != null && e.phase == Campagnes.Phase.Repos ? "voyage-nuit" : "");
+        pilou.marque(attend);
+        if (revenu) pilou.sauter();
+        if (ouvert) {
+            int[] ici = positionPilou();
+            remplir(System.currentTimeMillis());
+            ancrer(ici);
+        }
+    }
+
+    // L'app, directement dans la lecture de l'aventure.
+    private void ouvrirAventure() {
+        ctx.startActivity(new android.content.Intent(ctx, Principale.class).putExtra(Principale.EXTRA_ONGLET, Principale.AVENTURE)
+                .putExtra(Principale.EXTRA_LECTURE, true).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP));
+    }
+
     /** Une IA attend : il saute et montre la bulle quelques secondes. */
     void alerter() {
         pilou.sauter();
@@ -187,6 +215,21 @@ final class Bulle {
 
     private void remplir(long maintenant) {
         panneau.removeAllViews();
+        // L'aventure d'abord : où il en est ; un toucher sur la ligne ouvre l'aventure.
+        if (aventure != null && (aventure.enAttente() || attendAventure)) {
+            String s = attendAventure ? "!  Pilou est revenu : il t'attend" : aventure.phase == Campagnes.Phase.Repos
+                    ? "☾  il se repose · reprise " + CampagnesTel.heure(aventure.fin)
+                    : "⟶  en route · retour " + CampagnesTel.heure(aventure.fin);
+            TextView t = texte(s, attendAventure ? (sombre ? 0xfff69d50 : ORANGE) : sombre ? 0xff6cb6ff : BLEU, false);
+            t.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            t.setMinHeight((int) (32 * d));
+            t.setGravity(Gravity.CENTER_VERTICAL);
+            t.setOnClickListener(v -> h.post(() -> {
+                fermer();
+                ouvrirAventure();
+            }));
+            panneau.addView(t);
+        }
         panneau.addView(texte(etat.nom + " · niv " + etat.niveau + "   " + etat.resume(maintenant), sombre ? 0xffadbac7 : PALE, true));
         List<Etat.Ligne> lignes = etat.lignes(maintenant, (int) (maintenant / 300));
         for (int i = 0; i < Math.min(6, lignes.size()); i++) {
@@ -256,9 +299,11 @@ final class Bulle {
                     h.post(() -> {
                         if (!pose) return;
                         if (deplace) ranger();
+                        else if (attendAventure && !ouvert) ouvrirAventure(); // il est revenu : le toucher mène à l'aventure
                         else if (ouvert) fermer();
                         else ouvrir(0);
                     });
+
                     return true;
                 default:
                     return false;

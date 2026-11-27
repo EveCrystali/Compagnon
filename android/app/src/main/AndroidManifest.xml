@@ -81,6 +81,11 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
+        <!-- Retour de Pilou (campagnes) : l'alarme posée à la fin d'une attente, sans permission d'alarme exacte. -->
+        <receiver
+            android:name=".Retour"
+            android:exported="false" />
+
         <receiver
             android:name=".Demarrage"
             android:exported="false">

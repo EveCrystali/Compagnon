@@ -144,7 +144,14 @@ final class PageReglages extends Page {
         Ui.interrupteur(a, c, "Une session a fini", "Fin de tour ou erreur", Prefs.alerteFin(a),
                 oui -> Prefs.de(a).edit().putBoolean("alerteFin", oui).apply());
         c.addView(Ui.separateur(a));
+        Ui.interrupteur(a, c, "Retours de Pilou (aventures)", "Une seule notification quand il revient d'une étape, jamais de relance",
+                Prefs.alerteAventure(a), oui -> {
+                    Prefs.de(a).edit().putBoolean("alerteAventure", oui).apply();
+                    new Thread(() -> Retour.programmer(a.getApplicationContext()), "pilou-retour").start();
+                });
+        c.addView(Ui.separateur(a));
         Ui.interrupteur(a, c, "Mises à jour de Pilou", "Une fois par jour au plus", Prefs.alerteMaj(a),
+
                 oui -> Prefs.de(a).edit().putBoolean("alerteMaj", oui).apply());
         c.addView(Ui.separateur(a));
         autoriser = Ui.bouton(a, "Autoriser les notifications", true, v -> a.demanderNotifications());

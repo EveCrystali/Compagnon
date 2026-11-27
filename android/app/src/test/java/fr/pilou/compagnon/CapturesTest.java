@@ -69,6 +69,11 @@ public class CapturesTest {
                 appairer();
                 essayer("metiers", this::metiers);
                 appairer();
+                appairer();
+                essayer("aventure", this::aventure);
+                appairer();
+                essayer("aventure-suspendue", this::aventureSuspendue);
+                essayer("epreuves", this::epreuves);
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
@@ -206,7 +211,7 @@ public class CapturesTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         Principale a = c.get();
         attendre();
-        String[] noms = {"accueil", "jouer", "boutique", "collection", "reglages"};
+        String[] noms = {"accueil", "aventure", "jouer", "boutique", "collection", "reglages"};
         for (int i = 0; i < Principale.N; i++) {
             a.aller(i, false);
             attendre();
@@ -224,7 +229,191 @@ public class CapturesTest {
         c.pause().stop().destroy();
     }
 
+    // ---- Aventure (campagnes) : liste, lecture, attente, épreuve, repos, reprise, fin, carnet ; horloge injectée.
+
+    private final long[] horloge = {0};
+
+    private void sansAnimations(boolean oui) {
+        android.provider.Settings.Global.putFloat(RuntimeEnvironment.getApplication().getContentResolver(),
+                android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, oui ? 0f : 1f);
+    }
+
+    private void avancer(long ms) {
+        horloge[0] += ms;
+    }
+
+    private void aventure() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        sansAnimations(true);
+        horloge[0] = System.currentTimeMillis();
+        CampagnesTel.horloge = () -> horloge[0];
+        CampagnesTel.graineEssai = AventureTest.GLISSE;
+        CampagnesTel.prechargerMaintenant();
+        try {
+            ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+            Principale a = c.get();
+            a.aller(Principale.AVENTURE, false);
+            attendre();
+            PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+            ecran(a, "aventure-liste");
+            contenu(pa, "aventure-liste-long");
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            CampagnesTel.demarrer(ctx, "prologue", false);
+            a.ouvrirLecture();
+            attendre();
+            Lecture l = pa.lecture();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-lecture-choix");
+            CampagnesTel.choisir(ctx, "lampe");
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-attente");
+            a.aller(Principale.ACCUEIL, false);
+            attendre();
+            ecran(a, "aventure-accueil-attente");
+            avancer(CampagnesTel.etat(ctx).fin - horloge[0] + 1000);
+            a.page(Principale.ACCUEIL).rafraichir();
+            a.majBandeau();
+            attendre();
+            ecran(a, "aventure-accueil-il-attend");
+            a.ouvrirLecture();
+            attendre();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-lecture-retour");
+            CampagnesTel.choisir(ctx, "saute");
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-epreuve");
+            l.ouvrirEpreuve(false);
+            attendre();
+            ecran(a, "aventure-epreuve-ecran");
+            l.epreuveOuverte().forcer(true);
+            attendre();
+            ecran(a, "aventure-epreuve-reussie");
+            l.fermerCouche();
+            CampagnesTel.epreuve(ctx, true);
+            attendre();
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            CampagnesTel.choisir(ctx, "raccourci");
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-repos");
+            avancer(CampagnesTel.etat(ctx).fin - horloge[0] + 1000);
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-reprise");
+            CampagnesTel.choisir(ctx, "sentier");
+            avancer(CampagnesTel.etat(ctx).fin - horloge[0] + 1000);
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            CampagnesTel.choisir(ctx, "lampe");
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-depart-ou-attente");
+            Campagnes.Etat e = CampagnesTel.etat(ctx);
+            if (e.phase == Campagnes.Phase.Depart) {
+                CampagnesTel.continuer(ctx);
+                e = CampagnesTel.etat(ctx);
+            }
+            if (e.enAttente()) avancer(e.fin - horloge[0] + 1000);
+            l.rafraichir();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-fin");
+            vue(l.filVue(), "aventure-fin-long");
+            a.page(Principale.AVENTURE).retour();
+            attendre();
+            contenu(pa, "aventure-liste-apres-long");
+            pa.ouvrirCarnet();
+            attendre();
+            contenu(pa, "aventure-carnet-long");
+            c.pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            CampagnesTel.graineEssai = null;
+            sansAnimations(false);
+        }
+    }
+
+    // Une aventure mise de côté (la confirmation en deux gestes), puis la liste qui propose de la reprendre.
+    private void aventureSuspendue() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        sansAnimations(true);
+        CampagnesTel.prechargerMaintenant();
+        try {
+            ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+            Principale a = c.get();
+            CampagnesTel.demarrer(ctx, "phare-eteint", false);
+            a.ouvrirLecture();
+            attendre();
+            PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+            Lecture l = pa.lecture();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-phare");
+            l.confirmerSuspension();
+            attendre();
+            ecran(a, "aventure-confirmation");
+            CampagnesTel.abandonner(ctx);
+            l.fermerCouche();
+            attendre();
+            pa.fermerLecture();
+            attendre();
+            contenu(pa, "aventure-liste-suspendue-long");
+            c.pause().stop().destroy();
+        } finally {
+            sansAnimations(false);
+        }
+    }
+
+    // Les mini-jeux des épreuves, en cours de partie (un toucher les lance, un peu de temps passe).
+    private void epreuves() {
+        sansAnimations(false);
+        for (String jeu : new String[]{"reflexe", "memoire", "rythme", "visee", "des"}) {
+            ActivityController<Atelier> c = Robolectric.buildActivity(Atelier.class).setup().visible();
+            Epreuves.Ecran e = new Epreuves.Ecran(c.get(), jeu, 2, 55, 31, "mystere", ok -> {
+            }, () -> {
+            });
+            c.get().setContentView(e);
+            attendre();
+            vue(e, "epreuve-" + jeu + "-depart");
+            Epreuves.Jeu j = e.jeu();
+            long t0 = android.os.SystemClock.uptimeMillis();
+            j.dispatchTouchEvent(android.view.MotionEvent.obtain(t0, t0, android.view.MotionEvent.ACTION_DOWN, j.getWidth() / 2f, j.getHeight() / 2f, 0));
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(jeu.equals("memoire") ? 1300 : jeu.equals("rythme") ? 1500 : 900));
+            vue(e, "epreuve-" + jeu);
+            c.pause().stop().destroy();
+        }
+    }
+
+    // Une vue quelconque, à la taille de l'écran (ou à sa hauteur naturelle si elle est plus haute).
+    private void vue(View v, String nom) {
+        android.util.DisplayMetrics m = v.getResources().getDisplayMetrics();
+        int w = m.widthPixels;
+        v.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        int h = Math.max(m.heightPixels / 2, Math.min(v.getMeasuredHeight(), 12_000));
+        if (v instanceof Epreuves.Ecran) h = m.heightPixels;
+        v.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY));
+        v.layout(0, 0, w, h);
+        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(b);
+        cv.drawColor(Ui.p(v.getContext()).fond);
+        v.draw(cv);
+        ecrire(b, nom);
+    }
+
     private void atelier(String jeu) {
+
         Intent i = new Intent(RuntimeEnvironment.getApplication(), Atelier.class).putExtra(Atelier.EXTRA_JEU, jeu);
         ActivityController<Atelier> c = Robolectric.buildActivity(Atelier.class, i).setup().visible();
         attendre();

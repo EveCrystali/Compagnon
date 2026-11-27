@@ -2,7 +2,9 @@ package fr.pilou.compagnon;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+
 import android.content.pm.PackageManager;
 import android.graphics.Insets;
 import android.graphics.drawable.ColorDrawable;
@@ -23,15 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * L'app Pilou : une seule activité, cinq onglets (Accueil, Jouer, Boutique, Collection, Réglages), une barre de
- * navigation en bas et, en haut de chaque onglet, le bandeau niveau / XP / pièces d'or. Bord à bord : le contenu
- * passe sous les barres système, décalé de leur hauteur.
+ * L'app Pilou : une seule activité, cinq onglets (Accueil, Aventure, Jouer, Boutique, Collection), une barre de
+ * navigation en bas et, en haut, le bandeau niveau / XP / pièces d'or, avec la roue des Réglages. Bord à bord : le
+ * contenu passe sous les barres système, décalé de leur hauteur.
  */
 public final class Principale extends Activity {
-    static final int ACCUEIL = 0, JOUER = 1, BOUTIQUE = 2, COLLECTION = 3, REGLAGES = 4, N = 5;
-    static final String EXTRA_ONGLET = "onglet";
-    private static final String[] NOMS = {"Accueil", "Jouer", "Boutique", "Collection", "Réglages"};
-    private static final String[][] ICONES = {Ui.ACCUEIL, Ui.JOUER, Ui.BOUTIQUE, Ui.COLLECTION, Ui.REGLAGES};
+    /** Pages : les cinq onglets de la barre (NAV), puis les Réglages (la roue du bandeau). */
+    static final int ACCUEIL = 0, AVENTURE = 1, JOUER = 2, BOUTIQUE = 3, COLLECTION = 4, REGLAGES = 5, N = 6, NAV = 5;
+    static final String EXTRA_ONGLET = "onglet", EXTRA_LECTURE = "lecture";
+    private static final String[] NOMS = {"Accueil", "Aventure", "Jouer", "Boutique", "Collection", "Réglages"};
+    private static final String[][] ICONES = {Ui.ACCUEIL, Ui.AVENTURE, Ui.JOUER, Ui.BOUTIQUE, Ui.COLLECTION, Ui.REGLAGES};
 
     private final Handler h = new Handler(Looper.getMainLooper());
     private final Page[] pages = new Page[N];
@@ -41,9 +44,11 @@ public final class Principale extends Activity {
     private FrameLayout contenu, cadre, entete;
     private LinearLayout nav;
     private Vitrine.Bandeau bandeau;
-    private TextView pastilleBoutique;
+    private TextView pastilleBoutique, pastilleAventure;
+    private Ui.Icone roue;
+    private View boutonRoue;
     private View rangees;
-    private int courant = -1;
+    private int courant = -1, avantReglages = ACCUEIL;
     private boolean actif;
 
     @Override
@@ -59,16 +64,30 @@ public final class Principale extends Activity {
         // Bandeau permanent (niveau, XP, po, prochaine rangée) : un toucher ouvre les niveaux.
         entete = new FrameLayout(this);
         entete.setBackgroundColor(Vitrine.NUIT);
+        LinearLayout ligneHaut = Ui.rangee(this);
+        ligneHaut.setGravity(Gravity.TOP);
         bandeau = new Vitrine.Bandeau(this);
         bandeau.setOnClickListener(v -> allerNiveaux());
-        entete.addView(bandeau, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ligneHaut.addView(bandeau, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        // La roue des Réglages : 48 dp de toucher, à droite des pièces d'or.
+        FrameLayout r = new FrameLayout(this);
+        roue = new Ui.Icone(this, Ui.REGLAGES, new int[]{0, Vitrine.ARGENT}, 2);
+        r.addView(roue, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+        r.setBackground(Ui.touchable(this, Ui.arrondi(this, 0x00000000, 24, 0), 24));
+        r.setContentDescription("Réglages");
+        r.setOnClickListener(v -> aller(courant == REGLAGES ? avantReglages : REGLAGES, true));
+        LinearLayout.LayoutParams lr = new LinearLayout.LayoutParams(Ui.dp(this, 48), Ui.dp(this, 52));
+        lr.rightMargin = Ui.dp(this, 4);
+        ligneHaut.addView(r, lr);
+        boutonRoue = r;
+        entete.addView(ligneHaut, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         racine.addView(entete, Ui.large());
         contenu = new FrameLayout(this);
         racine.addView(contenu, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
         nav = Ui.rangee(this);
         nav.setBackgroundColor(p.surface);
         nav.setElevation(Ui.dp(this, 8));
-        for (int i = 0; i < N; i++) nav.addView(boutonNav(i), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        for (int i = 0; i < NAV; i++) nav.addView(boutonNav(i), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         racine.addView(nav, Ui.large());
         racine.setOnApplyWindowInsetsListener((v, ins) -> {
             int haut, bas, gauche, droite;
@@ -98,6 +117,7 @@ public final class Principale extends Activity {
 
         int onglet = sauve != null ? sauve.getInt(EXTRA_ONGLET, ACCUEIL) : getIntent().getIntExtra(EXTRA_ONGLET, ACCUEIL);
         aller(onglet, false);
+        if (sauve == null && getIntent().getBooleanExtra(EXTRA_LECTURE, false)) ouvrirLecture();
         majBandeau();
         lireLien(getIntent());
         if (sauve == null && !Prefs.de(this).getBoolean("notifDemandee", false)) {
@@ -133,19 +153,22 @@ public final class Principale extends Activity {
         b.setPadding(0, Ui.dp(this, 4), 0, Ui.dp(this, 2));
         LinearLayout fond = Ui.rangee(this);
         fond.setGravity(Gravity.CENTER);
-        fond.setPadding(Ui.dp(this, 14), Ui.dp(this, 5), Ui.dp(this, 14), Ui.dp(this, 5));
+        fond.setPadding(Ui.dp(this, 12), Ui.dp(this, 5), Ui.dp(this, 12), Ui.dp(this, 5));
         icones[i] = new Ui.Icone(this, ICONES[i], new int[]{0, p.doux}, 2);
         fond.addView(icones[i]);
-        if (i == BOUTIQUE) {
-            // Pastille « ! » : une rangée vient de s'ouvrir ou une offre du jour attend.
-            pastilleBoutique = Ui.texte(this, "!", 10, Vitrine.ENCRE, true);
-            pastilleBoutique.setBackground(Ui.arrondi(this, Vitrine.ORANGE, 8, 0));
-            pastilleBoutique.setPadding(Ui.dp(this, 5), 0, Ui.dp(this, 5), 0);
-            pastilleBoutique.setVisibility(View.GONE);
+        if (i == BOUTIQUE || i == AVENTURE) {
+            // Pastille « ! » : une rangée vient de s'ouvrir (boutique) ; Pilou est revenu et attend (aventure).
+            TextView pastille = Ui.texte(this, "!", 10, Vitrine.ENCRE, true);
+            pastille.setBackground(Ui.arrondi(this, Vitrine.ORANGE, 8, 0));
+            pastille.setPadding(Ui.dp(this, 5), 0, Ui.dp(this, 5), 0);
+            pastille.setVisibility(View.GONE);
+            pastille.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             LinearLayout.LayoutParams lpb = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lpb.leftMargin = Ui.dp(this, 3);
             lpb.gravity = Gravity.TOP;
-            fond.addView(pastilleBoutique, lpb);
+            fond.addView(pastille, lpb);
+            if (i == BOUTIQUE) pastilleBoutique = pastille;
+            else pastilleAventure = pastille;
         }
         boutons[i] = fond;
         b.addView(fond);
@@ -163,6 +186,7 @@ public final class Principale extends Activity {
     Page page(int i) {
         if (pages[i] == null) {
             switch (i) {
+                case AVENTURE: pages[i] = new PageAventure(this); break;
                 case JOUER: pages[i] = new PageJouer(this); break;
                 case BOUTIQUE: pages[i] = new PageBoutique(this); break;
                 case COLLECTION: pages[i] = new PageCollection(this); break;
@@ -176,8 +200,11 @@ public final class Principale extends Activity {
     /** Va à l'onglet i (fondu et léger glissement). */
     void aller(int i, boolean anime) {
         if (i < 0 || i >= N) i = ACCUEIL;
+        if (i == REGLAGES && courant != REGLAGES && courant >= 0) avantReglages = courant;
         Ui.Palette p = Ui.p(this);
-        for (int k = 0; k < N; k++) {
+        roue.couleurs(new int[]{0, i == REGLAGES ? Vitrine.ORANGE : Vitrine.ARGENT});
+        boutonRoue.setSelected(i == REGLAGES);
+        for (int k = 0; k < NAV; k++) {
             boolean sel = k == i;
             icones[k].couleurs(new int[]{0, sel ? p.bleu : p.doux});
             boutons[k].setBackground(sel ? Ui.arrondi(this, p.voile | 0x10000000, 16, 0) : null);
@@ -187,21 +214,31 @@ public final class Principale extends Activity {
             if (boutons[k].getParent() instanceof View) ((View) boutons[k].getParent()).setSelected(sel);
         }
         if (i == courant) {
-            page(i).defile.smoothScrollTo(0, 0);
+            page(i).retourHaut();
             return;
         }
         Page nouvelle = page(i);
         if (nouvelle.getParent() == null) contenu.addView(nouvelle, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         for (int k = 0; k < N; k++) if (pages[k] != null && k != i) pages[k].setVisibility(View.GONE);
         nouvelle.setVisibility(View.VISIBLE);
-        if (anime) {
+        if (anime && Vitrine.anime(this)) {
+            // Transition courte : fondu et léger glissement dans le sens de la navigation.
+            int sens = courant < 0 ? 0 : i > courant ? 1 : -1;
             nouvelle.setAlpha(0);
-            nouvelle.setTranslationY(Ui.dp(this, 14));
-            nouvelle.animate().alpha(1).translationY(0).setDuration(190).start();
+            nouvelle.setTranslationX(Ui.dp(this, 18) * sens);
+            nouvelle.setTranslationY(sens == 0 ? Ui.dp(this, 10) : 0);
+            nouvelle.animate().alpha(1).translationX(0).translationY(0).setDuration(180)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator(1.6f)).start();
         }
         courant = i;
         nouvelle.montree();
         majBandeau();
+    }
+
+    /** Aventure, directement dans la lecture de la campagne en cours (notification de retour, carte de l'accueil, bulle). */
+    void ouvrirLecture() {
+        aller(AVENTURE, true);
+        ((PageAventure) page(AVENTURE)).lire();
     }
 
     /** Boutique, sur un rayon (PageBoutique.VITRINE : la vitrine). */
@@ -234,9 +271,32 @@ public final class Principale extends Activity {
         pastilleBoutique.setVisibility(neuf ? View.VISIBLE : View.GONE);
         if (boutons[BOUTIQUE].getParent() instanceof View)
             ((View) boutons[BOUTIQUE].getParent()).setContentDescription(neuf ? "Boutique, du nouveau" : "Boutique");
-        int vu = Prefs.de(this).getInt("niveauVu", 0);
+        // Le niveau ne se compte qu'appairé : l'appairage d'un Pilou déjà grand n'ouvre pas la fenêtre « Rangées débloquées ».
+        boolean appaire = Chiffre.valide(Prefs.code(this));
+        int vu = appaire ? Prefs.de(this).getInt("niveauVu", 0) : 0;
         if (vu > 0 && n > vu && !Boutique.debloques(vu, n).isEmpty()) montrerRangees(vu, n);
-        if (n != vu) Prefs.de(this).edit().putInt("niveauVu", n).apply();
+        if (appaire && n != vu) Prefs.de(this).edit().putInt("niveauVu", n).apply();
+        majAventure();
+    }
+
+    private String aventureVue = "";
+
+    /** Pastille « ! » de l'onglet Aventure : Pilou est revenu, il a écrit, il attend. */
+    void majAventure() {
+        if (pastilleAventure == null || !CampagnesTel.pretes()) return;
+        Campagnes.Etat e = CampagnesTel.etat(this);
+        boolean attend = courant != AVENTURE && CampagnesTel.attendJoueur(this, e);
+        String vu = String.valueOf(attend);
+        if (vu.equals(aventureVue)) return;
+        aventureVue = vu;
+        pastilleAventure.setVisibility(attend ? View.VISIBLE : View.GONE);
+        if (attend && Vitrine.anime(this)) {
+            pastilleAventure.setScaleX(0.2f);
+            pastilleAventure.setScaleY(0.2f);
+            pastilleAventure.animate().scaleX(1).scaleY(1).setDuration(260).setInterpolator(new android.view.animation.OvershootInterpolator(2.5f)).start();
+        }
+        if (boutons[AVENTURE].getParent() instanceof View)
+            ((View) boutons[AVENTURE].getParent()).setContentDescription(attend ? "Aventure, Pilou t'attend" : "Aventure");
     }
 
     /** « NIVEAU 15 ! Rangées débloquées » : les objets entrés en rayon, « Voir en boutique » ou « Plus tard ». */
@@ -332,6 +392,8 @@ public final class Principale extends Activity {
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (rangees != null) fermerRangees();
+        else if (courant >= 0 && page(courant).retour()) return;
+        else if (courant == REGLAGES) aller(avantReglages, true);
         else if (courant != ACCUEIL) aller(ACCUEIL, true);
         else super.onBackPressed();
     }
@@ -340,6 +402,7 @@ public final class Principale extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.hasExtra(EXTRA_ONGLET)) aller(intent.getIntExtra(EXTRA_ONGLET, ACCUEIL), true);
+        if (intent.getBooleanExtra(EXTRA_LECTURE, false)) ouvrirLecture();
         lireLien(intent);
     }
 
@@ -347,7 +410,19 @@ public final class Principale extends Activity {
     protected void onResume() {
         super.onResume();
         actif = true;
+        Retour.auPremierPlan = true;
         Veille.demarrer(this);
+        // Les campagnes se lisent hors du fil d'interface ; puis l'alarme du retour est remise d'aplomb.
+        Context app = getApplicationContext();
+        CampagnesTel.precharger(() -> {
+            if (courant >= 0 && actif) page(courant).rafraichir();
+            // Les nouvelles des PC du groupe (une décision prise ailleurs), puis l'alarme du retour remise d'aplomb.
+            new Thread(() -> {
+                CampagnesTel.synchroniser(app);
+                Retour.programmer(app);
+            }, "pilou-retour").start();
+
+        });
         tic();
     }
 
@@ -355,6 +430,7 @@ public final class Principale extends Activity {
     protected void onPause() {
         super.onPause();
         actif = false;
+        Retour.auPremierPlan = false;
         h.removeCallbacksAndMessages(null);
     }
 
