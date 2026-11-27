@@ -75,7 +75,7 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
   | Capture | Défaut | Gravité | Suite |
   |---|---|---|---|
   | Petit écran, scène avec portrait (`*-grande-panne-choix`, `*-phare-eteint-*`, `aventure-personnage*`) | Le portrait (96 dp) remonte jusqu'à la barre du haut et passe **devant** le bouton « ⋯ » et la fin du titre | Moyenne | Corrigé : la barre passe devant (`Lecture.java`) |
-  | Même cas, titre long (« La nuit des six bateaux ») | Le titre reste coupé visuellement par le portrait, même devant lui | Faible | Proposé : portrait plus petit quand la scène descend à 156 dp (choix de design) |
+  | Même cas, titre long (« La nuit des six bateaux ») | Était coupé par le portrait ; il passe maintenant en entier devant lui (vérifié sur les captures de la PR) | Faible | Si le chevauchement gêne sur téléphone : portrait plus petit à 156 dp (choix de design) |
   | `*-grande-panne-*` chapitre 1 (« 13 h 37 ») | Le titre blanc se pose sur l'afficheur pixel « 1337 » du décor : deux textes superposés | Faible | Décor (`assets/`) ou titre décalé : à trancher |
   | Titres de chapitre sur décor clair (prologue, `petit-nuage` « Lâcher ») | Blanc + ombre sur ciel crème ou rose : lisible mais contraste faible | Faible | Proposé : voile sombre derrière le titre |
   | `jeu-petit-grandepolice-*` barre du bas | « Boutique » et « Collection » se touchent, sans espace | Moyenne | Proposé : libellés réduits ou sur deux lignes en grande police (`Principale`) |
