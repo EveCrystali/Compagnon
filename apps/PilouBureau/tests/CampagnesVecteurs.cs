@@ -163,11 +163,29 @@ public sealed class CampagnesVecteurs
     }
 
     // Version courte pour les parcours complets (docs/TEST-JEU.md) : l'empreinte de l'état au lieu de son texte.
+    // Sans la prose (textes des messages, lieu, ligne « pendant ») : une relecture d'orthographe des campagnes ne change pas
+    // ces empreintes ; tout le reste (nœuds, phases, heures, tirages, variables, humeurs, décors, nombre de messages) compte.
     public Campagnes.Etat? EtatH(long t)
     {
         var e = Campagnes.Actualiser(K, Biblio, t);
-        L.Add($"etat {F(t)} {(e is null ? "rien" : Empreinte(e.Texte()))}");
+        L.Add($"etat {F(t)} {(e is null ? "rien" : Empreinte(SansProse(e)))}");
         return e;
+    }
+
+    public static string SansProse(Campagnes.Etat e)
+    {
+        var champs = e.Texte().Split('|').Where(c => !c.StartsWith("lieu=", StringComparison.Ordinal) && !c.StartsWith("pendant=", StringComparison.Ordinal)
+                                                       && !c.StartsWith("messages=", StringComparison.Ordinal));
+        var b = new StringBuilder();
+        foreach (var m in e.Messages) b.Append($"{m.E}.{m.I}.{m.Qui}.{m.Noeud}.{m.Humeur}.{m.Decor}.{m.T}.{(m.Reprise ? 1 : 0)}\n");
+        return string.Join("|", champs) + "|messages=" + F(e.Messages.Count) + ":" + Empreinte(b.ToString());
+    }
+
+    public void FilH()
+    {
+        var b = new StringBuilder();
+        foreach (var m in K.Fil) b.Append($"{m.P}.{m.E}.{m.I}.{m.Qui}.{m.Noeud}\n");
+        L.Add($"filh {F(K.Fil.Count)} {F(K.NonLus)} {Empreinte(b.ToString())}");
     }
 
     // Les messages publiés, en empreinte, avec la taille du plus gros (octets de JSON).
@@ -231,7 +249,12 @@ public sealed class CampagnesVecteurs
     }
 
     // Échange complet : chaque carnet nommé reçoit les messages des autres, dans l'ordre donné.
-    public void Echanger(long t, params string[] ordre)
+    public void Echanger(long t, params string[] ordre) => Echanger(t, true, ordre);
+
+    // Le même, avec les états sans la prose (vraies campagnes : la relecture d'orthographe ne change pas les vecteurs).
+    public void EchangerH(long t, params string[] ordre) => Echanger(t, false, ordre);
+
+    private void Echanger(long t, bool prose, string[] ordre)
     {
         var envois = new Dictionary<string, List<string>>();
         foreach (var nom in ordre.Distinct())
@@ -244,7 +267,8 @@ public sealed class CampagnesVecteurs
             Carnet(nom);
             foreach (var autre in ordre.Where(a => a != nom))
                 foreach (var m in envois[autre]) Recevoir(nom, t, m);
-            Actualiser(t);
+            if (prose) Actualiser(t);
+            else EtatH(t);
         }
     }
 
@@ -516,7 +540,7 @@ public sealed class CampagnesVecteurs
             if (x.Phase == Campagnes.Phase.Choix && x.Options.Count >= 2 && x.ChapitreNumero >= 2) break;
             Pas("phare-eteint", "pc-a", ref td);
         }
-        s.Echanger(td, "dv-pc", "dv-tel");
+        s.EchangerH(td, "dv-pc", "dv-tel");
         var ed = s.EtatH(td)!;
         s.Carnet("dv-pc");
         s.Choisir("phare-eteint", td + 10_000, "pc-a", ed.Options[0].Id);
@@ -530,11 +554,11 @@ public sealed class CampagnesVecteurs
             s.Carnet("dv-tel");
             Pas("phare-eteint", "tel-b", ref tq);
         }
-        s.Echanger(Math.Max(tp, tq) + 1000, "dv-tel", "dv-pc");
+        s.EchangerH(Math.Max(tp, tq) + 1000, "dv-tel", "dv-pc");
         foreach (var nom in new[] { "dv-pc", "dv-tel" })
         {
             s.Carnet(nom);
-            s.Fil();
+            s.FilH();
             s.SignatureH();
         }
 

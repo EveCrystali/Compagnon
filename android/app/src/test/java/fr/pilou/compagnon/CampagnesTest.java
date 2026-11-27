@@ -52,6 +52,18 @@ public class CampagnesTest {
         return String.format(Locale.ROOT, "%016x", h);
     }
 
+    /** Comme CampagnesVecteurs.SansProse (C#) : l'état sans les textes des messages, le lieu et la ligne « pendant ». */
+    static String sansProse(Campagnes.Etat e) {
+        List<String> champs = new ArrayList<>();
+        for (String c : e.texte().split("\\|", -1))
+            if (!c.startsWith("lieu=") && !c.startsWith("pendant=") && !c.startsWith("messages=")) champs.add(c);
+        StringBuilder b = new StringBuilder();
+        for (Campagnes.Message m : e.messages)
+            b.append(m.e).append('.').append(m.i).append('.').append(m.qui).append('.').append(m.noeud).append('.').append(m.humeur).append('.')
+                    .append(m.decor).append('.').append(m.t).append('.').append(m.reprise ? 1 : 0).append('\n');
+        return String.join("|", champs) + "|messages=" + e.messages.size() + ":" + empreinte(b.toString());
+    }
+
     private static String ok(String refus) {
         return refus == null ? "ok" : refus;
     }
@@ -130,9 +142,14 @@ public class CampagnesTest {
                     return "actualiser " + m[1] + " " + (e == null ? "rien" : e.texte());
                 }
                 case "etat": {
-                    // Parcours complets (docs/TEST-JEU.md) : l'état en empreinte.
+                    // Parcours complets (docs/TEST-JEU.md) : l'état en empreinte, sans la prose (textes, lieu, « pendant »).
                     Campagnes.Etat e = Campagnes.actualiser(k, CampagnesTest::biblio, Long.parseLong(m[1]));
-                    return "etat " + m[1] + " " + (e == null ? "rien" : empreinte(e.texte()));
+                    return "etat " + m[1] + " " + (e == null ? "rien" : empreinte(sansProse(e)));
+                }
+                case "filh": {
+                    StringBuilder b = new StringBuilder();
+                    for (Campagnes.Message x : k.fil) b.append(x.p).append('.').append(x.e).append('.').append(x.i).append('.').append(x.qui).append('.').append(x.noeud).append('\n');
+                    return "filh " + k.fil.size() + " " + k.nonLus() + " " + empreinte(b.toString());
                 }
                 case "messagesh": {
                     List<String> l = Campagnes.messages(k, m[1], m[2]);

@@ -260,7 +260,7 @@ public class ParcoursTests(ITestOutputHelper sortie)
             }
         }
         else r.Defauts.Add($"pas de fin (nœud {e.Noeud}, {e.Phase})");
-        v.Fil();
+        v.FilH();
         v.Acquis(c.Id);
         v.SignatureH();
         return r;

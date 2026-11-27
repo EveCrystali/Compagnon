@@ -40,7 +40,9 @@ regarder de ses yeux sur un vrai Windows et un vrai téléphone. Le contrat du m
   la rejoue avec `Campagnes.java` : mêmes états, mêmes messages, même fil, même signature du carnet.
 - Régénérer après un changement voulu du moteur ou d'une campagne :
   `PILOU_REGENERER=1 dotnet test apps/PilouBureau/tests -p:EnableWindowsTargeting=true --filter Le_telephone_rejoue_les_memes_vecteurs`.
-  Une correction d'orthographe dans une campagne change les empreintes : il faut régénérer.
+  Les parties entières des vraies campagnes y sont comparées **sans la prose** (textes, lieux, ligne « pendant ») :
+  une relecture d'orthographe ne les change pas. Les cas plus anciens du prologue comparent aussi ses textes :
+  une retouche du prologue demande de régénérer.
 
 ### 3. Synchronisation (`SynchroParcoursTests`)
 
