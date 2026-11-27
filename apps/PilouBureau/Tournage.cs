@@ -183,7 +183,20 @@ public static class Tournage
     public static readonly IReadOnlyList<string> FamillesConnues = new[] { "stade:", "tenue:", "objet:", "soins:", "meteo:" };
 
     public static bool EssaiConnu(string scene) =>
-        EssaisConnus.Contains(scene) || FamillesConnues.Any(f => scene.StartsWith(f, StringComparison.Ordinal) && scene.Length > f.Length);
+        EssaisConnus.Contains(scene) || EssaiAuBord(scene) is not null
+        || FamillesConnues.Any(f => scene.StartsWith(f, StringComparison.Ordinal) && scene.Length > f.Length);
+
+    // Jeux qui se rejouent collés à un bord de l'écran (--essai=peche:gauche, cuisine:droite…).
+    public static readonly IReadOnlyList<string> JeuxAuBord = new[] { "peche", "mord", "prise", "cuisine", "tape", "etoile", "bulles" };
+
+    // « peche:gauche » → (peche, bord gauche) ; null si ce n'est pas un essai au bord.
+    public static (string Jeu, bool Gauche)? EssaiAuBord(string scene)
+    {
+        int i = scene.IndexOf(':');
+        if (i < 0) return null;
+        var (jeu, bord) = (scene[..i], scene[(i + 1)..]);
+        return JeuxAuBord.Contains(jeu) && bord is "gauche" or "droite" ? (jeu, bord == "gauche") : null;
+    }
 
     // Le rayon « Ensembles » de la boutique, s'il existe dans cette version ; null sinon.
     public static string? RayonEnsembles() =>
@@ -212,7 +225,7 @@ public static class Tournage
         JsonSerializer.Serialize(new
         {
             version,
-            essais = EssaisConnus.Concat(FamillesConnues.Select(f => f + "*")).ToList(),
+            essais = EssaisConnus.Concat(JeuxAuBord.SelectMany(j => new[] { j + ":gauche", j + ":droite" })).Concat(FamillesConnues.Select(f => f + "*")).ToList(),
             rayons = Boutique.Rayons.ToList(),
             ensembles = RayonEnsembles(),
             // Durée de la visite avec ce que cet exe sait jouer : le script attend jusque-là (plus une marge).

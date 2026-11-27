@@ -53,9 +53,9 @@ public sealed class FenetreDefense : Window
         // Taille en pixels physiques : la bande, puis un facteur entier k (un pixel de jeu = k × k pixels d'écran).
         var z = l.Zone;
         double s = l.Echelle;
-        int hauteurPhys = (int)Math.Round(z.Height * s * PartHauteur), largeurPhys = (int)Math.Round(z.Width * s * Math.Clamp(l.Largeur, 0.3, 1));
-        _k = Math.Max(1, hauteurPhys / 200);
-        int w = Math.Max(320, largeurPhys / _k), h = Math.Max(150, hauteurPhys / _k);
+        var bande = Placement.Bande(z.Left, z.Top, z.Width, z.Height, s, l.Largeur, PartHauteur);
+        _k = bande.K;
+        int w = bande.W, h = bande.H;
         _partie = new PartieDefense(w, h, l.Graine);
         _pilote = l.Demo ? new PiloteDemo(l.Graine) : null;
         _toile = new ToileDefense(w, h);
@@ -72,10 +72,9 @@ public sealed class FenetreDefense : Window
         UseLayoutRounding = true;
         Width = w * _k / s;
         Height = h * _k / s;
-        double gaucheEcran = z.Left * s + (z.Width * s - w * _k) / 2;
-        _gauchePhys = Math.Round(gaucheEcran);
+        _gauchePhys = bande.GauchePhys;
         Left = _gauchePhys / s;
-        Top = (Math.Round(z.Bottom * s) - h * _k) / s;
+        Top = bande.HautPhys / s;
         _image.Source = _bitmap;
         _image.Stretch = Stretch.Fill;
         _image.Width = Width;

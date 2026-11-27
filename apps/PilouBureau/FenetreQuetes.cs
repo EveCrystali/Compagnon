@@ -195,7 +195,7 @@ public sealed partial class FenetrePilou
         if (_badgeBoutique is null) return;
         _badgeBoutique.ToolTip = $"Boutique : {_nouveautes} nouveauté{(_nouveautes > 1 ? "s" : "")} — clic pour y aller";
         if (Bandeau.Anime) _badgeBoutique.Changer("badge-boutique", t);
-        Canvas.SetLeft(_badgeBoutique, TeteX + (_aGauche ? 34 : -64));
+        Canvas.SetLeft(_badgeBoutique, Placement.ACote(_aGauche, CoteJeu, 34, _badgeBoutique.Width));
         Canvas.SetTop(_badgeBoutique, TeteY - 6 + (Bandeau.Anime ? Math.Round(Math.Sin(t / 500) * 2) : 0));
     }
 

@@ -100,6 +100,15 @@ public sealed class FenetreInvite : Window
         _bulle.Visibility = Visibility.Visible;
     }
 
+    private double _zoneGauche = double.NegativeInfinity, _zoneDroite = double.PositiveInfinity;
+
+    // Écran de l'hôte : l'invité qui entre par le bord apparaît au bord, pas sur l'écran voisin.
+    public void Borner(double zoneGauche, double zoneDroite)
+    {
+        _zoneGauche = zoneGauche;
+        _zoneDroite = zoneDroite;
+    }
+
     // x : milieu des pieds ; pieds : ordonnée du sol (unités WPF de l'écran).
     public void Poser(Pose p, double x, double pieds, double maintenant)
     {
@@ -108,5 +117,9 @@ public sealed class FenetreInvite : Window
         _scene.InvalidateVisual();
         Left = Math.Round(x - Largeur / 2 * _k);
         Top = Math.Round(pieds - (HauteurBulle + Scene.Sol) * _k);
+        // Partie de la fenêtre sur l'écran de l'hôte (unités avant k) ; le reste est découpé.
+        double x0 = Math.Clamp((_zoneGauche - Left) / _k, 0, Largeur), x1 = Math.Clamp((_zoneDroite - Left) / _k, 0, Largeur);
+        var racine = (FrameworkElement)Content;
+        racine.Clip = x0 <= 0 && x1 >= Largeur ? null : new RectangleGeometry(new Rect(x0, -4000, Math.Max(0, x1 - x0), 8000));
     }
 }

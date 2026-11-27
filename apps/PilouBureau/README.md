@@ -14,6 +14,7 @@ format : `docs/BRANCHER.md`.
 | `Integrations.cs` | branchement Codex (`~/.codex/hooks.json`) |
 | `Discord.cs` | statut Discord (Rich Presence), webhook |
 | `FenetrePilou.cs`, `FenetreIntegrations.cs`, `Jeux.cs`, `Scene.cs`, `Pixels.cs` | fenêtre, dessin, jeux |
+| `Placement.cs` | géométrie sans WPF (testée) : repères de la fenêtre, côté de la place, éléments posés à côté de Pilou en miroir exact, pêche (canne dans la main, fil du bout de la canne au bouchon), cuisine, bornage à l'écran courant (X négatif compris), sortie par le bord, bande de la Défense ; essais `--essai=peche:gauche\|droite` (aussi `mord:`, `prise:`, `cuisine:`, `tape:`, `etoile:`, `bulles:`) : Pilou collé à ce bord de son écran ; rendus de contrôle : `PILOU_PLANCHES_BORDS=<dossier> dotnet test --filter PlanchesBords` |
 | `Gestes.cs`, `Notifications.cs` | Pilou au clavier, appareil photo, filtre et file des notifications (sans WPF, testés) |
 | `Crochets.cs`, `SourceNotifsWindows.cs`, `FenetreGestes.cs` | crochet clavier (compte seulement), presse-papiers et dossier Captures, lecteur de notifications, menu et bulle (`docs/NOTIFICATIONS.md`) |
 | `Instance.cs`, `InstanceWindows.cs` | instance unique : relancer l'exe ramène Pilou (ou remplace un Pilou figé), `--redemarrer`, `--apres-maj` ; les essais (`--essai`, `--film`, `--instantane`) tournent à côté |

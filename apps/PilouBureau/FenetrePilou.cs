@@ -16,8 +16,8 @@ namespace PilouBureau;
 // Seuls ses pixels et la bulle prennent la souris ; le reste laisse passer les clics.
 public sealed partial class FenetrePilou : Window
 {
-    private const double LargeurBase = 380;
-    private const double HauteurBulle = 150;
+    private const double LargeurBase = Placement.LargeurBase;
+    private const double HauteurBulle = Placement.HauteurBulle;
 
     private enum Geste { Rien, Marche, Assis, Baille, Ballon, SauteSouris }
 
@@ -610,7 +610,7 @@ public sealed partial class FenetrePilou : Window
         _queue.Margin = aGauche ? new Thickness(marge, -6, 0, 0) : new Thickness(0, -6, marge, 0);
     }
 
-    private double PiedsDansFenetre => (_aGauche ? Scene.Largeur / 2 : LargeurBase - Scene.Largeur / 2) * K;
+    private double PiedsDansFenetre => Placement.PiedsDansFenetre(_aGauche, K);
 
     private Matrix VersWpf => PresentationSource.FromVisual(this)?.CompositionTarget?.TransformFromDevice ?? Matrix.Identity;
     private Matrix VersEcran => PresentationSource.FromVisual(this)?.CompositionTarget?.TransformToDevice ?? Matrix.Identity;
@@ -675,10 +675,11 @@ public sealed partial class FenetrePilou : Window
             OccuperSeul(t, expr);
         }
 
-        if (!_attrape && _auSol) _zone = ZoneSous(_x, _zone.Bottom - 10);
+        // Pendant une visite ou une expédition, l'écran reste celui du départ (sinon, passé le bord, l'écran voisin
+        // deviendrait le sien : sortie recalculée en route, pancarte posée sur l'autre écran).
+        if (!_attrape && _auSol) _zone = ZoneSous(XEcran, _zone.Bottom - 10);
         double sol = _zone.Bottom;
-        double demi = Scene.Largeur / 2 * K;
-        double min = _zone.Left + demi, max = _zone.Right - demi;
+        var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
 
         bool marche = false;
         if (_attrape)
@@ -811,10 +812,31 @@ public sealed partial class FenetrePilou : Window
         AnimerExpedition(t);
         if (t < _alerteJusque) Peindre();
 
-        bool gauche = _x < (_zone.Left + _zone.Right) / 2;
-        if (gauche != _aGauche && !_attrape) Placer(gauche);
-        Left = Math.Round(_x - PiedsDansFenetre);
-        Top = Math.Round(_yPieds - (HauteurBulle + Scene.Sol) * K);
+        bool gauche = Placement.AGauche(_x, _zone.Left, _zone.Right);
+        // Côté changé en plein jeu (Pilou lâché de l'autre côté) : l'eau, la marmite… étaient posées de l'autre côté.
+        if (gauche != _aGauche && !_attrape)
+        {
+            if (_jeuEnCours != Jeu.Aucun) Arreter("");
+            Placer(gauche);
+        }
+        Left = Placement.GaucheFenetre(_x, _aGauche, K);
+        Top = Placement.HautFenetre(_yPieds, K);
+        Borner();
+    }
+
+    // Ce qui déborde de l'écran courant (un écran voisin, à gauche en X négatif, ou rien) est découpé : la bulle
+    // se resserre, et Pilou qui part par le bord disparaît au bord au lieu de réapparaître sur l'écran d'à côté.
+    private (double X0, double X1) _visible = (0, LargeurBase);
+    private bool _visibleAGauche;
+
+    private void Borner()
+    {
+        var v = Placement.Visible(Left, K, _zone.Left, _zone.Right);
+        if (v == _visible && _aGauche == _visibleAGauche) return;
+        _visibleAGauche = _aGauche;
+        _visible = v;
+        _racine.Clip = v == (0, LargeurBase) ? null : new RectangleGeometry(new Rect(v.X0, -4000, v.X1 - v.X0, 8000));
+        _bulle.MaxWidth = Placement.LargeurBulle(_aGauche, v);
     }
 
     // Claude t'attend (et ce n'est pas encore « lu ») : Pilou court se placer sous la souris,

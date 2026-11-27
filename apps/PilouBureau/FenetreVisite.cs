@@ -43,8 +43,8 @@ public sealed partial class FenetrePilou
             _reglages.Taille = Tournage.TailleTournage(_zone.Height);
             AppliquerTaille();
         }
-        double demi = Scene.Largeur / 2 * K;
-        _x = Math.Clamp(dip.X, _zone.Left + demi, Math.Max(_zone.Left + demi, _zone.Right - demi));
+        var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+        _x = Math.Clamp(dip.X, min, max);
         _yPieds = _zone.Bottom;
         _cible = _x;
         _zoneConnue = true;

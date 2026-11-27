@@ -110,7 +110,8 @@ public sealed partial class FenetrePilou
         _repas.IsHitTestVisible = false;
         _repas.RenderTransformOrigin = new Point(0.5, 0.5);
         _jeu.Children.Add(_repas);
-        Canvas.SetLeft(_repas, TeteX + (_aGauche ? 20 : -40));
+        // Près de sa bouche, du côté de la place (miroir exact d'un côté à l'autre).
+        Canvas.SetLeft(_repas, Placement.ACote(_aGauche, CoteJeu, 20, _repas.Width));
         Canvas.SetTop(_repas, TeteY + 34);
         _repasDebut = Maintenant;
     }
@@ -291,7 +292,7 @@ public sealed partial class FenetrePilou
     {
         if (_iconeSoin is not null)
         {
-            Canvas.SetLeft(_iconeSoin, TeteX + (_aGauche ? -52 : 30));
+            Canvas.SetLeft(_iconeSoin, Placement.ACote(_aGauche, -CoteJeu, 24, _iconeSoin.Width));
             Canvas.SetTop(_iconeSoin, TeteY + 4 + Math.Sin(t / 600) * 2);
         }
         if (_repas is not null)
