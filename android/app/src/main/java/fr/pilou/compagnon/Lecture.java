@@ -116,6 +116,8 @@ final class Lecture extends FrameLayout {
         lpp.rightMargin = Ui.dp(a, 14);
         lpp.bottomMargin = Ui.dp(a, 40);
         tete.addView(perso, lpp);
+        // Sur un petit écran, la scène rapetisse et le portrait remonte jusqu'à la barre : boutons et titre restent devant.
+        barreHaut.bringToFront();
 
         lieu = Ui.puceScene(a, "");
         LayoutParams ll = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
