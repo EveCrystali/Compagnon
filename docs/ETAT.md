@@ -21,6 +21,7 @@ Dernière mise à jour : 27 novembre 2026.
 | `relecture-petit-nuage` | Relecture de tous les parcours, orthographe, dosage des fins |
 | `relecture-grande-panne` | Idem, plus le prologue |
 | `relecture-phare-eteint` | Idem, plus la loyauté de l'enquête |
+| `animations-campagnes` | Décors animés en boucle, portraits animés de 29 personnages (champ `personnage` des nœuds), écriture lettre à lettre, volet entre décors, fond selon le ton et l'heure, réglage des animations (PC et Android) |
 | `illustrations-campagnes` | Décors `decor-<campagne>-<id>`, objets exclusifs des fins, vignettes de souvenirs, 80 sprites de plus en fin |
 
 ## Ensuite

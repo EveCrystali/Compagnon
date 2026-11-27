@@ -53,6 +53,41 @@ Astral** (40), avec une variante câline ou espiègle selon les soins reçus.
 
 Les plans complets, qui révèlent tout, sont dans `docs/campagnes/*-plan.md`.
 
+### Leur apparence (portraits animés, `outils/sprites/portraits_campagnes.py`)
+
+Chacun a un portrait de 32 × 32 (64 × 64 en fin) qui respire, cligne et parle ; ses expressions entre parenthèses.
+Pas de rouge contre vert : les rainettes sont sarcelle, les joues pêche, les bouches prune.
+
+- **La Grande Panne** : **Grumeau** (`grumeau`), sablier de bois, verre un peu rayé, gros sourcils de crin gris, un
+  grain coincé au col ; grognon même content (colère, tendre, surpris). **Le Rond** (`le-rond`), anneau de huit points
+  bleus dont deux éteints, un visage au milieu (surpris). **Mlle Renvoi** (`mlle-renvoi`), chignon prune, lunettes
+  rectangulaires, tailleur violet, un astérisque doré à la boutonnière (joie, colère). **Le golem de tickets**
+  (`golem`), pile de tickets, une fente pour œil orange (colère). **Quatre-Cent-Quatre** (`spectre-404`), feuille pâle
+  lavande au coin corné, au bas ondulé (triste). **Le Dateur** (`dateur`), tampon à poignée de bois, molette bloquée,
+  socle encreur à sec (joie, triste). **Mme Échéance** (`mme-echeance`), une dame-calendrier, anneaux sur le front
+  (malice). **Ctrl, Alt et Suppr** (`raccourcis`), trois touches, ardoise, violette et orange, une rame en travers
+  (peur). **S** (`touche-s`), petite touche timide, un S gravé (joie). **L'Imprimante** (`imprimante`), longs cils,
+  cartouches dont la cyan est vide quand elle se fâche (colère). **Brouillon** (`brouillon`), feuille qui tremble, une
+  phrase inachevée et ses trois points (peur, tendre, joie). **Le Tic-Tac** (`tic-tac`), disque de laiton à pattes,
+  côté tic pâle et inquiet, côté tac chaud et paisible (joie, triste). **Le Balayeur** (`balayeur`), balai de paille
+  au chapeau rond, très poli (triste).
+- **Le phare éteint** : **Anselme** (`anselme`), barbe blanche, casquette marine à insigne de laiton, yeux pâles,
+  voilés (triste, joie). **Lison** (`lison`), deux nattes cuivrées, taches de son, ciré bleu (malice, peur, joie).
+  **Tudal** (`tudal`), bonnet de laine orange, barbe de trois jours, pull marine à côtes (colère). **Perrine**
+  (`perrine`), chignon châtain, joues rondes, tablier crème (joie). **Odile** (`odile`), carré gris, lunettes rondes,
+  écharpe bleue en travers (triste). **Basile** (`basile`), crâne lisse, couronne de cheveux, loupe d'horloger vissée à
+  l'œil, moustache, montre à gousset (peur, triste). **M. Vernier** (`vernier`), chapeau de pluie et ciré jaunes,
+  jumelles au cou.
+- **Petit Nuage** : **Brouillon** (`brouillon`), tout petit nuage blanc, joues roses, grands yeux ; une goutte quand il
+  est triste (joie, triste, peur). **Tournebise** (`tournebise`), coq de fer rouillé de profil, crête et bec dorés, sur
+  sa croix des vents (triste, tendre). **Ondée** (`ondee`), vieux nuage gris très large, paupières tranquilles, une
+  pluie douce dessous (tendre). **Mi-Bémol** (`mi-bemol`), rainette sarcelle au ventre crème, une baguette de jonc
+  (joie). **Dentelle** (`dentelle`), araignée violette pendue à son fil, une goutte de rosée à vendre (malice).
+  **Madame Bocal** (`madame-bocal`), marmotte ronde, un bocal serré contre elle, un courant d'air dedans (joie). **Les
+  Froisseuses** (`froisseuses`), chauve-souris aux ailes froissées comme du papier. **Les Enclumes** (`enclumes`),
+  nuages d'orage plats dessus (colère : un petit éclair, une forme). **La bergeronnette** (`bergeronnette`), grise et
+  blanche, calotte noire, longue queue.
+
 ## Ce que Pilou n'est pas
 
 Ni un assistant, ni un outil de productivité, ni un jeu qui réclame. C'est **un animal de compagnie de

@@ -124,8 +124,8 @@ nativement en fin (`fin.ids_campagnes`) :
 | `ton-humour`, `ton-mystere`, `ton-emotion`, `ton-epique` | 12 × 12 (24 × 24) | emblème du ton, chacun d'une **forme** à lui : rond rieur, losange à serrure, cœur, étoile |
 
 **Décors.** Format commun paysage 96 × 40 (rapport 2,4 : un bandeau d'en-tête), 192 × 80 en fin. Trois plans au
-moins, une lumière qui vient d'un côté, un détail charmant par décor ; quelques-uns s'animent (deux ou trois images,
-`duree` : vagues, néon, brume, draps, poussière), avec autant d'images et la même `duree` aux deux échelles. Une palette
+moins, une lumière qui vient d'un côté, un détail charmant par décor ; tous s'animent en boucle (6 à 8 images, voir
+« Animations des campagnes »), avec autant d'images et la même `duree` aux deux échelles. Une palette
 restreinte par campagne (`PAL` de chaque module, et ses rampes de lumière) : prologue (fin d'après-midi dorée, herbes
 sarcelle), grande-panne (plastique beige, néons cyan et orange, gelée sarcelle), phare-eteint (nuit bleue, brume,
 granit, lanternes orange), petit-nuage (ciels lavés, soirs lavande, neige, mélèzes dorés). Les lecteurs n'ont aucune
@@ -152,6 +152,55 @@ Vérifié par `IllustrationsTests.cs` et `IllustrationsTest.java` (chaque décor
 déclaré a son sprite, au bon format, opaque, natif en fin ; chaque exclusif se voit porté aux quatre stades ; les
 emblèmes de ton ont quatre silhouettes différentes), et par quatre poses de `rendus-reference.txt`.
 
+## Animations des campagnes
+
+Les campagnes vivent : décors en boucle, portraits des personnages, écriture lettre à lettre, transitions, fond qui
+respire. Tout ce que le PC et le téléphone doivent calculer de la même façon (quelle image à quel instant, combien de
+lettres écrites, l'ordre du volet, les couleurs et les particules du fond, quand tombent les récompenses) est dans
+`outils/sprites/animations.py`, en arithmétique entière ; `reference.py` en écrit `outils/sprites/animations-reference.txt`,
+relu ligne à ligne par `AnimationsCampagneTests.cs` (`AnimationsCampagne.cs`) et `AnimationsTest.java` (`Animations.java`).
+
+**Décors animés.** Les 46 décors bouclent sur **6 à 8 images, de 180 à 250 ms** (4 à 5,5 images par seconde). Rien
+n'est redessiné à la main : `decors_campagnes.toiles` rejoue le dessin de chaque image avec une **phase** de boucle
+`decors_campagnes.PHASE` (0 ≤ p < 1) ; les outils des décors s'en servent (`dc.onde()` : flammes qui vacillent, reflets
+de la mer, étoiles du ciel de nuit, vagues, nuages qui dérivent d'un pixel, draps, drapeau, ailes des oiseaux,
+balancier qui frémit), puis les **effets d'ambiance** de `ambiances_decors.py` se posent dessus : `faisceau` (le phare
+qui tourne), `reflets`, `brume` (ondes stationnaires : elle respire sans filer), `pulse` (lanternes, néons, poêle,
+flaques de lumière), `fumee`, `particules` (poussière dans un rai, neige, bruine, aiguilles de mélèze, braises, graines),
+`pluie`, `vent` (herbes, feuillages : le haut balance, la base reste plantée ; seulement sur les couleurs données, pour
+ne pas faire trembler la trame du ciel), `onduler` (eau), `scintille` (points clairs isolés qui s'éteignent chacun à
+son tour), `balayage` (reflet sur une vitre, une lentille, une barre de chargement). Chaque effet est une fonction
+périodique de la phase : la dernière image retombe sur la première sans à-coup. Couleurs prises dans la palette du
+décor (62 au plus). Réglage par décor dans `REGLES` : nombre d'images, durée, « garder » l'ancienne alternance du dessin.
+
+**Portraits des personnages** (`portraits_campagnes.py`, voir LORE.md) : `portrait-<campagne>-<personnage>` (neutre) et
+`portrait-<campagne>-<personnage>-<expression>`, 32 × 32 (fin 64 × 64, natif), fond transparent, cerne sombre, cinq
+images dans un ordre fixe, déclaré par une clé que les anciens lecteurs ignorent :
+
+```
+portrait: repos 0 1 cligne 2 parle 3 4
+```
+
+0 repos ; 1 inspiré (le haut du corps monte d'un pixel) ; 2 yeux fermés ; 3 et 4 bouche mi-ouverte et ouverte.
+`animations.image_portrait(n, duree, t, parle, niveau)` choisit : clignement 150 ms toutes les 4,3 s, respiration
+toutes les 900 ms, parole 3-4-3-0 à 140 ms tant que Pilou écrit une réplique du personnage (« … »). Les expressions
+sont celles de Pilou (`joie`, `peur`, `triste`, `surpris`, `colere`, `tendre`, `malice`…) ; une expression non dessinée
+retombe sur le visage neutre (`AnimationsCampagne.Portrait`, `Animations.portrait`). 29 personnages, 69 portraits.
+
+**Niveaux.** Réglage « animations des campagnes » : `completes` (tout), `reduites` (décors fixes, clignement seul,
+fondu au lieu du volet, pas de particules), `aucune` (rien ne bouge, texte écrit d'un coup). Si le système demande moins
+d'animations (Windows : « Afficher les animations » coupé ; Android : échelle des animations à 0), c'est `aucune`.
+
+**Mémoire et charge.** Chaque image n'est rendue qu'une fois, puis gardée dans un cache borné (28 sprites sur le PC,
+24 sur le téléphone : au plus ~10 Mo) ; une image ne change à l'écran que lorsque son numéro change (4 à 7 fois par
+seconde pour un décor, ~7 fois pour un portrait qui parle). Le téléphone lit les décors et portraits fins **à la
+demande** (`Banque.aLire`, 12 gardés) : ils ne ralentissent pas le démarrage. Fichiers : environ 5,5 Mo de texte de plus
+dans `assets/sprites2x` (6 images par décor), compressés dans l'APK.
+
+**Planches** : `python3 outils/sprites/planches_animations.py [dossier] [filtre]` → `decors-<campagne>.png` (toutes les
+images côte à côte, la première répétée à droite pour juger la boucle), `decors-<campagne>.gif` (mosaïque à la vitesse
+réelle), `portraits-<campagne>.png` et `.gif` (repos puis parole, avec le choix d'image commun).
+
 ## Format d'un sprite
 
 ```
@@ -163,6 +212,7 @@ decalage: -14 -1       coin haut-gauche par rapport à l'ancre, en pixels de la 
 couche: derriere       dessiné avant le corps (cape, aura) ; par défaut : devant
 coiffe: oui            cache l'antenne (chapeaux)
 duree: 250             ms par image quand il y en a plusieurs
+portrait: repos 0 1 cligne 2 parle 3 4   (portraits de campagne seulement ; clé ignorée des anciens lecteurs)
 palette: a=#1c2128 b=#b4dbff c=@contour
 images:
 ..aaaa..

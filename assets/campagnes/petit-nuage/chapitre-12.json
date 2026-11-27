@@ -45,6 +45,7 @@
     "ch12-leve": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon", "expression": "peur",
       "texte": [
         "Ils se levaient. Tous. Lentement, les vieux d'abord, puis les autres, en une longue file qui montait vers le sud. J'étais au bord de l'eau, debout, avec ma casserole. Brouillon est monté avec eux, à la hauteur d'un arbre. Et puis il s'est arrêté. Il a laissé passer deux grands, trois. Il est redescendu. Il est revenu se coller contre moi, tout froid, tout tremblant, et il a dit : « Goutte. » Rien d'autre. Au-dessus de nous, la file avançait."
       ],
@@ -66,6 +67,7 @@
     "ch12-encore": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "brouillon",
       "texte": [
         "Je l'ai gardé. J'ai refermé les bras, sans serrer, et j'ai dit : encore un peu. Il n'a pas discuté. Il s'est fait tout rond contre moi. On a regardé passer les derniers, les traînards, un vieux tout effiloché qui fermait la marche. Puis le ciel a été vide, et bleu, et très grand. Brouillon a levé un bord vers le haut, comme on lève la main. Personne n'a répondu. Il a dit : « Partis. » J'ai dit oui. Il n'y était pour rien. C'est moi qui n'ai pas su."
       ],
@@ -185,6 +187,7 @@
       "lieu": "Chez toi, plus tard",
       "decor": "fenetre-maison",
       "humeur": "triste",
+      "personnage": "tournebise",
       "texte": [
         "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. Je me suis demandé, tout le long du chemin, ce que j'aurais pu faire de plus pour qu'il se retourne. Rire plus. Le laisser faire davantage. Avoir moins peur de l'eau. Je ne sais pas. Peut-être rien. Peut-être qu'un nuage qui s'en va bien, c'est un nuage qui ne regarde pas derrière.",
         "Je pense à Tournebise. Lui non plus ne sait pas si elle s'est retournée. Mais elle est arrivée, et c'est lui qui l'a menée jusque-là. Je comprends mieux ce que ça vaut. Il est arrivé. Il est grand, quelque part, ou il le sera. Le soir, je monte sur le rebord de ta fenêtre et je regarde passer les nuages. Je ne sais pas lequel c'est. J'agite la main pour tous. Ça fait beaucoup de bonjours, mais j'ai le temps."
@@ -224,6 +227,7 @@
       "lieu": "Chez toi, plus tard",
       "decor": "fenetre-maison",
       "humeur": "triste",
+      "personnage": "tournebise",
       "texte": [
         "Je suis rentré. J'ai retrouvé le pot de fleurs, le caillou dessus, ton bureau. Je ne vais pas te mentir : j'ai refait cette dernière aube dans ma tête à chaque pas du retour. Il est arrivé. Il est avec les siens, il ne rétrécira plus, et c'est pour ça qu'on était partis. Mais je ne lui ai pas dit au revoir comme il faut. Il m'a manqué un peu de temps. Il m'en manquera toujours un peu.",
         "En repassant à la halte, je n'ai pas eu besoin de raconter. Tournebise a su en me voyant. Il a juste dit : « Toi aussi. » Et il m'a fait une place sur le toit. Depuis, le soir, je monte sur le rebord de ta fenêtre, je regarde passer les nuages, et je dis au revoir. À voix haute, à tous, à tout hasard. On ne sait jamais lequel écoute. Je crois que je le dirai longtemps. Ça ne me dérange pas."
@@ -237,6 +241,7 @@
       "lieu": "La halte, au retour",
       "decor": "halte-girouette",
       "humeur": "joie",
+      "personnage": "tournebise",
       "texte": [
         "Je suis rentré par la halte du Bout-des-Prés. De loin, j'ai vu qu'il avait plu : le toit brillait, et rien que le toit. Tout autour, le pré était sec. Tournebise ne m'a pas dit bonjour. Il a dit : « Elle est venue. Elle a plu sur moi. Rien que sur moi. Ça m'a dérouillé le pivot. » Et il a fait une chose que je ne lui avais jamais vu faire. Il a tourné. Un tour complet, en grinçant, pour me montrer.",
         "Il indique le vent, maintenant, comme tout le monde. Sauf le soir : le soir, il se remet vers la montagne, mais il dit que ce n'est plus pour chercher. Il m'a laissé la plume. Je l'ai accrochée à ta fenêtre. Quand il pleut, elle sonne. Hier, elle a sonné deux fois : un coup grave, et, juste après, un tout petit, à côté. Sur la vitre, il restait un rond sec, de ma taille. J'ai fait bonjour aux deux."

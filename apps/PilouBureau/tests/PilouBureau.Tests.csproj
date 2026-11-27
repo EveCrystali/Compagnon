@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../Placement.cs;../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Meteo.cs;../Connecteurs.cs;../ApiLocale.cs;../Diagnostics.cs;../../../integrations/visualstudio/Rapport.cs;../Connecteurs/*.cs;../Soins.cs;../Expeditions.cs;../Amis.cs;../Gestes.cs;../Notifications.cs;../Vivacite.cs;../Clics.cs;../Icone.cs;../Instance.cs;../MenuNotification.cs;../Tournage.cs;../Police.cs;../Defense.cs;../DessinDefense.cs;../Campagnes.cs;../Aventure.cs;../Epreuves.cs" />
+    <Compile Include="../Placement.cs;../Etats.cs;../Statut.cs;../Signal.cs;../Integrations.cs;../Telephone.cs;../Mise.cs;../Butin.cs;../Recompenses.cs;../Reglages.cs;../Profil.cs;../Groupe.cs;../Boutique.cs;../Quetes.cs;../Progression.cs;../Activites.cs;../Metiers.cs;../Sprites.cs;../RenduPilou.cs;../Meteo.cs;../Connecteurs.cs;../ApiLocale.cs;../Diagnostics.cs;../../../integrations/visualstudio/Rapport.cs;../Connecteurs/*.cs;../Soins.cs;../Expeditions.cs;../Amis.cs;../Gestes.cs;../Notifications.cs;../Vivacite.cs;../Clics.cs;../Icone.cs;../Instance.cs;../MenuNotification.cs;../Tournage.cs;../Police.cs;../Defense.cs;../DessinDefense.cs;../Campagnes.cs;../Aventure.cs;../Epreuves.cs;../AnimationsCampagne.cs" />
     <EmbeddedResource Include="../activites.json" LogicalName="PilouBureau.activites.json" />
     <EmbeddedResource Include="../../../assets/catalogue.txt" LogicalName="pilou:catalogue.txt" />
     <EmbeddedResource Include="../../../assets/campagnes/**/*.json" LogicalName="campagne:%(RecursiveDir)%(Filename)%(Extension)" />

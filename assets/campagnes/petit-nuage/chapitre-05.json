@@ -7,6 +7,7 @@
       "lieu": "La halte du Bout-des-Prés",
       "decor": "halte-girouette",
       "humeur": "surpris",
+      "personnage": "tournebise",
       "texte": [
         "C'était une girouette. Un coq en fer, tout rouillé, sur le toit d'une petite halte en pierre, avec une lanterne pendue au bec. C'est lui qui grince. Il s'appelle Tournebise. Il nous a vus arriver de loin : « Une goutte et un petit. Entrez, c'est ouvert. Moi, je ne descends plus. La rouille. »",
         "Un détail bizarre : le vent vient du plateau, mais lui, il pointe vers la montagne. Il ne tourne pas. Brouillon a peur du grincement. Il s'est caché derrière moi, ce qui ne sert à rien, il dépasse de partout. Le coq le regarde, et il a une façon de le regarder… Je ne sais pas. Je les présente, ou je laisse faire ?"
@@ -19,6 +20,7 @@
     "ch5-mesure": {
       "type": "hasard",
       "humeur": "neutre",
+      "personnage": "tournebise",
       "texte": [
         "On est entrés. Il y a un poêle, une marmite, un banc. La voix de Tournebise descend par le tuyau de la cheminée, ça fait drôle : « Mets de l'eau à chauffer. La vapeur pour lui, la soupe pour toi. » Puis Brouillon est monté le voir, finalement, tout seul, par la fenêtre. Le coq l'a examiné un long moment, d'un œil, puis de l'autre."
       ],
@@ -30,6 +32,7 @@
     "ch5-mesure-grand": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "tournebise",
       "texte": [
         "« Deux Pilou et demi, au moins », a dit Tournebise. Je ne lui avais pas donné l'unité : il a deviné. « Tu l'as bien tenu, la goutte. À ce train, il arrive entier. J'en ai vu passer, des petits, au bout d'un fil ou dans un panier, qui ne faisaient plus qu'une pomme, ici. En dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Lui, il a de la marge. Ne la gaspille pas. »"
       ],
@@ -38,6 +41,7 @@
     "ch5-mesure-petit": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "tournebise",
       "texte": [
         "« Il a fondu, ton petit », a dit Tournebise. « Je ne te gronde pas : ça fond vite, à cet âge, on ne s'en rend pas compte. Tu le mesures comment ? En Pilou ? Bon. Alors retiens ça, la goutte : en dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Et il n'en est plus si loin. Alors la brume, la vapeur, tout ce que tu trouves, tu le lui donnes. Et plus de bêtises au soleil. »"
       ],
@@ -46,6 +50,7 @@
     "ch5-histoire": {
       "type": "attente",
       "humeur": "neutre",
+      "personnage": "tournebise",
       "duree_min": 15,
       "duree_max": 20,
       "pendant": "La soupe cuit ; Tournebise raconte",
@@ -104,6 +109,7 @@
     "ch5-toit": {
       "type": "choix",
       "humeur": "tendre",
+      "personnage": "tournebise",
       "texte": [
         "Il est tard. Brouillon s'est réveillé, et il veut dormir là-haut. Sur le toit, dehors, à côté de Tournebise. Il l'a demandé lui-même : « Brouillon là. » Le vieux coq dit que c'est une bonne école. Qu'un petit qui n'a jamais pris le vent ne saura pas monter, une fois au lac, et qu'il lui montrera comment on se tient.",
         "Mais il fait froid, là-haut, et le vent l'use. Près du poêle, il passerait la nuit dans la vapeur et il reprendrait un bord, c'est sûr. Il me regarde. Il attend que je dise oui. Je dis quoi ?"
@@ -116,6 +122,7 @@
     "ch5-la-haut": {
       "type": "attente",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "duree_min": 25,
       "duree_max": 30,
       "pendant": "Pilou dort d'un œil ; sur le toit, on apprend le vent",
@@ -128,6 +135,7 @@
     "ch5-poele": {
       "type": "attente",
       "humeur": "tendre",
+      "personnage": "tournebise",
       "duree_min": 25,
       "duree_max": 30,
       "pendant": "Pilou dort près du poêle, un nuage dans la vapeur",
@@ -140,6 +148,7 @@
     "ch5-plume": {
       "type": "choix",
       "humeur": "surpris",
+      "personnage": "tournebise",
       "texte": [
         "Ce matin, Tournebise m'a appelé sur le toit. Une des plumes de sa queue s'est décrochée dans la nuit. C'est une plume en fer, longue comme moi, qui sonne quand on la cogne. Il veut que je l'emporte. « Si tu vois, au lac, une grande grise. Très vieille. Large comme une vallée. Fais sonner ça. Elle saura. »",
         "J'ai soulevé la plume. Elle est lourde. Vraiment lourde, avec la casserole et le réchaud en plus, et la route qui monte. Il le sait. Il a ajouté : « Tu peux dire non. Je ne t'en voudrai pas. » Et il a regardé ailleurs, c'est-à-dire la montagne. Je fais quoi ?"
@@ -152,6 +161,7 @@
     "ch5-plume-oui": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "tournebise", "expression": "tendre",
       "texte": [
         "Je l'ai attachée en travers du baluchon. Je penche à gauche, maintenant. À chaque pas, elle fait ding contre la casserole. Brouillon trouve que je fais une très belle musique. Tournebise n'a pas dit merci. Il a dit : « Elle aimait les mirabelles. Enfin, l'odeur. » Comme si c'était un renseignement utile. Je crois que c'était sa façon."
       ],
@@ -168,6 +178,7 @@
     "ch5-routes": {
       "type": "choix",
       "humeur": "determine",
+      "personnage": "brouillon",
       "recompense": { "po": 20, "xp": 10 },
       "texte": [
         "Voilà. Il y a deux passages, m'a dit Tournebise. Le col, là-haut, entre deux dents : la Gencive. C'est par là qu'il est passé. C'est long et froid, mais on voit où on met les pieds. Si on n'a pas perdu un seul jour en route, on arrive au lac le dernier soir. Pas avant.",

@@ -40,6 +40,7 @@
     "ch2-libre": {
       "type": "attente",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "duree_min": 15,
       "duree_max": 25,
       "pendant": "Pilou fait dix pas, se retourne, appelle",
@@ -66,6 +67,7 @@
       "lieu": "Le Pré aux Draps",
       "decor": "pre-aux-draps",
       "humeur": "joie",
+      "personnage": "brouillon",
       "texte": [
         "Il faut que je te raconte. On est arrivés dans un pré plein de cordes à linge. Onze grands draps blancs qui claquent au vent. Brouillon s'est arrêté net. Il a fait un bruit que je ne connaissais pas, très aigu. Et il a foncé. Il se frotte à eux, il se glisse entre deux, il leur parle en pff.",
         "Il croit que c'est sa famille. Voilà. Il croit qu'il est arrivé. Les draps ne répondent pas, évidemment, ce sont des draps. Il attend quand même. Il est tellement content que je n'ose plus bouger. Je fais quoi, moi, maintenant ?"

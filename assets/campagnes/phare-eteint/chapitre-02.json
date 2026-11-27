@@ -7,6 +7,7 @@
       "lieu": "Le Bigorneau Qui Tousse",
       "decor": "auberge-bigorneau",
       "humeur": "peur",
+      "personnage": "perrine",
       "texte": [
         "Je suis à l'auberge, Le Bigorneau Qui Tousse, et j'y reste : dehors il n'y a plus que la brume et des pas. Quand je suis entré dans la salle, tout le monde s'est tu. Tu connais ce silence-là ? Celui où même les cuillères attendent. Puis Perrine, la patronne, a lancé : « Une soupe pour le petit bleu ! » et les cuillères sont reparties.",
         "À la grande table, une dame en gilet strict trie des papiers à en-tête : Odile, la maire. Près de la grande horloge arrêtée, un monsieur maigre, une loupe vissée à l'œil, lui ouvre le ventre avec des tournevis de poupée : Basile, l'horloger. Au portemanteau, un ciré jaune qui goutte. Au fond, Tudal le pêcheur boude devant son verre. Perrine me demande où je veux m'asseoir."
@@ -19,6 +20,7 @@
     "ch2-table-odile": {
       "type": "recit",
       "humeur": "neutre",
+      "personnage": "odile",
       "texte": [
         "Odile m'a fait une place en retournant sa pile de papiers, un peu trop vite. Elle a des yeux fatigués et gentils, et des questions pointues. J'ai répondu que j'aimais les phares. « Celui-ci coûte cher, vous savez. Et il y a des décisions pénibles qu'on ne repousse pas éternellement. » Elle a dit ça en regardant le ciré jaune.",
         "Sur une feuille mal retournée, j'ai lu à l'envers : « Service des Feux », et un mot tamponné en travers, en grosses lettres. Je lis très bien à l'envers, c'est un talent d'encre. Mais elle a posé son coude dessus. « Mangez tant que c'est chaud. » Puis, plus bas, presque pour elle : « Et ne traversez pas demain. Laissez ce pauvre homme tranquille. »"
@@ -37,6 +39,7 @@
     "ch2-nuit": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "perrine",
       "texte": [
         "La soupe est finie. Perrine me propose une chambre sous le toit : « J'ai de la place, mes pensionnaires sont au large. Les six bateaux ne rentrent que mercredi soir. » Seulement la lettre dit de ne me fier à personne, et ici tout le monde me regarde par-dessus son bol. Sur le quai, j'ai vu un hangar à bateaux entrouvert. Je dors où ?"
       ],
@@ -50,6 +53,7 @@
       "lieu": "La chambre sous le toit",
       "decor": "guet-de-nuit",
       "humeur": "fatigue",
+      "personnage": "perrine",
       "texte": [
         "La chambre est grande comme un tiroir, et j'aime bien les tiroirs. Un édredon rouge, une chandelle, et un carreau qui donne pile sur la mer. Perrine m'a monté un bol de soupe en plus. En redescendant, elle a marmonné : « J'en fais toujours trop, c'est bête. » Je coince la chaise sous la poignée et je m'installe au carreau. Si quelque chose bouge cette nuit du côté du phare, je le verrai."
       ],
@@ -127,6 +131,7 @@
     "ch2-bidons-fouille": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "tudal",
       "texte": [
         "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée en cette saison : c'est affiché en gros sur la cabane du port. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
       ],

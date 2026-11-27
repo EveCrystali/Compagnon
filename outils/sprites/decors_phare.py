@@ -7,6 +7,7 @@ Le phare de la Dent-Creuse est le même partout : tour effilée, galerie, lanter
 import math
 
 import toile
+import decors_campagnes as dc
 from decors_campagnes import decor
 from peinture import (Palette, degrade, relief, voile, eclat, lueur, semis, ell, poly, rect, point, trait, hline, vline, courbe,
                       etoile4, hasard)
@@ -60,7 +61,7 @@ def phare(t, x, base, h=22, w=5, allume=False, c=ENCRE, c2=None):
 def mer(t, y0, y1=40, k=0, couleurs=(MER2, MER1, MER0), reflet=BR2, graine=0):
     degrade(t, y0, y1, list(couleurs), trame=0.5)
     for i in range(18):
-        x = (hasard(i, 1, graine) * 100 + k * 3 * (1 + i % 2)) % 100 - 2
+        x = (hasard(i, 1, graine) * 100 + 1.4 * dc.onde(hasard(i, 4, graine)) * (1 + i % 2)) % 100 - 2
         y = y0 + 1 + hasard(i, 2, graine) * (y1 - y0 - 2)
         l = 2 + hasard(i, 3, graine) * 4 * (y - y0 + 4) / (y1 - y0)
         hline(t, x, x + l, y, reflet)
@@ -70,15 +71,17 @@ def ciel_nuit(t, y1, etoiles=12, graine=0):
     degrade(t, 0, y1, [N0, N1, N2, N3])
     for i in range(etoiles):
         x, y = hasard(i, 5, graine) * 96, hasard(i, 6, graine) * y1 * 0.6
-        point(t, x, y, BR4 if i % 3 else L5)
+        v = dc.onde(hasard(i, 7, graine))
+        point(t, x, y, N3 if v < -0.75 else BR4 if i % 3 else L5)
 
 
 def flamme(t, x, y, k=0, r=1.0, froid=True):
     """Flamme de bougie ou de lanterne, qui vacille d'une image à l'autre. froid : la lueur réchauffe une scène bleue
     (mélange vers l'orange) ; sinon elle éclaire le bois le long de sa rampe."""
     lueur(t, x, y, 8 * r, L4, PAL, force=0.55 if froid else 0.4, teinte=froid)
-    ell(t, x + (0.2 if k % 2 else -0.2), y, 0.9 * r, 1.6 * r, L3)
-    ell(t, x, y + 0.4, 0.5 * r, 0.9 * r, L5)
+    v, w = dc.onde(x * 0.137), dc.onde(x * 0.137 + 0.3)
+    ell(t, x + 0.25 * v, y - 0.15 * w, 0.9 * r, 1.6 * r * (1 + 0.1 * w), L3)
+    ell(t, x + 0.1 * v, y + 0.4, 0.5 * r, 0.9 * r, L5)
 
 
 def bougie(t, x, y, allumee=True, k=0, froid=False):
@@ -288,7 +291,7 @@ def passe_pied(t, k):
     degrade(t, 19, 40, [BR3, G4, G3, G2])
     for i, (x, y, l) in enumerate(((10, 27, 12), (40, 31, 16), (78, 26, 10), (60, 36, 18), (6, 36, 10))):
         ell(t, x, y, l / 2, 1 + l / 14, BR2)
-        hline(t, x - l / 4 + k, x, y - 0.3, BR4)
+        hline(t, x - l / 4 + 0.8 * dc.onde(i * 0.21), x + 0.6 * dc.onde(i * 0.21 + 0.1), y - 0.3, BR4)
     # La chaussée de pierres claires qui file en zigzag vers le rocher.
     pts = [(40, 40), (46, 34), (54, 29), (62, 24), (70, 20)]
     for i in range(len(pts) - 1):
@@ -342,11 +345,12 @@ def pied_phare(t, k):
         hline(t, 36 - i * 3, 60 + i * 3, y, BR3)
     # La mer qui remonte autour du rocher (trois images).
     def vague(x):
-        return 34.5 + 1.2 * math.sin(x / 3 + k * 2.1) - (0.8 if k == 2 else 0)
-    relief(t, vague, MER1, lisere=BR4, cond=lambda x, y: not (30 < x < 66 and y < 37.5 - k * 0.6))
-    relief(t, lambda x: vague(x) + 2.5, MER0, cond=lambda x, y: not (27 < x < 69 and y < 37.5 - k * 0.6))
+        return 34.5 + 1.2 * math.sin(x / 3 + 2 * math.pi * dc.PHASE) - 0.4 * (1 + dc.onde())
+    monte = 0.3 * (1 + dc.onde())
+    relief(t, vague, MER1, lisere=BR4, cond=lambda x, y: not (30 < x < 66 and y < 37.5 - monte))
+    relief(t, lambda x: vague(x) + 2.5, MER0, cond=lambda x, y: not (27 < x < 69 and y < 37.5 - monte))
     for i in range(6):
-        x = (i * 17 + k * 5) % 96
+        x = (i * 17 + 2.5 * dc.onde(i * 0.17)) % 96
         hline(t, x, x + 3, 37 + (i % 2) * 1.5, BR3)
 
 
@@ -372,8 +376,9 @@ def place(t, k):
     point(t, 48, 4.5, ENCRE)
     # Le drapeau mouillé, qui pend.
     vline(t, 63, 0, 9, G1)
-    poly(t, [(63.2, 1), (67, 1.5 + k * 0.4), (66.5, 5.5), (63.2, 5)], VOLET)
-    poly(t, [(65, 1.2), (67, 1.5 + k * 0.4), (66.5, 5.5), (65, 5.3)], CREME)
+    fl = 0.3 * (1 + dc.onde())
+    poly(t, [(63.2, 1), (67, 1.5 + fl), (66.5 + fl * 0.3, 5.5), (63.2, 5)], VOLET)
+    poly(t, [(65, 1.2), (67, 1.5 + fl), (66.5 + fl * 0.3, 5.5), (65, 5.3)], CREME)
     # Les goélands sur le toit.
     for x in (38, 41, 57):
         ell(t, x, 6.8 - (x - 38) * 0.0, 1.2, 0.8, CREME)
@@ -393,7 +398,7 @@ def place(t, k):
     ell(t, 22, 30.5, 5.6, 1.5, N3)
     rect(t, 21, 22, 2, 8, G4)
     ell(t, 22, 22, 2.4, 1, G3)
-    trait(t, 23, 22, 25, 25 + k, BR4, ep=1)
+    trait(t, 23, 22, 25 + 0.3 * dc.onde(0.25), 25.5 + 0.5 * dc.onde(), BR4, ep=1)
     rect(t, 70, 30, 14, 1.4, W3)
     rect(t, 70, 27.5, 14, 1.4, W3)
     rect(t, 71, 31.4, 1, 3, W1)
@@ -404,10 +409,7 @@ def place(t, k):
         hline(t, 89.4, 93.5, y, G3)
     rect(t, 90.5, 27, 1, 5, W1)
     point(t, 92.5, 19.6, L2)
-    # La bruine.
-    for i in range(14):
-        x, y = hasard(i, 1, 30 + k) * 96, hasard(i, 2, 30 + k) * 40
-        trait(t, x, y, x - 0.5, y + 1.2, BR4, ep=1)
+    # La bruine : ambiances_decors (pluie qui tombe en boucle).
 
 
 @decor("phare-eteint", "atelier-basile", images=2, duree=1000)
@@ -426,7 +428,7 @@ def atelier(t, k):
             rect(t, x - r - 0.8, y - r - 0.8, 2 * r + 1.6, 2 * r + 1.6, W3)
         else:
             ell(t, x, y, r + 0.8, r + 0.8, W4)
-            rect(t, x - 0.6, y + r, 1.2, 3, W4)
+            rect(t, x - 0.6 + 0.7 * dc.onde(i * 0.17), y + r, 1.2, 3, W4)
         ell(t, x, y, r, r, CREME)
         a = math.radians(i * 47 + (6 if k else 0))
         b = math.radians(i * 113)

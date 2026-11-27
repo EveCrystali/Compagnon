@@ -168,7 +168,10 @@ def main():
         lignes.append("%s | %s" % (i, empreinte_sprite(rendu.agrandir(B[i]))))
     with open(os.path.join(rendu.ICI, "agrandis-reference.txt"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lignes) + "\n")
-    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis")
+    # Animations des campagnes : les règles communes (animations.py) ; relues par le PC et le téléphone.
+    import animations
+    animations.ecrire_reference()
+    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt")
 
 
 if __name__ == "__main__":

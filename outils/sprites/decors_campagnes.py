@@ -16,6 +16,15 @@ from toile import Toile, ecrire
 
 W, H = 96, 40
 DECORS = {}
+# Phase de la boucle d'ambiance en cours de dessin (0 ≤ PHASE < 1) : les outils des décors (flamme, mer, ciel de nuit,
+# engrenages…) s'en servent pour bouger d'une image à l'autre sans à-coup (ambiances_decors.py).
+PHASE = 0.0
+
+
+def onde(decalage=0.0):
+    """Sinus de la boucle d'ambiance (vaut 0 hors animation)."""
+    import math
+    return math.sin(2 * math.pi * (PHASE + decalage))
 
 
 def decor(campagne, id_, images=1, duree=0):
@@ -26,15 +35,34 @@ def decor(campagne, id_, images=1, duree=0):
 
 
 def toiles(sid):
-    """Les images d'un décor à l'échelle courante (toile.ECHELLE)."""
+    """Les images d'un décor à l'échelle courante (toile.ECHELLE) : sa boucle d'ambiance (ambiances_decors.py), ou ses
+    images d'origine s'il n'en a pas."""
+    global PHASE
+    import ambiances_decors
+    import sys
     f, n, duree, _, _ = DECORS[sid]
+    regle = ambiances_decors.regle(sid)
     ims = []
-    for k in range(n):
-        t = Toile(W, H)
-        f(t, k)
+    if regle is None:
+        for k in range(n):
+            PHASE = 0.0
+            t = Toile(W, H)
+            f(t, k)
+            ims.append(t)
+    else:
+        images, duree, garder, effets = regle
+        pal = sys.modules[f.__module__].PAL
+        for k in range(images):
+            PHASE = k / images
+            t = Toile(W, H)
+            f(t, (k * n) // images if garder else 0)
+            for effet in effets:
+                effet(t, PHASE, pal)
+            ims.append(t)
+        PHASE = 0.0
+    for t in ims:
         for r in t.g:
             assert None not in r, "%s : pixel vide (un décor est opaque)" % sid
-        ims.append(t)
     return ims, duree
 
 

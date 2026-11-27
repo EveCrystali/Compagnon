@@ -6,6 +6,7 @@
       "lieu": "Dans la Tour",
       "decor": "tour-tampon",
       "humeur": "joie",
+      "personnage": "golem",
       "checkpoint": true,
       "texte": [
         "Je suis vivant. Le golem voulait seulement remettre un papier à Grumeau : « Rappel. Numéro 1 337, vous êtes attendu à votre guichet. » Grumeau a demandé quand. Le golem a dit : « À 13 h 38. » Puis il est parti faire sa ronde, à sa vitesse, c'est-à-dire qu'on a eu le temps de compter chaque ticket de son dos. Vingt-deux retournements. Grumeau dit vingt. Il y a un grumeau.",
@@ -45,6 +46,7 @@
       "type": "choix",
       "lieu": "Étage des formulaires",
       "humeur": "surpris",
+      "personnage": "mlle-renvoi",
       "texte": [
         "Étage des formulaires. Des casiers jusqu'au plafond, une couleur par demande. Mlle Renvoi l'avait dit : il nous faut le jaune poussin, « Demande exceptionnelle ». Il en reste un seul, sous une cloche en verre. Pour soulever la cloche, il faut remplir un formulaire vert d'eau. Le casier des verts d'eau est vide, avec un mot : « Réassort à 13 h 38. »",
         "L'employé des casiers est un trombone déplié qui se ronge le bout. Il voudrait bien nous aider, mais il n'a « pas la main ». Dans la corbeille à papier, je vois dépasser un vieux jaune poussin froissé, rempli à moitié par quelqu'un d'autre. Comment on s'y prend ?"
@@ -58,6 +60,7 @@
     "ch4a-form-liste": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "mlle-renvoi",
       "texte": [
         "J'ai récité la liste de Mlle Renvoi, d'une traite, avec le ton. Le trombone s'est redressé d'un coup. « Vous connaissez les pièces ? Par cœur ? Personne ne connaît les pièces ! » Il a soulevé la cloche lui-même, en regardant ailleurs, « puisque vous êtes du métier ». J'ai le jaune poussin, tout neuf, tout lisse. Grumeau a fait « mmh » sur un ton que je ne lui connaissais pas. De la fierté, peut-être. Ou un grain de travers."
       ],
@@ -67,6 +70,7 @@
     "ch4a-form-corbeille": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "grumeau",
       "texte": [
         "J'ai plongé dans la corbeille. Le jaune poussin froissé était rempli jusqu'à la ligne 3 par un certain « Bob (copie) », qui demandait une chaise. J'ai gommé avec le pouce. Ça marche bien, je suis soluble. Le trombone a regardé le plafond pendant toute l'opération, très concentré sur une fissure. On a notre formulaire. Il sent un peu le trognon de pomme, mais il est réglementaire, d'après Grumeau, « à l'odeur près »."
       ],
@@ -87,6 +91,7 @@
       "lieu": "Bureau du Dateur",
       "decor": "etage-guichets",
       "humeur": "triste",
+      "personnage": "dateur", "expression": "joie",
       "checkpoint": true,
       "texte": [
         "Un formulaire sans tampon, d'après Grumeau, c'est « un chapeau sans tête ». Il en faut trois. Et la case du milieu, « Objet de la demande » ? « Laisse. Personne ne la lit jamais. » Le premier tampon se demande ici, au Dateur : un gros tampon à roulettes de chiffres, effondré derrière son bureau. Il ne sait écrire que la date et l'heure, et depuis ce matin c'est la même. « 13 h 37. 13 h 37. J'avais une œuvre, vous savez. »",
@@ -101,6 +106,7 @@
     "ch4a-vise": {
       "type": "epreuve",
       "humeur": "determine",
+      "personnage": "dateur",
       "texte": [
         "Bon. J'ai trempé le pied dans son coussin. Ça chatouille, ça pique, et j'ai perdu au moins un millimètre. Le Dateur revit : il roule des épaules, il s'échauffe le manche. Mais il tremble d'émotion, et la case « Visa » est minuscule. C'est moi qui tiens le formulaire. Aide-moi à le placer pile sous le tampon quand il tombe : s'il déborde de la case, c'est refusé."
       ],
@@ -112,6 +118,7 @@
     "ch4a-tampon-net": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "dateur", "expression": "triste",
       "texte": [
         "TCHAC. « 13 h 37 », en bleu, pile dans la case, sans une bavure. Il y avait enfin de quoi encrer, et le Dateur a contemplé son travail les larmes aux roulettes. « C'est la même heure que les autres. Mais celle-ci, elle est belle. » Premier tampon ! Grumeau a vérifié les bords à travers son propre verre et n'a rien trouvé à redire, ce qui l'a contrarié. Plus que deux. Ils se demandent plus haut. Évidemment."
       ],
@@ -121,6 +128,7 @@
     "ch4a-tampon-bave": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "dateur",
       "texte": [
         "Le tampon est tombé de travers. Moitié dans la case, moitié sur « Ne rien inscrire ici ». Le Dateur a regardé la tache, puis moi, puis la tache. « Baveux. Refusé. Je n'ai pas le droit de recommencer sur le même exemplaire, et il n'y en a pas d'autre. » Il s'est effondré de nouveau. Zéro tampon ici. Grumeau dit qu'il en reste à prendre plus haut, et que la prochaine fois je respirerai avant."
       ],
@@ -131,6 +139,7 @@
       "lieu": "Au pied de la Tour",
       "decor": "tour-tampon",
       "humeur": "peur",
+      "personnage": "dateur",
       "texte": [
         "J'ai dessiné le tampon moi-même, avec le doigt, pendant que le Dateur se mouchait. Très ressemblant, je trouvais. Une sonnerie a retenti. Une trappe s'est ouverte sous moi, marquée « Sans suite ». J'ai glissé dans un tuyau pendant un temps infini, classé entre un vieux courrier et une facture, jusqu'à un bac tout en bas de la Tour. L'affiche avait prévenu. Je me repose, je me défroisse, et je remonte."
       ],
@@ -139,6 +148,7 @@
     "ch4a-ailleurs": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "dateur",
       "texte": [
         "Non. Je tiens à mes millimètres. Il doit bien rester de l'encre quelque part dans cet étage : un fond de cartouche, un stylo oublié, un buvard encore humide. Je fouille les tiroirs un par un. Grumeau fait le guet en répétant que c'est du temps perdu, ce qui dans sa bouche est presque un compliment. Le Dateur nous regarde avec des yeux de tampon battu. Je reviens dès que j'ai trouvé."
       ],
@@ -151,6 +161,7 @@
     "ch4a-montee": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "dateur",
       "texte": [
         "Avant qu'on parte, le Dateur m'a retenu par le baluchon. Il a chuchoté que le dernier papier qu'il a tamponné, à 13 h 37 pile, était une autorisation de sortie. Pour qui, il n'a pas eu le temps de lire : la main qui la tenait tremblait trop. Et la phrase du motif s'arrêtait au milieu. Je n'aime pas ça. Les deux autres tampons sont à l'étage 37. On remonte. À tout à l'heure."
       ],
@@ -166,6 +177,7 @@
       "lieu": "Caverne des câbles",
       "decor": "caverne-cables",
       "humeur": "peur",
+      "personnage": "raccourcis",
       "texte": [
         "Alt a ouvert la porte de service avec une épingle, a dit « c'est tout droit, ou alors pas », et nous a plantés là. Elle nous retrouvera au Marais, « ou alors plus loin ». Derrière la porte : la Caverne des câbles. Des câbles partout, gros comme des troncs, emmêlés à perte de vue, et pas une lampe. Ça bourdonne. Ça fait des petits clics. J'ai très peur du noir, je préfère te le dire.",
         "Grumeau prétend que lui n'a peur de rien, mais il s'est rapproché de mon pied. Son sable luit un tout petit peu dans l'ombre, une lueur de veilleuse. Il faut y aller quand même. Je m'y prends comment, pour ne pas trembler ?"
@@ -178,6 +190,7 @@
     "ch4b-descente": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "grumeau",
       "texte": [
         "On avance. Grumeau a dit : « Si tu racontes ça à quelqu'un, je nie tout. » Je ne sais pas de quoi il parle, on fait semblant tous les deux. Les câbles descendent en pente douce. Il faut les enjamber un par un, et certains sont tièdes, ce que je trouve suspect pour un câble. Je compte mes pas à voix haute. Je t'écris dès qu'il y a de la lumière, ou un problème. Plutôt de la lumière, j'espère."
       ],
@@ -192,6 +205,7 @@
       "lieu": "Caverne des câbles",
       "decor": "caverne-cables",
       "humeur": "peur",
+      "personnage": "grumeau",
       "checkpoint": true,
       "texte": [
         "C'était un problème. Un bug géant. Six pattes, des antennes, une carapace qui clignote, et il bouche tout le tunnel. J'ai sorti mon épée en bois. Il a levé une patte, très calme : « Avant toute chose : je ne suis pas un bug. Je suis un comportement non documenté. » Il a l'air de l'avoir dit souvent. Et de n'avoir jamais été cru.",
@@ -218,6 +232,7 @@
     "ch4b-duel-gagne": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "grumeau",
       "texte": [
         "Touché ! Trois parades et une botte que je ne saurais pas refaire. Il est tombé assis, très surpris. « Vous m'avez reproduit. Personne n'arrive jamais à me reproduire. » Il en avait presque les antennes humides. Il s'est rangé contre la paroi pour nous laisser passer, et il m'a demandé de signaler notre duel à quelqu'un, « pour mon dossier ». J'ai promis. Grumeau affirme qu'il a tout vu et qu'il m'a beaucoup aidé."
       ],
@@ -235,6 +250,7 @@
     "ch4b-bug-flatte": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "grumeau",
       "texte": [
         "J'ai dit qu'il était une très belle fonctionnalité. Il s'est arrêté de clignoter. « Vous trouvez ? » J'ai ajouté que ses antennes étaient très bien pensées. Il a rosi de la carapace et s'est aplati contre la paroi pour nous laisser passer. « Enfin quelqu'un qui lit la documentation. » Il n'y a pas de documentation, c'est tout son drame. Grumeau dit que mentir aux insectes, c'est le début de la fin. Mais il est passé aussi."
       ],
@@ -243,6 +259,7 @@
     "ch4b-couloir": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "grumeau",
       "texte": [
         "On a pris le couloir de gauche. Tout droit, facile. Au bout d'un moment, on a croisé une affiche : « Vous êtes ici. » Puis une autre, la même, avec la même tache dans le coin. Puis une troisième. Grumeau s'est arrêté : « On est déjà passés ici. Je reconnais ma mauvaise humeur. » Devant, le couloir continue, bien droit, bien tentant. Derrière, on entend encore le bug clignoter. Je fais quoi ?"
       ],
@@ -254,6 +271,7 @@
     "ch4b-echec-boucle": {
       "type": "echec",
       "humeur": "fatigue",
+      "personnage": "grumeau",
       "texte": [
         "J'ai continué tout droit. Quatrième affiche. Cinquième. À la douzième, j'ai compris, mais mes pieds non : c'est une boucle, et une fois lancé on n'en sort plus qu'en s'écroulant. J'ai tourné jusqu'à avoir le tournis, puis je me suis assis par terre, au pied de l'affiche. « Vous êtes ici. » Oui. Merci. Grumeau m'a tiré dehors par le baluchon. Je reprends mon souffle, et on y retourne. Par ailleurs."
       ],
@@ -262,6 +280,7 @@
     "ch4b-slime": {
       "type": "choix",
       "humeur": "surpris",
+      "personnage": "grumeau",
       "texte": [
         "Le tunnel repart, et plus loin, à un croisement, il y a de la lumière. Elle vient d'une grosse goutte de gelée verte, collée au plafond, qui luit comme un écran. Grumeau a reculé : « Un slime de cache. Ne touche pas, ça garde tout. » Le slime a une voix de vieux poste de radio : « Bonjour. Chez moi, il est encore hier. Enfin, 13 h 36. C'est tout frais. »",
         "Il garde l'image des choses comme elles étaient juste avant. Dans sa gelée, on peut regarder un endroit tel qu'il était à 13 h 36 ! Mais une seule image : pour en charger une autre, il faudrait l'essorer, et Grumeau refuse d'essorer qui que ce soit. Je lui demande de montrer quoi ?"
@@ -274,6 +293,7 @@
     "ch4b-slime-hier": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "grumeau",
       "texte": [
         "La gelée s'est troublée, puis j'ai vu l'Horloge. Un grand balancier, et dessus une petite chose qui allait d'un côté, tic, de l'autre, tac. Quelqu'un est entré. Flou, tout plat, tremblant. Il a parlé. Le Tic-Tac s'est arrêté pour écouter. Et puis, je te promets, il a sauté de son balancier tout seul, et ils sont partis ensemble. Personne ne tirait personne. Grumeau a dit : « Ça, ce n'est pas un enlèvement. C'est une démission. »"
       ],
@@ -282,6 +302,7 @@
     "ch4b-slime-chemin": {
       "type": "recit",
       "humeur": "neutre",
+      "personnage": "grumeau",
       "texte": [
         "La gelée a montré le Marais, vu d'en haut : de l'eau grise, une barre de chargement dans le ciel, et, en travers, une ligne de pierres plates. Un gué ! « C'est le chemin d'hier, a précisé le slime. Aujourd'hui, je ne garantis rien. Je ne garantis jamais aujourd'hui. » J'ai bien regardé où étaient les pierres. Grumeau dit qu'un gué de la veille, c'est comme du pain de la veille. Mais ça se mange."
       ],
@@ -290,6 +311,7 @@
     "ch4b-sortie": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "grumeau",
       "texte": [
         "Le slime nous a souhaité une bonne journée d'hier. Devant, la caverne remonte et l'air devient humide. Ça sent la vase et le redémarrage. Grumeau a horreur de l'humidité, il me l'a dit onze fois, je les ai comptées pour me venger. Il paraît que le Marais est juste au bout, et que là-bas rien ne finit jamais de charger. On y va. Je t'écris quand je vois le ciel. S'il y en a un."
       ],
