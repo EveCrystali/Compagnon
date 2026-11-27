@@ -17,10 +17,23 @@ tableau ci-dessous via son compte rendu, et le pilote l'intègre.
 
 ## Le cap (fixé par le pilote, 27 novembre 2026)
 
-**Phase actuelle : finir et prouver, pas ajouter.** Le contenu est là (quatre campagnes, présence, boutique, métiers).
-Ce qui manque, c'est la preuve sur de vrais appareils et la vidéo qui montre le tout.
+**Phase actuelle (Antoine, 27 novembre 2026 au soir) : le meilleur rendu possible, systématiquement.** Le contenu est
+là (quatre campagnes, présence, boutique, métiers). On ne rajoute pas de fonctions de jeu : on rend l'existant plus
+beau, plus vivant, plus immersif, et on le prouve sur de vrais appareils.
 
-Priorités, dans l'ordre :
+**Exigence de rendu** : chaque chantier qui touche à l'image ou au son va au-delà du strict nécessaire. Planche de
+contrôle avant / après, relecture à l'œil de chaque image produite, capture sur le vrai PC quand c'est possible,
+une seconde passe de finition avant la PR. « Ça marche » ne suffit pas : « c'est beau » est le critère.
+
+**Outils** : pas de logiciel 3D ni d'éditeur graphique. Les sprites restent générés par le code Python de
+`outils/sprites/` (texte versionné, rendu identique PC / Android, références partagées). Pillow et numpy sont permis
+pour les planches de contrôle et les mesures, jamais dans le rendu livré. Les sons sont synthétisés par un script
+maison, comme les sprites.
+
+Chantiers de rendu (ouverts par le pilote le 27 novembre) : police pixel maison, sons 8 bits, vie du personnage
+(ombre, ressorts, particules, lumière de l'heure), animations des campagnes.
+
+Priorités de vérification, en parallèle :
 
 1. **Vidéo de promo** : tournage (`outils/tourner-ecran-gauche.ps1`) puis montage (`outils/video/`). Les deux
    chantiers sont ouverts.
@@ -32,7 +45,7 @@ Priorités, dans l'ordre :
    appareils, deux écrans à échelles différentes, poids de l'exe.
 5. **Seuils de complicité** : pas avant le 4 décembre 2026 (une semaine d'usage réel), et sur les retours d'Antoine.
 
-Hors cap tant que le pilote ne l'a pas rouvert : toute idée de `IDEES.md`, toute nouvelle campagne, tout nouveau
+Hors cap tant que le pilote ne l'a pas rouvert : les petits jeux de `IDEES.md`, toute nouvelle campagne, tout nouveau
 connecteur. Une session qui pense qu'il faut en sortir le dit dans son compte rendu ; elle ne s'y lance pas.
 
 ## Règles d'orchestration
@@ -99,6 +112,9 @@ Tenu par le pilote. Dernière mise à jour : 27 novembre 2026, 23 h.
 | Liste de contrôle Windows (`TEST-JEU.md`) | `claude/controle-windows` | `apps/PilouBureau/` hors moteur des campagnes, `docs/TEST-JEU.md` | Lancé par le pilote |
 | Divergence de campagne entre appareils | `claude/divergence-campagne` | moteur des campagnes PC et Android, vecteurs partagés, leurs tests | Lancé par le pilote |
 | Audit UI/UX du menu clic droit | `claude/audit-menu` | lecture seule du code ; `docs/AUDIT-MENU.md`, `docs/maquettes/menu/` | Lancé par le pilote ; l'implémentation attend le choix d'Antoine |
+| Police pixel maison complète | `claude/police-pixel` | `Police.cs`, `Police.java`, fichiers de police, bulle et petits mots | Lancé par le pilote |
+| Sons 8 bits (PC et Android) | `claude/sons-pilou` | `Sons.cs`, `Sons.java`, sons partagés, `outils/sons/`, réglage, appels d'une ligne | Lancé par le pilote ; défaut « aucun » en attendant Antoine |
+| Vie du personnage (ombre, ressorts, lumière) | `claude/vie-personnage` | `RenduPilou.*`, `Animations.java`, `PilouVue.java`, `animations.py`, référence d'animation | Lancé par le pilote |
 | Pilotage (ce fichier) | `claude/pilotage`, PR #81 | `docs/PILOTAGE.md`, `CLAUDE.md` | PR ouverte |
 
 Fusionnés le 27 novembre : tournage de la promo (#80), montage de la promo (#78), boutons du journal et taille
