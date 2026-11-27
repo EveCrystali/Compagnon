@@ -355,6 +355,31 @@ public final class Sprites {
         }
     }
 
+    // ---- Illustrations des campagnes (docs/SPRITES.md, « Décors et illustrations des campagnes ») : décor d'une scène
+    // (bandeau de 96 × 40, 192 × 80 en fin), timbre d'un souvenir, vignette d'une campagne, emblème d'un ton. null si la
+    // banque ne l'a pas : l'interface garde alors son repli. echelle : 1, ou 2 (dessin fin). Dessin : Sprites.dessiner.
+    public static final int DECOR_LARGEUR = 96, DECOR_HAUTEUR = 40;
+
+    public static Sprite decor(Banque b, String campagne, String decor, int echelle) {
+        return decor == null || decor.isEmpty() ? null : illustration(b, "decor-" + campagne + "-" + decor, echelle);
+    }
+
+    public static Sprite souvenir(Banque b, String campagne, String souvenir, int echelle) {
+        return illustration(b, "souvenir-" + campagne + "-" + souvenir, echelle);
+    }
+
+    public static Sprite vignette(Banque b, String campagne, int echelle) {
+        return illustration(b, "campagne-" + campagne, echelle);
+    }
+
+    public static Sprite ton(Banque b, String ton, int echelle) {
+        return illustration(b, "ton-" + ton, echelle);
+    }
+
+    private static Sprite illustration(Banque b, String id, int echelle) {
+        return b == null || b.get(id) == null ? null : b.get(id, echelle);
+    }
+
     private Sprites() {
     }
 }

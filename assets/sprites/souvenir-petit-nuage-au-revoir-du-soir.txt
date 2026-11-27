@@ -1,0 +1,31 @@
+# Souvenir de campagne (petit-nuage)
+id: souvenir-petit-nuage-au-revoir-du-soir
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#e6ecf2 b=#8a79b8 c=#5c5a9a d=#fff6cc e=#ffc89a f=#f6f1e4 g=#c76f9a h=#f2a8c8
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabccccccccccccccccccbaa
+aabccccccccccccccdcccbaa
+.abbcbeeeecbcbcbcbcbcba.
+aabbbeffffebbcbbbcbbbbaa
+aabbgeeeeeegbbbbbbbbbbaa
+.abbbbbbbbbbbbbbbbbbbba.
+aabbbbbbbbbbbbeeebbbbbaa
+aabbbbbbbbbbeeffffeebbaa
+.abhbhbhbhbheeeeeeeebba.
+aabbhbhbhbhbhbhbhbhbhbaa
+aabhhhhhhhhhhhhhhhhhhbaa
+.abhhhhhhhhhhhhhhhhhhba.
+aabhhhhhhhhhhhhhhhhhhbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabccccccccccccccccccbaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

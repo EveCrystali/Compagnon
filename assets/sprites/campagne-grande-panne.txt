@@ -1,0 +1,39 @@
+# Vignette de campagne : grande-panne
+id: campagne-grande-panne
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#6a5acd b=#3a2a7a c=#f69d50 d=#e8d5b0 e=#0d2a4d f=#3fb8e0 g=#c4a77d
+images:
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbcbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbddddddddddddddddddddddddbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeefffeeefffeeefffdbbaa
+aabbdeeeefeeeefefeeefeeeeefdbbaa
+aabbdeeeefeeeefeeeeefeeeeefdbbaa
+aabbdeeeefeefffefefffeeeeefdbbaa
+aabbdeeeefeeeefeeeeefeeeeefdbbaa
+aabbdeeeefeefffeeefffeeeeefdbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbdeeeeeeeeeeeeeeeeeeeeeedbbaa
+aabbddddddddddddddddddddddddbbaa
+aabbbbbbbbbbbggggggbbbbbbbbbbbaa
+aabbbbbbbbbbbggggggbbbbbbbbbbbaa
+aabbbbbbbbbbbggggggbbbbbbbbbbbaa
+aabbbbbbbggggggggggggggbbbbbbbaa
+aabbbbbbbggggggggggggggbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbcbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.

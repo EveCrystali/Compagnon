@@ -43,6 +43,16 @@ SERIE = [
     "voyage-montre",
 ]
 
+
+
+def ids_campagnes():
+    """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
+    import campagnes_sprites
+    import decors_campagnes
+    decors_campagnes.charger()
+    return sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS)
+
+
 RETOUCHES = {}
 
 
@@ -69,7 +79,7 @@ def generer(dessiner):
     """Rejoue tous les dessins à l'échelle 2 ; seuls ceux de la série sont écrits (assets/sprites2x, index2x.txt)."""
     import retouches_fines  # noqa: F401  (remplit RETOUCHES)
     toile.ECHELLE = 2
-    toile.FINS = set(SERIE) | set(ids_visage())
+    toile.FINS = set(SERIE) | set(ids_visage()) | set(ids_campagnes())
     toile.RETOUCHES = RETOUCHES
     try:
         dessiner()

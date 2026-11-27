@@ -1,0 +1,31 @@
+# Souvenir de campagne (grande-panne)
+id: souvenir-grande-panne-seconde-en-plus
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d2caff b=#6a5acd c=#16365e d=#c9a227 e=#f6f1e4 f=#f5d76e g=#768390 h=#8a4a1f i=#ffffff j=#1c2128
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabccccccddddddccccccbaa
+aabcccccddeeeeddfccccbaa
+.abccccdegeghegfifcccba.
+aabcccdeeeeeheeefdcccbaa
+aabccddgeeeeheeegddccbaa
+.abccdeeeeeeheeeeedccba.
+aabccdeeeeeeheeeeedccbaa
+aabccdegeeeejjjjegdccbaa
+.abccdeeeeeeeeeeeedccba.
+aabccddgeeeeeeeegddccbaa
+aabcccdeeeeeeeeeedcccbaa
+.abccccdegeeeegedccccba.
+aabcccccddeegeddcccccbaa
+aabccccccddddddccccccbaa
+.abccccccccccccccccccba.
+aabccccccccccccccccccbaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

@@ -1,0 +1,31 @@
+# Souvenir de campagne (phare-eteint)
+id: souvenir-phare-eteint-tout-le-monde-savait
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#b4dbff b=#1f4f8a c=#0d2a4d d=#2f5c8e e=#1c2128 f=#fff6cc g=#16365e h=#f69d50 i=#3b4654
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abddccccccccccccccddba.
+aabdddddccceecccdddddbaa
+aabddddddddddddddddddbaa
+.abdddddcceffeccdddddba.
+aabddcccccceeccccccddbaa
+aabgcgcgcgceegcgcgcgcbaa
+.abcgcgcgcgeecgcgcgcgba.
+aabggggggggeeggggggggbaa
+aabggggggggeeggggggggbaa
+.abggggggggeeggggggggba.
+aabgghghggheeghghgghgbaa
+aabgeeeeeeeeeeeeeeeegbaa
+.abieeeeeeeiieeeeeeeiba.
+aabieeeeeeeiieeeeeeeibaa
+aabiiiiiiiiiiiiiiiiiibaa
+.abiiiiiiiiiiiiiiiiiiba.
+aabiiiiiiiiiiiiiiiiiibaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

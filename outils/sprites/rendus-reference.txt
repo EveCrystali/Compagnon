@@ -86,3 +86,7 @@ expr=repos t=300 objets=chapeau-explorateur,lunettes-rondes,sac-a-dos,parapluie,
 expr=joie t=900 stade=3 objets=bonnet-pompon,echarpe-tricot,cartable,ballon-helium,tortue | 89963fe8c812de2c88a4a5b1b011b8849814eca1feeaf2d317307b3ae70ed3fd
 expr=malice t=120 stade=4 objets=chapeau-pirate,lunettes-etoiles,medaille,epee-bois,mini-dragon | 5775673bdb0768e67e0525cebe2aa5a6206652bcb3afb36bbcc5b166f8a64da1
 expr=tendre t=640 stade=1 objets=couronne-fleurs,foulard-explorateur,baguette,escargot | 5e8ef765cb3e7c62f75807c50416a9c8ffe1fe16b803aff376a0c311d0b71381
+expr=determine t=300 objets=casquette-gardien,sifflet-lison,corne-de-poche,cire-jaune | 0111ce78e293d3b1be1153a6f96073bc2481c854e95eeba94408da1cc7d9c957
+expr=joie t=500 stade=3 objets=bonnet-de-givre,echarpe-de-veille,caillou-du-col,baluchon-cabosse | f98d3a79e06ec174bba593cfbe1423b59c7fdbca8253676fad0cfd7ccd55c07c
+expr=malice t=800 stade=4 objets=eteignoir,sablier-de-poche,galet-machoire | ff19211d017bb8d084eb566386f1accc9d4e3138f1cb2417e7e2a5ea4328c169
+expr=tendre t=200 stade=1 objets=casserole-chapeau,plume-de-girouette | eb132f7ad1a86e7740c6be53c8230c290f5cb69e8f75556613246c31869780c3

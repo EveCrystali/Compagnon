@@ -103,6 +103,11 @@ POSES = [
     "expr=joie t=900 stade=3 objets=bonnet-pompon,echarpe-tricot,cartable,ballon-helium,tortue",
     "expr=malice t=120 stade=4 objets=chapeau-pirate,lunettes-etoiles,medaille,epee-bois,mini-dragon",
     "expr=tendre t=640 stade=1 objets=couronne-fleurs,foulard-explorateur,baguette,escargot",
+    # Objets exclusifs des campagnes (campagnes_sprites.py), sur chaque stade.
+    "expr=determine t=300 objets=casquette-gardien,sifflet-lison,corne-de-poche,cire-jaune",
+    "expr=joie t=500 stade=3 objets=bonnet-de-givre,echarpe-de-veille,caillou-du-col,baluchon-cabosse",
+    "expr=malice t=800 stade=4 objets=eteignoir,sablier-de-poche,galet-machoire",
+    "expr=tendre t=200 stade=1 objets=casserole-chapeau,plume-de-girouette",
 ]
 
 

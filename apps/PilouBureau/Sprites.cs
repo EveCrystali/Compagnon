@@ -337,3 +337,29 @@ public sealed class Banque
         return g;
     }
 }
+
+// Illustrations des campagnes (docs/SPRITES.md, « Décors et illustrations des campagnes ») : décor d'une scène
+// (bandeau de 96 × 40, 192 × 80 en fin), timbre d'un souvenir, vignette d'une campagne, emblème d'un ton. Chaque
+// fonction rend le sprite à l'échelle demandée (1, ou 2 : dessin fin), ou null si la banque ne l'a pas : l'interface
+// garde alors son repli.
+public static class Illustrations
+{
+    public const int DecorLargeur = 96, DecorHauteur = 40;
+
+    public static string IdDecor(string campagne, string decor) => "decor-" + campagne + "-" + decor;
+    public static string IdSouvenir(string campagne, string souvenir) => "souvenir-" + campagne + "-" + souvenir;
+    public static string IdVignette(string campagne) => "campagne-" + campagne;
+    public static string IdTon(string ton) => "ton-" + ton;
+
+    public static Sprite? Decor(Banque b, string campagne, string? decor, int echelle = 2) =>
+        string.IsNullOrEmpty(decor) ? null : Lire(b, IdDecor(campagne, decor), echelle);
+
+    public static Sprite? Souvenir(Banque b, string campagne, string souvenir, int echelle = 2) =>
+        Lire(b, IdSouvenir(campagne, souvenir), echelle);
+
+    public static Sprite? Vignette(Banque b, string campagne, int echelle = 2) => Lire(b, IdVignette(campagne), echelle);
+
+    public static Sprite? Ton(Banque b, string ton, int echelle = 2) => Lire(b, IdTon(ton), echelle);
+
+    private static Sprite? Lire(Banque b, string id, int echelle) => b[id] is null ? null : b.Echelle(id, echelle);
+}

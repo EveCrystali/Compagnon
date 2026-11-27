@@ -1,0 +1,27 @@
+# Objet exclusif (Petit Nuage) : caillou du col
+id: caillou-du-col
+slot: main
+ancre: main
+decalage: -4 -14
+palette: a=#3a2a7a b=#6a5acd c=#9b8cff d=#d2caff e=#b4dbff f=#ffffff g=@contour h=@ombre
+images:
+.........aaaaaa.........
+......aaaaaaaaaaaa......
+....aaaaaabbbbaaaaaa....
+...aaaabbbbbbbbbbaaaa...
+..aaabccccccccbbbbbaaa..
+.aaaccccccccccccbbbbaaa.
+.aacccccdccccccccbbebaa.
+aaaccccccccccccccbbbbaaa
+aacccccccccccccccffffbaa
+aabccccccccccffffffffbaa
+aabcccccffffffffffbbbbaa
+aabbcfffffffffccbbbbbbaa
+aaabggfffcccccbbbbbbbaaa
+.aggggggbbbbbbbbbbbbbaa.
+.aghhhhgbbbbbbbbbbbbaaa.
+.gghhhhggbbbbbbbbbbaaa..
+.gghhhhggbbbbbbbbaaaa...
+..ghhhhgaabbbbaaaaaa....
+..ggggggaaaaaaaaaa......
+....gg...aaaaaa.........
