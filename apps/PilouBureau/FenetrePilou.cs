@@ -97,6 +97,7 @@ public sealed partial class FenetrePilou : Window
         _devant = devant;
         _demo = demo;
         _reglages = Reglages.Lire(dossier);
+        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         CalculerEchelle();
         WindowStyle = WindowStyle.None;
@@ -278,6 +279,7 @@ public sealed partial class FenetrePilou : Window
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
+        menu.Items.Add(Choix("Sons", new[] { ("Aucun", "aucun"), ("Discrets", "discrets"), ("Normaux", "normaux") }, _reglages.Sons, v => { _reglages.Sons = v; Sons.Jouer(Son.Caresse); }));
         var accessoires = new MenuItem { Header = "Accessoire" };
         foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
                      Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
@@ -1173,6 +1175,7 @@ public sealed partial class FenetrePilou : Window
     private void Caresser()
     {
         Signaler("caresse", 1);
+        Sons.Jouer(Son.Caresse);
         SoinCaresse();
         Vecu(f => f.Ca++, "caresses");
         _tCaresse = Maintenant;

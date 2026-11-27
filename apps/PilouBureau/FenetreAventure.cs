@@ -1258,6 +1258,7 @@ internal sealed class FenetreAventure : Window
     private void Choisir(string option)
     {
         _message = _pilou.CampagneChoisir(option) ?? "";
+        if (_message == "") Sons.Jouer(Son.Choix);
         _cleAction = "";
         Rafraichir();
     }

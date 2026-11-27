@@ -25,6 +25,8 @@ Dernière mise à jour : 27 novembre 2026.
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
+- **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
+  téléphone et `outils/sons/sons.py` ; **coupés par défaut** (« Sons : aucun »), en attendant le choix d'Antoine.
 
 ## En cours
 
@@ -51,6 +53,8 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 - La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal, le mot du soir (notification, Doze), le
   widget et la bulle avec le mot, la synchronisation entre deux appareils réels.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
+- Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
+  sortie audio) ; sur téléphone, aucune lecture réelle.
 
 ## Points connus
 
