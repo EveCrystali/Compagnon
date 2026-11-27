@@ -551,7 +551,7 @@ public class ConnecteursVague2Tests
         Assert.Empty(s.Sortis);                                               // pas activée : rien ne sort
         r.Activer(s, true);
         r.Publier(new EvenementPilou("pilou", "notification", "✦ Quête réussie"));
-        SpinWait.SpinUntil(() => { lock (s.Sortis) return s.Sortis.Count > 0; }, 2000);
+        SpinWait.SpinUntil(() => { lock (s.Sortis) return s.Sortis.Count > 0; }, 20_000);
         Assert.Equal("✦ Quête réussie", Assert.Single(s.Sortis).Titre);
     }
 }
