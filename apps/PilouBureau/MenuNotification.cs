@@ -15,7 +15,7 @@ public enum ChoixNotification
 
 public static class MenuNotification
 {
-    public const string Infobulle = "Pilou";
+    public const string Infobulle = "Pilou, ton petit compagnon de bureau";
 
     // null : un trait de séparation. La première entrée est celle du clic gauche (en gras dans le menu).
     public static readonly IReadOnlyList<(ChoixNotification? Choix, string Texte)> Entrees = new (ChoixNotification?, string)[]

@@ -214,8 +214,10 @@ final class PageReglages extends Page {
         // ---- À propos
         corps.addView(Ui.titreSection(a, "À propos"));
         c = Ui.carte(a);
-        c.addView(Ui.texte(a, "Pilou, le compagnon de tes IA de code. Il suit tes sessions Claude et Codex depuis ton PC, "
-                + "pêche, cuisine et chasse les bugs avec toi.", 14, p.texte, false));
+        c.addView(Ui.texte(a, "Pilou, un petit compagnon qui vit en bas de ton écran. Il mène sa petite vie sans te déranger, "
+                + "grandit pendant que tu travailles, joue, mange, pêche, cuisine et chasse les bugs avec toi ; "
+                + "tout le reste est en option, pour le personnaliser. Et au passage, branché à tes applis "
+                + "(IA de code, Discord, musique, agenda…), il te prévient de ce qui compte.", 14, p.texte, false));
         c.addView(Ui.ligne(a, "Code source", "github.com/EveCrystali/Compagnon", 0,
                 v -> a.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(DEPOT)))));
         c.addView(Ui.separateur(a));

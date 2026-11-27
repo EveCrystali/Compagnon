@@ -82,6 +82,11 @@ public sealed class Reglages
     public double DefenseLargeur { get; set; } = 1.0;
     public bool DefenseFlashsReduits { get; set; }
 
+    // Bienvenue : une seule bulle au tout premier lancement, jamais ensuite. Un reglages.json d'avant ce champ
+    // (Pilou déjà installé) compte comme déjà accueilli (voir Depuis).
+    public bool BienvenueFaite { get; set; }
+    public const string MotBienvenue = "coucou ! je m'installe en bas de ton écran, sans te déranger. on grandit ensemble ♥";
+
     public ReglagesNotifs FiltreDesNotifs() => new(NotifsWindows, NotifsMode, NotifsApps, NotifsMasquer);
 
     public string Partage(string local) => string.IsNullOrWhiteSpace(DossierPartage) ? local : DossierPartage;
@@ -93,13 +98,21 @@ public sealed class Reglages
         try
         {
             var chemin = Path.Combine(dossier, "reglages.json");
-            if (File.Exists(chemin)) return JsonSerializer.Deserialize<Reglages>(File.ReadAllText(chemin), Options) ?? new();
+            if (File.Exists(chemin)) return Depuis(File.ReadAllText(chemin));
         }
         catch (Exception e) when (e is IOException or JsonException or UnauthorizedAccessException)
         {
             // fichier illisible : réglages par défaut
         }
         return new();
+    }
+
+    // Lecture d'un reglages.json existant : sans le champ BienvenueFaite, c'est un Pilou déjà installé.
+    public static Reglages Depuis(string json)
+    {
+        var r = JsonSerializer.Deserialize<Reglages>(json, Options) ?? new();
+        if (!json.Contains($"\"{nameof(BienvenueFaite)}\"", StringComparison.Ordinal)) r.BienvenueFaite = true;
+        return r;
     }
 
     public void Ecrire(string dossier)

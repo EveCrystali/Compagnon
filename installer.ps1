@@ -80,4 +80,5 @@ try {
 catch { Write-Host "  (raccourci du menu Demarrer impossible : $($_.Exception.Message))" }
 Start-Process $exe
 Write-Host '* Pilou est là, en bas de l''écran. Clic droit sur lui pour les réglages et les intégrations.' -ForegroundColor Cyan
+Write-Host '  Il mène sa petite vie sans te déranger et grandit pendant que tu travailles ; tout le reste est en option.'
 Write-Host '  S''il ne repond plus : son icone pres de l''horloge, ou menu Demarrer -> Pilou.'

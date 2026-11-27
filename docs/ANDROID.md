@@ -1,8 +1,13 @@
 # Pilou sur Android
 
-L'app montre sur le téléphone ce que Pilou voit sur le PC : quelles sessions Claude et Codex
-travaillent, lesquelles ont fini, lesquelles t'attendent. Elle ne fait tourner aucune IA : elle écoute
-le PC.
+Un petit compagnon qui vit en bas de ton écran : sur le téléphone, tu retrouves le Pilou de ton PC,
+qui mène sa petite vie sans te déranger (il joue, mange, pêche, cuisine) et grandit pendant que tu
+travailles. Tu y joues à ses mini-jeux, suis ses quêtes, ses hauts faits et ses expéditions, et le
+personnalises dans la boutique ; tout cela est optionnel, et la progression est partagée avec le PC.
+
+Et au passage, s'il est branché à tes applis sur le PC, il te prévient : quelles sessions Claude et
+Codex travaillent, lesquelles ont fini, lesquelles t'attendent, et les nouvelles des connecteurs.
+L'app ne fait tourner aucune IA : elle écoute le PC.
 
 ## L'app
 
@@ -12,7 +17,7 @@ tourne), titre et prochaine rangée de la boutique ; un toucher ouvre Collection
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), les appareils du groupe, le mot du jour. Pas encore appairé : un guide en trois étapes. |
+| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), les appareils du groupe, le mot du jour. Pas encore appairé : deux lignes pour dire qui est Pilou, puis un guide en trois étapes. |
 | **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
 | **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède). |

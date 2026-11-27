@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Accueil : Pilou en grand (on le caresse), son niveau et sa barre d'XP, l'état du PC, les sessions
- * en cours, les appareils du groupe, un mot du jour. Pas encore appairé : un guide en trois étapes.
+ * en cours, les appareils du groupe, un mot du jour. Pas encore appairé : qui est Pilou, puis un guide en trois étapes.
  */
 final class PageAccueil extends Page {
     private static final String[] MOTS = {
@@ -138,7 +138,16 @@ final class PageAccueil extends Page {
 
         // Pas appairé : le guide.
         guide = Ui.carte(a);
-        guide.addView(Ui.texte(a, "Pilou ne connaît pas encore ton PC", 17, p.texte, true));
+        guide.addView(Ui.texte(a, "Un petit compagnon qui vit en bas de ton écran", 17, p.texte, true));
+        TextView intro = Ui.texte(a, "Pilou mène sa petite vie sans te déranger : il joue, mange, pêche, cuisine, et grandit pendant que tu "
+                + "travailles. Le reste est en option, pour le personnaliser. Et s'il est branché à tes applis, il te prévient "
+                + "quand une IA t'attend.",
+                14, p.doux, false);
+        intro.setPadding(0, Ui.dp(a, 6), 0, 0);
+        guide.addView(intro, Ui.large());
+        TextView relier = Ui.texte(a, "Pour le retrouver ici, relie-le à ton PC :", 14, p.texte, true);
+        relier.setPadding(0, Ui.dp(a, 12), 0, 0);
+        guide.addView(relier, Ui.large());
         String[] etapes = {"Sur le PC, clic droit sur Pilou → Intégrations → Android : appairer.",
                 "Vise le QR code avec l'appareil photo du téléphone : l'app s'ouvre et s'appaire.",
                 "Ou tape le code de 16 caractères dans Réglages → Appairage."};

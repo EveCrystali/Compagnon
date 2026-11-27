@@ -1,7 +1,7 @@
 # Pilou — ton petit compagnon de bureau
 
 <p align="center">
-  <img src="docs/promo/pilou-promo.gif" alt="Pilou en action : il suit tes applis, tape avec toi, prend tes captures en photo, joue, évolue et rend visite à tes amis" width="640">
+  <img src="docs/promo/pilou-promo.gif" alt="Pilou en action : il vit en bas de l'écran, joue, pêche, évolue avec toi et rend visite à tes amis" width="640">
 </p>
 
 <p align="center">
@@ -10,20 +10,20 @@
   <a href="https://github.com/EveCrystali/Compagnon/releases/latest">dernière version</a>
 </p>
 
-Une petite goutte d'encre bleue en pixels vit au premier plan de ton écran, sans prendre de place ni te
-déranger : ses petites réactions ne partent pas à chaque fois, jamais pendant que tu tapes, et il bouge moins
-quand tu travailles ; ce qui compte (une IA qui t'attend, « ✓ fini ») passe toujours.
-Elle te suit, reconnaît ce que tu fais (jeux, bureautique, musique, visio, tes IA de code
-**Claude Code** et **Codex**…), évolue avec toi au fil des niveaux, se personnalise dans une
-boutique rétro et va même **rendre visite à tes amis**. Une bulle te dit quelles sessions
-réfléchissent, ont fini ou t'attendent. Gratuit, sur Windows et Android, avec une progression
-partagée entre PC et téléphone.
+Pilou est avant tout un **petit animal de compagnie de bureau** : une goutte d'encre bleue en pixels
+qui vit en bas de ton écran, comme pour te soutenir pendant que tu travailles. Il mène sa petite vie
+dans son coin sans te déranger (jamais pendant que tu tapes), joue, mange, pêche, cuisine… et grandit
+au fil de tes journées. Tout le reste est optionnel : de quoi le personnaliser et le faire vivre.
+Gratuit, sur Windows et Android, avec une progression partagée entre PC et téléphone.
 
-```
- ❗ Claude · refonte-auth     attend ton autorisation
- ◐ Codex · mon-api            shell · 12 s
- ✓ Claude · docs              fini · il y a 3 min
-```
+- **vit en bas de l'écran sans déranger** : petites réactions discrètes, il bouge moins quand tu travailles ;
+- **grandit pendant que tu travailles** : niveaux, évolutions, titres ;
+- **hauts faits, mini-jeux, quêtes, expéditions** : il joue, pêche, cuisine, part à l'aventure ;
+- **boutique et ensembles** pour le personnaliser ;
+- **rend visite à tes amis** ;
+- et au passage, **il se branche à tes applis** : il te prévient quand une IA t'attend (Claude Code,
+  Codex), relaie Discord, ta musique, ton agenda, tes mails, GitHub, la météo… et s'anime avec
+  ([voir plus bas](#le-petit-plus--il-se-branche-à-tes-applis)).
 
 ## Installer (Windows 10/11)
 
@@ -57,6 +57,21 @@ PC, sessions), **Jouer** (le jeu de tir **Chasse aux bugs**, pêche, cuisine, pe
 permanente, le widget et Pilou flottant par-dessus les applis. Les gains des jeux sont crédités au PC. Appairage par QR code depuis le PC (clic
 droit → Intégrations → Android), échanges chiffrés de bout en bout. Détails et tableau de ce qui est
 sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
+
+## Le petit plus : il se branche à tes applis
+
+En bonus, et seulement si tu le veux, Pilou se branche à tes applis pour relayer ce qui mérite ton
+attention et adapter ses animations, sans jamais crier. Beaucoup sont déjà prises en compte (IA de code,
+Discord, musique, agenda, mail, GitHub, météo…, voir [Connecteurs](#connecteurs)) ; pour les autres,
+l'[API locale](docs/API.md) suffit. Ce qui compte (une IA qui t'attend, « ✓ fini ») passe toujours, même
+quand il se fait discret. Sa bulle te dit par exemple quelles sessions réfléchissent, ont fini ou
+t'attendent :
+
+```
+ ❗ Claude · refonte-auth     attend ton autorisation
+ ◐ Codex · mon-api            shell · 12 s
+ ✓ Claude · docs              fini · il y a 3 min
+```
 
 ## Ce qu'il suit
 
@@ -185,7 +200,7 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   fois même si plusieurs PC l'ont reçue. *Appareils du groupe* : nom, XP, vu il y a… ; si le relais est
   bloqué (proxy d'entreprise), Pilou le dit (« relais injoignable ») ;
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
-  travail) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
+  travail ; fiche de l'appli : [docs/DISCORD-APP.md](docs/DISCORD-APP.md)) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
 - **Amis…** : un code ami (`PILOU-XXXX-XXXX-XXXX`, distinct du code de groupe) à échanger avec
   quelqu'un ; amis actifs quand chacun a ajouté l'autre. Quand il s'ennuie (deux fois par jour au
