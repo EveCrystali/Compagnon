@@ -6,6 +6,8 @@ Ce fichier est lu au début de chaque session. Il dit l'essentiel ; le détail e
 - **Ce qui a été décidé, et pourquoi** : [docs/DECISIONS.md](docs/DECISIONS.md)
 - **Où en est le travail** : [docs/ETAT.md](docs/ETAT.md) — à tenir à jour en fin de session
 - **Idées gardées pour plus tard** : [docs/IDEES.md](docs/IDEES.md)
+- **Qui dirige, le cap, les chantiers en cours** : [docs/PILOTAGE.md](docs/PILOTAGE.md) — à lire avant de
+  commencer. Une session pilote répartit le travail ; les autres font un seul chantier dans leur périmètre.
 
 ## Le projet en trois lignes
 
