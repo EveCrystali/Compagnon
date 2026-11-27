@@ -70,6 +70,8 @@ public static class Quetes
         new("presence", "Passe {0} min avec Pilou", Mesure.Somme, [60, 180], [600, 1200], [2400, 3600], true, 30),
         new("agenda:ponctuel", "Sois à l'heure à {0} réunion{s}", Mesure.Somme, [1, 2], [3, 6], [], false),
         new("chasse","Atteins {0} points à Chasse aux bugs", Mesure.Max, [800, 2000], [3000, 6000], [], false, 100),
+        // Après un premier fichier repassé à zéro erreur (extensions Visual Studio / VS Code, docs/EDITEURS.md).
+        new("propre", "Repasse {0} fichier{s} à zéro erreur", Mesure.Somme, [1, 3], [5, 10], [], false),
         new("activite:code", "Code pendant {0} min", Mesure.Somme, [30, 120], [300, 600], [1500, 2400], false, 15),
         new("activite:tableur", "Travaille {0} min sur un tableur", Mesure.Somme, [20, 60], [120, 300], [], false, 10),
         new("activite:musique", "Écoute {0} min de musique", Mesure.Somme, [30, 90], [240, 480], [], false, 15),

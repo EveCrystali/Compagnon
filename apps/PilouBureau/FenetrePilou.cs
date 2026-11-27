@@ -497,6 +497,7 @@ public sealed partial class FenetrePilou : Window
                 Foreground = Couleurs.Texte,
                 Margin = new Thickness(0, 1, 0, 1),
             });
+        if (BlocDiagnostics() is { } diag) _lignes.Children.Add(diag);
         foreach (var l in lignes) _lignes.Children.Add(Ligne(l));
         if (detail && autres > 0)
             _lignes.Children.Add(Discret($"+ {autres} autre{(autres > 1 ? "s" : "")} session{(autres > 1 ? "s" : "")} au calme"));
@@ -756,6 +757,7 @@ public sealed partial class FenetrePilou : Window
         var meteo = EffetMeteoCourant(t);
         // Une grimace 6 s sur 30 (au lieu de 6 sur 18), comme sur le téléphone (Meteo.java).
         if (meteo.Inconfort is "mouille" or "froid" && montre == Expr.Repos && (int)(t / Meteo.PeriodeGrimace) % Meteo.CycleGrimace == 0) montre = Expr.Grimace;
+        montre = ExprDiagnostics(montre, t);
         _scene.Pose = new Pose
         {
             Meteo = meteo.Sprites,

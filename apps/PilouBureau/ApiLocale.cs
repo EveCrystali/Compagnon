@@ -11,6 +11,7 @@ namespace PilouBureau;
 // administrateur ni réservation d'URL. Chaque requête porte « Authorization: Bearer <jeton> ».
 //   POST /evenements   un EvenementPilou en JSON → 202
 //   GET  /etat         sessions, humeur, niveau (rien de privé) → 200
+//   POST /diagnostics  erreurs du fichier ouvert dans l'éditeur (Diagnostics.cs, docs/EDITEURS.md) → 202
 // Doc : docs/API.md.
 public sealed class ApiLocale : IDisposable
 {
@@ -21,14 +22,17 @@ public sealed class ApiLocale : IDisposable
     private readonly Func<string> _etat;
     private readonly Action<EvenementPilou> _recevoir;
     private readonly Func<double> _epoque;
+    private readonly Func<RapportDiagnostics, bool>? _diagnostics;
     private TcpListener? _ecoute;
     private CancellationTokenSource? _arret;
 
     public int Port { get; private set; }
     public string? Erreur { get; private set; }
 
-    public ApiLocale(Func<string> jeton, Func<string> etat, Action<EvenementPilou> recevoir, Func<double>? epoque = null)
+    public ApiLocale(Func<string> jeton, Func<string> etat, Action<EvenementPilou> recevoir, Func<double>? epoque = null,
+        Func<RapportDiagnostics, bool>? diagnostics = null)
     {
+        _diagnostics = diagnostics;
         _jeton = jeton;
         _etat = etat;
         _recevoir = recevoir;
@@ -172,10 +176,16 @@ public sealed class ApiLocale : IDisposable
                 if (e is null) return (400, Json(new { erreur }));
                 _recevoir(e);
                 return (202, Json(new { recu = true }));
+            case ("POST", "/diagnostics") when _diagnostics is not null:
+                var d = RapportDiagnostics.Lire(corps, _epoque(), out var erreurD);
+                if (d is null) return (400, Json(new { erreur = erreurD }));
+                // recu = false : le connecteur « Éditeurs » est coupé (rien n'est gardé).
+                return (202, Json(new { recu = _diagnostics(d) }));
             case (_, "/etat" or "/evenements"):
+            case (_, "/diagnostics") when _diagnostics is not null:
                 return (405, Json(new { erreur = "méthode non permise" }));
             default:
-                return (404, Json(new { erreur = "inconnu : GET /etat, POST /evenements" }));
+                return (404, Json(new { erreur = "inconnu : GET /etat, POST /evenements, POST /diagnostics" }));
         }
     }
 
