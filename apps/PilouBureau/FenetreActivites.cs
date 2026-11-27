@@ -274,8 +274,8 @@ public sealed partial class FenetrePilou
         foreach (var me in Metiers.Tous)
         {
             var sec = Metiers.Secondes(me, _profil.Activites);
-            int n = Metiers.Niveau(sec);
-            m.Items.Add(new MenuItem { Header = $"{me.Nom} — {Metiers.Grades[n]} · {Metiers.Progres(sec)}", IsEnabled = sec > 0 });
+            int n = Metiers.Niveau(me, sec);
+            m.Items.Add(new MenuItem { Header = $"{me.Nom} — {Metiers.Grades[n]} · {Metiers.Progres(me, sec)}", IsEnabled = sec > 0 });
         }
         m.Items.Add(new Separator());
         var succes = new MenuItem { Header = $"Succès ({_profil.Succes.Count}/{Succes.Tous.Count})" };

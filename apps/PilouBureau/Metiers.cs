@@ -4,47 +4,59 @@ namespace PilouBureau;
 // Succès : des défis de comportement (« 4 h de code d'affilée »), annoncés une fois, avec de l'XP.
 public static class Metiers
 {
-    public sealed record Metier(string Id, string Nom, string[] Activites);
+    public sealed record Metier(string Id, string Nom, string[] Activites, bool Travail = false);
 
     public static readonly IReadOnlyList<Metier> Tous = new Metier[]
     {
-        new("codeur", "Codeur", new[] { "code" }),
-        new("tableur", "As du tableur", new[] { "tableur" }),
+        new("codeur", "Codeur", new[] { "code" }, Travail: true),
+        new("tableur", "As du tableur", new[] { "tableur" }, Travail: true),
         new("joueur", "Joueur", new[] { "jeu", "jeu-mmo" }),
         new("musicien", "Mélomane", new[] { "musique" }),
         new("cinephile", "Cinéphile", new[] { "video" }),
         new("lecteur", "Lecteur", new[] { "lecture" }),
         new("artiste", "Artiste", new[] { "dessin" }),
-        new("orateur", "Orateur", new[] { "visio", "diaporama" }),
-        new("ecrivain", "Écrivain", new[] { "texte" }),
-        new("facteur", "Facteur", new[] { "mail" }),
+        new("orateur", "Orateur", new[] { "visio", "diaporama" }, Travail: true),
+        new("ecrivain", "Écrivain", new[] { "texte" }, Travail: true),
+        new("facteur", "Facteur", new[] { "mail" }, Travail: true),
     };
 
-    // Heures nécessaires pour chaque niveau de métier (1 à 6).
+    // Heures nécessaires pour chaque niveau de métier (1 à 6). Les métiers de travail (code, tableur, visio,
+    // écriture, mail) se pratiquent des heures chaque jour : leurs paliers sont quatre fois plus hauts.
     public static readonly int[] Paliers = { 1, 5, 15, 40, 100, 250 };
+    public static readonly int[] PaliersTravail = { 4, 20, 60, 160, 400, 1000 };
     public static readonly string[] Grades = { "Novice", "Apprenti", "Compagnon", "Confirmé", "Expert", "Maître", "Légende" };
+
+    public static int[] PaliersDe(Metier m) => m.Travail ? PaliersTravail : Paliers;
 
     public static long Secondes(Metier m, IReadOnlyDictionary<string, long> parActivite) =>
         m.Activites.Sum(a => parActivite.TryGetValue(a, out var s) ? s : 0);
 
-    public static int Niveau(long secondes)
+    public static int Niveau(long secondes) => Niveau(secondes, Paliers);
+
+    public static int Niveau(Metier m, long secondes) => Niveau(secondes, PaliersDe(m));
+
+    private static int Niveau(long secondes, int[] paliers)
     {
         double heures = secondes / 3600.0;
         int n = 0;
-        while (n < Paliers.Length && heures >= Paliers[n]) n++;
+        while (n < paliers.Length && heures >= paliers[n]) n++;
         return n;
     }
 
     // « 17 h / 40 h » vers le palier suivant ; au dernier palier, le total.
-    public static string Progres(long secondes)
+    public static string Progres(long secondes) => Progres(secondes, Paliers);
+
+    public static string Progres(Metier m, long secondes) => Progres(secondes, PaliersDe(m));
+
+    private static string Progres(long secondes, int[] paliers)
     {
-        int n = Niveau(secondes);
+        int n = Niveau(secondes, paliers);
         var h = secondes / 3600.0;
-        return n >= Paliers.Length ? $"{h:0} h" : $"{h:0.#} h / {Paliers[n]} h";
+        return n >= paliers.Length ? $"{h:0} h" : $"{h:0.#} h / {paliers[n]} h";
     }
 
     public static Dictionary<string, int> Niveaux(IReadOnlyDictionary<string, long> parActivite) =>
-        Tous.ToDictionary(m => m.Id, m => Niveau(Secondes(m, parActivite)));
+        Tous.ToDictionary(m => m.Id, m => Niveau(m, Secondes(m, parActivite)));
 
     public static string DeActivite(string activite) => Tous.FirstOrDefault(m => m.Activites.Contains(activite))?.Id ?? "";
 }
@@ -85,7 +97,7 @@ public static class Succes
         new("explorateur", "Explorateur", "8 activités différentes", s => Activites.Toutes.Count(a => s.Secondes.TryGetValue(a, out var v) && v >= 60), 8),
         new("dactylo", "Dactylo", "taper avec Pilou au clavier 25 fois", s => s.SeancesClavier, 25),
         new("photographe", "Photographe", "10 captures d'écran photographiées par Pilou", s => s.Captures, 10),
-        new("couteau-suisse", "Couteau suisse", "4 métiers au rang Compagnon", s => Metiers.Tous.Count(m => Metiers.Niveau(Metiers.Secondes(m, s.Secondes)) >= 2), 4, 50),
+        new("couteau-suisse", "Couteau suisse", "4 métiers au rang Compagnon", s => Metiers.Tous.Count(m => Metiers.Niveau(m, Metiers.Secondes(m, s.Secondes)) >= 2), 4, 50),
         // Défense du bureau (DefenseTests.cs).
         new("pare-feu", "Pare-feu", "vaincre un Bug de prod à Défense du bureau", s => s.Defense?.Boss ?? 0, 1),
         new("rempart", "Rempart", "atteindre la vague 10 à Défense du bureau", s => s.Defense?.MeilleureVague ?? 0, 10, 40),
