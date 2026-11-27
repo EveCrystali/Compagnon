@@ -101,8 +101,14 @@ Champs communs à tous les nœuds :
 | `lieu` | court libellé affiché en tête (« La jetée », « Sous le phare »), gardé tant qu'un nœud n'en donne pas un autre |
 | `humeur` | facultatif : l'expression de Pilou pendant ce message, parmi `joie`, `peur`, `triste`, `surpris`, `determine`, `fatigue`, `tendre`, `colere`, `malice`, `neutre` (défaut : `neutre`) |
 | `decor` | facultatif : identifiant d'un décor déclaré dans `decors` ; hérité du nœud précédent tant qu'il n'est pas redéfini |
+| `personnage` | facultatif : le personnage que ce message fait parler ou décrit (`grumeau`, `lison`, `tournebise`…) ; son portrait animé apparaît au bord de la scène. **Jamais hérité** : un personnage n'est montré que là où le texte le fait vivre |
+| `expression` | facultatif, avec `personnage` : son expression (mêmes valeurs que `humeur`) ; sans elle, ou si elle n'est pas dessinée, son visage neutre |
 
-`humeur` et `decor` servent aux interfaces (animer Pilou, illustrer la scène) ; un moteur ancien les ignore.
+`humeur`, `decor`, `personnage` et `expression` servent aux interfaces (animer Pilou, illustrer la scène, montrer qui
+parle) ; un moteur ancien les ignore. Les personnages et leurs expressions dessinées sont listés dans
+`outils/sprites/portraits_campagnes.py` (et LORE.md) ; `python3 outils/campagnes/personnages.py` propose (et
+`--ecrire` pose, une ligne par nœud, sans toucher aux textes) le champ d'après les noms cités près d'une réplique ou
+d'un verbe de présence.
 
 Les sept types :
 
@@ -137,6 +143,8 @@ Conditions (`si`) : `{ "var": "courage", "min": 2 }`, `{ "var": "courage", "max"
 - tout `choix` a au moins une option sans condition ; variables, objets, drapeaux et souvenirs utilisés
   sont déclarés (les drapeaux se déclarent par leur premier usage en effet) ;
 - toute `humeur` est l'une des dix valeurs ; tout `decor` utilisé est déclaré dans `decors` ;
+- tout `personnage` a son portrait (`assets/sprites/portrait-<campagne>-<personnage>.txt`), toute `expression` est une
+  humeur et a le sien (`…-<expression>.txt`) ; pas d'`expression` sans `personnage` ;
 - durées et longueurs dans les bornes ; récompenses plafonnées (voir plus bas) ;
 - statistiques rendues : nœuds, mots, choix et attentes par parcours (min, médiane, max), temps réel
   total par parcours, nombre de fins atteignables.
@@ -399,6 +407,17 @@ avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
   récompenses, fins restantes) ; carnet (fins, souvenirs, titres, objets exclusifs) ; « mettre de côté » avec
   confirmation. Pas de réponse depuis la bulle : la bulle est recomposée plusieurs fois par seconde dans une
   fenêtre qui ne s'active pas, des boutons y seraient peu fiables ; un clic ouvre la fenêtre.
+- **Animations** (`ScenesAnimees.cs`, règles communes dans `AnimationsCampagne.cs`, voir SPRITES.md « Animations des
+  campagnes ») : le décor boucle en dessin fin et passe au suivant par un **volet pixelisé** (fondu en animations
+  réduites) ; le **personnage** du message (champ `personnage`) entre au bord droit de la scène, respire, cligne, et
+  parle tant que Pilou écrit une de ses répliques ; Pilou cligne au même rythme. L'écriture lettre à lettre suit la
+  ponctuation (une pause aux virgules, une plus longue aux points ; cinq secondes au plus), les « … » durent selon le
+  message qui vient ; un clic ou Espace écrit tout. Le fond de la fenêtre respire selon le ton et l'heure (dégradé et
+  quelques particules lentes) ; les vignettes de la bibliothèque bougent un peu ; l'emblème du ton se pose au début d'un
+  chapitre ; à la fin, les récompenses tombent une à une, le souvenir et l'emblème se posent avec un éclat. Bouton
+  **« ✧ »** en haut : animations complètes, réduites (décors fixes) ou aucune, et « texte instantané »
+  (`reglages.json` : `AnimationsCampagnes`, `TexteInstantane`) ; Windows sans animations : rien ne bouge. La minuterie
+  s'arrête quand la fenêtre est réduite ou cachée ; un sprite manquant laisse l'image fixe ou le repli.
 - **Épreuves** (10 à 25 s, souris ou clavier, difficulté 1 à 3, la variable `bonus` élargit un peu les
   tolérances) : `reflexe` (cinq étoiles, 3 ou 4 à attraper ; trop tôt = manquée), `memoire` (4 à 6 signes ◆ ● ▲ ■
   à refaire, une seconde chance en difficulté 1 et 2), `rythme` (huit notes sur une ligne), `visee` (une luciole à
@@ -410,7 +429,7 @@ avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
 - **Récompenses** : versées une fois (`Campagnes.Crediter`) ; po et xp s'envolent au-dessus de Pilou ; un objet
   exclusif est annoncé et rejoint l'inventaire (boutique, « Ce qu'il porte »).
 - **Essais** (en mémoire, profil intact) : `--essai=campagne:lecture`, `campagne:attente`, `campagne:retour`,
-  `campagne:epreuve`, `campagne:fin` ; deux étapes de la visite guidée (`aventure-lecture`, `aventure-retour`).
+  `campagne:epreuve`, `campagne:fin`, `campagne:personnage` (La Grande Panne jusqu'à un choix où un personnage parle) ; deux étapes de la visite guidée (`aventure-lecture`, `aventure-retour`).
 - **Maquettes** hors WPF : `PILOU_PLANCHES_AVENTURE=<dossier>/matiere dotnet test --filter PlanchesAventure`, puis
   `python3 outils/maquettes/aventure.py <dossier>/matiere <dossier>`.
 - **Prudence** : chaque chemin neuf est protégé ; une erreur coupe la présence de la campagne pour la session (ou

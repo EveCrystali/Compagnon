@@ -79,6 +79,21 @@ l'onglet montre « Pilou déplie ses cartes… » le temps qu'il faut.
   (service d'écoute). Le téléphone avance PC éteint ; seules les récompenses attendent un PC.
 
 
+### Animations des campagnes
+
+`ScenesAnimees.java` (affichage) et `Animations.java` (règles communes avec le PC, vérifiées par `AnimationsTest` sur
+`outils/sprites/animations-reference.txt`). La scène (`Aventure.Scene`) dessine le décor en dessin fin et le fait vivre :
+à sa vitesse dans la lecture (`plein(true)`), au ralenti (quatre images, trois fois plus lentes) dans la liste et sur
+l'accueil ; un décor qui change s'efface par un volet pixelisé. Le personnage du message (champ `personnage` du nœud)
+apparaît au bord droit de la scène (`ScenesAnimees.Portrait`, 96 dp), respire, cligne, et parle pendant ses répliques.
+Pilou écrit lettre à lettre (`ScenesAnimees.Ecriture` : le texte est posé en entier, la fin reste invisible, la bulle
+ne bouge pas ; un toucher écrit tout). Le fond de la lecture prend une teinte légère du ton et de l'heure (lisible en
+clair comme en sombre). À la fin, les récompenses tombent une à une ; le souvenir et l'emblème du ton se posent avec un
+éclat. Menu « ⋯ » de la lecture : « Animations : complètes / réduites / aucune » et « Texte instantané » (préférences
+`animationsCampagnes`, `texteInstantane`) ; l'échelle des animations du système à 0 coupe tout. Rien ne se redessine
+hors de l'écran (`isShown`), images rendues une fois (cache de 24 sprites), décors et portraits fins lus à la demande.
+Capture Robolectric : `aventure-personnage`, `aventure-personnage-sans-animation`.
+
 ### Chasse aux bugs
 
 Un jeu de tir à vagues, original : Pilou, en bas, tire tout seul des étincelles ; on le déplace en

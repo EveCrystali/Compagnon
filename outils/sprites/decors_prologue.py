@@ -7,6 +7,7 @@ ombres longues vers la gauche. La colline d'en face (le but) se voit dans presqu
 import math
 
 import toile
+import decors_campagnes as dc
 from decors_campagnes import decor, W, H
 from peinture import (Palette, degrade, relief, voile, eclat, lueur, semis, ell, poly, rect, point, trait, trait1, hline, vline,
                       courbe, nuage, etoile4, hasard, seuil)
@@ -210,7 +211,7 @@ def roseaux(t, x0, x1, bas, graine, haut=14, quenouilles=True):
 @decor("prologue", "jardin")
 def jardin(t, k):
     ciel(t, 30, soleil=(76, 9), r=3)
-    nuage(t, 24, 9, 16, 3.2, CREME, BLANC, CIEL[2])
+    nuage(t, 24 + 0.8 * dc.onde(), 9, 16, 3.2, CREME, BLANC, CIEL[2])
     colline_en_face(t, 76, 26, 24, 5)
     relief(t, lambda x: 24 + 2.5 * math.sin(x / 9 + 1) + 1.5 * math.sin(x / 4), S3, lisere=OR3)
     maison_minuscule(t, 22, 22.5 + 2.5 * math.sin(22 / 9 + 1) + 1.5 * math.sin(22 / 4))
@@ -239,7 +240,7 @@ def jardin(t, k):
 @decor("prologue", "mare", images=2, duree=700)
 def mare(t, k):
     ciel(t, 22, soleil=(18, 8), r=3)
-    nuage(t, 66, 8, 20, 3, CREME, BLANC, CIEL[2])
+    nuage(t, 66 + 0.8 * dc.onde(0.3), 8, 20, 3, CREME, BLANC, CIEL[2])
     colline_en_face(t, 70, 20, 22, 5)
     relief(t, lambda x: 19.5 + 1.5 * math.sin(x / 7), S3, lisere=OR3)
     relief(t, lambda x: 22 + 0.8 * math.sin(x / 4 + 2), S2, lisere=OR2)
@@ -292,7 +293,7 @@ def chemin(t, pts, l, c):
 @decor("prologue", "pied-colline", images=2, duree=800)
 def pied_colline(t, k):
     ciel(t, 26, soleil=(88, 14), r=3.2)
-    nuage(t, 18, 7, 18, 3, CREME, BLANC, CIEL[2])
+    nuage(t, 18 + 0.8 * dc.onde(0.6), 7, 18, 3, CREME, BLANC, CIEL[2])
     relief(t, lambda x: 22 + 2 * math.sin(x / 10), BRUME2, lisere=OR3)
     # La grande colline ronde qui remplit la droite, son flanc gauche à l'ombre.
     relief(t, lambda x: 40 - 32 * max(0, 1 - ((x - 64) / 40) ** 2) ** 0.7, S3, lisere=OR3)
@@ -317,7 +318,7 @@ def pied_colline(t, k):
 @decor("prologue", "pente", images=2, duree=900)
 def pente(t, k):
     ciel(t, 40, soleil=(14, 10), r=3)
-    nuage(t, 40, 6, 22, 3, CREME, BLANC, CIEL[2])
+    nuage(t, 40 + 0.8 * dc.onde(0.1), 6, 22, 3, CREME, BLANC, CIEL[2])
     relief(t, lambda x: 30 + 3 * math.sin(x / 9), BRUME2, lisere=OR3, x1=40)
     # La pente, raide, de bas à gauche vers le haut à droite.
     f = lambda x: 40 - x * 0.36 - 1.5 * math.sin(x / 7)
@@ -362,7 +363,7 @@ def sommet(t, k):
     if toile.fin():
         ell(t, 66, 29, 4.5, 4.5, BLANC, cond=lambda x, y, u, v: y < 29.5)
     for i, (x, y, l) in enumerate(((20, 10, 26), (52, 6, 18), (84, 14, 16))):
-        x += k * 0.5
+        x += 0.7 * dc.onde(i * 0.23)
         nuage(t, x, y, l, 2.2, "#f6a35c", "#ffd3a6", "#b679a6")
     # L'horizon, très loin, et la vallée en contrebas : la maison et la mare toutes petites.
     relief(t, lambda x: 29 + 1.2 * math.sin(x / 6), LOIN, lisere=OR3)
@@ -381,7 +382,8 @@ def sommet(t, k):
     ell(t, tx, 19, 6, 4.5, S1)
     ell(t, tx + 1.5, 18, 4.5, 3.4, S2)
     ell(t, tx + 2.5, 17.5, 2.5, 2, OR1)
-    for (x, y) in ((50, 15), (56, 12), (61, 16)):
-        x += k
-        trait(t, x - 1, y - 0.6, x, y, OMBRE, ep=1)
-        trait(t, x, y, x + 1, y - 0.6, OMBRE, ep=1)
+    for i, (x, y) in enumerate(((50, 15), (56, 12), (61, 16))):
+        x += 0.8 * dc.onde(i * 0.3)
+        aile = -0.9 if dc.onde(i * 0.27) > 0 else 0.1     # les ailes battent lentement
+        trait(t, x - 1, y + aile, x, y, OMBRE, ep=1)
+        trait(t, x, y, x + 1, y + aile, OMBRE, ep=1)

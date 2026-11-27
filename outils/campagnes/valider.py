@@ -27,7 +27,14 @@ ISSUES = ("bonne", "douce-amere", "mauvaise", "secrete")
 HUMEURS = ("joie", "peur", "triste", "surpris", "determine", "fatigue", "tendre", "colere", "malice", "neutre")
 ID = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
-COMMUNS = {"type", "texte", "checkpoint", "effets", "recompense", "lieu", "humeur", "decor"}
+COMMUNS = {"type", "texte", "checkpoint", "effets", "recompense", "lieu", "humeur", "decor", "personnage", "expression"}
+# Portraits des personnages (« personnage », « expression » des nœuds) : assets/sprites/portrait-<campagne>-<id>[-<expr>].txt
+SPRITES = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "assets", "sprites"))
+
+
+def portrait(campagne, personnage, expression=""):
+    nom = "portrait-%s-%s" % (campagne, personnage) + ("" if expression in ("", "neutre") else "-" + expression)
+    return nom, os.path.isfile(os.path.join(SPRITES, nom + ".txt"))
 PROPRES = {
     "recit": {"suite"},
     "choix": {"options"},
@@ -450,6 +457,22 @@ class Validateur:
                 r.erreur(f, ident, f"décor « {n['decor']} » non déclaré dans « decors » (campagne.json)")
             if isinstance(n["decor"], str):
                 self.decors_lus.add(n["decor"])
+        if "personnage" in n or "expression" in n:
+            camp = os.path.basename(os.path.normpath(self.dossier))
+            p = n.get("personnage")
+            x = n.get("expression", "")
+            if not isinstance(p, str) or not ID.match(p):
+                r.erreur(f, ident, "« expression » sans « personnage », ou « personnage » qui n'est pas un identifiant")
+            elif not isinstance(x, str) or x not in HUMEURS + ("",):
+                r.erreur(f, ident, f"« expression » vaut « {x} » : attendu l'une de {', '.join(HUMEURS)}")
+            else:
+                nom, ok = portrait(camp, p)
+                if not ok:
+                    r.erreur(f, ident, f"personnage « {p} » : pas de portrait {nom} dans assets/sprites")
+                elif x:
+                    nom, ok = portrait(camp, p, x)
+                    if not ok:
+                        r.erreur(f, ident, f"personnage « {p} » : pas d'expression « {x} » dessinée ({nom})")
         if "recompense" in n:
             if t == "fin":
                 r.erreur(f, ident, "une fin donne ses récompenses dans « recompenses » (au pluriel), pas « recompense »")

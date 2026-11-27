@@ -1,0 +1,73 @@
+# Enveloppe brandie (fermée, cachet rond)
+id: enveloppe-close
+slot: main
+ancre: tete
+decalage: -14 -34
+duree: 320
+palette: a=#1c2128 b=#f6f8fa c=#f9fbfc d=#c9d1d9 e=#c9cbd2 f=#e7b085 g=#d9803a h=#ffc89a i=#b26b38
+images:
+....................................
+....................................
+....................................
+....................................
+....................................
+....................................
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbccccccccccccccccccccbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaddddbbbbbbbbbbbbbbbbbbbbbbbbddddaa
+aaddddddbbbbbbbbbbbbbbbbbbbbddddddaa
+aaccddddddeebbbbbbbbbbbbeeddddddccaa
+aabbccddddddeeeeeeeeeeeeddddddccbbaa
+aabbbbccddddddffggffffddddddccbbbbaa
+aabbbbbbccddddggggggggddddccbbbbbbaa
+aabbbbbbbbccffgghhggggffccbbbbbbbbaa
+aabbbbbbbbbbgggghhggggggbbbbbbbbbbaa
+aabbbbbbbbbbggggffggggggbbbbbbbbbbaa
+aabbbbbbbbbbggggggggggggbbbbbbbbbbaa
+aabbbbbbbbbbciggggggggicbbbbbbbbbbaa
+aabbbbbbbbbbbbiiggiiiibbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaeeeeeeeeeebbbbbbbbbbbbeeeeeeeeeeaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+....................................
+....................................
+---
+....................................
+....................................
+....................................
+....................................
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbccccccccccccccccccccbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaddddbbbbbbbbbbbbbbbbbbbbbbbbddddaa
+aaddddddbbbbbbbbbbbbbbbbbbbbddddddaa
+aaccddddddeebbbbbbbbbbbbeeddddddccaa
+aabbccddddddeeeeeeeeeeeeddddddccbbaa
+aabbbbccddddddffggffffddddddccbbbbaa
+aabbbbbbccddddggggggggddddccbbbbbbaa
+aabbbbbbbbccffgghhggggffccbbbbbbbbaa
+aabbbbbbbbbbgggghhggggggbbbbbbbbbbaa
+aabbbbbbbbbbggggffggggggbbbbbbbbbbaa
+aabbbbbbbbbbggggggggggggbbbbbbbbbbaa
+aabbbbbbbbbbciggggggggicbbbbbbbbbbaa
+aabbbbbbbbbbbbiiggiiiibbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaeeeeeeeeeebbbbbbbbbbbbeeeeeeeeeeaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
+....................................
+....................................
+....................................
+....................................

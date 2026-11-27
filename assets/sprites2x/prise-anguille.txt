@@ -1,0 +1,27 @@
+# prise de pêche
+id: prise-anguille
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#0d2a4d b=#2a5ea8 c=#3b72c2 d=#7295c6 e=#6a8ec2 f=#265090 g=#6cb6ff h=#ffffff i=#1c2128 j=#16407a k=#10305e
+images:
+...........................aaaaaabbbbbbbbbaaaaaaa...............
+.........................aaaaabbbbcccccccccbbbaaaa..............
+.......................aaaaabbbcccddbdddbddccbbbaaaa............
+......................aaaabbbccbddbbedbbbbbddccbbaaaaa..........
+aaaaa...............aaaabbbbcddbbbbbdbbfedbbbbdccbbaaaa.........
+aaaaaaa...........aaaaabbbccdbbedbbbbbbbdbbbfebddcbbbaaa........
+ddddaaaaaaaaa...aaaaabbbccdbbbbdbbbbbbbbbbbbbdbbbbccbbaaaaaaa...
+dbbbbbaaaaaaaaaaaaabbbbcddbedbbbbbbbbbbbbbbbbbbbbbddccbaaaaaaaa.
+dbbfcbbbggggaaaaabbbbccdbbbdbbbbbbbbbbbbbbbbbbbbfedbddcaaaddaaaa
+dbbbbccbghiiaaabbbbccdbbbbbbbbbbbbbbffffbbbbbbbbbdbbbbbdddbbddaa
+dbbbbdbcgiiibjbccccddbedbbbbbbbbbfffaaaafffbbbbbbbbbbbbbbbbbbbda
+dbbfebbbgiigcccdddbbbbdbbbbbbbbffaaaaaaaaaaffbbbbbbbbfedbbbbbbba
+dbbbdbbbbbbddjjbbbedbbbbbbbbbffaaaaaa..aaaaaafbbbbbbbbdbbbbbbbbd
+dbbbbfkkkekbbejdbbdbbbbffbbbfaaaaa........aaaaffbbbbbbbbbbbbbbbb
+bbbbbbdddddbbddbbbbbbffggbffaaaa............aaaaffffbbbbbbbbbbbf
+fbbbbbbbbbbbbbbbbbbffgdbbfaaaa...............aaaaaaaffbbbbbbbbbf
+affbbbbbbbbbbbbbbbfgbbbbaaaaa..................aaaaaaafbbbbbbbbf
+aaaffbbbbbbbbbbbbbbbfbfaaaa........................aaaabbbbbbbfa
+aaaaafffbbbbbbbbbbfbaaaaa............................aafbbbbbbfa
+..aaaaaaffffffffffaaaaaa.............................aaaffffffaa

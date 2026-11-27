@@ -6,6 +6,7 @@
       "lieu": "Porte du dossier Temp",
       "decor": "dossier-temp",
       "humeur": "peur",
+      "personnage": "balayeur",
       "checkpoint": true,
       "texte": [
         "On est en bas. À l'instant où je posais le pied par terre, une voix est tombée du ciel, de très haut, très en retard : « Ça va, merci. Et vous ? » La gargouille. Grumeau a répondu « on fait aller », par réflexe. Et puis on a regardé devant nous. L'homme au balai. Il n'est pas figé : il attend. Il a tourné la tête et il a dit, très poliment : « Bonjour. Je suis le Balayeur. »",
@@ -21,6 +22,7 @@
     "ch8-balai-rond": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "balayeur",
       "texte": [
         "J'ai sifflé vers le haut, sans trop y croire. Et il est venu ! Le Rond, descendu du Hall en roulant sur sa tranche. Depuis que je l'ai poussé, il sait qu'on peut tourner à la main. Il s'est planté devant le Balayeur et il a dit : « Un instant… » Le Balayeur a baissé son balai. Il attend. Un programme attend toujours quand le Rond le demande, c'est plus fort que lui. Grumeau a murmuré : « Bon. Il sert à quelque chose. » On est entrés."
       ],
@@ -29,6 +31,7 @@
     "ch8-balai-bluff": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "balayeur",
       "texte": [
         "J'ai pris ma plus grosse voix : « Inspection surprise. Contrôle du matériel. Ce balai a-t-il son tampon de l'année ? » Le Balayeur a pâli. Il a retourné son balai, cherché le tampon sur le manche, sous les poils, partout. Grumeau a enchaîné, impitoyable : « Article 12. Tout balai non tamponné doit être présenté au guichet. » Le Balayeur est parti le présenter. Au guichet. Fermé jusqu'à 13 h 38. Il reviendra à l'heure, il revient toujours. Mais on est entrés."
       ],
@@ -37,6 +40,7 @@
     "ch8-fenetre": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "balayeur",
       "texte": [
         "La fenêtre « Copie de copie » donne sur une autre fenêtre, « Copie de copie (2) », qui donne sur une troisième. J'en ai traversé neuf, en rentrant le ventre, avec Grumeau qui cognait contre chaque cadre. À la dernière, je suis tombé dans le dossier Temp la tête la première. Dehors, le Balayeur n'a pas bougé. Mais il a dit, sans se retourner : « J'ai vu. Je note. À 13 h 38, je commencerai par les coins. Tâchez de ne pas y être. »"
       ],
@@ -45,6 +49,7 @@
     "ch8-balai-franc": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "tic-tac",
       "texte": [
         "Je lui ai tout dit : le Tic-Tac, le goûter, les horloges. Il a écouté sans baisser son balai. « Vous voulez relancer l'heure. Donc vous voulez que je passe. C'est aimable. » Il s'est écarté d'un pas. « Entrez. Mais je vous préviens : je commence toujours par les coins, et je finis par le milieu. C'est tout ce que je peux faire pour qui que ce soit. » Je crois que c'était un cadeau. Un cadeau de balayeur."
       ],
@@ -65,6 +70,7 @@
     "ch8-spectre": {
       "type": "choix",
       "humeur": "tendre",
+      "personnage": "spectre-404",
       "texte": [
         "Quelque chose de froid m'a traversé l'épaule. Quatre-Cent-Quatre ! Le petit spectre de la Tour. Il m'a retrouvé, lui qui ne retrouve jamais rien. « Tu avais promis. Je crois que c'est ici. Ce que je cherche. Ça sent comme moi. » Il montre une allée sombre, sur le côté, pleine de vieux fichiers sans nom. Ce n'est pas notre chemin. C'est même à l'opposé.",
         "Grumeau regarde ailleurs, exprès, pour ne pas m'influencer, ce qui m'influence beaucoup. On n'a pas l'éternité devant nous. Enfin, si. Mais le Tic-Tac est quelque part là-dedans, avec quelqu'un qui fait peur à tout le monde. Je tiens ma promesse maintenant ?"
@@ -77,6 +83,7 @@
     "ch8-page": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "spectre-404", "expression": "triste",
       "texte": [
         "On le suit. L'allée est pleine de choses effacées à moitié : des images sans couleurs, des phrases sans verbes, une chanson dont il ne reste que le refrain. Quatre-Cent-Quatre flotte devant, il renifle chaque pile. Grumeau dit qu'on perd du temps, et il ajoute, pour la première fois : « Ça ne fait rien. » Je fouille avec eux. Je ne sais même pas ce qu'on cherche. Lui non plus. Je t'écris si on trouve."
       ],
@@ -89,6 +96,7 @@
     "ch8-page-trouvee": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "spectre-404", "expression": "triste",
       "texte": [
         "On a trouvé. Sous une pile, un coin de page, déchiré, avec trois mots dessus : « Bienvenue sur ma ». C'est tout ce qu'il reste. Quatre-Cent-Quatre l'a regardé longtemps. « C'était moi. J'étais une page. Quelqu'un m'a effacé, et il est resté quelqu'un pour me chercher. » Il a serré le morceau contre son 404. Il ne pleure pas, il pixellise un peu. Puis : « Je connais ce dossier par cœur. Je vous emmène où vous voulez. »"
       ],
@@ -98,6 +106,7 @@
     "ch8-promesse-trahie": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "J'ai dit « plus tard ». Il a hoché la tête, très lentement. « Plus tard. Oui. C'est ce qu'on dit. » Et il est devenu si pâle que je voyais les dossiers à travers lui, puis seulement les dossiers. Grumeau s'est arrêté. « Introuvable, la promesse aussi. Tu lui fais attendre quelque chose qui ne viendra pas. Je sais ce que c'est, figure-toi. » Il est reparti devant. Je marche derrière. J'ai mérité de marcher derrière."
       ],
@@ -108,6 +117,7 @@
       "lieu": "Les allées de Temp",
       "decor": "dossier-temp",
       "humeur": "peur",
+      "personnage": "grumeau",
       "checkpoint": true,
       "texte": [
         "Plus on avance, plus les allées se ressemblent. Sur les murs de dossiers, il y a maintenant des traces : des mots barrés, des phrases raturées à grands traits, de plus en plus serrés. Mon baluchon tremble tout seul. Devant nous, le chemin se divise. Tout droit, les ratures continuent, de plus en plus noires. À droite, une archive toute propre, fermée par un joli nœud : « PAS_UN_PIEGE.zip ».",
@@ -123,6 +133,7 @@
     "ch8-echec-zip": {
       "type": "echec",
       "humeur": "peur",
+      "personnage": "grumeau",
       "texte": [
         "C'était un piège. Dès que j'ai passé le nœud, l'archive s'est refermée et tout s'est mis à serrer. J'ai été compressé. À douze pour cent de ma taille, plié en huit, avec Grumeau tassé contre moi, les grains en rangs. Quelqu'un nous a expédiés, comme une pièce jointe, tout au bout du dossier, près de la porte. Il m'a fallu un long moment pour me décompresser. Il manque un pli quelque part. Le nom avait pourtant prévenu."
       ],
@@ -131,6 +142,7 @@
     "ch8-marche": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "On s'enfonce. Je ne te cache pas que j'ai peur. Les ratures couvrent tout, maintenant, et entre les ratures il y a des débuts de phrases : « Je voulais », « Il faudrait que », « Cher ». Jamais la fin. On raconte que là où passe le Sans-Titre, les phrases s'arrêtent au milieu. Grumeau marche si près de moi qu'on fait un seul bruit. Je t'écris quand on voit la cabane. Si c'est une cabane."
       ],
@@ -144,6 +156,7 @@
       "type": "choix",
       "lieu": "Devant la cabane",
       "humeur": "peur",
+      "personnage": "grumeau",
       "texte": [
         "La cabane. Elle est faite de vieux brouillons froissés, collés les uns aux autres, avec une cheminée en rouleau de papier. Elle est beaucoup plus petite que trois étages. Il y a de la lumière dedans. Et sur la porte, en grosses lettres raturées trois fois : « DEMI-TOUR ». Grumeau s'est arrêté. « Je suis un instrument de mesure, moi. Pas un héros. Je mesure que c'est assez près. »",
         "Il reste dix pas jusqu'à la porte. Il ne veut pas les faire, et je ne veux pas les faire seul. Je ne suis pas un héros non plus, je suis une goutte. Trouve-moi quelque chose à lui dire."
@@ -156,6 +169,7 @@
     "ch8-seuil": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "tic-tac",
       "texte": [
         "On a fait les dix pas. Je suis devant la porte. De l'autre côté, quelque chose a bougé, puis une petite voix a crié : « N'entrez pas ! Je suis très… je suis extrêmement… » Elle n'a pas trouvé le mot. Silence. Puis : « Je suis armé d'un… » Rien non plus. Et là, derrière la voix, je l'ai entendu. Lent. Paresseux. Mais c'est lui. Tic… Tac.",
         "Il est là ! Le Tic-Tac est là, à une porte en papier de moi. Grumeau l'a entendu aussi : son sable s'est arrêté de couler une seconde, je te jure. La voix répète « n'entrez pas », moins fort. Qu'est-ce que je fais ?"

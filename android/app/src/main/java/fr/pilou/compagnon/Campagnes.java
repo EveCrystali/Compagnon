@@ -165,6 +165,8 @@ public final class Campagnes {
     public static final class Noeud {
         public String id = "", chapitre = "", type = "", lieu = "", humeur = "neutre", decor = "", suite = "", pendant = "", tenue = "",
                 jeu = "", bonus = "", reussite = "", echec = "", issue = "", titre = "";
+        /** Facultatifs (interfaces seulement) : le personnage que le message fait parler ou décrit, et son expression. */
+        public String personnage = "", expression = "";
         public final List<String> texte = new ArrayList<>();
         public boolean checkpoint;
         public List<Effet> effets = new ArrayList<>();
@@ -401,6 +403,8 @@ public final class Campagnes {
         n.humeur = s(o, "humeur", "neutre");
         if (!HUMEURS.contains(n.humeur)) n.humeur = "neutre";
         n.decor = s(o, "decor");
+        n.personnage = s(o, "personnage");
+        n.expression = s(o, "expression");
         n.suite = s(o, "suite");
         n.pendant = s(o, "pendant");
         n.tenue = s(o, "tenue");

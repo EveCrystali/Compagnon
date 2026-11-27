@@ -1,0 +1,31 @@
+# pièce d'or (icône)
+id: po
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#7a5a10 b=#f5d76e c=#c9a227 d=#fff6cc e=#e3bd44 f=#ffffff
+images:
+....aaaaabbbbbbaaaaa....
+...aaabbbbbcbbbbbcaaa...
+..aaabbbbbccccbbbccaaa..
+.aaabcbccccccccccbccaaa.
+aaabbbcccdddbbecccbccaaa
+aabbfccddddbbbbeecccccaa
+abbbccdddddaaabbeeccccca
+abbccddddbdaaabbeeecccca
+acbccdddbbdaaabbeeecccca
+bbbcdddbbbdaaabbeeeecccc
+bbccddbbbbdaaabbeeeecccc
+bbccdbbbbbdaaabbeeeecccc
+bbccbbbbbbdaaabbeeeecccc
+bbccebbbbbdaaabeeeeecccc
+cbbceebbbbdaaaeeeeeecccc
+acbcceebbbdaaaeeeeecccca
+acccceeeeedaaaeeeeecccca
+accccceeeedaaaeeeeccccca
+aaccccceeeeeeeeeecccccaa
+aaacccccceeeeeeccccccaaa
+.aaaccccccccccccccccaaa.
+..aaaccccccccccccccaaa..
+...aaaccccccccccccaaa...
+....aaaaaccccccaaaaa....

@@ -6,6 +6,7 @@
       "lieu": "La cabane de papier",
       "decor": "cabane-brouillon",
       "humeur": "surpris",
+      "personnage": "grumeau",
       "checkpoint": true,
       "texte": [
         "Quoi que j'aie fait à cette porte, le résultat a été le même : elle s'est ouverte, quelqu'un a crié « Ah ! », j'ai crié « Ah ! », et Grumeau a dit « Ah. » Le Sans-Titre est devant moi. Il m'arrive à l'épaule. C'est une feuille. Une seule page, un peu cornée, avec deux yeux inquiets et une ligne d'écriture en haut. Il tremble tellement qu'il fait du vent.",
@@ -16,6 +17,7 @@
     "ch9-face": {
       "type": "choix",
       "humeur": "neutre",
+      "personnage": "grumeau",
       "texte": [
         "La feuille s'est mise entre le hamac et nous, les bras écartés, enfin les marges. « Je ne l'ai pas… il n'est pas… vous ne pouvez pas le… » Il ne finit aucune phrase. Je crois que ce n'est pas la peur : il est comme ça. Sur sa première ligne, je lis : « Document sans titre (récupéré) ». Grumeau me pousse du socle : c'est à moi de parler. Je commence par quoi ?"
       ],
@@ -29,6 +31,7 @@
     "ch9-doux": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "texte": [
         "Il a arrêté de trembler d'un coup. Il m'a regardé comme si j'avais lu par-dessus son épaule, ce qui, pour un document, est très intime. « Tu sais ? » J'ai dit que je savais un bout. Ses marges sont retombées. « Alors tu sais que je ne suis pas un… que je n'ai jamais voulu… » Il s'est assis par terre, à plat. « On m'appelle Brouillon. Enfin, personne ne m'appelle. Mais si quelqu'un m'appelait. »"
       ],
@@ -37,6 +40,7 @@
     "ch9-brusque": {
       "type": "recit",
       "humeur": "colere",
+      "personnage": "tic-tac",
       "texte": [
         "J'ai crié « Rends-nous le Tic-Tac ! » en levant mon épée en bois. Il a reculé jusqu'au mur. « N'approchez pas ! Ou je… je me mets en gras ! » Et il l'a fait. Sa ligne est devenue toute noire, toute épaisse. C'était sa pire menace. On s'est regardés, lui en gras, moi avec mon bout de bois. Le Tic-Tac a soupiré : « Vous êtes — ridicules — tous — les deux. » J'ai baissé mon épée. Il a repris sa graisse normale. Il s'appelle Brouillon."
       ],
@@ -45,6 +49,7 @@
     "ch9-pourquoi": {
       "type": "recit",
       "humeur": "neutre",
+      "personnage": "tic-tac",
       "texte": [
         "« Pourquoi 13 h 37 ? » Il a ouvert la bouche, l'a refermée. « Parce qu'après, il y a… parce qu'à 13 h 38, moi, je… » Il a regardé le Tic-Tac pour qu'on l'aide. Le Tic-Tac a posé une carte. « Laisse-le — arriver. — Il met — du temps. » La feuille a soufflé un grand coup. « Je m'appelle Brouillon. C'est tout ce que j'arrive à dire d'une traite. Pour le reste, il faudrait qu'on s'asseye. »"
       ],
@@ -53,6 +58,7 @@
     "ch9-partie": {
       "type": "attente",
       "humeur": "neutre",
+      "personnage": "tic-tac",
       "texte": [
         "On s'est assis. Mais avant de parler, le Tic-Tac veut finir sa partie. Il insiste, des deux côtés : « On n'a — jamais fini — une partie — de rien. » Il joue contre lui-même, le côté tic contre le côté tac, et il triche des deux mains. Brouillon sert une tisane tiède. Grumeau refuse la tasse, puis la prend. Je n'ose pas presser l'heure en personne. On attend la fin de la partie. Je te raconte tout après."
       ],
@@ -65,6 +71,7 @@
     "ch9-aveu": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "tic-tac",
       "texte": [
         "Voilà l'histoire. À 13 h 30, quelqu'un a commencé à écrire Brouillon. Une ligne : « Cher toi, je voulais te dire que ». Puis ce quelqu'un est parti déjeuner, sans enregistrer. Brouillon est resté seul dans le dossier Temp, avec sa demi-phrase. Et il a lu l'affiche : Grand Nettoyage à 13 h 38. Huit minutes. Il n'a volé personne. Il est monté à l'Horloge et il a demandé au Tic-Tac, poliment, s'il voulait faire une pause.",
         "« Personne — ne nous l'avait — jamais — demandé », a dit le Tic-Tac. « On bat — depuis toujours. — On n'a jamais eu — une seconde — à nous. — Elles sont toutes — aux autres. » Grumeau n'a pas grogné. Il regardait Brouillon. Un vieux sablier qu'on a remplacé, une page qu'on va effacer : ils se sont reconnus, je crois. Il a juste dit : « Huit minutes. Ils ne lui ont même pas laissé le quart d'heure. »"
@@ -76,6 +83,7 @@
       "lieu": "La cabane de papier",
       "decor": "cabane-brouillon",
       "humeur": "surpris",
+      "personnage": "brouillon",
       "checkpoint": true,
       "texte": [
         "Problème. Le côté tic veut rentrer : il est ponctuel, il se ronge, il dit qu'on a « un retard — impossible — à mesurer ». Mais pendant qu'on parlait, le côté tac s'est endormi. D'un seul côté. Sa première sieste, en plein hamac, avec un petit ronflement à contretemps. Le côté tic chuchote : « Ne le réveille pas — en sursaut. — La dernière fois, — ça a donné — un 29 février. »",
@@ -98,6 +106,7 @@
     "ch9-veille": {
       "type": "choix",
       "humeur": "tendre",
+      "personnage": "balayeur",
       "texte": [
         "On le laisse dormir. Le côté tic s'est résigné : il compte les ronflements, pour s'occuper. Brouillon a baissé la lumière. Dehors, par la fenêtre en papier calque, on devine le dossier Temp tout gris, et très loin la silhouette du Balayeur, à son poste, qui attend son heure. La sieste va durer : il paraît qu'une première sieste dure toujours. J'ai le temps de faire une chose avant de m'endormir aussi. Laquelle ?"
       ],
@@ -119,6 +128,7 @@
     "ch9-gouter": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "grumeau", "expression": "surpris",
       "texte": [
         "J'ai sorti ma galette. Je la garde depuis ce matin, à travers tout. Je l'ai coupée en quatre : Brouillon, le côté tic, une part pour le côté tac à son réveil, et moi. Grumeau ne mange que du sable. Le côté tic a goûté et il a arrêté de battre, une seconde entière, de surprise. « C'est ça — un goûter ? — On en a sonné — des milliers. — On n'en avait — jamais mangé. » Il n'était même pas 16 h. C'était le meilleur."
       ],
@@ -135,6 +145,7 @@
     "ch9-sieste": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "balayeur",
       "texte": [
         "Je m'installe contre Grumeau, qui fait semblant de ne pas veiller. Le hamac se balance d'un seul côté. Juste avant de fermer les yeux, j'ai vu Brouillon se lever, sans bruit. Il a chuchoté qu'il sortait « juste vérifier un »… et il n'a pas fini. La porte s'est refermée. Par la fenêtre, je regarde l'endroit où se tenait le Balayeur. Il n'y est plus. Je voudrais rester éveillé. Je n'y arrive pas. Si tu lis ça, pense à moi très fort."
       ],
@@ -148,6 +159,7 @@
     "ch9-demi-1": {
       "type": "choix",
       "humeur": "fatigue",
+      "personnage": "tic-tac",
       "texte": [
         "On l'emmène comme ça. J'ai décroché le hamac avec le Tic-Tac dedans, un côté éveillé, un côté qui ronfle. Brouillon nous a regardés partir depuis sa porte, sans un mot, même pas un début. Le côté tic est inquiet : « Tout seul, — je ne fais — que la moitié — du travail. » Grumeau répète « une demi-horloge » à chaque pas.",
         "Il faudra bien que quelqu'un fasse le tac, là-haut, pendant que le vrai dort. Le côté tic nous regarde, Grumeau et moi, à tour de rôle. Ce n'est pas une bonne idée, je le sens. On n'a fait que vingt pas : il est encore temps de raccrocher le hamac et d'attendre. Sinon, qui s'y colle ?"
@@ -161,6 +173,7 @@
     "ch9-demi-refus": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "J'ai regardé Grumeau. Il a reculé d'un grain. « Moi ? Faire le tac ? Je coule, petit, je ne bats pas. Et je ne relancerai pas une horloge à cloche-pied. » Puis, plus bas : « On rentre. On raccroche ce hamac. Et on attend. Attendre, c'est mon métier, je te rappelle. Pour une fois qu'il sert à quelque chose. » Il avait raison. On a refait les vingt pas dans l'autre sens. Brouillon nous a rouvert sans rien dire, avec un soulagement qui faisait du vent."
       ],

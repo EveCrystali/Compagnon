@@ -75,6 +75,8 @@ public class CapturesTest {
                 essayer("aventure", this::aventure);
                 appairer();
                 essayer("aventure-suspendue", this::aventureSuspendue);
+                appairer();
+                essayer("aventure-personnages", this::aventurePersonnages);
                 essayer("epreuves", this::epreuves);
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
@@ -383,6 +385,56 @@ public class CapturesTest {
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             CampagnesTel.graineEssai = null;
+            sansAnimations(false);
+        }
+    }
+
+    // Les animations des campagnes (ScenesAnimees) : La Grande Panne jouée jusqu'à un choix où un personnage parle ;
+    // le décor animé, son portrait au bord de la scène, le fond teinté ; puis la même scène sans animations.
+    private void aventurePersonnages() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().remove("campagnes").remove("campParties").commit();
+        sansAnimations(false);
+        horloge[0] = System.currentTimeMillis();
+        CampagnesTel.horloge = () -> horloge[0];
+        CampagnesTel.prechargerMaintenant();
+        try {
+            CampagnesTel.demarrer(ctx, "grande-panne", false);
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            int choix = 0;
+            for (int pas = 0; pas < 300; pas++) {
+                Campagnes.Etat e = CampagnesTel.etat(ctx);
+                if (e == null || !e.enCours()) break;
+                Campagnes.Noeud n = gp.noeud(e.noeud);
+                if (e.phase == Campagnes.Phase.Choix && choix >= 2 && n != null && !n.personnage.isEmpty()) break;
+                switch (e.phase) {
+                    case Choix: CampagnesTel.choisir(ctx, e.options.get(0).id); choix++; break;
+                    case Depart: CampagnesTel.continuer(ctx); break;
+                    case Epreuve: CampagnesTel.epreuve(ctx, true); break;
+                    default: avancer(Math.max(60_000, e.fin - horloge[0] + 60_000));
+                }
+            }
+            ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+            Principale a = c.get();
+            a.ouvrirLecture();
+            attendre();
+            PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+            Lecture l = pa.lecture();
+            l.accelerer();
+            attendre();
+            ecran(a, "aventure-personnage");
+            ScenesAnimees.regler(ctx, Animations.AUCUNE);
+            pa.fermerLecture();
+            attendre();
+            a.ouvrirLecture();
+            attendre();
+            pa.lecture().accelerer();
+            attendre();
+            ecran(a, "aventure-personnage-sans-animation");
+            ScenesAnimees.regler(ctx, Animations.COMPLETES);
+            c.pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
             sansAnimations(false);
         }
     }

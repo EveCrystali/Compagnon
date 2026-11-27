@@ -16,6 +16,7 @@
     "ch7-blanc": {
       "type": "hasard",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "On est entrés dans le nuage du col. Dedans, on n'y voit pas à trois pas : c'est du brouillard, épais, froid, qui mouille. Je compte les cairns à voix haute pour me donner du courage. Quatre. Cinq. Brouillon ne dit plus rien du tout. Je le sens qui s'agite : il a compris où on est. Chez un grand. Dans un grand."
       ],
@@ -27,6 +28,7 @@
     "ch7-bocal-brouillard": {
       "type": "choix",
       "humeur": "triste",
+      "personnage": "brouillon",
       "texte": [
         "Dans le bocal, sous mon bras, Brouillon s'est collé à la vitre. Il a fait de la buée de l'intérieur, et dans la buée, il a appuyé un bord, bien à plat. On aurait dit une main. Il regarde le grand nuage, tout autour de nous. Il dit quelque chose, je vois le verre vibrer, mais le couvercle est vissé et je n'entends rien.",
         "Si j'ouvre, il ira. Dans ce blanc, je risque de le perdre de vue, et il prendra le froid en plein. Si je n'ouvre pas, il aura traversé le premier des siens derrière une vitre. J'ai la main sur le couvercle. Je fais quoi ?"
@@ -63,6 +65,7 @@
     "ch7-laine": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "La laine ! J'ai un brin de laine au poignet depuis le chemin creux, et je l'avais oublié. Il était raide de givre, tendu vers la gauche. J'ai tiré dessus très doucement, de peur qu'il casse, en avançant d'un pas à chaque fois. Dix pas. Vingt. Au bout du fil, il y avait Brouillon, en grande conversation avec un nuage qui ne lui répondait pas. Il a regardé la laine, puis moi : « Goutte triche. » Oui. Et alors ?"
       ],
@@ -83,6 +86,7 @@
     "ch7-vapeur": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "madame-bocal",
       "duree_min": 20,
       "duree_max": 25,
       "pendant": "Pilou fait de la vapeur dans le brouillard, et attend",
@@ -124,6 +128,7 @@
     "ch7-neige": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "brouillon",
       "duree_min": 15,
       "duree_max": 20,
       "pendant": "Pilou monte dans la neige, de cairn en cairn",
@@ -137,6 +142,7 @@
       "type": "choix",
       "lieu": "Le pont de neige",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "Dernier obstacle. Une faille, bleue, profonde, et par-dessus, un pont de neige. Pas plus large que moi. J'ai posé un pied : ça a fait un bruit de biscotte. Il tient, mais il ne tiendra pas grand-chose. Et moi, avec tout ce que je porte, je suis beaucoup plus que pas grand-chose.",
         "Brouillon a compris avant moi. Il s'est posé sur le pont et il a dit : « Brouillon colle. » Il peut y laisser un peu de son eau, pour geler la neige et la durcir. Un peu de lui, donc. Sinon, il y a un grand tour par la crête : une demi-journée de plus. Qu'est-ce que je fais ?"
@@ -158,6 +164,7 @@
     "ch7-pont": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "texte": [
         "Il s'est étalé sur le pont comme du beurre sur une tartine. Il a serré très fort, il est devenu gris, et la neige sous lui a blanchi, durci, craqué. Quand il s'est relevé, il lui manquait un bord, et le pont était de la glace. J'ai traversé à quatre pattes avec tout mon barda. Ça n'a pas bougé. De l'autre côté, il m'attendait, plus petit et très fier : « Brouillon sert. » Oui. Tu sers. Tu n'imagines pas à quel point."
       ],
@@ -179,6 +186,7 @@
       "type": "attente",
       "lieu": "Sous le col",
       "humeur": "determine",
+      "personnage": "tournebise",
       "duree_min": 150,
       "duree_max": 180,
       "pendant": "Pilou franchit le col",
