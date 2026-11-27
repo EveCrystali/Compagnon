@@ -22,6 +22,7 @@ qui compte (une IA qui attend, un message). Le propriétaire est Antoine ; on lu
 | `assets/` | Ressources communes aux deux : sprites texte, catalogue, campagnes |
 | `outils/sprites/` | Générateurs Python des sprites, planches de contrôle, références de rendu |
 | `outils/campagnes/` | Validateur des campagnes |
+| `outils/video/` | Montage de la vidéo de promo à partir d'un tournage (`monter.py`, plan dans `montage.json`) : [docs/VIDEO.md](docs/VIDEO.md) |
 | `plugins/compagnon/` | Le mod Claude Code (hooks → fichiers d'état) |
 | `integrations/` | Extensions VS Code et Visual Studio |
 | `docs/` | Une page par sujet (campagnes, sprites, Android, connecteurs, amis…) |
