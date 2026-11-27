@@ -157,8 +157,8 @@
       "decor": "seuil",
       "humeur": "tendre",
       "texte": [
-        "Me voilà rentré. Et je sais. Le soleil n'a pas de lit. Il a toute une mer : il s'y glisse doucement, comme dans un bain, et il tire l'horizon sur lui. Pas de couette. Je crois qu'il n'en a pas besoin.",
-        "Voilà. C'était ma première aventure, et tu étais là. Les prochaines seront plus longues : des heures de route, des nuits dehors, des choix qui comptent pour de bon. Je t'écrirai. Tu répondras ? Garde ce coucher de soleil : il est à nous deux."
+        "Me voilà rentré. Et je sais. Le soleil n'a pas de lit. Derrière l'horizon, il a toute une mer : il s'y glisse doucement, comme dans un bain, et il tire l'horizon sur lui. Pas de couette. Je crois qu'il n'en a pas besoin.",
+        "Voilà. C'était ma première aventure, et tu étais là. Tu as bien choisi, tout du long. Enfin, c'était mon idée. Bon : la nôtre. Les prochaines seront plus longues : des heures de route, des nuits dehors, des choix qui comptent pour de bon. Je t'écrirai. Tu répondras ? Garde ce coucher de soleil : il est à nous deux."
       ],
       "recompenses": { "po": 20, "xp": 10, "souvenir": "coucher-de-soleil" }
     },
@@ -171,7 +171,7 @@
       "humeur": "triste",
       "texte": [
         "Je suis rentré avant la nuit. Sage. Raisonnable. Un peu déçu, je ne te le cache pas : du pas de la porte, j'ai vu le ciel devenir rose, puis mauve, et je n'ai pas vu où allait le soleil. Il garde encore son secret.",
-        "Mais j'ai une question pour une prochaine fois, et c'est précieux, une question. Les prochaines aventures seront plus longues : des heures de route, des nuits dehors. Je t'écrirai. Et un soir, on retournera là-haut, toi et moi. Promis."
+        "Rentrer, c'était ton idée, cette fois. Je te la laisse. Et puis j'ai une question pour une prochaine fois, et c'est précieux, une question. Les prochaines aventures seront plus longues : des heures de route, des nuits dehors. Je t'écrirai. Et un soir, on retournera là-haut, toi et moi. Promis."
       ],
       "recompenses": { "po": 10, "xp": 5, "souvenir": "question-gardee" }
     }

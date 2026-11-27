@@ -264,7 +264,7 @@
       "type": "hasard",
       "humeur": "determine",
       "texte": [
-        "J'ai regardé Grumeau. Il fixait toujours la direction de son guichet, son ticket 1 337 serré contre le verre. Il ne dira jamais rien, je le connais maintenant. Alors je l'ai dit pour lui : « Non. On relance. » Brouillon a cessé de trembler de joie et s'est mis à trembler tout court. Le Tic-Tac est revenu sur son balancier, sans un reproche. Grumeau a fait « mmh ». Le plus beau « mmh » de la journée. Bon. On reprend : qu'est-ce qu'on fait de Brouillon ?"
+        "J'ai regardé Grumeau. Il fixait toujours la direction de son guichet, son ticket 1 337 serré contre le verre. Il ne dira jamais rien, je le connais maintenant. Alors je l'ai dit pour lui : « Non. On relance. » Brouillon a cessé de trembler de joie et s'est mis à trembler tout court. Le Tic-Tac est revenu sur son balancier, sans un reproche. Grumeau a fait « mmh ». Le plus beau « mmh » de la journée. Bon. Je te redis ce qu'on a, et cette fois on choisit pour de bon. Brouillon va sûrement retenter sa chance."
       ],
       "issues": [
         { "poids": 1, "vers": "ch10-plan-a", "si": { "drapeau": "route-guichets" } },

@@ -477,9 +477,9 @@ actualiser 1790000812000 phase=Attente|noeud=p2-sentier|e=4|t=1790000811000|fin=
 actualiser 1790000936000 phase=Choix|noeud=p2-sommet|e=4|t=1790000931000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=joie|pendant=|tenue=|options=1:reste,3:rentre|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=|issue=:0:0|messages=7:c1744c17bf4fcca7
 choisir prologue 1790000936000 pc-c reste ok
 actualiser 1790000937000 phase=Attente|noeud=p2-veille|e=5|t=1790000936000|fin=1790001056000|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=Le sommet|decor=sommet|humeur=tendre|pendant=Pilou regarde le soleil descendre|tenue=attend|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=|issue=:0:0|messages=9:4080233d99d523e1
-actualiser 1790001061000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:9a035667a7fe04b3
-actualiser 1790001062000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:9a035667a7fe04b3
-fil 29 24 40fa8b274af31434
+actualiser 1790001061000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
+actualiser 1790001062000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
+fil 29 24 bb5dceed1c3a07ff
 acquis prologue 25 13 p2-fin-coucher
 carnet pc-a
 messages pc-a pc 1
@@ -493,15 +493,15 @@ m {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a"
 carnet pc-a
 recevoir pc-a 1790001063000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
 recevoir pc-a 1790001063000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
-actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:9a035667a7fe04b3
+actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet tel-b
 recevoir tel-b 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 recevoir tel-b 1790001063000 0 {"v":1,"a":"pc-c","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
-actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:9a035667a7fe04b3
+actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet pc-c
 recevoir pc-c 1790001063000 1 {"v":1,"a":"pc-a","k":"pc","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":16,"e":3,"r":2,"i":4,"n":1,"t":1790000805,"ici":["w0qW",{},"","u9tj","KKuf","JiOI"],"l":["pc-a","pc-c"],"j":[[3,6,0,"1SBO",0],[4,131,1,"nYww",1]]},"h":{"prologue":[1,1,{"LyH9":1790001056},"JiOILyH9"]}}
 recevoir pc-c 1790001063000 0 {"v":1,"a":"tel-b","k":"tel","q":{"c":"prologue","p":1,"d":1790000005,"o":"pc-a","g":"g1","x":2,"e":0,"r":0,"i":0,"n":0,"t":1790000005,"ici":["nfeZ",{},"","","",""],"l":["pc-a","pc-c","tel-b"],"j":[[0,20,0,"-2gY",1],[1,95,2,"a7X0",2],[1,99,1,"a7X0",1],[2,200,2,"1SBO",1]]},"h":{"prologue":[1,0,{},"JiOI"]}}
-actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:9a035667a7fe04b3
+actualiser 1790001063000 phase=Fin|noeud=p2-fin-coucher|e=5|t=1790001056000|fin=0|reprise=0|tirages=2|chapitre=ch2:2/2|lieu=La maison|decor=seuil|humeur=tendre|pendant=|tenue=|options=|jeu=:0:0:0|vars=elan:0|objets=|drapeaux=ami-canard|credits=p2-fin-coucher|issue=bonne:20:10|messages=12:6019a743514dc79e
 carnet tel-b
 acquis prologue 25 13 p2-fin-coucher
 attente 0 0
