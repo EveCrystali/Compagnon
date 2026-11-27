@@ -260,7 +260,8 @@ final class Vitrine {
             while (t.length() > 3 && txt.measureText(t) > x1 - x0) t = t.substring(0, t.length() - 2);
             if (!t.equals(titre)) t = t + "…";
             cv.drawText(t, x0, by + dp(13), txt);
-            int bas = Butin.xpPourNiveau(niveau), haut = Butin.xpPourNiveau(niveau + 1);
+            // Niveau acquis gardé (comme l'Accueil) : si l'XP est sous le palier du niveau, la barre part du palier de la courbe.
+            int bas = Butin.xpPourNiveau(Math.min(niveau, Butin.niveau(xp))), haut = Butin.xpPourNiveau(niveau + 1);
             float part = haut > bas ? Math.max(0, Math.min(1, (xp - bas) / (float) (haut - bas))) : 1;
             int cases = 16;
             float pas = (x1 - x0) / cases, ecart = Math.max(1, pas * 0.2f), yb = by + dp(19);

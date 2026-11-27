@@ -1,0 +1,300 @@
+package fr.pilou.compagnon;
+
+import static org.robolectric.Shadows.shadowOf;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.os.Looper;
+import android.util.Base64;
+import android.view.View;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
+import org.robolectric.annotation.Config;
+import org.robolectric.annotation.GraphicsMode;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+/**
+ * Test de jeu (docs/TEST-JEU.md) : la lecture de chaque campagne photographiée sur ses pires cas réels — le message le
+ * plus long, le choix le plus chargé (options et libellés les plus longs), un départ et une attente, l'épreuve, le repos,
+ * la fin au titre le plus long — sur un petit téléphone (360 × 640 dp), en thème clair, en sombre, et en grande police
+ * (× 1,3). Images dans build/captures (préfixe « jeu- »), miniatures dans le journal (lignes CAPTURE). Ne fait jamais
+ * échouer le build : un écran qui refuse de se dessiner écrit CAPTURE-ERREUR.
+ */
+@RunWith(RobolectricTestRunner.class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+@Config(sdk = 34)
+public class CapturesCampagnesTest {
+    private static final String[][] FORMATS = {
+            {"jeu-petit-clair", "w360dp-h640dp-notnight-xhdpi", "1"},
+            {"jeu-petit-sombre", "w360dp-h640dp-night-xhdpi", "1"},
+            {"jeu-petit-grandepolice", "w360dp-h640dp-notnight-xhdpi", "1.3"},
+    };
+    private static final String[] CAMPAGNES = {"prologue", "grande-panne", "phare-eteint", "petit-nuage"};
+
+    private File dossier;
+    private String format;
+    private final long[] horloge = {0};
+
+    @Test
+    public void piresCasDeChaqueCampagne() {
+        try {
+            dossier = new File("build/captures");
+            dossier.mkdirs();
+            for (String[] f : FORMATS) {
+                format = f[0];
+                RuntimeEnvironment.setQualifiers(f[1]);
+                RuntimeEnvironment.setFontScale(Float.parseFloat(f[2]));
+                for (String id : CAMPAGNES) {
+                    Campagnes.Campagne c = Campagnes.charger(id);
+                    if (c == null) continue;
+                    // En sombre, seulement les deux écrans les plus chargés (contraste) ; sinon tout.
+                    for (Map.Entry<String, String[]> cas : piresCas(c).entrySet()) {
+                        if (format.endsWith("sombre") && !cas.getKey().equals("texte") && !cas.getKey().equals("choix")) continue;
+                        essayer(id + "-" + cas.getKey(), () -> photographier(c, cas.getKey(), cas.getValue()));
+                    }
+                }
+            }
+            RuntimeEnvironment.setFontScale(1f);
+        } catch (Throwable t) {
+            System.out.println("CAPTURES-SAUTEES " + t);
+        }
+    }
+
+    private void essayer(String nom, Runnable r) {
+        try {
+            r.run();
+        } catch (Throwable t) {
+            System.out.println("CAPTURE-ERREUR " + format + "-" + nom + " " + t);
+        }
+    }
+
+    // ---- Les pires cas, tirés des fichiers de la campagne : { nœud, geste (1) ou départ à confirmer (0) }
+
+    static Map<String, String[]> piresCas(Campagnes.Campagne c) {
+        Map<String, String[]> l = new java.util.LinkedHashMap<>();
+        Campagnes.Noeud texte = null, choix = null, attente = null, epreuve = null, repos = null, fin = null;
+        int mTexte = -1, mChoix = -1, mAttente = -1, mEpreuve = -1, mRepos = -1, mFin = -1;
+        List<String> ids = new ArrayList<>(c.noeuds.keySet());
+        java.util.Collections.sort(ids);
+        for (String id : ids) {
+            Campagnes.Noeud n = c.noeuds.get(id);
+            int mots = 0;
+            for (String t : n.texte) mots = Math.max(mots, t.split("\\s+").length);
+            if (mots > mTexte) {
+                mTexte = mots;
+                texte = n;
+            }
+            switch (n.type) {
+                case "choix": {
+                    int s = n.options.size() * 1000;
+                    for (Campagnes.Option o : n.options) s += o.libelle.length();
+                    if (s > mChoix) {
+                        mChoix = s;
+                        choix = n;
+                    }
+                    break;
+                }
+                case "attente": {
+                    int s = n.pendant.length() * 10 + mots;
+                    if (s > mAttente) {
+                        mAttente = s;
+                        attente = n;
+                    }
+                    break;
+                }
+                case "epreuve":
+                    if (!n.jeu.equals("des") && mots > mEpreuve) {
+                        mEpreuve = mots;
+                        epreuve = n;
+                    }
+                    break;
+                case "echec":
+                    if (mots > mRepos) {
+                        mRepos = mots;
+                        repos = n;
+                    }
+                    break;
+                case "fin": {
+                    int s = n.titre.length() * 10 + mots;
+                    if (s > mFin) {
+                        mFin = s;
+                        fin = n;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        if (texte != null) l.put("texte", new String[]{texte.id, "1"});
+        if (choix != null) l.put("choix", new String[]{choix.id, "1"});
+        if (attente != null) {
+            l.put("depart", new String[]{attente.id, "0"});
+            l.put("attente", new String[]{attente.id, "1"});
+        }
+        if (epreuve != null) l.put("epreuve", new String[]{epreuve.id, "1"});
+        if (repos != null) l.put("repos", new String[]{repos.id, "1"});
+        if (fin != null) l.put("fin", new String[]{fin.id, "1"});
+        return l;
+    }
+
+    /** Décor et nœud du lieu hérités en arrivant à chaque nœud (premier chemin trouvé depuis le départ). */
+    static Map<String, String[]> herites(Campagnes.Campagne c) {
+        Map<String, String[]> vu = new HashMap<>();
+        ArrayDeque<String[]> file = new ArrayDeque<>();
+        file.add(new String[]{c.depart, "", ""});
+        while (!file.isEmpty()) {
+            String[] x = file.poll();
+            Campagnes.Noeud n = c.noeuds.get(x[0]);
+            if (n == null || vu.containsKey(x[0])) continue;
+            vu.put(x[0], new String[]{x[1], x[2]});
+            String decor = n.decor.isEmpty() ? x[1] : n.decor, lieu = n.lieu.isEmpty() ? x[2] : n.id;
+            List<String> suites = new ArrayList<>();
+            if (!n.suite.isEmpty()) suites.add(n.suite);
+            for (Campagnes.Option o : n.options) suites.add(o.vers);
+            for (Campagnes.IssueHasard h : n.issues) suites.add(h.vers);
+            if (!n.reussite.isEmpty()) suites.add(n.reussite);
+            if (!n.echec.isEmpty()) suites.add(n.echec);
+            for (String s : suites) file.add(new String[]{s, decor, lieu});
+        }
+        return vu;
+    }
+
+    // Une partie posée au nœud voulu (base « ici »), tous drapeaux et objets acquis quand cela montre plus d'options.
+    private static String partie(Campagnes.Campagne c, String noeud, boolean geste, long t, boolean tout) {
+        String[] h = herites(c).get(noeud);
+        String decor = h == null || h[0].isEmpty() ? "" : Campagnes.code(h[0]), lieu = h == null || h[1].isEmpty() ? "" : Campagnes.code(h[1]);
+        StringBuilder objets = new StringBuilder(), drapeaux = new StringBuilder();
+        if (tout) {
+            for (Campagnes.Nomme o : c.objets) if (!o.portable) objets.append(Campagnes.code(o.id));
+            java.util.TreeSet<String> d = new java.util.TreeSet<>();
+            for (Campagnes.Noeud n : c.noeuds.values()) {
+                for (Campagnes.Effet e : n.effets) if (e.sorte.equals("drapeau")) d.add(Campagnes.code(e.nom));
+                for (Campagnes.Option o : n.options) for (Campagnes.Effet e : o.effets) if (e.sorte.equals("drapeau")) d.add(Campagnes.code(e.nom));
+            }
+            for (String x : d) drapeaux.append(x);
+        }
+        return "{\"c\":\"" + c.id + "\",\"p\":1,\"d\":" + t / 1000 + ",\"o\":\"tel-capture\",\"g\":\"capture\",\"x\":" + (geste ? 2 : 0)
+                + ",\"e\":0,\"r\":0,\"i\":0,\"n\":0,\"t\":" + t / 1000 + ",\"ici\":[\"" + Campagnes.code(noeud) + "\",{},\"" + objets + "\",\"" + drapeaux
+                + "\",\"" + decor + "\",\"" + lieu + "\"]}";
+    }
+
+    private void photographier(Campagnes.Campagne c, String cas, String[] quoi) {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        appairer(ctx);
+        horloge[0] = 1_790_000_000_000L;
+        CampagnesTel.horloge = () -> horloge[0];
+        android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+        CampagnesTel.prechargerMaintenant();
+        try {
+            Campagnes.Carnet k = new Campagnes.Carnet();
+            String json = partie(c, quoi[0], quoi[1].equals("1"), horloge[0], false);
+            if (cas.equals("choix")) {
+                // Le plus d'options possible : avec ou sans tout ce qui se gagne en route.
+                String tout = partie(c, quoi[0], true, horloge[0], true);
+                Campagnes.Etat a = Campagnes.rejouer(c, Campagnes.lirePartie(json), horloge[0]);
+                Campagnes.Etat b = Campagnes.rejouer(c, Campagnes.lirePartie(tout), horloge[0]);
+                if (b.options.size() > a.options.size()) json = tout;
+            }
+            k.courante = Campagnes.lirePartie(json);
+            Prefs.de(ctx).edit().putString("campagnes", Campagnes.sauver(k)).commit();
+            Campagnes.Etat e = CampagnesTel.etat(ctx);
+            if (cas.equals("attente") && e.phase == Campagnes.Phase.Attente) horloge[0] += (e.fin - horloge[0]) / 3;
+            ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+            Principale a = ac.get();
+            a.ouvrirLecture();
+            attendre();
+            PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+            Lecture l = pa.lecture();
+            l.accelerer();
+            attendre();
+            ecran(a, c.id + "-" + cas);
+            if (cas.equals("texte") || cas.equals("fin")) vue(l.filVue(), c.id + "-" + cas + "-fil");
+            if (cas.equals("epreuve")) {
+                l.ouvrirEpreuve(false);
+                attendre();
+                ecran(a, c.id + "-" + cas + "-jeu");
+                l.fermerCouche();
+            }
+            ac.pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f);
+        }
+    }
+
+    // Un téléphone appairé, au milieu d'un niveau (rien de personnel : nom et appareils fictifs).
+    private static void appairer(Context ctx) {
+        long t = System.currentTimeMillis();
+        String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"Pêcheur du dimanche\",\"couleur\":\"bleu\","
+                + "\"humeur\":\"repos\",\"calmes\":2,\"sessions\":[],\"xp\":3900,\"accessoire\":\"\",\"carnet\":[],\"plats\":[],\"recus\":[],"
+                + "\"po\":240,\"objets\":[],\"porte\":{},\"stade\":2}";
+        Prefs.de(ctx).edit().putString("code", "ABCDEFGHJKMNPQRS").putString("etat", etat).putLong("recu", t).commit();
+    }
+
+    // ---- Prise de vue (comme CapturesTest)
+
+    private static void attendre() {
+        shadowOf(Looper.getMainLooper()).idle();
+    }
+
+    private void ecran(Activity a, String nom) {
+        View racine = a.getWindow().getDecorView();
+        android.util.DisplayMetrics m = a.getResources().getDisplayMetrics();
+        int w = m.widthPixels, h = m.heightPixels;
+        racine.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY));
+        racine.layout(0, 0, w, h);
+        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        racine.draw(new Canvas(b));
+        ecrire(b, nom);
+    }
+
+    private void vue(View v, String nom) {
+        android.util.DisplayMetrics m = v.getResources().getDisplayMetrics();
+        int w = m.widthPixels;
+        v.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        int h = Math.max(m.heightPixels / 2, Math.min(v.getMeasuredHeight(), 12_000));
+        v.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY));
+        v.layout(0, 0, w, h);
+        Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(b);
+        cv.drawColor(Ui.p(v.getContext()).fond);
+        v.draw(cv);
+        ecrire(b, nom);
+    }
+
+    private void ecrire(Bitmap b, String nom) {
+        String fichier = format + "-" + nom;
+        try (FileOutputStream f = new FileOutputStream(new File(dossier, fichier + ".png"))) {
+            b.compress(Bitmap.CompressFormat.PNG, 100, f);
+        } catch (Exception e) {
+            System.out.println("CAPTURE-ERREUR " + fichier + " " + e);
+        }
+        float k = Math.min(1f, 560f / Math.min(b.getHeight(), b.getWidth() * 2f));
+        Bitmap mini = Bitmap.createScaledBitmap(b, Math.max(1, Math.round(b.getWidth() * k)), Math.max(1, Math.round(b.getHeight() * k)), true);
+        ByteArrayOutputStream o = new ByteArrayOutputStream();
+        mini.compress(Bitmap.CompressFormat.PNG, 100, o);
+        String s = Base64.encodeToString(o.toByteArray(), Base64.NO_WRAP);
+        int n = (s.length() + 3999) / 4000;
+        for (int i = 0; i < n; i++)
+            System.out.println("CAPTURE " + fichier + " " + (i + 1) + "/" + n + " " + s.substring(i * 4000, Math.min(s.length(), (i + 1) * 4000)));
+        System.out.println(String.format(Locale.ROOT, "CAPTURE-TAILLE %s %dx%d", fichier, b.getWidth(), b.getHeight()));
+    }
+}
