@@ -233,6 +233,7 @@ public sealed partial class FenetrePilou
             _profil.Succes.Add(d.Id);
             GagnerActivite(d.Xp);
             Flotter("SUCCES !", 1.6, new Point(TeteX - 46, TeteY - 70));
+            Sons.Jouer(Son.Succes);
             Dire($"succès débloqué : {d.Nom} !", 5000);
             _secondesNonEcrites = 60;
         }

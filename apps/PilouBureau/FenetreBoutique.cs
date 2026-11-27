@@ -715,6 +715,7 @@ internal sealed class FenetreBoutique : Window
         if (_choisi is null) return;
         var a = _choisi;
         var refus = _pilou.Acheter(a.Id);
+        if (refus is null) Sons.Jouer(Son.Achat);
         _message.Text = refus is null ? $"✓ {a.Nom} est à toi !" : $"✕ {refus}";
         // Un objet portable acheté se porte tout de suite (on peut le retirer).
         if (refus is null && Boutique.Slots.Contains(a.Slot)) _pilou.Equiper(a.Slot, a.Id);

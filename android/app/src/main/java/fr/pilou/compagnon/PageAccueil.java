@@ -391,6 +391,7 @@ final class PageAccueil extends Page {
 
     private void caresser() {
         pilou.jouer("caresse", 2400);
+        Sons.jouer(app, Sons.CARESSE);
         coeur.setAlpha(1);
         coeur.setTranslationY(0);
         coeur.animate().alpha(0).translationY(-Ui.dp(app, 36)).setDuration(900).start();

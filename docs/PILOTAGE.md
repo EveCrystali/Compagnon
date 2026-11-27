@@ -9,7 +9,7 @@ Toute session le lit avant de commencer, juste après `CLAUDE.md`.
 | Rôle | Fait | Ne fait pas |
 |---|---|---|
 | **Antoine** | Tranche le produit (tout ce qui va dans `DECISIONS.md`), teste sur ses vrais appareils, peut tout réorienter. | — |
-| **Session pilote** (ouverte le 27 novembre 2026, titre « Pilote ») | Tient le cap, fixe les priorités, découpe le travail en chantiers, lance les sessions avec un brief, arbitre entre chantiers, relit les comptes rendus, tient ce fichier et `ETAT.md`. | Coder un gros chantier elle-même ; trancher à la place d'Antoine une question de produit. |
+| **Session pilote** (ouverte le 27 novembre 2026, titre « Pilote Compagnon ») | Tient le cap, fixe les priorités, découpe le travail en chantiers, lance les sessions avec un brief, arbitre entre chantiers, relit les comptes rendus, tient ce fichier et `ETAT.md`. | Coder un gros chantier elle-même ; trancher à la place d'Antoine une question de produit. |
 | **Session de chantier** | Fait un seul chantier, dans son périmètre de fichiers, jusqu'à la PR fusionnée ; rend un compte rendu. | Changer de cap, ouvrir un second sujet, toucher aux fichiers d'un autre chantier, modifier ce fichier. |
 
 Une session ouverte par Antoine sans passer par le pilote est un chantier comme un autre : elle s'inscrit dans le
@@ -98,6 +98,7 @@ Tenu par le pilote. Dernière mise à jour : 27 novembre 2026, 23 h.
 | Relecture des captures Android | `claude/relecture-captures` | lecture seule ; correction Android seulement pour un défaut évident, hors moteur des campagnes | Lancé par le pilote |
 | Liste de contrôle Windows (`TEST-JEU.md`) | `claude/controle-windows` | `apps/PilouBureau/` hors moteur des campagnes, `docs/TEST-JEU.md` | Lancé par le pilote |
 | Divergence de campagne entre appareils | `claude/divergence-campagne` | moteur des campagnes PC et Android, vecteurs partagés, leurs tests | Lancé par le pilote |
+| Audit UI/UX du menu clic droit | `claude/audit-menu` | lecture seule du code ; `docs/AUDIT-MENU.md`, `docs/maquettes/menu/` | Lancé par le pilote ; l'implémentation attend le choix d'Antoine |
 | Pilotage (ce fichier) | `claude/pilotage`, PR #81 | `docs/PILOTAGE.md`, `CLAUDE.md` | PR ouverte |
 
 Fusionnés le 27 novembre : tournage de la promo (#80), montage de la promo (#78), boutons du journal et taille

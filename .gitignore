@@ -8,3 +8,5 @@ android/app/build/
 android/app/genere/
 android/local.properties
 outils/campagnes/__pycache__/
+outils/sons/ecoute/
+outils/sons/__pycache__/

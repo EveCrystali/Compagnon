@@ -237,6 +237,7 @@ public final class Principale extends Activity {
 
     /** Aventure, directement dans la lecture de la campagne en cours (notification de retour, carte de l'accueil, bulle). */
     void ouvrirLecture() {
+        Sons.jouer(this, Sons.AVENTURE);
         aller(AVENTURE, true);
         ((PageAventure) page(AVENTURE)).lire();
     }
