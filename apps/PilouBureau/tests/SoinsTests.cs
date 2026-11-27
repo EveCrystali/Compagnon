@@ -204,7 +204,7 @@ public class SoinsTests
         for (int i = 0; i < 200; i++) Soins.Ajouter(p.Soins, Soins.Action("nourrir", T0 + i * 60_000, "gateau"));
         p.Evolution.Variantes[2] = "calin";
         var json = Groupe.Json(Groupe.Moi(p, "pc", "Perso"));
-        Assert.True(json.Length <= 2600, $"{json.Length}");
+        Assert.True(json.Length <= Groupe.TailleJson, $"{json.Length}");
         var lu = Groupe.Lire(json)!;
         Assert.Equal("pc", lu.SoinsOrigine);
         Assert.Equal(T0, lu.SoinsBase!.T);

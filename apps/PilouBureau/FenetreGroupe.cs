@@ -19,6 +19,21 @@ public sealed partial class FenetrePilou
 
     private int TotalXp() => _profil.Total(DossierPartage, GroupeMem.Compteurs);
 
+    // Métiers et succès de tout le groupe (Groupe.Cumuler). Les profils du dossier partagé sont relus au plus
+    // une fois par minute : le cumul sert à chaque image d'activité.
+    private List<Profil>? _autresDossier;
+    private double _autresDossierLu = -1e12;
+
+    private Groupe.Cumul CumulGroupe()
+    {
+        if (_autresDossier is null || Epoque - _autresDossierLu > 60_000)
+        {
+            _autresDossier = _profil.EnMemoire ? new List<Profil>() : _profil.AutresDuDossier(DossierPartage);
+            _autresDossierLu = Epoque;
+        }
+        return Groupe.Cumuler(_profil, _autresDossier, GroupeMem.Compteurs);
+    }
+
     private bool DansUnGroupe => Telephone.Valide(_reglages.Telephone);
 
     private string IdAppareil
@@ -60,7 +75,11 @@ public sealed partial class FenetrePilou
         var signature = $"{_profil.Xp}|{_profil.XpTelephone}|{_profil.Carnet.Count}|{_profil.Plats.Count}|{NomPilou}"
                         + $"|{b.PoGagnes}|{b.PoDepenses}|{b.PoDepTelephone}|{b.Inventaire.Count}|{string.Join(",", b.Equipe.Select(kv => kv.Key + kv.Value.Id))}"
                         + $"|{_profil.Evolution.NiveauAcquis}|{_profil.Evolution.NiveauPaye}"
-                        + $"|{_profil.Expedition.Jour}|{_profil.Expedition.Nombre}|{_profil.Expedition.Libre}";
+                        + $"|{_profil.Expedition.Jour}|{_profil.Expedition.Nombre}|{_profil.Expedition.Libre}"
+                        // Métiers : une publication par demi-heure d'activité au plus (le relais limite les messages),
+                        // tout de suite pour un succès, un grade payé ou un compteur de succès.
+                        + $"|{_profil.Activites.Values.Sum() / 1800}|{_profil.Succes.Count}|{string.Join(",", _profil.MetiersPayes.Values)}"
+                        + $"|{_profil.SeancesClavier}|{_profil.Captures}|{_profil.Presentations}|{_profil.Defense.Meilleur}|{_profil.Defense.MeilleureVague}|{_profil.Defense.Boss}";
         if (signature != _grSignature)
         {
             _grSignature = signature;
@@ -129,6 +148,8 @@ public sealed partial class FenetrePilou
                     _xpTotal = TotalXp();
                     if (_xpTotal > avant) Flotter($"+{_xpTotal - avant} xp");
                     VerifierNiveau();
+                    // Heures et succès des autres PC : grades montés ailleurs (annonce discrète), succès du groupe.
+                    MetiersEtSuccesDuGroupe();
                 });
             }
             catch (Exception e) when (e is HttpRequestException or TaskCanceledException)

@@ -17,10 +17,10 @@ tourne), titre et prochaine rangée de la boutique ; un toucher ouvre Collection
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), les appareils du groupe, le mot du jour. Pas encore appairé : deux lignes pour dire qui est Pilou, puis un guide en trois étapes. |
+| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), la carte **Métiers et succès** (métier le plus pratiqué, succès obtenus), les appareils du groupe, le mot du jour. Pas encore appairé : deux lignes pour dire qui est Pilou, puis un guide en trois étapes. |
 | **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
-| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède). |
+| **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède), **Métiers** (métiers et succès du PC, voir plus bas). |
 | **Réglages** | Appairage, Pilou flottant (taille, cacher, ramener), notifications, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
 
 ### Chasse aux bugs
@@ -183,6 +183,28 @@ compteur sur un troisième sujet (`pilou-groupe-v1`) et garde, pour chacun des a
 valeur reçue (compteur G) ; le total est la somme. Les gains du téléphone sont crédités par **chaque**
 PC du groupe dans un compteur à part (`XpTelephone`), dont on prend le maximum : ils ne comptent qu'une
 fois. L'app affiche la liste *Appareils du groupe* (nom, XP, vu il y a…) que le PC lui transmet.
+
+Partagé dans le groupe : XP, pièces d'or, objets et tenue, carnet et recettes, soins et variantes
+d'évolution, limites d'expédition, et **métiers et succès**. Pour ces derniers, chaque PC publie ses
+propres totaux (champ `act` : minutes par activité non nulles ; `cpt` : frappes avec Pilou, captures,
+présentations, record, vague et boss de Défense du bureau), la liste de ses succès (`suc`) et les grades
+de métier déjà récompensés (`mp`). Le total du groupe est la somme (plus grande valeur reçue de chaque
+appareil, records au maximum), les succès et grades payés une union : le premier PC qui franchit un
+succès ou un grade crédite l'XP, les autres le reprennent sans XP. Un ancien PC ignore ces champs.
+
+## Métiers et succès
+
+*Collection → Métiers* (et la petite carte **Métiers et succès** de l'Accueil, qui y mène) montre les
+métiers du groupe : nom, grade (Novice → Légende), barre vers le palier suivant (« 5,7 h / 6 h »),
+⚒ pour un métier de travail, ♪ pour un loisir, triés par heures, ceux à 0 h grisés ; puis
+« Succès 3/22 », les obtenus d'abord (✓), les autres avec leur description et leur avancement
+(« 3 / 10 », « 2,5 h / 4 h »). Le PC envoie `metiers` (niveaux) et `succes` (ids) — ce qu'envoie aussi
+un ancien PC, dont l'app montre alors le grade seul (« au moins 30 h ») — et, s'il est à jour,
+`heures` (dixièmes d'heure par métier) et `avance` (dixièmes d'avancement des succès commencés). Le
+catalogue (`Metiers.java`) est le même que celui du PC : `src/test/resources/metiers-succes.txt`, écrit
+par le test C# depuis `Metiers.cs`, est relu par `MetiersTest`. Un message trop long est allégé pas à
+pas (`Telephone.SousLimite`) ; l'app garde alors carnet, recettes, heures et avancement du message
+précédent.
 
 ## Météo
 

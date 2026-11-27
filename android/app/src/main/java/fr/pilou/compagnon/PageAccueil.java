@@ -51,6 +51,9 @@ final class PageAccueil extends Page {
     // Expédition (lecture seule : elle se lance sur le PC) : en route ou pas, énergie, dernier journal.
     private final LinearLayout carteExpedition;
     private String empreinteExpedition = "";
+    /** Petite carte « Métiers et succès » : le métier le plus pratiqué et les succès ; un toucher ouvre la page. */
+    private final LinearLayout carteMetiers;
+    private final TextView metiersTexte;
 
     PageAccueil(Principale a) {
         super(a);
@@ -135,6 +138,20 @@ final class PageAccueil extends Page {
         carteNouvelles.addView(nouvelles, Ui.large());
         carteNouvelles.setVisibility(View.GONE);
         corps.addView(carteNouvelles, Ui.large(a, 14));
+
+        carteMetiers = Ui.carte(a);
+        carteMetiers.addView(Ui.texte(a, Metiers.TRAVAIL + "  Métiers et succès", 17, p.texte, true), Ui.large());
+        metiersTexte = Ui.texte(a, "", 14, p.doux, false);
+        metiersTexte.setPadding(0, Ui.dp(a, 4), 0, 0);
+        carteMetiers.addView(metiersTexte, Ui.large());
+        TextView voir = Ui.texte(a, "Voir les métiers et les succès ›", 14, p.bleu, true);
+        voir.setPadding(0, Ui.dp(a, 8), 0, 0);
+        carteMetiers.addView(voir, Ui.large());
+        carteMetiers.setBackground(Ui.touchable(a, Ui.arrondi(a, p.surface, 18, p.bord), 18));
+        carteMetiers.setClickable(true);
+        carteMetiers.setOnClickListener(v -> a.allerMetiers());
+        carteMetiers.setVisibility(View.GONE);
+        corps.addView(carteMetiers, Ui.large(a, 14));
 
         // Pas appairé : le guide.
         guide = Ui.carte(a);
@@ -298,6 +315,12 @@ final class PageAccueil extends Page {
         String dansNiveau = Math.max(0, total - bas) + " / " + Math.max(1, haut - bas) + " xp · niv " + (n + 1) + " dans " + Math.max(0, haut - total) + " xp";
         xp.setText(dansNiveau + energie + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
         expedition(e, appaire, maintenant, p);
+        boolean metiers = appaire && Metiers.connus(e);
+        carteMetiers.setVisibility(metiers ? View.VISIBLE : View.GONE);
+        if (metiers) {
+            metiersTexte.setText(Metiers.resume(e));
+            carteMetiers.setContentDescription("Métiers et succès : " + Metiers.resume(e) + ". Toucher pour les voir.");
+        }
 
         if (!appaire) {
             etatPc.setText("◌  pas encore appairé");

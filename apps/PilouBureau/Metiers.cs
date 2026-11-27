@@ -60,6 +60,36 @@ public static class Metiers
         Tous.ToDictionary(m => m.Id, m => Niveau(m, Secondes(m, parActivite)));
 
     public static string DeActivite(string activite) => Tous.FirstOrDefault(m => m.Activites.Contains(activite))?.Id ?? "";
+
+    // Un grade monté. Discret : il a déjà été récompensé ailleurs dans le groupe (un autre PC l'a franchi) :
+    // une petite annonce ici, sans XP.
+    public sealed record Montee(Metier Metier, int Niveau, int Xp, bool Discret);
+
+    // Grades à annoncer et à récompenser, d'après les heures du groupe. niveaux : maintenant ; vus : ceux déjà
+    // connus ici (null au premier calcul : rien à annoncer) ; payes : grades déjà récompensés par cet appareil
+    // (mis à jour) ; payesAutres : ceux des autres appareils du groupe. Un grade n'est payé qu'une fois dans le
+    // groupe : celui qui le voit le premier au-dessus de tout ce qui a déjà été payé le crédite (10 xp × grade).
+    public static List<Montee> Monter(IReadOnlyDictionary<string, int> niveaux, IReadOnlyDictionary<string, int>? vus,
+        Dictionary<string, int> payes, IEnumerable<IReadOnlyDictionary<string, int>> payesAutres)
+    {
+        var autres = payesAutres.ToList();
+        var r = new List<Montee>();
+        foreach (var m in Tous)
+        {
+            int n = niveaux.GetValueOrDefault(m.Id);
+            int paye = Math.Max(payes.GetValueOrDefault(m.Id), autres.Select(a => a.GetValueOrDefault(m.Id)).DefaultIfEmpty(0).Max());
+            if (n > paye)
+            {
+                int xp = 0;
+                for (int k = paye + 1; k <= n; k++) xp += 10 * k;
+                r.Add(new Montee(m, n, xp, false));
+                paye = n;
+            }
+            else if (vus is not null && n > vus.GetValueOrDefault(m.Id)) r.Add(new Montee(m, n, 0, true));
+            if (paye > 0) payes[m.Id] = paye;
+        }
+        return r;
+    }
 }
 
 // Ce que l'on sait pour juger les succès (les compteurs du profil et la série en cours).
@@ -112,16 +142,41 @@ public static class Succes
         return Tous.Where(d => !obtenus.Contains(d.Id) && d.Atteint(s)).ToList();
     }
 
+    // Unité de l'avancement (le téléphone fait le même texte, Metiers.java) : heures, nombre, vague, points ;
+    // "" pour un succès d'un coup (noctambule…).
+    public static string Unite(Defi d) => d.But <= 1 ? "" : d.Id switch
+    {
+        "visio-man" or "orateur" or "explorateur" or "couteau-suisse" or "dactylo" or "photographe" => "n",
+        "rempart" => "vague",
+        "gardien" => "points",
+        _ => "h",
+    };
+
     public static string Progres(Defi d, Stats s)
     {
         var a = Math.Min(d.Avancement(s), d.But);
-        return d.But <= 1 ? "" : d.Id switch
+        return Unite(d) switch
         {
-            "marathon" => $"{a:0.#} h / {d.But} h",
-            "visio-man" or "orateur" or "explorateur" or "couteau-suisse" or "dactylo" or "photographe" => $"{a:0} / {d.But}",
-            "rempart" => $"vague {a:0} / {d.But}",
-            "gardien" => $"{a:0} / {d.But:0} points",
+            "" => "",
+            "n" => $"{a:0} / {d.But}",
+            "vague" => $"vague {a:0} / {d.But}",
+            "points" => $"{a:0} / {d.But:0} points",
             _ => $"{a:0.#} h / {d.But} h",
         };
+    }
+
+    // Avancement des succès pas encore obtenus, en dixièmes (arrondis vers le bas : jamais « 10 / 10 » avant
+    // l'heure), pour le téléphone ; seulement ceux qui ont commencé et qui se comptent (pas les succès d'un coup).
+    public static Dictionary<string, int> Avancements(Stats s, IEnumerable<string> obtenus)
+    {
+        var deja = obtenus.ToHashSet();
+        var r = new Dictionary<string, int>();
+        foreach (var d in Tous)
+        {
+            if (deja.Contains(d.Id) || Unite(d) == "") continue;
+            int v = (int)Math.Floor(Math.Min(d.Avancement(s), d.But) * 10 + 1e-9);
+            if (v > 0) r[d.Id] = v;
+        }
+        return r;
     }
 }

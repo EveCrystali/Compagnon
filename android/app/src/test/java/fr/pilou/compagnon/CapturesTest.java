@@ -67,6 +67,8 @@ public class CapturesTest {
                 appairer();
                 essayer("boutique", this::boutique);
                 appairer();
+                essayer("metiers", this::metiers);
+                appairer();
                 essayer("atelier-peche", () -> atelier("peche"));
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
@@ -147,6 +149,20 @@ public class CapturesTest {
         c.pause().stop().destroy();
     }
 
+    // Métiers et succès : la carte de l'accueil, puis la page (Collection → Métiers) qu'elle ouvre.
+    private void metiers() {
+        ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = c.get();
+        a.aller(Principale.ACCUEIL, false);
+        attendre();
+        contenu(a.page(Principale.ACCUEIL), "metiers-accueil-long");
+        a.allerMetiers();
+        attendre();
+        ecran(a, "metiers");
+        contenu(a.page(Principale.COLLECTION), "metiers-long");
+        c.pause().stop().destroy();
+    }
+
     private void appairer(String plus) {
         Context ctx = RuntimeEnvironment.getApplication();
         long t = System.currentTimeMillis();
@@ -159,6 +175,9 @@ public class CapturesTest {
                 + "\"po\":240,\"objets\":[\"echarpe\",\"petit-chat\"],\"porte\":{\"cou\":\"echarpe\",\"compagnon\":\"petit-chat\"},"
                 + "\"offres\":[\"cape\",\"monocle\",\"aura\",\"parapluie\"],\"promo\":\"cape\",\"serie\":3,\"stade\":2,"
                 + "\"quetes\":[[0,\"Pêcher 3 poissons\",1,3,30,0],[0,\"Finir 5 tours de Claude\",5,5,40,1],[1,\"Cuisiner 4 plats\",2,4,120,0]],"
+                + "\"metiers\":{\"codeur\":2,\"musicien\":3,\"joueur\":1},\"succes\":[\"marathon\",\"melomane\",\"dactylo\"],"
+                + "\"heures\":{\"codeur\":412,\"musicien\":187,\"joueur\":34,\"facteur\":57,\"cinephile\":3},"
+                + "\"avance\":{\"codeur-confirme\":412,\"gamer\":34,\"visio-man\":30,\"rempart\":70,\"photographe\":20},"
                 + "\"appareils\":[{\"nom\":\"RTX4070Ti\",\"xp\":3100,\"t\":" + (t - 20_000) + "},{\"nom\":\"PC-TAGG\",\"xp\":500,\"t\":" + (t - 7_200_000) + "}]}";
         Prefs.de(ctx).edit().putString("code", "ABCDEFGHJKMNPQRS").putString("etat", etat).putLong("recu", t)
                 .putBoolean("bulle", true).commit();
@@ -194,8 +213,8 @@ public class CapturesTest {
             ecran(a, etat + "-" + noms[i]);
             Page p = a.page(i);
             if (i == Principale.COLLECTION) {
-                String[] sous = {"carnet", "recettes", "niveaux", "style"};
-                for (int k = 0; k <= PageCollection.STYLE; k++) {
+                String[] sous = {"carnet", "recettes", "niveaux", "style", "metiers"};
+                for (int k = 0; k <= PageCollection.METIERS; k++) {
                     ((PageCollection) p).choisir(k);
                     attendre();
                     contenu(p, etat + "-collection-" + (k < sous.length ? sous[k] : String.valueOf(k)));

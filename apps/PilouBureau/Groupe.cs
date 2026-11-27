@@ -12,6 +12,9 @@ namespace PilouBureau;
 // autre appareil, la plus grande valeur reçue ; le total est la somme. Ordre d'arrivée, doublons et
 // retards n'y changent rien. Les gains du téléphone (canal retour) sont crédités par chaque PC du groupe
 // dans un compteur à part (XpTelephone) : on en prend le maximum, jamais la somme.
+// Métiers et succès suivent la même règle : chaque appareil publie SES secondes par activité et SES compteurs
+// (frappes avec Pilou, captures, présentations, boss de Défense) ; le total du groupe est la somme (Cumuler).
+// Records de Défense : le maximum. Succès et grades déjà récompensés : l'union (un seul crédit d'XP).
 public static class Groupe
 {
     public static string Sujet(string code) =>
@@ -26,8 +29,28 @@ public static class Groupe
         IReadOnlyList<string>? Inventaire = null, IReadOnlyDictionary<string, Port>? Equipe = null, int NiveauPaye = 0, int NiveauAcquis = 0,
         EtatSoins? SoinsBase = null, string SoinsOrigine = "", IReadOnlyList<ActionSoin>? SoinsActions = null,
         IReadOnlyDictionary<int, string>? Variantes = null,
-        string ExpJour = "", int ExpNombre = 0, double ExpLibre = 0)
+        string ExpJour = "", int ExpNombre = 0, double ExpLibre = 0,
+        IReadOnlyDictionary<string, long>? Secondes = null, IReadOnlyList<string>? SuccesObtenus = null,
+        IReadOnlyDictionary<string, int>? MetiersPayes = null,
+        int Clavier = 0, int Captures = 0, int Presentations = 0, int DefRecord = 0, int DefVague = 0, int DefBoss = 0)
     {
+        public IReadOnlyDictionary<string, long> Temps => Secondes ?? new Dictionary<string, long>();
+        public IReadOnlyList<string> Succes => SuccesObtenus ?? Array.Empty<string>();
+        public IReadOnlyDictionary<string, int> Payes => MetiersPayes ?? new Dictionary<string, int>();
+
+        // Métiers et succès de deux messages du même appareil : maximum par activité et par compteur, union des succès.
+        public Compteur AvecMetiers(Compteur c) => this with
+        {
+            Secondes = MaxParCle(Temps, c.Temps),
+            SuccesObtenus = Succes.Union(c.Succes).OrderBy(x => x, StringComparer.Ordinal).ToList(),
+            MetiersPayes = MaxParCle(Payes, c.Payes),
+            Clavier = Math.Max(Clavier, c.Clavier),
+            Captures = Math.Max(Captures, c.Captures),
+            Presentations = Math.Max(Presentations, c.Presentations),
+            DefRecord = Math.Max(DefRecord, c.DefRecord),
+            DefVague = Math.Max(DefVague, c.DefVague),
+            DefBoss = Math.Max(DefBoss, c.DefBoss),
+        };
         public IReadOnlyList<ActionSoin> Actions => SoinsActions ?? Array.Empty<ActionSoin>();
         public IReadOnlyDictionary<int, string> Formes => Variantes ?? new Dictionary<int, string>();
         public IReadOnlyList<string> Objets => Inventaire ?? Array.Empty<string>();
@@ -85,7 +108,7 @@ public static class Groupe
                 Autres[c.Appareil] = c;
                 return true;
             }
-            var fusion = avant with
+            var fusion = (avant with
             {
                 Nom = c.T >= avant.T ? c.Nom : avant.Nom,
                 Machine = c.T >= avant.T ? c.Machine : avant.Machine,
@@ -111,14 +134,18 @@ public static class Groupe
                 ExpNombre = c.ExpJour == avant.ExpJour ? Math.Max(c.ExpNombre, avant.ExpNombre)
                     : string.CompareOrdinal(c.ExpJour, avant.ExpJour) > 0 ? c.ExpNombre : avant.ExpNombre,
                 ExpLibre = Math.Max(avant.ExpLibre, c.ExpLibre),
-            };
+            }).AvecMetiers(c);
             bool change = fusion.Xp != avant.Xp || fusion.XpTelephone != avant.XpTelephone || fusion.T != avant.T
                           || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
                           || fusion.Objets.Count != avant.Objets.Count || fusion.NiveauAcquis != avant.NiveauAcquis
                           || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom
                           || fusion.Actions.Count != avant.Actions.Count || fusion.Formes.Count != avant.Formes.Count
                           || (fusion.SoinsBase?.T ?? 0) != (avant.SoinsBase?.T ?? 0)
-                          || fusion.ExpJour != avant.ExpJour || fusion.ExpNombre != avant.ExpNombre || fusion.ExpLibre != avant.ExpLibre;
+                          || fusion.ExpJour != avant.ExpJour || fusion.ExpNombre != avant.ExpNombre || fusion.ExpLibre != avant.ExpLibre
+                          || !MemesValeurs(fusion.Temps, avant.Temps) || fusion.Succes.Count != avant.Succes.Count
+                          || !MemesValeurs(fusion.Payes, avant.Payes)
+                          || fusion.Clavier != avant.Clavier || fusion.Captures != avant.Captures || fusion.Presentations != avant.Presentations
+                          || fusion.DefRecord != avant.DefRecord || fusion.DefVague != avant.DefVague || fusion.DefBoss != avant.DefBoss;
             Autres[c.Appareil] = fusion;
             return change;
         }
@@ -129,6 +156,17 @@ public static class Groupe
             Depuis = "";
         }
     }
+
+    private static Dictionary<string, T> MaxParCle<T>(IReadOnlyDictionary<string, T> a, IReadOnlyDictionary<string, T> b) where T : IComparable<T>
+    {
+        var r = new Dictionary<string, T>(a);
+        foreach (var (k, v) in b)
+            if (!r.TryGetValue(k, out var x) || v.CompareTo(x) > 0) r[k] = v;
+        return r;
+    }
+
+    private static bool MemesValeurs<T>(IReadOnlyDictionary<string, T> a, IReadOnlyDictionary<string, T> b) =>
+        a.Count == b.Count && a.All(kv => b.TryGetValue(kv.Key, out var v) && EqualityComparer<T>.Default.Equals(v, kv.Value));
 
     // ---- Messages
 
@@ -151,7 +189,14 @@ public static class Groupe
         p.Bourse.PoGagnes, p.Bourse.PoDepenses, p.Bourse.PoDepTelephone,
         p.Bourse.Inventaire.OrderBy(x => x).ToList(), new Dictionary<string, Port>(p.Bourse.Equipe), p.Evolution.NiveauPaye,
         p.Evolution.NiveauAcquis, p.Soins.Base, p.Soins.Origine, Soins.Recentes(p.Soins, 12), new Dictionary<int, string>(p.Evolution.Variantes),
-        p.Expedition.Jour, p.Expedition.Nombre, p.Expedition.Libre);
+        p.Expedition.Jour, p.Expedition.Nombre, p.Expedition.Libre,
+        new Dictionary<string, long>(p.Activites.Where(kv => kv.Value > 0)), p.Succes.Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList(),
+        new Dictionary<string, int>(p.MetiersPayes.Where(kv => kv.Value > 0)),
+        p.SeancesClavier, p.Captures, p.Presentations, p.Defense.Meilleur, p.Defense.MeilleureVague, p.Defense.Boss);
+
+    // JSON du compteur, au plus : chiffré (nonce et étiquette, puis base64), il reste sous Telephone.TailleMax
+    // (4 × (2 750 + 28) / 3 ≈ 3 704 octets). Le JSON n'a que des caractères ASCII (accents échappés).
+    public const int TailleJson = 2750;
 
     // Un message ntfy reste sous 4 096 octets une fois chiffré : on retire des actions de soin récentes au besoin.
     public static string Json(Compteur c)
@@ -160,7 +205,7 @@ public static class Groupe
         while (true)
         {
             var json = JsonBrut(c with { SoinsActions = actions });
-            if (json.Length <= 2600 || actions.Count == 0) return json;
+            if (json.Length <= TailleJson || actions.Count == 0) return json;
             actions.RemoveAt(actions.Count - 1);
         }
     }
@@ -177,6 +222,12 @@ public static class Groupe
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
         ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = Boutique.HorsGarde(c.Objets), ["garde"] = Boutique.Garde(c.Objets), ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
         ["equipe"] = c.Porte.ToDictionary(kv => kv.Key, kv => new Dictionary<string, object> { ["id"] = kv.Value.Id, ["t"] = kv.Value.T }),
+        // Métiers et succès (ignorés par un ancien PC) : minutes par activité (non nulles), succès obtenus, grades
+        // récompensés, compteurs [frappes avec Pilou, captures, présentations, record, vague, boss de Défense].
+        ["act"] = c.Temps.Where(kv => kv.Value >= 60).ToDictionary(kv => kv.Key, kv => kv.Value / 60),
+        ["suc"] = c.Succes,
+        ["mp"] = c.Payes.Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value),
+        ["cpt"] = new[] { c.Clavier, c.Captures, c.Presentations, c.DefRecord, c.DefVague, c.DefBoss },
     });
 
     public static Compteur? Lire(string json)
@@ -229,10 +280,33 @@ public static class Groupe
                 if (ex.TryGetProperty("n", out var en) && en.ValueKind == JsonValueKind.Number && en.TryGetInt32(out var nb)) expNombre = Math.Clamp(nb, 0, 10);
                 if (ex.TryGetProperty("l", out var el) && el.ValueKind == JsonValueKind.Number) expLibre = Math.Max(0, el.GetDouble());
             }
+            // Métiers et succès (absents chez un ancien PC : rien). Bornes : un an de minutes par activité, ids connus.
+            var secondes = new Dictionary<string, long>();
+            if (r.TryGetProperty("act", out var act) && act.ValueKind == JsonValueKind.Object)
+                foreach (var x in act.EnumerateObject())
+                    if (Activites.Toutes.Contains(x.Name) && x.Value.ValueKind == JsonValueKind.Number && x.Value.TryGetInt64(out var mn) && mn > 0)
+                        secondes[x.Name] = Math.Min(mn, 366L * 24 * 60) * 60;
+            var payes = new Dictionary<string, int>();
+            if (r.TryGetProperty("mp", out var mp) && mp.ValueKind == JsonValueKind.Object)
+                foreach (var x in mp.EnumerateObject())
+                    if (Metiers.Tous.Any(m => m.Id == x.Name) && x.Value.ValueKind == JsonValueKind.Number && x.Value.TryGetInt32(out var nv) && nv > 0)
+                        payes[x.Name] = Math.Min(nv, Metiers.Grades.Length - 1);
+            var succes = L("suc", 100).Where(id => PilouBureau.Succes.Tous.Any(d => d.Id == id)).ToList();
+            var cpt = new int[6];
+            if (r.TryGetProperty("cpt", out var cp) && cp.ValueKind == JsonValueKind.Array)
+            {
+                int i = 0;
+                foreach (var x in cp.EnumerateArray())
+                {
+                    if (i >= cpt.Length) break;
+                    cpt[i++] = x.ValueKind == JsonValueKind.Number && x.TryGetInt32(out var nb) ? Math.Max(0, nb) : 0;
+                }
+            }
             return new Compteur(appareil, nom.Length > 40 ? nom[..40] : nom, S("machine"), N("xp"), N("xpTel"), t, L("prises", 100), L("plats", 200),
                 N("po"), N("poDep"), N("poDepTel"), L("objets", 300).Concat(Boutique.Deplier(S("garde"))).Distinct()
                     .Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
-                soinsBase, origine, actions, formes, expJour, expNombre, expLibre);
+                soinsBase, origine, actions, formes, expJour, expNombre, expLibre,
+                secondes, succes, payes, cpt[0], cpt[1], cpt[2], cpt[3], cpt[4], cpt[5]);
         }
         catch (JsonException)
         {
@@ -323,6 +397,50 @@ public static class Groupe
         Bourse.FusionEquipe(new[] { (IReadOnlyDictionary<string, Port>)moi.Bourse.Equipe }
             .Concat(dossier.Select(p => (IReadOnlyDictionary<string, Port>)p.Bourse.Equipe))
             .Concat(groupe.Select(c => c.Porte)));
+
+    // Métiers et succès de tout le groupe : ce PC, les PC du dossier partagé et ceux du relais. Chaque autre
+    // appareil compte une fois (le même PC vu des deux côtés : sa plus grande valeur, activité par activité).
+    public sealed record Cumul(Dictionary<string, long> Secondes, int Clavier, int Captures, int Presentations, EtatDefense Defense,
+        List<string> Succes, List<IReadOnlyDictionary<string, int>> PayesAutres);
+
+    public static Cumul Cumuler(Profil moi, IEnumerable<Profil> dossier, IEnumerable<Compteur> groupe)
+    {
+        var parMachine = new Dictionary<string, Compteur>(StringComparer.OrdinalIgnoreCase);
+        void Voir(string cle, Compteur c)
+        {
+            if (string.Equals(cle, moi.Machine, StringComparison.OrdinalIgnoreCase)) return;
+            parMachine[cle] = parMachine.TryGetValue(cle, out var avant) ? avant.AvecMetiers(c) : c;
+        }
+        foreach (var p in dossier) Voir(p.Machine, Moi(p, "dossier:" + p.Machine, ""));
+        foreach (var c in groupe) Voir(c.Machine == "" ? "appareil:" + c.Appareil : c.Machine, c);
+
+        var autres = parMachine.Values.ToList();
+        var secondes = new Dictionary<string, long>(moi.Activites.Where(kv => kv.Value > 0));
+        foreach (var c in autres)
+            foreach (var (k, v) in c.Temps)
+                secondes[k] = secondes.GetValueOrDefault(k) + v;
+        var defense = new EtatDefense
+        {
+            Meilleur = autres.Select(c => c.DefRecord).Append(moi.Defense.Meilleur).Max(),
+            MeilleureVague = autres.Select(c => c.DefVague).Append(moi.Defense.MeilleureVague).Max(),
+            Boss = moi.Defense.Boss + autres.Sum(c => c.DefBoss),
+        };
+        var succes = moi.Succes.Concat(autres.SelectMany(c => c.Succes)).Distinct().ToList();
+        return new Cumul(secondes, moi.SeancesClavier + autres.Sum(c => c.Clavier), moi.Captures + autres.Sum(c => c.Captures),
+            moi.Presentations + autres.Sum(c => c.Presentations), defense, succes, autres.Select(c => c.Payes).ToList());
+    }
+
+    // Succès obtenus ailleurs dans le groupe : ajoutés ici sans XP ni annonce (crédités là-bas). Renvoie les nouveaux.
+    public static List<string> UnirSucces(Profil moi, Cumul c)
+    {
+        var nouveaux = c.Succes.Where(id => !moi.Succes.Contains(id)).ToList();
+        moi.Succes.AddRange(nouveaux);
+        return nouveaux;
+    }
+
+    // Ce que le PC sait pour juger les succès, avec les totaux du groupe (série de code et réunions : celles d'ici).
+    public static Stats StatsGroupe(Cumul c, double serieCodeSec, int reunions, DateTime heure, string activite) =>
+        new(c.Secondes, serieCodeSec, reunions, c.Presentations, heure, activite, c.Clavier, c.Captures, c.Defense);
 
     // « vu il y a 3 min » pour les menus.
     public static string VuIlYa(double t, double maintenant) => t <= 0 ? "jamais vu" : $"vu il y a {Statut.Duree(maintenant - t)}";

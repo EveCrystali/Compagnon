@@ -1,0 +1,38 @@
+# Catalogue des métiers et des succès, tiré de apps/PilouBureau/Metiers.cs (MetiersTelephoneTests).
+# Le téléphone en a une copie (android/.../Metiers.java) : MetiersTest vérifie qu'elle donne ce même texte.
+# Pour le refaire après un changement du PC : PILOU_REGENERER=1 dotnet test apps/PilouBureau/tests
+paliers 1,5,15,40,100,250
+paliersTravail 6,30,90,240,600,1500
+grades Novice,Apprenti,Compagnon,Confirmé,Expert,Maître,Légende
+metier codeur|Codeur|code|travail
+metier tableur|As du tableur|tableur|travail
+metier joueur|Joueur|jeu,jeu-mmo|loisir
+metier musicien|Mélomane|musique|loisir
+metier cinephile|Cinéphile|video|loisir
+metier lecteur|Lecteur|lecture|loisir
+metier artiste|Artiste|dessin|loisir
+metier orateur|Orateur|visio,diaporama|travail
+metier ecrivain|Écrivain|texte|travail
+metier facteur|Facteur|mail|travail
+succes marathon|Marathon|4 h de code d'affilée|4|25|h
+succes noctambule|Noctambule|actif entre 1 h et 4 h du matin|1|25|
+succes leve-tot|Lève-tôt|actif avant 6 h du matin|1|25|
+succes visio-man|Visio-man|10 réunions en 7 jours|10|25|n
+succes orateur|Orateur|5 présentations en plein écran|5|25|n
+succes melomane|Mélomane|10 h de musique|10|25|h
+succes tableur-fou|Tableur fou|10 h de tableur|10|25|h
+succes codeur-confirme|Codeur confirmé|50 h de code|50|50|h
+succes gamer|Gamer|20 h de jeu|20|25|h
+succes aventurier|Aventurier|10 h de jeu de rôle en ligne|10|25|h
+succes cinephile|Cinéphile|10 h de vidéo|10|25|h
+succes rat-de-bibliotheque|Rat de bibliothèque|10 h de lecture|10|25|h
+succes artiste|Artiste|10 h de dessin ou de création|10|25|h
+succes plume|Plume|10 h d'écriture|10|25|h
+succes facteur|Facteur|5 h de mail|5|25|h
+succes explorateur|Explorateur|8 activités différentes|8|25|n
+succes dactylo|Dactylo|taper avec Pilou au clavier 25 fois|25|25|n
+succes photographe|Photographe|10 captures d'écran photographiées par Pilou|10|25|n
+succes couteau-suisse|Couteau suisse|4 métiers au rang Compagnon|4|50|n
+succes pare-feu|Pare-feu|vaincre un Bug de prod à Défense du bureau|1|25|
+succes rempart|Rempart|atteindre la vague 10 à Défense du bureau|10|40|vague
+succes gardien|Gardien du bureau|10 000 points à Défense du bureau|10000|40|points

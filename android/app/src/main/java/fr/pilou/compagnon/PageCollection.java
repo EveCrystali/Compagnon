@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/** Collection : carnet de pêche, livre de recettes, récompenses, style (accessoires et couleurs). */
+/** Collection : carnet de pêche, livre de recettes, récompenses, style (accessoires et couleurs), métiers et succès. */
 final class PageCollection extends Page {
-    private static final String[] ONGLETS = {"Carnet", "Recettes", "Niveaux", "Style"};
-    static final int NIVEAUX = 2, STYLE = 3;
+    private static final String[] ONGLETS = {"Carnet", "Recettes", "Niveaux", "Style", "Métiers"};
+    static final int NIVEAUX = 2, STYLE = 3, METIERS = 4;
     static final Map<String, String> ACCESSOIRES = new HashMap<>(), COULEURS = new HashMap<>();
 
     static {
@@ -75,7 +75,8 @@ final class PageCollection extends Page {
         int n = Gains.niveau(app, e);
         Set<String> carnet = Gains.carnet(app, e), plats = Gains.plats(app, e);
         String nouvelle = choisi + "|" + n + "|" + carnet + "|" + plats + "|" + e.couleur + "|" + e.accessoire + "|" + Gains.stock(app)
-                + "|" + Gains.solde(app, e) + "|" + e.objets + "|" + Gains.porte(app, e) + "|" + e.offres + "|" + Gains.achatsEnAttente(app, e);
+                + "|" + Gains.solde(app, e) + "|" + e.objets + "|" + Gains.porte(app, e) + "|" + e.offres + "|" + Gains.achatsEnAttente(app, e)
+                + "|" + e.metiers + "|" + e.heures + "|" + e.avance + "|" + e.succes;
         if (nouvelle.equals(empreinte)) return;
         empreinte = nouvelle;
         contenu.removeAllViews();
@@ -83,6 +84,7 @@ final class PageCollection extends Page {
             case 1: recettes(e, n, plats); break;
             case 2: recompenses(n); break;
             case 3: style(e, n); break;
+            case 4: metiers(e); break;
             default: carnet(n, carnet);
         }
         contenu.setAlpha(0);
@@ -269,6 +271,86 @@ final class PageCollection extends Page {
             liste.addView(l, Ui.large());
         }
         contenu.addView(liste, Ui.large());
+    }
+
+    // ---- Métiers et succès (le temps passé dans chaque activité sur les PC du groupe ; les défis réussis)
+
+    private void metiers(Etat e) {
+        Ui.Palette p = Ui.p(app);
+        LinearLayout tete = Ui.carte(app);
+        java.util.List<Metiers.Ligne> lignes = Metiers.lignes(e);
+        int commences = 0;
+        for (Metiers.Ligne l : lignes) if (l.commence()) commences++;
+        tete.addView(Ui.texte(app, commences + " / " + Metiers.TOUS.size() + " métiers commencés", 18, p.texte, true));
+        TextView explique = Ui.texte(app, Metiers.connus(e)
+                ? "Le temps passé dans chaque activité sur tes PC fait monter un métier, de Novice à Légende."
+                : "Le PC n'a encore rien envoyé : les métiers et les succès arrivent avec sa prochaine nouvelle.", 13, p.doux, false);
+        explique.setPadding(0, Ui.dp(app, 6), 0, 0);
+        tete.addView(explique, Ui.large());
+        TextView legende = Ui.texte(app, Metiers.TRAVAIL + " travail (paliers 6 → 1500 h)   " + Metiers.LOISIR + " loisir (1 → 250 h)", 12, p.doux, false);
+        legende.setPadding(0, Ui.dp(app, 6), 0, 0);
+        tete.addView(legende, Ui.large());
+        contenu.addView(tete, Ui.large(app, 12));
+
+        LinearLayout liste = Ui.carte(app);
+        for (int i = 0; i < lignes.size(); i++) {
+            Metiers.Ligne l = lignes.get(i);
+            if (i > 0) liste.addView(Ui.separateur(app));
+            boolean actif = l.commence();
+            int teinte = !actif ? p.argent : l.metier.travail ? p.bleu : p.orange;
+            LinearLayout r = Ui.rangee(app);
+            r.setGravity(Gravity.TOP);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            r.addView(Ui.pastille(app, l.metier.signe(), teinte));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            t.addView(Ui.texte(app, l.metier.nom + " · " + l.grade(), 15, actif ? p.texte : p.doux, true), Ui.large());
+            if (actif && l.dixiemes > 0) {
+                Ui.Barre b = new Ui.Barre(app);
+                b.part(l.part());
+                LinearLayout.LayoutParams lb = Ui.large();
+                lb.topMargin = Ui.dp(app, 5);
+                lb.bottomMargin = Ui.dp(app, 3);
+                t.addView(b, lb);
+            }
+            t.addView(Ui.texte(app, l.texte(), 12, p.doux, false), Ui.large());
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            r.setAlpha(actif ? 1f : 0.6f);
+            r.setContentDescription(l.metier.nom + (l.metier.travail ? ", métier de travail" : ", loisir") + ", " + l.grade() + ", " + l.texte());
+            liste.addView(r, Ui.large());
+        }
+        contenu.addView(liste, Ui.large(app, 12));
+
+        int obtenus = Metiers.obtenus(e);
+        LinearLayout tetes = Ui.carte(app);
+        tetes.addView(Ui.texte(app, "Succès " + obtenus + "/" + Metiers.SUCCES.size(), 18, p.texte, true));
+        Ui.Barre bs = new Ui.Barre(app);
+        bs.part(obtenus / (float) Metiers.SUCCES.size());
+        LinearLayout.LayoutParams lbs = Ui.large();
+        lbs.topMargin = Ui.dp(app, 8);
+        tetes.addView(bs, lbs);
+        contenu.addView(tetes, Ui.large(app, 12));
+        LinearLayout succes = Ui.carte(app);
+        java.util.List<Metiers.Succes> tries = Metiers.succesTries(e);
+        for (int i = 0; i < tries.size(); i++) {
+            Metiers.Succes s = tries.get(i);
+            if (i > 0) succes.addView(Ui.separateur(app));
+            boolean ok = e.succes.contains(s.id);
+            Integer a = e.avance.get(s.id);
+            String progres = ok || a == null ? "" : Metiers.progres(s, a);
+            LinearLayout r = Ui.rangee(app);
+            r.setGravity(Gravity.TOP);
+            r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
+            r.addView(Ui.pastille(app, ok ? "✓" : "·", ok ? p.bleu : p.argent));
+            LinearLayout t = Ui.pile(app);
+            t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+            t.addView(Ui.texte(app, s.nom, 15, ok ? p.texte : p.doux, true), Ui.large());
+            t.addView(Ui.texte(app, s.description + (progres.isEmpty() ? "" : " · " + progres) + "  ·  +" + s.xp + " xp", 12, p.doux, false), Ui.large());
+            r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            r.setContentDescription(s.nom + (ok ? ", obtenu" : ", pas encore") + ", " + s.description + (progres.isEmpty() ? "" : ", " + progres));
+            succes.addView(r, Ui.large());
+        }
+        contenu.addView(succes, Ui.large());
     }
 
     // ---- Style

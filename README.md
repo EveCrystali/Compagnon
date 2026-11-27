@@ -204,6 +204,12 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   le dossier et par le relais compte une fois ; l'XP gagnée dans l'atelier du téléphone compte une
   fois même si plusieurs PC l'ont reçue. *Appareils du groupe* : nom, XP, vu il y a… ; si le relais est
   bloqué (proxy d'entreprise), Pilou le dit (« relais injoignable ») ;
+  ce qui est partagé : XP, pièces d'or, objets et tenue, carnet et recettes, soins et évolutions, limites
+  d'expédition, et les **métiers et succès** : chaque PC publie ses propres heures par activité (en minutes)
+  et ses compteurs (frappes avec Pilou, captures, présentations, Défense du bureau) ; un métier monte avec
+  les heures de tous les PC (fermer Pilou sur l'un ne fait rien perdre à l'autre). Un succès ou un grade
+  n'est récompensé qu'une fois dans le groupe : le PC qui le franchit le premier crédite l'XP, les autres
+  le reprennent sans XP (petite annonce discrète). Un ancien PC du groupe garde ses propres métiers ;
 - **Intégrations** : brancher ou débrancher Codex · statut Discord « Joue à Pilou » (niveau, IA au
   travail ; fiche de l'appli : [docs/DISCORD-APP.md](docs/DISCORD-APP.md)) · me prévenir sur mon téléphone (webhook Discord, Slack ou ntfy) quand une IA attend
   depuis 30 s ou a fini un long travail, si je suis loin du PC ;
