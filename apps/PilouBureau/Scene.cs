@@ -195,6 +195,19 @@ public sealed class Scene : FrameworkElement
 
     protected override void OnRender(DrawingContext dc)
     {
+        try
+        {
+            Rendre(dc);
+        }
+        catch (Exception) when (Finesse.Active)
+        {
+            // Le dessin fin a échoué ici : repli sur le dessin d'origine (la fenêtre redessine aussitôt).
+            Finesse.Replier();
+        }
+    }
+
+    private void Rendre(DrawingContext dc)
+    {
         var p = Pose;
         if (p.Pancarte != "")
         {

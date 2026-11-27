@@ -171,6 +171,13 @@ public sealed partial class FenetrePilou : Window
         _scene.MouseMove += Bouge;
         _scene.MouseLeftButtonUp += Relache;
 
+        Finesse.Repli += () => Dispatcher.BeginInvoke(() =>
+        {
+            _reglages.DessinFin = false;
+            _reglages.Ecrire(_dossier);
+            AppliquerTaille();
+            Dire("dessin fin indisponible sur cet écran : je reviens au dessin d'origine", 5000);
+        });
         SourceInitialized += (_, _) =>
         {
             _nous = new WindowInteropHelper(this).Handle;

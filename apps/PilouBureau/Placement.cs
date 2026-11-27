@@ -21,6 +21,16 @@ public static class Finesse
 {
     public static bool Active { get; set; } = true;
     public static int Echelle => Active ? 2 : 1;
+    // Filet de sécurité : si le dessin fin échoue sur une machine (pilote, mémoire…), on revient une fois pour
+    // toutes au dessin d'origine au lieu de laisser Pilou invisible. La fenêtre s'y abonne pour l'enregistrer.
+    public static event Action? Repli;
+
+    public static void Replier()
+    {
+        if (!Active) return;
+        Active = false;
+        Repli?.Invoke();
+    }
     // Mise à l'échelle Windows de l'écran de Pilou (1 = 100 %, 1,25 = 125 %…) et pixels physiques par unité de la
     // fenêtre de Pilou (échelle de la fenêtre × mise à l'échelle) : tenus à jour par FenetrePilou.
     public static double Dpi { get; set; } = 1;
