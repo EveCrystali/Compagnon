@@ -102,8 +102,15 @@ public class CapturesCampagnesTest {
             }
             switch (n.type) {
                 case "choix": {
-                    int s = n.options.size() * 1000;
-                    for (Campagnes.Option o : n.options) s += o.libelle.length();
+                    // Ce qui sera vraiment proposé (sans rien, ou avec tout ce qui se gagne en route) : le plus d'options,
+                    // puis les libellés les plus longs.
+                    int s = 0;
+                    for (boolean tout : new boolean[]{false, true}) {
+                        Campagnes.Etat e = Campagnes.rejouer(c, Campagnes.lirePartie(partie(c, id, true, 1_790_000_000_000L, tout)), 1_790_000_000_000L);
+                        int v = e.options.size() * 1000;
+                        for (Campagnes.OptionVue o : e.options) v += o.libelle.length();
+                        s = Math.max(s, v);
+                    }
                     if (s > mChoix) {
                         mChoix = s;
                         choix = n;

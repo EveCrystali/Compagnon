@@ -151,7 +151,7 @@ final class Lecture extends FrameLayout {
         dock.setVisibility(View.GONE);
         // Quatre options de deux lignes (ou une grande police) ne tiennent pas toujours sous la scène d'un petit
         // téléphone : le bas défile alors, borné pour que le fil reste lisible, au lieu de cacher les dernières options.
-        DockDefilant cadreDock = new DockDefilant(a);
+        DockDefilant cadreDock = new DockDefilant(a, tete);
         cadreDock.setBackground(Ui.coins(a, p.surface, 20, 20, 0, 0, p.bord));
         cadreDock.setElevation(Ui.dp(a, 10));
         cadreDock.addView(dock, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -162,10 +162,13 @@ final class Lecture extends FrameLayout {
         addView(couche, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    /** Le bas de l'écran (options, départ, attente…) : jamais plus de 70 % de ce que la scène laisse ; au-delà, il défile. */
+    /** Le bas de l'écran (options, départ, attente…) : jamais plus de 65 % de ce que la scène laisse ; au-delà, il défile. */
     static final class DockDefilant extends ScrollView {
-        DockDefilant(android.content.Context c) {
+        private final View scene;
+
+        DockDefilant(android.content.Context c, View scene) {
             super(c);
+            this.scene = scene;
             setClipToPadding(false);
             setVerticalFadingEdgeEnabled(true);
             setFadingEdgeLength(Ui.dp(c, 28));
@@ -174,8 +177,13 @@ final class Lecture extends FrameLayout {
 
         @Override
         protected void onMeasure(int largeur, int hauteur) {
-            int mode = MeasureSpec.getMode(hauteur);
-            if (mode != MeasureSpec.UNSPECIFIED) hauteur = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(hauteur) * 7 / 10, MeasureSpec.AT_MOST);
+            // La colonne mesure le bas avant de partager le reste au fil : la hauteur proposée est celle de toute la
+            // colonne, scène comprise. On retire la scène, et on garde au fil au moins un bon tiers.
+            if (MeasureSpec.getMode(hauteur) != MeasureSpec.UNSPECIFIED) {
+                ViewGroup.LayoutParams lp = scene.getLayoutParams();
+                int dispo = MeasureSpec.getSize(hauteur) - (lp != null && lp.height > 0 ? lp.height : 0);
+                hauteur = MeasureSpec.makeMeasureSpec(Math.max(Ui.dp(getContext(), 120), dispo * 65 / 100), MeasureSpec.AT_MOST);
+            }
             super.onMeasure(largeur, hauteur);
         }
     }
