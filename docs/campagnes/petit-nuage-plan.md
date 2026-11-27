@@ -197,7 +197,7 @@ sous les plafonds (600 / 300).
 |---|---|
 | Nœuds | 198 (86 récits, 49 choix, 35 attentes, 8 épreuves, 8 aiguillages, 6 échecs, 6 fins) |
 | Mots | ≈ 17 000 ; 252 messages, 68 mots en moyenne, tous entre 33 et 104 |
-| Choix par parcours | 31 · 36 · 39 (min · médiane · max, hors reprises après échec) |
+| Choix par parcours | 31 · 35 · 39 (min · médiane · max, hors reprises après échec) |
 | Attentes par parcours | 15 · 17 · 22, dont 4 longues sur tous les parcours |
 | Temps réel par parcours | 11 h 15 · 12 h 35 · 14 h 40 sans échec (médiane de 13 h avec les repos après échec) |
 | Chapitres par parcours | 9 ou 10 |
