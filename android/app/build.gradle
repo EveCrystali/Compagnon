@@ -37,10 +37,11 @@ android {
         }
     }
 
-    // Banque de sprites commune avec le PC (assets/ à la racine du dépôt), lue comme ressources Java.
+    // Banque de sprites commune avec le PC (assets/ à la racine du dépôt), lue comme ressources Java ; les campagnes
+    // aussi (assets/campagnes/<id>/*.json), avec leur index écrit ci-dessous (genere/campagnes/index.txt).
     sourceSets {
         main {
-            resources.srcDirs += ['../../assets']
+            resources.srcDirs += ['../../assets', 'genere']
         }
     }
 
@@ -75,6 +76,16 @@ android {
         checkReleaseBuilds false
     }
 }
+
+// Index des campagnes (docs/CAMPAGNES.md) : Android ne sait pas lister ses ressources Java, Campagnes.disponibles() lit
+// donc cette liste des dossiers de assets/campagnes qui ont une fiche. Elle est refaite à chaque configuration, hors de
+// build/ (un « clean » ne l'efface pas) ; le dossier genere/ n'est pas versionné.
+def idsCampagnes = (file('../../assets/campagnes').listFiles() ?: [] as File[])
+        .findAll { new File(it, 'campagne.json').isFile() }.collect { it.name }.sort()
+def indexCampagnes = file('genere/campagnes/index.txt')
+def texteIndex = idsCampagnes.collect { it + '\n' }.join('')
+indexCampagnes.parentFile.mkdirs()
+if (!indexCampagnes.isFile() || indexCampagnes.getText('UTF-8') != texteIndex) indexCampagnes.setText(texteIndex, 'UTF-8')
 
 // Une configuration par version : dans une même configuration, Gradle ne garderait que la plus récente.
 configurations {

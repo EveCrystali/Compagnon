@@ -1,7 +1,9 @@
 """Empreintes de référence du rendu de Pilou : les tests C# (RenduTests.cs) et JVM (RenduPilouTest.java) doivent
-retrouver exactement les mêmes pixels que ce rendu Python, pose par pose.
+retrouver exactement les mêmes pixels que ce rendu Python, pose par pose, aux deux échelles, et le même
+agrandissement automatique de chaque sprite.
 
-    python3 outils/sprites/reference.py  → outils/sprites/rendus-reference.txt
+    python3 outils/sprites/reference.py  → outils/sprites/rendus-reference.txt (échelle 1),
+                                           rendus-reference-2x.txt (rendu fin), agrandis-reference.txt
 """
 import hashlib
 import os
@@ -71,6 +73,36 @@ POSES = [
     "expr=repos t=660 stade=4 couleur=nebuleuse objets=cape-chauve-souris,coiffe-courge,chauve-souris,bonus-frissons",
     "expr=repos t=250 stade=1 objets=ailes-libellule,lunettes-kaleido,orbite-lunes,bottes-nuage",
     "expr=concentre t=900 stade=3 objets=tricorne-moka,bandeau-oeil,sabre-cuillere,perroquet-caramel,aurore-boreale",
+    # Humeurs des campagnes.
+    "expr=joie t=350",
+    "expr=peur t=420 tremble=0.4",
+    "expr=triste t=900",
+    "expr=surpris t=150 saut=1.5",
+    "expr=determine t=640 regard=1",
+    "expr=fatigue t=1200",
+    "expr=tendre t=700 stade=3",
+    "expr=colere t=350 stade=4",
+    "expr=malice t=500 stade=1",
+    "expr=neutre t=260 cligne=1",
+    "expr=triste t=1300 stade=1 objets=echarpe",
+    "expr=peur t=800 couleur=miel objets=lanterne",
+    # Tenues de voyage des campagnes (la pose vient du rendu : voyager).
+    "expr=repos t=250 tenue=voyage-marche",
+    "expr=determine t=410 tenue=voyage-course",
+    "expr=joie t=780 tenue=voyage-bateau",
+    "expr=determine t=630 tenue=voyage-grimpe stade=3",
+    "expr=repos t=1150 tenue=voyage-nage",
+    "expr=repos t=2100 tenue=voyage-nuit",
+    "expr=peur t=950 tenue=voyage-cache",
+    "expr=neutre t=3000 tenue=voyage-attend",
+    "expr=neutre t=1700 tenue=voyage-attend stade=4",
+    "expr=repos t=330 tenue=voyage-marche stade=1 regard=-1",
+    "expr=surpris t=2000 tenue=voyage-cache stade=4",
+    # Cosmétiques redessinés en fin, sur chaque stade.
+    "expr=repos t=300 objets=chapeau-explorateur,lunettes-rondes,sac-a-dos,parapluie,oiseau",
+    "expr=joie t=900 stade=3 objets=bonnet-pompon,echarpe-tricot,cartable,ballon-helium,tortue",
+    "expr=malice t=120 stade=4 objets=chapeau-pirate,lunettes-etoiles,medaille,epee-bois,mini-dragon",
+    "expr=tendre t=640 stade=1 objets=couronne-fleurs,foulard-explorateur,baguette,escargot",
 ]
 
 
@@ -107,6 +139,11 @@ def empreinte(g):
     return h.hexdigest()
 
 
+def empreinte_sprite(s):
+    """Empreinte d'un sprite agrandi : ses images, ligne par ligne (« --- » entre deux images)."""
+    return hashlib.sha256("\n---\n".join("\n".join(im) for im in s.images).encode("utf-8")).hexdigest()
+
+
 def main():
     B, T, TEN = rendu.banque(), rendu.teintes(), rendu.tenues()
     lignes = ["# pose | sha256 des pixels ARGB (gros-boutiste, ligne par ligne, 48 × 56)"]
@@ -114,7 +151,19 @@ def main():
         lignes.append("%s | %s" % (l, empreinte(rendu.rendre(pose(l), B, T, TEN))))
     with open(os.path.join(rendu.ICI, "rendus-reference.txt"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lignes) + "\n")
-    print(len(POSES), "poses")
+    # Rendu fin (échelle 2) : les mêmes poses sur la grille 96 × 112.
+    lignes = ["# pose | sha256 des pixels ARGB du rendu fin (échelle 2, gros-boutiste, ligne par ligne, 96 × 112)"]
+    for l in POSES:
+        lignes.append("%s | %s" % (l, empreinte(rendu.rendre(pose(l), B, T, TEN, 2))))
+    with open(os.path.join(rendu.ICI, "rendus-reference-2x.txt"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(lignes) + "\n")
+    # Agrandissement automatique : chaque sprite 1× agrandi par la règle commune (rendu.agrandir).
+    lignes = ["# sprite | sha256 du sprite 1× agrandi (lignes de lettres, « --- » entre deux images)"]
+    for i in sorted(B):
+        lignes.append("%s | %s" % (i, empreinte_sprite(rendu.agrandir(B[i]))))
+    with open(os.path.join(rendu.ICI, "agrandis-reference.txt"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(lignes) + "\n")
+    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis")
 
 
 if __name__ == "__main__":

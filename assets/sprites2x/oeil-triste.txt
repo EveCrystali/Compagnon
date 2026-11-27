@@ -1,0 +1,25 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-triste
+slot: visage
+ancre: aucun
+decalage: 0 -4
+palette: a=#1c2128 b=#ffffff c=#34496e
+images:
+.........aaa
+.......aaaaa
+....aaaaaa..
+.aaaaaa.....
+aaa.........
+............
+............
+............
+....aaaa....
+..aaaaaaaa..
+.aabbbbaaaa.
+aabbbbbbaaaa
+aabbbbbbaaaa
+aaabbbbaabaa
+aaaaaaaaaaaa
+.aaccccaaaa.
+..aaaaaaaa..
+....aaaa....

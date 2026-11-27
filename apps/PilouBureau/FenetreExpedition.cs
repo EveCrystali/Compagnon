@@ -56,12 +56,12 @@ public sealed partial class FenetrePilou
         _profil.Ecrire(DossierPartage);
     }
 
-    // Pourquoi Pilou ne peut pas partir maintenant (visite, invité), "" s'il le peut.
+    // Pourquoi Pilou ne peut pas partir maintenant (visite, invité, attente d'une campagne), "" s'il le peut.
     private string Occupation() =>
         _visites.Sortie is not null ? "Pilou est en visite chez un ami"
         : _visites.Venue is not null ? "Pilou a de la visite"
         : _evolutionDebut >= 0 ? "Pilou est en pleine évolution"
-        : "";
+        : OccupationCampagne();
 
     // ---- Énergie : attente, travail, repas
 

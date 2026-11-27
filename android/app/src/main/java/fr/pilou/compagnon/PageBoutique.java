@@ -82,7 +82,7 @@ final class PageBoutique extends Page {
         decor = new ImageView(a);
         decor.setScaleType(ImageView.ScaleType.CENTER_CROP);
         scene.addView(decor, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        essai = new PilouVue(a, 3.2f * a.getResources().getDisplayMetrics().density);
+        essai = new PilouVue(a, 3.2f * a.getResources().getDisplayMetrics().density, true);
         essai.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         scene.addView(essai, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));

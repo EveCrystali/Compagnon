@@ -1,0 +1,19 @@
+# marque d'humeur (campagnes), posée sur l'ancre des yeux
+id: marque-colere
+slot: visage
+ancre: yeux
+decalage: 10 -7
+duree: 300
+palette: a=#d9803a
+images:
+aa.aa
+a...a
+.....
+a...a
+aa.aa
+---
+.....
+.a.a.
+.....
+.a.a.
+.....

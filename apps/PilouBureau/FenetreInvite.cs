@@ -117,6 +117,11 @@ public sealed class FenetreInvite : Window
         _scene.InvalidateVisual();
         Left = Math.Round(x - Largeur / 2 * _k);
         Top = Math.Round(pieds - (HauteurBulle + Scene.Sol) * _k);
+        if (Finesse.Active)
+        {
+            Left = Placement.Aligner(Left, Finesse.Dpi);
+            Top = Placement.Aligner(Top, Finesse.Dpi);
+        }
         // Partie de la fenêtre sur l'écran de l'hôte (unités avant k) ; le reste est découpé.
         double x0 = Math.Clamp((_zoneGauche - Left) / _k, 0, Largeur), x1 = Math.Clamp((_zoneDroite - Left) / _k, 0, Largeur);
         var racine = (FrameworkElement)Content;

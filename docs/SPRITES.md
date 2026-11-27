@@ -7,6 +7,8 @@ Pilou et tous ses objets sont dessinés **une seule fois**, dans `assets/`, et l
 |---|---|
 | `assets/sprites/<id>.txt` | un sprite (plusieurs images s'il est animé) |
 | `assets/index.txt` | la liste des identifiants (Android ne sait pas lister un dossier de ressources) |
+| `assets/sprites2x/<id>.txt` | le même sprite redessiné deux fois plus fin, s'il l'a été (rendu fin, voir plus bas) |
+| `assets/index2x.txt` | la liste des sprites redessinés en fin |
 | `assets/teintes.txt` | couleurs de Pilou : contour, ombre, base, clair |
 | `assets/tenues.txt` | tenue d'activité → sprites portés |
 | `assets/plats.txt` | recette → sprite du plat |
@@ -14,11 +16,85 @@ Pilou et tous ses objets sont dessinés **une seule fois**, dans `assets/`, et l
 ## Grille
 
 Pilou se dessine sur une grille de **48 × 56**, la même partout, à la taille d'affichage d'avant
-(un pixel de cette grille vaut 104/48 unités WPF sur le PC). Le corps est procédural (une ellipse ombrée
+(un pixel de cette grille vaut 104/48 unités WPF sur le PC), et, en rendu fin, sur la grille double 96 × 112. Le corps est procédural (une ellipse ombrée
 en trame, un reflet, un cerne d'un pixel) ; le visage, l'antenne, l'étincelle et tout ce qu'il porte
 viennent des sprites. Trois rendus suivent la même règle et tombent sur les mêmes pixels :
 `outils/sprites/rendu.py` (référence), `apps/PilouBureau/RenduPilou.cs`, `android/.../RenduPilou.java`
-— vérifié par `RenduTests.cs` et `RenduPilouTest.java` sur les poses de `outils/sprites/rendus-reference.txt`.
+— vérifié par `RenduTests.cs` et `RenduPilouTest.java` sur les poses de `outils/sprites/rendus-reference.txt`
+(et de `rendus-reference-2x.txt` pour le rendu fin).
+
+## Rendu fin (2×)
+
+Le rendu existe à deux échelles. **1** : la grille 48 × 56 de toujours, inchangée au pixel près. **2** : le
+**rendu fin**, sur une grille **96 × 112**, pour tous les endroits où Pilou est affiché assez grand (portraits et
+récompenses des campagnes, accueil et boutique du téléphone, bureau Windows).
+
+- **Corps** : calculé directement à la finesse double (contour plus rond, cerne de deux pixels fins, trame à trois
+  paliers — un quart, un demi, trois quarts — au lieu du seul damier, reflet en croissant, antenne qui se courbe,
+  pieds arrondis). Mêmes grandeurs que le 1×, multipliées par deux, arrondies au pixel fin : les animations
+  (respiration, saut, assis, tremblement…) tombent aux mêmes endroits.
+- **Sprites** : si `assets/sprites2x/<id>.txt` existe (même format, mêmes ancrages × 2), c'est lui ; sinon le
+  sprite 1× est **agrandi automatiquement**, une fois, au premier usage.
+- **Agrandissement automatique** : règle **MMPX** (Morgan McGuire et Mara Gagiu, « MMPX Style-Preserving Pixel Art
+  Magnification », 2021). Chaque pixel devient 2 × 2 pixels pris parmi lui-même et ses voisins : ni flou, ni
+  nouvelle couleur. Par rapport à EPX / Scale2x, elle garde les cernes sombres d'un pixel, traite les croisements et
+  lisse aussi les pentes 2:1. Les couleurs se comparent par leur lettre de palette, le vide compte comme une
+  couleur, la « clarté » d'une couleur vaut (r + v + b + 1) × (256 − alpha) (256 pour le vide ; les références
+  `@contour`… prennent les valeurs du bleu). Strictement la même dans `rendu.agrandir` (Python),
+  `Sprite.Agrandi` (C#) et `Sprites.agrandir` (Java).
+- **Vérifié** par `rendus-reference-2x.txt` (les poses de référence à l'échelle 2) et `agrandis-reference.txt`
+  (chaque sprite agrandi), dans `RenduTests.cs` et `RenduPilouTest.java`.
+
+| | Échelle 1 | Rendu fin |
+|---|---|---|
+| Python | `rendu.rendre(pose, B, T, TEN)` | `rendu.rendre(pose, B, T, TEN, 2)` |
+| C# | `RenduPilou.Rendre(allure, banque)` | `RenduPilou.Rendre(allure, banque, 2)` (ou `out geo, debord, 2, tampon`) |
+| Java | `RenduPilou.rendre(allure, banque, geo)` | `RenduPilou.rendre(allure, banque, geo, 2)` (ou `…, 2, tampon`) |
+
+La géométrie rendue (`Geometrie`) reste en pixels de la grille 48 × 56 aux deux échelles. Un `TamponRendu` (C#) ou
+`RenduPilou.Tampon` (Java) gardé d'une image à l'autre évite toute allocation des grilles.
+
+**Où il sert.** Téléphone : `new PilouVue(contexte, pixel, true)` passe en fin dès qu'un pixel fin fait au moins
+2 pixels de l'écran (accueil, essayage, installation, bulle flottante sur les écrans denses), et arrondit alors sa
+taille pour qu'un pixel fin tombe sur un nombre entier de pixels ; sinon elle reste en 1×. PC : réglage
+**« Dessin fin »** du menu (activé par défaut). La fenêtre de Pilou prend l'échelle qui met un pixel fin sur un
+nombre entier de pixels physiques à toutes les mises à l'échelle de Windows (`Placement.PixelsParPixelFin`,
+`Placement.Echelle`), et ce qui l'accompagne suit (sprites fins, tailles ramenées à des pixels entiers :
+`Finesse.Net`, `Pixels.Affiner`). Décoché : le rendu d'origine.
+
+### Redessiner un sprite en 2×
+
+Les dessins sont faits de formes (`toile.py` : ellipses, polygones, lignes, cernes). Pour le rendu fin, les mêmes
+fonctions de dessin sont **rejouées sur une toile deux fois plus fine** (`toile.ECHELLE = 2`) : les coordonnées
+restent celles de la grille 1× (les demi-unités sont permises), les formes sont calculées à la finesse double, les
+motifs écrits à la main sont agrandis par la règle commune.
+
+1. Ajouter l'identifiant à `SERIE` dans `outils/sprites/fin.py`.
+2. Au besoin, lui donner une retouche dans `outils/sprites/retouches_fines.py` : une recette en quelques mots
+   (`"L:#f69d50 O:#f69d50 P:#6a5acd:12"` : liseré clair, ombre, plis, mailles, couture, reflet) ou une fonction
+   décorée par `@retouche("id")` ; ou, dans la fonction de dessin elle-même, un bloc `if toile.fin():` qui ajoute
+   en pixels fins ce que la grille 1× ne peut pas porter (`t.pf`, `t.motif_fin`, demi-unités).
+3. `python3 outils/sprites/generer.py && python3 outils/sprites/planches_hd.py`, regarder
+   `planches/hd/cosmetiques-redessines.png`, corriger ; puis `python3 outils/sprites/reference.py`.
+
+`python3 outils/sprites/fin.py` liste les sprites redessinés et ceux encore agrandis automatiquement
+(`planches/hd/rapport.txt`). Le visage est entièrement dessiné en pixels fins (`visage_sprites.py`).
+
+## Humeurs et tenues de voyage (campagnes)
+
+Dix humeurs en plus des expressions d'origine, aux deux échelles (`Allure.Expr` / `allure.expr` / `Pose.expr`) :
+`joie`, `peur`, `triste`, `surpris`, `determine`, `fatigue`, `tendre`, `colere`, `malice`, `neutre`. Chacune a ses
+yeux (`oeil-<humeur>`, avec sourcil ; `oeil-malice-d` : œil droit dessiné à part), sa bouche (`bouche-<humeur>`),
+parfois une marque posée sur l'ancre des yeux (`marque-triste` : larme ; `marque-peur` : goutte ; `marque-colere` :
+signe de colère) et ses joues (`joie`, `tendre`). Chaque humeur se lit à sa forme, jamais à une couleur seule.
+
+Huit tenues de voyage (`voyage_sprites.py`, `assets/tenues.txt`), pour Pilou « occupé » pendant une attente :
+`Tenue = "voyage-marche"` (baluchon, bâton, pas sur place), `voyage-course` (bandeau, foulée), `voyage-bateau`
+(barque, rame, vagues), `voyage-grimpe` (corde), `voyage-nage` (bouée), `voyage-nuit` (bonnet, couverture, lune),
+`voyage-cache` (buisson, seuls les yeux dépassent), `voyage-attend` (assis, il regarde sa montre). La pose de
+chaque mode (marche, tangage, guet…) est imposée par le rendu commun (`voyager` / `Voyager`) : il suffit de
+donner la tenue. Sur le PC : `Pose.Tenue` et `Pose.Humeur` ; essais `--essai=tenue:voyage-marche`,
+`--essai=humeur:joie`, `--essai=dessin:origine`.
 
 ## Format d'un sprite
 
@@ -87,9 +163,10 @@ l'ancien et du nouveau stade de plus en plus vite, puis une gerbe d'étincelles 
 ## Ajouter ou retoucher un sprite
 
 ```
-python3 outils/sprites/generer.py      # réécrit assets/ depuis les dessins du script
+python3 outils/sprites/generer.py      # réécrit assets/ (sprites, sprites2x, index, tenues…) depuis les dessins
 python3 outils/sprites/planches.py     # planches PNG de contrôle (outils/sprites/planches/)
-python3 outils/sprites/reference.py    # nouvelles empreintes si le rendu de Pilou change exprès
+python3 outils/sprites/planches_hd.py  # planches du rendu fin : avant / après, portrait, bureau (planches/hd/)
+python3 outils/sprites/reference.py    # nouvelles empreintes si le rendu de Pilou change exprès (deux échelles)
 ```
 
 Palette : bleus, oranges, argent, violets, jaunes, sables, neutres ; jamais d'opposition rouge / vert,

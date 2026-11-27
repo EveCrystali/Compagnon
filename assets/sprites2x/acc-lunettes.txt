@@ -1,0 +1,24 @@
+id: acc-lunettes
+slot: yeux
+ancre: yeux
+decalage: -26 -2
+palette: a=#1c2128 b=#2d333b c=#b4dbff
+images:
+........................................................
+........................................................
+..aaaaaaaaaaaaaaaaaaaa............aaaaaaaaaaaaaaaaaaaa..
+..aaaaaaaaaaaaaaaaaaaa............aaaaaaaaaaaaaaaaaaaa..
+aabbccccbbbbbbbbbbbbbbaaaaaaaaaaaabbccccbbbbbbbbbbbbbbaa
+aabbccccbbbbbbbbbbbbbbaaaaaaaaaaaabbccccbbbbbbbbbbbbbbaa
+aabbccbbbbbbbbbbbbbbbbaaaaaaaaaaaabbccbbbbbbbbbbbbbbbbaa
+aabbccbbbbbbbbbbbbbbbbaaaaaaaaaaaabbccbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbaa........aabbbbbbbbbbbbbbbbbbbbaa
+aaaaaaaaaaaaaaaaaaaaaaaa........aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa........aaaaaaaaaaaaaaaaaaaaaaaa
+........................................................
+........................................................

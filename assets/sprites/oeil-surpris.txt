@@ -1,0 +1,16 @@
+# œil d'humeur (campagnes)
+id: oeil-surpris
+slot: visage
+ancre: aucun
+decalage: 0 -3
+palette: a=#1c2128 b=#ffffff
+images:
+.aaaa.
+a....a
+......
+.aaaa.
+abbbba
+abaaba
+abaaba
+abbbba
+.aaaa.

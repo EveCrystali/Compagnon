@@ -1,0 +1,21 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-fatigue
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=@ombre b=@contour c=#1c2128 d=#ffffff e=#34496e
+images:
+...aaaaaa...
+.aaaaaaaaaa.
+aaaaaaaaaaaa
+aaaaaaaaaaaa
+bbbbbbbbbbbb
+bbbbbbbbbbbb
+ccddddcccccc
+ccddddcccccc
+cccddccccccc
+cccccccccccc
+cccccccccccc
+.ccceeeeccc.
+..cccccccc..
+....cccc....
