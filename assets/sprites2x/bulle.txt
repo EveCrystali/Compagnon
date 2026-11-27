@@ -1,0 +1,39 @@
+# bulle à éclater
+id: bulle
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a8fdc b=#b4dbff c=#e8f4ff d=#ffffff e=#d8ecff
+images:
+........aaaaaaaaaaaaaaaa........
+.......aaaaabbbbbbbbaaaaa.......
+.....aaaabbbbbbbbbbbbbbaaaa.....
+....aaaabbbbbbccccbbbbbbaaaa....
+...aaabbbbbccdcccccccbbbbbaaa...
+..aaabbbbccddcccccccbbbbbbbaaa..
+..aabbbbcdddccccccceebbbbbbbaa..
+.aaabbbcddddcccccceeebbbbbbbaaa.
+aaabbbcddddcccccceeeeebbbbbbbaaa
+aabbbcdddddddccceeeeeebbbbbbbbaa
+aabbbddddddddcceeeeeeebbbbbbbbaa
+aabbcddddddddceeeeeeeeebbbbbbbaa
+abbbcdccccccceeeeeeeeeebbbbbbbba
+abbbcccccccceeeeeeeeeebbbbbbbbba
+abbcccccccceeeeeeeeeeebbbbbbbbba
+abbccccccceeeeeeeeeeeebbbbbbbbba
+abbcccccceeeeeeeeeeeeebbbbbbbbba
+abbccccceeeeeeeeeeeeebbbbbbbbbba
+abbbccceeeeeeeeeeeeeebbbbbbbbbba
+abbbcceeeeeeeeeeeeeebbbbbbbbbbba
+aabbcbeeeeeeeeeeeeebbbbbbbbbdbaa
+aabbbbbbeeeeeeeeebbbbbbbbbbddbaa
+aabbbbbbbbbeebbbbbbbbbbbbbbdbbaa
+aaabbbbbbbbbbbbbbbbbbbbbbbddbaaa
+.aaabbbbbbbbbbbbbbbbbbbbbddbaaa.
+..aabbbbbbbbbbbbbbbbbbbbddbbaa..
+..aaabbbbbbbbbbbbbbbbbbddbbaaa..
+...aaabbbbbbbbbbbbbbbdddbbaaa...
+....aaaabbbbbbbbbbbbddbbaaaa....
+.....aaaabbbbbbbbbbbbbbaaaa.....
+.......aaaaabbbbbbbbaaaaa.......
+........aaaaaaaaaaaaaaaa........

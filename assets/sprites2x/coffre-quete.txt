@@ -1,0 +1,42 @@
+id: coffre-quete
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#dec579 c=#c9a686 d=#c9a227 e=#a86f3c f=#f5d76e g=#ad8f78 h=#7a4b26 i=#664128 j=#a58629 k=#4a2e17
+images:
+........aaaa..aaaaaaaaaaaaaaaa..aaaa........
+.......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.......
+......aabbbbaaaccccccccccccccaaabbbbaa......
+......aaddddaaceeeeeeeeeeeeeecaaddddaa......
+......aaddddcceeeeeeeeeeeeeeeeccddddaa......
+.....aaaddddeeeeeeeeeeeeeeeeeeeeddddaaa.....
+....aaacddddeeeeeeeeeeeeeeeeeeeeddddcaaa....
+...aaaceddddeeeeeeeeeeeeeeeeeeeeddddecaaa...
+..aaaceeddddeeeeeeeeeeeeeeeeeeeeddddeecaaa..
+.aaaeeeeddddeeeeeeeeeeeeeeeeeeeeddddeeeeaaa.
+aaaeeeeeddddeeeeeeeeeeeeeeeeeeeeddddeeeeeaaa
+aaeeeeeeddddeeeeeeeeeeeeeeeeeeeeddddeeeeeeaa
+aabbbbbbddddbbbbbbddddddddbbbbbbddddbbbbbbaa
+aaddddddddddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddffffffffddddddddddddddddaa
+aaddddddddddddddddffffffffddddddddddddddddaa
+aaggggggddddggggggffffffffggggggddddggggggaa
+aahhhhhhddddhhhhhhffffffffhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhffaaaaffhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhffaaaaffhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhffaaaaffhhhhhhddddhhhhhhaa
+aahhiihhddjjhhhhiiffaaaaffhhiihhddjjhhhhiiaa
+aahhkkhhddkkhhhhkkffffkkffhhkkhhddkkhhhhkkaa
+aahhkkhhddkkhhhhkkffffkkffhhkkhhddkkhhhhkkaa
+aahhgghhddbbhhhhgggggggggghhgghhddbbhhhhggaa
+aahhhhhhddddhhhhhhhhhhhhhhhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhhhhhhhhhhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhhhhhhhhhhhhhhhddddhhhhhhaa
+aahhhhhhddddhhhhhhhhhhhhhhhhhhhhddddhhhhhhaa
+aaiiiiiiddddiiiiiiiiiiiiiiiiiiiiddddiiiiiiaa
+aabbbbbbddddbbbbbbbbbbbbbbbbbbbbddddbbbbbbaa
+aaddddddddddddddddddddddddddddddddddddddddaa
+aaddddddddddddddddddddddddddddddddddddddddaa
+aaddddddjjjjddddddddddddddddddddjjjjddddddaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..

@@ -280,9 +280,13 @@ def _base(id_, images):
 
 
 def _serie3(id_):
+    import fin
+
     def toutes(images):
         images = _base(id_, images)
         f, auto = FINITIONS.get(id_, (None, True))
+        if id_ in fin.SERIE4:
+            auto = False   # quatrième série : jamais de lumière générique, seulement le dessin propre au sprite
         for k, t in enumerate(images):
             if auto:
                 riche(t)
@@ -297,5 +301,6 @@ def inscrire():
     import finition_cuisine  # noqa: F401  (inscrit les finitions de chaque famille)
     import finition_fonds  # noqa: F401
     import finition_defense  # noqa: F401
-    for i in fin.SERIE3:
+    import finition_lot3  # noqa: F401
+    for i in list(fin.SERIE3) + list(fin.SERIE4):
         fin.RETOUCHES[i] = _serie3(i)

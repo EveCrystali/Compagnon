@@ -83,6 +83,14 @@ qu'un agrandissement au plus proche voisin), sa base fine est l'agrandissement c
 liseré de lumière et une ombre d'un pixel fin sur ses couleurs principales (ou une recette de `RECETTES2`). Avant /
 après : `python3 outils/sprites/planches_campagnes.py` (`redessines-<n>.png`).
 
+Quatrième série (`fin.SERIE4` : variantes d'évolution, poufs, polaroïds, bonus d'ensemble, icônes, accessoires, objets
+tenus en main, particules — 96 sprites) : **aucune finition générique**. Chaque sprite a son dessin fin, écrit à la main
+dans `finition_lot3.py` (variantes), `finition_effets.py` (bonus, pluies), `finition_objets*.py` (icônes, accessoires,
+objets) et `finition_particules.py` (confettis, bulles, mousse, feu...) : soit redessiné en pixels fins à partir de ses
+formes (même silhouette, mêmes ancrages, mêmes images et durées), soit rejeu fin retouché couleur par couleur. Les pinceaux
+communs (cœur, étincelle, bulle, note) sont dans `fins.py`, appelés par les primitives d'origine quand `fins.ACTIF`.
+Reprises du lot précédent : `plat-friture`, `soin-faim`, `prise-ecrevisse` (`finition_objets3.py`).
+
 `python3 outils/sprites/fin.py` liste les sprites redessinés et ceux encore agrandis automatiquement
 (`planches/hd/rapport.txt`). Le visage est entièrement dessiné en pixels fins (`visage_sprites.py`).
 
