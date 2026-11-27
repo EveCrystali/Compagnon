@@ -21,12 +21,12 @@ téléphone supprime les animations.
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand en dessin fin (le toucher le caresse, devant son décor s'il en porte un ; en tenue de voyage, avec « ⟶ en route · retour vers 15 h 40 » sous lui, quand il est parti en aventure), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »). Puis la carte **Aventure** en tête quand une campagne est en cours (sa scène, Pilou qui marche, le compte à rebours ; ou « ● Il t'attend ! »), l'expédition du PC, la météo, **les quêtes** (◔ ◑ ●), les sessions (❗ ? ◐ ✓ ■ ✕), la **Vitrine**, **Métiers et succès**. Le reste (nouvelles des connecteurs, appareils et amis du groupe, mot du jour) est replié derrière « Nouvelles, groupe, mot du jour ▾ » (le choix est gardé). Pas encore appairé : qui est Pilou, puis un guide en trois étapes. |
+| **Accueil** | Le **mot du jour** de Pilou en tête, sous son nom (docs/PRESENCE.md). Pilou en grand en dessin fin (le toucher le caresse, devant son décor s'il en porte un ; en tenue de voyage, avec « ⟶ en route · retour vers 15 h 40 » sous lui, quand il est parti en aventure), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »). Puis la carte **Aventure** en tête quand une campagne est en cours (sa scène, Pilou qui marche, le compte à rebours ; ou « ● Il t'attend ! »), l'expédition du PC, la météo, **les quêtes** (◔ ◑ ●), les sessions (❗ ? ◐ ✓ ■ ✕), la **Vitrine**, **Métiers et succès**, puis **Pilou et moi** : complicité (palier, jours ensemble, barre vers le palier suivant), la question du prénom (posée une fois, deux boutons de même poids) et le **journal de Pilou**, feuilletable (◀ ▶), avec son petit dessin dans l'humeur du jour. Le reste (nouvelles des connecteurs, appareils et amis du groupe) est replié derrière « Nouvelles et groupe ▾ » (le choix est gardé). Pas encore appairé : qui est Pilou, puis un guide en trois étapes. |
 | **Aventure** | Les campagnes : Pilou t'écrit, tu choisis, il part pour de vrai (voir plus bas). |
 | **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
 | **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède), **Métiers** (métiers et succès du PC, voir plus bas). |
-| **Réglages** (roue du bandeau) | Appairage, Pilou flottant (taille, cacher, ramener), notifications (dont « Retours de Pilou (aventures) »), soins, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
+| **Réglages** (roue du bandeau) | Appairage, Pilou flottant (taille, cacher, ramener), **Pilou et moi** (Pilou me parle : peu, normalement, jamais ; le mot du soir : chaque jour, parfois, jamais ; son journal ; petits gestes ; mon prénom, à changer ou effacer), notifications (dont « Retours de Pilou (aventures) »), soins, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
 
 ### Aventure : les campagnes
 
@@ -297,7 +297,8 @@ et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes
 | Taille de Pilou | ✓ | ✓ curseur |
 | Alertes (une IA attend, a fini) | webhook | ✓ notifications |
 | Mises à jour | automatiques | notification, un appui, confirmation d'Android |
-| Messages du jour (bonjour, bon appétit…) | ✓ | pas encore |
+| Petits mots de Pilou (docs/PRESENCE.md) | ✓ trois par jour au plus, aux moments calmes | ✓ un par jour au plus : le mot du soir (notification silencieuse), aussi en tête de l'Accueil, dans le widget et la bulle |
+| Journal de Pilou, complicité, prénom | ✓ fenêtre Journal, menu Pilou et moi | ✓ carte Pilou et moi, Réglages ; mêmes pages, mot pour mot |
 | Traînée d'étoiles (niveau 9) | ✓ | pas encore |
 | Thème clair/sombre de la bulle | ✓ | pas encore (bulle claire) |
 | Promenade, suit la souris, s'accroche au curseur, toque à l'écran, ballon | ✓ | sans objet (pas de souris) ; on déplace Pilou au doigt |
@@ -308,5 +309,5 @@ PC garde pour l'instant sa grille.
 
 ## Pas encore
 
-Plusieurs PC appairés au même téléphone, Pilou qui se promène sur le bord de l'écran, messages du
-jour et traînée d'étoiles sur le téléphone.
+Plusieurs PC appairés au même téléphone, Pilou qui se promène sur le bord de l'écran, traînée d'étoiles sur le
+téléphone.

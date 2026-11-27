@@ -18,6 +18,17 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
 - **Soins minimalistes** : un ou deux clics, pas de mode de difficulté. Négligé, Pilou boude un temps
   (animations grognonnes, gains × 0,6), rien de plus.
 - **Clavier** : séance de 40 s au plus, puis 10 min de repos.
+- **Présence au quotidien** (docs/PRESENCE.md) : on doit sentir sa présence sans qu'elle dérange. Sur PC, **trois
+  petits mots par jour au plus** (premier retour au clavier, retour après une vraie pause, fin de journée), espacés de
+  90 min, par la retenue commune et seulement au calme ; sur téléphone, **un mot par jour au plus**, le soir (19 h –
+  20 h 30), notification silencieuse sans badge ni relance, réglable (chaque jour par défaut, parfois, jamais). Un
+  réglage global « Pilou me parle : peu / normalement / jamais ». Jamais de reproche ni de culpabilité.
+- **Complicité** : elle monte lentement (temps ensemble, gestes, jours, campagnes finies), plafonnée par jour, et ne
+  baisse jamais. Paliers Connaissance, Copain, Ami, Meilleur ami, Inséparables, annoncés une fois, sans pièces.
+- **Journal** : régénéré à l'identique des deux côtés à partir des mêmes faits fusionnés et de la même graine, plutôt
+  que des textes synchronisés.
+- **Prénom** : demandé une seule fois, refuser aussi simple qu'accepter ; dans le groupe chiffré seulement, jamais
+  chez les amis.
 - **Météo discrète** : peu de particules, translucides ; le parapluie s'achète, il ne s'impose pas.
 - **Notifications Windows** : désactivées tant que Pilou n'est pas un paquet signé.
 - **Discord** : un bot, jamais l'automatisation d'un compte personnel.

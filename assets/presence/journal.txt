@@ -38,7 +38,7 @@ j-peche||On a lancé la ligne. Il en est sorti {prise}, et moi j'étais content.
 j-peche||Aujourd'hui, un peu de pêche. {prise}, ça compte, je l'ai écrit.
 j-plat||On a cuisiné {plat}. Ça sentait bon jusque dans mon antenne.
 j-plat||Au menu : {plat}. J'en ai gardé une miette pour plus tard.
-j-plat||Aujourd'hui, {plat}. Je n'ai rien renversé, ou presque.
+j-plat||Au menu du soir : {plat}. Je n'ai rien renversé, ou presque.
 j-plat||J'ai goûté {plat}. Je vais en rêver cette nuit, c'est sûr.
 j-plat||On a fait {plat}. La marmite a fait des bulles, moi aussi.
 j-plat||Cuisine du jour : {plat}. Je suis un peu chef, maintenant.
@@ -57,7 +57,7 @@ j-visite||Aujourd'hui, j'ai vu un autre Pilou. Il était bleu aussi, on s'est bi
 j-visite||Une visite ! J'ai rangé la barre des tâches avant, au cas où.
 j-expedition||Je suis parti en expédition : {lieu}. Je n'ai pas eu peur, ou alors juste un peu.
 j-expedition||Expédition du jour : {lieu}. J'en ai rapporté des souvenirs et un peu de poussière.
-j-expedition||Aujourd'hui, {lieu}. C'était grand, c'était bizarre, c'était bien.
+j-expedition||Départ pour l'expédition « {lieu} ». C'était grand, c'était bizarre, c'était bien.
 j-expedition||Destination du jour : {lieu}. Il y avait des choses absurdes, comme toujours là-bas.
 j-expedition||On m'a envoyé en mission : {lieu}. Je suis revenu entier, c'est le principal.
 j-aventure||On a avancé dans l'aventure. J'ai écrit, tu as choisi, et je suis reparti.

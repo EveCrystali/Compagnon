@@ -408,6 +408,24 @@ public class PresenceTests
     }
 
     [Fact]
+    public void Les_scenes_d_essai_sont_connues_de_la_visite_guidee()
+    {
+        foreach (var s in new[] { "mot", "journal", "complicite" }) Assert.True(Tournage.EssaiConnu(s), s);
+    }
+
+    [Fact]
+    public void Les_prises_et_les_plats_ont_leur_article()
+    {
+        Assert.Equal("une truite argentée", Presence.AvecArticle("truite", "Truite argentée"));
+        Assert.Equal("un goujon bleu", Presence.AvecArticle("goujon", "Goujon bleu"));
+        Assert.Equal("des croquettes croustillantes", Presence.AvecArticle("croquettes", "Croquettes croustillantes"));
+        Assert.Equal("un riz de la lagune", Presence.AvecArticle("paella", "Riz de la lagune"));
+        // Toutes les prises et toutes les recettes connues reçoivent un article.
+        Assert.All(Butin.Prises, p => Assert.Matches("^(un|une|des) ", Presence.AvecArticle(p.Id, p.Nom)));
+        Assert.All(Butin.Recettes, r => Assert.Matches("^(un|une|des) ", Presence.AvecArticle(r.Id, r.Nom)));
+    }
+
+    [Fact]
     public void L_etat_se_relit_a_l_identique()
     {
         var e = Neuf("pc-1", "pc");
