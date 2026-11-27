@@ -1,0 +1,29 @@
+# marque d'humeur, dessin fin
+id: marque-colere
+slot: visage
+ancre: yeux
+decalage: 20 -14
+duree: 300
+palette: a=#d9803a b=#ffc89a
+images:
+aaaa..aaaa
+abba..abba
+aba....aba
+aaa....aaa
+..........
+..........
+aaa....aaa
+aba....aba
+abba..abba
+aaaa..aaaa
+---
+..........
+..........
+..aa..aa..
+..aa..aa..
+..........
+..........
+..aa..aa..
+..aa..aa..
+..........
+..........

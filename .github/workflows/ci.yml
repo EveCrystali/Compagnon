@@ -6,6 +6,17 @@ on:
   pull_request:
 
 jobs:
+  # Campagnes (docs/CAMPAGNES.md) : le validateur passe sur tout assets/campagnes/. Léger et sans dépendance :
+  # c'est lui qui dit à l'auteur d'une histoire le fichier, le nœud et la raison.
+  campagnes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Le validateur lui-même (une faute à la fois)
+        run: python3 outils/campagnes/test_valider.py
+      - name: Toutes les campagnes (erreur → échec ; les avertissements ne bloquent pas)
+        run: python3 outils/campagnes/valider.py
+
   overlay:
     runs-on: ubuntu-latest
     steps:

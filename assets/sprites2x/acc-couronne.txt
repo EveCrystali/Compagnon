@@ -1,0 +1,27 @@
+id: acc-couronne
+slot: tete
+ancre: tete
+decalage: -20 -20
+coiffe: oui
+palette: a=#7a5a10 b=#f9e6a5 c=#f5d76e d=#fff6cc e=#c8b162 f=#c9a227 g=#6cb6ff h=#b4dbff i=#a58629
+images:
+...............aaaaaa...............
+..............aaabcaaa..............
+.............aaabcddaaa...........aa
+aa..........aaabccddbaaa.........aaa
+aaa........aaabcccbbcbaaa.......aaab
+baaa.......aabccccccccbaa......aaabc
+cbaaa.....aaaccccccccccaaa....aaabcc
+ccbaaa...aaabccccccccccbaaa..aaabccc
+cccbaaa.aaabccccccccccccbaaaaaabcccc
+ccccbaaaaabccccccccccccccbaaaabccccc
+cccccbaaabccccccccccccccccbaabcccccc
+cccccccacccccccccccccccccccccccccccc
+cccccccccccccccccccccccccccccccccccc
+eeeeeccccceeeeeeeeeeeeeeeecccceeeeee
+ffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffff
+ffffffffggggffffhhhhffffggggffffffff
+ffffffffggggffffhhhhffffggggffffffff
+ffffffffffffffffffffffffffffffffffff
+iiiiiiiiffffiiiiffffiiiiffffiiiiiiii

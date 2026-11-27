@@ -1,0 +1,21 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-haut
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#ffffff
+images:
+....aaaa....
+..aaaaaaaa..
+.aaabbbbaaa.
+aaabbbbbbaaa
+aaabbbbbbaaa
+aaaabbbbaaaa
+aaaaaaaaaaaa
+aaaaaaaaaaaa
+.aaaaaaaaaa.
+...aaaaaa...
+............
+............
+............
+............

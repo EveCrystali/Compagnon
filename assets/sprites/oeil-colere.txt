@@ -1,0 +1,15 @@
+# œil d'humeur (campagnes)
+id: oeil-colere
+slot: visage
+ancre: aucun
+decalage: 0 -2
+palette: a=#1c2128 b=#ffffff
+images:
+aa....
+aaaa..
+..aaaa
+....aa
+.aaaaa
+abbaaa
+aaaaaa
+.aaaa.

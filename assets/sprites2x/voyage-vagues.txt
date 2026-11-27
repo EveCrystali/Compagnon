@@ -1,0 +1,59 @@
+# Tenues de voyage « bateau » et « nage » : l'eau, au premier plan
+id: voyage-vagues
+slot: effet
+ancre: aucun
+decalage: 0 100
+duree: 260
+palette: a=#b4dbff b=#6cb6ff c=#ffffff d=#4a8fdc e=#1f4f8a
+images:
+....aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa..............
+....aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa..............
+..bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb............
+..bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb............
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+bbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbb
+bbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbb
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+edddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+---
+aaaa..................aaaaaa..................aaaaaa..................aaaaaa..................aa
+aaaa..................aaaaaa..................aaaaaa..................aaaaaa..................aa
+ccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb..............bbcc
+ccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb..............bbcc
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddd
+ddddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddd
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+---
+................aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa..
+................aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa..
+..............bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb
+..............bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+ddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddddddd
+ddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddddddd
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+---
+..........aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa........
+..........aaaaaa..................aaaaaa..................aaaaaa..................aaaaaa........
+........bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb......
+........bbccccccbb..............bbccccccbb..............bbccccccbb..............bbccccccbb......
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+ddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddddddddddd
+ddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbddddddddddddbbbbbbdddddddddddd
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeedddddeeeeeeeeeeeeeeeeeeeddddd
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee

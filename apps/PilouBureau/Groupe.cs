@@ -364,11 +364,12 @@ public static class Groupe
     }
 
     // Pièces d'or du groupe : Σ (gains − dépenses) par appareil (chacun à sa plus grande valeur vue), moins
-    // les achats faits sur le téléphone (comptés au maximum : chaque PC du groupe les applique).
+    // les achats faits sur le téléphone (comptés au maximum : chaque PC du groupe les applique), plus les po
+    // des campagnes (comptées au maximum elles aussi : Campagnes.Crediter).
     public static int SoldePo(Profil moi, IEnumerable<Profil> dossier, IEnumerable<Compteur> groupe)
     {
         var gains = new Dictionary<string, (int G, int D)>(StringComparer.OrdinalIgnoreCase);
-        int tel = moi.Bourse.PoDepTelephone;
+        int tel = moi.Bourse.PoDepTelephone, campagnes = moi.Bourse.PoCampagnes;
         void Voir(string cle, int g, int d)
         {
             if (string.Equals(cle, moi.Machine, StringComparison.OrdinalIgnoreCase)) return;
@@ -379,13 +380,15 @@ public static class Groupe
         {
             Voir(p.Machine, p.Bourse.PoGagnes, p.Bourse.PoDepenses);
             tel = Math.Max(tel, p.Bourse.PoDepTelephone);
+            campagnes = Math.Max(campagnes, p.Bourse.PoCampagnes);
         }
         foreach (var c in groupe)
         {
             Voir(c.Machine == "" ? "appareil:" + c.Appareil : c.Machine, c.PoGagnes, c.PoDepenses);
             tel = Math.Max(tel, c.PoDepTel);
         }
-        return moi.Bourse.PoGagnes - moi.Bourse.PoDepenses + gains.Values.Sum(x => x.G - x.D) - tel;
+        // Po des campagnes : chaque PC les déduit du même historique partagé (sujet des campagnes) ; au maximum.
+        return moi.Bourse.PoGagnes - moi.Bourse.PoDepenses + gains.Values.Sum(x => x.G - x.D) - tel + campagnes;
     }
 
     // Objets possédés par le groupe (union) et ce que Pilou porte (dernière écriture gagne par emplacement).

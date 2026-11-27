@@ -12,6 +12,9 @@ public enum Accessoire { Saison, Aucun, Bonnet, Casque, Noeud, Feuille, Lunettes
 public sealed class Reglages
 {
     public double Taille { get; set; } = 1.0;
+    // Dessin fin : Pilou sur la grille fine 96 × 112, un pixel fin sur un nombre entier de pixels physiques
+    // (Placement.Echelle). Décoché : le rendu d'origine (grille 48 × 56, taille libre).
+    public bool DessinFin { get; set; } = true;
     public ModeBulle Bulle { get; set; } = ModeBulle.Compacte;
     public ThemeBulle Theme { get; set; } = ThemeBulle.Auto;
     public Accessoire Accessoire { get; set; } = Accessoire.Saison;
@@ -49,6 +52,8 @@ public sealed class Reglages
     public string Relais { get; set; } = PilouBureau.Telephone.RelaisParDefaut;
     // Dernier message du téléphone lu sur le sujet retour (identifiant ntfy).
     public string RetourDepuis { get; set; } = "";
+    // Dernier message lu sur le sujet des campagnes (identifiant ntfy).
+    public string CampagnesDepuis { get; set; } = "";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
     // Icône près de l'horloge (zone de notification) : la porte de secours si l'overlay ne répond plus.

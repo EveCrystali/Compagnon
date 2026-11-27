@@ -1,0 +1,23 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-colere
+slot: visage
+ancre: aucun
+decalage: 0 -4
+palette: a=#1c2128 b=#ffffff
+images:
+aaa.........
+aaaaaa......
+aaaaaaaa....
+...aaaaaaa..
+.....aaaaaaa
+.......aaaaa
+.........aaa
+............
+..aaaaaaaaaa
+.aabbbaaaaaa
+aabbbbbaaaaa
+aaabbbaaaaaa
+aaaaaaaaaaaa
+.aaaaaaaaaa.
+..aaaaaaaa..
+....aaaa....

@@ -176,7 +176,7 @@ public sealed partial class FenetrePilou
             foreach (var c in GroupeMem.Compteurs.OrderByDescending(c => c.T))
                 appareils.Items.Add(new MenuItem { Header = $"{c.Nom} · {c.Xp} xp · {Groupe.VuIlYa(c.T, maintenant)}", IsEnabled = false });
             int tel = Math.Max(_profil.XpTelephone, GroupeMem.Compteurs.Select(c => c.XpTelephone).DefaultIfEmpty(0).Max());
-            if (tel > 0) appareils.Items.Add(new MenuItem { Header = $"Téléphone · {tel} xp (atelier)", IsEnabled = false });
+            if (tel > 0) appareils.Items.Add(new MenuItem { Header = $"Téléphone et campagnes · {tel} xp", IsEnabled = false });
             appareils.Items.Add(new MenuItem { Header = $"Total : {_xpTotal} xp · niveau {Niveau}", IsEnabled = false });
             m.Items.Add(appareils);
             m.Items.Add(Entree("Rejoindre un autre groupe… (code de mon autre PC ou du téléphone)", Rejoindre));

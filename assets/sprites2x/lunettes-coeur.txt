@@ -1,0 +1,29 @@
+# Lunettes cœur
+id: lunettes-coeur
+slot: yeux
+ancre: yeux
+decalage: -30 -4
+palette: a=#8a4a1f b=#ffc3dc c=#ff9ec7 d=#ffffff e=#d9803a f=#d083a9
+images:
+..aaaabbbbaaaaaaaabbbbaaaa........aaaabbbbaaaaaaaabbbbaaaa..
+.aaabbccccbbaaaabbccccbbaaa......aaabbccccbbaaaabbccccbbaaa.
+aaabccccccccbaabccccccccbaaa....aaabccccccccbaabccccccccbaaa
+aabccccccccccbbccccccccccbaaa..aaabccccccccccbbccccccccccbaa
+abccccddddcccccccccccccccccaaaaaacccccddddccccccccccccccccba
+acccccddddcccccccccccccccccaaaaaacccccddddccccccccccccccccca
+acccccbbbbcccccccccccccccceeeeeeeeccccbbbbccccccccccccccccca
+accccccccccccccccccccccccceeeeeeeeccccccccccccccccccccccccca
+accccccccccccccccccccccccccaaaaaacccccccccccccccccccccccccca
+afcccccccccccccccccccccccccaaaaaacccccccccccccccccccccccccfa
+aafccccccccccccccccccccccfaaa..aaafccccccccccccccccccccccfaa
+aaafccccccccccccccccccccfaaa....aaafccccccccccccccccccccfaaa
+.aaaffccccccccccccccccffaaa......aaaffccccccccccccccccffaaa.
+..aaaafccccccccccccccfaaaa........aaaafccccccccccccccfaaaa..
+...aaaafccccccccccccfaaaa..........aaaafccccccccccccfaaaa...
+.....aaafccccccccccfaaa..............aaafccccccccccfaaa.....
+......aaafccccccccfaaa................aaafccccccccfaaa......
+.......aaafccccccfaaa..................aaafccccccfaaa.......
+........aaafccccfaaa....................aaafccccfaaa........
+.........aaafccfaaa......................aaafccfaaa.........
+..........aaaffaaa........................aaaffaaa..........
+...........aaaaaa..........................aaaaaa...........

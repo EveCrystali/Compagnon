@@ -71,11 +71,17 @@ uniques dans toute la campagne.
   ],
   "variables": { "courage": 0, "confiance": 0 },
   "objets": [ { "id": "lanterne", "nom": "Lanterne" } ],
-  "souvenirs": [ { "id": "phare-rallume", "nom": "La lumière revenue", "texte": "Tu as rallumé le phare." } ]
+  "souvenirs": [ { "id": "phare-rallume", "nom": "La lumière revenue", "texte": "Tu as rallumé le phare." } ],
+  "decors": [ { "id": "jetee-brouillard", "nom": "La jetée", "description": "une jetée de bois dans le brouillard, lanterne éteinte, mer d'encre" } ]
 }
 ```
 
 `ton` : `humour`, `mystere`, `emotion` ou `epique`. `niveau` : niveau de Pilou requis pour commencer.
+`decors` (facultatif) : les décors illustrés de la campagne, 6 à 14 ; la `description` sert à l'illustrateur.
+`objets` : les objets de l'histoire, et les objets exclusifs que donnent les fins ; ceux-ci portent
+`"portable": true` (et, si possible, `"emplacement"` : `tete`, `yeux`, `cou`, `dos`, `main`, `pieds` ou
+`compagnon`), par exemple `{ "id": "bonnet-de-givre", "nom": "Bonnet de givre", "portable": true, "emplacement": "tete" }`.
+`"court": true` (facultatif) : campagne courte exprès, comme le prologue ; la taille visée ne lui est pas demandée.
 
 ### Fichier de chapitre
 
@@ -92,7 +98,11 @@ Champs communs à tous les nœuds :
 | `checkpoint` | `true` : état sauvegardé ici ; un échec y ramène |
 | `effets` | liste d'effets appliqués à l'entrée dans le nœud |
 | `recompense` | `{ "po": 20, "xp": 10 }`, créditée une seule fois (fin de chapitre) |
-| `lieu` | court libellé affiché en tête (« La jetée », « Sous le phare ») |
+| `lieu` | court libellé affiché en tête (« La jetée », « Sous le phare »), gardé tant qu'un nœud n'en donne pas un autre |
+| `humeur` | facultatif : l'expression de Pilou pendant ce message, parmi `joie`, `peur`, `triste`, `surpris`, `determine`, `fatigue`, `tendre`, `colere`, `malice`, `neutre` (défaut : `neutre`) |
+| `decor` | facultatif : identifiant d'un décor déclaré dans `decors` ; hérité du nœud précédent tant qu'il n'est pas redéfini |
+
+`humeur` et `decor` servent aux interfaces (animer Pilou, illustrer la scène) ; un moteur ancien les ignore.
 
 Les sept types :
 
@@ -126,9 +136,79 @@ Conditions (`si`) : `{ "var": "courage", "min": 2 }`, `{ "var": "courage", "max"
 - un `checkpoint` au début de chaque chapitre ; aucun nœud `echec` atteignable avant le premier check-point ;
 - tout `choix` a au moins une option sans condition ; variables, objets, drapeaux et souvenirs utilisés
   sont déclarés (les drapeaux se déclarent par leur premier usage en effet) ;
+- toute `humeur` est l'une des dix valeurs ; tout `decor` utilisé est déclaré dans `decors` ;
 - durées et longueurs dans les bornes ; récompenses plafonnées (voir plus bas) ;
 - statistiques rendues : nœuds, mots, choix et attentes par parcours (min, médiane, max), temps réel
   total par parcours, nombre de fins atteignables.
+
+Le validateur est `outils/campagnes/valider.py` (Python 3, sans dépendance) ; la CI le lance sur toutes
+les campagnes de `assets/campagnes/` :
+
+```
+python3 outils/campagnes/valider.py                      # toutes les campagnes
+python3 outils/campagnes/valider.py assets/campagnes/x   # une seule
+```
+
+Chaque message dit le fichier, le nœud et la raison. Une **erreur** fait échouer (code de sortie 1) ; un
+**avertissement** ne bloque pas ; une **note** situe la campagne par rapport à la taille visée.
+
+### Précisions du format (ce que le moteur et le validateur appliquent)
+
+Le moteur a demandé de trancher quelques points que le format laissait ouverts. Ils font partie du contrat :
+
+- **Fichiers** : UTF-8 sans BOM ; jamais deux fois la même clé dans un objet JSON ; `id` de la fiche = nom
+  du dossier ; `chapitre` du fichier = `id` du chapitre ; un fichier `.json` absent de `chapitres` n'est pas lu.
+- **Identifiants** : minuscules ASCII, chiffres, tirets (`^[a-z0-9]+(-[a-z0-9]+)*$`), pour la campagne, les
+  chapitres, les nœuds, les options, les variables, les objets, les drapeaux, les souvenirs et les décors.
+  Les nœuds sont uniques dans toute la campagne ; les options, dans leur `choix`. Deux identifiants d'une même
+  famille ne doivent pas avoir le même **code court** (4 caractères tirés de l'identifiant, utilisés dans les
+  messages entre appareils) : c'est très rare, et le validateur dit lequel renommer.
+- **Textes** : `texte` est obligatoire pour `recit`, `choix`, `attente`, `echec`, `fin` ; facultatif pour
+  `epreuve` et `hasard`. Un message de plus de 110 mots est un avertissement, de plus de 160 une erreur ;
+  avertissement aussi si plus d'un tiers des messages font moins de 30 mots. Libellé d'option : 60 caractères
+  au plus (avertissement) ; `pendant` : 60 ; `lieu` : 40.
+- **Récits** : ils s'enchaînent sans geste. Après un `choix`, Pilou dit tout ce qu'il a à dire (récits, puis
+  le `texte` de l'attente) et part : l'attente commence à l'heure du choix.
+- **Deux attentes de suite** (ou une attente juste après un repos) : Pilou ne repart jamais sans un geste. Au
+  retour, il dit le `texte` de la nouvelle attente et le joueur répond « vas-y » (une décision « continuer ») ;
+  l'attente commence alors. Écrire le `texte` d'une attente comme ce que Pilou dit avant de partir.
+- **`attente`** : `pendant` et `tenue` sont obligatoires ; `duree_max`, s'il est là, va de `duree_min` à 600.
+- **`epreuve`** : `difficulte` obligatoire. Aux dés (jeu `des`, jeu inconnu, ou appareil qui ne sait pas jouer
+  le jeu), la chance de réussir est de 70 %, 55 % ou 40 % selon la difficulté, plus 5 points par point de la
+  variable `bonus` (bornée entre 10 % et 95 %). Un jeu inconnu est un avertissement.
+- **`hasard`** : `poids` entier ≥ 1. On tire parmi les issues dont la condition est vraie. Un `hasard` sert
+  donc aussi d'**aiguillage** : toutes ses issues peuvent porter un `si`, avec des conditions qui se
+  complètent. Il faut qu'une issue soit toujours possible : le validateur le prouve en essayant tous les cas
+  (objets, drapeaux, valeurs autour des seuils) ; s'il n'y arrive pas, c'est un avertissement ; s'il trouve un
+  parcours qui arrive là sans issue possible, c'est une erreur (le moteur, lui, tirerait alors parmi toutes).
+- **Conditions** : `{ "var": …, "min": 2, "max": 5 }` peut porter les deux bornes ; un drapeau testé doit
+  être posé par au moins un effet quelque part.
+- **Check-point** : `checkpoint: true` est permis sur tout type de nœud, sauf `echec` et `fin` (un `choix`,
+  une `attente`, un `hasard` peuvent en porter un). L'état est gardé **avant** les effets du nœud. Après un
+  échec et son repos, Pilou y rentre de nouveau : son texte est redit, ses effets rejoués une fois. Variables,
+  objets, drapeaux et décor reviennent à ce qu'ils étaient ; les récompenses déjà touchées restent, et ne se
+  touchent pas deux fois. Ce que Pilou redit alors est marqué **reprise** (`Etat.Reprise`, `Message.Reprise`),
+  jusqu'à la prochaine décision : l'interface ne le montre pas comme une nouveauté (elle peut le replier, ou
+  dire « Bon. On reprend ici. »). Tout nœud par lequel on entre dans un chapitre (depuis un autre chapitre, ou
+  le départ) est un check-point ; un chapitre peut n'être traversé que par certaines routes.
+- **Échec en boucle** : erreur si un `echec` est atteignable depuis un check-point sans `choix`, `attente`
+  ni mini-jeu entre les deux (récits, hasards, épreuves aux dés seulement) : après chaque repos, Pilou y
+  retomberait tout seul.
+- **Récompenses** : un nœud ordinaire porte `recompense` (`po`, `xp` seulement) : c'est sur ce champ que
+  porte le plafond par chapitre (40 po, 20 xp sur un parcours). Une fin porte `recompenses` (obligatoire, même
+  à zéro), à part du plafond par chapitre, avec en plus `souvenir` (déclaré), `titre` (le texte du titre, 40
+  caractères au plus) et `objet`. Chaque fin peut donner son propre titre et son propre objet ; six objets
+  exclusifs au plus par campagne. Tout `objet` de récompense est déclaré dans `objets` de la fiche avec
+  `"portable": true` et un `nom` : le moteur en fait un objet exclusif, qui ne s'achète pas et rejoint
+  l'inventaire à la fin obtenue. Son dessin peut manquer : l'objet existe quand même, sans sprite, en
+  attendant l'illustrateur (le sprite porte l'identifiant de l'objet). Le plafond global (600 po, 300 xp) porte
+  sur le meilleur parcours complet. Une fin a un `titre` (son nom) et une `issue`.
+- **Rejouer** : ni po ni xp ; les souvenirs, les titres et les objets des fins pas encore obtenues se gagnent.
+- **Taille visée** : hors des fourchettes (chapitres, nœuds, mots, fins, choix et attentes par parcours),
+  c'est un avertissement ; plus de 10 % au-dessus du plus grand nombre de nœuds ou de mots visé, une erreur.
+  Les choix et les attentes se comptent sur un parcours **sans rejouer les échecs** : ce qui est refait après
+  un retour au check-point ne compte qu'une fois (médiane de parcours tirés au hasard). Une campagne
+  `"court": true` en est dispensée.
 
 ## Récompenses (plafonds)
 
@@ -154,8 +234,142 @@ variables, objets, drapeaux, nœud courant, fin de l'attente en cours, dernier c
 - Fin d'attente : notification locale sur le téléphone (programmée à l'heure de fin, même hors ligne),
   bulle sur le PC.
 
+## API du moteur
+
+Le moteur est écrit deux fois, à l'identique : `apps/PilouBureau/Campagnes.cs` (PC, sans WPF) et
+`android/app/src/main/java/fr/pilou/compagnon/Campagnes.java` (Java pur). Le PC écrit des vecteurs
+(`android/app/src/test/resources/campagnes-vecteurs.txt` : parties entières, conflits, journaux en désordre,
+fusions, messages) que les tests Java rejouent ligne à ligne. Les noms ci-dessous sont ceux du C# ; en Java,
+les mêmes en minuscule (`Campagnes.actualiser`, `etat.phase`…).
+
+### Les campagnes embarquées
+
+- `Campagnes.Disponibles()` : les identifiants (tout dossier de `assets/campagnes/` qui a une fiche : rien
+  à déclarer ailleurs). `Campagnes.Charger(id)` : la campagne, ou `null`.
+- `Campagne` : `Id`, `Titre`, `Ton`, `Accroche`, `Niveau`, `Duree`, `Chapitres`, `Souvenirs`, `Decors`,
+  `Noeuds`.
+
+### L'état courant
+
+Tout part du **carnet** (`Campagnes.Carnet`) : la partie en cours, les parties suspendues, l'historique et
+le fil des messages. Sur le PC il vit dans le profil (`Profil.CarnetCampagnes`) ; sur le téléphone dans les
+préférences (`CampagnesTel.carnet(contexte)`).
+
+`Campagnes.Actualiser(carnet, Campagnes.Charger, maintenant)` rejoue la partie à l'heure donnée (ms Unix) et
+rend l'`Etat`, ou `null` s'il n'y a pas de partie. À appeler à l'ouverture, après chaque décision, et quand
+une attente finit.
+
+| `Etat` | Sens |
+|---|---|
+| `Phase` | `Choix` (des options), `Epreuve` (un mini-jeu), `Depart` (Pilou attend un « vas-y »), `Attente` (parti), `Repos` (après un échec), `Fin`, `Abandon`, `Cassee` (fichier de campagne incohérent) |
+| `Options` | phase `Choix` : les options proposées (`Id`, `Libelle`), conditions déjà appliquées |
+| `Jeu`, `Difficulte`, `Aide`, `Chance` | phase `Epreuve` : le jeu, sa difficulté 1 à 3, la valeur de la variable bonus, la chance aux dés (%) |
+| `Fin` | phases `Attente` et `Repos` : l'heure de retour (ms Unix), pour la bulle et la notification locale ; 0 sinon |
+| `Pendant`, `Tenue` | phases `Depart`, `Attente`, `Repos` : la ligne d'état et la tenue de Pilou occupé (`Repos` : « Pilou se repose », `nuit`) |
+| `Lieu`, `Decor`, `Humeur` | le lieu et le décor courants (hérités), l'humeur du dernier message |
+| `Reprise` | Pilou vient de revenir à un check-point (échec, ou partie abandonnée qu'on reprend) et rien n'a encore été décidé : ce qu'il redit n'est pas une nouveauté |
+| `Chapitre`, `ChapitreTitre`, `ChapitreNumero`, `ChapitreTotal`, `Progression` | où l'on en est (progression de 0 à 1) |
+| `Issue`, `TitreFin`, `Recompenses` | phase `Fin` : la fin obtenue |
+| `Variables`, `Objets`, `Drapeaux` | l'état de l'histoire (pour un écran « sac à dos ») |
+
+Le **fil** (`carnet.Fil`) est la correspondance : les messages de Pilou (`Qui` = `pilou`) et les choix du
+joueur (`joueur`), chacun avec son `Texte`, son `Noeud`, son `Lieu`, son `Humeur`, son `Decor`, son heure
+`T`, et `Reprise` s'il est redit au retour d'un échec. `carnet.NonLus` compte les messages de Pilou pas encore lus, `Campagnes.NonLu(carnet, message)` le dit
+pour un message, `Campagnes.MarquerLu(carnet)` marque tout lu. Le fil garde les 150 derniers messages.
+
+`Campagnes.Ligne(etat, heureDeFin)` donne « Pilou longe la falaise · retour vers 15 h 40 ».
+`Campagnes.Fins`, `Souvenirs`, `Titres`, `ObjetsGagnes`, `Acquis` lisent l'historique d'une campagne ;
+`Campagnes.Finie`, `EnCours`, `Reprenable` disent où en est le carnet.
+
+### Les décisions
+
+Chacune renvoie `null` si c'est fait, sinon une raison courte à montrer telle quelle.
+
+| Fonction | Quand |
+|---|---|
+| `Demarrer(carnet, campagne, niveau, maintenant, appareil, Charger)` | aucune partie en cours ; reprend au dernier check-point une campagne abandonnée (`neuf: true` : depuis le début) |
+| `Choisir(carnet, campagne, maintenant, appareil, idOption)` | phase `Choix` |
+| `Continuer(…)` | phase `Depart` : « vas-y » |
+| `Epreuve(…, reussie)` | phase `Epreuve` : le résultat du mini-jeu |
+| `EpreuveAuDe(…)` | phase `Epreuve` : l'appareil ne sait pas jouer ce jeu, les dés décident |
+| `Abandonner(…)` | à tout moment, même pendant une attente |
+
+`appareil` est l'identifiant de l'appareil dans le groupe (PC : `Reglages.Appareil` ; téléphone :
+`CampagnesTel.appareil`). Sur le PC, la fenêtre offre `CampagneDemarrer`, `CampagneChoisir`,
+`CampagneContinuer`, `CampagneEpreuve`, `CampagneAuDe`, `CampagneAbandonner`, `EtatCampagne` et
+`CampagneEnAttente` (`FenetreCampagne.cs`) ; sur le téléphone, `CampagnesTel` offre les mêmes
+(`demarrer`, `choisir`, `continuer`, `epreuve`, `auDe`, `abandonner`, `etat`, `lu`, `enAttente`). Ces deux
+façades gardent le carnet, publient et refusent une décision quand Pilou est en expédition ou en visite.
+
+Pendant une attente de campagne ou un repos, le PC refuse les départs en expédition et en visite
+(« Pilou est en campagne… ») ; pendant une expédition ou une visite, il refuse les décisions de campagne,
+sauf l'abandon. `--essai=campagne:<id>` déroule une campagne en accéléré dans la bulle, sans rien écrire.
+
+### Le moteur pur
+
+`Campagnes.Rejouer(campagne, partie, maintenant)` rend l'état d'une `Partie` ; `Campagnes.Decider(campagne,
+partie, maintenant, appareil, valeur)` rend la partie avec la décision ajoutée, ou `null` si elle n'est pas
+valide (valeur : le rang de l'option, ou `Suite`, `Reussite`, `Rate`, `Abandon`) ; `Campagnes.Compacter`
+avance la base. Une `Partie`, c'est une **base** (le résumé de l'état à un check-point : nœud, variables,
+objets, drapeaux, décor, heure, tirages déjà faits) et le **journal** des décisions prises depuis. Une
+décision : son étape, son heure (à la seconde), son appareil, le nœud où elle est prise, sa valeur.
+
+- Même journal, même état, partout : les tirages (`hasard`, `duree_max`, dés) ne dépendent que de la graine
+  de la partie et du nombre de tirages déjà faits.
+- Deux décisions pour la même étape : la plus ancienne gagne ; à égalité, le plus petit identifiant
+  d'appareil. Une décision prise ailleurs que là où en est l'histoire (autre nœud, option absente) ne compte
+  pas. L'ordre d'arrivée et les doublons ne changent rien.
+- La base avance au check-point suivant quand la décision qui y mène a plus de dix minutes (le temps qu'un
+  autre appareil dise qu'il avait décidé avant). Au-delà de 24 décisions sans check-point, elle avance au
+  milieu du chapitre, en gardant le check-point.
+- Une attente finit toute seule quand son heure est passée. Si un autre appareil, dont l'horloge avance, a
+  déjà décidé la suite, l'état le suit.
+- Une seule partie en cours dans le groupe : celle au plus grand numéro (à égalité, la plus ancienne). Une
+  partie mise de côté ou abandonnée reste suspendue à son dernier check-point jusqu'à ce qu'on la reprenne.
+
+### Synchronisation
+
+Un **message dédié**, sur un sujet à part du relais (`Campagnes.Sujet(code)`, tiré du code du groupe comme
+les autres ; chiffré de la même façon). Les messages existants ne changent pas, et un ancien appareil
+n'écoute pas ce sujet. Chaque appareil publie son carnet quand il change (et toutes les 6 h) ; le PC relit le
+sujet toutes les 90 s, le téléphone toutes les 5 min et à chaque décision.
+`Campagnes.Messages(carnet, appareil, "pc" | "tel")` rend un message (deux ou plus seulement s'il y a
+beaucoup de parties suspendues), chacun de 2 750 octets au plus ; `Campagnes.Recevoir(carnet, json,
+appareil, Charger, maintenant)` le fusionne : même résultat dans n'importe quel ordre, autant de fois
+qu'on veut.
+
+```
+{"v":1,"a":"<appareil>","k":"pc"|"tel",
+ "q":<partie en cours>, "s":[<parties suspendues>],
+ "h":{"<campagne>":[<n° de la dernière partie>,<n° de la dernière partie finie>,{"<fin>":<secondes>},"<nœuds récompensés>"]}}
+
+partie = {"c":"<campagne>","p":<n°>,"d":<départ, s>,"o":"<appareil d'origine>","g":"<graine>",
+          "x":<1 rejeu + 2 geste + 4 nœud déjà entré + 8 abandonnée + 16 reprise>,
+          "e":<étape>,"r":<rang>,"i":<messages déjà émis>,"n":<tirages faits>,"t":<heure de la base, s>,
+          "ici":["<nœud>",{"<variable>":<valeur>},"<objets>","<drapeaux>","<décor>","<nœud du lieu>"],
+          "cp":[…le dernier check-point, s'il n'est pas « ici »…],
+          "l":["<appareil>",…],"j":[[<étape>,<secondes depuis la base>,<rang de l'appareil>,"<nœud>",<valeur>],…]}
+```
+
+Nœuds, variables, objets, drapeaux et décors y sont des **codes courts** de 4 caractères
+(`Campagnes.Code(id)`), mis bout à bout quand il y en a plusieurs. Mesuré (test
+`Messages_sous_la_limite_pour_une_campagne_de_200_noeuds`) sur une campagne de 258 nœuds jouée jusqu'au
+bout, 371 décisions, avec deux autres campagnes finies (six fins chacune) et deux suspendues : 1 854 octets
+de JSON au plus, soit 2 512 chiffrés pour une limite de 3 800 ; le prologue au départ : 192 octets, 296
+chiffrés. Pour comparaison, le message de groupe d'un profil garni fait déjà 3 404 octets chiffrés et celui
+du téléphone est allégé pour tenir en 3 792 : d'où le message à part.
+
+**Récompenses.** L'historique (`h`) dit quels nœuds ont été récompensés ; chaque PC verse ceux qu'il n'a pas
+encore versés (`Campagnes.Crediter`), dans deux compteurs à part que tous les PC du groupe tiennent à
+l'identique et qui se comptent **au maximum, jamais en somme** : les po dans `Bourse.PoCampagnes`, l'xp dans
+`Profil.XpTelephone` (le compteur des gains du téléphone, déjà partagé). Le téléphone ne verse rien : il
+montre ce qui attend un PC (`Campagnes.EnAttente`), comme pour les achats. L'objet d'une fin (un objet
+`portable` de la fiche : `Campagnes.Exclusifs`, que `Boutique.Trouver` connaît) rejoint l'inventaire du PC ; il
+ne voyage pas dans les messages du groupe ni du téléphone, chaque appareil le tient de l'historique
+(`Campagnes.ObjetsGagnes`). Souvenirs et titres se lisent dans l'historique.
+
 ## Les campagnes
 
 | Id | Titre | Ton | Niveau |
 |---|---|---|---|
-| *(à venir)* | | | |
+| `prologue` | La colline d'en face | humour | 1 |

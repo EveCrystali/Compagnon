@@ -1,0 +1,103 @@
+{
+  "chapitre": "a",
+  "noeuds": {
+    "a-debut": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Le départ",
+      "decor": "d-un",
+      "humeur": "joie",
+      "effets": [ { "var": "courage", "plus": 1 }, { "drapeau": "parti" } ],
+      "texte": [ "Je pars. Premier message de la campagne d'essai.", "Deuxième message : le carrefour est devant." ],
+      "suite": "a-carrefour"
+    },
+    "a-carrefour": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [ "Quatre chemins. Lequel ?" ],
+      "options": [
+        { "id": "nord", "libelle": "Le nord", "vers": "a-marche", "effets": [ { "var": "ruse", "plus": 2 }, { "objet": "cle", "donne": true } ] },
+        { "id": "sud", "libelle": "Le sud", "vers": "a-des", "si": { "var": "courage", "min": 2 } },
+        { "id": "secret", "libelle": "Le passage", "vers": "a-secret",
+          "si": { "tous": [ { "drapeau": "parti" }, { "non": { "objet": "cle" } }, { "un": [ { "var": "ruse", "max": 0 }, { "objet": "pain" } ] } ] } },
+        { "id": "boucle", "libelle": "Tourner en rond", "vers": "a-boucle" }
+      ]
+    },
+    "a-boucle": {
+      "type": "attente",
+      "texte": [ "Je fais le tour du carrefour." ],
+      "duree_min": 5,
+      "pendant": "Pilou tourne en rond",
+      "tenue": "bateau",
+      "suite": "a-carrefour"
+    },
+    "a-marche": {
+      "type": "attente",
+      "lieu": "La route du nord",
+      "humeur": "fatigue",
+      "texte": [ "La route est longue. J'y vais." ],
+      "duree_min": 10,
+      "duree_max": 30,
+      "pendant": "Pilou marche vers le nord",
+      "tenue": "marche",
+      "suite": "a-double"
+    },
+    "a-double": {
+      "type": "attente",
+      "texte": [ "Arrivé au gué. Je dors ici et je repars." ],
+      "duree_min": 5,
+      "pendant": "Pilou dort au gué",
+      "tenue": "nuit",
+      "suite": "a-epreuve"
+    },
+    "a-epreuve": {
+      "type": "epreuve",
+      "texte": [ "Un garde me pose une devinette." ],
+      "jeu": "memoire",
+      "difficulte": 2,
+      "bonus": "ruse",
+      "reussite": "a-prime",
+      "echec": "a-chute"
+    },
+    "a-des": {
+      "type": "epreuve",
+      "texte": [ "Le pont tangue. Je lance les dés." ],
+      "jeu": "des",
+      "difficulte": 3,
+      "bonus": "courage",
+      "reussite": "a-prime",
+      "echec": "a-chute"
+    },
+    "a-secret": {
+      "type": "epreuve",
+      "texte": [ "Un jeu que personne ne connaît." ],
+      "jeu": "inconnu",
+      "difficulte": 1,
+      "reussite": "a-prime",
+      "echec": "a-hasard"
+    },
+    "a-hasard": {
+      "type": "hasard",
+      "texte": [ "Le passage se divise." ],
+      "issues": [
+        { "poids": 1, "vers": "a-prime", "si": { "objet": "pain" } },
+        { "poids": 2, "vers": "a-chute" },
+        { "poids": 1, "vers": "a-carrefour" }
+      ]
+    },
+    "a-chute": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [ "Je suis tombé. Je me repose." ],
+      "repos_min": 15
+    },
+    "a-prime": {
+      "type": "recit",
+      "humeur": "joie",
+      "recompense": { "po": 10, "xp": 5 },
+      "effets": [ { "objet": "pain", "donne": true }, { "drapeau": "parti", "ote": true } ],
+      "texte": [ "Passé ! Dix pièces et un pain." ],
+      "suite": "b-entree"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-malice-d
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=@contour c=#ffffff
+images:
+......aaaaaa
+...aaaaaaaa.
+aaaaaaa.....
+aaaa........
+.bbbbbbbbbb.
+bbbbbbbbbbbb
+aaaaaaaaaaaa
+aaaaaaccccaa
+aaaaaaccccaa
+.aaaaaaccaa.
+..aaaaaaaa..
+....aaaa....
+............
+............

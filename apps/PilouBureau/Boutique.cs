@@ -267,8 +267,9 @@ public static class Boutique
 
     private static readonly Dictionary<string, Article> ParId = Catalogue.GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First());
 
-    // Le butin des expéditions (Expeditions.Exclusifs) se porte comme un article, mais ne se vend pas.
-    public static Article? Trouver(string id) => ParId.GetValueOrDefault(id) ?? Expeditions.Exclusif(id);
+    // Le butin des expéditions (Expeditions.Exclusifs) et les objets gagnés en campagne (Campagnes.Exclusifs) se
+    // portent comme un article, mais ne se vendent pas.
+    public static Article? Trouver(string id) => ParId.GetValueOrDefault(id) ?? Expeditions.Exclusif(id) ?? Campagnes.Exclusif(id);
 
     public static IReadOnlyList<Ensemble> Ensembles => Garnie.Ensembles;
     public static IReadOnlyList<PalierCollection> PaliersCollection => Garnie.Paliers;
@@ -449,7 +450,10 @@ public static class Boutique
         return Convert.ToBase64String(octets).TrimEnd('=').Replace('+', '-').Replace('/', '_');
     }
 
-    public static List<string> HorsGarde(IEnumerable<string> inventaire) => inventaire.Where(id => (Trouver(id)?.Numero ?? 0) == 0).ToList();
+    // Les objets gagnés en campagne ne voyagent pas dans ces messages (déjà près de la limite de taille) : chaque
+    // appareil les déduit de l'historique des campagnes, qui a son propre message.
+    public static List<string> HorsGarde(IEnumerable<string> inventaire) =>
+        inventaire.Where(id => (Trouver(id)?.Numero ?? 0) == 0 && (ParId.ContainsKey(id) || !Campagnes.EstExclusif(id))).ToList();
 
     public static List<string> Deplier(string? garde)
     {
@@ -513,6 +517,7 @@ public static class Boutique
         var a = Trouver(id);
         if (a is null) return "objet inconnu";
         if (Expeditions.EstExclusif(id)) return "introuvable en boutique : butin d'expédition";
+        if (!ParId.ContainsKey(id) && Campagnes.EstExclusif(id)) return "introuvable en boutique : récompense de campagne";
         bool consommable = a.Slot == Consommable;
         if (!consommable && b.Inventaire.Contains(id)) return "déjà dans l'inventaire";
         if (!Ouvert(a, niveau)) return $"niveau {a.NiveauMin} requis";
@@ -556,6 +561,8 @@ public sealed class Bourse
     public int PoGagnes { get; set; }
     public int PoDepenses { get; set; }
     public int PoDepTelephone { get; set; }
+    // Po gagnées en campagne (Campagnes.Crediter) : chaque PC du groupe verse les mêmes, comptées au maximum.
+    public int PoCampagnes { get; set; }
     public List<string> Inventaire { get; set; } = new();
     // Consommables achetés et pas encore utilisés (pierre de calme…), propres à cet appareil.
     public Dictionary<string, int> Consommables { get; set; } = new();

@@ -1,0 +1,32 @@
+{
+  "v": 1,
+  "id": "prologue",
+  "titre": "La colline d'en face",
+  "ton": "humour",
+  "accroche": "Pilou part pour sa toute première aventure : la colline d'en face. Il veut savoir où le soleil va se coucher.",
+  "niveau": 1,
+  "duree": "≈ 15 minutes",
+  "court": true,
+  "depart": "p1-lettre",
+  "chapitres": [
+    { "id": "ch1", "titre": "Le sac à dos", "fichier": "chapitre-01.json" },
+    { "id": "ch2", "titre": "La colline", "fichier": "chapitre-02.json" }
+  ],
+  "variables": { "elan": 0 },
+  "objets": [
+    { "id": "lampe", "nom": "Lampe de poche" },
+    { "id": "corde", "nom": "Corde à sauter" }
+  ],
+  "souvenirs": [
+    { "id": "coucher-de-soleil", "nom": "Le coucher de soleil", "texte": "Tu as vu, avec Pilou, où le soleil va dormir." },
+    { "id": "question-gardee", "nom": "Une question pour plus tard", "texte": "Pilou est rentré avant la nuit. Le soleil garde son secret." }
+  ],
+  "decors": [
+    { "id": "seuil", "nom": "Devant la maison", "description": "le pas d'une petite porte ronde, un paillasson, un sac à dos trop plein posé dessus, lumière dorée de fin d'après-midi" },
+    { "id": "jardin", "nom": "Le jardin", "description": "un jardin vu à hauteur d'herbe, brins géants, un escargot sur une feuille, la maison minuscule au loin" },
+    { "id": "mare", "nom": "La mare", "description": "une mare ronde, trois nénuphars en ligne, des roseaux, une grenouille, l'eau sombre et calme" },
+    { "id": "pied-colline", "nom": "Au pied de la colline", "description": "le bas d'une colline ronde, un bâton planté bien droit dans l'herbe, deux chemins qui se séparent" },
+    { "id": "pente", "nom": "La pente", "description": "une pente d'herbe raide, des pâquerettes, un pissenlit géant, un panneau de bois de travers" },
+    { "id": "sommet", "nom": "Le sommet", "description": "le haut de la colline, herbe rase, grand ciel orange, le soleil bas sur l'horizon, la maison et la mare toutes petites en contrebas" }
+  ]
+}
