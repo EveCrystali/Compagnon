@@ -131,15 +131,48 @@ final class Lecture extends FrameLayout {
 
         // ---- Ce que le joueur peut faire.
         dock = Ui.pile(a);
-        dock.setBackground(Ui.coins(a, p.surface, 20, 20, 0, 0, p.bord));
-        dock.setElevation(Ui.dp(a, 10));
         dock.setPadding(Ui.dp(a, 16), Ui.dp(a, 14), Ui.dp(a, 16), Ui.dp(a, 14));
         dock.setVisibility(View.GONE);
-        colonne.addView(dock, Ui.large());
+        // Quatre options de deux lignes (ou une grande police) ne tiennent pas toujours sous la scène d'un petit
+        // téléphone : le bas défile alors, borné pour que le fil reste lisible, au lieu de cacher les dernières options.
+        DockDefilant cadreDock = new DockDefilant(a);
+        cadreDock.setBackground(Ui.coins(a, p.surface, 20, 20, 0, 0, p.bord));
+        cadreDock.setElevation(Ui.dp(a, 10));
+        cadreDock.addView(dock, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        colonne.addView(cadreDock, Ui.large());
 
         couche = new FrameLayout(a);
         couche.setVisibility(View.GONE);
         addView(couche, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    /** Le bas de l'écran (options, départ, attente…) : jamais plus de 70 % de ce que la scène laisse ; au-delà, il défile. */
+    static final class DockDefilant extends ScrollView {
+        DockDefilant(android.content.Context c) {
+            super(c);
+            setClipToPadding(false);
+            setVerticalFadingEdgeEnabled(true);
+            setFadingEdgeLength(Ui.dp(c, 28));
+            setOverScrollMode(OVER_SCROLL_IF_CONTENT_SCROLLS);
+        }
+
+        @Override
+        protected void onMeasure(int largeur, int hauteur) {
+            int mode = MeasureSpec.getMode(hauteur);
+            if (mode != MeasureSpec.UNSPECIFIED) hauteur = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(hauteur) * 7 / 10, MeasureSpec.AT_MOST);
+            super.onMeasure(largeur, hauteur);
+        }
+    }
+
+    // La scène rapetisse un peu sur un petit écran (de 184 à 156 dp) : la place va au fil et aux options.
+    @Override
+    protected void onMeasure(int largeur, int hauteur) {
+        if (MeasureSpec.getMode(hauteur) != MeasureSpec.UNSPECIFIED) {
+            int h = Math.max(Ui.dp(app, 156), Math.min(Ui.dp(app, 184), MeasureSpec.getSize(hauteur) * 32 / 100));
+            ViewGroup.LayoutParams lp = tete.getLayoutParams();
+            if (lp != null && lp.height != h) lp.height = h;
+        }
+        super.onMeasure(largeur, hauteur);
     }
 
     private TextView bouton(String signe, String description) {
@@ -471,6 +504,7 @@ final class Lecture extends FrameLayout {
         if (k.equals(dockCle)) return;
         dockCle = k;
         dock.removeAllViews();
+        if (dock.getParent() instanceof ScrollView) ((ScrollView) dock.getParent()).scrollTo(0, 0);
         compte = retourVers = refus = null;
         barreAttente = null;
         dock.setVisibility(View.VISIBLE);
@@ -602,7 +636,7 @@ final class Lecture extends FrameLayout {
         LinearLayout r = Ui.rangee(app);
         r.setPadding(0, Ui.dp(app, 12), 0, 0);
         Button jouer = Ui.bouton(app, "Jouer", true, v -> lancerEpreuve(false));
-        Button des = Ui.bouton(app, "Les dés · " + etat.chance + " %", false, v -> lancerEpreuve(true));
+        Button des = Ui.bouton(app, "Les dés · " + etat.chance + "\u00a0%", false, v -> lancerEpreuve(true));
         des.setContentDescription("Laisser faire les dés : " + etat.chance + " pour cent de chance");
         for (Button b : new Button[]{jouer, des}) {
             b.setEnabled(!bloque);

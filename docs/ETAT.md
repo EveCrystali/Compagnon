@@ -27,7 +27,7 @@ Dernière mise à jour : 27 novembre 2026.
 
 1. **Présence de Pilou hors campagnes** : petits mots rares et justes, mémoire de ce qu'on a vécu,
    complicité qui grandit, sur PC et téléphone, sans jamais spammer.
-2. **Test de jeu complet** : parcours entiers rejoués par le moteur des deux côtés, synchronisation
+2. **Test de jeu complet** (branche `test-jeu`, voir `TEST-JEU.md`) : parcours entiers rejoués par le moteur des deux côtés, synchronisation
    entre appareils, revue des captures de chaque écran.
 3. **Vidéo de promo** avec les campagnes. Il faut tourner sur le PC d'Antoine
    (`outils/tourner-ecran-gauche.ps1`) puis monter (scripts dans l'historique : cartons, caméra qui

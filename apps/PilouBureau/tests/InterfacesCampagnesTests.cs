@@ -80,6 +80,26 @@ public class InterfacesCampagnesTests(ITestOutputHelper sortie)
         }
     }
 
+    // La ligne de la bulle pendant chaque attente réelle : courte, et l'heure de retour jamais coupée.
+    [Fact]
+    public void La_ligne_de_la_bulle_garde_toujours_l_heure_de_retour()
+    {
+        long fin = new DateTimeOffset(2026, 11, 27, 15, 40, 0, TimeSpan.Zero).ToUnixTimeMilliseconds();
+        int max = 0;
+        foreach (var id in ParcoursTests.Ids)
+            foreach (var n in Charger(id)!.Noeuds.Values.Where(n => n.Type == "attente"))
+            {
+                var l = Aventure.LigneBulle(new Campagnes.Etat { Phase = Phase.Attente, Pendant = n.Pendant, Fin = fin, T = fin - 600_000 });
+                max = Math.Max(max, l.Length);
+                Assert.True(l.Length <= Aventure.LongueurLigneBulle, $"{n.Id} : « {l} »");
+                Assert.Contains(" · retour vers ", l);
+                Assert.StartsWith("⚑ ", l);
+            }
+        var repos = Aventure.LigneBulle(new Campagnes.Etat { Phase = Phase.Repos, Pendant = "Pilou se repose", Fin = fin });
+        Assert.StartsWith("⚑ Pilou se repose · jusqu'à ", repos);
+        sortie.WriteLine($"ligne de bulle la plus longue : {max} caractères");
+    }
+
     // --essai=campagne:<id> (FenetreCampagne.EssaiCampagne) : même politique, un message ou une décision par pas, au plus
     // 600 pas. Chaque campagne doit y arriver à une fin.
     [Theory]

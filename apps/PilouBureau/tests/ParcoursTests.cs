@@ -324,6 +324,14 @@ public class ParcoursTests(ITestOutputHelper sortie)
             if (!r.Fins.ContainsKey(f.Id)) defauts.Add($"fin {f.Id} jamais atteinte");
         foreach (var p in b.Rejoues)
             foreach (var x in p.Defauts) defauts.Add($"moteur, marche {p.Graine} : {x}");
+        // Plafonds sur chaque marche, échecs et reprises compris (on ne « farme » pas une récompense en échouant).
+        foreach (var m in r.Toutes.Where(m => m.Fin != ""))
+        {
+            if (m.Po > 600 || m.Xp > 300) defauts.Add($"marche {m.Graine} : {m.Po} po, {m.Xp} xp");
+            foreach (var g in m.Credits.Select(c.Noeud).Where(n => n!.Type != "fin").GroupBy(n => n!.Chapitre))
+                if (g.Sum(n => n!.Recompense.Po) > 40 || g.Sum(n => n!.Recompense.Xp) > 20)
+                    defauts.Add($"marche {m.Graine}, chapitre {g.Key} : {g.Sum(n => n!.Recompense.Po)} po, {g.Sum(n => n!.Recompense.Xp)} xp");
+        }
         // Le moteur a traversé tout ce que le simulateur annonçait pour les marches choisies.
         var rejouees = new HashSet<string>(r.Choisies.SelectMany(m => m.Aretes));
         foreach (var a in r.Aretes.Where(a => !rejouees.Contains(a))) defauts.Add($"arête {a} pas rejouée par le moteur");
@@ -442,12 +450,13 @@ public class ParcoursTests(ITestOutputHelper sortie)
         md.Append(Ci, $"| Échecs | {Mmm(finies.Select(m => (long)m.Echecs), x => x.ToString(Ci))} | — |\n");
         md.Append(Ci, $"| po | {Mmm(finies.Select(m => (long)m.Po), x => x.ToString(Ci))} | {Mmm(propres.Select(m => (long)m.Po), x => x.ToString(Ci))} |\n");
         md.Append(Ci, $"| xp | {Mmm(finies.Select(m => (long)m.Xp), x => x.ToString(Ci))} | {Mmm(propres.Select(m => (long)m.Xp), x => x.ToString(Ci))} |\n\n");
-        md.Append("| Fin | Issue | Marches | Rejouée par le moteur (graine : choix, attentes, temps, po/xp, octets) |\n|---|---|---|---|\n");
-        foreach (var (fin, k) in r.Fins.OrderByDescending(kv => kv.Value))
+        md.Append("| Fin | Issue | Joueur au hasard (part des marches) | Rejouée par le moteur (graine : choix, attentes, temps, po/xp, octets) |\n|---|---|---|---|\n");
+        var auHasard = finies.Where(m => m.Politique == 0).ToList();
+        foreach (var (fin, _) in r.Fins.OrderByDescending(kv => auHasard.Count(m => m.Fin == kv.Key)))
         {
             var p = b.Rejoues.FirstOrDefault(x => x.Fin == fin);
             string rejouee = p is null ? "—" : FormattableString.Invariant($"{p.Graine} : {p.Choix} choix, {p.Attentes} attentes, {H(p.Minutes)}, {p.Po}/{p.Xp}, {p.MaxOctets} o");
-            md.Append(FormattableString.Invariant($"| `{fin}` | {r.S.C.Noeud(fin)!.Issue} | {k} ({100.0 * k / finies.Count:0.0} %) | {rejouee} |\n"));
+            md.Append(FormattableString.Invariant($"| `{fin}` | {r.S.C.Noeud(fin)!.Issue} | {100.0 * auHasard.Count(m => m.Fin == fin) / Math.Max(1, auHasard.Count):0.0} % | {rejouee} |\n"));
         }
         md.Append('\n');
         File.WriteAllText(Path.Combine(dossier, $"parcours-{b.Id}.md"), md.ToString());
