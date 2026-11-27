@@ -351,6 +351,7 @@ public sealed partial class FenetrePilou
         if (_dernierNiveau > 0 && n > _dernierNiveau)
         {
             var ouvert = Ouvertures(_dernierNiveau, n);
+            Sons.Jouer(Son.Succes);
             Dire(ouvert.Count > 0 ? $"niveau {n} ! accès : {string.Join(", ", ouvert)}" : $"niveau {n} !", 5500);
             // Nouvelles rangées en boutique : une petite fenêtre « Voir en boutique ».
             if (PilouBureau.Boutique.Debloques(_dernierNiveau, n).Count > 0) MontrerRangees(_dernierNiveau, n);

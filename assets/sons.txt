@@ -1,0 +1,66 @@
+# Sons de Pilou (docs/SONS.md) : lu par Sons.cs, Sons.java et outils/sons/sons.py, qui en tirent les mêmes échantillons.
+# Une ligne par note : son | début (ms) | durée (ms) | fréquence (Hz, ou de>à pour un glissé) | onde | volume (0-100)
+# Ondes : tri (triangle 4 bits, la voix de Pilou), puls (impulsion 25 %, l'accompagnement), bruit (souffle doux).
+# Pour le bruit, la fréquence est la cadence du générateur de bruit (plus haut = plus clair).
+# Gamme : do majeur pentatonique (do ré mi sol la), rien au-dessus du ré 6 (1175 Hz).
+
+# Clic sur Pilou : un « pouic » qui monte puis se pose.
+caresse|0|60|587>880|tri|40
+caresse|55|70|880>784|tri|30
+
+# Petit mot : deux notes à peine posées.
+mot|0|70|784|tri|20
+mot|65|120|1047|tri|15
+
+# Ouverture de la fenêtre Aventure : arpège qui s'ouvre.
+aventure|0|80|392|tri|36
+aventure|75|80|523|tri|36
+aventure|150|80|659|tri|36
+aventure|225|220|784|tri|34
+aventure|0|380|131|puls|10
+
+# Choix validé dans une campagne.
+choix|0|55|659|tri|36
+choix|50|110|784|tri|34
+
+# Achat en boutique : la petite pièce.
+achat|0|50|880|tri|34
+achat|45|150|1175|tri|28
+
+# Pêche : ça mord ! un « bloup » et une éclaboussure.
+peche|0|70|330>659|tri|38
+peche|65|60|659|tri|28
+peche|0|90|6000>1500|bruit|8
+
+# Retour d'expédition : la petite chanson du retour à la maison.
+expedition|0|90|392|tri|36
+expedition|90|90|523|tri|36
+expedition|180|90|659|tri|36
+expedition|270|90|587|tri|34
+expedition|360|240|523|tri|34
+expedition|0|180|131|puls|9
+expedition|360|240|131|puls|9
+
+# Retour de campagne : une fanfare de poche.
+campagne|0|100|523|tri|36
+campagne|100|100|784|tri|36
+campagne|200|100|659|tri|36
+campagne|300|300|1047|tri|30
+campagne|0|200|131|puls|10
+campagne|200|100|165|puls|9
+campagne|300|300|196|puls|9
+
+# Nouveau palier de complicité : chaud, un peu plus long.
+palier|0|120|523|tri|34
+palier|120|120|659|tri|34
+palier|240|120|784|tri|34
+palier|360|120|880|tri|32
+palier|480|340|784|tri|30
+palier|0|240|131|puls|9
+palier|240|240|165|puls|9
+palier|480|340|196|puls|9
+
+# Récompense, succès : deux notes qui montent.
+succes|0|70|784|tri|36
+succes|70|190|1047|tri|30
+succes|70|190|196|puls|9

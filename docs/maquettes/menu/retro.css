@@ -1,0 +1,112 @@
+/* Maquettes du menu clic droit de Pilou (docs/AUDIT-MENU.md).
+   Reprend le gabarit de apps/PilouBureau/MenuRetro.xaml : cadre double biseauté, coins carrés, Consolas,
+   pointillés, curseur ► au survol, coche ✓. Couleurs de MenuRetro.cs / Bandeau.cs. Jamais de rouge ni de vert :
+   chaque état porte un signe (► survol, ✓ coché, ◉ / ○ choix, ☐ case vide, ⓘ information, ▸ sous-menu). */
+
+:root {
+  --fond: #151a2e; --texte: #e6ecf2; --pale: #adbac7; --eteint: #7d8796;
+  --survol-fond: #f69d50; --survol-texte: #151a2e;
+  --bord-ext: #0b0e1a; --bord-milieu: #6a5acd; --biseau-clair: #3a4270; --biseau-sombre: #0b0e1a;
+  --pointilles: #6a5acd; --coche: #6cb6ff; --titre: #9b8cff; --po: #f5d76e;
+  --page: #0e1220; --page-texte: #e6ecf2; --carte: #1f2540;
+}
+#jour:checked ~ .scene {
+  --fond: #fbf3e4; --texte: #1c2128; --pale: #57606a; --eteint: #767c84;
+  --survol-fond: #1f5fae; --survol-texte: #ffffff;
+  --bord-ext: #1c2128; --bord-milieu: #2f7ed8; --biseau-clair: #ffffff; --biseau-sombre: #d9c7a3;
+  --pointilles: #c86a1c; --coche: #1f5fae; --titre: #6a4fc8; --po: #a8650a;
+  --page: #efe6d2; --page-texte: #1c2128; --carte: #fffaf0;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: "Segoe UI", system-ui, sans-serif; }
+#jour { position: absolute; left: -999px; }
+.scene { background: var(--page); color: var(--page-texte); min-height: 100vh; padding: 16px; }
+.barre { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: baseline; margin-bottom: 14px; }
+.barre h1 { font-size: 18px; margin: 0; }
+.barre a { color: inherit; }
+.bascule { cursor: pointer; border: 2px solid var(--bord-milieu); padding: 2px 8px; font-size: 13px; }
+.bascule::before { content: "☾ nuit · cliquer pour le jour"; }
+#jour:checked ~ .scene .bascule::before { content: "☀ jour · cliquer pour la nuit"; }
+.note { max-width: 760px; font-size: 14px; line-height: 1.45; margin: 0 0 14px; }
+.cote { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+
+/* Le cadre : 2 px d'ombre, 2 px de couleur, biseau clair / sombre. */
+.menu, .sous {
+  list-style: none; margin: 0; padding: 3px 2px;
+  background: var(--fond); color: var(--texte);
+  font: 12.5px/1 Consolas, "Segoe UI Symbol", "Segoe UI Emoji", monospace;
+  border-top: 2px solid var(--biseau-clair); border-left: 2px solid var(--biseau-clair);
+  border-right: 2px solid var(--biseau-sombre); border-bottom: 2px solid var(--biseau-sombre);
+  outline: 2px solid var(--bord-milieu); box-shadow: 0 0 0 4px var(--bord-ext);
+  min-width: 250px; width: max-content; max-width: 420px;
+}
+.menu { margin: 4px; position: relative; }
+.sous { display: none; position: absolute; left: calc(100% + 4px); top: -5px; z-index: 5; }
+li { position: relative; }
+li:hover > .sous { display: block; }
+
+/* Une ligne : 22 px, curseur ► à gauche au survol, colonne d'icône, flèche ▸ à droite. */
+.menu li > span, .sous li > span {
+  display: flex; align-items: center; gap: 6px; min-height: 22px; padding: 3px 8px 3px 5px; cursor: default;
+  white-space: nowrap;
+}
+.menu li > span::before, .sous li > span::before { content: "►"; font-size: 8px; width: 8px; visibility: hidden; }
+li:not(.info):not(.titre):hover > span { background: var(--survol-fond); color: var(--survol-texte); }
+li:not(.info):not(.titre):hover > span::before { visibility: visible; }
+.ic { display: inline-block; width: 16px; text-align: center; }
+.ic:empty::before { content: ""; }
+.flex { flex: 1; }
+.sub > span::after { content: "▸"; margin-left: 14px; }
+
+/* États : chacun a son signe. */
+.on > span .ic::before { content: "✓"; color: var(--coche); font-weight: bold; }
+.off > span .ic::before { content: "☐"; color: var(--pale); }
+.r-on > span .ic::before { content: "◉"; color: var(--coche); }
+.r-off > span .ic::before { content: "○"; color: var(--pale); }
+li:hover > span .ic::before { color: inherit; }
+.info > span { color: var(--eteint); font-style: italic; }
+.info > span::before { content: "ⓘ"; visibility: visible; font-size: 11px; font-style: normal; }
+.titre > span { color: var(--titre); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; min-height: 18px; padding-top: 6px; }
+.titre > span::before { content: ""; width: 0; }
+.titre > span::after { content: ""; flex: 1; border-top: 2px dotted var(--pointilles); margin-left: 6px; }
+.sep { height: 2px; margin: 4px 8px; background: repeating-linear-gradient(90deg, var(--pointilles) 0 2px, transparent 2px 4px); }
+.moment > span { font-weight: 600; }
+.moment > span .ic { color: var(--survol-fond); }
+li.moment:hover > span .ic { color: inherit; }
+
+/* Le bandeau (niveau, XP, po), comme Bandeau.cs en version compacte. */
+.bandeau > span { padding: 4px; }
+.bandeau > span::before { display: none; }
+.bd { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 12px 6px 10px; border: 2px solid #6a5acd; background: #151a2e; color: #adbac7; }
+li.bandeau:hover > span { background: transparent; }
+li.bandeau:hover .bd { outline: 2px solid var(--survol-fond); }
+.bd b { font: bold 17px Consolas, monospace; color: #f69d50; }
+.bd i { font-style: normal; font-size: 11px; display: block; }
+.jauge { height: 6px; background: #2d333b; margin: 3px 0; width: 150px; }
+.jauge::after { content: ""; display: block; width: 62%; height: 100%; background: #6cb6ff; }
+.bd .po { margin-left: auto; font: bold 12px Consolas, monospace; color: #f5d76e; }
+
+/* B : la rangée de cases. */
+.rangee > span { padding: 4px 6px; gap: 4px; }
+.rangee > span::before { display: none; }
+li.rangee:hover > span { background: transparent; }
+.case {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; width: 54px; padding: 6px 2px 4px;
+  border: 2px solid var(--bord-milieu); font-size: 10.5px; color: var(--texte);
+}
+.case em { font-style: normal; font-size: 18px; line-height: 1; }
+.case:hover { background: var(--survol-fond); color: var(--survol-texte); border-color: var(--survol-texte); }
+
+/* Index : les quatre menus côte à côte. */
+.carte { background: var(--carte); padding: 10px 12px 14px; border: 2px solid var(--bord-milieu); }
+.carte h2 { font-size: 15px; margin: 0 0 6px; }
+.carte p { font-size: 13px; margin: 0 0 8px; max-width: 300px; }
+.carte a { color: inherit; }
+
+@media (max-width: 700px) {
+  .sous { position: static; display: none; margin: 2px 0 4px 16px; }
+  .menu, .sous { max-width: 100%; }
+  .menu li > span, .sous li > span { white-space: normal; }
+}

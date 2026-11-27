@@ -301,6 +301,7 @@ public sealed partial class FenetrePilou
 
         if (mord && _alerte is null)
         {
+            Sons.Jouer(Son.Peche);
             _alerte = new Pixels(Pixels.Texte("!"), new Brush?[] { null, OrangeJeu }, ContourXp, 4) { IsHitTestVisible = false };
             _jeu.Children.Add(_alerte);
             Eclabousser(new Point(g.Attache.X, g.Eau.Y), t);
