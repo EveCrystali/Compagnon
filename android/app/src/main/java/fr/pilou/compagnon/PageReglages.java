@@ -257,6 +257,7 @@ final class PageReglages extends Page {
                 + " · id " + Prefs.de(app).getString("dernierId", "-")
                 + "\nPC : " + e.resume(maintenant) + " · sessions " + e.sessions.size()
                 + "\ngains en attente : " + Gains.enAttente(app) + " xp"
+                + "\ncampagnes : " + CampagnesTel.diagnostic(app)
                 + "\nflottant : " + Prefs.bulle(app) + " · permission " + Settings.canDrawOverlays(app) + " · caché " + Veille.cache(app)
                 + "\nnotifications : " + app.notificationsPermises();
     }

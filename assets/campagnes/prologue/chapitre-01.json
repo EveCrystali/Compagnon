@@ -1,0 +1,116 @@
+{
+  "chapitre": "ch1",
+  "noeuds": {
+    "p1-lettre": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Devant la porte",
+      "decor": "seuil",
+      "humeur": "joie",
+      "texte": [
+        "Ça marche ? Tu me lis ? Bon. Alors voilà : c'est ma toute première lettre. J'ai écrit « lettre » en haut, pour être sûr. Je t'écris parce que je pars à l'aventure, et qu'un aventurier sérieux prévient toujours quelqu'un avant de partir.",
+        "Une petite aventure, hein. La colline d'en face. Il paraît que de là-haut, on voit où le soleil va se coucher. Je veux vérifier qu'il a un vrai lit, avec une couette. Ça me tracasse depuis mardi."
+      ],
+      "suite": "p1-sac"
+    },
+    "p1-sac": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Premier problème : mon sac. Le goûter est déjà dedans, il reste de la place pour une seule chose. J'hésite depuis une heure et je m'énerve tout seul. Alors c'est toi qui choisis. C'est comme ça que ça marche, nous deux : je raconte, tu décides, et après je dis que c'était mon idée."
+      ],
+      "options": [
+        { "id": "lampe", "libelle": "Prends la lampe de poche", "vers": "p1-jardin", "effets": [ { "objet": "lampe", "donne": true } ] },
+        { "id": "corde", "libelle": "Prends la corde à sauter", "vers": "p1-jardin", "effets": [ { "objet": "corde", "donne": true } ] },
+        { "id": "gouter", "libelle": "Prends un deuxième goûter", "vers": "p1-jardin", "effets": [ { "var": "elan", "plus": 1 } ] }
+      ]
+    },
+    "p1-jardin": {
+      "type": "attente",
+      "lieu": "Le jardin",
+      "decor": "jardin",
+      "humeur": "joie",
+      "texte": [
+        "Excellent choix. C'était mon idée. Maintenant, écoute bien, c'est le plus important : quand je pars, je pars pour de vrai. Traverser le jardin me prend une minute. Une vraie minute, avec soixante secondes dedans. Pendant ce temps, pas de nouvelles : je marche. Pose-moi là, fais ta vie, je te fais signe en arrivant. J'y vais !"
+      ],
+      "duree_min": 1,
+      "pendant": "Pilou traverse le jardin",
+      "tenue": "marche",
+      "suite": "p1-mare"
+    },
+    "p1-mare": {
+      "type": "choix",
+      "lieu": "La mare",
+      "decor": "mare",
+      "humeur": "peur",
+      "texte": [
+        "Me revoilà ! Tu vois : je reviens toujours. Le jardin est traversé. J'ai croisé un escargot qui allait dans l'autre sens. On s'est salués, entre voyageurs. Il m'a souhaité bonne route. Enfin, il a remué une antenne. Je traduis.",
+        "Devant moi, la mare. Dessus, trois nénuphars. Dessous, je préfère ne pas savoir. La colline est juste de l'autre côté. Je passe comment ? Réfléchis bien : c'est moi qui me mouille."
+      ],
+      "options": [
+        { "id": "saute", "libelle": "Saute de nénuphar en nénuphar", "vers": "p1-saut" },
+        { "id": "tour", "libelle": "Fais le tour, tranquillement", "vers": "p1-tour" },
+        { "id": "pont", "libelle": "Lance la corde et fais un pont", "vers": "p1-pont", "si": { "objet": "corde" },
+          "effets": [ { "objet": "corde", "donne": false }, { "drapeau": "ami-canard" } ] }
+      ]
+    },
+    "p1-saut": {
+      "type": "epreuve",
+      "humeur": "determine",
+      "texte": [
+        "D'accord. Je recule. Je prends mon élan. Je rentre le ventre, on ne sait jamais. Trois nénuphars, trois bonds : c'est une question de réflexes. Enfin, des tiens, surtout. Tu me dis quand sauter ?"
+      ],
+      "jeu": "reflexe",
+      "difficulte": 1,
+      "bonus": "elan",
+      "reussite": "p1-saut-ok",
+      "echec": "p1-plouf"
+    },
+    "p1-saut-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Hop. Hop. HOP ! Tu as vu ça ? Non, tu n'as pas vu, mais crois-moi sur parole : c'était gracieux. Le dernier nénuphar a un peu tangué, une grenouille a applaudi. Enfin, elle a fait « coâ ». Je le prends comme un applaudissement."
+      ],
+      "suite": "p1-rive"
+    },
+    "p1-plouf": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "mouille" } ],
+      "texte": [
+        "Hop. Hop. Plouf. Bon. Le troisième nénuphar n'était pas d'accord. Rien de grave : la mare m'arrive au menton, et j'ai le menton très bas. Je ressors de l'autre côté avec une lentille d'eau sur la tête. La grenouille dit que ça me va bien. Je crois qu'elle se moque."
+      ],
+      "suite": "p1-rive"
+    },
+    "p1-tour": {
+      "type": "attente",
+      "humeur": "malice",
+      "texte": [
+        "Sage décision. Les héros des livres foncent tout droit, et après ils éternuent pendant trois chapitres. Moi, je contourne. C'est plus long : deux minutes, à peu près. Je compte les roseaux pour passer le temps. À tout à l'heure !"
+      ],
+      "duree_min": 2,
+      "pendant": "Pilou contourne la mare",
+      "tenue": "marche",
+      "suite": "p1-rive"
+    },
+    "p1-pont": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai lancé la corde vers l'autre rive. Un canard l'a attrapée au vol. On a discuté. Il tient un bout, je traverse, et en échange il garde la corde pour sauter avec ses cousins. C'est honnête. Me voilà au sec, sans corde, mais avec un ami canard. On ne peut pas tout avoir."
+      ],
+      "suite": "p1-rive"
+    },
+    "p1-rive": {
+      "type": "recit",
+      "lieu": "L'autre rive",
+      "humeur": "joie",
+      "recompense": { "po": 5, "xp": 3 },
+      "texte": [
+        "De l'autre côté ! Et regarde : chaque fois que je termine une étape, je trouve quelque chose. Là, cinq pièces sous un caillou. Je ne sais pas qui range ses pièces sous les cailloux, mais merci. Elles iront dans ta bourse. La colline est juste devant. Elle a l'air plus haute que depuis la maison."
+      ],
+      "suite": "p2-pied"
+    }
+  }
+}

@@ -38,6 +38,8 @@
     <!-- Sprites redessinés pour le rendu fin (grille 96 × 112) ; les autres sont agrandis à la demande. -->
     <EmbeddedResource Include="..\..\assets\sprites2x\*.txt" LogicalName="sprite2x:%(Filename)" />
     <EmbeddedResource Include="..\..\assets\*.txt" LogicalName="pilou:%(Filename)%(Extension)" />
+    <!-- Campagnes (docs/CAMPAGNES.md) : assets/campagnes/<id>/*.json, communes avec l'app Android. -->
+    <EmbeddedResource Include="..\..\assets\campagnes\**\*.json" LogicalName="campagne:%(RecursiveDir)%(Filename)%(Extension)" />
     <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
     <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
     <!-- Icône de Pilou (16 à 48 px), tirée de son rendu (Icone.cs) : zone de notification. -->

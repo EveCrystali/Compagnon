@@ -23,6 +23,7 @@ public sealed class Profil
     // Gains du téléphone déjà crédités (identifiants) : un message relu n'est jamais compté deux fois.
     public List<string> Recus { get; set; } = new();
     // XP gagnée sur le téléphone (atelier), créditée par chaque PC du groupe : comptée au maximum, pas en somme.
+    // L'XP des campagnes y va aussi (Campagnes.Crediter) : même règle, chaque PC verse les mêmes récompenses.
     public int XpTelephone { get; set; }
     // Pièces d'or, inventaire et équipement (boutique), quêtes de cet appareil.
     public Bourse Bourse { get; set; } = new();
@@ -47,6 +48,9 @@ public sealed class Profil
     public EtatExpedition Expedition { get; set; } = new();
     // Défense du bureau : record, plus haute vague, gains du jour (plafonds), propres à ce PC.
     public EtatDefense Defense { get; set; } = new();
+    // Campagnes (Campagnes.cs) : partie en cours (journal depuis le dernier check-point), parties suspendues,
+    // historique des campagnes finies, fil des messages. Le journal et l'historique sont partagés avec le groupe.
+    public Campagnes.Carnet CarnetCampagnes { get; set; } = new();
     public DateTime MisAJour { get; set; } = DateTime.Now;
     // Profil de démonstration (tournage, Tournage.ProfilDemo) : il vit en mémoire et ne s'écrit jamais.
     [JsonIgnore]
