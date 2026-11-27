@@ -1,0 +1,40 @@
+# marque d'humeur, dessin fin
+id: marque-triste
+slot: visage
+ancre: yeux
+decalage: -18 14
+duree: 420
+palette: a=#1f4f8a b=#b4dbff c=#ffffff
+images:
+..aa..
+.abba.
+.abba.
+abcbba
+abbbba
+.aaaa.
+......
+......
+......
+......
+---
+......
+......
+..aa..
+.abba.
+.abba.
+abcbba
+abbbba
+.aaaa.
+......
+......
+---
+......
+......
+......
+......
+..aa..
+.abba.
+.abba.
+abcbba
+abbbba
+.aaaa.

@@ -1,4 +1,4 @@
-# Tenues d'activité : identifiant (Pose.Tenue) -> sprites portés.
+# Tenues d'activité et de voyage : identifiant (Pose.Tenue) -> sprites portés.
 code: tenue-code-lunettes tenue-code-clavier
 tableur: tenue-tableur-lunettes tenue-tableur-calculatrice
 jeu-mmo: tenue-mmo-epee tenue-mmo-bouclier
@@ -12,3 +12,11 @@ nuit: tenue-nuit-bonnet
 mail: tenue-mail-casquette tenue-mail-enveloppe
 texte: tenue-texte-plume
 diaporama: tenue-diaporama-pointeur
+voyage-marche: voyage-baluchon voyage-baton
+voyage-course: voyage-bandeau voyage-foulee
+voyage-bateau: voyage-barque voyage-rame voyage-vagues
+voyage-grimpe: voyage-corde voyage-prises
+voyage-nage: voyage-bouee voyage-brasse voyage-vagues
+voyage-nuit: tenue-nuit-bonnet voyage-couverture voyage-lune
+voyage-cache: voyage-buisson
+voyage-attend: voyage-montre

@@ -1,0 +1,14 @@
+# œil d'humeur (campagnes)
+id: oeil-malice-d
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=@contour c=#ffffff
+images:
+...aaa
+aaa...
+bbbbbb
+aaaaaa
+aaacca
+.aaaa.
+......

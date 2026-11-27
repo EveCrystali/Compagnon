@@ -140,7 +140,7 @@ public sealed partial class FenetrePilou
         var motifCanne = dessin?.Motif ?? MotifCanne;
         _reperesCanne = Placement.ReperesCanne(motifCanne);
         _largeurCanne = motifCanne.GetLength(1);
-        double tailleCanne = _tailleCanne = dessin is null ? 4 : Placement.TailleCanne;
+        double tailleCanne = _tailleCanne = dessin is null ? 4 : Finesse.Net(Placement.TailleCanne);
         var g = Placement.Peche(_aGauche, GeoPilou, _largeurCanne, _reperesCanne, tailleCanne);
         _geoPeche = g;
         _eau = new Pixels(Eau(t), new Brush?[] { null, EauBase, EauClaire, EauSombre }, null, 4) { IsHitTestVisible = false };
@@ -149,15 +149,18 @@ public sealed partial class FenetrePilou
         _jeu.Children.Add(_eau);
 
         var motif = g.CanneMiroir ? Miroir(motifCanne) : motifCanne;
-        _canne = dessin is { } d ? new Pixels(motif, d.Palette, null, tailleCanne) : new Pixels(motif, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, tailleCanne);
+        _canne = dessin is { } d ? new Pixels(motif, d.Palette, null, tailleCanne).Affiner("canne", 0, g.CanneMiroir)
+            : new Pixels(motif, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, tailleCanne);
         _canne.IsHitTestVisible = false;
         _jeu.Children.Add(_canne);
 
         var bouchon = Pixels.DeSprite("bouchon");
-        _bouchon = bouchon is { } b ? new Pixels(b.Motif, b.Palette, null, 1.6) : new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
+        double tailleBouchon = Finesse.Net(1.6);
+        _bouchon = bouchon is { } b ? new Pixels(b.Motif, b.Palette, null, tailleBouchon).Affiner("bouchon")
+            : new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
         // Le fil s'attache en haut, au milieu du bouchon.
         int bw = bouchon?.Motif.GetLength(1) ?? MotifBouchon.GetLength(1);
-        double tb = bouchon is null ? 3 : 1.6;
+        double tb = bouchon is null ? 3 : tailleBouchon;
         _attacheBouchonX = (bw / 2.0 + 1) * tb;
         _attacheBouchonY = tb;
         _jeu.Children.Add(_bouchon);
@@ -241,18 +244,20 @@ public sealed partial class FenetrePilou
     private bool MontrerTropheeHd(string id, Rarete r)
     {
         if (Pixels.DeSprite(id) is not { } d) return false;
-        const double taille = 1.5;
+        double taille = Finesse.Net(1.5);
         int sw = d.Motif.GetLength(1), sh = d.Motif.GetLength(0);
         double w = (sw + 2) * taille, h = (sh + 2) * taille;
         double x = Math.Round((TeteX - w / 2) / 3) * 3, y = Math.Max(4, TeteY - 30 - h);
         if (Cadre(r, (sw + 1) / 2, (sh + 1) / 2) is { } c)
         {
-            _cadre = new Pixels(c.Motif, c.Palette, null, 3) { IsHitTestVisible = false };
-            Canvas.SetLeft(_cadre, x - 2 * 3);
-            Canvas.SetTop(_cadre, y - 2 * 3);
+            // Le cadre a des pixels deux fois plus gros que le trophée (3 pour 1,5 au dessin d'origine).
+            double tc = 2 * taille;
+            _cadre = new Pixels(c.Motif, c.Palette, null, tc) { IsHitTestVisible = false };
+            Canvas.SetLeft(_cadre, x - 2 * tc);
+            Canvas.SetTop(_cadre, y - 2 * tc);
             _jeu.Children.Add(_cadre);
         }
-        _trophee = new Pixels(d.Motif, d.Palette, null, taille) { IsHitTestVisible = false };
+        _trophee = new Pixels(d.Motif, d.Palette, null, taille) { IsHitTestVisible = false }.Affiner(id);
         Canvas.SetLeft(_trophee, x);
         Canvas.SetTop(_trophee, y);
         _jeu.Children.Add(_trophee);
@@ -360,14 +365,15 @@ public sealed partial class FenetrePilou
         // marmite, qui débordait sous le sol, et seule la largeur du petit dessin de repli servait au miroir).
         var dFeu = Pixels.DeSprite("feu");
         var dMarmite = Pixels.DeSprite("marmite");
-        double tf = dFeu is null ? 4 : 1.6, tm = dMarmite is null ? 4 : 2.2;
+        double tf = dFeu is null ? 4 : Finesse.Net(1.6), tm = dMarmite is null ? 4 : Finesse.Net(2.2);
         var mFeu = dFeu?.Motif ?? MotifFeu1;
         var mMarmite = dMarmite?.Motif ?? MotifMarmite;
         var (hautFeu, basFeu) = Placement.Rangs(mFeu);
         var (_, basMarmite) = Placement.Rangs(mMarmite);
-        _feu = dFeu is { } f ? new Pixels(f.Motif, f.Palette, null, tf) : new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, tf);
+        _feu = dFeu is { } f ? new Pixels(f.Motif, f.Palette, null, tf).Affiner("feu") : new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, tf);
         _feu.IsHitTestVisible = false;
-        _marmite = dMarmite is { } m ? new Pixels(m.Motif, m.Palette, null, tm) : new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, tm);
+        _marmite = dMarmite is { } m ? new Pixels(m.Motif, m.Palette, null, tm).Affiner("marmite")
+            : new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, tm);
         var (pm, pf) = Placement.Cuisine(_aGauche, _marmite.Width, (basMarmite + 2) * tm, _feu.Width, (hautFeu + 1) * tf, (basFeu + 2) * tf);
         _posMarmite = new Point(pm.X, pm.Y);
         _tailleMarmite = new Size(_marmite.Width, _marmite.Height);

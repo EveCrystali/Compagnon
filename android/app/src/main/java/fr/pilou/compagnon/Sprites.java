@@ -12,6 +12,8 @@ import java.util.Map;
 /**
  * Banque de sprites partagée avec le PC : assets/ du dépôt, embarqué comme ressources Java (voir app/build.gradle) :
  * /index.txt, /sprites/&lt;id&gt;.txt, /teintes.txt, /tenues.txt, /plats.txt. Format : docs/SPRITES.md.
+ * Rendu fin (grille 96 × 112) : /index2x.txt et /sprites2x/&lt;id&gt;.txt pour les sprites redessinés ; les autres sont
+ * agrandis à la demande (agrandir, même règle que le PC et que outils/sprites/rendu.py).
  */
 public final class Sprites {
     public static final class Sprite {
@@ -21,6 +23,30 @@ public final class Sprites {
         /** Couleur par lettre : #rrggbb(aa) ou @contour / @ombre / @base / @clair. */
         public final Map<Character, String> palette = new HashMap<>();
         public final List<String[]> images = new ArrayList<>();
+        /** Rendu fin : faux si ce sprite 2× vient de l'agrandissement automatique d'un sprite 1×. */
+        public boolean natif = true;
+        private int[] compilee;
+
+        /** Palette prête à peindre, par lettre : ARGB ; 0 : rien ; 1 à 4 : contour, ombre, base, clair de la teinte de
+         *  Pilou. Calculée une fois (le rendu ne relit pas les codes à chaque pixel). */
+        public int[] compilee() {
+            int[] c = compilee;
+            if (c != null) return c;
+            c = new int[128];
+            for (Map.Entry<Character, String> e : palette.entrySet()) {
+                char ch = e.getKey();
+                if (ch >= 128) continue;
+                switch (e.getValue()) {
+                    case "@contour": c[ch] = 1; break;
+                    case "@ombre": c[ch] = 2; break;
+                    case "@base": c[ch] = 3; break;
+                    case "@clair": c[ch] = 4; break;
+                    default: c[ch] = couleur(e.getValue());
+                }
+            }
+            compilee = c;
+            return c;
+        }
 
         public int w() {
             if (images.isEmpty()) return 0;
@@ -83,6 +109,115 @@ public final class Sprites {
         return s;
     }
 
+    // ---- Agrandissement automatique (rendu fin) : même règle que rendu.agrandir (Python) et Sprite.Agrandi (C#).
+
+    /** Clarté d'une couleur de palette : (r + v + b + 1) × (256 − alpha) ; vide : 256. Les références à la teinte de
+     *  Pilou prennent les valeurs du bleu, pour que l'agrandissement ne dépende pas de la teinte portée. */
+    static int clarte(String code) {
+        if (code == null) return 256;
+        switch (code) {
+            case "@contour": code = "#1f4f8a"; break;
+            case "@ombre": code = "#4a8fdc"; break;
+            case "@base": code = "#6cb6ff"; break;
+            case "@clair": code = "#b4dbff"; break;
+            default: break;
+        }
+        if (code.length() < 7 || code.charAt(0) != '#') return 256;
+        int c = couleur(code);
+        return ((c >> 16 & 0xff) + (c >> 8 & 0xff) + (c & 0xff) + 1) * (256 - (c >>> 24));
+    }
+
+    private static char src(String[] im, int x, int y) {
+        return y >= 0 && y < im.length && x >= 0 && x < im[y].length() ? im[y].charAt(x) : '.';
+    }
+
+    /**
+     * Image deux fois plus grande, mêmes lettres. Règle « MMPX » (McGuire et Gagiu, 2021) : chaque pixel devient
+     * 2 × 2 pixels pris parmi lui-même et ses voisins, sans flou ni nouvelle couleur ; les cernes sombres d'un pixel
+     * sont gardés, les diagonales et les pentes 2:1 lissées. Le vide (« . », hors de l'image) compte comme une couleur.
+     */
+    static String[] agrandirImage(String[] im, Map<Character, String> palette) {
+        int h = im.length, w = 0;
+        for (String l : im) w = Math.max(w, l.length());
+        int[] cl = new int[128];
+        java.util.Arrays.fill(cl, 256);
+        for (Map.Entry<Character, String> e : palette.entrySet())
+            if (e.getKey() < 128) cl[e.getKey()] = clarte(e.getValue());
+        String[] sortie = new String[h * 2];
+        char[] haut = new char[w * 2], bas = new char[w * 2];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                char A = src(im, x - 1, y - 1), B = src(im, x, y - 1), C = src(im, x + 1, y - 1);
+                char D = src(im, x - 1, y), E = src(im, x, y), F = src(im, x + 1, y);
+                char G = src(im, x - 1, y + 1), H = src(im, x, y + 1), I = src(im, x + 1, y + 1);
+                char J = E, K = E, L = E, M = E;
+                if (!(A == E && B == E && C == E && D == E && F == E && G == E && H == E && I == E)) {
+                    char P = src(im, x, y - 2), S = src(im, x, y + 2), Q = src(im, x - 2, y), R = src(im, x + 2, y);
+                    int Bl = cl[B & 127], Dl = cl[D & 127], El = cl[E & 127], Fl = cl[F & 127], Hl = cl[H & 127];
+                    // Pentes 1:1 (coins arrondis, diagonales lissées).
+                    if (D == B && D != H && D != F && (El >= Dl || E == A) && (E == A || E == C || E == G) && (El < Dl || A != D || E != P || E != Q)) J = D;
+                    if (B == F && B != D && B != H && (El >= Bl || E == C) && (E == A || E == C || E == I) && (El < Bl || C != B || E != P || E != R)) K = B;
+                    if (H == D && H != F && H != B && (El >= Hl || E == G) && (E == A || E == G || E == I) && (El < Hl || G != H || E != S || E != Q)) L = H;
+                    if (F == H && F != B && F != D && (El >= Fl || E == I) && (E == C || E == G || E == I) && (El < Fl || I != H || E != R || E != S)) M = F;
+                    // Croisements.
+                    if (E != F && E == C && E == I && E == D && E == Q && F == B && F == H && F != src(im, x + 3, y)) K = M = F;
+                    if (E != D && E == A && E == G && E == F && E == R && D == B && D == H && D != src(im, x - 3, y)) J = L = D;
+                    if (E != H && E == G && E == I && E == B && E == P && H == D && H == F && H != src(im, x, y + 3)) L = M = H;
+                    if (E != B && E == A && E == C && E == H && E == S && B == D && B == F && B != src(im, x, y - 3)) J = K = B;
+                    if (Bl < El && E == G && E == H && E == I && E == S && E != A && E != D && E != C && E != F) J = K = B;
+                    if (Hl < El && E == A && E == B && E == C && E == P && E != D && E != G && E != I && E != F) L = M = H;
+                    if (Fl < El && E == A && E == D && E == G && E == Q && E != B && E != C && E != I && E != H) K = M = F;
+                    if (Dl < El && E == C && E == F && E == I && E == R && E != B && E != A && E != G && E != H) J = L = D;
+                    // Pentes 2:1.
+                    if (H != B) {
+                        if (H != A && H != E && H != C) {
+                            if (H == G && H == F && H == R && H != D && H != src(im, x + 2, y - 1)) L = M;
+                            if (H == I && H == D && H == Q && H != F && H != src(im, x - 2, y - 1)) M = L;
+                        }
+                        if (B != I && B != G && B != E) {
+                            if (B == A && B == F && B == R && B != D && B != src(im, x + 2, y + 1)) J = K;
+                            if (B == C && B == D && B == Q && B != F && B != src(im, x - 2, y + 1)) K = J;
+                        }
+                    }
+                    if (F != D) {
+                        if (D != I && D != E && D != C) {
+                            if (D == A && D == H && D == S && D != B && D != src(im, x + 1, y + 2)) J = L;
+                            if (D == G && D == B && D == P && D != H && D != src(im, x + 1, y - 2)) L = J;
+                        }
+                        if (F != E && F != A && F != G) {
+                            if (F == C && F == H && F == S && F != B && F != src(im, x - 1, y + 2)) K = M;
+                            if (F == I && F == B && F == P && F != H && F != src(im, x - 1, y - 2)) M = K;
+                        }
+                    }
+                }
+                haut[x * 2] = J;
+                haut[x * 2 + 1] = K;
+                bas[x * 2] = L;
+                bas[x * 2 + 1] = M;
+            }
+            sortie[y * 2] = new String(haut);
+            sortie[y * 2 + 1] = new String(bas);
+        }
+        return sortie;
+    }
+
+    /** Sprite deux fois plus fin, mêmes couleurs, mêmes ancrages (× 2). */
+    public static Sprite agrandir(Sprite s) {
+        Sprite g = new Sprite();
+        g.id = s.id;
+        g.slot = s.slot;
+        g.ancre = s.ancre;
+        g.dx = s.dx * 2;
+        g.dy = s.dy * 2;
+        g.duree = s.duree;
+        g.derriere = s.derriere;
+        g.coiffe = s.coiffe;
+        g.natif = false;
+        g.palette.putAll(s.palette);
+        for (String[] im : s.images) g.images.add(agrandirImage(im, s.palette));
+        return g;
+    }
+
     /** ARGB d'un code #rrggbb ou #rrggbbaa ; 0 = transparent ou inconnu. */
     public static int couleur(String code) {
         if (code == null || code.length() < 7 || code.charAt(0) != '#') return 0;
@@ -97,8 +232,34 @@ public final class Sprites {
         public final Map<String, String[]> tenues = new HashMap<>();
         public final Map<String, String> plats = new HashMap<>();
 
+        /** Sprites redessinés pour le rendu fin (assets/sprites2x). */
+        public final Map<String, Sprite> fins = new HashMap<>();
+        private final Map<String, Sprite> agrandis = new HashMap<>();
+
         public Sprite get(String id) {
             return id == null ? null : sprites.get(id);
+        }
+
+        /** Sprite du rendu fin : le dessin 2× s'il existe, sinon le sprite 1× agrandi (calculé une fois). */
+        public Sprite fin(String id) {
+            if (id == null) return null;
+            Sprite s = fins.get(id);
+            if (s != null) return s;
+            synchronized (agrandis) {
+                s = agrandis.get(id);
+                if (s == null) {
+                    Sprite petit = sprites.get(id);
+                    if (petit == null) return null;
+                    s = agrandir(petit);
+                    agrandis.put(id, s);
+                }
+                return s;
+            }
+        }
+
+        /** Sprite à l'échelle demandée (1 : grille 48 × 56 ; 2 : rendu fin). */
+        public Sprite get(String id, int echelle) {
+            return echelle == 2 ? fin(id) : get(id);
         }
 
         /** Sprite du plat d'une recette ; inventé : plat-invente ; brûlé : plat-rate. */
@@ -123,6 +284,11 @@ public final class Sprites {
             if (id.isEmpty() || id.startsWith("#")) continue;
             String t = ressource("/sprites/" + id + ".txt");
             if (!t.isEmpty()) b.sprites.put(id, lire(t, id));
+        }
+        for (String id : lignes(ressource("/index2x.txt"))) {
+            if (id.isEmpty() || id.startsWith("#")) continue;
+            String t = ressource("/sprites2x/" + id + ".txt");
+            if (!t.isEmpty()) b.fins.put(id, lire(t, id));
         }
         for (String[] l : table(ressource("/teintes.txt"))) {
             if (l.length != 5) continue;

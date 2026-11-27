@@ -1,0 +1,60 @@
+# Sac d'expédition (ensemble Explorateur)
+id: sac-explorateur
+slot: dos
+ancre: cou
+decalage: -46 -32
+couche: derriere
+palette: a=#1c2128 b=#f9c292 c=#d9803a d=#f69d50 e=#d2884b f=#dac8ae g=#c4a77d h=#f1e5ce i=#e8d5b0 j=#b8c4d2 k=#8fbae9 l=#4a8fdc m=#beaf96 n=#8a6e4b o=#7a4b26 p=#bfaf9c
+images:
+..aabbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbccdbbbbbbbaa..
+..aaddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddaa..
+..aaddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddaa..
+..aaddddbccdddddddbccdddddddbccdddddddbccdddddddbccdddddddbccdddddddbccdddddddbccdddddddaa..
+..aadddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccdddddddaa..
+..aaddeddccdddedddeccdedddeddccdddedddeccdedddeddccdddedddeccdedddeddccdddedddeccdedddedaa..
+..aadddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccdddddddcccddddddaaa.
+..aaddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddaaaa
+..aaddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddffggggggggggggggggggffaa
+..aaddddddccddddddddccddddddddccddddddddccddddddddccddddddddccddddddggggggggggggggggggggggaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagghhhhhhhhhhhhhhhhhhggaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggiiiiiiiiiiiiiiiiiiggaa
+ffffffggggggffffffaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggggggggggggggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggggjjjjjjggggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggggjjjjjjggggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggggjjjjjjggggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggggjjjjjjggggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+gggggkkkkkkkkgggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggkllllllllkggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+ggggllllllllllggggaa..............................................aaggiiiiiiiiiiiiiiiiiiggaa
+gggkllllllllllkgggaa..............................................aaggmmmmmmmmmmmmmmmmmmggaa
+gggllllllllllllgggaa..............................................aaggffffffffffffffffffggaa
+gggllllllllllllgggaa..............................................aaggggggggggggggggggggggaa
+gggllllllllllllgggaa..............................................aaggggggggggggggggggggggaa
+gggllllllllllllgggaa..............................................aaggggggggggggggggggggggaa
+gggllllllllllllgggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+gggfllllllllllfgggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggllllllllllggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggfllllllllfggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+gggggfllllllfgggggaa..............................................aaggnnnnoooooooooonnnnggaa
+ggggggfllllfggggggaa..............................................aaggnnnnoooooooooonnnnggaa
+gggggggffffgggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggggggggggggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggggggggggggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggggggggggggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggggggggggggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+ggggggggggggggggggaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+aaaaaaaaaaaaaaaaaaaa..............................................aaggnnnnnnnnnnnnnnnnnnggaa
+aaaaaaaaaaaaaaaaaaa...............................................aaggnnppnnppnnppnnppnnggaa
+..................................................................aaggnnnnnnnnnnnnnnnnnnggaa
+..................................................................aaggnnnnnnnnnnnnnnnnnnggaa
+..................................................................aaggffffffffffffffffffggaa
+..................................................................aaggggggggggggggggggggggaa
+..................................................................aaggggggggggggggggggggggaa
+..................................................................aaggggggggggggggggggggggaa
+..................................................................aaaaaaaaaaaaaaaaaaaaaaaaaa
+...................................................................aaaaaaaaaaaaaaaaaaaaaaaa.
+............................................................................................
+............................................................................................
+............................................................................................
+............................................................................................

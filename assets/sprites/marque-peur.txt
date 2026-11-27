@@ -1,0 +1,19 @@
+# marque d'humeur (campagnes), posée sur l'ancre des yeux
+id: marque-peur
+slot: visage
+ancre: yeux
+decalage: 11 -4
+duree: 380
+palette: a=#1f4f8a b=#b4dbff
+images:
+.a.
+aba
+aba
+.a.
+...
+---
+...
+.a.
+aba
+aba
+.a.

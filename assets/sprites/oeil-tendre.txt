@@ -1,0 +1,14 @@
+# œil d'humeur (campagnes)
+id: oeil-tendre
+slot: visage
+ancre: aucun
+decalage: 0 0
+palette: a=@ombre b=@contour c=#1c2128 d=#ffffff
+images:
+......
+.aaaa.
+bbbbbb
+cddccc
+cddcdc
+cccccc
+.cccc.

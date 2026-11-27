@@ -1,0 +1,25 @@
+# œil gauche, dessin fin (le droit est son miroir)
+id: oeil-surpris
+slot: visage
+ancre: aucun
+decalage: 0 -6
+palette: a=#1c2128 b=#ffffff
+images:
+...aaaaaa...
+.aaaaaaaaaa.
+aaa......aaa
+aa........aa
+............
+............
+....aaaa....
+..aaaaaaaa..
+.aabbbbbbaa.
+.abbbbbbbba.
+aabbbaabbbaa
+aabbaaaabbaa
+aabbabaabbaa
+aabbbaabbbaa
+.abbbbbbbba.
+.aabbbbbbaa.
+..aaaaaaaa..
+....aaaa....

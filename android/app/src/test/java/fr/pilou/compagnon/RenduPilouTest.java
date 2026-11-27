@@ -2,6 +2,8 @@ package fr.pilou.compagnon;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -68,21 +70,130 @@ public class RenduPilouTest {
         return s.toString();
     }
 
+    static List<String[]> reference(String fichier) throws Exception {
+        List<String[]> l = new ArrayList<>();
+        for (String ligne : Files.readAllLines(new File(racine(), "outils/sprites/" + fichier).toPath(), StandardCharsets.UTF_8)) {
+            if (ligne.startsWith("#") || ligne.trim().isEmpty()) continue;
+            String[] p = ligne.split("\\|");
+            l.add(new String[]{p[0].trim(), p[1].trim()});
+        }
+        return l;
+    }
+
+    private static void memesPixels(String fichier, int echelle) throws Exception {
+        Sprites.Banque b = Sprites.banque();
+        List<String> ecarts = new ArrayList<>();
+        List<String[]> poses = reference(fichier);
+        RenduPilou.Tampon tampon = new RenduPilou.Tampon();
+        for (String[] p : poses) {
+            if (!empreinte(RenduPilou.rendre(allure(p[0]), b, null, echelle)).equals(p[1])) ecarts.add(p[0]);
+            // Avec un tampon réutilisé d'une image à l'autre : mêmes pixels.
+            else if (!empreinte(RenduPilou.rendre(allure(p[0]), b, null, echelle, tampon)).equals(p[1])) ecarts.add("tampon : " + p[0]);
+        }
+        assertTrue("trop peu de poses", poses.size() >= 80);
+        assertEquals("poses qui diffèrent de la référence : " + ecarts, 0, ecarts.size());
+    }
+
     @Test
     public void memesPixelsQueLaReference() throws Exception {
+        memesPixels("rendus-reference.txt", 1);
+    }
+
+    /** Rendu fin (grille 96 × 112) : mêmes pixels que rendu.py à l'échelle 2 et que le PC. */
+    @Test
+    public void renduFinMemesPixelsQueLaReference() throws Exception {
+        memesPixels("rendus-reference-2x.txt", 2);
+    }
+
+    /** L'agrandissement automatique d'un sprite 1× donne les mêmes lettres que rendu.agrandir, sprite par sprite. */
+    @Test
+    public void agrandissementIdentiqueALaReference() throws Exception {
         Sprites.Banque b = Sprites.banque();
-        List<String> lignes = Files.readAllLines(new File(racine(), "outils/sprites/rendus-reference.txt").toPath(), StandardCharsets.UTF_8);
+        List<String[]> lignes = reference("agrandis-reference.txt");
+        assertEquals(b.sprites.size(), lignes.size());
         List<String> ecarts = new ArrayList<>();
-        int n = 0;
-        for (String l : lignes) {
-            if (l.startsWith("#") || l.trim().isEmpty()) continue;
-            String[] p = l.split("\\|");
-            String obtenu = empreinte(RenduPilou.rendre(allure(p[0]), b, null));
-            if (!obtenu.equals(p[1].trim())) ecarts.add(p[0].trim());
-            n++;
+        for (String[] p : lignes) {
+            Sprites.Sprite s = b.get(p[0]);
+            assertNotNull(p[0], s);
+            Sprites.Sprite g = Sprites.agrandir(s);
+            StringBuilder t = new StringBuilder();
+            for (int k = 0; k < g.images.size(); k++) {
+                if (k > 0) t.append("\n---\n");
+                t.append(String.join("\n", g.images.get(k)));
+            }
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            StringBuilder h = new StringBuilder();
+            for (byte o : md.digest(t.toString().getBytes(StandardCharsets.UTF_8))) h.append(String.format("%02x", o));
+            if (!h.toString().equals(p[1])) ecarts.add(p[0]);
+            assertEquals(p[0], s.w() * 2, g.w());
+            assertEquals(p[0], s.dx * 2, g.dx);
+            assertTrue(p[0], !g.natif && g.palette.equals(s.palette));
         }
-        assertTrue("trop peu de poses", n >= 40);
-        assertEquals("poses qui diffèrent de la référence : " + ecarts, 0, ecarts.size());
+        assertEquals("sprites agrandis qui diffèrent de la référence : " + ecarts, 0, ecarts.size());
+    }
+
+    /** Les sprites redessinés en fin gardent l'emplacement, l'ancre et l'animation du sprite 1×. */
+    @Test
+    public void spritesFinsCoherents() {
+        Sprites.Banque b = Sprites.banque();
+        assertTrue(b.fins.size() + " sprites fins", b.fins.size() >= 100);
+        for (Sprites.Sprite f : b.fins.values()) {
+            Sprites.Sprite s = b.get(f.id);
+            assertNotNull(f.id + " : pas de sprite 1×", s);
+            assertEquals(f.id, s.slot + s.ancre + s.derriere + s.coiffe + s.duree + s.images.size(),
+                    f.slot + f.ancre + f.derriere + f.coiffe + f.duree + f.images.size());
+            assertTrue(f.id + " : ancrage", Math.abs(f.dx - s.dx * 2) <= 2 && Math.abs(f.dy - s.dy * 2) <= 2);
+            assertSame(f, b.fin(f.id));
+            assertSame(f, b.get(f.id, 2));
+        }
+        assertSame(b.fin("po"), b.fin("po"));
+        assertSame(b.get("po"), b.get("po", 1));
+        assertNull(b.fin("n-existe-pas"));
+    }
+
+    /** Humeurs et tenues de voyage des campagnes : tout est dans la banque, aux deux échelles. */
+    @Test
+    public void humeursEtVoyagesDesCampagnes() throws Exception {
+        Sprites.Banque b = Sprites.banque();
+        String repos = empreinte(RenduPilou.rendre(new RenduPilou.Allure(), b, null));
+        for (String h : RenduPilou.HUMEURS) {
+            assertNotNull("bouche-" + h, b.get("bouche-" + h));
+            assertNotNull("bouche-" + h + " (fin)", b.fins.get("bouche-" + h));
+            RenduPilou.Allure a = new RenduPilou.Allure();
+            a.expr = h;
+            assertTrue(h, !repos.equals(empreinte(RenduPilou.rendre(a, b, null))));
+        }
+        for (String mode : RenduPilou.VOYAGES) {
+            assertNotNull(mode, b.tenues.get("voyage-" + mode));
+            RenduPilou.Allure a = new RenduPilou.Allure();
+            a.tenue = "voyage-" + mode;
+            a.t = 400;
+            RenduPilou.Allure nu = new RenduPilou.Allure();
+            nu.t = 400;
+            assertTrue(mode, !empreinte(RenduPilou.rendre(nu, b, null)).equals(empreinte(RenduPilou.rendre(a, b, null))));
+            assertEquals(96 * 112, RenduPilou.rendre(a, b, null, 2).length);
+            assertEquals("l'allure donnée n'est pas modifiée", "repos", a.expr);
+        }
+        RenduPilou.Allure m = new RenduPilou.Allure();
+        m.tenue = "voyage-marche";
+        assertTrue(RenduPilou.voyager(m).marche && !m.marche);
+    }
+
+    /** La géométrie rendue reste en pixels de la grille 48 × 56, quelle que soit l'échelle. */
+    @Test
+    public void geometrieIndependanteDeLEchelle() {
+        Sprites.Banque b = Sprites.banque();
+        RenduPilou.Geometrie g1 = new RenduPilou.Geometrie(), g2 = new RenduPilou.Geometrie();
+        for (int stade = 1; stade <= 4; stade++) {
+            RenduPilou.Allure a = new RenduPilou.Allure();
+            a.stade = stade;
+            a.t = 700;
+            RenduPilou.rendre(a, b, g1, 1);
+            RenduPilou.rendre(a, b, g2, 2);
+            assertEquals(g1.cx, g2.cx, 1e-9);
+            assertEquals(g1.ry, g2.ry, 1e-9);
+            assertTrue(Math.abs(g1.sommet - g2.sommet) <= 1 && Math.abs(g1.pied - g2.pied) <= 1);
+        }
     }
 
     @Test
@@ -108,5 +219,8 @@ public class RenduPilouTest {
     public void objetInconnuIgnoreSansPlanter() {
         RenduPilou.Allure a = allure("expr=repos t=0 objets=n-existe-pas tenue=inconnue accessoire=rien stade=9");
         assertEquals(RenduPilou.W * RenduPilou.H, RenduPilou.rendre(a, Sprites.banque(), null).length);
+        assertEquals(RenduPilou.W * RenduPilou.H * 4, RenduPilou.rendre(a, Sprites.banque(), null, 2).length);
+        a.tenue = "voyage-inconnu";
+        assertEquals(RenduPilou.W * RenduPilou.H * 4, RenduPilou.rendre(a, new Sprites.Banque(), null, 2).length);
     }
 }

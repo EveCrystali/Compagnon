@@ -1,0 +1,43 @@
+# Bouclier-couvercle (butin d'expédition)
+id: bouclier-couvercle
+slot: dos
+ancre: main-g
+decalage: -24 -18
+palette: a=#1c2128 b=#768390 c=#d3dae3 d=#b8c4d2 e=#e6ecf2 f=#97a2b2 g=#f9c292 h=#f69d50 i=#ffd8b0
+images:
+........aaaaaaaaaaaaaaaa........
+.......aaaaabbbbbbbbaaaaa.......
+......aaabbbbbbbbbbbbbbaaa......
+.....aaabbbbbccccccbbbbbaaa.....
+....aaabbbbddddddddccbbbbaaa....
+...aaabbbddddddddddddccbbbaaa...
+..aaabbbdddddddddddddddcbbbaaa..
+.aaabbbdddeeeeeeffddddddcbbbaaa.
+.aabbbddeeeeeeeeeefddddddcbbbaa.
+aaabbbdeeeeeeeeeeeedddddddbbbaaa
+aabbbcdeeeeeeeeeeeefddddddcbbbaa
+aabbbdeeeeeeeeeeeeeedddddddbbbaa
+aabbcdeeeeeeeeeeeeeedddddddcbbaa
+abbbddeeeeeeeeeeeeeeddddddddbbba
+abbbddeeeeeeeghhgggeddddddddbbba
+abbcddceeeeeghhhhhhgddddddddcbba
+abbddddeeeeehhiihhhhdddddddddbba
+abbddddceeeehhiihhhhdddddddddbba
+abbdddddcceehhgghhhhdddddddddbba
+abbdddddddcchhhhhhhhdddddddddbba
+abbfddddddddhhhhhhhhddddddddfbba
+abbbddddddddchhhhhhcddddddddbbba
+abbbdddddddddccccccdddddddddbbba
+aabbfdddddddddddddddddddffdfbbaa
+aabbbdddddddddddddddddddbbdbbbaa
+aabbbfddddddddddddddddffbbfbbbaa
+aaabbbddddddddddddddddbbddbbbaaa
+.aabbbfdddddddddddddddbbddbbbaa.
+.aaabbbfdddddddddddddddddbbbaaa.
+..aaabbbfdddddddddddddddbbbaaa..
+...aaabbbffddddddddddfdbbbaaa...
+....aaabbbbffddddddffbbbbaaa....
+.....aaabbbbbffffffbbbbbaaa.....
+......aaabbbbbbbbbbbbbbaaa......
+.......aaaaabbbbbbbbaaaaa.......
+........aaaaaaaaaaaaaaaa........

@@ -1,0 +1,29 @@
+# En-cas de route : galette (+15 énergie)
+id: galette-route
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#4a2e17 b=#c4a77d c=#e8d5b0 d=#d9803a e=#dac8ae f=#8a6e4b g=#a18a6e
+images:
+.....aaaaaaaaaaaaaaaaaa.....
+....aaaabbbbbbbbbbbbaaaa....
+..aaaabbccccccccccbbbbaaaa..
+.aaaabccccccccccccccbbbaaaa.
+aaabbcccccccccddcccccbbbeaaa
+aabbcccccccccdddccccccbbbeaa
+aabcccccccccddccccccffcbbbaa
+aeccccccccccddccccccffccbbea
+abccccffcccddddcccccccccbbba
+abccccffcccddddcccccccccbbba
+bbccccccccccddccccccccccbbbb
+bbccccccccccddccccccccccbbbb
+abccccccccdddcccccccccccbbba
+abecccccccddcccccccccccebbba
+agbeccccccccccccccccccebbbga
+aabbbccccccccccccccccebbbbaa
+aabbbbccffccccccccffebbbbgaa
+aaabbbbbffccccccccffbbbggaaa
+.aaaabbbbbbbbbbbbbbbbbgaaaa.
+..aaaabbbbbbbbbbbbbbbgaaaa..
+....aaaabbbbbbbbbbbbaaaa....
+.....aaaaaaaaaaaaaaaaaa.....
