@@ -82,6 +82,7 @@ public class CapturesTest {
                 essayer("atelier-cuisine", () -> atelier("cuisine"));
                 essayer("chasse", this::chasse);
                 essayer("installation", this::installation);
+                essayer("police", this::police);
             }
         } catch (Throwable t) {
             // Rendu natif indisponible ou écran qui refuse de se dessiner : pas de captures, pas d'échec.
@@ -209,6 +210,42 @@ public class CapturesTest {
         attendre();
         contenu(a.page(Principale.REGLAGES), "presence-reglages-long");
         c.pause().stop().destroy();
+    }
+
+    // La police pixel de Pilou (docs/POLICE.md) : petits mots tels que la bulle flottante, l'Accueil et le widget les
+    // écrivent, sur fond clair et sombre.
+    private void police() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        float d = ctx.getResources().getDisplayMetrics().density;
+        android.widget.LinearLayout l = new android.widget.LinearLayout(ctx);
+        l.setOrientation(android.widget.LinearLayout.VERTICAL);
+        int m = (int) (12 * d);
+        l.setPadding(m, m, m, m);
+        String[] mots = {"« coucou ! je m'installe en bas de ton écran, sans te déranger. on grandit ensemble ♥ »",
+                "« c'est le soir ! j'ai voulu éteindre la lumière, je n'ai pas trouvé l'interrupteur »",
+                "« ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L'ÎLE DU NORD ! » +12 po · niveau 4 ✓ ☁ ⚡"};
+        float[] tailles = {1.25f, 1.6f};
+        for (int sombre = 0; sombre < 2; sombre++)
+            for (float t : tailles)
+                for (String mot : mots) {
+                    TextePixelVue v = new TextePixelVue(ctx, t, sombre == 1 ? 0xffcdd9e5 : 0xff1c2128);
+                    v.texte(mot);
+                    v.maxLargeur((int) (280 * d));
+                    v.setBackgroundColor(sombre == 1 ? 0xff22272e : 0xfff6f1e6);
+                    v.setPadding(m, m / 2, m, m / 2);
+                    l.addView(v);
+                }
+        android.graphics.Bitmap w = TextePixelVue.image(ctx, mots[0], 1.2f, 0xFFCDD9E5, (int) (200 * d), 2);
+        android.widget.ImageView iv = new android.widget.ImageView(ctx);
+        iv.setImageBitmap(w);
+        iv.setBackgroundColor(0xff22272e);
+        iv.setPadding(m, m / 2, m, m / 2);
+        iv.setScaleType(android.widget.ImageView.ScaleType.FIT_START);
+        iv.setAdjustViewBounds(true);
+        // Comme dans le widget (layout/widget.xml) : à sa taille, jamais étirée.
+        l.addView(iv, new android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+        vue(l, "police");
     }
 
     private void appairer(String plus) {

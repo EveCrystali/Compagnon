@@ -38,15 +38,15 @@
             android:textColor="#FFCDD9E5"
             android:textSize="12sp" />
 
-        <TextView
+        <!-- Le mot du jour, écrit dans la police pixel de Pilou (image : TextePixelVue.image, docs/POLICE.md). -->
+        <ImageView
             android:id="@+id/mot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="#FFCDD9E5"
-            android:textSize="11sp"
-            android:textStyle="italic"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
             android:visibility="gone" />
 
         <TextView

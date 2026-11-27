@@ -336,10 +336,10 @@ final class PresenceVue extends LinearLayout {
     }
 
     /** Le mot du jour, en tête de l'Accueil (italique, discret) ; vide : rien. */
-    static TextView motTete(Principale a) {
+    /** Le mot du jour en tête de l'Accueil, dans la police pixel de Pilou (sa voix écrite, docs/POLICE.md). */
+    static TextePixelVue motTete(Principale a) {
         Ui.Palette p = Ui.p(a);
-        TextView t = Ui.texte(a, "", Ui.T_CORPS, p.texte, false);
-        t.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
+        TextePixelVue t = new TextePixelVue(a, 1.6f, p.texte);
         t.setBackground(Ui.arrondi(a, p.voile | 0x11000000, 16, 0));
         t.setPadding(Ui.dp(a, 14), Ui.dp(a, 10), Ui.dp(a, 14), Ui.dp(a, 10));
         t.setVisibility(View.GONE);

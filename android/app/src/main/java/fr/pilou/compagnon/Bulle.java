@@ -239,7 +239,15 @@ final class Bulle {
         panneau.addView(texte(etat.nom + " · niv " + etat.niveau + "   " + etat.resume(maintenant), sombre ? 0xffadbac7 : PALE, true));
         // Le mot du jour (docs/PRESENCE.md), discret, sous l'en-tête.
         String mot = motDuJour;
-        if (!mot.isEmpty()) panneau.addView(texte("« " + mot + " »", sombre ? 0xffcdd9e5 : TEXTE, true));
+        // Sa voix écrite : la police pixel de Pilou (docs/POLICE.md), sur trois lignes au plus.
+        if (!mot.isEmpty()) {
+            TextePixelVue v = new TextePixelVue(ctx, 1.25f, sombre ? 0xffcdd9e5 : TEXTE);
+            v.maxLargeur((int) (280 * d));
+            v.maxLignes(3);
+            v.texte("« " + mot + " »");
+            v.setPadding(0, (int) (3 * d), 0, (int) (3 * d));
+            panneau.addView(v);
+        }
         List<Etat.Ligne> lignes = etat.lignes(maintenant, (int) (maintenant / 300));
         for (int i = 0; i < Math.min(6, lignes.size()); i++) {
             Etat.Ligne l = lignes.get(i);

@@ -42,6 +42,8 @@
     <EmbeddedResource Include="..\..\assets\campagnes\**\*.json" LogicalName="campagne:%(RecursiveDir)%(Filename)%(Extension)" />
     <!-- Présence au quotidien (docs/PRESENCE.md) : petits mots et gabarits du journal, communs avec l'app Android. -->
     <EmbeddedResource Include="..\..\assets\presence\*.txt" LogicalName="presence:%(Filename)%(Extension)" />
+    <!-- Police pixel de Pilou (docs/POLICE.md), commune avec l'app Android. -->
+    <EmbeddedResource Include="..\..\assets\police\*.txt" LogicalName="police:%(Filename)%(Extension)" />
     <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
     <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
     <!-- Icône de Pilou (16 à 48 px), tirée de son rendu (Icone.cs) : zone de notification. -->

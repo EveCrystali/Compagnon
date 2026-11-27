@@ -171,6 +171,9 @@ def main():
     # Animations des campagnes : les règles communes (animations.py) ; relues par le PC et le téléphone.
     import animations
     animations.ecrire_reference()
+    # La police pixel : mise en page et pixels de vrais textes (police-reference.txt).
+    import police
+    police.reference()
     print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt")
 
 
