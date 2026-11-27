@@ -8,7 +8,7 @@
       "decor": "abreuvoir-aube",
       "humeur": "neutre",
       "texte": [
-        "Il a gelé. La vraie gelée, la première. L'herbe est blanche et elle craque comme des biscottes, le lac fume, et il y a de la glace fine tout le long du bord. Je t'écris avec les mains raides. C'est le matin qu'on attendait depuis le jardin, depuis les ronces, et je ne sais toujours pas si je l'attendais ou si je le redoutais. Je vais te raconter dans l'ordre, sinon je n'y arriverai pas."
+        "Il a gelé. La vraie gelée, la première. L'herbe est blanche et elle craque comme des biscottes, le lac fume, et il y a de la glace fine tout le long du bord. Je t'écris avec les mains raides. C'est le matin vers lequel on marche depuis les ronces, et je ne sais toujours pas si je l'espérais ou si j'en avais peur. Je vais te raconter dans l'ordre, sinon je n'y arriverai pas."
       ],
       "suite": "ch12-mode"
     },
@@ -29,7 +29,7 @@
       "humeur": "triste",
       "texte": [
         "J'étais encore dans la pente. À cent pas de la rive, peut-être deux cents, avec mes petites jambes. Et je les ai vus se lever. Tous. Lentement, les vieux d'abord, puis les autres, en une longue file qui montait vers le sud. J'ai couru. On ne rattrape pas des nuages en courant, je le sais, maintenant.",
-        "Je l'ai cherché. Des centaines de nuages blancs, vus d'en dessous. Et puis, presque en queue de file, il y en a un tout petit qui s'est arrêté. Il a laissé passer les autres. Il s'est tourné vers la pente, et il a fait quelque chose, au-dessus du lac. Un arc. Minuscule. D'une seule couleur. Tu devines laquelle. Il savait que je le reconnaîtrais à ça. Puis il a rejoint la file."
+        "Je l'ai cherché. Des centaines de nuages blancs, vus d'en dessous. Et puis, presque en queue de file, il y en a un tout petit qui s'est arrêté. Il a laissé passer les autres. Il s'est tourné vers la pente, et il a fait quelque chose, au-dessus du lac. Un arc. Minuscule. D'une seule couleur. Tu devines laquelle. Il savait que je le reconnaîtrais à ça. Et il est reparti à sa place, dans la file."
       ],
       "suite": "ch12-fin-de-loin"
     },
@@ -54,7 +54,7 @@
       "type": "choix",
       "humeur": "triste",
       "texte": [
-        "On y est. Il est contre moi, et les siens s'en vont. Les derniers passent au-dessus du lac, ils ne l'attendront pas. Il ne bouge pas. Il n'attend pas que je le retienne, et il n'attend pas que je le chasse : il attend que je lui dise ce qui est juste, comme depuis le premier jour. J'ai la gorge toute petite. Je ne t'ai jamais autant demandé : qu'est-ce que je fais ?"
+        "On y est. Il est contre moi, et les siens s'en vont. Les derniers passent au-dessus du lac ; bientôt, il n'y aura plus personne à rejoindre. Il ne bouge pas. Il n'attend pas que je le retienne, et il n'attend pas que je le chasse : il attend que je lui dise ce qui est juste, comme depuis le premier jour. J'ai la gorge toute petite. Je ne t'ai jamais autant demandé : qu'est-ce que je fais ?"
       ],
       "options": [
         { "id": "ch12-adieu-va", "libelle": "Dis-lui : « Va. »", "vers": "ch12-va" },
@@ -114,7 +114,7 @@
       "type": "recit",
       "humeur": "triste",
       "texte": [
-        "Il a sauté. Il est monté de la hauteur d'un tabouret. Le vent du matin l'a retourné comme une crêpe, et il est redescendu. Il a recommencé. Quatre fois. À la cinquième, il n'a même plus décollé. Il lui manque quelque chose pour tenir là-haut : un peu de corps, ou un peu de métier. Je ne sais pas lequel des deux je ne lui ai pas donné. Les derniers passaient. Un vieux a ralenti, il a regardé en bas, longtemps. Puis il a suivi les autres. Brouillon est revenu se poser sur ma casserole, sans rien dire."
+        "Il a sauté. Il est monté de la hauteur d'un tabouret. Le vent du matin l'a retourné comme une crêpe, et il est redescendu. Il a recommencé. Quatre fois. À la cinquième, il n'a même plus décollé. Il lui manque quelque chose pour tenir là-haut : un peu de corps, ou un peu de métier. Je ne sais pas lequel des deux je ne lui ai pas donné. Les derniers passaient. Un vieux a ralenti, il a regardé en bas, longtemps. Et il a suivi les autres. Brouillon est revenu se poser sur ma casserole, sans rien dire."
       ],
       "suite": "ch12-fin-hiver"
     },
@@ -123,7 +123,7 @@
       "humeur": "tendre",
       "texte": [
         "Il est monté. Droit, sans trembler, à la hauteur des arbres, puis des rochers. Et là, il s'est arrêté, juste au-dessus de moi. Il est devenu gris. J'ai compris ce qui venait. Je n'ai pas bougé. Je me suis dit : tant pis, je serai délavé, je serai bleu pâle jusqu'à la fin de mes jours, je ne bouge pas.",
-        "Il a plu. Une vraie pluie, fine, tiède, toute la rive a chanté. Et pas une goutte sur moi. Pas une. Il a plu tout autour, en rond, exactement à ma taille. Je suis resté debout au milieu d'un cercle d'herbe sèche, pendant qu'il lâchait tout ce qu'il avait. Il s'en souvenait : sa pluie, je l'aime, mais pas sur moi. Puis il a crié, de là-haut, très fort : « Goutte ! » Et il a rejoint la file."
+        "Il a plu. Une vraie pluie, fine, tiède, toute la rive a chanté. Et pas une goutte sur moi. Pas une. Il a plu tout autour, en rond, exactement à ma taille. Je suis resté debout au milieu d'un cercle d'herbe sèche, pendant qu'il lâchait tout ce qu'il avait. Il s'en souvenait : sa pluie, je l'aime, mais pas sur moi. De là-haut, il a crié, très fort : « Goutte ! » Et il a rejoint la file."
       ],
       "suite": "ch12-apres"
     },
@@ -161,7 +161,7 @@
       "humeur": "tendre",
       "texte": [
         "J'ai cogné la plume contre la casserole. Ding. Tout en haut, loin derrière les autres, la grande grise fermait la marche. Elle s'est arrêtée. Elle est redescendue, elle toute seule, à contre-courant de tout le troupeau, jusqu'à toucher le lac. Je lui ai dit, je ne sais pas si les très vieux nuages comprennent : il ne s'est pas endormi exprès. Il regarde par ici tous les jours. Il s'appelle Tournebise.",
-        "Elle est restée immobile un long moment. Puis elle a fait une chose que je n'avais vu faire à aucun nuage : elle a quitté la file. Elle est partie de l'autre côté. Vers le col, vers le plateau, vers un petit toit avec un coq dessus. Les autres l'ont attendue en tournant lentement au-dessus des crêtes. Brouillon aussi, je le voyais : le plus petit point, tout au bord."
+        "Elle est restée immobile un long moment. Et elle a fait une chose que je n'avais vu faire à aucun nuage : elle a quitté la file. Elle est partie de l'autre côté. Vers le col, vers le plateau, vers un petit toit avec un coq dessus. Les autres l'ont attendue en tournant lentement au-dessus des crêtes. Brouillon aussi, je le voyais : le plus petit point, tout au bord."
       ],
       "suite": "ch12-fin-deux"
     },

@@ -47,7 +47,7 @@
       ],
       "options": [
         { "id": "ch7-perdu-tache", "libelle": "Cherche du bleu : sa tache", "vers": "ch7-tache", "si": { "drapeau": "tache-bleue" }, "effets": [ { "var": "lien", "plus": 1 } ] },
-        { "id": "ch7-perdu-laine", "libelle": "Tire tout doucement sur la laine", "vers": "ch7-laine", "si": { "drapeau": "ficelle" } },
+        { "id": "ch7-perdu-laine", "libelle": "Tire tout doucement sur la laine", "vers": "ch7-laine", "si": { "drapeau": "ficelle" }, "effets": [ { "var": "lien", "plus": 1 } ] },
         { "id": "ch7-perdu-ecoute", "libelle": "Ne bouge plus. Écoute d'où viennent les pff.", "vers": "ch7-memoire" },
         { "id": "ch7-perdu-vapeur", "libelle": "Allume le réchaud et attends-le, le temps qu'il faudra", "vers": "ch7-vapeur", "effets": [ { "drapeau": "a-traine" } ] }
       ]
@@ -95,6 +95,7 @@
     "ch7-retrouve": {
       "type": "recit",
       "humeur": "joie",
+      "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "Il est sorti du blanc d'un seul coup, à deux pas de moi, comme quelqu'un qui pousse une porte. Couvert de givre, tout raide, avec des paillettes partout. Et ravi. Il a dit : « Grand dit rien. Grand dort. » Il lui a parlé tout ce temps, et l'autre n'a pas répondu, les très grands sont comme ça. Je l'ai frotté avec mon baluchon pour le dégeler. Je n'ai rien dit. J'avais la voix qui faisait n'importe quoi."
       ],

@@ -123,7 +123,7 @@
       "difficulte": 2,
       "bonus": "lien",
       "texte": [
-        "Je grimpe. Je n'ai jamais grimpé à rien, mais là, je grimpe, la casserole me tape dans le dos. La plus haute branche craque. Il est juste au-dessus, il monte encore, il ne me voit pas. Je n'aurai qu'un seul saut, au moment où il passera le plus près. Trois, deux…"
+        "Je grimpe. Je ne sais pas grimper, mais là, je grimpe, la casserole me tape dans le dos. La plus haute branche craque. Il est juste au-dessus, il monte encore, il ne me voit pas. Je n'aurai qu'un seul saut, au moment où il passera le plus près. Trois, deux…"
       ],
       "reussite": "ch4-rattrape",
       "echec": "ch4-echec-enclumes"

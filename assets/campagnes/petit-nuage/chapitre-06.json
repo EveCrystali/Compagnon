@@ -127,7 +127,7 @@
       "checkpoint": true,
       "humeur": "peur",
       "texte": [
-        "Dehors, il fait nuit. Madame Bocal a passé le museau par sa porte ronde, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas cette nuit. Le ciel a sa tête de couvercle. Il va neiger. Demain matin, à la première heure, ou pas du tout. » Elle nous offre son paillasson. Mais le col est juste là, au-dessus de nous, et chaque heure compte. Je l'écoute, ou on tente ?"
+        "Dehors, il fait nuit. Madame Bocal a passé le museau par sa porte ronde, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas cette nuit. Le ciel a sa tête de couvercle, il neigera jusqu'au matin. Demain, à la première heure, ou pas du tout. » Elle nous offre son paillasson. Mais le col est juste là, au-dessus de nous, et chaque heure compte. Je l'écoute, ou on tente ?"
       ],
       "options": [
         { "id": "ch6-meteo-dormir", "libelle": "Écoute-la : dors ici, pars à l'aube", "vers": "ch6-bocaux" },
@@ -140,7 +140,7 @@
       "decor": "sentier-des-melezes",
       "humeur": "peur",
       "texte": [
-        "On est partis quand même. Au bout d'une heure, il s'est mis à neiger, d'abord trois flocons, puis tous les autres. Je ne vois plus mes pieds. Et Brouillon fait un bruit nouveau : il craque. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
+        "On est partis quand même. Au bout d'une heure, la neige tombait si serré que je ne voyais plus mes pieds. Et Brouillon s'est mis à craquer. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
       ],
       "options": [
         { "id": "ch6-ce-soir-redescendre", "libelle": "Redescends au terrier, tout de suite", "vers": "ch6-bocaux", "effets": [ { "var": "taille", "plus": -1 } ] },
