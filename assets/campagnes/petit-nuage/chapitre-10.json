@@ -1,0 +1,228 @@
+{
+  "chapitre": "ch10",
+  "noeuds": {
+    "ch10-rive": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Au-dessus de l'Abreuvoir",
+      "decor": "abreuvoir",
+      "humeur": "surpris",
+      "texte": [
+        "Ça brille. Et ça boit. C'est un lac. Immense, tout en bas, dans un creux de montagnes. On l'appelle l'Abreuvoir. Et sur le lac, il y a des nuages. Pas dix. Des centaines. Descendus du ciel, le ventre posé sur l'eau, les uns contre les autres, comme un troupeau à la rivière.",
+        "Ils boivent. Ça fait un bruit de mille personnes qui soufflent sur leur soupe. Brouillon ne bouge plus. Il ne dit rien. Il n'a pas crié, il n'a pas foncé comme pour les draps. Il regarde, et il s'est mis tout contre moi. C'est eux. Cette fois, c'est vraiment eux. On y est arrivés."
+      ],
+      "suite": "ch10-heure"
+    },
+    "ch10-heure": {
+      "type": "hasard",
+      "humeur": "neutre",
+      "texte": [
+        "J'ai regardé le soleil, et j'ai fait le compte des jours sur mes doigts, ce qui est vite fait. La bergeronnette avait dit : ils repartent à la première gelée. Tournebise avait dit : la veille, ils se serrent. Ils sont serrés. C'est pour cette nuit. On est arrivés le bon jour, de justesse, avec une casserole cabossée et un nuage qui tient debout. Reste à savoir combien d'heures on a devant nous."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-trop-tard", "si": { "tous": [ { "drapeau": "route-col" }, { "drapeau": "a-traine" } ] } },
+        { "poids": 1, "vers": "ch10-apres-midi", "si": { "tous": [ { "drapeau": "route-gorge" }, { "non": { "drapeau": "a-traine" } } ] } },
+        { "poids": 1, "vers": "ch10-troupeau", "si": { "non": { "un": [
+          { "tous": [ { "drapeau": "route-col" }, { "drapeau": "a-traine" } ] },
+          { "tous": [ { "drapeau": "route-gorge" }, { "non": { "drapeau": "a-traine" } } ] }
+        ] } } }
+      ]
+    },
+    "ch10-trop-tard": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Pas assez. Le soleil est déjà derrière les crêtes, et le lac est tout en bas : il y a une nuit entière de descente dans les cailloux. Si je descends à mon pas, on sera sur la rive à l'aube. Juste quand ils s'en iront. C'est le jour qu'on a perdu. Il est là, devant nous, exactement de la longueur de cette pente.",
+        "Brouillon, lui, flotte. Seul, sans moi, il serait en bas avant minuit, avec les siens, avec toute la nuit pour boire. Seul. Sans que je sois là. Il ne l'a pas proposé. Il n'y a même pas pensé, il attend que je me mette en route. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch10-trop-tard-ensemble", "libelle": "Descends avec lui, toute la nuit, sans t'arrêter", "vers": "ch10-descente", "effets": [ { "drapeau": "descente-nuit" } ] },
+        { "id": "ch10-trop-tard-seul", "libelle": "Envoie-le devant, seul. Tu le rejoindras.", "vers": "ch10-mots", "effets": [ { "drapeau": "seul-devant" } ] },
+        { "id": "ch10-trop-tard-plume", "libelle": "Fais sonner la plume de fer, là-haut, le plus fort possible", "vers": "ch10-sonne", "si": { "objet": "plume" }, "effets": [ { "drapeau": "ondee" }, { "drapeau": "attendu" }, { "drapeau": "descente-nuit" } ] }
+      ]
+    },
+    "ch10-sonne": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai détaché la plume et j'ai cogné dessus avec la casserole, de toutes mes forces. Ding. Ça a roulé sur tout le lac. En bas, rien n'a bougé. Et puis si. Au fond, contre la montagne, quelque chose de gris, que j'avais pris pour un versant, s'est tourné. Lentement. Large comme une vallée. Elle a regardé vers nous. Et elle est venue se coucher en travers du lac, devant tous les autres, comme on se met devant une porte. Je crois qu'elle les fera attendre. Je descends."
+      ],
+      "suite": "ch10-descente"
+    },
+    "ch10-mots": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "Je lui ai expliqué. Qu'il descend plus vite que moi. Que les siens sont là, et qu'il ne faut pas les rater. Que je le rejoindrai en bas, au matin. Il a mis du temps à comprendre que je ne venais pas tout de suite. Il a dit : « Goutte après ? » J'ai dit oui. Après. Il attend, tourné vers moi. C'est maintenant qu'il faut lui dire quelque chose, et je n'aurai peut-être pas d'autre occasion. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch10-mots-a-tout-a-l-heure", "libelle": "« À tout à l'heure, Brouillon. »", "vers": "ch10-seul" },
+        { "id": "ch10-mots-va-boire", "libelle": "« Ne te retourne pas. Va boire. »", "vers": "ch10-seul" },
+        { "id": "ch10-mots-rien", "libelle": "Rien. Pose ta main sur lui, une seconde.", "vers": "ch10-seul" }
+      ]
+    },
+    "ch10-seul": {
+      "type": "attente",
+      "humeur": "triste",
+      "duree_min": 150,
+      "duree_max": 180,
+      "pendant": "Pilou descend seul, dans la nuit",
+      "tenue": "marche",
+      "recompense": { "po": 13, "xp": 6 },
+      "texte": [
+        "Il est parti. Il a descendu la pente en flottant, de plus en plus petit, une tache pâle, puis plus rien. Il s'est retourné deux fois. Ou trois, je ne voyais plus bien. Moi, je descends à pied, dans les cailloux, dans le noir. C'est idiot : j'ai l'habitude d'être seul, c'est presque mon métier. Mais la casserole ne fait pas le même bruit qu'hier. Est-ce qu'il sera encore là, en bas, quand j'arriverai ? Je descends. Je te dis."
+      ],
+      "suite": "ch12-gelee"
+    },
+    "ch10-descente": {
+      "type": "attente",
+      "humeur": "determine",
+      "duree_min": 150,
+      "duree_max": 180,
+      "pendant": "Pilou descend vers le lac, toute la nuit",
+      "tenue": "marche",
+      "recompense": { "po": 13, "xp": 6 },
+      "texte": [
+        "On descend. Pas de pause, pas de vapeur, pas de mesure du soir. Des cailloux, des cailloux, et le noir. Brouillon vole juste devant mes pieds pour que je voie où les poser : il est ma lanterne. En bas, le lac luit un peu, et le troupeau dessus, comme de la neige qui respire. Il fait de plus en plus froid. J'ai du givre sur l'antenne. Est-ce qu'on y sera avant qu'ils se lèvent ? Je ne m'arrête pas. Je t'écris en bas."
+      ],
+      "suite": "ch12-gelee"
+    },
+    "ch10-apres-midi": {
+      "type": "choix",
+      "lieu": "La rive de l'Abreuvoir",
+      "humeur": "joie",
+      "texte": [
+        "On a le temps ! Il est midi, on sera sur la rive dans une heure, et ils ne partent que demain à l'aube. Tu te rends compte ? Tout un après-midi. Je n'ai jamais eu tout un après-midi devant moi de ma vie, sans route à faire, avec quelqu'un.",
+        "Brouillon a voulu aller au troupeau tout de suite, puis il a eu peur, puis il a dit : « D'abord Goutte. » D'abord moi. Alors voilà : on a un rocher plat au bord de l'eau, du soleil, et quelques heures. Une seule chose à faire, pas deux. On fait quoi de notre dernier après-midi ?"
+      ],
+      "options": [
+        { "id": "ch10-apres-midi-lecon", "libelle": "Une leçon de pluie, la dernière", "vers": "ch10-lecon", "effets": [ { "drapeau": "sait-pleuvoir" }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch10-apres-midi-ricochets", "libelle": "Des ricochets. Rien d'utile.", "vers": "ch10-ricochets", "effets": [ { "var": "lien", "plus": 2 } ] }
+      ]
+    },
+    "ch10-lecon": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou donne une leçon de pluie, de loin",
+      "tenue": "attend",
+      "texte": [
+        "Leçon de pluie. Je me suis mis à dix pas, par prudence. Je lui ai dit ce que j'en sais, c'est-à-dire rien : que pleuvoir, c'est lâcher. Que ça ne se pousse pas, ça se laisse. Il s'est installé au-dessus du rocher plat. Il est devenu gris, tout doucement. Il me regarde. Je lui fais oui de la tête. Je crois qu'il y a une goutte qui vient. Je ne te dérange pas pendant qu'il travaille."
+      ],
+      "suite": "ch10-troupeau"
+    },
+    "ch10-ricochets": {
+      "type": "attente",
+      "humeur": "joie",
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou fait des ricochets avec un nuage",
+      "tenue": "attend",
+      "texte": [
+        "Ricochets. Je lui ai montré : un caillou plat, le poignet, et hop. Le mien a fait plouf. Lui, il n'a pas de poignet, alors il souffle dessus, et son caillou a fait quatre bonds. Quatre ! Il a crié « Beige ! », ce qui, chez lui, veut dire que c'est réussi. Maintenant, il veut battre son record, et moi le mien, qui est de un. On en a pour l'après-midi. Ne nous attends pas."
+      ],
+      "suite": "ch10-troupeau"
+    },
+    "ch10-troupeau": {
+      "type": "choix",
+      "lieu": "La rive de l'Abreuvoir",
+      "humeur": "tendre",
+      "texte": [
+        "Le soir tombe sur le lac, et on est au bord. De près, ils sont énormes. Le plus petit des grands ferait trente Brouillon. Il y a aussi des jeunes, à peine plus gros que lui, qui jouent entre les pattes des vieux, enfin, entre leurs bords. L'un d'eux est venu le renifler. Il a dit quelque chose en pff. Brouillon a répondu en pff.",
+        "Chaque soir, m'a expliqué une sarcelle, les petits vont au bord et rendent un peu d'eau au lac. Trois gouttes, n'importe quoi. C'est comme ça qu'on entre dans le troupeau. C'est maintenant. Les autres petits y vont. Brouillon me regarde, puis eux, puis moi. Comment je l'aide ?"
+      ],
+      "options": [
+        { "id": "ch10-troupeau-avec", "libelle": "Va avec lui jusqu'au bord de l'eau", "vers": "ch10-rite", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch10-troupeau-vas-y", "libelle": "Reste où tu es. Dis-lui juste : vas-y.", "vers": "ch10-rite", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch10-troupeau-presente", "libelle": "Présente-le toi-même aux grands", "vers": "ch10-rite" }
+      ]
+    },
+    "ch10-rite": {
+      "type": "hasard",
+      "humeur": "peur",
+      "texte": [
+        "Il y est allé. Les petits se sont alignés au bord, une douzaine, et les vieux se sont tus. Chacun son tour. Le premier a lâché une averse de la taille d'un mouchoir. Le deuxième, quatre gouttes, et tout le monde a eu l'air content. Puis ça a été à lui. Il s'est avancé au-dessus de l'eau. Je ne respirais plus. De là où j'étais, je voyais son reflet trembler."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-rite-ok", "si": { "drapeau": "sait-pleuvoir" } },
+        { "poids": 1, "vers": "ch10-rite-rate", "si": { "non": { "drapeau": "sait-pleuvoir" } } }
+      ]
+    },
+    "ch10-rite-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Il a plu. Sans forcer, sans se plisser : il est devenu gris, il a pensé à quelque chose, et c'est tombé. Sept gouttes, je les ai comptées, sept ronds dans le lac. Un vieux nuage a fait un bruit grave, et les autres se sont écartés d'un bord pour lui faire une place. Une place à sa taille, entre deux grands. Il n'y est pas allé tout de suite. Il s'est d'abord retourné pour voir si j'avais vu. J'avais vu."
+      ],
+      "suite": "ch10-reflet"
+    },
+    "ch10-rite-rate": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Il s'est plissé. Il a forcé. Il est devenu gris, puis rose, et rien n'est tombé. Pff. Je voulais disparaître dans ma casserole. Mais une grande, à côté de lui, s'est penchée un peu, et elle a laissé tomber trois gouttes juste sous lui, pile dans son reflet. Personne n'a rien remarqué, ou tout le monde a fait semblant. Les autres se sont écartés pour lui faire une place. Il ne sait toujours pas pleuvoir. Mais il est entré."
+      ],
+      "suite": "ch10-reflet"
+    },
+    "ch10-reflet": {
+      "type": "hasard",
+      "humeur": "neutre",
+      "texte": [
+        "Après, le vent est tombé et le lac est devenu lisse comme une vitre. Brouillon est revenu vers moi, au ras de l'eau. Et il s'est arrêté net. Dans le lac, il y avait tout le monde, à l'envers : les grands, immenses, les montagnes, et lui, au milieu. Et moi, sur le bord. Il ne s'était jamais vu. Il est resté longtemps au-dessus de son reflet, à comparer."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch10-reflet-menti", "si": { "drapeau": "a-menti" } },
+        { "poids": 1, "vers": "ch10-reflet-vrai", "si": { "non": { "drapeau": "a-menti" } } }
+      ]
+    },
+    "ch10-reflet-menti": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "var": "lien", "plus": -2 } ],
+      "texte": [
+        "Il a dit : « Goutte pas grande. » Puis : « Brouillon petit. » Il a tout compris d'un coup, là, dans l'eau. Que je n'avais pas grandi. Que c'était lui, depuis le début. « Goutte a dit faux. » J'ai dit oui. Que je ne voulais pas qu'il ait peur. Il a réfléchi. « Brouillon peur quand même. Peur tout seul. » Il n'était pas fâché. C'est pire. Il est resté à côté de moi, mais un peu moins près qu'avant, de l'épaisseur d'une feuille."
+      ],
+      "suite": "ch10-question"
+    },
+    "ch10-reflet-vrai": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "lien", "plus": 1 } ],
+      "texte": [
+        "Il a dit : « Petit. » J'ai dit oui. Il s'est comparé aux grands, puis à moi, puis encore aux grands. « Goutte avait dit. » Oui. À l'arbre mort, je le lui avais dit. Il a hoché tout son corps. Puis : « Goutte dit aussi Brouillon grand, après ? » Je ne lui ai jamais dit ça. Mais j'ai regardé les vieux, larges comme des collines, qui ont tous eu sa taille un jour. J'ai dit oui. Et ça non plus, ce n'était pas un mensonge."
+      ],
+      "suite": "ch10-question"
+    },
+    "ch10-question": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "Il fait presque nuit. Les grands se serrent, c'est le signe. Brouillon fait des allers-retours entre eux et moi, il n'arrive pas à choisir un côté. Et tout à l'heure, il a posé la question que j'attendais depuis les ronces, je crois. Il a montré le troupeau, puis le ciel, puis moi : « Goutte vient aussi ? »",
+        "Il le croit possible. Pour lui, je suis une goutte de pluie qui a mis du temps à remonter, c'est tout. Il a déjà repéré une place à côté de la sienne. Je n'ai pas le droit de rater cette réponse-là. Qu'est-ce que je lui dis ?"
+      ],
+      "options": [
+        { "id": "ch10-question-en-bas", "libelle": "« Non. Moi, je suis d'en bas. C'est là que j'habite. »", "vers": "ch10-soir-tombe", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch10-question-flotter", "libelle": "« J'aimerais bien. Mais je ne sais pas flotter. »", "vers": "ch10-soir-tombe", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch10-question-draps", "libelle": "D'abord, avoue-lui : les draps, c'était ta voix", "vers": "ch10-draps", "si": { "drapeau": "voix-des-draps" }, "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch10-draps": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Avant de répondre, j'ai avoué. Les draps, dans le pré. La grosse voix. C'était moi, caché derrière le plus grand. Il m'a regardé un moment. Puis il a fait son bruit de bulle : « Brouillon savait. Draps parlent pas. Goutte parle drap très mal. » Il le savait depuis le début, et il avait fait semblant, pour me faire plaisir. Ensuite seulement, j'ai répondu à sa question. Que non. Que moi, je reste en bas. Il a dit : « Savait aussi. »"
+      ],
+      "suite": "ch10-soir-tombe"
+    },
+    "ch10-soir-tombe": {
+      "type": "recit",
+      "humeur": "tendre",
+      "recompense": { "po": 14, "xp": 8 },
+      "texte": [
+        "Il n'a pas insisté. Il a regardé la place vide, à côté de la sienne, là-haut, un moment. Puis il est venu se poser sur mes genoux. J'en ai, finalement : il suffisait que quelqu'un s'y pose. La nuit est là. Il gèle déjà un peu : l'herbe fait un petit bruit quand je bouge. La sarcelle dit que le troupeau se lèvera à la première lueur. Il nous reste une nuit. La dernière."
+      ],
+      "suite": "ch11-crepuscule"
+    }
+  }
+}

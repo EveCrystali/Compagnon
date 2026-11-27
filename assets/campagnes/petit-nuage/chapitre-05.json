@@ -1,0 +1,191 @@
+{
+  "chapitre": "ch5",
+  "noeuds": {
+    "ch5-halte": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "La halte du Bout-des-Prés",
+      "decor": "halte-girouette",
+      "humeur": "surpris",
+      "texte": [
+        "C'était une girouette. Un coq en fer, tout rouillé, sur le toit d'une petite halte en pierre, avec une lanterne pendue au bec. C'est lui qui grince. Il s'appelle Tournebise. Il nous a vus arriver de loin : « Une goutte et un petit. Entrez, c'est ouvert. Moi, je ne descends plus. La rouille. »",
+        "Un détail bizarre : le vent vient du plateau, mais lui, il pointe vers la montagne. Il ne tourne pas. Brouillon a peur du grincement. Il s'est caché derrière moi, ce qui ne sert à rien, il dépasse de partout. Le coq le regarde, et il a une façon de le regarder… Je ne sais pas. Je les présente, ou je laisse faire ?"
+      ],
+      "options": [
+        { "id": "ch5-halte-presente", "libelle": "Présente-les : Brouillon, voici Tournebise", "vers": "ch5-mesure" },
+        { "id": "ch5-halte-laisse", "libelle": "Laisse Brouillon s'approcher quand il voudra", "vers": "ch5-mesure", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch5-mesure": {
+      "type": "hasard",
+      "humeur": "neutre",
+      "texte": [
+        "On est entrés. Il y a un poêle, une marmite, un banc. La voix de Tournebise descend par le tuyau de la cheminée, ça fait drôle : « Mets de l'eau à chauffer. La vapeur pour lui, la soupe pour toi. » Puis Brouillon est monté le voir, finalement, tout seul, par la fenêtre. Le coq l'a examiné un long moment, d'un œil, puis de l'autre."
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch5-mesure-grand", "si": { "var": "taille", "min": 5 } },
+        { "poids": 1, "vers": "ch5-mesure-petit", "si": { "var": "taille", "max": 4 } }
+      ]
+    },
+    "ch5-mesure-grand": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "« Deux Pilou et demi, facile », a dit Tournebise. Je ne lui avais pas donné l'unité : il a deviné. « Tu l'as bien tenu, la goutte. À ce train, il arrive entier. J'en ai vu passer, des petits, au bout d'un fil ou dans un panier, qui ne faisaient plus qu'une pomme, ici. En dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Lui, il a de la marge. Ne la gaspille pas. »"
+      ],
+      "suite": "ch5-histoire"
+    },
+    "ch5-mesure-petit": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "« Il a fondu, ton petit », a dit Tournebise. « Je ne te gronde pas : ça fond vite, à cet âge, on ne s'en rend pas compte. Tu le mesures comment ? En Pilou ? Bon. Alors retiens ça, la goutte : en dessous d'un Pilou, ça ne remonte pas tout seul, là-bas. Et il n'en est plus si loin. Alors la brume, la vapeur, tout ce que tu trouves, tu le lui donnes. Et plus de bêtises au soleil. »"
+      ],
+      "suite": "ch5-histoire"
+    },
+    "ch5-histoire": {
+      "type": "attente",
+      "humeur": "neutre",
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "La soupe cuit ; Tournebise raconte",
+      "tenue": "attend",
+      "texte": [
+        "La soupe cuit. Brouillon mange la vapeur au-dessus de la marmite, il a les bords tout dorés par le poêle. J'ai demandé à Tournebise pourquoi il regarde toujours la montagne, alors que le vent n'en vient pas. Il y a eu un long grincement dans le tuyau. Puis : « Assieds-toi. C'est une histoire de la longueur d'une soupe. » Je m'assieds. Je te la raconte après."
+      ],
+      "suite": "ch5-recit"
+    },
+    "ch5-recit": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Voilà ce qu'il m'a dit. Il y a très longtemps, il était sur un autre toit, et il tournait, comme tout le monde. Un matin d'après orage, il a trouvé une petite nuageuse coincée dans sa gouttière. Il l'a appelée Ondée. Et il est descendu de son toit, lui, un coq en fer, pour l'emmener à pied derrière les Dents-de-Lait.",
+        "Il est arrivé à temps. Par le col, trois jours de neige, la veille de la gelée. Il l'a vue boire au lac avec les autres. Il était si fatigué qu'il s'est assis. « Une minute. Je me suis dit : une minute. » Quand il a rouvert les yeux, il faisait jour, l'herbe était blanche, et le ciel était vide.",
+        "« Je ne sais pas si elle m'a cherché avant de partir. C'est ça que je regarde, quand je regarde là-bas. » Il a grincé un coup. « J'ai fait tout le chemin, la goutte, et j'ai raté la seule minute qui comptait. » Je n'ai rien trouvé à dire. La soupe était prête. Elle a refroidi."
+      ],
+      "suite": "ch5-minute"
+    },
+    "ch5-minute": {
+      "type": "choix",
+      "humeur": "triste",
+      "texte": [
+        "On est restés un moment comme ça, lui sur son toit, moi sur mon banc, avec le tuyau du poêle entre nous. Brouillon s'était endormi dans la vapeur. Je sentais qu'il fallait dire quelque chose, ou alors surtout ne rien dire. Je ne suis pas doué pour ces moments-là, tu le sais. Tu ferais quoi, à ma place ?"
+      ],
+      "options": [
+        { "id": "ch5-minute-regrette", "libelle": "Demande-lui s'il regrette le voyage", "vers": "ch5-regrette" },
+        { "id": "ch5-minute-silence", "libelle": "Ne dis rien. Monte t'asseoir à côté de lui.", "vers": "ch5-silence", "effets": [ { "objet": "cafe", "donne": true } ] },
+        { "id": "ch5-minute-promesse", "libelle": "Promets-lui que toi, tu ne dormiras pas", "vers": "ch5-promesse", "effets": [ { "drapeau": "promesse-veille" }, { "objet": "cafe", "donne": true } ] }
+      ]
+    },
+    "ch5-regrette": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai demandé : « Vous regrettez d'y être allé ? » Le tuyau n'a rien dit pendant longtemps. Puis : « Le voyage ? Jamais. Pas un pas. Elle est arrivée, tu comprends. Elle est grande, maintenant, quelque part. C'est moi qui l'ai menée jusque-là. » Un grincement. « La minute, par contre. La minute, tous les jours. » Il n'a plus parlé de la soirée. Mais il a laissé la lanterne allumée pour nous."
+      ],
+      "suite": "ch5-toit"
+    },
+    "ch5-silence": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je suis monté sur le toit par la gouttière, ce qui m'a pris un temps fou, et je me suis assis à côté de lui. On a regardé la montagne. On n'a rien dit. Au bout d'un long moment, il a poussé vers moi, du bec, un petit sachet. « Café de gland. C'est infect. Ça tiendrait éveillé un caillou. Tu le boiras la dernière nuit, pas avant. Et tu ne t'assieds pas. Même une minute. »"
+      ],
+      "suite": "ch5-toit"
+    },
+    "ch5-promesse": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "J'ai dit : « Moi, je ne dormirai pas. Je vous le promets. » C'est sorti tout seul. Le tuyau a ri, un rire de vieille charnière, pas méchant. « Tout le monde promet ça, la goutte. Moi aussi, j'avais promis. » Puis quelque chose a glissé le long de la gouttière : un petit sachet. « Café de gland. C'est infect. Bois-le la dernière nuit. Et puisque tu as promis : tiens parole, toi. » J'ai une promesse sur le dos, maintenant. Ça pèse plus que la casserole."
+      ],
+      "suite": "ch5-toit"
+    },
+    "ch5-toit": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Il est tard. Brouillon s'est réveillé, et il veut dormir là-haut. Sur le toit, dehors, à côté de Tournebise. Il l'a demandé lui-même : « Brouillon là. » Le vieux coq dit que c'est une bonne école. Qu'un petit qui n'a jamais pris le vent ne saura pas monter, une fois au lac, et qu'il lui montrera comment on se tient.",
+        "Mais il fait froid, là-haut, et le vent l'use. Près du poêle, il passerait la nuit dans la vapeur et il reprendrait un bord, c'est sûr. Il me regarde. Il attend que je dise oui. Je dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch5-toit-oui", "libelle": "Oui : qu'il dorme sur le toit, face au vent", "vers": "ch5-la-haut", "effets": [ { "var": "lien", "plus": 1 }, { "drapeau": "sait-tenir" } ] },
+        { "id": "ch5-toit-non", "libelle": "Non : au chaud près du poêle, il doit reprendre du volume", "vers": "ch5-poele", "effets": [ { "var": "taille", "plus": 1 } ] }
+      ]
+    },
+    "ch5-la-haut": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 25,
+      "duree_max": 30,
+      "pendant": "Pilou dort d'un œil ; sur le toit, on apprend le vent",
+      "tenue": "nuit",
+      "texte": [
+        "J'ai dit oui. Par la lucarne, j'entends la leçon : « Tu rentres le ventre. Tu penses à un caillou. Le vent, tu ne le combats pas, tu le laisses passer autour. » Et Brouillon qui répète : « Caillou. » Il se fait emporter jusqu'à la cheminée, il revient, il recommence. Moi, je suis en bas avec ma soupe froide, et je découvre que c'est difficile, de ne pas aller voir. Bonne nuit."
+      ],
+      "suite": "ch5-plume"
+    },
+    "ch5-poele": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 25,
+      "duree_max": 30,
+      "pendant": "Pilou dort près du poêle, un nuage dans la vapeur",
+      "tenue": "nuit",
+      "texte": [
+        "J'ai dit non, pas cette nuit. Il n'a pas insisté. Il s'est installé au-dessus de la marmite et je remets de l'eau dès qu'elle baisse. Il reprend du volume, je le vois d'ici. Par la lucarne, Tournebise a juste dit : « Comme tu veux. Mais le vent, il faudra bien qu'il l'apprenne quelque part. » Je sais. Demain. Ce soir, il est au chaud et il ronronne. Bonne nuit."
+      ],
+      "suite": "ch5-plume"
+    },
+    "ch5-plume": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Ce matin, Tournebise m'a appelé sur le toit. Une des plumes de sa queue s'est décrochée dans la nuit. C'est une plume en fer, longue comme moi, qui sonne quand on la cogne. Il veut que je l'emporte. « Si tu vois, au lac, une grande grise. Très vieille. Large comme une vallée. Fais sonner ça. Elle saura. »",
+        "J'ai soulevé la plume. Elle est lourde. Vraiment lourde, avec la casserole et le réchaud en plus, et la route qui monte. Il le sait. Il a ajouté : « Tu peux dire non. Je ne t'en voudrai pas. » Et il a regardé ailleurs, c'est-à-dire la montagne. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ch5-plume-prendre", "libelle": "Prends la plume. Tu la porteras.", "vers": "ch5-plume-oui", "effets": [ { "objet": "plume", "donne": true } ] },
+        { "id": "ch5-plume-refuser", "libelle": "Dis non, honnêtement : c'est trop lourd pour vous deux", "vers": "ch5-plume-non" }
+      ]
+    },
+    "ch5-plume-oui": {
+      "type": "recit",
+      "humeur": "determine",
+      "texte": [
+        "Je l'ai attachée en travers du baluchon. Je penche à gauche, maintenant. À chaque pas, elle fait ding contre la casserole. Brouillon trouve que je fais une très belle musique. Tournebise n'a pas dit merci. Il a dit : « Elle aimait les mirabelles. Enfin, l'odeur. » Comme si c'était un renseignement utile. Je crois que c'était sa façon."
+      ],
+      "suite": "ch5-routes"
+    },
+    "ch5-plume-non": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "J'ai dit non. Que j'avais déjà un nuage à mener, et que je ne voulais pas promettre une chose pour la lâcher dans la pente. Il a hoché le bec. « Tu as raison. Faut pas promettre lourd. J'en connais un qui l'a fait. » Il a remis la plume contre la cheminée, bien droite. Il ne m'en veut pas, je crois. C'est moi qui y pense encore."
+      ],
+      "suite": "ch5-routes"
+    },
+    "ch5-routes": {
+      "type": "choix",
+      "humeur": "determine",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Voilà. Il y a deux passages, m'a dit Tournebise. Le col, là-haut, entre deux dents : la Gencive. C'est par là qu'il est passé. C'est long et froid, mais on voit où on met les pieds. Si on n'a pas perdu un seul jour en route, on arrive au lac le dernier soir. Pas avant.",
+        "Ou le Trou-qui-Siffle, au pied de la paroi. Le vent traverse la montagne par là. C'est noir et c'est court : on sort de l'autre côté avec un jour d'avance. « Mais là-dedans, ça déchire. Quand le sifflet monte dans l'aigu, tu ne bouges plus. Et ton petit, dans le vent, ne le serre pas : un nuage qu'on serre, ça file entre les doigts. » Brouillon attend. Par où ?"
+      ],
+      "options": [
+        { "id": "ch5-routes-col", "libelle": "Le col : long, mais on voit clair", "vers": "ch6-sentier", "effets": [ { "drapeau": "route-col" } ] },
+        { "id": "ch5-routes-trou", "libelle": "Le Trou-qui-Siffle : court, mais noir", "vers": "ch8-entree", "effets": [ { "drapeau": "route-gorge" } ] },
+        { "id": "ch5-routes-temps", "libelle": "Demande-lui : avec le jour perdu, le col, ça passe encore ?", "vers": "ch5-temps", "si": { "drapeau": "a-traine" } }
+      ]
+    },
+    "ch5-temps": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "Je lui ai avoué qu'on avait perdu un jour. Il le savait : « Ça se voit à ta façon de regarder derrière toi. » Par le col, avec un jour de moins, on arrivera pour les voir partir, pas pour dire au revoir. À moins de regagner le temps dans la montée, en coupant par les rochers au lieu de suivre les lacets. « C'est faisable. C'est casse-figure. » Par le trou, même en retard, on arrive le dernier soir. Voilà. Je sais tout, maintenant."
+      ],
+      "suite": "ch5-routes"
+    }
+  }
+}

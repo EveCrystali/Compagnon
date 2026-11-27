@@ -1,0 +1,191 @@
+{
+  "chapitre": "ch2",
+  "noeuds": {
+    "ch2-chemin": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Le chemin creux",
+      "decor": "chemin-creux",
+      "humeur": "joie",
+      "texte": [
+        "Premier vrai bout de route ! On a dépassé la boîte aux lettres, puis le tas de bois, puis un endroit où je n'étais jamais allé et qui ressemble beaucoup au tas de bois. Le chemin passe entre deux haies. Il fait beau. J'ai la casserole qui tinte dans le dos : on dirait une fanfare d'une seule personne.",
+        "Le problème, c'est Brouillon. Il s'arrête à tout. Une toile d'araignée, un pissenlit, sa propre ombre. Et au moindre courant d'air, il part de côté : je l'ai déjà sorti deux fois de la haie, il y laisse des peluches. À ce rythme, on sera aux montagnes pour mes cent ans."
+      ],
+      "suite": "ch2-ficelle"
+    },
+    "ch2-ficelle": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Je me suis assis sur une pierre pour réfléchir. Lui, il essaie de s'asseoir aussi, il n'a pas encore compris le principe. Il faut trouver une façon d'avancer ensemble. Je pourrais le tenir. Je pourrais le porter. Ou je pourrais lui apprendre à me suivre, mais ça, ça va prendre un moment. Tu ferais comment, toi ?"
+      ],
+      "options": [
+        { "id": "ch2-ficelle-attache", "libelle": "Attache-le à ton poignet avec un brin de laine", "vers": "ch2-attache", "si": { "objet": "pelote" }, "effets": [ { "drapeau": "ficelle" } ] },
+        { "id": "ch2-ficelle-libre", "libelle": "Laisse-le libre et apprends-lui à te suivre", "vers": "ch2-libre", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch2-ficelle-baluchon", "libelle": "Porte-le dans le baluchon, la tête dehors", "vers": "ch2-baluchon" }
+      ]
+    },
+    "ch2-attache": {
+      "type": "attente",
+      "humeur": "malice",
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou marche, un nuage au bout d'un fil",
+      "tenue": "marche",
+      "texte": [
+        "J'ai coupé un long brin de laine bleue. Un bout autour de lui, un nœud, l'autre bout à mon poignet. Il a regardé le fil, il a tiré dessus pour voir, et moi j'ai décollé d'un centimètre. Maintenant, il flotte au-dessus de ma tête comme un ballon de fête. Les moineaux nous regardent passer. On avance bien. Je te raconte la suite au prochain arrêt."
+      ],
+      "suite": "ch2-draps"
+    },
+    "ch2-libre": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou fait dix pas, se retourne, appelle",
+      "tenue": "marche",
+      "texte": [
+        "On a inventé une méthode. Je fais dix pas, je me retourne, je dis « Brouillon ! », et il vient. Au début, il venait en passant par la haie. Maintenant, il vient presque droit. Une fois sur trois, c'est lui qui s'arrête pour vérifier que je suis toujours là, et ça, je ne le lui ai pas appris. On avance comme une limace distraite, mais on avance à deux. À tout à l'heure."
+      ],
+      "suite": "ch2-draps"
+    },
+    "ch2-baluchon": {
+      "type": "attente",
+      "humeur": "neutre",
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou file, un nuage dans le baluchon",
+      "tenue": "marche",
+      "texte": [
+        "Je l'ai plié dans le baluchon, entre la casserole et le réchaud. Il dépasse par le haut, comme la mousse d'un chocolat chaud. Il ne pèse rien, on file. Par le trou du nœud, il regarde le paysage défiler à l'envers. Il ne dit rien. Je ne sais pas si c'est qu'il est bien, ou s'il n'a juste pas le choix. Je te redis au prochain arrêt."
+      ],
+      "suite": "ch2-draps"
+    },
+    "ch2-draps": {
+      "type": "choix",
+      "lieu": "Le Pré aux Draps",
+      "decor": "pre-aux-draps",
+      "humeur": "joie",
+      "texte": [
+        "Il faut que je te raconte. On est arrivés dans un pré plein de cordes à linge. Onze grands draps blancs qui claquent au vent. Brouillon s'est arrêté net. Il a fait un bruit que je ne connaissais pas, très aigu. Et il a foncé. Il se frotte à eux, il se glisse entre deux, il leur parle en pff.",
+        "Il croit que c'est sa famille. Voilà. Il croit qu'il est arrivé. Les draps ne répondent pas, évidemment, ce sont des draps. Il attend quand même. Il est tellement content que je n'ose plus bouger. Je fais quoi, moi, maintenant ?"
+      ],
+      "options": [
+        { "id": "ch2-draps-apres-midi", "libelle": "Laisse-lui l'après-midi avec eux", "vers": "ch2-apres-midi", "effets": [ { "var": "lien", "plus": 2 }, { "drapeau": "a-traine" } ] },
+        { "id": "ch2-draps-explique", "libelle": "Explique-lui doucement que ce sont des draps", "vers": "ch2-explique" },
+        { "id": "ch2-draps-voix", "libelle": "Cache-toi derrière un drap et réponds à leur place", "vers": "ch2-voix", "effets": [ { "var": "lien", "plus": 1 }, { "drapeau": "voix-des-draps" } ] }
+      ]
+    },
+    "ch2-apres-midi": {
+      "type": "attente",
+      "humeur": "tendre",
+      "duree_min": 20,
+      "duree_max": 30,
+      "pendant": "Pilou attend dans l'herbe ; un nuage joue dans les draps",
+      "tenue": "attend",
+      "texte": [
+        "Tant pis pour la route. Je me suis couché dans l'herbe et je le regarde. Il a choisi un drap, le troisième, et il ne le quitte plus. Quand le vent gonfle le drap, il se gonfle aussi. Une hérissonne en tablier est sortie compter son linge : elle a compté douze, elle a recompté, elle est rentrée. On repartira quand le soleil baissera. Je sais, on perd une demi-journée. Mais regarde-le, aussi."
+      ],
+      "suite": "ch2-soleil"
+    },
+    "ch2-explique": {
+      "type": "recit",
+      "humeur": "triste",
+      "texte": [
+        "Je lui ai dit. Que ce sont des draps. Que ça sert à dormir, que ça ne parle pas, que ce n'est pas eux. Il m'a écouté jusqu'au bout. Il a regardé les draps, puis le ciel, vide, puis encore les draps. Et il a fait le tour de la corde pour dire au revoir à chacun. Il y en avait onze. Ça a été long. Je n'ai pas osé le presser."
+      ],
+      "suite": "ch2-soleil"
+    },
+    "ch2-voix": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Je me suis caché derrière le plus grand et j'ai pris une grosse voix : « Bonjour, petit. On est contents de te voir. » Il a fait trois tours sur lui-même. Alors j'ai continué : j'ai dit qu'ils étaient occupés à sécher, là, mais que les autres l'attendaient derrière les montagnes. Il a tout cru. Il est reparti en tête, tout gonflé. Moi, j'ai un drôle de goût dans la bouche. C'était gentil, ou c'était un mensonge ?"
+      ],
+      "suite": "ch2-soleil"
+    },
+    "ch2-soleil": {
+      "type": "choix",
+      "lieu": "La route blanche",
+      "decor": "chemin-creux",
+      "humeur": "peur",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "On a repris la route, et ça se gâte. Plus de haies : un chemin tout blanc, en plein soleil. Brouillon a chaud. Ses bords deviennent transparents, je vois les cailloux à travers. Je me suis mesuré contre lui en marchant : il a encore perdu un peu.",
+        "Il y a deux façons d'aller jusqu'à l'étang où on dormira. Tout droit par le chemin blanc, on y est avant le soir. Ou par le petit bois, à l'ombre, mais ça fait un grand détour et on arrivera de nuit. Lui, il ne se plaint pas. Il ne sait pas se plaindre. On passe par où ?"
+      ],
+      "options": [
+        { "id": "ch2-soleil-bois", "libelle": "Par le bois, à l'ombre, tant pis pour le détour", "vers": "ch2-etang" },
+        { "id": "ch2-soleil-droit", "libelle": "Tout droit, au soleil : on gagne du temps", "vers": "ch2-soleil-2" }
+      ]
+    },
+    "ch2-soleil-2": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "On va tout droit. Ça tape. Brouillon ne fait plus pff : il fait un petit sifflement, tout fin, comme un pneu de vélo. Il vole de plus en plus bas. Tout à l'heure, il a frôlé le chemin et il a laissé une trace humide dans la poussière, qui a séché en trois secondes. Il y a un noisetier, là, à gauche. L'étang est encore loin. Je ne sais pas. Dis-moi vite."
+      ],
+      "options": [
+        { "id": "ch2-soleil-2-noisetier", "libelle": "Arrête-toi sous le noisetier, le temps qu'il faudra", "vers": "ch2-noisetier", "effets": [ { "var": "taille", "plus": -1 } ] },
+        { "id": "ch2-soleil-2-continue", "libelle": "Continue : il tiendra bien jusqu'à l'étang", "vers": "ch2-echec-soleil" }
+      ]
+    },
+    "ch2-noisetier": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "On s'est arrêtés sous le noisetier. J'ai fait bouillir ma gourde entière et il a tout pris, sans ronronner. Il a mis longtemps à redevenir blanc. Il est plus petit qu'à midi : ça, l'ombre ne le rend pas. Du coup, on n'a rien gagné du tout, on arrivera à la nuit quand même. Je retiens une chose, je te la donne : avec lui, tout droit, ce n'est pas toujours le plus court."
+      ],
+      "suite": "ch2-etang"
+    },
+    "ch2-echec-soleil": {
+      "type": "echec",
+      "humeur": "triste",
+      "repos_min": 20,
+      "texte": [
+        "Il n'a pas tenu. À mi-chemin, il s'est posé par terre, d'un coup, plat comme une flaque. Il tenait dans mes deux bras. Je l'ai porté en courant jusqu'au dernier coin d'ombre, celui des haies, tout au début du chemin, et j'ai fait de la vapeur avec tout ce que j'avais. Il se regonfle, tout doucement. Je reste à côté. Je n'aurais pas dû insister. On reprendra la route quand il flottera de nouveau."
+      ]
+    },
+    "ch2-etang": {
+      "type": "choix",
+      "lieu": "L'Étang-qui-fume",
+      "decor": "etang-qui-fume",
+      "humeur": "fatigue",
+      "texte": [
+        "On y est. C'est un étang tout rond, avec des roseaux et un vieux saule. La nuit tombe, et il se passe un truc : l'eau fume. Une brume blanche monte de partout. Brouillon est fou de joie, il a encore cru que c'était quelqu'un. Mais la brume, au moins, ça se boit un peu : ses bords repoussent.",
+        "Le souci, c'est moi. La brume, c'est de l'eau, et tu sais ce que l'eau me fait. Si je dors au bord, je me réveille délavé. Si on dort au sec sous le saule, il n'y a plus de brume pour lui. On s'installe comment ?"
+      ],
+      "options": [
+        { "id": "ch2-etang-bord", "libelle": "Tous les deux au bord de l'eau, baluchon sur la tête", "vers": "ch2-goutte", "effets": [ { "var": "taille", "plus": 1 }, { "var": "lien", "plus": 1 } ] },
+        { "id": "ch2-etang-saule", "libelle": "Tous les deux au sec, sous le saule", "vers": "ch2-goutte" },
+        { "id": "ch2-etang-separes", "libelle": "Lui au bord de l'eau, toi sous le saule", "vers": "ch2-goutte", "effets": [ { "var": "taille", "plus": 1 }, { "var": "lien", "plus": -1 } ] }
+      ]
+    },
+    "ch2-goutte": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Juste avant de dormir, il est venu tout près. Il m'a regardé fixement, et il a dit un mot. Un vrai. Il a dit : « Goutte. » C'est moi, Goutte. Il m'appelle Goutte ! Et après, en montrant le ciel avec un de ses bords : « Goutte tombé aussi ? »",
+        "J'ai mis un moment à comprendre. Il croit que je suis une goutte de pluie. Que je suis tombé du ciel comme lui, pendant un orage, il y a longtemps, et que j'ai bleui en vieillissant. Il attend ma réponse. Il ne cligne pas des yeux, il n'a pas de quoi. Je lui dis quoi ?"
+      ],
+      "options": [
+        { "id": "ch2-goutte-en-bas", "libelle": "La vérité : non, moi, je suis d'en bas", "vers": "ch2-nuit", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch2-goutte-la-haut", "libelle": "Demande-lui plutôt comment c'était, là-haut", "vers": "ch2-nuit", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch2-goutte-dors", "libelle": "Dis-lui de dormir, il est tard", "vers": "ch2-nuit" }
+      ]
+    },
+    "ch2-nuit": {
+      "type": "attente",
+      "humeur": "surpris",
+      "duree_min": 90,
+      "duree_max": 100,
+      "pendant": "Pilou veille près de l'étang",
+      "tenue": "nuit",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "Il dort. Il fait son bruit de bouilloire, tout bas. Moi, je ne dors pas : c'est la première nuit que je passe loin de la maison, et je découvre qu'il y a beaucoup de dehors. Et puis il y a un autre bruit. Ça vient de l'eau. On dirait quelqu'un qui compte. Un, deux, trois, puis plus rien, puis ça recommence. Ça se rapproche, non ? Je vais voir. Enfin, je vais écouter de plus près. Je te raconte demain."
+      ],
+      "suite": "ch3-etang"
+    }
+  }
+}

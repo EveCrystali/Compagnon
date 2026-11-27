@@ -1,0 +1,197 @@
+{
+  "chapitre": "ch4",
+  "noeuds": {
+    "ch4-bord": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Le Plateau Râpé",
+      "decor": "plateau-rape",
+      "humeur": "peur",
+      "texte": [
+        "Je t'écris du bord. Devant nous, c'est plat, jaune, et ça ne s'arrête pas. Pas une haie, pas une flaque. Un seul arbre, mort, très loin, au milieu. Le vent est chaud et sec, on dirait un sèche-cheveux. Il y a une pancarte : « Plateau Râpé. Rien avant longtemps. » Au moins, c'est honnête.",
+        "Les montagnes sont de l'autre côté. On voit bien leurs pointes, maintenant, blanches et alignées : par ici, on les appelle les Dents-de-Lait. Et à droite, loin, au ras du plateau, il y a autre chose. Des nuages. Énormes, noirs, plats du dessus comme des enclumes. Brouillon ne regarde que ça."
+      ],
+      "suite": "ch4-noirs"
+    },
+    "ch4-noirs": {
+      "type": "choix",
+      "humeur": "peur",
+      "effets": [ { "var": "taille", "plus": -1 } ],
+      "texte": [
+        "Il s'est tourné vers eux, tout entier, et il a dit : « Grands. » Puis, plus bas : « Brouillon après ? » Il croit que c'est ce qu'il deviendra. Il a peut-être raison, je n'y connais rien. Mais je me rappelle la bergeronnette : pas les noirs, les noirs avalent. Ils sont encore loin. Il est heureux de les voir. Et le vent sec lui a déjà pris un bord depuis ce matin. Je lui dis, pour les noirs ?"
+      ],
+      "options": [
+        { "id": "ch4-noirs-explique", "libelle": "Explique-lui : ceux-là ne sont pas les siens", "vers": "ch4-traversee", "effets": [ { "drapeau": "prevenu" } ] },
+        { "id": "ch4-noirs-reve", "libelle": "Laisse-le rêver : ils sont loin", "vers": "ch4-traversee", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch4-traversee": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Bon. Il faut traverser. J'ai mis la casserole sur ma tête, ça fait chapeau, et j'ai regardé le soleil. Il y a la moitié du plateau jusqu'à l'arbre mort, et autant après. Si on y va tout de suite et sans traîner, on rattrape du temps, peut-être même une journée. Si on attend que la chaleur tombe, il séchera moins, mais on n'aura rien gagné. Je pars quand ?"
+      ],
+      "options": [
+        { "id": "ch4-traversee-frais", "libelle": "Maintenant, tant qu'il fait encore frais", "vers": "ch4-jour", "si": { "non": { "drapeau": "midi-passe" } }, "effets": [ { "drapeau": "a-traine", "ote": true } ] },
+        { "id": "ch4-traversee-soleil", "libelle": "Maintenant, en plein soleil, sans s'arrêter", "vers": "ch4-jour", "si": { "drapeau": "midi-passe" }, "effets": [ { "var": "taille", "plus": -2 }, { "drapeau": "a-traine", "ote": true } ] },
+        { "id": "ch4-traversee-attendre", "libelle": "Attends la fin de l'après-midi", "vers": "ch4-attend-soir" }
+      ]
+    },
+    "ch4-jour": {
+      "type": "attente",
+      "humeur": "determine",
+      "duree_min": 15,
+      "duree_max": 25,
+      "pendant": "Pilou traverse le plateau, une casserole sur la tête",
+      "tenue": "marche",
+      "texte": [
+        "On y va. Tout droit vers l'arbre mort. Je marche vite, Brouillon se tient dans mon ombre, ce qui est gentil de sa part, parce que mon ombre fait la taille d'une assiette. Il n'y a rien ici pour s'asseoir et t'écrire, alors tu n'auras pas de nouvelles avant l'arbre. Si tu vois passer une casserole avec des pieds, c'est moi."
+      ],
+      "suite": "ch4-question"
+    },
+    "ch4-attend-soir": {
+      "type": "attente",
+      "humeur": "fatigue",
+      "duree_min": 25,
+      "duree_max": 30,
+      "pendant": "Pilou attend que la chaleur tombe",
+      "tenue": "attend",
+      "texte": [
+        "On attend. J'ai trouvé le seul caillou qui fasse de l'ombre et on s'est mis derrière, lui dessus, moi dessous. Je lui fais de la vapeur à petites doses, pour économiser la gourde. Les nuages noirs ont un peu avancé, je crois, ou alors c'est moi. On partira quand le soleil sera descendu de moitié. Je te préviens quand on est à l'arbre."
+      ],
+      "suite": "ch4-question"
+    },
+    "ch4-question": {
+      "type": "choix",
+      "lieu": "L'arbre mort",
+      "humeur": "triste",
+      "texte": [
+        "On est à l'arbre mort. C'est la moitié. On souffle. Et là, Brouillon a fait une chose que je ne lui avais jamais vue faire : il s'est couché par terre à côté de moi. Bien aligné. Comme je fais, moi, le matin, pour le mesurer. Il a regardé où j'arrivais. Il a regardé où il arrivait, lui.",
+        "Et il a demandé : « Brouillon petit ? » Il ne fait plus trois Pilou, et il le voit bien. Il attend. Je pourrais lui dire la vérité. Je pourrais aussi lui dire que c'est moi qui grandis : il le croirait, il croit tout ce que je dis. Qu'est-ce que je réponds ?"
+      ],
+      "options": [
+        { "id": "ch4-question-vrai", "libelle": "La vérité : oui, il rétrécit, c'est pour ça qu'on se dépêche", "vers": "ch4-vrai", "effets": [ { "var": "lien", "plus": 1 } ] },
+        { "id": "ch4-question-menti", "libelle": "Dis-lui que c'est toi qui grandis", "vers": "ch4-menti", "effets": [ { "drapeau": "a-menti" }, { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch4-vrai": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "Je lui ai dit. Oui. Tu rétrécis un peu chaque jour, parce que tu es tout seul et que tu ne sais pas encore tout faire. C'est pour ça qu'on marche vite. Chez les tiens, ça s'arrêtera. Il n'a pas pleuré, les nuages ne pleurent pas, enfin si, mais ce n'est pas pareil. Il s'est relevé. Il a dit : « Alors vite. » Et il est parti devant. C'est moi qui ai dû courir."
+      ],
+      "suite": "ch4-enclumes"
+    },
+    "ch4-menti": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai dit : « Mais non ! C'est moi qui grandis. Regarde, je suis énorme. » J'ai gonflé les joues. Il a fait son bruit de bulle, tout soulagé, et il a tourné autour de moi pour admirer. Maintenant, il m'appelle « Grande Goutte ». C'est mignon. Ça m'a évité une conversation difficile. Je me demande juste ce que je lui dirai le jour où il se verra dans une flaque, à côté de moi."
+      ],
+      "suite": "ch4-enclumes"
+    },
+    "ch4-enclumes": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Ça y est, ils sont là. Les Enclumes. Ils ont traversé le plateau plus vite que nous et ils sont au-dessus de nos têtes, noirs, et ils grondent. Ça sent le métal. Il y a un vent qui monte du sol, droit vers eux, qui soulève la poussière et mes pieds.",
+        "Et Brouillon monte. Il ne s'envole pas : il est aspiré, et il est content ! Il crie « Grands ! Grands ! » en montant. Il est déjà à hauteur de l'arbre. J'ai vu un éclair là-haut, dans le noir, exactement là où il va. Vite, vite, dis-moi !"
+      ],
+      "options": [
+        { "id": "ch4-enclumes-laine", "libelle": "Tiens bon la laine !", "vers": "ch4-tire", "si": { "drapeau": "ficelle" } },
+        { "id": "ch4-enclumes-appelle", "libelle": "Appelle-le. Juste son nom.", "vers": "ch4-revient", "si": { "un": [ { "drapeau": "prevenu" }, { "var": "lien", "min": 5 } ] } },
+        { "id": "ch4-enclumes-saute", "libelle": "Grimpe à l'arbre et saute pour l'attraper", "vers": "ch4-saute" }
+      ]
+    },
+    "ch4-tire": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "jeu": "reflexe",
+      "difficulte": 1,
+      "bonus": "lien",
+      "texte": [
+        "La laine ! Elle se tend d'un coup, elle me scie le poignet, je décolle. Je me suis accroché à l'arbre mort avec tout ce que j'ai. Le fil vibre comme une corde de guitare. Il faut que je tire au bon moment, entre deux bourrasques, sinon ça casse. Allez. Allez !"
+      ],
+      "reussite": "ch4-rattrape",
+      "echec": "ch4-echec-enclumes"
+    },
+    "ch4-saute": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "jeu": "reflexe",
+      "difficulte": 2,
+      "bonus": "lien",
+      "texte": [
+        "Je grimpe. Je n'ai jamais grimpé à rien, mais là, je grimpe, la casserole me tape dans le dos. La plus haute branche craque. Il est juste au-dessus, il monte encore, il ne me voit pas. Je n'aurai qu'un seul saut, au moment où il passera le plus près. Trois, deux…"
+      ],
+      "reussite": "ch4-rattrape",
+      "echec": "ch4-echec-enclumes"
+    },
+    "ch4-revient": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "var": "lien", "plus": 1 } ],
+      "texte": [
+        "J'ai crié « Brouillon ! » Une seule fois, de toutes mes forces. Il s'est arrêté. Là-haut, dans le courant, il s'est retourné vers moi, puis vers eux, les grands, les magnifiques. Puis encore vers moi. Et il est redescendu. Tout seul, contre le vent, en ramant avec ses bords. Ça lui a pris une éternité. Il s'est posé sur ma tête, sur la casserole, et il a dit : « Pas les miens. » Je n'ai rien eu à faire. Rien. Il a choisi."
+      ],
+      "suite": "ch4-arc"
+    },
+    "ch4-rattrape": {
+      "type": "recit",
+      "humeur": "fatigue",
+      "texte": [
+        "Je l'ai. Je le tiens à deux bras, et on est plaqués au pied de l'arbre mort pendant que ça gronde au-dessus. Il se débat un peu. Il ne comprend pas pourquoi je l'ai empêché. Puis la foudre est tombée, loin, sur le plateau, et il a arrêté de se débattre. Il s'est fait tout petit dans mes bras. Je tremble encore. Je ne lâcherai plus jamais rien. Enfin. Tu vois ce que je veux dire."
+      ],
+      "suite": "ch4-arc"
+    },
+    "ch4-echec-enclumes": {
+      "type": "echec",
+      "humeur": "triste",
+      "repos_min": 30,
+      "texte": [
+        "Raté. Il m'a filé entre les doigts et le noir l'a pris. J'ai couru sous l'orage en criant son nom pendant je ne sais pas combien de temps. Ils l'ont recraché plus loin, avec la pluie : trempé, moitié moins gros, et très étonné. Les Enclumes ne sont pas méchants. Ils avalent, c'est tout. Je l'ai ramené dans mes bras jusqu'au bord du plateau, à la pancarte. On se sèche. On se tait. On retraversera quand il aura repris forme."
+      ]
+    },
+    "ch4-arc": {
+      "type": "choix",
+      "humeur": "joie",
+      "texte": [
+        "L'orage est passé. Il a plu dix minutes sur le plateau, j'étais sous la casserole, et maintenant tout brille. Et regarde ce qu'il y a derrière : un arc-en-ciel. Un vrai, énorme, avec toutes les couleurs dans l'ordre. Brouillon n'en avait jamais vu. Il a demandé qui l'avait fait. J'ai dit : la pluie et le soleil.",
+        "Alors il a voulu m'en faire un. Pour moi. Il s'est mis dos au soleil, il s'est concentré, il est devenu tout rose d'effort. Et il a fait… un arc. Petit. D'une seule couleur. Beige. Un arc-en-beige. Il me regarde, il attend mon avis. J'ai les joues qui tremblent. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "ch4-arc-rire", "libelle": "Ris. Avec lui, pas de lui.", "vers": "ch4-rire", "effets": [ { "var": "lien", "plus": 2 } ] },
+        { "id": "ch4-arc-beau", "libelle": "Dis-lui que c'est le plus beau que tu aies vu", "vers": "ch4-beau", "effets": [ { "var": "lien", "plus": 1 } ] }
+      ]
+    },
+    "ch4-rire": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "J'ai ri. Je n'ai pas pu faire autrement. Il a eu l'air vexé une demi-seconde, puis il a regardé son arc, et il a fait son bruit de bulle, de plus en plus fort, et on a ri tous les deux à s'en rouler dans la poussière mouillée. Entre deux hoquets, il a dit : « Beige ! » C'est son mot préféré, maintenant. Il l'a refait trois fois, exprès, de plus en plus beige. Je ne savais pas qu'on pouvait rire avec un nuage."
+      ],
+      "suite": "ch4-fin-plateau"
+    },
+    "ch4-beau": {
+      "type": "recit",
+      "humeur": "tendre",
+      "texte": [
+        "J'ai dit : « C'est le plus beau que j'aie jamais vu. » Et tu sais quoi ? En le disant, c'est devenu vrai. Personne ne m'avait jamais fait d'arc-en-ciel. Même beige. Même de la taille d'une anse de panier. Il s'est gonflé de fierté, il en a perdu son arc, il a essayé d'en refaire un et c'est sorti gris. Il a dit que le gris, c'était pour demain. Il a déjà des projets."
+      ],
+      "suite": "ch4-fin-plateau"
+    },
+    "ch4-fin-plateau": {
+      "type": "attente",
+      "humeur": "surpris",
+      "duree_min": 110,
+      "duree_max": 130,
+      "pendant": "Pilou finit de traverser le plateau, de nuit",
+      "tenue": "marche",
+      "recompense": { "po": 20, "xp": 10 },
+      "texte": [
+        "La nuit tombe et il reste la moitié du plateau. On marche. Il fait froid d'un coup, les étoiles sont sorties toutes ensemble. Brouillon vole bas, tout près, il est fatigué. Et tout au bout, au pied des montagnes, il y a une lumière. Pas une étoile : elle bouge un peu, à droite, à gauche. Et quand le vent vient de là-bas, on entend quelque chose qui grince. Qu'est-ce qui grince, la nuit, au bout de rien ? On y va. Je te dirai."
+      ],
+      "suite": "ch5-halte"
+    }
+  }
+}
