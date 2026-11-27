@@ -56,12 +56,11 @@ final class PageBoutique extends Page {
         enseigne.setBackground(cadre(a, Vitrine.NUIT, Vitrine.VIOLET_FONCE, 3));
         enseigne.setPadding(Ui.dp(a, 12), Ui.dp(a, 16), Ui.dp(a, 12), Ui.dp(a, 12));
         enseigne.addView(new Vitrine.Pixel(a, "BOUTIQUE", 4.2f, Vitrine.ORANGE, Vitrine.VIOLET_FONCE, true));
-        TextView sous = Ui.texte(a, "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.",
-                12, Vitrine.ARGENT, false);
+        TextView sous = Ui.texte(a, "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.", Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
         sous.setGravity(Gravity.CENTER);
         sous.setPadding(0, Ui.dp(a, 10), 0, 0);
         enseigne.addView(sous, Ui.large());
-        collection = Ui.texte(a, "", 13, Vitrine.ARGENT_CLAIR, true);
+        collection = Ui.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT_CLAIR, true);
         collection.setGravity(Gravity.CENTER);
         collection.setPadding(0, Ui.dp(a, 8), 0, Ui.dp(a, 4));
         enseigne.addView(collection, Ui.large());
@@ -86,7 +85,7 @@ final class PageBoutique extends Page {
         essai.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         scene.addView(essai, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
-        bulleEssai = Ui.texte(a, "ça te va bien !", 12, Vitrine.ENCRE, false);
+        bulleEssai = Ui.texte(a, "ça te va bien !", Ui.T_ETIQUETTE, Vitrine.ENCRE, false);
         bulleEssai.setPadding(Ui.dp(a, 10), Ui.dp(a, 4), Ui.dp(a, 10), Ui.dp(a, 5));
         bulleEssai.setVisibility(View.GONE);
         FrameLayout.LayoutParams lbu = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -96,10 +95,10 @@ final class PageBoutique extends Page {
         LinearLayout.LayoutParams ls = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 210));
         ls.topMargin = Ui.dp(a, 8);
         cabine.addView(scene, ls);
-        nom = Ui.texte(a, "", 17, Vitrine.ARGENT_CLAIR, true);
+        nom = Ui.texte(a, "", Ui.T_CARTE, Vitrine.ARGENT_CLAIR, true);
         nom.setPadding(0, Ui.dp(a, 10), 0, 0);
         cabine.addView(nom, Ui.large());
-        detail = Ui.texte(a, "", 13, Vitrine.ARGENT, false);
+        detail = Ui.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT, false);
         cabine.addView(detail, Ui.large());
         LinearLayout boutons = Ui.rangee(a);
         boutons.setPadding(0, Ui.dp(a, 10), 0, 0);
@@ -116,7 +115,7 @@ final class PageBoutique extends Page {
             boutons.addView(b, lb);
         }
         cabine.addView(boutons, Ui.large());
-        message = Ui.texte(a, "", 12, Vitrine.VIOLET, false);
+        message = Ui.texte(a, "", Ui.T_ETIQUETTE, Vitrine.VIOLET, false);
         message.setPadding(0, Ui.dp(a, 6), 0, 0);
         cabine.addView(message, Ui.large());
         corps.addView(cabine, Ui.large(a, 12));
@@ -213,8 +212,7 @@ final class PageBoutique extends Page {
         ongletsRayons(e, n);
         etageres.removeAllViews();
         if (e.po < 0) {
-            TextView t = Ui.texte(app, "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC). En attendant, on peut regarder.",
-                    13, Vitrine.ARGENT, false);
+            TextView t = Ui.texte(app, "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC). En attendant, on peut regarder.", Ui.T_DETAIL, Vitrine.ARGENT, false);
             t.setPadding(Ui.dp(app, 4), Ui.dp(app, 10), 0, Ui.dp(app, 4));
             etageres.addView(t, Ui.large());
         }
@@ -415,7 +413,7 @@ final class PageBoutique extends Page {
 
     private View onglet(String r, String texte, boolean neuf) {
         boolean actif = r.equals(rayon);
-        TextView t = Ui.texte(app, neuf ? texte + "  !" : texte, 13, actif ? 0xffffffff : Vitrine.ARGENT, true);
+        TextView t = Ui.texte(app, neuf ? texte + "  !" : texte, Ui.T_DETAIL, actif ? 0xffffffff : Vitrine.ARGENT, true);
         t.setBackground(cadre(app, actif ? Vitrine.VIOLET_FONCE : Vitrine.NUIT2, actif ? 0xffd2caff : neuf ? Vitrine.ORANGE : Vitrine.FERME, 2));
         t.setPadding(Ui.dp(app, 12), Ui.dp(app, 9), Ui.dp(app, 12), Ui.dp(app, 9));
         t.setOnClickListener(v -> rayon(r));
@@ -505,7 +503,7 @@ final class PageBoutique extends Page {
         Vitrine.Pixel t = new Vitrine.Pixel(app, titre, 2.2f, couleur, Vitrine.ENCRE, false);
         r.addView(t);
         l.addView(r);
-        TextView s = Ui.texte(app, sous, 12, Vitrine.ARGENT, false);
+        TextView s = Ui.texte(app, sous, Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
         s.setPadding(0, Ui.dp(app, 4), 0, 0);
         l.addView(s);
         if (flash && Vitrine.anime(app)) {
@@ -590,7 +588,7 @@ final class PageBoutique extends Page {
         // Rareté : signe dans sa couleur (et celui de l'ensemble), en bas à gauche ; lisere au-dessus.
         String ens = "";
         for (Boutique.Ensemble en : Boutique.ENSEMBLES) if (en.pieces.contains(a.id)) ens = " " + en.signe;
-        TextView rar = Ui.texte(app, Boutique.signeRarete(a.rarete) + ens, 13, Boutique.couleurRarete(a.rarete), true);
+        TextView rar = Ui.texte(app, Boutique.signeRarete(a.rarete) + ens, Ui.T_DETAIL, Boutique.couleurRarete(a.rarete), true);
         haut.addView(rar, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START | Gravity.BOTTOM));
         View lisere = new View(app);
         lisere.setBackgroundColor(Boutique.couleurRarete(a.rarete));
@@ -599,7 +597,7 @@ final class PageBoutique extends Page {
         ll.bottomMargin = Ui.dp(app, 2);
         c.addView(lisere, ll);
         if (!signe.isEmpty()) {
-            TextView s = Ui.texte(app, signe, 15, bord, true);
+            TextView s = Ui.texte(app, signe, Ui.T_CORPS, bord, true);
             haut.addView(s, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.END | Gravity.TOP));
         }
         if (ruban != null) {
@@ -609,7 +607,7 @@ final class PageBoutique extends Page {
             haut.addView(r, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START | Gravity.TOP));
         }
         c.addView(haut, Ui.large());
-        TextView nomT = Ui.texte(app, a.nom, 11, ouvert ? Vitrine.ARGENT_CLAIR : Vitrine.ARGENT, false);
+        TextView nomT = Ui.texte(app, a.nom, 12, ouvert ? Vitrine.ARGENT_CLAIR : Vitrine.ARGENT, false);
         nomT.setSingleLine(true);
         nomT.setEllipsize(TextUtils.TruncateAt.END);
         nomT.setGravity(Gravity.CENTER);
@@ -632,21 +630,21 @@ final class PageBoutique extends Page {
         r.setGravity(Gravity.CENTER);
         r.setBackground(cadre(app, Vitrine.ENCRE, bord, 1));
         r.setPadding(Ui.dp(app, 6), Ui.dp(app, 2), Ui.dp(app, 6), Ui.dp(app, 2));
-        if (a.recompense && !possede) r.addView(Ui.texte(app, "▣ à gagner", 11, Vitrine.ARGENT, true));
+        if (a.recompense && !possede) r.addView(Ui.texte(app, "▣ à gagner", 12, Vitrine.ARGENT, true));
         else if (!ouvert) {
             ImageView cad = new ImageView(app);
             Bitmap b = Vitrine.sprite("cadenas", Ui.dp(app, 1), 0, false);
             if (b != null) cad.setImageBitmap(b);
             cad.setPadding(0, 0, Ui.dp(app, 4), 0);
             r.addView(cad);
-            r.addView(Ui.texte(app, "NIV " + a.niveauMin, 11, Vitrine.ARGENT, true));
-        } else if (porteIci) r.addView(Ui.texte(app, "★ porté", 11, Vitrine.ORANGE, true));
-        else if (possede) r.addView(Ui.texte(app, a.recompense ? "✓ gagné" : "✓ à toi", 11, Vitrine.VIOLET, true));
-        else if (enRoute) r.addView(Ui.texte(app, "⇢ en route", 11, Vitrine.BLEU_CLAIR, true));
+            r.addView(Ui.texte(app, "NIV " + a.niveauMin, 12, Vitrine.ARGENT, true));
+        } else if (porteIci) r.addView(Ui.texte(app, "★ porté", 12, Vitrine.ORANGE, true));
+        else if (possede) r.addView(Ui.texte(app, a.recompense ? "✓ gagné" : "✓ à toi", 12, Vitrine.VIOLET, true));
+        else if (enRoute) r.addView(Ui.texte(app, "⇢ en route", 12, Vitrine.BLEU_CLAIR, true));
         else if (!dispo) {
             LocalDate d = Boutique.prochainPassage(a, jour());
             r.addView(Ui.texte(app, a.passage ? (d == null ? "✧ vitrine" : "✧ " + d.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", Locale.FRENCH)))
-                    : "⌛ " + Boutique.nomSaison(a.saison), 11, Vitrine.ARGENT, true));
+                    : "⌛ " + Boutique.nomSaison(a.saison), 12, Vitrine.ARGENT, true));
         }
         else {
             Vitrine.Piece pc = new Vitrine.Piece(app, 1.1f);
@@ -654,7 +652,7 @@ final class PageBoutique extends Page {
             lp.rightMargin = Ui.dp(app, 4);
             r.addView(pc, lp);
             boolean assez = connu && solde >= prix;
-            r.addView(Ui.texte(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), 11, assez ? Vitrine.ORANGE : Vitrine.ARGENT, true));
+            r.addView(Ui.texte(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), 12, assez ? Vitrine.ORANGE : Vitrine.ARGENT, true));
         }
         LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         l.topMargin = Ui.dp(app, 4);

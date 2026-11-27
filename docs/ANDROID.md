@@ -11,17 +11,73 @@ L'app ne fait tourner aucune IA : elle écoute le PC.
 
 ## L'app
 
-Une barre de navigation en bas, cinq onglets (thème clair ou sombre selon le téléphone), et en haut de
-chacun un **bandeau permanent** : pastille de niveau, mini barre d'XP pixel, pièces d'or (une pièce qui
-tourne), titre et prochaine rangée de la boutique ; un toucher ouvre Collection → Niveaux.
+Une barre de navigation en bas, cinq onglets — **Accueil · Aventure · Jouer · Boutique · Collection** — (thème
+clair ou sombre selon le téléphone), et en haut un **bandeau permanent** : pastille de niveau, mini barre d'XP
+pixel, pièces d'or (une pièce qui tourne), titre et prochaine rangée de la boutique ; un toucher ouvre
+Collection → Niveaux. La **roue** à droite du bandeau ouvre les Réglages (un second toucher, ou retour, revient à
+l'onglet d'avant). Pastille « ! » orange sur Aventure quand Pilou est revenu et attend, sur Boutique quand une
+rangée s'ouvre. Transitions courtes (fondu et glissement de 18 dp dans le sens de la navigation), figées si le
+téléphone supprime les animations.
 
 | Onglet | Ce qu'on y trouve |
 |---|---|
-| **Accueil** | Pilou en grand (le toucher le caresse, devant son décor s'il en porte un), niveau, titre et barre d'XP, la carte **Vitrine** (offre du jour, prochaine rangée), état du PC (« ● en ligne » / « ◌ le PC dort »), **les quêtes** (du jour ◔, de la semaine ◑, du mois ●, progrès et pièces d'or, série), les sessions en cartes (❗ ? ◐ ✓ ■ ✕), l'**expédition** du Pilou du PC (⚡, en route, dernier journal), la carte **Métiers et succès** (métier le plus pratiqué, succès obtenus), les appareils du groupe, le mot du jour. Pas encore appairé : deux lignes pour dire qui est Pilou, puis un guide en trois étapes. |
+| **Accueil** | Pilou en grand en dessin fin (le toucher le caresse, devant son décor s'il en porte un ; en tenue de voyage, avec « ⟶ en route · retour vers 15 h 40 » sous lui, quand il est parti en aventure), niveau, titre et barre d'XP, état du PC (« ● en ligne » / « ◌ le PC dort »). Puis la carte **Aventure** en tête quand une campagne est en cours (sa scène, Pilou qui marche, le compte à rebours ; ou « ● Il t'attend ! »), l'expédition du PC, la météo, **les quêtes** (◔ ◑ ●), les sessions (❗ ? ◐ ✓ ■ ✕), la **Vitrine**, **Métiers et succès**. Le reste (nouvelles des connecteurs, appareils et amis du groupe, mot du jour) est replié derrière « Nouvelles, groupe, mot du jour ▾ » (le choix est gardé). Pas encore appairé : qui est Pilou, puis un guide en trois étapes. |
+| **Aventure** | Les campagnes : Pilou t'écrit, tu choisis, il part pour de vrai (voir plus bas). |
 | **Boutique** | Boutique rétro : enseigne néon, cabine d'essayage (décor, Pilou qui porte l'objet ; *Essayer / Acheter / Porter*), onglets par rayon, étagères par rangée de niveau (cadenas + « NIV 15 » et silhouette tant que la rangée est fermée, « RANGÉE DÉBLOQUÉE ! » qui clignote), vitrine (offres du jour, nouveautés, prochaine rangée, à ta portée). Pastille « ! » sur l'onglet quand il y a du nouveau. |
 | **Jouer** | **Chasse aux bugs** en vedette (aperçu animé, record), puis les cartes de l'atelier : pêche, cuisine, étoile filante, bulles, tape m'en cinq. Un jeu pas encore ouvert montre « ◇ niveau N ». |
 | **Collection** | Carnet de pêche (grille des 23 prises, cadre de rareté), livre de recettes, **Niveaux** (ce que chaque niveau ouvre : jeux, évolutions, titres, et la **prochaine rangée** de la boutique avec « Voir en boutique »), style (ce qu'on possède), **Métiers** (métiers et succès du PC, voir plus bas). |
-| **Réglages** | Appairage, Pilou flottant (taille, cacher, ramener), notifications, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
+| **Réglages** (roue du bandeau) | Appairage, Pilou flottant (taille, cacher, ramener), notifications (dont « Retours de Pilou (aventures) »), soins, jeux (sons, vibrations), mises à jour, diagnostic (journal de plantage, copier le diagnostic), à propos. |
+
+### Aventure : les campagnes
+
+Le contrat (format, moteur, synchronisation) est `docs/CAMPAGNES.md` ; le moteur est `Campagnes.java`, la façade du
+téléphone `CampagnesTel.java`. Les campagnes se lisent hors du fil d'interface au lancement (`CampagnesTel.precharger`),
+l'onglet montre « Pilou déplie ses cartes… » le temps qu'il faut.
+
+- **La liste** : la campagne en cours d'abord (sa scène avec Pilou, « ● Il t'attend ! » ou le compte à rebours et
+  l'heure de retour), puis une carte par campagne, le prologue en premier : bande de décor aux couleurs du ton et
+  signe de forme (☼ drôle, ◆ mystère, ♥ émotion, ▲ épique), titre, accroche, durée, chapitres, niveau requis
+  (« ◇ Niveau 8 requis » et ce qu'il manque), progression d'une partie mise de côté (chapitre, lieu de reprise,
+  barre), fins obtenues (« Fins 1 / 6 ★ ◐ ? ? ? ? »), et **Commencer**, **Reprendre** / **Recommencer** (avec
+  confirmation) ou **Rejouer**. Une seule aventure à la fois : les autres boutons attendent, et le disent. Les po et
+  l'xp gagnés que nul PC n'a encore versés sont rappelés en haut (« … attendent ton PC »).
+- **La lecture**, en conversation : en haut la **scène** (le décor `decor-<campagne>-<décor>` de la banque de sprites,
+  dessiné net à l'échelle entière et posé au sol ; à défaut un ciel pixel en dégradé tramé aux couleurs du ton, des
+  collines tirées du nom du lieu, soleil, lune ou étoiles qui scintillent), Pilou en dessin fin qui prend l'**humeur**
+  de chaque message (il cligne, respire, sursaute quand il a peur ou qu'il est surpris), le chapitre, le lieu, un fil
+  d'avancement. Le **fil** : Pilou écrit « … » puis son message apparaît (rythme selon la longueur, un toucher sur le
+  fil accélère) ; tes choix s'affichent en bulles bleues « à toi » ; des séparateurs disent le chapitre qui commence,
+  le lieu qui change, l'heure après une longue absence ; ce que Pilou redit après un échec est marqué « ↺ On reprend
+  au dernier check-point » et grisé. En bas, selon la phase : 2 à 4 **options** en gros boutons (libellé sur deux
+  lignes), « **Vas-y, Pilou !** » (départ, avec la durée prévue), l'**épreuve** (Jouer ou « Les dés · 55 % »), l'**attente**
+  (Pilou en tenue de voyage qui marche sur place et le décor qui défile, la ligne `pendant`, le compte à rebours,
+  l'heure de retour, la barre, « Tu peux poser ton téléphone : je te préviens. »), le **repos** après un échec (Pilou
+  cabossé, pansement, heure de reprise, « Reprise au dernier check-point : <lieu> »).
+- **Les épreuves** (`Epreuves.java`, 10 à 25 s, d'une main) : *réflexe* (toucher quand le curseur passe dans la zone ;
+  deux sur trois), *mémoire* (refaire une suite de 3 à 5 signes ● ▲ ■ ◆, deux essais), *rythme* (8 notes à toucher
+  sur la ligne), *visée* (toucher des cibles qui filent), et les *dés* (le tirage du moteur, animé sur une jauge où la
+  part qui réussit est bleue). Toujours « Laisser faire les dés » ; chaque coup a son signe (✓ / ✕) en plus de sa
+  couleur, une vibration légère si les vibrations sont permises ; le résultat montre Pilou qui réagit, puis
+  « Continuer ».
+- **La fin** : l'issue avec son signe (★ bonne, ◐ douce-amère, ▽ mauvaise, ✧ secrète) et des étincelles pour les
+  belles, le titre de la fin, les po et l'xp (« Ces gains attendent ton PC » tant qu'aucun PC ne les a versés ; rien en
+  rejouant), le titre gagné, l'objet exclusif (Pilou qui le porte, ou « ? » tant que son dessin manque), le souvenir,
+  la grille des fins (celles qu'on a, les autres « ? ? ? »), puis « Retour aux aventures » ou « Rejouer ».
+- **Le carnet de voyage** : par campagne, les fins, les souvenirs, les titres et les objets exclusifs ; vide, il le dit
+  et propose le prologue.
+- **Mettre de côté** en deux gestes : « ⋯ » → « Mettre l'aventure de côté… », puis une confirmation qui dit où
+  Pilou reprendra et que rien d'acquis ne se perd. Possible même pendant une attente.
+- **Retour de Pilou** (`Retour.java`) : à la fin d'une attente ou d'un repos, **une** notification locale (canal
+  « Retours de Pilou (aventures) ») : « Pilou est arrivé : <lieu> — Il a besoin de toi. », jamais le texte de l'histoire.
+  Programmée à l'heure de fin avec `AlarmManager.setAndAllowWhileIdle` (pas de permission d'alarme exacte : Android
+  peut la retarder de quelques minutes en veille), même app fermée et hors ligne ; reprogrammée après chaque
+  décision, chaque synchronisation, à l'ouverture de l'app et au redémarrage du téléphone (`Demarrage`). Pas de relance ;
+  rien si l'app est au premier plan ; se coupe dans Réglages → Notifications. La toucher ouvre la lecture.
+- **Pilou flottant** : pendant une attente, il porte sa tenue de voyage et sa bulle commence par « ⟶ en route ·
+  retour 15 h 40 » ; à son retour, un petit « ! » orange jusqu'à ce qu'on ouvre l'aventure, et le toucher y mène.
+- **Synchronisation** : `CampagnesTel.synchroniser` à chaque décision, à l'ouverture de l'app et toutes les 5 min
+  (service d'écoute). Le téléphone avance PC éteint ; seules les récompenses attendent un PC.
+
 
 ### Chasse aux bugs
 

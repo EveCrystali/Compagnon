@@ -227,7 +227,7 @@ final class PageAventure extends Page {
         r.addView(Ui.pastille(app, "◈", Aventure.accentTon(app, "emotion")));
         LinearLayout t = Ui.pile(app);
         t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-        t.addView(Ui.texte(app, "Carnet de voyage", Ui.T_CORPS + 1, p.texte, true));
+        t.addView(Ui.texte(app, "Carnet de voyage", Ui.T_CORPS, p.texte, true));
         t.addView(Ui.texte(app, fins == 0 ? "Les souvenirs de vos aventures s'y rangeront." : fins + " fin" + (fins > 1 ? "s" : "") + " · " + souvenirs
                 + " souvenir" + (souvenirs > 1 ? "s" : ""), Ui.T_DETAIL, p.doux, false));
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -276,7 +276,7 @@ final class PageAventure extends Page {
             corpsCarte.addView(barreEnCours, Ui.large());
         } else {
             String quoi = etat.phase == Campagnes.Phase.Fin ? "★  Le dénouement t'attend !" : attend ? "●  Il t'attend !" : "Lis la suite de son aventure.";
-            TextView t = Ui.texte(app, quoi, Ui.T_CORPS + 1, attend ? p.orange : p.doux, attend);
+            TextView t = Ui.texte(app, quoi, Ui.T_CORPS, attend ? p.orange : p.doux, attend);
             t.setPadding(0, Ui.dp(app, 6), 0, 0);
             corpsCarte.addView(t, Ui.large());
             if (attend && !etat.lieu.isEmpty()) {
@@ -338,6 +338,12 @@ final class PageAventure extends Page {
         Ui.Palette p = Ui.p(app);
         boolean ouverte = niveau >= c.niveau;
         Campagnes.Partie suspendue = k.suspendues.get(c.id);
+        Campagnes.Etat ee = null;
+        // Mise de côté à l'instant : elle est encore « la partie courante », abandonnée.
+        if (suspendue == null && k.courante != null && k.courante.campagne.equals(c.id) && etat != null && etat.phase == Campagnes.Phase.Abandon) {
+            suspendue = k.courante;
+            ee = etat;
+        }
         boolean finie = Campagnes.finie(k, c.id);
         List<Campagnes.FinObtenue> fins = Campagnes.fins(k, c);
         int total = CampagnesTel.nombreFins(c);
@@ -371,9 +377,9 @@ final class PageAventure extends Page {
         m.setPadding(0, Ui.dp(app, 8), 0, 0);
         b.addView(m, Ui.large());
         if (suspendue != null) {
-            Campagnes.Noeud n = c.noeud(c.decode('n', suspendue.ici.n) == null ? "" : c.decode('n', suspendue.ici.n));
-            int rang = n == null ? -1 : CampagnesTel.rangChapitre(c, n.chapitre);
-            String l = CampagnesTel.lieuReprise(c, suspendue);
+            int rang = CampagnesTel.chapitreReprise(c, suspendue, ee) - 1;
+            String l = CampagnesTel.lieuReprise(c, suspendue, ee);
+
             TextView pr = Ui.texte(app, "Chapitre " + (rang + 1) + " / " + c.chapitres.size() + (l.isEmpty() ? "" : " · reprise : " + l), Ui.T_DETAIL, p.texte, true);
             pr.setPadding(0, Ui.dp(app, 8), 0, Ui.dp(app, 4));
             b.addView(pr, Ui.large());

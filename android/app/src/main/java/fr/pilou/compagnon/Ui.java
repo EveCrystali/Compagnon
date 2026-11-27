@@ -185,7 +185,7 @@ final class Ui {
     }
 
     static TextView sousTitre(Context c, String s) {
-        TextView t = texte(c, s, 14, p(c).doux, false);
+        TextView t = texte(c, s, T_DETAIL, p(c).doux, false);
         t.setPadding(0, 0, 0, dp(c, 16));
         return t;
     }
@@ -221,7 +221,7 @@ final class Ui {
         r.setPadding(dp(c, 4), dp(c, 10), dp(c, 4), dp(c, 10));
         r.setMinimumHeight(dp(c, 48)); // zone tactile minimale
         LinearLayout t = pile(c);
-        t.addView(texte(c, titre, 16, couleurTitre == 0 ? p.texte : couleurTitre, false));
+        t.addView(texte(c, titre, T_CORPS, couleurTitre == 0 ? p.texte : couleurTitre, false));
         if (sous != null && !sous.isEmpty()) t.addView(texte(c, sous, 13, p.doux, false));
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         if (action != null) {
@@ -239,7 +239,7 @@ final class Ui {
         r.setPadding(dp(c, 4), dp(c, 8), 0, dp(c, 8));
         r.setMinimumHeight(dp(c, 48));
         LinearLayout t = pile(c);
-        t.addView(texte(c, titre, 16, p.texte, false));
+        t.addView(texte(c, titre, T_CORPS, p.texte, false));
         if (sous != null && !sous.isEmpty()) t.addView(texte(c, sous, 13, p.doux, false));
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         Switch s = new Switch(c);

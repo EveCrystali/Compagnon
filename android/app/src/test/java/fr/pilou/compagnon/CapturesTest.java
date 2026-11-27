@@ -244,6 +244,7 @@ public class CapturesTest {
 
     private void aventure() {
         Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().remove("campagnes").remove("campParties").commit();
         sansAnimations(true);
         horloge[0] = System.currentTimeMillis();
         CampagnesTel.horloge = () -> horloge[0];
@@ -348,6 +349,7 @@ public class CapturesTest {
     // Une aventure mise de côté (la confirmation en deux gestes), puis la liste qui propose de la reprendre.
     private void aventureSuspendue() {
         Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().remove("campagnes").remove("campParties").commit();
         sansAnimations(true);
         CampagnesTel.prechargerMaintenant();
         try {

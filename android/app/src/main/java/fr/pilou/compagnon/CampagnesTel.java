@@ -122,11 +122,24 @@ public final class CampagnesTel {
     }
 
     /** Le lieu où Pilou reprendra après un repos ou une partie mise de côté : celui du dernier check-point. */
-    public static synchronized String lieuReprise(Campagnes.Campagne c, Campagnes.Partie p, Campagnes.Etat e) {
+    /** L'état au dernier check-point (là où Pilou reprendra) : le dernier point naturel du rejeu, sinon la base. */
+    public static Campagnes.Instantane pointReprise(Campagnes.Partie p, Campagnes.Etat e) {
         Campagnes.Instantane x = null;
-        if (e != null)
-            for (Campagnes.Point pt : e.points) if (pt.naturel && !pt.base.abandonnee) x = pt.base.ici;
-        if (x == null && p != null) x = p.cp != null ? p.cp : p.ici;
+        if (e != null) for (Campagnes.Point pt : e.points) if (pt.naturel) x = pt.base.ici;
+        if (x == null && p != null) x = p.cp != null && !p.abandonnee ? p.cp : p.ici;
+        return x;
+    }
+
+    /** Le numéro du chapitre (à partir de 1) où Pilou reprendra ; 0 s'il est inconnu. */
+    public static int chapitreReprise(Campagnes.Campagne c, Campagnes.Partie p, Campagnes.Etat e) {
+        Campagnes.Instantane x = pointReprise(p, e);
+        String id = x == null ? null : c.decode('n', x.n);
+        Campagnes.Noeud n = id == null ? null : c.noeud(id);
+        return n == null ? 0 : rangChapitre(c, n.chapitre) + 1;
+    }
+
+    public static synchronized String lieuReprise(Campagnes.Campagne c, Campagnes.Partie p, Campagnes.Etat e) {
+        Campagnes.Instantane x = pointReprise(p, e);
         if (x == null) return "";
         String noeud = c.decode('n', x.n);
         Campagnes.Noeud n = noeud == null ? null : c.noeud(noeud);
@@ -246,6 +259,8 @@ public final class CampagnesTel {
     private static String garde = "";
 
     private static synchronized void garder(Context c, Campagnes.Carnet k) {
+        noterParties(c, k);
+
         // L'interface demande l'état souvent : on ne réécrit le carnet que s'il a changé.
         String empreinte = Campagnes.signature(k) + "|" + k.fil.size() + "|" + k.lu + "|" + k.payesPc.size();
         if (k == cache && empreinte.equals(garde)) return;

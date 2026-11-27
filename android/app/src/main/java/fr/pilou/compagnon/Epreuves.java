@@ -52,7 +52,7 @@ final class Epreuves {
             LinearLayout titres = Ui.pile(c);
             titres.setPadding(Ui.dp(c, 12), 0, 0, 0);
             titres.addView(new Vitrine.Pixel(c, nom.equals("des") ? "LES DES" : "EPREUVE", 2.2f, Vitrine.ORANGE, Vitrine.VIOLET_FONCE, false));
-            TextView sous = Ui.texte(c, Aventure.nomJeu(nom) + "  ·  " + Aventure.difficulte(difficulte), Ui.T_DETAIL, Vitrine.ARGENT, true);
+            TextView sous = Ui.texte(c, nom.equals("des") ? "Chance de réussir : " + chance + " %" : Aventure.nomJeu(nom) + "  ·  " + Aventure.difficulte(difficulte), Ui.T_DETAIL, Vitrine.ARGENT, true);
             sous.setPadding(0, Ui.dp(c, 6), 0, 0);
             titres.addView(sous);
             haut.addView(titres, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));

@@ -533,7 +533,7 @@ final class Lecture extends FrameLayout {
         TextView s = Ui.texte(app, SIGNES[Math.min(rang, 3)], 18, Aventure.accentTon(app, campagne.ton), true);
         s.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         r.addView(s);
-        TextView t = Ui.texte(app, o.libelle, Ui.T_CORPS + 1, p.texte, true);
+        TextView t = Ui.texte(app, o.libelle, Ui.T_CORPS, p.texte, true);
         t.setMaxLines(2);
         t.setEllipsize(android.text.TextUtils.TruncateAt.END);
         t.setPadding(Ui.dp(app, 12), 0, 0, 0);
@@ -564,7 +564,7 @@ final class Lecture extends FrameLayout {
             int a = Math.max(1, n.dureeMin), b = Math.max(a, n.dureeMax);
             duree = a == b ? duree(a) : "entre " + duree(a) + " et " + duree(b);
         }
-        TextView t = Ui.texte(app, etat.pendant.isEmpty() ? "Pilou est prêt à repartir." : etat.pendant + ".", Ui.T_CORPS + 1, p.texte, true);
+        TextView t = Ui.texte(app, etat.pendant.isEmpty() ? "Pilou est prêt à repartir." : etat.pendant + ".", Ui.T_CORPS, p.texte, true);
         dock.addView(t, Ui.large());
         if (!duree.isEmpty()) {
             TextView s = Ui.texte(app, "◷  Ça prendra " + duree + ". Il n'attend que ton signal.", Ui.T_DETAIL, p.doux, false);
@@ -629,7 +629,7 @@ final class Lecture extends FrameLayout {
     private void attente(boolean repos) {
         long maintenant = CampagnesTel.maintenant();
         LinearLayout tete = Ui.rangee(app);
-        TextView quoi = Ui.texte(app, repos ? "Pilou se repose" : etat.pendant.isEmpty() ? "Pilou est en route" : etat.pendant, Ui.T_CORPS + 1, p.texte, true);
+        TextView quoi = Ui.texte(app, repos ? "Pilou se repose" : etat.pendant.isEmpty() ? "Pilou est en route" : etat.pendant, Ui.T_CORPS, p.texte, true);
         quoi.setMaxLines(2);
         tete.addView(quoi, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         dock.addView(tete, Ui.large());
@@ -720,7 +720,7 @@ final class Lecture extends FrameLayout {
                 sv.setBackground(Ui.arrondi(app, p.surface2, 14, 0));
                 sv.setPadding(Ui.dp(app, 14), Ui.dp(app, 12), Ui.dp(app, 14), Ui.dp(app, 12));
                 sv.addView(Ui.texte(app, "◈  SOUVENIR", Ui.T_ETIQUETTE, p.doux, true));
-                sv.addView(Ui.texte(app, s.nom, Ui.T_CORPS + 1, p.texte, true));
+                sv.addView(Ui.texte(app, s.nom, Ui.T_CORPS, p.texte, true));
                 if (!s.texte.isEmpty()) sv.addView(Ui.texte(app, s.texte, Ui.T_DETAIL, p.doux, false));
                 LinearLayout.LayoutParams l = Ui.large();
                 l.topMargin = Ui.dp(app, 12);
@@ -771,7 +771,7 @@ final class Lecture extends FrameLayout {
         LinearLayout t = Ui.pile(app);
         t.setPadding(objet != null ? Ui.dp(app, 12) : 0, 0, 0, 0);
         t.addView(Ui.texte(app, etiquette.toUpperCase(java.util.Locale.FRENCH), Ui.T_ETIQUETTE, p.doux, true));
-        t.addView(Ui.texte(app, valeur, Ui.T_CORPS + 1, p.texte, true));
+        t.addView(Ui.texte(app, valeur, Ui.T_CORPS, p.texte, true));
         if (objet != null) t.addView(Ui.texte(app, "Rejoint ta collection : il se porte comme les objets de la boutique.", Ui.T_DETAIL, p.doux, false));
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         c.addView(r, Ui.large());

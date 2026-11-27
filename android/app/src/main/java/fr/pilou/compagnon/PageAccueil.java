@@ -76,6 +76,11 @@ final class PageAccueil extends Page {
         nom.setPadding(Ui.dp(a, 2), 0, 0, Ui.dp(a, 10));
         corps.addView(nom);
 
+        // L'aventure en cours, en tête : il t'attend, ou il revient à telle heure.
+        carteAventure = Ui.pile(a);
+        carteAventure.setVisibility(View.GONE);
+        corps.addView(carteAventure, Ui.large(a, 14));
+
         // Carte principale : Pilou, niveau, XP.
         LinearLayout heros = Ui.carte(a);
         heros.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -129,9 +134,6 @@ final class PageAccueil extends Page {
         heros.addView(etatPc, le);
         corps.addView(heros, Ui.large(a, 14));
 
-        carteAventure = Ui.pile(a);
-        carteAventure.setVisibility(View.GONE);
-        corps.addView(carteAventure, Ui.large(a, 14));
 
         carteExpedition = Ui.carte(a);
         carteExpedition.setVisibility(View.GONE);
@@ -139,9 +141,9 @@ final class PageAccueil extends Page {
 
         // Météo (connecteur météo du PC) : le temps chez toi et ce que Pilou en pense.
         carteMeteo = Ui.carte(a);
-        meteoTitre = Ui.texte(a, "", 17, p.texte, true);
+        meteoTitre = Ui.texte(a, "", Ui.T_CARTE, p.texte, true);
         carteMeteo.addView(meteoTitre, Ui.large());
-        meteoTexte = Ui.texte(a, "", 14, p.doux, false);
+        meteoTexte = Ui.texte(a, "", Ui.T_DETAIL, p.doux, false);
         meteoTexte.setPadding(0, Ui.dp(a, 4), 0, 0);
         carteMeteo.addView(meteoTexte, Ui.large());
         carteMeteo.setVisibility(View.GONE);
@@ -514,17 +516,17 @@ final class PageAccueil extends Page {
         if (emp.equals(empreinteExpedition)) return;
         empreinteExpedition = emp;
         carteExpedition.removeAllViews();
-        carteExpedition.addView(Ui.texte(app, "⚔  Expédition" + (x.energie >= 0 ? "   ·   ⚡ " + x.energie + "/100" : ""), 17, p.texte, true), Ui.large());
-        TextView etat = Ui.texte(app, x.ligne(maintenant), 14, x.enRoute() ? p.orange : p.doux, x.enRoute());
+        carteExpedition.addView(Ui.texte(app, "⚔  Expédition" + (x.energie >= 0 ? "   ·   ⚡ " + x.energie + "/100" : ""), Ui.T_CARTE, p.texte, true), Ui.large());
+        TextView etat = Ui.texte(app, x.ligne(maintenant), Ui.T_DETAIL, x.enRoute() ? p.orange : p.doux, x.enRoute());
         etat.setPadding(0, Ui.dp(app, 4), 0, 0);
         carteExpedition.addView(etat, Ui.large());
         if (x.journal.isEmpty()) return;
         TextView titre = Ui.texte(app, x.signe() + "  Dernière : " + x.dernier + " · " + x.nomIssue()
-                + (x.t > 0 ? " · " + Etat.Expedition.heure(x.t) : ""), 14, p.texte, true);
+                + (x.t > 0 ? " · " + Etat.Expedition.heure(x.t) : ""), Ui.T_CORPS, p.texte, true);
         titre.setPadding(0, Ui.dp(app, 10), 0, Ui.dp(app, 2));
         carteExpedition.addView(titre, Ui.large());
         for (String l : x.journal) {
-            TextView t = Ui.texte(app, l, 13, p.doux, false);
+            TextView t = Ui.texte(app, l, Ui.T_DETAIL, p.doux, false);
             t.setPadding(0, Ui.dp(app, 2), 0, 0);
             carteExpedition.addView(t, Ui.large());
         }
@@ -557,7 +559,7 @@ final class PageAccueil extends Page {
         tete.addView(vide, new LinearLayout.LayoutParams(0, 1, 1));
         Vitrine.Piece piece = new Vitrine.Piece(app, 1.4f);
         tete.addView(piece);
-        TextView po = Ui.texte(app, e.po < 0 ? " — po" : " " + solde + " po", 15, Vitrine.ORANGE, true);
+        TextView po = Ui.texte(app, e.po < 0 ? " — po" : " " + solde + " po", Ui.T_CORPS, Vitrine.ORANGE, true);
         tete.addView(po);
         carteVitrine.addView(tete, Ui.large());
         float d = app.getResources().getDisplayMetrics().density;
@@ -574,23 +576,23 @@ final class PageAccueil extends Page {
             r.addView(im);
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, "Offre du jour", 12, Vitrine.ARGENT, false));
-            t.addView(Ui.texte(app, offre.nom, 16, Vitrine.ARGENT_CLAIR, true));
+            t.addView(Ui.texte(app, "Offre du jour", Ui.T_ETIQUETTE, Vitrine.ARGENT, false));
+            t.addView(Ui.texte(app, offre.nom, Ui.T_CORPS, Vitrine.ARGENT_CLAIR, true));
             int prix = Boutique.prix(offre, e.promo);
             boolean possede = e.objets.contains(offre.id);
             String etat = possede ? "✓ déjà à toi" : !ouvert ? "▣ rangée du niveau " + offre.niveauMin
                     : prix < offre.prix ? "◉ " + prix + " po au lieu de " + offre.prix + " (-25 %)" : "◉ " + prix + " po";
-            t.addView(Ui.texte(app, etat, 13, possede ? Vitrine.VIOLET : ouvert ? Vitrine.ORANGE : Vitrine.ARGENT, true));
+            t.addView(Ui.texte(app, etat, Ui.T_DETAIL, possede ? Vitrine.VIOLET : ouvert ? Vitrine.ORANGE : Vitrine.ARGENT, true));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             carteVitrine.addView(r, Ui.large());
         }
         String suite = Vitrine.prochaineRangee(n, xp);
         if (!suite.isEmpty()) {
-            TextView s = Ui.texte(app, suite, 13, Vitrine.VIOLET, false);
+            TextView s = Ui.texte(app, suite, Ui.T_DETAIL, Vitrine.VIOLET, false);
             s.setPadding(0, Ui.dp(app, 10), 0, 0);
             carteVitrine.addView(s, Ui.large());
         }
-        TextView aller = Ui.texte(app, "Ouvrir la boutique ›", 14, Vitrine.BLEU, true);
+        TextView aller = Ui.texte(app, "Ouvrir la boutique ›", Ui.T_CORPS, Vitrine.BLEU, true);
         aller.setPadding(0, Ui.dp(app, 10), 0, 0);
         carteVitrine.addView(aller, Ui.large());
         carteVitrine.setContentDescription("Vitrine de la boutique" + (offre != null ? ", offre du jour : " + offre.nom : "") + ". " + suite);
@@ -609,9 +611,9 @@ final class PageAccueil extends Page {
             LinearLayout l = new LinearLayout(app);
             l.setOrientation(LinearLayout.VERTICAL);
             l.setPadding(0, Ui.dp(app, 8), 0, 0);
-            l.addView(Ui.texte(app, n.titre, 14, p.texte, true), Ui.large());
-            if (!n.texte.isEmpty()) l.addView(Ui.texte(app, n.texte, 13, p.doux, false), Ui.large());
-            if (n.t > 0) l.addView(Ui.texte(app, "il y a " + Etat.duree(Math.max(0, maintenant - n.t)), 12, p.doux, false), Ui.large());
+            l.addView(Ui.texte(app, n.titre, Ui.T_CORPS, p.texte, true), Ui.large());
+            if (!n.texte.isEmpty()) l.addView(Ui.texte(app, n.texte, Ui.T_DETAIL, p.doux, false), Ui.large());
+            if (n.t > 0) l.addView(Ui.texte(app, "il y a " + Etat.duree(Math.max(0, maintenant - n.t)), Ui.T_ETIQUETTE, p.doux, false), Ui.large());
             nouvelles.addView(l, Ui.large());
         }
     }
@@ -646,7 +648,7 @@ final class PageAccueil extends Page {
         for (Etat.Quete q : e.quetes) {
             if (q.periode != derniere) {
                 derniere = q.periode;
-                TextView sec = Ui.texte(app, signes[Math.max(0, Math.min(2, q.periode))] + "  " + noms[Math.max(0, Math.min(2, q.periode))], 12, p.doux, true);
+                TextView sec = Ui.texte(app, signes[Math.max(0, Math.min(2, q.periode))] + "  " + noms[Math.max(0, Math.min(2, q.periode))], Ui.T_ETIQUETTE, p.doux, true);
                 sec.setPadding(0, quetes.getChildCount() == 0 ? 0 : Ui.dp(app, 10), 0, Ui.dp(app, 2));
                 quetes.addView(sec);
             }
@@ -655,13 +657,13 @@ final class PageAccueil extends Page {
             r.addView(Ui.pastille(app, q.reussie ? "✓" : "○", q.reussie ? p.bleu : p.argent));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, q.texte, 14, q.reussie ? p.doux : p.texte, !q.reussie));
+            t.addView(Ui.texte(app, q.texte, Ui.T_DETAIL, q.reussie ? p.doux : p.texte, !q.reussie));
             Ui.Barre b = new Ui.Barre(app);
             b.part(q.fait / (float) Math.max(1, q.objectif));
             LinearLayout.LayoutParams lb = Ui.large();
             lb.topMargin = Ui.dp(app, 4);
             t.addView(b, lb);
-            t.addView(Ui.texte(app, q.fait + " / " + q.objectif + "   ·   +" + q.po + " po", 12, q.reussie ? p.bleu : p.doux, false));
+            t.addView(Ui.texte(app, q.fait + " / " + q.objectif + "   ·   +" + q.po + " po", Ui.T_ETIQUETTE, q.reussie ? p.bleu : p.doux, false));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             quetes.addView(r, Ui.large());
         }
@@ -678,7 +680,7 @@ final class PageAccueil extends Page {
         sessions.removeAllViews();
         titreSessions.setText(("Sessions" + (lignes.isEmpty() ? "" : " · " + lignes.size())).toUpperCase(java.util.Locale.FRENCH));
         if (lignes.isEmpty()) {
-            TextView vide = Ui.texte(app, e.muet(maintenant) ? "Pilou attend des nouvelles du PC." : "Aucune session en cours — Pilou se repose.", 14, p.doux, false);
+            TextView vide = Ui.texte(app, e.muet(maintenant) ? "Pilou attend des nouvelles du PC." : "Aucune session en cours — Pilou se repose.", Ui.T_DETAIL, p.doux, false);
             vide.setPadding(Ui.dp(app, 2), Ui.dp(app, 4), 0, Ui.dp(app, 4));
             sessions.addView(vide);
             return;
@@ -692,11 +694,11 @@ final class PageAccueil extends Page {
             r.addView(Ui.pastille(app, l.signe, couleur));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            TextView titre = Ui.texte(app, l.libelle, 15, p.texte, true);
+            TextView titre = Ui.texte(app, l.libelle, Ui.T_CORPS, p.texte, true);
             titre.setSingleLine(true);
             titre.setEllipsize(android.text.TextUtils.TruncateAt.END);
             t.addView(titre);
-            t.addView(Ui.texte(app, l.texte, 13, l.ton == Etat.Ton.ATTENTE ? p.orange : p.doux, false));
+            t.addView(Ui.texte(app, l.texte, Ui.T_DETAIL, l.ton == Etat.Ton.ATTENTE ? p.orange : p.doux, false));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             sessions.addView(r, Ui.large());
         }
@@ -723,8 +725,8 @@ final class PageAccueil extends Page {
             r.addView(Ui.pastille(app, "✦", p.bleu));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, a.nom, 15, p.texte, true));
-            t.addView(Ui.texte(app, a.xp + " xp · " + (a.t <= 0 ? "jamais vu" : "vu il y a " + Etat.duree(maintenant - a.t)), 13, p.doux, false));
+            t.addView(Ui.texte(app, a.nom, Ui.T_CORPS, p.texte, true));
+            t.addView(Ui.texte(app, a.xp + " xp · " + (a.t <= 0 ? "jamais vu" : "vu il y a " + Etat.duree(maintenant - a.t)), Ui.T_DETAIL, p.doux, false));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             c.addView(r, Ui.large());
         }
@@ -740,7 +742,7 @@ final class PageAccueil extends Page {
             LinearLayout r = Ui.rangee(app);
             r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
             r.addView(Ui.pastille(app, "➜", p.orange));
-            TextView t = Ui.texte(app, e.visite, 14, p.orange, true);
+            TextView t = Ui.texte(app, e.visite, Ui.T_CORPS, p.orange, true);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             c.addView(r, Ui.large());
@@ -755,8 +757,8 @@ final class PageAccueil extends Page {
             r.addView(Ui.pastille(app, la ? "♥" : "○", la ? p.bleu : p.argent));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, a.nom, 15, p.texte, true));
-            t.addView(Ui.texte(app, a.texte(maintenant), 13, p.doux, false));
+            t.addView(Ui.texte(app, a.nom, Ui.T_CORPS, p.texte, true));
+            t.addView(Ui.texte(app, a.texte(maintenant), Ui.T_DETAIL, p.doux, false));
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             c.addView(r, Ui.large());
         }
