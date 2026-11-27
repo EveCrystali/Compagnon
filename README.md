@@ -359,10 +359,11 @@ Pilou reste volontairement discret (ni barre des tâches, ni Alt+Tab).
 Pour une vidéo de présentation avec de vraies images : `outils/tourner-ecran-gauche.ps1` filme **ton écran
 de gauche** (et lui seul) pendant qu'un Pilou de démonstration, en grand, devant un **décor de bureau fictif**
 (fond dégradé, fausses fenêtres, fausse barre des tâches : rien de ton bureau n'apparaît), y joue une visite
-guidée d'environ 1 min 35 :
+guidée d'environ 1 min 10 (2 min 25 avec les scènes récentes) :
 promenade, une IA qui attend, le vrai menu clic droit et ses sous-menus, la boutique, la fenêtre Amis, le
 clavier, la photo, une visite chez Léo, la pluie, deux petits jeux, l'évolution, le menu de l'icône près de
-l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions et le rayon Ensembles). Active « Ne pas
+l'horloge (et, si ta version les a, la Défense du bureau, les Expéditions, le rayon Ensembles, la pêche, la
+cuisine, l'Aventure, un petit mot de Pilou et le Journal). Active « Ne pas
 déranger », puis, dans PowerShell (option `-SansDecor` pour filmer ton vrai bureau) :
 
 ```powershell
