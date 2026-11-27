@@ -69,6 +69,14 @@ internal sealed class FenetreAventure : Window
     private string _cleAction = "", _decorMontre = "\u0001", _message = "";
     private string _humeurMontree = "neutre";
     private VueEpreuve? _epreuve;
+    // Animations (ScenesAnimees.cs) : décor en boucle et ses transitions, portrait du personnage, fond, vignettes.
+    private readonly ScenesAnimees _anims;
+    private readonly Image _decorAncien = new() { Stretch = Stretch.UniformToFill, Visibility = Visibility.Collapsed, IsHitTestVisible = false };
+    private readonly Image _persoImage = new() { Width = 104, Height = 104, Stretch = Stretch.Uniform, Visibility = Visibility.Collapsed };
+    private readonly TextBlock _persoNom = Texte(11, Gel("#fff6e0"));
+    private readonly StackPanel _perso = new() { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 16, 4), IsHitTestVisible = false };
+    private Aventure.Element? _dernierPilou;
+    private string _persoCle = "\u0001";
 
     private static readonly Brush Fond = Gel("#0f1324"), Case = Gel("#1f2540"), CaseClaire = Gel("#2a3156"), Ferme = Gel("#3b4654"),
         Parchemin = Gel("#efe0c0"), ParcheminBord = Gel("#8a6e4b"), Encre = Gel("#1c2128"), EncrePale = Gel("#5b4a34"), Ombre = Gel("#0a0d1a"),
@@ -208,6 +216,7 @@ internal sealed class FenetreAventure : Window
     public FenetreAventure(FenetrePilou pilou)
     {
         _pilou = pilou;
+        _anims = new ScenesAnimees(pilou);
         Title = "Aventure de Pilou";
         Width = 1020;
         Height = 720;
@@ -221,6 +230,12 @@ internal sealed class FenetreAventure : Window
         if (StyleBarre() is { } sb) Resources[typeof(ScrollBar)] = sb;
         RenderOptions.SetBitmapScalingMode(_portrait, BitmapScalingMode.NearestNeighbor);
         RenderOptions.SetBitmapScalingMode(_decorImage, BitmapScalingMode.NearestNeighbor);
+        RenderOptions.SetBitmapScalingMode(_decorAncien, BitmapScalingMode.NearestNeighbor);
+        RenderOptions.SetBitmapScalingMode(_persoImage, BitmapScalingMode.NearestNeighbor);
+        _persoNom.HorizontalAlignment = HorizontalAlignment.Center;
+        _persoNom.FontStyle = FontStyles.Italic;
+        _perso.Children.Add(_persoImage);
+        _perso.Children.Add(_persoNom);
 
         var racine = new Grid { Margin = new Thickness(14, 10, 14, 12) };
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -241,7 +256,11 @@ internal sealed class FenetreAventure : Window
         racine.Children.Add(tete);
         Grid.SetRow(_corps, 2);
         racine.Children.Add(_corps);
-        Content = racine;
+        // Le fond respire très doucement selon le ton de la campagne et l'heure (ScenesAnimees.Fond).
+        var cadreFond = new Grid();
+        cadreFond.Children.Add(_anims.Fond());
+        cadreFond.Children.Add(racine);
+        Content = cadreFond;
 
         _defile.Content = _fil;
         _defile.PreviewMouseLeftButtonDown += (_, _) => Sur(Accelerer);
@@ -264,6 +283,15 @@ internal sealed class FenetreAventure : Window
             _horloge.Stop();
             _anim.Stop();
         };
+        // Fenêtre réduite ou cachée : plus aucune minuterie d'animation.
+        void Veille()
+        {
+            bool visible = IsVisible && WindowState != WindowState.Minimized && IsLoaded;
+            if (visible && !_anim.IsEnabled) _anim.Start();
+            else if (!visible && _anim.IsEnabled) _anim.Stop();
+        }
+        StateChanged += (_, _) => Sur(Veille);
+        IsVisibleChanged += (_, _) => Sur(Veille);
         PreviewKeyDown += (_, e) => Sur(() => Touche(e));
     }
 
@@ -310,6 +338,7 @@ internal sealed class FenetreAventure : Window
             _cleVue = cle;
             _corps.Children.Clear();
             _epreuve = null;
+            _anims.ViderVignettes();
             switch (_vue)
             {
                 case Vue.Lecture:
@@ -326,6 +355,7 @@ internal sealed class FenetreAventure : Window
             _vueMontree = _vue;
         }
         if (_vue == Vue.Lecture) MettreAJourLecture();
+        _anims.Ton(_campagne?.Ton ?? "");
     }
 
     private void Montrer(Vue v)
@@ -356,6 +386,13 @@ internal sealed class FenetreAventure : Window
         Onglet("✉ En cours", Vue.Lecture, lecture);
         Onglet("☰ Bibliothèque", Vue.Bibliotheque, true);
         Onglet("❖ Carnet", Vue.Carnet, true);
+        var reglage = Bouton("✧", false, MenuAnimations, 12);
+        reglage.Margin = new Thickness(8, 0, 0, 0);
+        reglage.Padding = new Thickness(10, 5, 10, 5);
+        reglage.MinWidth = 0;
+        reglage.Background = Case;
+        reglage.ToolTip = "Animations des aventures";
+        _onglets.Children.Add(reglage);
     }
 
     private static void Apparaitre(UIElement e, double ms = 260, double dy = 8)
@@ -495,15 +532,19 @@ internal sealed class FenetreAventure : Window
     }
 
     // La vignette d'une campagne : son premier décor dessiné s'il existe, sinon un ciel à la teinte du ton et son signe.
-    private static UIElement Vignette(Campagne c, Aventure.Fiche f, double w, double h)
+    private UIElement Vignette(Campagne c, Aventure.Fiche f, double w, double h)
     {
         var cadre = new Grid { Width = w, Height = h, ClipToBounds = true, VerticalAlignment = VerticalAlignment.Top };
-        var sprite = c.Decors.Select(d => Apercu.Sprite(Aventure.SpriteDecor(c.Id, d.Id), 0, f.Statut == Aventure.Statut.Verrouillee)).FirstOrDefault(s => s is not null);
+        bool ferme = f.Statut == Aventure.Statut.Verrouillee;
+        var sprite = c.Decors.Select(d => Apercu.Sprite(Aventure.SpriteDecor(c.Id, d.Id), 0, ferme)).FirstOrDefault(s => s is not null);
         if (sprite is not null)
         {
             var im = new Image { Source = sprite, Stretch = Stretch.UniformToFill };
             RenderOptions.SetBitmapScalingMode(im, BitmapScalingMode.NearestNeighbor);
             cadre.Children.Add(im);
+            // Ouverte : le décor vit un peu (quelques images, au ralenti).
+            if (!ferme && c.Decors.Select(d => Illustrations.Decor(Banque.Commune, c.Id, d.Id, ScenesAnimees.Echelle)).FirstOrDefault(s => s is not null) is { } vivant)
+                _anims.Vignette(im, vivant);
         }
         else
         {
@@ -771,6 +812,7 @@ internal sealed class FenetreAventure : Window
         _bandeDecor.Children.Clear();
         _bandeDecor.Children.Add(new Border { Background = Ciel(_campagne?.Ton ?? "") });
         _bandeDecor.Children.Add(_decorImage);
+        _bandeDecor.Children.Add(Lib(_decorAncien));
         var legende = new StackPanel { VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(14, 0, 14, 10) };
         legende.Children.Add(_decorChapitre);
         legende.Children.Add(_decorLieu);
@@ -780,6 +822,9 @@ internal sealed class FenetreAventure : Window
             Background = new LinearGradientBrush(Color.FromArgb(0, 15, 19, 36), Color.FromArgb(200, 15, 19, 36), 90),
         });
         _bandeDecor.Children.Add(legende);
+        _bandeDecor.Children.Add(Lib(_perso));
+        _persoCle = "\u0001";
+        _dernierPilou = null;
         _bandeDecor.Children.Add(new Border { BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(0, 0, 0, 2), IsHitTestVisible = false });
         dg.Children.Add(_bandeDecor);
         _scene.Children.Clear();
@@ -876,17 +921,20 @@ internal sealed class FenetreAventure : Window
     private void Animer()
     {
         _t = _chrono.Elapsed.TotalMilliseconds;
+        _anims.Avancer(_t);
         if (_vue != Vue.Lecture) return;
         double now = _t;
         if (_enCours is { } el && _texteEnCours is { } tb)
         {
-            int n = _toutDeSuite || !Bandeau.Anime ? el.Texte.Length : Aventure.Lettres(el.Texte, now - _debutEcriture);
+            int n = _toutDeSuite || _anims.TexteInstantane ? el.Texte.Length : AnimationsCampagne.Lettres(el.Texte, (long)(now - _debutEcriture));
             tb.Text = n >= el.Texte.Length ? el.Texte : el.Texte[..n] + ((int)(now / 280) % 2 == 0 ? "▌" : " ");
             if (n >= el.Texte.Length)
             {
                 _enCours = null;
                 _texteEnCours = null;
-                _pauseJusque = now + (_toutDeSuite ? 0 : Aventure.PauseEntreMessages);
+                // Les « … » avant le message suivant : plus longs pour un long message (AnimationsCampagne.Attente).
+                _pauseJusque = now + (_toutDeSuite || _anims.TexteInstantane ? 0
+                    : _montres < _elements.Count ? AnimationsCampagne.Attente(_elements[_montres].Texte) : Aventure.PauseEntreMessages);
             }
             Defiler();
         }
@@ -897,7 +945,7 @@ internal sealed class FenetreAventure : Window
             {
                 var x = _elements[_montres];
                 _montres++;
-                if (x.Sorte == Aventure.Sorte.Pilou && x.Nouveau && Bandeau.Anime && !_toutDeSuite)
+                if (x.Sorte == Aventure.Sorte.Pilou && x.Nouveau && !_anims.TexteInstantane && !_toutDeSuite)
                 {
                     var (ligne, texte) = BullePilou(x, "");
                     _fil.Children.Add(ligne);
@@ -906,13 +954,19 @@ internal sealed class FenetreAventure : Window
                     _texteEnCours = texte;
                     _debutEcriture = now;
                     _humeurMontree = x.Humeur;
+                    _dernierPilou = x;
                     MettreAJourDecor(x.Decor, x.Lieu);
                     break;
                 }
                 var el2 = Element(x);
                 _fil.Children.Add(el2);
                 if (x.Nouveau || x.Sorte == Aventure.Sorte.Joueur) Apparaitre(el2, 200, 6);
-                if (x.Sorte == Aventure.Sorte.Pilou) _humeurMontree = x.Humeur;
+                if (x.Sorte == Aventure.Sorte.Pilou)
+                {
+                    _humeurMontree = x.Humeur;
+                    _dernierPilou = x;
+                }
+                if (x.Sorte == Aventure.Sorte.Chapitre && _montres < _elements.Count && _elements[_montres].Nouveau) Embleme(el2);
                 if (x.Sorte is Aventure.Sorte.Pilou or Aventure.Sorte.Reprise) MettreAJourDecor(x.Decor, x.Lieu);
             }
             Defiler();
@@ -925,7 +979,7 @@ internal sealed class FenetreAventure : Window
             }
         }
         // « Pilou écrit… » entre deux messages nouveaux.
-        bool ecrit = _enCours is null && _montres < _elements.Count && _elements[_montres] is { Sorte: Aventure.Sorte.Pilou, Nouveau: true } && Bandeau.Anime;
+        bool ecrit = _enCours is null && _montres < _elements.Count && _elements[_montres] is { Sorte: Aventure.Sorte.Pilou, Nouveau: true } && !_anims.TexteInstantane;
         if (ecrit != (_ecrit.Visibility == Visibility.Visible))
         {
             if (_ecrit.Parent is Panel p) p.Children.Remove(_ecrit);
@@ -938,6 +992,7 @@ internal sealed class FenetreAventure : Window
 
         // Le portrait : l'humeur du message en cours, il cligne ; il sautille un peu pendant qu'il écrit.
         if ((int)(now / 33) % 3 == 0) Portrait(now);
+        PersonnageEnScene(now);
         if (_voyage is not null && _etat is { EnAttente: true } ea && (int)(now / 33) % 2 == 0)
         {
             var a = _pilou.AllurePortrait("repos", now, "voyage-" + (Array.IndexOf(RenduPilou.Voyages, ea.Tenue) >= 0 ? ea.Tenue : "marche"));
@@ -951,7 +1006,8 @@ internal sealed class FenetreAventure : Window
     {
         var humeur = _enCours?.Humeur ?? _humeurMontree;
         var a = _pilou.AllurePortrait(humeur is "" or "neutre" ? "repos" : humeur, now);
-        if (_enCours is not null) a.Saut = Math.Abs(Math.Sin(now / 160)) * 0.6;
+        if (!_anims.Aucune) a.Cligne = AnimationsCampagne.Cligne((long)now);     // même rythme que les personnages
+        if (_enCours is not null && _anims.Completes) a.Saut = Math.Abs(Math.Sin(now / 160)) * 0.6;
         if (Apercu.ImageSiChange(a, ref _portraitPrecedent, fin: true) is { } im) _portrait.Source = im;
         _humeur.Text = NomHumeur(humeur);
     }
@@ -985,10 +1041,12 @@ internal sealed class FenetreAventure : Window
         var cle = decor + "|" + lieu;
         if (cle == _decorMontre) return;
         _decorMontre = cle;
-        var sprite = Apercu.Sprite(Aventure.SpriteDecor(c.Id, decor));
-        _decorImage.Source = sprite;
+        // Le décor animé (ScenesAnimees) : sa boucle, et une transition depuis le précédent (volet pixelisé ou fondu).
+        var anime = Illustrations.Decor(Banque.Commune, c.Id, decor, ScenesAnimees.Echelle);
+        bool premier = _decorImage.Source is null;
+        object? sprite = _anims.Decor(_decorImage, _decorAncien, anime, _t) ? anime : null;
         _decorImage.Visibility = sprite is null ? Visibility.Collapsed : Visibility.Visible;
-        if (sprite is not null) Apparaitre(_decorImage, 420, 0);
+        if (sprite is not null && premier) Apparaitre(_decorImage, 420, 0);
         var nom = lieu != "" ? lieu : Aventure.NomDecor(c, decor);
         Reecrire(_decorLieu, nom, 3);
         _decorChapitre.Text = _etat is { } e ? $"{c.Titre} · chapitre {e.ChapitreNumero} · {e.ChapitreTitre}" : c.Titre;
@@ -1369,13 +1427,16 @@ internal sealed class FenetreAventure : Window
         {
             var pas = Pastille(x, x.StartsWith('+') ? Bandeau.OrangePo : x.StartsWith('✦') ? Gel(Aventure.Or) : Bandeau.Violet, x.StartsWith('✦') ? e.Recompenses.Objet : null);
             gains.Children.Add(pas);
-            if (Bandeau.Anime)
-            {
-                pas.Opacity = 0;
-                pas.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)) { BeginTime = TimeSpan.FromMilliseconds(400 + 160 * i++) });
-            }
+            _anims.Tomber(pas, AnimationsCampagne.DelaiRecompense(i++));
         }
         if (e.Rejeu) gains.Children.Add(Pastille("rejouée : ni po ni xp, mais les souvenirs manquants", Bandeau.Argent));
+        // Le souvenir obtenu se pose avec un petit éclat, puis l'emblème du ton de la campagne.
+        var vitrine = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 4, 0, 6) };
+        if (e.Recompenses.Souvenir is { Length: > 0 } sv && Illustrations.Souvenir(Banque.Commune, c.Id, sv, ScenesAnimees.Echelle) is { } ss)
+            vitrine.Children.Add(_anims.Eclat(ScenesAnimees.Vue(ss, 72), 104, teinte, AnimationsCampagne.DelaiRecompense(i)));
+        if (Illustrations.Ton(Banque.Commune, c.Ton, ScenesAnimees.Echelle) is { } ts)
+            vitrine.Children.Add(_anims.Eclat(ScenesAnimees.Vue(ts, 36), 60, Gel(Aventure.TeinteTon(c.Ton)), AnimationsCampagne.DelaiRecompense(i + 1)));
+        if (vitrine.Children.Count > 0) p.Children.Add(vitrine);
         p.Children.Add(gains);
         p.Children.Add(Texte($"Fins trouvées : {Aventure.Fins6(k, c)}", 13, Bandeau.ArgentClair, true));
         var l = Rangee();
@@ -1386,6 +1447,83 @@ internal sealed class FenetreAventure : Window
         Grid.SetColumn(p, 1);
         g.Children.Add(p);
         return g;
+    }
+
+    // ---- Animations : personnage en scène, emblème de chapitre, réglages
+
+    // Le personnage du message en cours (ou du dernier) : son portrait au bord de la scène ; il parle tant que Pilou
+    // écrit une de ses répliques (« … »).
+    private void PersonnageEnScene(double now)
+    {
+        var el = _enCours ?? _dernierPilou;
+        var cle = el?.Cle ?? "";
+        if (cle != _persoCle)
+        {
+            _persoCle = cle;
+            Sprite? s = null;
+            string nom = "";
+            if (el is not null && _campagne is { } c && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, c, cle) is { } pe)
+            {
+                s = AnimationsCampagne.Portrait(Banque.Commune, c.Id, pe.Personnage, pe.Expression, ScenesAnimees.Echelle);
+                nom = NomPersonnage(pe.Personnage);
+            }
+            _persoNom.Text = nom;
+            _anims.Personnage(_persoImage, s, false, now);
+        }
+        _anims.Parle(_enCours is { } e && AnimationsCampagne.Parle(e.Texte));
+    }
+
+    private static string NomPersonnage(string id) => id switch
+    {
+        "grumeau" => "Grumeau", "le-rond" => "le Rond", "mlle-renvoi" => "Mlle Renvoi", "golem" => "le golem de tickets",
+        "spectre-404" => "Quatre-Cent-Quatre", "dateur" => "le Dateur", "mme-echeance" => "Mme Échéance", "raccourcis" => "Ctrl, Alt et Suppr",
+        "touche-s" => "S", "imprimante" => "l'Imprimante", "brouillon" => "Brouillon", "tic-tac" => "le Tic-Tac", "balayeur" => "le Balayeur",
+        "anselme" => "Anselme", "lison" => "Lison", "tudal" => "Tudal", "perrine" => "Perrine", "odile" => "Odile", "basile" => "Basile",
+        "vernier" => "M. Vernier", "tournebise" => "Tournebise", "ondee" => "Ondée", "mi-bemol" => "Mi-Bémol", "dentelle" => "Dentelle",
+        "madame-bocal" => "Madame Bocal", "froisseuses" => "les Froisseuses", "enclumes" => "les Enclumes", "bergeronnette" => "la bergeronnette",
+        _ => "",
+    };
+
+    // Un chapitre qui commence : l'emblème du ton de la campagne se pose au milieu du séparateur, avec un éclat.
+    private void Embleme(UIElement separateur)
+    {
+        if (separateur is not Grid g || _campagne is not { } c || Illustrations.Ton(Banque.Commune, c.Ton, ScenesAnimees.Echelle) is not { } ts) return;
+        var e = _anims.Eclat(ScenesAnimees.Vue(ts, 24), 44, Gel(Aventure.TeinteTon(c.Ton)), 120);
+        g.ColumnDefinitions.Insert(1, new ColumnDefinition { Width = GridLength.Auto });
+        foreach (UIElement x in g.Children)
+            if (Grid.GetColumn(x) >= 1) Grid.SetColumn(x, Grid.GetColumn(x) + 1);
+        Grid.SetColumn(e, 1);
+        if (e is FrameworkElement fe) fe.Margin = new Thickness(0, 0, 8, 0);
+        g.Children.Add(e);
+    }
+
+    // Le bouton « ✧ » : animations complètes, réduites ou aucune ; texte écrit d'un coup.
+    private void MenuAnimations()
+    {
+        var m = new ContextMenu();
+        void Choix(string texte, string niveau)
+        {
+            var i = new MenuItem { Header = texte, IsCheckable = true, IsChecked = _pilou.AnimationsCampagnes == niveau };
+            i.Click += (_, _) => Sur(() =>
+            {
+                _pilou.AnimationsCampagnes = niveau;
+                _cleVue = "";
+                Rafraichir();
+            });
+            m.Items.Add(i);
+        }
+        Choix("Animations complètes", AnimationsCampagne.Completes);
+        Choix("Animations réduites (décors fixes)", AnimationsCampagne.Reduites);
+        Choix("Aucune animation", AnimationsCampagne.Aucune);
+        m.Items.Add(new Separator());
+        var t = new MenuItem { Header = "Texte instantané (sans lettre à lettre)", IsCheckable = true, IsChecked = _pilou.TexteInstantane };
+        t.Click += (_, _) => Sur(() => _pilou.TexteInstantane = !_pilou.TexteInstantane);
+        m.Items.Add(t);
+        if (!Bandeau.Anime)
+            m.Items.Add(new MenuItem { Header = "(Windows demande moins d'animations : rien ne bouge)", IsEnabled = false });
+        m.Placement = PlacementMode.Bottom;
+        m.PlacementTarget = _onglets;
+        m.IsOpen = true;
     }
 
     // ---- Clavier : 1 à 4 (options, ou signes de la mémoire), Espace / Entrée (accélérer, « vas-y », jouer), Échap.

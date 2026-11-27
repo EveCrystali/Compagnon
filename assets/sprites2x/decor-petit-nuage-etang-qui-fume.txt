@@ -3,7 +3,7 @@ id: decor-petit-nuage-etang-qui-fume
 slot: objet
 ancre: aucun
 decalage: 0 0
-duree: 260
+duree: 250
 palette: a=#8790a4 b=#1d6578 c=#93aacb d=#2f8f9c e=#3b2616 f=#e6eef7 g=#c3d3e6 h=#b5bccb i=#ffffff j=#f2f6fb k=#dbe9f5 l=#4f7fa6 m=#123f52 n=#2c5577 o=#5e3c22 p=#5bb3ae q=#8fb6d8 r=#a07a52 s=#5c6478
 images:
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

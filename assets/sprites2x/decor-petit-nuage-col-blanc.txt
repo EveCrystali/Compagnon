@@ -3,7 +3,7 @@ id: decor-petit-nuage-col-blanc
 slot: objet
 ancre: aucun
 decalage: 0 0
-duree: 260
+duree: 250
 palette: a=#e6eef7 b=#ffffff c=#b5bccb d=#c3d3e6 e=#f2f6fb f=#8790a4 g=#93aacb h=#4f7fa6
 images:
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

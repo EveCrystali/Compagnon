@@ -361,7 +361,7 @@ def regles():
     d("phare-eteint", "atelier-basile", 8, 200, False, [
         particules((4, 6, 60, 30), [F.LAITON2, F.L4], n=12, dx=2, dy=-3, graine=57, oscille=0.6),
         pulse(30, 30, 26, F.LAITON2, force=0.12, ampleur=0.6, ry=14)])
-    d("phare-eteint", "sentier-douaniers", 6, 260, False, [
+    d("phare-eteint", "sentier-douaniers", 6, 250, False, [
         brume(8, 32, 0.45, F.BR4), reflets((0, 30, 70, 40), F.BR3, n=8, graine=58, eau=[F.BR1, F.BR2, F.N3])])
     d("phare-eteint", "grotte-souffleur", 6, 240, True, [
         reflets((48, 24, 92, 31), F.BR4, n=8, ampleur=1.2, graine=59), pulse(28, 29, 18, F.L3, force=0.18, ampleur=0.5, teinte=True),
@@ -385,7 +385,7 @@ def regles():
         vent((0, 12, 34, 32), 0.8, sur=herbes_n), vent((62, 12, 96, 32), 0.8, 0.3, sur=herbes_n),
         particules((0, 4, 96, 30), [N.NE4, N.P4], n=8, dx=8, dy=-2, graine=72, oscille=1.0)])
     d("petit-nuage", "pre-aux-draps", 6, 230, True, [vent((0, 22, 96, 40), 0.8, sur=herbes_n)])
-    d("petit-nuage", "etang-qui-fume", 6, 260, True, [
+    d("petit-nuage", "etang-qui-fume", 6, 250, True, [
         reflets((0, 28, 96, 38), N.EA4, n=10, graine=73, eau=[N.EA1, N.EA2, N.EA3]), scintille((0, 0, 50, 24), ecart=60, part=0.6, graine=74)])
     d("petit-nuage", "plateau-rape", 6, 200, True, [
         vent((0, 24, 96, 38), 1.0, sur=herbes_n), particules((0, 14, 96, 36), [N.P3, N.TE3], n=12, dx=14, dy=-1, graine=75)])
@@ -395,15 +395,15 @@ def regles():
         particules((0, 8, 96, 38), [N.M2, N.M1], n=12, dx=-3, dy=7, graine=77, oscille=0.8), vent((0, 10, 96, 34), 0.6, sur=[N.M1, N.M2])])
     d("petit-nuage", "terrier-aux-bocaux", 6, 240, True, [
         pulse(48, 20, 16, N.L2, force=0.25, ampleur=0.4), scintille((0, 0, 96, 30), ecart=110, part=0.5, graine=78)])
-    d("petit-nuage", "col-blanc", 6, 260, True, [
+    d("petit-nuage", "col-blanc", 6, 250, True, [
         particules((0, 0, 96, 36), [N.NE4, N.NE3], n=18, dx=-4, dy=6, graine=79, oscille=0.6)])
     d("petit-nuage", "trou-qui-siffle", 6, 180, True, [scintille((0, 0, 96, 40), ecart=120, part=0.4, graine=80)])
     d("petit-nuage", "grande-salle", 6, 240, False, [
         particules((40, 4, 56, 36), [N.SO3, N.NE3], n=10, dx=0, dy=4, graine=81, oscille=0.6),
         particules((0, 4, 96, 34), [N.EA4], n=4, dx=0, dy=14, graine=82, vie=(0.3, 0.9))])
-    d("petit-nuage", "abreuvoir", 6, 260, True, [
+    d("petit-nuage", "abreuvoir", 6, 250, True, [
         reflets((0, 30, 96, 37), N.SO3, n=10, graine=83), scintille((0, 0, 96, 8), ecart=60, part=0.5, graine=84)])
-    d("petit-nuage", "abreuvoir-aube", 6, 260, True, [reflets((0, 30, 96, 37), N.AU2, n=10, graine=85)])
+    d("petit-nuage", "abreuvoir-aube", 6, 250, True, [reflets((0, 30, 96, 37), N.AU2, n=10, graine=85)])
     d("petit-nuage", "fenetre-maison", 6, 250, True, [
         fumee(34, 24, N.NE3, n=4, haut=8, derive=1.5, r=(0.5, 1.6), force=0.6), pulse(10, 26, 16, N.L2, force=0.15, ampleur=0.5, ry=10)])
     return R

@@ -3,7 +3,7 @@ id: decor-petit-nuage-abreuvoir-aube
 slot: objet
 ancre: aucun
 decalage: 0 0
-duree: 260
+duree: 250
 palette: a=#9cc3e8 b=#c3d3e6 c=#ffffff d=#bcd7ef e=#e8c8d8 f=#8790a4 g=#5c6478 h=#f8dcc8 i=#dbe9f5 j=#4f7fa6 k=#e6eef7 l=#b5bccb
 images:
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
