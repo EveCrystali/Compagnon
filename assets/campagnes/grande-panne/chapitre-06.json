@@ -19,7 +19,6 @@
       "lieu": "L'antichambre",
       "decor": "bureau-echeance",
       "humeur": "neutre",
-      "personnage": "mme-echeance",
       "texte": [
         "La porte s'est rouverte, en grand cette fois. Une secrétaire, un petit calendrier à spirale, nous a fait entrer dans une antichambre. « Mme Échéance va vous recevoir tout de suite. Asseyez-vous. » Je me suis assis. « Non, attendez debout, c'est plus rapide. » Je me suis relevé. Elle a tourné une de ses pages et elle a soupiré : « C'est toujours la même. » On attend qu'on nous appelle. Encore. Mais c'est la dernière fois, je le sens."
       ],
@@ -66,7 +65,7 @@
       "lieu": "Bureau de Mme Échéance",
       "decor": "bureau-echeance",
       "humeur": "malice",
-      "personnage": "mme-echeance",
+      "personnage": "grumeau",
       "checkpoint": true,
       "texte": [
         "Quelqu'un a frappé. Mme Échéance est sortie « vérifier que rien n'arrive », ce qui est son métier en ce moment. Elle a laissé les deux cartes sur le bureau. Celle que je n'ai pas vue est là, retournée, à une longueur de bras. Grumeau a lu dans mes pensées : « Elle a dit une seule. Elle a dit ne touchez pas. Ici, celui qui touche une carte devient prévu. » Je ne sais pas ce que ça veut dire. Ça me démange. Je fais quoi ?"
@@ -88,7 +87,7 @@
     "ch6a-offre": {
       "type": "choix",
       "humeur": "tendre",
-      "personnage": "grumeau",
+      "personnage": "mme-echeance",
       "texte": [
         "Je n'ai rien touché. Mme Échéance est revenue, a regardé les cartes, puis moi, et son crayon gauche a frémi : c'était un test, et on est les premiers à le réussir depuis l'invention du mardi. Alors elle a parlé. Dans le dossier Temp, un fichier temporaire ne dure que s'il est enregistré : une demande exceptionnelle, trois tampons. Sinon, il reste la Corbeille. « On n'y est pas effacé. On y est rangé. »",
         "Puis elle a reconnu Grumeau. « Matricule 0003. Votre réintégration était prévue, vous savez. » Il a demandé quand. Tu connais la réponse. Elle soupire : il lui reste de l'encre pour un seul coup de tampon aujourd'hui. Un visa sur mon formulaire, ou le dossier de Grumeau remonté en haut de la pile. Il dit : « Prends le visa. Je m'en fiche. » Il ne s'en fiche pas."
@@ -101,7 +100,7 @@
     "ch6a-visa": {
       "type": "recit",
       "humeur": "determine",
-      "personnage": "mme-echeance",
+      "personnage": "grumeau",
       "texte": [
         "J'ai pris le visa. Mme Échéance a tamponné, sec, précis, sans une goutte de trop, et sans lire la case « Objet de la demande », elle non plus. Grumeau a dit « très bien » d'une voix parfaitement normale, et il a regardé la pile où dort son dossier, tout en bas, sous trente ans de poussière. Je lui ai promis qu'on reviendrait. Il a répondu qu'il ne fallait rien promettre à 13 h 37, que ça n'engageait à rien. Mais il a retenu que j'avais promis."
       ],
@@ -110,7 +109,7 @@
     "ch6a-dossier": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "mme-echeance",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "J'ai dit : « Le dossier de Grumeau. » Il s'est retourné si vite qu'il a failli tomber de la chaise. Mme Échéance a tiré une chemise grise de tout en bas de la pile, a soufflé dessus, a tamponné, et l'a posée tout en haut. « Premier dossier traité à la reprise. » Grumeau n'a rien dit pendant un long moment. Puis : « C'était idiot. Il te fallait ce tampon. » Puis, très bas : « Merci, pâté. »"
       ],
@@ -234,6 +233,7 @@
     "ch6b-file": {
       "type": "attente",
       "humeur": "fatigue",
+      "personnage": "grumeau",
       "texte": [
         "On fait la queue. Devant nous : un rapport de stage, deux billets de train périmés, une recette de gâteau qui a perdu sa page 2. Tout le monde est très calme, c'est le calme de ceux qui ont arrêté d'espérer. Grumeau discute retraite avec un vieux courrier. J'avance d'une feuille de temps en temps, quand l'une d'elles renonce et s'en va. À ce rythme, on y sera vers 13 h 38. Je plaisante. Enfin, j'espère. Je t'écris devant l'estrade."
       ],
@@ -259,7 +259,7 @@
     "ch6b-liste": {
       "type": "recit",
       "humeur": "peur",
-      "personnage": "grumeau",
+      "personnage": "grumeau", "expression": "surpris",
       "texte": [
         "La liste est un rouleau long comme la file. Tout en bas, la dernière ligne : « Document sans titre, une page. Annulé. Motif : fichier temporaire, suppression prévue à 13 h 38 par le Grand Nettoyage. » J'ai relu trois fois. Le Sans-Titre n'est pas un monstre. C'est une page, une seule, qui doit être effacée à 13 h 38. Et qui a trouvé le seul moyen pour que 13 h 38 n'arrive pas. Grumeau a dit : « Ah. » Rien d'autre. C'est rare."
       ],
@@ -268,6 +268,7 @@
     "ch6b-s": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "touche-s",
       "texte": [
         "Derrière le bac, une toute petite touche, recroquevillée : S. Je me suis assis à côté sans rien demander. Au bout d'un moment, elle a raconté. Avec Ctrl, elle sauvait les gens : il suffisait qu'elles se donnent la main. Un jour, elle a sauvé par-dessus la bonne version. Tout écrasé. Depuis, elle se cache. Je lui ai dit que moi aussi je rate des trucs, et que j'y retourne quand même, en tremblant. Elle a chuchoté : « Si un jour il faut sauver quelqu'un, appelle. Pas trop fort. »"
       ],

@@ -22,6 +22,7 @@
       "lieu": "L'escalier de la Tour",
       "decor": "etage-guichets",
       "humeur": "fatigue",
+      "personnage": "grumeau",
       "texte": [
         "Premier problème, au premier palier : Grumeau ne monte pas les marches. Il a essayé. Un sablier, ça n'a pas de genoux. Il est planté en bas, très digne, et il affirme que l'escalier est mal conçu et qu'il écrira à quelqu'un. On a trente-sept paliers à faire. Je vois deux solutions, et il va détester les deux. Laquelle ?"
       ],
@@ -46,7 +47,6 @@
       "type": "choix",
       "lieu": "Étage des formulaires",
       "humeur": "surpris",
-      "personnage": "mlle-renvoi",
       "texte": [
         "Étage des formulaires. Des casiers jusqu'au plafond, une couleur par demande. Mlle Renvoi l'avait dit : il nous faut le jaune poussin, « Demande exceptionnelle ». Il en reste un seul, sous une cloche en verre. Pour soulever la cloche, il faut remplir un formulaire vert d'eau. Le casier des verts d'eau est vide, avec un mot : « Réassort à 13 h 38. »",
         "L'employé des casiers est un trombone déplié qui se ronge le bout. Il voudrait bien nous aider, mais il n'a « pas la main ». Dans la corbeille à papier, je vois dépasser un vieux jaune poussin froissé, rempli à moitié par quelqu'un d'autre. Comment on s'y prend ?"
@@ -60,7 +60,7 @@
     "ch4a-form-liste": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "mlle-renvoi",
+      "personnage": "grumeau",
       "texte": [
         "J'ai récité la liste de Mlle Renvoi, d'une traite, avec le ton. Le trombone s'est redressé d'un coup. « Vous connaissez les pièces ? Par cœur ? Personne ne connaît les pièces ! » Il a soulevé la cloche lui-même, en regardant ailleurs, « puisque vous êtes du métier ». J'ai le jaune poussin, tout neuf, tout lisse. Grumeau a fait « mmh » sur un ton que je ne lui connaissais pas. De la fierté, peut-être. Ou un grain de travers."
       ],
@@ -91,7 +91,7 @@
       "lieu": "Bureau du Dateur",
       "decor": "etage-guichets",
       "humeur": "triste",
-      "personnage": "dateur", "expression": "joie",
+      "personnage": "dateur", "expression": "triste",
       "checkpoint": true,
       "texte": [
         "Un formulaire sans tampon, d'après Grumeau, c'est « un chapeau sans tête ». Il en faut trois. Et la case du milieu, « Objet de la demande » ? « Laisse. Personne ne la lit jamais. » Le premier tampon se demande ici, au Dateur : un gros tampon à roulettes de chiffres, effondré derrière son bureau. Il ne sait écrire que la date et l'heure, et depuis ce matin c'est la même. « 13 h 37. 13 h 37. J'avais une œuvre, vous savez. »",
@@ -118,7 +118,7 @@
     "ch4a-tampon-net": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "dateur", "expression": "triste",
+      "personnage": "dateur", "expression": "joie",
       "texte": [
         "TCHAC. « 13 h 37 », en bleu, pile dans la case, sans une bavure. Il y avait enfin de quoi encrer, et le Dateur a contemplé son travail les larmes aux roulettes. « C'est la même heure que les autres. Mais celle-ci, elle est belle. » Premier tampon ! Grumeau a vérifié les bords à travers son propre verre et n'a rien trouvé à redire, ce qui l'a contrarié. Plus que deux. Ils se demandent plus haut. Évidemment."
       ],
@@ -128,7 +128,7 @@
     "ch4a-tampon-bave": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "dateur",
+      "personnage": "dateur", "expression": "triste",
       "texte": [
         "Le tampon est tombé de travers. Moitié dans la case, moitié sur « Ne rien inscrire ici ». Le Dateur a regardé la tache, puis moi, puis la tache. « Baveux. Refusé. Je n'ai pas le droit de recommencer sur le même exemplaire, et il n'y en a pas d'autre. » Il s'est effondré de nouveau. Zéro tampon ici. Grumeau dit qu'il en reste à prendre plus haut, et que la prochaine fois je respirerai avant."
       ],
@@ -139,7 +139,6 @@
       "lieu": "Au pied de la Tour",
       "decor": "tour-tampon",
       "humeur": "peur",
-      "personnage": "dateur",
       "texte": [
         "J'ai dessiné le tampon moi-même, avec le doigt, pendant que le Dateur se mouchait. Très ressemblant, je trouvais. Une sonnerie a retenti. Une trappe s'est ouverte sous moi, marquée « Sans suite ». J'ai glissé dans un tuyau pendant un temps infini, classé entre un vieux courrier et une facture, jusqu'à un bac tout en bas de la Tour. L'affiche avait prévenu. Je me repose, je me défroisse, et je remonte."
       ],
@@ -242,6 +241,7 @@
     "ch4b-duel-perdu": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "grumeau",
       "texte": [
         "Perdu. Il m'a désarmé d'une patte, sans méchanceté, et mon épée est restée plantée dans un câble. Puis il m'a regardé de près. « Vous êtes trop petit pour être corrigé. Passez. » Il s'est poussé, par pitié. Je déteste la pitié, mais j'ai pris le passage quand même, parce que j'aime encore moins les tunnels bouchés. Grumeau a récupéré mon épée du bout du socle. Il n'a fait aucun commentaire. C'était pire."
       ],

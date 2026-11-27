@@ -20,6 +20,7 @@
     "ch7-seau": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "lison",
       "texte": [
         "« UN PAS DE PLUS ET JE LÂCHE LE SEAU ! » La voix vient d'au-dessus. Dans le tournant de l'escalier, il y a une fille. Une natte, onze ans peut-être, des bottes jaunes trop grandes, et un seau plein à ras bord qu'elle tient à deux mains au-dessus du vide. Au-dessus de moi. Elle sait donc ce que je suis, et ce que l'eau me fait.",
         "« Personne monte ici. Personne. T'es qui, et qui t'envoie ? » Je crois qu'elle le sait très bien : elle veut voir ce que je réponds. Elle ne plaisante pas. Le seau non plus, il goutte déjà. Qu'est-ce que je fais ?"
@@ -106,7 +107,7 @@
       "lieu": "La chambre de veille",
       "decor": "chambre-de-veille",
       "humeur": "tendre",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "triste",
       "texte": [
         "Je suis entré dans la chambre de veille. Dans le fauteuil, Anselme. Une grande barbe blanche, de grandes mains, une corne de brume à soufflet sur les genoux. Il a tourné la tête vers moi. Un peu à côté de moi. Ses yeux sont comme deux vitres embuées. « C'est donc toi, l'encre. Je te croyais plus grand. Remarque, à présent, je crois surtout ce que j'entends. »",
         "Puis, sans attendre : « Personne n'a éteint mon phare, petit. C'est moi. Jeudi, dans la nuit, mon feu a donné trois éclats au lieu de deux et un long. Il a menti. Tudal a failli y rester. Je n'y vois plus depuis deux hivers, et voilà où ça mène : j'ai dû me tromper de cran. Un phare qui ment est pire qu'un phare éteint. Alors j'ai éteint. »",
@@ -121,7 +122,7 @@
     "ch7-doigts": {
       "type": "recit",
       "humeur": "surpris",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "triste",
       "texte": [
         "J'ai fini par demander comment on règle un phare sans le voir. Il a levé ses grandes mains. « Avec ça. Le cadran de réglage a des crans. On part de la butée et on compte : onze à gauche, deux à droite. Clac, clac, clac. Trente ans que je le fais, les dix derniers sans regarder, bien avant mes yeux. Mes doigts connaissent le chemin mieux que moi. »",
         "« Et jeudi, vous avez bien compté ? » Il s'est tu longtemps. « Comme toujours. Onze, deux. Et pourtant trois éclats. C'est donc que mes doigts s'en vont aussi, comme mes yeux, et que je ne m'en rends même plus compte. » Lison a murmuré : « C'est pas vrai. » Lui : « La machine ne se trompe pas, petite. Les vieux, si. » Une main qui compte juste depuis trente ans, et un feu faux : il y a quelque chose entre les deux."
@@ -131,6 +132,7 @@
     "ch7-colere": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "anselme",
       "effets": [ { "var": "courage", "plus": 1 } ],
       "texte": [
         "Il a frappé le bras du fauteuil. « Et un phare faux les jettera sur la Mâchoire ! Tu crois que je ne les compte pas, ces bateaux ? Je les ai tous vus naître, leurs patrons. » La colère est retombée aussi vite. « Je sonne la corne quand la brume vient. C'est tout ce qu'un aveugle peut faire sans mentir. »",
@@ -141,7 +143,7 @@
     "ch7-fouille": {
       "type": "choix",
       "humeur": "determine",
-      "personnage": "anselme",
+      "personnage": "lison",
       "texte": [
         "La mer a refermé le Passe-Pied : je passe la nuit ici. Anselme s'est assoupi dans son fauteuil. Lison m'a donné un bout de chandelle, long comme mon bras : « C'est tout ce qui reste. L'huile, on la garde pour… pour rien, en fait. Par habitude. »",
         "Un bout de chandelle, c'est de quoi regarder une chose de près, peut-être deux en me dépêchant. Il y a la machine du feu, tout en haut, dans la lanterne. Le gros carnet de veille, sur la table. Et la boîte en fer où Anselme range son courrier. Par quoi je commence ?"
@@ -157,6 +159,7 @@
       "lieu": "La lanterne",
       "decor": "lanterne-du-phare",
       "humeur": "surpris",
+      "personnage": "anselme", "expression": "joie",
       "effets": [ { "drapeau": "vu-machine" }, { "drapeau": "c-came" }, { "drapeau": "k-basile" } ],
       "texte": [
         "La lanterne. La grande lentille dort sous un drap, et dessous, la machine : des roues de laiton, un poids au bout de sa chaîne, et le cadran de réglage. J'approche ma chandelle. Tout est vieux, patiné, doré sombre. Tout, sauf le cadran. Il est en fer-blanc, gris, tenu par une vis toute neuve. Ce n'est pas le cadran de cette machine. On l'a changé.",
@@ -170,7 +173,7 @@
       "lieu": "La chambre de veille",
       "decor": "chambre-de-veille",
       "humeur": "triste",
-      "personnage": "anselme",
+      "personnage": "lison",
       "effets": [ { "drapeau": "vu-carnet" }, { "drapeau": "k-odile" } ],
       "texte": [
         "Le carnet de veille. Trente ans de nuits, une ligne par nuit : l'heure d'allumage, le vent, la brume, « rien à signaler ». Au début, l'écriture d'Anselme, droite et serrée, à l'encre bleu-noir. Puis, il y a deux hivers, elle grossit, elle penche. Puis elle s'arrête. Et une autre prend la suite : une écriture d'écolier, bien posée, qui essaie d'imiter la sienne.",
@@ -184,7 +187,6 @@
       "lieu": "La chambre de veille",
       "decor": "chambre-de-veille",
       "humeur": "tendre",
-      "personnage": "perrine", "expression": "joie",
       "effets": [ { "drapeau": "vu-lettres" }, { "drapeau": "k-perrine" } ],
       "texte": [
         "La boîte en fer. Dedans, mes cartes. Toutes. Rangées par hiver, avec un élastique. Je ne savais pas qu'on pouvait garder mes cartes. Et sur chacune des dernières, dans le coin, une petite note au crayon, d'une écriture ronde et appliquée : « Lue le jeudi 12. » « Relue le jeudi 19, il a ri au passage du goéland. »",
@@ -241,6 +243,7 @@
     "ch7-confidence": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "lison",
       "effets": [ { "drapeau": "c-jeudi" } ],
       "texte": [
         "Elle m'a regardé longtemps. Puis, au lieu d'aller se coucher, elle a chuchoté encore : « Je vais te dire un truc que j'ai dit à personne. Jeudi, en rentrant de l'école, j'ai vu l'horloger redescendre du phare en courant, pendant la sieste d'Anselme. Il avait un paquet rond sous le bras, dans un drap, et la marée aux talons. Je l'ai pas dit à Anselme : il aurait cru que je cherche des excuses à ses yeux. »",
@@ -251,7 +254,7 @@
     "ch7-fin": {
       "type": "attente",
       "humeur": "peur",
-      "personnage": "lison",
+      "personnage": "lison", "expression": "peur",
       "texte": [
         "Lison a hoché la tête, puis elle est allée remonter la couverture d'Anselme. Je vais dormir un peu, roulé dans une chaussette de laine qu'elle m'a prêtée : comme sac de couchage, c'est pile ma taille. Je te dis bonne nuit d'ici. Ne t'inquiète pas, je laisse un œil ouvert. Enfin, une goutte.",
         "Attends. Écoute. En bas. On frappe à la grande porte. Trois coups, lents. Toc. Toc. Toc. À marée haute, en pleine nuit, sur un rocher entouré d'eau. Lison s'est redressée d'un bond. Elle a soufflé : « N'ouvre pas. » Anselme ne s'est pas réveillé. Les coups recommencent. Qui peut bien frapper chez un phare qui n'ouvre plus à personne ? Je descends voir. Si je ne t'écris pas avant l'aube, c'est que j'ai eu trop peur pour tenir un crayon."

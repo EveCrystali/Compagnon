@@ -67,7 +67,7 @@
       "lieu": "Le Pré aux Draps",
       "decor": "pre-aux-draps",
       "humeur": "joie",
-      "personnage": "brouillon",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "Il faut que je te raconte. On est arrivés dans un pré plein de cordes à linge. Onze grands draps blancs qui claquent au vent. Brouillon s'est arrêté net. Il a fait un bruit que je ne connaissais pas, très aigu. Et il a foncé. Il se frotte à eux, il se glisse entre deux, il leur parle en pff.",
         "Il croit que c'est sa famille. Voilà. Il croit qu'il est arrivé. Les draps ne répondent pas, évidemment, ce sont des draps. Il attend quand même. Il est tellement content que je n'ose plus bouger. Je fais quoi, moi, maintenant ?"
@@ -112,6 +112,7 @@
       "lieu": "La route blanche",
       "decor": "chemin-creux",
       "humeur": "peur",
+      "personnage": "brouillon", "expression": "triste",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "Ici, ça se gâte. Plus de haies, plus d'ombre : un chemin de craie, tout blanc, sous un soleil d'automne qui cogne encore. Brouillon a chaud. Ses bords deviennent transparents, je vois les cailloux à travers. Je me suis allongé contre lui, vite, à même la poussière : il a encore perdu un peu.",
@@ -125,6 +126,7 @@
     "ch2-soleil-2": {
       "type": "choix",
       "humeur": "peur",
+      "personnage": "brouillon", "expression": "triste",
       "texte": [
         "On va tout droit. Ça tape. Brouillon ne fait plus pff : il fait un petit sifflement, tout fin, comme un pneu de vélo. Il vole de plus en plus bas. Tout à l'heure, il a frôlé le chemin et il a laissé une trace humide dans la poussière, qui a séché en trois secondes. Il y a un noisetier, là, à gauche. L'étang est encore loin. Je ne sais pas. Dis-moi vite."
       ],
@@ -154,6 +156,7 @@
       "lieu": "L'Étang-qui-fume",
       "decor": "etang-qui-fume",
       "humeur": "fatigue",
+      "personnage": "brouillon", "expression": "joie",
       "texte": [
         "On y est. C'est un étang tout rond, avec des roseaux et un vieux saule. La nuit tombe, et il se passe un truc : l'eau fume. Une brume blanche monte de partout. Brouillon est fou de joie, il a encore cru que c'était quelqu'un. Mais la brume, au moins, ça se boit un peu : ses bords repoussent.",
         "Le souci, c'est moi. La brume, c'est de l'eau, et tu sais ce que l'eau me fait. Si je dors au bord, je me réveille délavé. Si on dort au sec sous le saule, il n'y a plus de brume pour lui. On s'installe comment ?"

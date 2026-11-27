@@ -22,7 +22,7 @@
     "ch8-balai-rond": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "balayeur",
+      "personnage": "le-rond",
       "texte": [
         "J'ai sifflé vers le haut, sans trop y croire. Et il est venu ! Le Rond, descendu du Hall en roulant sur sa tranche. Depuis que je l'ai poussé, il sait qu'on peut tourner à la main. Il s'est planté devant le Balayeur et il a dit : « Un instant… » Le Balayeur a baissé son balai. Il attend. Un programme attend toujours quand le Rond le demande, c'est plus fort que lui. Grumeau a murmuré : « Bon. Il sert à quelque chose. » On est entrés."
       ],
@@ -31,7 +31,7 @@
     "ch8-balai-bluff": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "balayeur",
+      "personnage": "grumeau",
       "texte": [
         "J'ai pris ma plus grosse voix : « Inspection surprise. Contrôle du matériel. Ce balai a-t-il son tampon de l'année ? » Le Balayeur a pâli. Il a retourné son balai, cherché le tampon sur le manche, sous les poils, partout. Grumeau a enchaîné, impitoyable : « Article 12. Tout balai non tamponné doit être présenté au guichet. » Le Balayeur est parti le présenter. Au guichet. Fermé jusqu'à 13 h 38. Il reviendra à l'heure, il revient toujours. Mais on est entrés."
       ],
@@ -49,7 +49,7 @@
     "ch8-balai-franc": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "tic-tac",
+      "personnage": "balayeur",
       "texte": [
         "Je lui ai tout dit : le Tic-Tac, le goûter, les horloges. Il a écouté sans baisser son balai. « Vous voulez relancer l'heure. Donc vous voulez que je passe. C'est aimable. » Il s'est écarté d'un pas. « Entrez. Mais je vous préviens : je commence toujours par les coins, et je finis par le milieu. C'est tout ce que je peux faire pour qui que ce soit. » Je crois que c'était un cadeau. Un cadeau de balayeur."
       ],
@@ -83,7 +83,7 @@
     "ch8-page": {
       "type": "attente",
       "humeur": "determine",
-      "personnage": "spectre-404", "expression": "triste",
+      "personnage": "grumeau", "expression": "tendre",
       "texte": [
         "On le suit. L'allée est pleine de choses effacées à moitié : des images sans couleurs, des phrases sans verbes, une chanson dont il ne reste que le refrain. Quatre-Cent-Quatre flotte devant, il renifle chaque pile. Grumeau dit qu'on perd du temps, et il ajoute, pour la première fois : « Ça ne fait rien. » Je fouille avec eux. Je ne sais même pas ce qu'on cherche. Lui non plus. Je t'écris si on trouve."
       ],
@@ -142,7 +142,7 @@
     "ch8-marche": {
       "type": "attente",
       "humeur": "peur",
-      "personnage": "brouillon",
+      "personnage": "grumeau",
       "texte": [
         "On s'enfonce. Je ne te cache pas que j'ai peur. Les ratures couvrent tout, maintenant, et entre les ratures il y a des débuts de phrases : « Je voulais », « Il faudrait que », « Cher ». Jamais la fin. On raconte que là où passe le Sans-Titre, les phrases s'arrêtent au milieu. Grumeau marche si près de moi qu'on fait un seul bruit. Je t'écris quand on voit la cabane. Si c'est une cabane."
       ],
@@ -169,7 +169,6 @@
     "ch8-seuil": {
       "type": "choix",
       "humeur": "peur",
-      "personnage": "tic-tac",
       "texte": [
         "On a fait les dix pas. Je suis devant la porte. De l'autre côté, quelque chose a bougé, puis une petite voix a crié : « N'entrez pas ! Je suis très… je suis extrêmement… » Elle n'a pas trouvé le mot. Silence. Puis : « Je suis armé d'un… » Rien non plus. Et là, derrière la voix, je l'ai entendu. Lent. Paresseux. Mais c'est lui. Tic… Tac.",
         "Il est là ! Le Tic-Tac est là, à une porte en papier de moi. Grumeau l'a entendu aussi : son sable s'est arrêté de couler une seconde, je te jure. La voix répète « n'entrez pas », moins fort. Qu'est-ce que je fais ?"

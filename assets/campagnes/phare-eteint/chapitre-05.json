@@ -40,6 +40,7 @@
     "ch5a-ruse": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "basile",
       "texte": [
         "J'ai sorti ma boussole, celle qui indique surtout l'heure du goûter. Basile l'a prise entre deux doigts et l'a regardée à la loupe, ravi : enfin un malade intéressant. Moi, pendant ce temps, j'ai regardé le reste. Les crayons gras, taillés fin comme des aiguilles. La limaille dorée partout : du laiton. Un gros registre noir, « Travaux », ouvert près de la caisse. Et sous le drap du fond, quelque chose de rond, grand comme une assiette."
       ],
@@ -70,7 +71,6 @@
     "ch5a-registre": {
       "type": "recit",
       "humeur": "surpris",
-      "personnage": "basile",
       "effets": [ { "drapeau": "c-jeudi" } ],
       "texte": [
         "Le registre « Travaux », à la page de la semaine dernière. « Jeudi. Dent-Creuse, pendant la sieste d'A. Cadran de réglage démonté, emporté pour gravure. Posé le cadran de rechange en fer-blanc. Pas eu le temps d'essayer le feu : la marée. À vérifier. » Et « à vérifier » est souligné trois fois, d'un trait de plus en plus appuyé.",
@@ -94,7 +94,7 @@
     "ch5a-clef": {
       "type": "choix",
       "humeur": "determine",
-      "personnage": "basile", "expression": "peur",
+      "personnage": "basile",
       "texte": [
         "Basile a le dos tourné, le nez dans le coucou. Dans mon baluchon, j'ai une ficelle et un hameçon ramassé sur le quai. La clef pend à deux mètres. Un bon lancer, et je la décroche sans bruit. Mais c'est du vol, soyons honnêtes. L'autre façon, c'est de me planter devant lui et de dire : « Basile, il faut qu'on parle du phare. Pour de vrai. » Ça me fait plus peur que le lancer. Je fais quoi ?"
       ],
@@ -117,7 +117,7 @@
     "ch5a-clef-ok": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "basile",
+      "personnage": "basile", "expression": "triste",
       "effets": [ { "objet": "clef-service", "donne": true } ],
       "texte": [
         "Dans l'anneau, du premier coup ! La clef a glissé le long de la ficelle comme une perle et je l'ai reçue dans les bras. Je suis sorti à reculons, la clef sur l'épaule comme une rame. Basile n'a rien vu. Enfin, je croyais. Arrivé sur le trottoir, j'ai entendu sa voix, toute petite, derrière la vitre : « Dites-lui… Non. Ne lui dites rien. » Il avait donc vu. Et il m'a laissé faire."

@@ -63,6 +63,7 @@
     "ch5-recit": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "tournebise", "expression": "triste",
       "texte": [
         "Voilà ce qu'il m'a dit. Il y a très longtemps, il était sur un autre toit, et il tournait, comme tout le monde. Un matin d'après orage, il a trouvé une petite nuageuse coincée dans sa gouttière. Il l'a appelée Ondée. Et il est descendu de son toit, lui, un coq en fer, pour l'emmener à pied derrière les Dents-de-Lait.",
         "Il est arrivé à temps. Par le col, trois jours de neige, la veille de la gelée. Il l'a vue boire au lac avec les autres, tous serrés comme des moutons : la veille du départ, ils se serrent. Il était si fatigué qu'il s'est assis. « Une minute. Je me suis dit : une minute. » Quand il a rouvert les yeux, il faisait jour, l'herbe était blanche, et le ciel était vide.",
@@ -73,6 +74,7 @@
     "ch5-minute": {
       "type": "choix",
       "humeur": "triste",
+      "personnage": "tournebise", "expression": "triste",
       "texte": [
         "On est restés un moment comme ça, lui sur son toit, moi sur mon banc, avec le tuyau du poêle entre nous. Brouillon s'était endormi dans la vapeur. Je sentais qu'il fallait dire quelque chose, ou alors surtout ne rien dire. Je ne suis pas doué pour ces moments-là, tu le sais. Tu ferais quoi, à ma place ?"
       ],
@@ -109,7 +111,7 @@
     "ch5-toit": {
       "type": "choix",
       "humeur": "tendre",
-      "personnage": "tournebise",
+      "personnage": "tournebise", "expression": "tendre",
       "texte": [
         "Il est tard. Brouillon s'est réveillé, et il veut dormir là-haut. Sur le toit, dehors, à côté de Tournebise. Il l'a demandé lui-même : « Brouillon là. » Le vieux coq dit que c'est une bonne école. Qu'un petit qui n'a jamais pris le vent ne saura pas monter, une fois au lac, et qu'il lui montrera comment on se tient.",
         "Mais il fait froid, là-haut, et le vent l'use. Près du poêle, il passerait la nuit dans la vapeur et il reprendrait un bord, c'est sûr. Il me regarde. Il attend que je dise oui. Je dis quoi ?"
@@ -122,7 +124,7 @@
     "ch5-la-haut": {
       "type": "attente",
       "humeur": "tendre",
-      "personnage": "brouillon",
+      "personnage": "tournebise", "expression": "tendre",
       "duree_min": 25,
       "duree_max": 30,
       "pendant": "Pilou dort d'un œil ; sur le toit, on apprend le vent",
@@ -178,7 +180,7 @@
     "ch5-routes": {
       "type": "choix",
       "humeur": "determine",
-      "personnage": "brouillon",
+      "personnage": "tournebise",
       "recompense": { "po": 20, "xp": 10 },
       "texte": [
         "Voilà. Il y a deux passages, m'a dit Tournebise. Le col, là-haut, entre deux dents : la Gencive. C'est par là qu'il est passé. C'est long et froid, mais on voit où on met les pieds. Si on n'a pas perdu un seul jour en route, on arrive au lac le dernier soir. Pas avant.",

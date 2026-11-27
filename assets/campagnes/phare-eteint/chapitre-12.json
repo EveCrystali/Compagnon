@@ -68,6 +68,7 @@
     "ch9-g-lison-allume": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "lison", "expression": "joie",
       "texte": [
         "Lison a pris la boîte comme on prend un oiseau. Elle a craqué l'allumette, protégé la flamme du creux de la main, exactement comme il fait, et elle l'a approchée de la mèche. Anselme lui tenait le coude, sans guider : juste là. La flamme a pris. Bleue, puis jaune, puis blanche. Basile a libéré le cran, le poids a commencé à descendre, et la grande lentille s'est mise à tourner, lentement, avec un ronron de chat énorme. J'ai peur de regarder. Je regarde."
       ],
@@ -76,7 +77,7 @@
     "ch9-g-anselme-allume": {
       "type": "recit",
       "humeur": "joie",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "joie",
       "texte": [
         "Anselme a gardé la boîte. Il a craqué l'allumette sans la voir, il l'a écoutée grésiller, et il a trouvé la mèche du premier coup : à la chaleur, à l'odeur, à trente ans d'habitude. « Regarde bien, Lison. Demain, c'est toi. » La flamme a pris. Bleue, puis jaune, puis blanche. Basile a libéré le cran, le poids a commencé à descendre, et la grande lentille s'est mise à tourner, lentement, avec un ronron de chat énorme. J'ai peur de regarder. Je regarde."
       ],
@@ -86,7 +87,7 @@
       "type": "attente",
       "lieu": "La galerie du phare",
       "humeur": "joie",
-      "personnage": "anselme",
+      "personnage": "lison", "expression": "peur",
       "texte": [
         "Un éclat. Deux éclats. Un long. Le noir. Un éclat. Deux éclats. Un long. Je n'ai jamais rien vu d'aussi beau, et pourtant j'ai vu des goûters. Le pinceau de lumière passe sur la brume, sur la Mâchoire toute blanche d'écume, sur le quai où Trébrume entier s'est mis à crier. Anselme ne voit rien de tout ça. Il écoute la machine, la tête penchée, et il dit : « Elle dit vrai. »",
         "Maintenant, on veille. Dix heures. Sur la galerie, Lison compte les feux de mât qui sortent de la brume et s'alignent sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Elle attend. Elle se penche. Elle ne dit plus rien. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas, comme une prière. Je reste à côté d'elle. On regarde le noir. Où est-elle, la Tape-Dur ?"
@@ -101,7 +102,7 @@
       "type": "choix",
       "lieu": "La lanterne",
       "humeur": "tendre",
-      "personnage": "lison",
+      "personnage": "vernier",
       "texte": [
         "Onze heures passées, et un sixième feu est sorti de la brume, tout seul, loin derrière les autres : la Tape-Dur, lourde de poisson, qui avait pris son temps. Lison a dévalé l'escalier en hurlant « PAPA ! » et je ne l'ai revue qu'une heure plus tard, trempée d'embruns et de larmes.",
         "Dans la lanterne, Vernier a sorti l'ordre de fermeture. Il le tient à deux mains. « Le feu dit vrai. L'erreur est expliquée. Mais mon règlement est formel : il faut à ce phare un gardien capable d'en répondre, et M. Anselme n'y voit plus. Donnez-moi une raison de ne pas signer. Une vraie. » Tout le monde est là, dans la lumière qui tourne : Odile, Tudal, Perrine, Basile. C'est moi qu'il regarde."
@@ -115,7 +116,7 @@
     "ch9-g-tous": {
       "type": "recit",
       "humeur": "tendre",
-      "personnage": "basile",
+      "personnage": "anselme", "expression": "joie",
       "texte": [
         "J'ai dit : « Il n'a jamais été seul. Regardez autour de vous. » Et j'ai tout déballé, debout sur le bâti. Tudal, qui paie l'huile depuis le printemps avec ses homards. Perrine, qui lui lit son courrier chaque jeudi et fait semblant de croire aux lunettes cassées. Odile, qui signe ses rapports et invente des varicelles de goélands. Basile, qui soudait des points pour ses doigts.",
         "Ils se sont regardés, tous les quatre. « Tu savais ? » a dit Odile à Perrine. « Depuis deux hivers. Et toi ? » « Un an. » Tudal a grogné : « Moi, je croyais être le seul. » « Moi aussi », a dit Basile. « Moi aussi », ont dit les deux autres. Et Anselme, au milieu, tournait la tête de voix en voix. « Tout le monde savait ? Depuis tout ce temps ? Et moi qui me cachais comme un voleur. » Il riait. Perrine pleurait dans son torchon."
@@ -138,7 +139,7 @@
     "fin-bonne": {
       "type": "fin",
       "humeur": "joie",
-      "personnage": "lison",
+      "personnage": "vernier",
       "issue": "bonne",
       "titre": "Deux éclats, un long",
       "texte": [
@@ -154,7 +155,7 @@
       "lieu": "La lanterne",
       "decor": "lanterne-du-phare",
       "humeur": "triste",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "triste",
       "texte": [
         "On a monté la caisse à quatre. « Balise automatique, modèle 4. Ne nécessite aucune présence. » C'est écrit dessus, au pochoir. Vernier la visse sur la galerie, dehors, face au large, avec des gestes propres. Il ne fait pas ça méchamment. Il fait ça bien, et c'est presque pire.",
         "Anselme est dans la lanterne, debout près de la grande lentille sous son drap. Il ne dit rien. Lison est assise dans l'escalier et refuse de regarder. Vernier me demande de lui tenir la lampe pendant qu'il serre les derniers boulons. Et Anselme, sans se retourner, dit : « Reste un peu, l'encre. » Je ne peux pas être aux deux endroits. Je vais où ?"
@@ -167,7 +168,7 @@
     "ch9-a-anselme": {
       "type": "recit",
       "humeur": "triste",
-      "personnage": "vernier",
+      "personnage": "anselme", "expression": "triste",
       "texte": [
         "Je suis resté. Il a passé la main sous le drap, sur le verre de la lentille, comme on flatte un cheval. « Elle est froide. En trente ans, je ne l'avais jamais sentie froide plus d'un jour. » Il a retiré sa main. « Tu sais ce qui me manquera ? Pas la lumière : je ne la voyais plus. Le bruit. Le ronron de la machine. On dort bien, avec ça. » Dehors, Vernier a dit : « C'est prêt. » Anselme a redressé sa casquette. « Eh bien. Allons écouter une machine qui n'a besoin de personne. »"
       ],
@@ -188,7 +189,7 @@
       "lieu": "La jetée",
       "decor": "jetee-nuit",
       "humeur": "triste",
-      "personnage": "lison",
+      "personnage": "lison", "expression": "peur",
       "texte": [
         "La balise s'est allumée toute seule, à l'heure, sans allumette. Une lumière blanche, plate, exacte : deux éclats, un long, découpés au couteau. Elle ne se trompera jamais. Elle ne reconnaîtra jamais personne non plus. Sur le quai, les gens ont applaudi un peu, puis ils ont arrêté, parce qu'on n'applaudit pas une machine.",
         "Je suis redescendu sur la jetée avec Lison. Dix heures. Les feux de mât sortent de la brume et s'alignent sur la balise. Un. Deux. Trois, quatre ensemble. Cinq. Lison attend. Elle se penche. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas. Elle ne me regarde pas. Je reste à côté d'elle quand même. On regarde le noir. Et si elle ne revenait pas ?"
@@ -249,7 +250,7 @@
       "lieu": "La chambre de veille",
       "decor": "chambre-de-veille",
       "humeur": "determine",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "triste",
       "texte": [
         "Lison m'a ouvert la petite porte avant que je frappe. « Alors ? » J'ai raconté : l'inspecteur signera demain matin, sauf si le phare dit son nom cette nuit. Deux éclats, un long, sans une faute. Anselme était dans son fauteuil, la corne sur les genoux. Il a tout écouté sans bouger.",
         "« Non », a-t-il dit. « Je ne touche plus à ce cadran. La dernière fois que je l'ai réglé, j'ai failli tuer un homme. » Lison s'est mise à pleurer de rage. « Mon père rentre dans deux heures ! » Il a tourné la tête vers elle, et j'ai vu sa barbe trembler. Il ne dira pas oui tout seul. Il faut que je trouve la phrase. Laquelle ?"
@@ -262,7 +263,7 @@
     "ch9-s-bateaux": {
       "type": "recit",
       "humeur": "malice",
-      "personnage": "lison",
+      "personnage": "anselme", "expression": "joie",
       "texte": [
         "Il m'a écouté jusqu'au bout. Puis il a fermé ses yeux qui ne voient plus, ce qui chez lui doit servir à réfléchir. « Je peux allumer une flamme. Fixe, sans la machine : ça, je ne peux pas le rater. Mais un feu fixe ne dit aucun nom. Il faudrait le cacher, le montrer, le cacher. À la main. Toute une nuit. »",
         "Lison a relevé la tête d'un coup. « Avec le plateau à soupe ! Il est en fer, il est grand comme la vitre ! » Anselme a ri, pour la première fois depuis que je le connais. « Deux éclats, un long, au plateau à soupe. Sans une faute. Vous êtes fous tous les deux. » Il s'est levé de son fauteuil, en cherchant le mur. « D'accord. »"
@@ -289,7 +290,7 @@
     "ch9-echec-volet": {
       "type": "echec",
       "humeur": "triste",
-      "personnage": "lison",
+      "personnage": "anselme",
       "texte": [
         "J'ai perdu le compte. Un instant, un seul : j'ai dit « montre » quand il fallait dire « cache », et trois éclats sont partis vers le large avant que Lison ne plaque le plateau contre la vitre. Anselme a soufflé la flamme lui-même, d'un coup, sans un mot. Dans le noir, il a dit : « On reprend. Mais d'abord tu t'assois et tu respires. » Il avait prévenu : au premier doute, on masque tout. J'ai voulu rattraper au lieu de m'arrêter."
       ],
@@ -328,7 +329,7 @@
       "lieu": "Au pied de la Dent-Creuse",
       "decor": "pied-du-phare",
       "humeur": "triste",
-      "personnage": "vernier",
+      "personnage": "lison",
       "texte": [
         "Au bout des pierres claires, il y a deux rubans de toile en croix sur la grande porte, et un cachet de cire rouge : « Service des Feux. Phare fermé. » Vernier est passé avant moi, en canot, avec les gendarmes. Anselme est à l'auberge, dans la chambre sous le toit ; il n'a pas dit un mot depuis qu'on l'a descendu.",
         "Lison m'attend sur le seuil, la vieille corne à soufflet dans les bras. « On peut aller au bout de la jetée et sonner toute la nuit. Ça porte pas loin, mais ça dit où est la terre. » Elle regarde les scellés, puis moi. « Ou alors on passe par le Souffleur, on monte, et on rallume. Je sais régler : onze à gauche, deux à droite. J'ai des yeux, moi. » Dans deux heures, les bateaux. Je choisis quoi ?"
@@ -344,6 +345,7 @@
       "lieu": "La jetée",
       "decor": "jetee-nuit",
       "humeur": "triste",
+      "personnage": "lison",
       "texte": [
         "On est au bout de la jetée. Lison pompe le soufflet, je tiens la corne tournée vers le large, et à chaque coup le son me traverse comme un train. C'est la voix du premier soir, celle de la Dent qui a mal. Maintenant je sais ce qu'elle disait : je suis là, je n'y vois rien, mais je suis là.",
         "Dix heures. Dans la brume, des feux de mât apparaissent, hésitent, tournent en rond. Ils cherchent une lumière et ne trouvent qu'un bruit. Un. Deux. Trois. Quatre. Cinq. Lison a les mains en sang sur le soufflet et ne veut pas me le laisser. Cinq. Il en manque un. Est-ce qu'un bruit suffit à ramener quelqu'un ? On sonne."
