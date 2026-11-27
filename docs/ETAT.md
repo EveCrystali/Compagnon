@@ -32,8 +32,10 @@ Dernière mise à jour : 27 novembre 2026.
 2. **Test de jeu complet** (branche `test-jeu`, voir `TEST-JEU.md`) : parcours entiers rejoués par le moteur des deux côtés, synchronisation
    entre appareils, revue des captures de chaque écran.
 3. **Vidéo de promo** avec les campagnes. Il faut tourner sur le PC d'Antoine
-   (`outils/tourner-ecran-gauche.ps1`) puis monter (scripts dans l'historique : cartons, caméra qui
-   suit les rectangles de `chronologie.json`).
+   (`outils/tourner-ecran-gauche.ps1`) puis monter avec `outils/video/monter.py` (plan de montage
+   `outils/video/montage.json`, voir [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage
+   (Pilou 0.9.45, sans pêche, cuisine, Aventure, mot ni complicité) : après le nouveau tournage, regarder la
+   planche et ajuster sous-plages, durées et cadrages des scènes récentes, puis remplacer `docs/promo/`.
 
 ## Jamais vérifié sur un vrai appareil
 
