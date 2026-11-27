@@ -17,6 +17,7 @@ MER0, MER1, MER2 = "#08142a", "#0f2443", "#1b3a62"
 G1, G2, G3, G4 = "#232a3a", "#3a4357", "#566079", "#7f889c"
 L1, L2, L3, L4, L5 = "#8a4a1f", "#d9803a", "#f69d50", "#ffc89a", "#fff1c9"
 W1, W2, W3, W4 = "#2e1d12", "#4e321d", "#77502f", "#a87a4c"
+W25 = "#5a3a22"
 CREME, ENCRE = "#efe4cc", "#0a0f1c"
 CIRE, CIRE2 = "#d9a82e", "#f5d76e"
 V1, V2 = "#33294f", "#56487e"
@@ -24,9 +25,9 @@ GOE1, GOE2 = "#4a3f2a", "#6e6040"
 VOLET, VOLET2 = "#3f6fb0", "#6c98d0"
 LAITON, LAITON2 = "#b98b2e", "#e8c45e"
 
-PAL = Palette(N0, N1, N2, N3, N4, BR1, BR2, BR3, BR4, MER0, MER1, MER2, G1, G2, G3, G4, L1, L2, L3, L4, L5, W1, W2, W3, W4,
+PAL = Palette(N0, N1, N2, N3, N4, BR1, BR2, BR3, BR4, MER0, MER1, MER2, G1, G2, G3, G4, L1, L2, L3, L4, L5, W1, W2, W25, W3, W4,
               CREME, ENCRE, CIRE, CIRE2, V1, V2, GOE1, GOE2, VOLET, VOLET2, LAITON, LAITON2).rampes(
-    [ENCRE, N0, N1, N2, N3, N4, BR1, BR2, BR3, BR4], [G1, G2, G3, G4, BR3, BR4], [W1, W2, W3, W4, L3, L4, L5],
+    [ENCRE, N0, N1, N2, N3, N4, BR1, BR2, BR3, BR4], [G1, G2, G3, G4, BR3, BR4], [W1, W2, W25, W3, W4, L3, L4, L5],
     [L1, L2, L3, L4, L5], [MER0, MER1, MER2, N3], [V1, V2, BR2], [GOE1, GOE2, W4], [VOLET, VOLET2, BR4],
     [CIRE, CIRE2, L5], [LAITON, LAITON2, L5], [CREME, L5])
 
@@ -72,19 +73,20 @@ def ciel_nuit(t, y1, etoiles=12, graine=0):
         point(t, x, y, BR4 if i % 3 else L5)
 
 
-def flamme(t, x, y, k=0, r=1.0):
-    """Flamme de bougie ou de lanterne, qui vacille d'une image à l'autre."""
-    lueur(t, x, y, 8 * r, L4, PAL, force=0.55, teinte=True)
+def flamme(t, x, y, k=0, r=1.0, froid=True):
+    """Flamme de bougie ou de lanterne, qui vacille d'une image à l'autre. froid : la lueur réchauffe une scène bleue
+    (mélange vers l'orange) ; sinon elle éclaire le bois le long de sa rampe."""
+    lueur(t, x, y, 8 * r, L4, PAL, force=0.55 if froid else 0.4, teinte=froid)
     ell(t, x + (0.2 if k % 2 else -0.2), y, 0.9 * r, 1.6 * r, L3)
     ell(t, x, y + 0.4, 0.5 * r, 0.9 * r, L5)
 
 
-def bougie(t, x, y, allumee=True, k=0):
+def bougie(t, x, y, allumee=True, k=0, froid=False):
     rect(t, x - 1, y, 2, 4, CREME)
     vline(t, x + 0.5, y, y + 4, BR3)
     rect(t, x - 2, y + 4, 4, 1, LAITON)
     if allumee:
-        flamme(t, x, y - 1.8, k)
+        flamme(t, x, y - 1.8, k, froid=froid)
     else:
         trait(t, x, y, x, y - 1, ENCRE, ep=1)
         for i in range(3):
@@ -193,7 +195,7 @@ def port(t, k):
 @decor("phare-eteint", "auberge-bigorneau", images=2, duree=600)
 def auberge(t, k):
     rect(t, 0, 0, 96, 40, W2)
-    planches_mur(t, 0, 4, 96, 28, "#5a3a22", W1, pas=6)
+    planches_mur(t, 0, 4, 96, 28, W25, W1, pas=6)
     # Poutres basses.
     rect(t, 0, 0, 96, 4, W1)
     for x in (10, 44, 78):
@@ -565,7 +567,7 @@ def cave(t, k):
 @decor("phare-eteint", "chambre-de-veille", images=2, duree=500)
 def chambre(t, k):
     rect(t, 0, 0, 96, 40, W2)
-    planches_mur(t, 0, 0, 96, 30, "#5a3a22", W1, pas=6)
+    planches_mur(t, 0, 0, 96, 30, W25, W1, pas=6)
     # La meurtrière sur la nuit.
     rect(t, 45, 4, 6, 14, G2)
     degrade(t, 5, 17, [N0, N2], x0=46, x1=50)

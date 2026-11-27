@@ -304,7 +304,9 @@ def sentier_meleze(t, k):
     degrade(t, 0, 40, [C1, C2, C3])
     # Deux sommets blancs en forme de dents, un col arrondi entre eux.
     montagnes(t, [(56, 3, 9), (78, 4, 9)], 22, roche=R3, ombre=R2, neige=NE4, neige_o=NE2, limite=0.55)
-    relief(t, lambda x: 15 + 3 * ((x - 67) / 8) ** 2 if 59 < x < 75 else 40, NE4, x0=59, x1=75, bas=22)
+    # Le col arrondi entre les deux dents : une selle de neige.
+    relief(t, lambda x: 16 - 5 * ((x - 67) / 8) ** 2, NE3, lisere=NE4, x0=60, x1=74, bas=22)
+    relief(t, lambda x: 19 - 2 * ((x - 67) / 8) ** 2, NE2, x0=60, x1=74, bas=22)
     # La pente raide, rochers gris, premières plaques de neige.
     f = lambda x: 18 + (96 - x) * 0.18
     relief(t, f, H2, lisere=H4)
@@ -354,7 +356,7 @@ def terrier(t, k):
     rect(t, 46, 22, 4, 3, B1)
     ell(t, 48, 20, 2.2, 2.6, L2)
     ell(t, 48, 20.6 - k * 0.3, 1, 1.4, L3)
-    lueur(t, 48, 21, 30, L2, PAL, force=0.4, ry=20)
+    lueur(t, 48, 20.5, 12, L2, PAL, force=0.3, ry=9)
     ell(t, 48, 36, 12, 6, P2)
     ell(t, 48, 32, 9, 6, P3, cond=lambda x, y, u, v: v < 0.3)
     semis(t, lambda x, y: ((x - 48) / 12) ** 2 + ((y - 34) / 6) ** 2 < 1, [P1, P4], 0.25, graine=4,

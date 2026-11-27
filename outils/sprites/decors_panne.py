@@ -200,7 +200,7 @@ def tour(t, k):
     voile(t, lambda x, y: max(0, 1 - y / 16), G3, PAL, (0, 0, 96, 18), niveaux=3)
     # Néon jaune administratif au-dessus de la porte.
     rect(t, 42, 22, 12, 1.4, J3 if k == 0 else J2)
-    lueur(t, 48, 23, 26, J3, PAL, force=0.4, ry=12, teinte=True)
+    lueur(t, 48, 23, 14, J3, PAL, force=0.3, ry=6)
     # La porte basse et le tabouret trop petit.
     ell(t, 48, 32, 3.5, 3.5, ENCRE, cond=lambda x, y, u, v: y < 32)
     rect(t, 44.5, 32, 7, 6, ENCRE)
