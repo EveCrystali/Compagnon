@@ -64,12 +64,17 @@ de Brouillon et du Tic-Tac (« jamais une seconde à nous ») ; la fin choisie.
 | Ticket n° 1 338 : « je suis le prochain » (l'afficheur appelle le numéro de l'heure) | ch. 1 | ch. 3 (on peut le vendre), ch. 7 (on peut l'échanger), ch. 10 : le numéro est enfin appelé ; clé de la fin secrète |
 | La pause déjeuner sans déjeuner (la cantine rouvre à 13 h 38) : tout le monde lorgne la galette de Pilou | ch. 1-2 | ch. 3 (golem), ch. 6B (hydre), ch. 9 (premier goûter du Tic-Tac) |
 | Les « retournements » de Grumeau, qui « n'est pas un minuteur » | ch. 1 | ch. 10 : c'est lui qui compte la dernière minute, à la main |
-| Le grumeau (quatre secondes de retard) | ch. 1 | fin bonne : « si une minute te semble un peu longue, c'est lui » |
+| Le grumeau (quatre secondes de retard) | ch. 1 | route B : l'humidité du Marais le pousse à sept secondes (ch. 5B, 6B), l'Imprimante le sèche ; fin bonne : « si une minute te semble un peu longue, c'est lui » |
+| « Je vais dans la même direction », « pâté », « petit » | ch. 1 | ch. 2 et 6 (« j'allais dans cette direction ») ; ch. 6A « Merci, pâté » ; ch. 10, la dernière minute : « Je ne vais pas dans la même direction que toi, Pilou. Je vais avec toi. Nuance. » (la seule fois où il dit son nom) |
+| « Ne jamais prononcer le mot urgent : ça rallonge » | ch. 2 | ch. 5A : le guichet recule, le couloir s'étire (`ch5a-exc-urgent`) |
+| Les « Ou alors… » d'Alt | ch. 3 | ch. 6B : en quittant le quai, « C'est par là. » Rien après. Ctrl s'inquiète |
+| « Quand ton numéro sort, tu as droit à une réclamation » | ch. 2 | fin secrète (Pilou réclame sa seconde) ; les autres fins : « qu'est-ce que j'aurais réclamé ? Une seconde de plus, peut-être » |
 | Le Rond, « Un instant… » | ch. 2 | ch. 8 : il fait patienter le Balayeur (si on l'a aidé) |
 | Les astérisques de Mlle Renvoi, son coupe-file « non valable dans les files d'attente » | ch. 2 | ch. 5A (guichet sans file), ch. 6B (une file d'impression n'est pas une file d'attente), fins |
 | Les phrases jamais finies de Brouillon | ch. 8 | fin bonne : un point final ; fin secrète : le droit de rester un brouillon |
 | La question à la gargouille : « Et vous, ça va ? » | ch. 7 | la réponse arrive au début du ch. 8 |
-| Le formulaire jaune poussin dont personne n'a rempli la case « Objet de la demande » | ch. 4A | ch. 10 : c'est dans cette case qu'on sauve Brouillon |
+| Le formulaire jaune poussin dont personne ne lit la case « Objet de la demande » | ch. 4A (« Laisse. Personne ne la lit jamais. »), puis à chaque tampon (ch. 5A, 6A) | ch. 10 : c'est dans cette case qu'on sauve Brouillon |
+| L'heure exacte | ch. 2 (les « photos de l'heure exacte » de Mlle Renvoi) ; ch. 7 : la Citadelle est « le dernier endroit où l'on sait encore l'heure exacte » | la question à la gargouille qui ouvre la fin secrète |
 
 ## Chapitres
 
@@ -79,7 +84,7 @@ de Brouillon et du Tic-Tac (« jamais une seconde à nous ») ; la fin choisie.
 | 2 | Prenez un ticket | Hall des Pas Comptés | Mlle Renvoi ; l'histoire de Grumeau ; le Rond coincé ; la rumeur du Sans-Titre | marche vers la Tour |
 | 3 | La Tour du tampon | pied de la Tour | le spectre 404 (promesse) ; le revendeur de places (vendre le ticket ?) ; le golem ; Alt propose les coulisses : **choix de route** | **longue attente** : la ronde du golem… qui vient droit sur eux |
 | 4 | Plus haut, plus bas | A : étages de la Tour · B : Caverne des câbles | A : le formulaire, le Dateur à sec, Pilou sert d'encrier · B : le bug géant, le couloir en boucle, le slime de cache et « hier » | montée / sortie de la caverne |
-| 5 | Trente-sept | A : étage 37 · B : Marais des mises à jour (37 %) | A : Service des Exceptions, loterie des Priorités · B : le levier interdit, les Raccourcis, la petite Suppr | **longue attente** : A la file du dernier guichet, B la traversée (quelque chose parle sous la barque) |
+| 5 | Trente-sept | A : étage 37 · B : Marais des mises à jour (37 %) | A : Service des Exceptions (« urgent » rallonge), le couloir des trente-sept portes et de leurs panneaux, loterie des Priorités, la trente-septième porte et la première question de Grumeau · B : le levier interdit, Grumeau prend l'humidité, les Raccourcis, la petite Suppr | **longue attente** : A la file du dernier guichet, B la traversée (quelque chose parle sous la barque) |
 | 6 | Ce qui était prévu | A : bureau de Mme Échéance · B : l'hydre, puis l'Imprimante | A : les cartes de 13 h 37 et 13 h 38, la tentation d'y toucher, un seul coup de tampon : le formulaire ou le dossier de Grumeau · B : l'hydre, la file d'impression, la liste ou la petite S | départ pour la Citadelle |
 | 7 | La Citadelle du nuage | Citadelle | la synchronisation (deux Pilou) ou les marches qui se chargent ; la gargouille et **une** question bonus ; Grumeau au bord du vide ; trois façons de redescendre | **longue attente** : la descente ; en bas, quelqu'un attend déjà avec un balai |
 | 8 | Le dossier Temp | dossier Temp | le Balayeur ; le spectre et sa page (promesse tenue ou trahie) ; le labyrinthe ; les ratures ; la porte | la voix derrière la porte |
@@ -122,6 +127,7 @@ Objets : `ticket` (n° 1 338), `gouter` (la galette), `coupe-file`, `formulaire`
 | `sait-seconde` / `sait-peur` / `sait-chemin` | ch. 7, la question bonus (une seule) | ch. 10 fin secrète / ch. 8 la porte / ch. 8 le labyrinthe |
 | `confiance-brouillon` | ch. 8 (rassurer), ch. 9 (options douces, goûter, lire sa phrase) | ch. 10 : on sait où il est parti |
 | `plan-enregistre`, `plan-corbeille`, `plan-seconde` | ch. 10 | aiguillage vers la fin (aucun des trois : l'impression) |
+| `pause-refusee` | ch. 10, « Regarde Grumeau une dernière fois » | ch. 10 : l'option « Ne relance rien » n'est plus proposée |
 
 La galette (`gouter`) ne sert qu'une fois : au golem (ch. 3), à l'hydre (ch. 6B) ou au premier goûter
 du Tic-Tac (ch. 9).
@@ -133,8 +139,8 @@ du Tic-Tac (ch. 9).
 | **Enregistré sous…** | bonne | A : formulaire + 3 tampons · B : `s-apprivoisee` | on donne un nom à Brouillon ; le Balayeur s'excuse ; Grumeau remplace le Tic-Tac une minute par jour (64 secondes) |
 | **Corbeille avec vue** | douce-amère | route A, toujours possible | Brouillon glisse par le toboggan de la Corbeille : pas effacé, rangé |
 | **Sorti sur papier** | douce-amère | route B, toujours possible | imprimé en bleu Pilou, il quitte l'ordinateur : fini, un peu trop |
-| **Retour à 13 h 38** | mauvaise | choisir de ne rien relancer | la pause éternelle ; Pilou prend le guichet 9 |
-| **Le demi-temps** | mauvaise | ch. 9 : emmener le Tic-Tac à moitié endormi (on peut encore faire demi-tour au choix suivant) | l'horloge ne fait plus que « tic… tic… » ; le goûter de 16 h tombe à 32 h |
+| **Retour à 13 h 38** | mauvaise | choisir de ne rien relancer, puis prendre le guichet 9 (au choix suivant, « Regarde Grumeau une dernière fois » ramène au plan, et l'option de la pause disparaît : drapeau `pause-refusee`) | la pause éternelle ; Pilou prend le guichet 9 |
+| **Le demi-temps** | mauvaise | ch. 9 : emmener le Tic-Tac à moitié endormi, puis faire le tac soi-même (au choix suivant, on peut faire demi-tour ; et si l'on désigne Grumeau, il refuse et ramène tout le monde : `ch9-demi-refus`) | l'horloge ne fait plus que « tic… tic… » ; le goûter de 16 h tombe à 32 h |
 | **13 h 37 et 60 secondes** | secrète | `ticket` gardé + `sait-seconde` + `complicite` ≥ 5 | à 13 h 38 on appelle le 1 338 : Pilou réclame le remboursement du temps perdu — une seconde, rétroactive. Brouillon s'y installe ; le Tic-Tac y prend sa pause |
 
 Chaque fin : un titre, l'objet `sablier-de-poche`, un souvenir. Meilleur parcours (fin secrète) :
@@ -195,17 +201,19 @@ et reste **un seul** personnage (pas de duo) ; le formulaire n'a pas de numéro,
 la préposée s'appelle Renvoi (le signe d'appel de note). Les lieux et créatures viennent du jeu
 (docs/EXPEDITIONS.md).
 
-## Chiffres mesurés (script de vérification maison, 5 000 parcours simulés)
+## Chiffres mesurés (validateur, 400 parcours tirés au hasard)
 
 | | min | médiane | max |
 |---|---|---|---|
-| Nœuds lus par parcours (192 au total) | 79 | 92 | 107 |
-| Mots lus par parcours (17 000 au total) | 7 360 | 8 480 | 9 730 |
-| Choix | 31 | 36 | 42 |
+| Nœuds lus par parcours (195 au total) | 81 | 98 | 118 |
+| Mots lus par parcours (17 450 au total) | 7 520 | 9 000 | 10 970 |
+| Choix | 31 | 35 | 39 |
 | Attentes | 15 | 18 | 21 |
 | dont longues | 3 | 4 | 4 |
-| Attente réelle | 7,8 h | 10,8 h | 13,3 h |
+| Attente réelle | 8,6 h | 12,2 h | 16,5 h |
 
-Joueur simulé : choisit au hasard, mais ne refait pas le choix qui vient de le faire échouer. En tirant
-tout au hasard, échecs répétés compris, le maximum monte à 48 choix (0,3 % des parcours dépassent 45).
-Les six fins sont atteintes ; la fin secrète dans environ 2 % des parcours aléatoires.
+Fréquence des fins, joueur au hasard (après la relecture ; avant entre parenthèses) : Corbeille 24 %
+(15 %), Sorti sur papier 26 % (14 %), Enregistré 15 % (9 %), Retour à 13 h 38 18 % (30 %), Le
+demi-temps 15 % (29 %), fin secrète 3 % (3 %). Un joueur attentif (qui ne prend aucune option
+annoncée comme risquée et garde son ticket) n'obtient jamais de mauvaise fin : Enregistré 19 à 39 %,
+fin secrète 11 à 21 % selon qu'il se sert ou non des options débloquées.
