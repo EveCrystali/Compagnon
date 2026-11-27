@@ -770,7 +770,12 @@ internal sealed class FenetreAventure : Window
         var dock = new DockPanel();
         DockPanel.SetDock(bas, Dock.Bottom);
         dock.Children.Add(bas);
-        dock.Children.Add(pg);
+        // Fenêtre basse (taille minimale, 840 × 560) : la colonne défile au lieu de passer sous les boutons du bas.
+        dock.Children.Add(new ScrollViewer
+        {
+            Content = pg, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+            Margin = new Thickness(0, 0, 0, 8),
+        });
         gauche.Child = dock;
         g.Children.Add(gauche);
 
@@ -779,7 +784,15 @@ internal sealed class FenetreAventure : Window
         var dg = new Grid();
         dg.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         dg.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        dg.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        var rangAction = new RowDefinition { Height = GridLength.Auto };
+        dg.RowDefinitions.Add(rangAction);
+        // Fenêtre basse et choix à quatre options : la zone d'action défile plutôt que d'écraser le fil, qui garde de
+        // quoi lire quelques lignes du message.
+        var actionDefile = new ScrollViewer
+        {
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+        };
+        dg.SizeChanged += (_, _) => actionDefile.MaxHeight = Math.Max(120, dg.ActualHeight - _bandeDecor.ActualHeight - FilMinimum);
         _bandeDecor.Children.Clear();
         _bandeDecor.Children.Add(new Border { Background = Ciel(_campagne?.Ton ?? "") });
         _bandeDecor.Children.Add(_decorImage);
@@ -810,13 +823,16 @@ internal sealed class FenetreAventure : Window
         dg.Children.Add(_scene);
         _action.Background = Bandeau.Nuit2;
         _action.BorderBrush = Bandeau.Bord;
-        Grid.SetRow(_action, 2);
-        dg.Children.Add(_action);
+        actionDefile.Content = _action;
+        Grid.SetRow(actionDefile, 2);
+        dg.Children.Add(actionDefile);
         droite.Child = dg;
         Grid.SetColumn(droite, 1);
         g.Children.Add(droite);
         _corps.Children.Add(g);
     }
+
+    private const double FilMinimum = 110;
 
     // Chaque seconde : le fil (nouveaux messages), l'en-tête, la zone d'action, le compte à rebours.
     private void MettreAJourLecture()

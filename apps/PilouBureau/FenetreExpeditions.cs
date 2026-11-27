@@ -52,6 +52,8 @@ internal sealed class FenetreExpeditions : Window
             BorderBrush = principal ? Bandeau.Encre : Bandeau.Bord, BorderThickness = new Thickness(2),
             FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center,
         };
+        // Même habit que l'Aventure et le journal : sans lui, un bouton désactivé (◀ ▶ d'un seul objet) prend le gris de Windows.
+        if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
         b.Click += (_, _) => action();
         return b;
     }

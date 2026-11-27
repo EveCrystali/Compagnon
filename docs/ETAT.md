@@ -45,10 +45,12 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 
 ## Jamais vérifié sur un vrai appareil
 
-- Sous Windows : le dessin fin sur le bureau (charge, netteté à 125 % et 150 %), les extensions d'éditeur, la fenêtre des
-  expéditions, la fenêtre Aventure et ses animations.
+- Sous Windows (liste passée le 27 novembre 2026, détail dans `TEST-JEU.md`) : vus et corrigés sur le PC d'Antoine, la
+  fenêtre Aventure (taille minimale), la fenêtre des expéditions, le journal, la charge du dessin fin (≈ 5 % d'un cœur),
+  la relance en pleine campagne, une fin versée une fois. Restent : un vrai écran à 125 % et 150 %, les épreuves jouées
+  au clavier et à la souris, les extensions d'éditeur, les animations à l'œil.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin, l'onglet Aventure et la notification de retour.
-- La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal, le mot du soir (notification, Doze), le
+- La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal sur de vraies pages, le mot du soir (notification, Doze), le
   widget et la bulle avec le mot, la synchronisation entre deux appareils réels.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 
