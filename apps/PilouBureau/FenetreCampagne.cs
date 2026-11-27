@@ -14,6 +14,7 @@ namespace PilouBureau;
 //   CampagneEnAttente            Pilou est parti (attente) ou se repose : pas d'expédition ni de visite pendant ce temps
 //   CampagneDemarrer(id), CampagneChoisir(option), CampagneContinuer(), CampagneEpreuve(reussie), CampagneAuDe(),
 //   CampagneAbandonner()         chacune renvoie null si c'est fait, sinon la raison (à montrer telle quelle)
+//   CampagneMarquerLu()          le fil est lu (CarnetCampagnes.NonLus retombe à zéro)
 //   --essai=campagne:<id>        déroule la campagne en accéléré dans la bulle (rien n'est écrit, rien n'est publié)
 public sealed partial class FenetrePilou
 {
@@ -189,6 +190,13 @@ public sealed partial class FenetrePilou
 
     // Abandonner reste possible quand Pilou est occupé ailleurs.
     internal string? CampagneAbandonner() => DeciderCampagne((k, c, t) => Campagnes.Abandonner(k, c, t, IdAppareil), memeOccupe: true);
+
+    // Tout le fil est lu (le repère de lecture est propre à cet appareil : il se garde dans le profil).
+    internal void CampagneMarquerLu()
+    {
+        Campagnes.MarquerLu(CarnetCamp);
+        if (_essaiCamp is null) _profil.Ecrire(DossierPartage);
+    }
 
     // ---- Essai sans attendre : --essai=campagne:<id> déroule la campagne en accéléré dans la bulle. Le carnet d'essai
     // vit en mémoire (rien n'est écrit, rien n'est publié) ; l'horloge de l'essai saute par-dessus les attentes.
