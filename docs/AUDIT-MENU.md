@@ -453,13 +453,17 @@ Ordre de mise en œuvre suggéré (chantier séparé, lancé par le pilote aprè
 
 ---
 
-## 5. Questions pour Antoine
+## 5. Réponses d'Antoine (27 novembre 2026)
 
-1. **Quelle proposition** : A + zone du moment (recommandée), A seule, B, ou C ?
-2. **Pêcher et Cuisiner** dans Jouer (+1 geste) ou gardés au premier niveau (+2 lignes) ?
-3. **Garder deux portes vers la boutique** (bandeau et 🛒) ou seulement le bandeau ?
-4. **« Afficher Claude »** : utile au quotidien (alors en haut, dans la zone du moment quand Claude attend) ou rare
-   (alors dans Réglages) ?
-5. **Le partage d'XP par dossier** (ancien mécanisme) : le garder à côté du groupe d'appareils, ou le retirer du menu ?
-6. **Discrétion à plat** : accepter un sous-menu Discrétion assez long (≈ 18 lignes, avec titres), ou le couper en deux
-   (« Il se montre » / « Il se cache ») ?
+| # | Question | Réponse |
+|---|---|---|
+| 1 | Quelle proposition : A + zone du moment, A seule, B ou C ? | **En attente** (question reformulée) |
+| 2 | Pêcher et Cuisiner dans Jouer (+1 geste) ? | **Oui** : ils entrent dans Jouer ▸ |
+| 3 | Deux portes vers la boutique ou une seule ? | **Une seule.** Laquelle garder (bandeau ou ligne 🛒) reste à confirmer ; à défaut, le bandeau, qui montre déjà les po |
+| 4 | « Afficher Claude » ? | **Retiré du menu** |
+| 5 | Partage d'XP par dossier ? | **Retiré du menu principal** ; il vit seulement dans Réglages ▸ |
+| 6 | Discrétion : un long sous-menu ou deux ? | **Deux sous-menus** : « Il se montre » (bulle, il me parle, il bouge, retour d'aventure) et « Il se cache » (se cacher 10 min, plein écran, présentation, visio, vacances) |
+
+Conséquence pour A : le premier niveau perd « Afficher Claude » (il était dans Réglages) et la ligne 🛒 si le bandeau
+reste la porte ; Discrétion devient deux portes ◌ « Il se montre » et ◌ « Il se cache ». Le compte reste à 14 lignes.
+Les maquettes montrent encore la version d'avant ces réponses.
