@@ -73,17 +73,20 @@ regarder de ses yeux sur un vrai Windows et un vrai téléphone. Le contrat du m
 |---|---|---|---|---|---|---|
 | Prologue | 25/25 · 27/27 | 2 | 2 min / 5 min / 55 min | 4 / 4 / 10 | 2–7 (0) | 325 o |
 | La Grande Panne | 195/195 · 209/209 | 6 | 7 h 52 / 11 h 30 / 18 h 17 | 31 / 36 / 54 | 15–22 (3–4) | 495 o |
-| Le phare éteint | 199/199 · 209/209 | 6 | 11 h 24 / 14 h 23 / 25 h 57 | 32 / 36 / 60 | 17–22 (4–6) | 490 o |
+| Le phare éteint | 199/199 · 209/209 | 6 | 11 h 24 / 13 h 51 / 25 h 57 | 32 / 36 / 60 | 17–22 (4–5) | 490 o |
 | Petit Nuage | 199/199 · 215/215 | 6 | 11 h 16 / 12 h 49 / 16 h 01 | 31 / 36 / 52 | 15–22 (4) | 484 o |
 
 Les maxima viennent des marches qui échouent souvent (jusqu'à 26 échecs au phare, au hasard) ; sans échec
-ni abandon, le phare se joue en 11 h 24 à 14 h 38 d'attente. Au pire (20 fins dans l'historique, trois
+ni abandon, le phare se joue en 11 h 24 à 14 h 19 d'attente. Au pire (20 fins dans l'historique, trois
 parties suspendues), un message fait **1 542 octets de JSON** (limite 2 750), **2 096 chiffrés** (limite
 3 800). Le tableau détaillé de chaque campagne s'écrit avec
 `PILOU_TEST_JEU=<dossier> dotnet test apps/PilouBureau/tests -p:EnableWindowsTargeting=true --filter ParcoursTests`.
 
-Attentes hors des décisions : celles du prologue durent 1 à 2 min (exprès, pour apprendre le geste) ;
-au phare, `ch9-a-veille` et `ch9-g-veille` (60–90 min) ne sont pas en fin de chapitre.
+Attentes hors des décisions : seules celles du prologue (1 à 2 min, exprès, pour apprendre le geste). Au phare,
+`ch9-a-veille` et `ch9-g-veille`, qui duraient 60–90 min sans fermer le chapitre (un choix suit), ont été ramenées à
+20–30 min le 27 novembre ; `ch9-s-veille` et `ch9-f-corne` (60–90 min) mènent droit à une fin et gardent leur durée.
+Un script hors dépôt a vérifié qu'aucune autre attente de plus de 30 min ne tombe en milieu de chapitre dans les quatre
+campagnes (toutes précèdent le chapitre suivant ou une fin).
 
 ## Relancer
 

@@ -92,8 +92,8 @@
         "Un éclat. Deux éclats. Un long. Le noir. Un éclat. Deux éclats. Un long. Je n'ai jamais rien vu d'aussi beau, et pourtant j'ai vu des goûters. Le pinceau de lumière passe sur la brume, sur la Mâchoire toute blanche d'écume, sur le quai où Trébrume entier s'est mis à crier. Anselme ne voit rien de tout ça. Il écoute la machine, la tête penchée, et il dit : « Elle dit vrai. »",
         "Maintenant, on veille. Dix heures. Sur la galerie, Lison compte les feux de mât qui sortent de la brume et s'alignent sur nous. Un. Deux. Trois, quatre ensemble. Cinq. Elle attend. Elle se penche. Elle ne dit plus rien. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas, comme une prière. Je reste à côté d'elle. On regarde le noir. Où est-elle, la Tape-Dur ?"
       ],
-      "duree_min": 60,
-      "duree_max": 90,
+      "duree_min": 20,
+      "duree_max": 30,
       "pendant": "Pilou veille sur la galerie avec Lison",
       "tenue": "nuit",
       "suite": "ch9-g-verdict"
@@ -194,8 +194,8 @@
         "La balise s'est allumée toute seule, à l'heure, sans allumette. Une lumière blanche, plate, exacte : deux éclats, un long, découpés au couteau. Elle ne se trompera jamais. Elle ne reconnaîtra jamais personne non plus. Sur le quai, les gens ont applaudi un peu, puis ils ont arrêté, parce qu'on n'applaudit pas une machine.",
         "Je suis redescendu sur la jetée avec Lison. Dix heures. Les feux de mât sortent de la brume et s'alignent sur la balise. Un. Deux. Trois, quatre ensemble. Cinq. Lison attend. Elle se penche. Il en manque un. « La Tape-Dur passe toujours en dernier », répète-t-elle tout bas. Elle ne me regarde pas. Je reste à côté d'elle quand même. On regarde le noir. Et si elle ne revenait pas ?"
       ],
-      "duree_min": 60,
-      "duree_max": 90,
+      "duree_min": 20,
+      "duree_max": 30,
       "pendant": "Pilou veille sur la jetée avec Lison",
       "tenue": "nuit",
       "suite": "ch9-a-matin"
