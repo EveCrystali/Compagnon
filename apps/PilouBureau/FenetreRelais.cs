@@ -27,6 +27,7 @@ public sealed partial class FenetrePilou
         _zoneNotif.Relance += () => Ramener(false);
         _zoneNotif.QuitterDemande += () => Application.Current.Shutdown();
         _zoneNotif.Choix += Choisir;
+        _zoneNotif.TexteAventure = TexteMenuIcone;
         _zoneNotif.IconeVisible = _reglages.IconeNotification;
         Application.Current.Exit += (_, _) => _zoneNotif?.Dispose();
     }
@@ -56,6 +57,9 @@ public sealed partial class FenetrePilou
                 break;
             case ChoixNotification.Defense:
                 LancerDefense();
+                break;
+            case ChoixNotification.Aventure:
+                OuvrirAventure();
                 break;
         }
     }

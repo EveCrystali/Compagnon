@@ -36,7 +36,8 @@ public sealed partial class FenetrePilou
     // Une petite phrase spontanée : seulement si la retenue le permet (pas à chaque fois, pas en pleine saisie).
     private void DireSpontane(string texte, double ms)
     {
-        if (!_demo && Dosage.Tenter(Maintenant, EnSaisie)) Dire(texte, ms); // visite guidée : il ne dit que son texte
+        // Visite guidée : il ne dit que son texte ; en route pour sa campagne : il est occupé, il ne commente rien.
+        if (!_demo && !CampagneOccupe && Dosage.Tenter(Maintenant, EnSaisie)) Dire(texte, ms);
     }
 
     private void DemarrerGestes()

@@ -122,6 +122,12 @@ public sealed partial class FenetrePilou : Window
         };
         _bulle.MouseLeftButtonUp += (_, e) =>
         {
+            // Ce qui parle de l'aventure (ligne d'attente, annonce du retour) ouvre la fenêtre Aventure.
+            if (ClicAventure(e.OriginalSource))
+            {
+                e.Handled = true;
+                return;
+            }
             ToutLu();
             Natif.Activer(Natif.TrouverClaude());
             e.Handled = true;
@@ -239,6 +245,7 @@ public sealed partial class FenetrePilou : Window
         menu.Items.Add(BandeauMenu());
         int neufs = NouveautesBoutique();
         menu.Items.Add(Entree(neufs > 0 ? $"🛒 Boutique ({neufs} nouveauté{(neufs > 1 ? "s" : "")})" : "🛒 Boutique", OuvrirBoutique));
+        menu.Items.Add(Prudemment(MenuAventure, Entree("✉ Aventure…", OuvrirAventure)));
         menu.Items.Add(new Separator());
         menu.Items.Add(Entree("♥ Caresser", Caresser));
         menu.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
@@ -545,6 +552,7 @@ public sealed partial class FenetrePilou : Window
         if (Maintenant < _messageJusque)
             _lignes.Children.Add(new TextBlock
             {
+                Tag = _messageTag == "" ? null : _messageTag,
                 Text = _message,
                 FontFamily = new FontFamily("Segoe UI"),
                 FontSize = 12.5,
@@ -561,6 +569,8 @@ public sealed partial class FenetrePilou : Window
             _lignes.Children.Add(Discret(texteResume));
         if (_survol && toutes.Count == 0)
             _lignes.Children.Add(Discret(vivantes.Count == 0 ? "aucune session ouverte" : "rien en cours"));
+        // En route pour sa campagne : une ligne discrète, sous les sessions (elles passent d'abord).
+        LignesCampagne();
 
         // Parti chez un ami : une ligne dit où il est et quand il revient ; les sessions restent au-dessous.
         if (LigneVisite() is { Length: > 0 } visite) _lignes.Children.Insert(Maintenant < _messageJusque ? 1 : 0, Discret(visite));
@@ -577,6 +587,7 @@ public sealed partial class FenetrePilou : Window
     private void Dire(string texte, double ms = 3500)
     {
         _message = texte;
+        _messageTag = "";
         _messageJusque = Maintenant + ms;
         Bulle(_vivantes, Epoque);
     }
@@ -605,7 +616,7 @@ public sealed partial class FenetrePilou : Window
         // Une fois par jour chacune, sans couper une saisie ni suivre de trop près une autre réaction.
         void Une(string cle, bool quand, string texte)
         {
-            if (_demo || !quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
+            if (_demo || CampagneOccupe || !quand || _dit.Contains($"{cle}-{jour}") || !Dosage.Libre(Maintenant, EnSaisie)) return;
             _dit.Add($"{cle}-{jour}");
             Dosage.Noter(Maintenant);
             Dire(texte, 6000);
@@ -724,7 +735,7 @@ public sealed partial class FenetrePilou : Window
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
         // En visite (chez un ami, ou un ami chez lui) ou en expédition, pas de petit jeu ni d'occupation tout seul.
-        if (!_visites.Occupe && !EnExpedition)
+        if (!_visites.Occupe && !EnExpedition && !CampagneOccupe)
         {
             ProposerJeu(t, expr);
             OccuperSeul(t, expr);
@@ -771,8 +782,11 @@ public sealed partial class FenetrePilou : Window
             _yPieds = sol;
             _x = Math.Clamp(_x, min, max);
             // Au clavier ou l'appareil photo en main, il reste sur place.
-            if (GesteEnCours) _geste = Geste.Rien;
-            marche = MarcheVisite(dt, min, max) || Courir(t, dt, min, max) || (_jeuEnCours == Jeu.Aucun && !_dortBureau && !GesteEnCours && Gestes(expr, fatigue, t, dt, min, max));
+            // En route pour sa campagne, il reste à sa place (sa tenue de voyage l'anime sur place) ; une IA qui
+            // t'attend le fait quand même courir sous la souris.
+            if (GesteEnCours || CampagneOccupe) _geste = Geste.Rien;
+            marche = MarcheVisite(dt, min, max) || Courir(t, dt, min, max)
+                     || (_jeuEnCours == Jeu.Aucun && !_dortBureau && !GesteEnCours && !CampagneOccupe && Gestes(expr, fatigue, t, dt, min, max));
         }
 
         // Assis : on s'y pose et on s'en relève en douceur.
@@ -860,12 +874,14 @@ public sealed partial class FenetrePilou : Window
         HabillerVisite(_scene.Pose, t);
         HabillerExpedition(_scene.Pose, t);
         HabillerGestes(_scene.Pose, t);
+        HabillerCampagne(_scene.Pose);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
         AnimerSoins(t);
         AnimerBoutique(t);
         AnimerExpedition(t);
+        AnimerRetour(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = Placement.AGauche(_x, _zone.Left, _zone.Right);
@@ -1048,7 +1064,7 @@ public sealed partial class FenetrePilou : Window
         double dx = _souris.X - _x, dy = _souris.Y - (_yPieds - 10 * Scene.PA * K);
         bool pres = Math.Abs(dx) < 380 && Math.Abs(dy) < 380;
         // Souris secouée près de lui : la tête lui tourne, mais pas à chaque fois (souvent, c'est juste du travail).
-        if (pres && chemin > 1700 && t > _etourdiJusque + 3000 && _geste != Geste.SauteSouris && !_attrape)
+        if (pres && chemin > 1700 && t > _etourdiJusque + 3000 && _geste != Geste.SauteSouris && !_attrape && !CampagneOccupe)
         {
             if (Dosage.Tenter(t, EnSaisie))
             {
@@ -1060,7 +1076,7 @@ public sealed partial class FenetrePilou : Window
         if (_scene.IsMouseOver && !_attrape)
         {
             if (_survolSceneDebut < 0) _survolSceneDebut = t;
-            if (!_ronronDit && t - _survolSceneDebut > 1500)
+            if (!_ronronDit && t - _survolSceneDebut > 1500 && !CampagneOccupe)
             {
                 _ronronDit = true;
                 Dire("rrr…", 1800);
@@ -1220,7 +1236,12 @@ public sealed partial class FenetrePilou : Window
         if (!_attrape && _appui is not null)
         {
             // Pendant tape m'en cinq, la pêche ou la cuisine, un clic sur Pilou joue (jugé à l'instant de l'appui).
-            if (!ClicJeuSurPilou(_appuiT)) Caresser();
+            // Il t'attend pour son aventure : un clic sur lui ouvre la fenêtre (sinon, c'est une caresse).
+            if (!ClicJeuSurPilou(_appuiT))
+            {
+                if (_retour.Signe) OuvrirAventure();
+                else Caresser();
+            }
             ToutLu();
         }
         if (_attrape)
