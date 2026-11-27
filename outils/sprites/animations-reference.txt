@@ -1,0 +1,598 @@
+# Animations des campagnes : valeurs de référence (outils/sprites/animations.py, écrites par reference.py).
+# Relues par AnimationsCampagneTests.cs (PC) et AnimationsTest.java (téléphone).
+niveau completes 1 completes
+niveau completes 0 aucune
+niveau reduites 1 reduites
+niveau reduites 0 aucune
+niveau aucune 1 aucune
+niveau aucune 0 aucune
+niveau inconnu 1 completes
+niveau inconnu 0 aucune
+decor 1 0 0 completes 0
+decor 1 0 0 reduites 0
+decor 1 0 0 aucune 0
+decor 1 0 239 completes 0
+decor 1 0 239 reduites 0
+decor 1 0 239 aucune 0
+decor 1 0 240 completes 0
+decor 1 0 240 reduites 0
+decor 1 0 240 aucune 0
+decor 1 0 1199 completes 0
+decor 1 0 1199 reduites 0
+decor 1 0 1199 aucune 0
+decor 1 0 1440 completes 0
+decor 1 0 1440 reduites 0
+decor 1 0 1440 aucune 0
+decor 1 0 99999 completes 0
+decor 1 0 99999 reduites 0
+decor 1 0 99999 aucune 0
+decor 1 0 -5 completes 0
+decor 1 0 -5 reduites 0
+decor 1 0 -5 aucune 0
+decor 6 240 0 completes 0
+decor 6 240 0 reduites 0
+decor 6 240 0 aucune 0
+decor 6 240 239 completes 0
+decor 6 240 239 reduites 0
+decor 6 240 239 aucune 0
+decor 6 240 240 completes 1
+decor 6 240 240 reduites 0
+decor 6 240 240 aucune 0
+decor 6 240 1199 completes 4
+decor 6 240 1199 reduites 0
+decor 6 240 1199 aucune 0
+decor 6 240 1440 completes 0
+decor 6 240 1440 reduites 0
+decor 6 240 1440 aucune 0
+decor 6 240 99999 completes 2
+decor 6 240 99999 reduites 0
+decor 6 240 99999 aucune 0
+decor 6 240 -5 completes 0
+decor 6 240 -5 reduites 0
+decor 6 240 -5 aucune 0
+decor 8 200 0 completes 0
+decor 8 200 0 reduites 0
+decor 8 200 0 aucune 0
+decor 8 200 239 completes 1
+decor 8 200 239 reduites 0
+decor 8 200 239 aucune 0
+decor 8 200 240 completes 1
+decor 8 200 240 reduites 0
+decor 8 200 240 aucune 0
+decor 8 200 1199 completes 5
+decor 8 200 1199 reduites 0
+decor 8 200 1199 aucune 0
+decor 8 200 1440 completes 7
+decor 8 200 1440 reduites 0
+decor 8 200 1440 aucune 0
+decor 8 200 99999 completes 3
+decor 8 200 99999 reduites 0
+decor 8 200 99999 aucune 0
+decor 8 200 -5 completes 0
+decor 8 200 -5 reduites 0
+decor 8 200 -5 aucune 0
+decor 2 500 0 completes 0
+decor 2 500 0 reduites 0
+decor 2 500 0 aucune 0
+decor 2 500 239 completes 0
+decor 2 500 239 reduites 0
+decor 2 500 239 aucune 0
+decor 2 500 240 completes 0
+decor 2 500 240 reduites 0
+decor 2 500 240 aucune 0
+decor 2 500 1199 completes 0
+decor 2 500 1199 reduites 0
+decor 2 500 1199 aucune 0
+decor 2 500 1440 completes 0
+decor 2 500 1440 reduites 0
+decor 2 500 1440 aucune 0
+decor 2 500 99999 completes 1
+decor 2 500 99999 reduites 0
+decor 2 500 99999 aucune 0
+decor 2 500 -5 completes 0
+decor 2 500 -5 reduites 0
+decor 2 500 -5 aucune 0
+portrait 1 150 0 0 completes 0
+portrait 1 150 0 0 reduites 0
+portrait 1 150 0 0 aucune 0
+portrait 1 150 0 1 completes 0
+portrait 1 150 0 1 reduites 0
+portrait 1 150 0 1 aucune 0
+portrait 1 150 140 0 completes 0
+portrait 1 150 140 0 reduites 0
+portrait 1 150 140 0 aucune 0
+portrait 1 150 140 1 completes 0
+portrait 1 150 140 1 reduites 0
+portrait 1 150 140 1 aucune 0
+portrait 1 150 280 0 completes 0
+portrait 1 150 280 0 reduites 0
+portrait 1 150 280 0 aucune 0
+portrait 1 150 280 1 completes 0
+portrait 1 150 280 1 reduites 0
+portrait 1 150 280 1 aucune 0
+portrait 1 150 899 0 completes 0
+portrait 1 150 899 0 reduites 0
+portrait 1 150 899 0 aucune 0
+portrait 1 150 899 1 completes 0
+portrait 1 150 899 1 reduites 0
+portrait 1 150 899 1 aucune 0
+portrait 1 150 900 0 completes 0
+portrait 1 150 900 0 reduites 0
+portrait 1 150 900 0 aucune 0
+portrait 1 150 900 1 completes 0
+portrait 1 150 900 1 reduites 0
+portrait 1 150 900 1 aucune 0
+portrait 1 150 4149 0 completes 0
+portrait 1 150 4149 0 reduites 0
+portrait 1 150 4149 0 aucune 0
+portrait 1 150 4149 1 completes 0
+portrait 1 150 4149 1 reduites 0
+portrait 1 150 4149 1 aucune 0
+portrait 1 150 4150 0 completes 0
+portrait 1 150 4150 0 reduites 0
+portrait 1 150 4150 0 aucune 0
+portrait 1 150 4150 1 completes 0
+portrait 1 150 4150 1 reduites 0
+portrait 1 150 4150 1 aucune 0
+portrait 1 150 4299 0 completes 0
+portrait 1 150 4299 0 reduites 0
+portrait 1 150 4299 0 aucune 0
+portrait 1 150 4299 1 completes 0
+portrait 1 150 4299 1 reduites 0
+portrait 1 150 4299 1 aucune 0
+portrait 1 150 4300 0 completes 0
+portrait 1 150 4300 0 reduites 0
+portrait 1 150 4300 0 aucune 0
+portrait 1 150 4300 1 completes 0
+portrait 1 150 4300 1 reduites 0
+portrait 1 150 4300 1 aucune 0
+portrait 1 150 8599 0 completes 0
+portrait 1 150 8599 0 reduites 0
+portrait 1 150 8599 0 aucune 0
+portrait 1 150 8599 1 completes 0
+portrait 1 150 8599 1 reduites 0
+portrait 1 150 8599 1 aucune 0
+portrait 1 150 12345 0 completes 0
+portrait 1 150 12345 0 reduites 0
+portrait 1 150 12345 0 aucune 0
+portrait 1 150 12345 1 completes 0
+portrait 1 150 12345 1 reduites 0
+portrait 1 150 12345 1 aucune 0
+portrait 3 150 0 0 completes 0
+portrait 3 150 0 0 reduites 0
+portrait 3 150 0 0 aucune 0
+portrait 3 150 0 1 completes 0
+portrait 3 150 0 1 reduites 0
+portrait 3 150 0 1 aucune 0
+portrait 3 150 140 0 completes 0
+portrait 3 150 140 0 reduites 0
+portrait 3 150 140 0 aucune 0
+portrait 3 150 140 1 completes 0
+portrait 3 150 140 1 reduites 0
+portrait 3 150 140 1 aucune 0
+portrait 3 150 280 0 completes 0
+portrait 3 150 280 0 reduites 0
+portrait 3 150 280 0 aucune 0
+portrait 3 150 280 1 completes 0
+portrait 3 150 280 1 reduites 0
+portrait 3 150 280 1 aucune 0
+portrait 3 150 899 0 completes 0
+portrait 3 150 899 0 reduites 0
+portrait 3 150 899 0 aucune 0
+portrait 3 150 899 1 completes 0
+portrait 3 150 899 1 reduites 0
+portrait 3 150 899 1 aucune 0
+portrait 3 150 900 0 completes 1
+portrait 3 150 900 0 reduites 0
+portrait 3 150 900 0 aucune 0
+portrait 3 150 900 1 completes 1
+portrait 3 150 900 1 reduites 0
+portrait 3 150 900 1 aucune 0
+portrait 3 150 4149 0 completes 0
+portrait 3 150 4149 0 reduites 0
+portrait 3 150 4149 0 aucune 0
+portrait 3 150 4149 1 completes 0
+portrait 3 150 4149 1 reduites 0
+portrait 3 150 4149 1 aucune 0
+portrait 3 150 4150 0 completes 2
+portrait 3 150 4150 0 reduites 2
+portrait 3 150 4150 0 aucune 0
+portrait 3 150 4150 1 completes 2
+portrait 3 150 4150 1 reduites 2
+portrait 3 150 4150 1 aucune 0
+portrait 3 150 4299 0 completes 2
+portrait 3 150 4299 0 reduites 2
+portrait 3 150 4299 0 aucune 0
+portrait 3 150 4299 1 completes 2
+portrait 3 150 4299 1 reduites 2
+portrait 3 150 4299 1 aucune 0
+portrait 3 150 4300 0 completes 0
+portrait 3 150 4300 0 reduites 0
+portrait 3 150 4300 0 aucune 0
+portrait 3 150 4300 1 completes 0
+portrait 3 150 4300 1 reduites 0
+portrait 3 150 4300 1 aucune 0
+portrait 3 150 8599 0 completes 2
+portrait 3 150 8599 0 reduites 2
+portrait 3 150 8599 0 aucune 0
+portrait 3 150 8599 1 completes 2
+portrait 3 150 8599 1 reduites 2
+portrait 3 150 8599 1 aucune 0
+portrait 3 150 12345 0 completes 1
+portrait 3 150 12345 0 reduites 0
+portrait 3 150 12345 0 aucune 0
+portrait 3 150 12345 1 completes 1
+portrait 3 150 12345 1 reduites 0
+portrait 3 150 12345 1 aucune 0
+portrait 5 150 0 0 completes 0
+portrait 5 150 0 0 reduites 0
+portrait 5 150 0 0 aucune 0
+portrait 5 150 0 1 completes 3
+portrait 5 150 0 1 reduites 0
+portrait 5 150 0 1 aucune 0
+portrait 5 150 140 0 completes 0
+portrait 5 150 140 0 reduites 0
+portrait 5 150 140 0 aucune 0
+portrait 5 150 140 1 completes 4
+portrait 5 150 140 1 reduites 0
+portrait 5 150 140 1 aucune 0
+portrait 5 150 280 0 completes 0
+portrait 5 150 280 0 reduites 0
+portrait 5 150 280 0 aucune 0
+portrait 5 150 280 1 completes 3
+portrait 5 150 280 1 reduites 0
+portrait 5 150 280 1 aucune 0
+portrait 5 150 899 0 completes 0
+portrait 5 150 899 0 reduites 0
+portrait 5 150 899 0 aucune 0
+portrait 5 150 899 1 completes 3
+portrait 5 150 899 1 reduites 0
+portrait 5 150 899 1 aucune 0
+portrait 5 150 900 0 completes 1
+portrait 5 150 900 0 reduites 0
+portrait 5 150 900 0 aucune 0
+portrait 5 150 900 1 completes 3
+portrait 5 150 900 1 reduites 0
+portrait 5 150 900 1 aucune 0
+portrait 5 150 4149 0 completes 0
+portrait 5 150 4149 0 reduites 0
+portrait 5 150 4149 0 aucune 0
+portrait 5 150 4149 1 completes 4
+portrait 5 150 4149 1 reduites 0
+portrait 5 150 4149 1 aucune 0
+portrait 5 150 4150 0 completes 2
+portrait 5 150 4150 0 reduites 2
+portrait 5 150 4150 0 aucune 0
+portrait 5 150 4150 1 completes 2
+portrait 5 150 4150 1 reduites 2
+portrait 5 150 4150 1 aucune 0
+portrait 5 150 4299 0 completes 2
+portrait 5 150 4299 0 reduites 2
+portrait 5 150 4299 0 aucune 0
+portrait 5 150 4299 1 completes 2
+portrait 5 150 4299 1 reduites 2
+portrait 5 150 4299 1 aucune 0
+portrait 5 150 4300 0 completes 0
+portrait 5 150 4300 0 reduites 0
+portrait 5 150 4300 0 aucune 0
+portrait 5 150 4300 1 completes 3
+portrait 5 150 4300 1 reduites 0
+portrait 5 150 4300 1 aucune 0
+portrait 5 150 8599 0 completes 2
+portrait 5 150 8599 0 reduites 2
+portrait 5 150 8599 0 aucune 0
+portrait 5 150 8599 1 completes 2
+portrait 5 150 8599 1 reduites 2
+portrait 5 150 8599 1 aucune 0
+portrait 5 150 12345 0 completes 1
+portrait 5 150 12345 0 reduites 0
+portrait 5 150 12345 0 aucune 0
+portrait 5 150 12345 1 completes 3
+portrait 5 150 12345 1 reduites 0
+portrait 5 150 12345 1 aucune 0
+texte 0 Coucou !
+texte 1 On est devant la vitre. Mlle Renvoi lève les yeux et dit : « Bonjour*. » Je te jure que j'ai entendu l'astérisque.
+texte 2 Il pleut, il pleut, il pleut… et moi, je suis une goutte d'encre ; tu vois le problème ?
+texte 3 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+texte 4 
+ecriture 0 406 600
+lettres 0 0 0
+lettres 0 1 0
+lettres 0 21 0
+lettres 0 22 1
+lettres 0 23 1
+lettres 0 300 7
+lettres 0 1000 8
+lettres 0 2500 8
+lettres 0 5199 8
+lettres 0 5200 8
+lettres 0 9000 8
+ecriture 1 3288 792
+lettres 1 0 0
+lettres 1 1 0
+lettres 1 21 0
+lettres 1 22 1
+lettres 1 23 1
+lettres 1 300 13
+lettres 1 1000 35
+lettres 1 2500 88
+lettres 1 5199 114
+lettres 1 5200 114
+lettres 1 9000 114
+ecriture 2 2756 714
+lettres 2 0 0
+lettres 2 1 0
+lettres 2 21 0
+lettres 2 22 1
+lettres 2 23 1
+lettres 2 300 9
+lettres 2 1000 28
+lettres 2 2500 86
+lettres 2 5199 88
+lettres 2 5200 88
+lettres 2 9000 88
+ecriture 3 5200 1500
+lettres 3 0 0
+lettres 3 1 0
+lettres 3 21 1
+lettres 3 22 1
+lettres 3 23 1
+lettres 3 300 23
+lettres 3 1000 76
+lettres 3 2500 192
+lettres 3 5199 399
+lettres 3 5200 400
+lettres 3 9000 400
+ecriture 4 0 600
+lettres 4 0 0
+lettres 4 1 0
+lettres 4 21 0
+lettres 4 22 0
+lettres 4 23 0
+lettres 4 300 0
+lettres 4 1000 0
+lettres 4 2500 0
+lettres 4 5199 0
+lettres 4 5200 0
+lettres 4 9000 0
+volet 0 187 3550 1664 5028 1641 5005 3118 6482 3096 6459 4573 7937
+volet 1 4687 2050 6164 3528 6141 3505 7618 4982 7596 4959 9073 6437
+volet 2 1312 4675 1289 4653 2766 6130 2743 6107 4221 7584 4198 7562
+volet 3 5812 3175 5789 3153 7266 4630 7243 4607 8721 6084 8698 6062
+volet 4 187 3550 1664 5028 1641 5005 3118 6482 3096 6459 4573 7937
+fond humour 0 #151b36 #2a2549 #ffc89a
+fond humour 7 #363751 #504469 #ffc89a
+fond humour 12 #262f54 #423c6c #ffc89a
+fond humour 18 #363046 #503c5d #ffc89a
+fond humour 23 #151b36 #2a2549 #ffc89a
+particule humour 0 0 5686 2031 150
+particule humour 0 5000 4987 4231 64
+particule humour 0 123456 5083 2940 150
+particule humour 1 0 9236 7352 150
+particule humour 1 5000 8479 9552 53
+particule humour 1 123456 8634 8260 150
+particule humour 2 0 7747 7676 95
+particule humour 2 5000 7459 9876 143
+particule humour 2 123456 7508 8584 150
+particule humour 3 0 3417 8902 107
+particule humour 3 5000 3069 1102 131
+particule humour 3 123456 3118 9811 150
+particule humour 4 0 288 6293 139
+particule humour 4 5000 9774 8493 99
+particule humour 4 123456 9823 7201 150
+particule humour 5 0 4380 376 150
+particule humour 5 5000 4943 9376 150
+particule humour 5 123456 4441 1285 126
+particule humour 6 0 3724 2940 150
+particule humour 6 5000 3536 1940 150
+particule humour 6 123456 3854 649 51
+particule humour 7 0 141 3749 150
+particule humour 7 5000 565 2749 116
+particule humour 7 123456 400 4658 150
+particule humour 8 0 3694 925 150
+particule humour 8 5000 3506 9925 150
+particule humour 8 123456 3822 8634 51
+particule humour 9 0 3930 4913 150
+particule humour 9 5000 4360 3913 117
+particule humour 9 123456 4192 5822 150
+particule humour 10 0 6770 7717 150
+particule humour 10 5000 7134 6717 105
+particule humour 10 123456 6969 8626 150
+particule humour 11 0 1240 2516 150
+particule humour 11 5000 1147 1516 18
+particule humour 11 123456 982 3425 150
+particule humour 12 0 9953 7863 150
+particule humour 12 5000 515 6863 150
+particule humour 12 123456 9975 8772 119
+particule humour 13 0 2441 8008 150
+particule humour 13 5000 1847 208 84
+particule humour 13 123456 1896 8917 150
+fond mystere 0 #090d1c #151b36 #a9bbd8
+fond mystere 7 #272630 #373751 #a9bbd8
+fond mystere 12 #161d31 #272f54 #a9bbd8
+fond mystere 18 #271f25 #373046 #a9bbd8
+fond mystere 23 #090d1c #151b36 #a9bbd8
+particule mystere 0 0 7123 4270 150
+particule mystere 0 5000 7496 4202 0
+particule mystere 0 123456 6006 4386 150
+particule mystere 1 0 628 9548 150
+particule mystere 1 5000 1001 9480 11
+particule mystere 1 123456 9511 9665 150
+particule mystere 2 0 9497 213 95
+particule mystere 2 5000 7465 445 78
+particule mystere 2 123456 8379 330 150
+particule mystere 3 0 5121 1396 107
+particule mystere 3 5000 3061 1627 66
+particule mystere 3 123456 4004 1512 150
+particule mystere 4 0 1866 8665 139
+particule mystere 4 5000 9726 8897 34
+particule mystere 4 123456 749 8782 150
+particule mystere 5 0 5358 1681 150
+particule mystere 5 5000 6070 1612 150
+particule mystere 5 123456 4358 1797 46
+particule mystere 6 0 4062 3568 150
+particule mystere 6 5000 4498 3500 150
+particule mystere 6 123456 5608 3385 131
+particule mystere 7 0 1304 5299 150
+particule mystere 7 5000 2090 5231 150
+particule mystere 7 123456 402 5416 111
+particule mystere 8 0 4032 1554 150
+particule mystere 8 5000 4468 1486 150
+particule mystere 8 123456 5578 1371 130
+particule mystere 9 0 5092 6460 150
+particule mystere 9 5000 5881 6391 150
+particule mystere 9 123456 4191 6576 110
+particule mystere 10 0 7948 9312 150
+particule mystere 10 5000 8705 9243 150
+particule mystere 10 123456 7046 9428 123
+particule mystere 11 0 2527 4441 150
+particule mystere 11 5000 3065 4373 83
+particule mystere 11 123456 1576 4558 150
+particule mystere 12 0 901 9139 150
+particule mystere 12 5000 1595 9071 150
+particule mystere 12 123456 9883 9256 39
+particule mystere 13 0 3958 323 150
+particule mystere 13 5000 1780 555 19
+particule mystere 13 123456 2842 440 150
+fond emotion 0 #151931 #352e4b #f2c6d6
+fond emotion 7 #37354a #5e4f6c #f2c6d6
+fond emotion 12 #272d4c #50486f #f2c6d6
+fond emotion 18 #372f3f #5e485f #f2c6d6
+fond emotion 23 #151931 #352e4b #f2c6d6
+particule emotion 0 0 4877 6663 150
+particule emotion 0 5000 4784 4600 27
+particule emotion 0 123456 5135 5257 150
+particule emotion 1 0 8450 1897 150
+particule emotion 1 5000 8285 9833 15
+particule emotion 1 123456 8706 490 150
+particule emotion 2 0 6784 2926 95
+particule emotion 2 5000 7183 862 105
+particule emotion 2 123456 7040 1519 150
+particule emotion 3 0 2478 4061 107
+particule emotion 3 5000 2805 1998 94
+particule emotion 3 123456 2735 2655 150
+particule emotion 4 0 9411 1201 139
+particule emotion 4 5000 9539 9138 62
+particule emotion 4 123456 9669 9795 150
+particule emotion 5 0 3856 3075 150
+particule emotion 5 5000 4114 3812 150
+particule emotion 5 123456 3613 4468 40
+particule emotion 6 0 3522 4240 150
+particule emotion 6 5000 2919 4977 150
+particule emotion 6 123456 3267 5634 150
+particule emotion 7 0 9517 6956 150
+particule emotion 7 5000 9788 7693 150
+particule emotion 7 123456 9762 5550 24
+particule emotion 8 0 3492 2227 150
+particule emotion 8 5000 2886 2964 150
+particule emotion 8 123456 3237 3621 150
+particule emotion 9 0 3307 8113 150
+particule emotion 9 5000 3584 8850 150
+particule emotion 9 123456 3553 6706 23
+particule emotion 10 0 6136 1016 150
+particule emotion 10 5000 6333 1753 143
+particule emotion 10 123456 6382 9610 36
+particule emotion 11 0 526 6499 150
+particule emotion 11 5000 176 7236 55
+particule emotion 11 123456 771 5093 123
+particule emotion 12 0 9442 504 150
+particule emotion 12 5000 9656 1241 150
+particule emotion 12 123456 9200 1898 47
+particule emotion 13 0 1594 2798 150
+particule emotion 13 5000 1626 735 47
+particule emotion 13 123456 1851 1391 150
+fond epique 0 #061428 #112c4b #ffd29a
+fond epique 7 #232e3f #314d6c #ffd29a
+fond epique 12 #132640 #21466f #ffd29a
+fond epique 18 #242833 #32465f #ffd29a
+fond epique 23 #061428 #112c4b #ffd29a
+particule epique 0 0 5835 2648 150
+particule epique 0 5000 5139 4191 98
+particule epique 0 123456 5507 3085 150
+particule epique 1 0 9369 7958 150
+particule epique 1 5000 8637 9500 87
+particule epique 1 123456 9005 8394 150
+particule epique 2 0 8009 8376 95
+particule epique 2 5000 7558 9918 150
+particule epique 2 123456 7926 8812 150
+particule epique 3 0 3663 9590 107
+particule epique 3 5000 3177 1133 150
+particule epique 3 123456 3545 26 150
+particule epique 4 0 489 6947 139
+particule epique 4 5000 9902 8490 134
+particule epique 4 123456 270 7383 150
+particule epique 5 0 4575 736 150
+particule epique 5 5000 5068 9879 147
+particule epique 5 123456 4630 1172 150
+particule epique 6 0 3716 3113 150
+particule epique 6 5000 3865 2256 150
+particule epique 6 123456 3334 3550 26
+particule epique 7 0 374 4176 150
+particule epique 7 5000 783 3319 82
+particule epique 7 123456 345 4613 150
+particule epique 8 0 3685 1098 150
+particule epique 8 5000 3835 241 150
+particule epique 8 123456 3303 1535 27
+particule epique 9 0 4163 5340 150
+particule epique 9 5000 4577 4482 83
+particule epique 9 123456 4139 5776 150
+particule epique 10 0 6995 8157 150
+particule epique 10 5000 7369 7300 71
+particule epique 10 123456 6931 8593 150
+particule epique 11 0 1408 3047 150
+particule epique 11 5000 658 4590 16
+particule epique 11 123456 1069 3483 150
+particule epique 12 0 137 8215 150
+particule epique 12 5000 630 7358 150
+particule epique 12 123456 191 8651 150
+particule epique 13 0 2620 8647 150
+particule epique 13 5000 1985 189 118
+particule epique 13 123456 2353 9083 150
+fond autre 0 #101424 #21252d #adbac7
+fond autre 7 #302e3a #454446 #adbac7
+fond autre 12 #20263c #363d48 #adbac7
+fond autre 18 #30282f #453d3a #adbac7
+fond autre 23 #101424 #21252d #adbac7
+particule autre 0 0 7123 4270 150
+particule autre 0 5000 7496 4202 0
+particule autre 0 123456 6006 4386 150
+particule autre 1 0 628 9548 150
+particule autre 1 5000 1001 9480 11
+particule autre 1 123456 9511 9665 150
+particule autre 2 0 9497 213 95
+particule autre 2 5000 7465 445 78
+particule autre 2 123456 8379 330 150
+particule autre 3 0 5121 1396 107
+particule autre 3 5000 3061 1627 66
+particule autre 3 123456 4004 1512 150
+particule autre 4 0 1866 8665 139
+particule autre 4 5000 9726 8897 34
+particule autre 4 123456 749 8782 150
+particule autre 5 0 5358 1681 150
+particule autre 5 5000 6070 1612 150
+particule autre 5 123456 4358 1797 46
+particule autre 6 0 4062 3568 150
+particule autre 6 5000 4498 3500 150
+particule autre 6 123456 5608 3385 131
+particule autre 7 0 1304 5299 150
+particule autre 7 5000 2090 5231 150
+particule autre 7 123456 402 5416 111
+particule autre 8 0 4032 1554 150
+particule autre 8 5000 4468 1486 150
+particule autre 8 123456 5578 1371 130
+particule autre 9 0 5092 6460 150
+particule autre 9 5000 5881 6391 150
+particule autre 9 123456 4191 6576 110
+particule autre 10 0 7948 9312 150
+particule autre 10 5000 8705 9243 150
+particule autre 10 123456 7046 9428 123
+particule autre 11 0 2527 4441 150
+particule autre 11 5000 3065 4373 83
+particule autre 11 123456 1576 4558 150
+particule autre 12 0 901 9139 150
+particule autre 12 5000 1595 9071 150
+particule autre 12 123456 9883 9256 39
+particule autre 13 0 3958 323 150
+particule autre 13 5000 1780 555 19
+particule autre 13 123456 2842 440 150
+recompense 420 680 940 1200 1460

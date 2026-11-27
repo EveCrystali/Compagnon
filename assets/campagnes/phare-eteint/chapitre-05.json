@@ -7,6 +7,7 @@
       "lieu": "L'atelier de Basile",
       "decor": "atelier-basile",
       "humeur": "surpris",
+      "personnage": "basile",
       "texte": [
         "Deux heures pile : Basile a rouvert. Sa boutique s'appelle « Basile : horlogerie, mécanique fine, réparations de tout ». Dedans, deux cents pendules, et pas deux d'accord. Ici il est midi, minuit, quatre heures dix et l'heure du thé, tout ça en même temps.",
         "Basile est à son établi, loupe à l'œil, de la poussière dorée jusque dans les sourcils. Au mur, derrière lui, un tableau de clefs étiquetées. J'en vois une grosse, tout en haut : « D.-C. service ». Dent-Creuse. Et au fond, sur une étagère, une forme ronde sous un drap. Il lève la tête : « C'est pour une réparation ? » Je l'aborde comment ?"
@@ -28,6 +29,7 @@
     "ch5a-billet": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "basile", "expression": "peur",
       "effets": [ { "drapeau": "c-limaille" } ],
       "texte": [
         "J'ai déplié le billet sur l'établi. « Repars à la prochaine marée. » La poussière du pli a brillé sous sa lampe, pareille à celle de ses manches. De la limaille de laiton. Basile est devenu de la couleur de son papier.",
@@ -46,6 +48,7 @@
     "ch5a-sonnette": {
       "type": "choix",
       "humeur": "malice",
+      "personnage": "perrine",
       "texte": [
         "Ding ! La porte. C'est Perrine, le coucou de l'auberge sous le bras : « Il chante faux, Basile, et à des heures indécentes. » Basile part vers elle en s'essuyant les mains. Je crois même qu'elle m'a fait un clin d'œil. J'ai une minute, seul au fond de l'atelier. Deux choses me démangent : le drap sur l'étagère, et le registre noir près de la caisse. Une seule. Laquelle ?"
       ],
@@ -67,6 +70,7 @@
     "ch5a-registre": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "basile",
       "effets": [ { "drapeau": "c-jeudi" } ],
       "texte": [
         "Le registre « Travaux », à la page de la semaine dernière. « Jeudi. Dent-Creuse, pendant la sieste d'A. Cadran de réglage démonté, emporté pour gravure. Posé le cadran de rechange en fer-blanc. Pas eu le temps d'essayer le feu : la marée. À vérifier. » Et « à vérifier » est souligné trois fois, d'un trait de plus en plus appuyé.",
@@ -77,6 +81,7 @@
     "ch5a-patience": {
       "type": "attente",
       "humeur": "neutre",
+      "personnage": "basile",
       "texte": [
         "Basile a posé le coucou sur l'établi et m'a dit d'attendre : « J'en ai pour dix minutes, il a juste avalé une plume. » Dix minutes à faire l'innocent au milieu de deux cents pendules. La clef « D.-C. service » pend toujours là-haut, à son clou. Je réfléchis à la façon de repartir avec."
       ],
@@ -89,6 +94,7 @@
     "ch5a-clef": {
       "type": "choix",
       "humeur": "determine",
+      "personnage": "basile", "expression": "peur",
       "texte": [
         "Basile a le dos tourné, le nez dans le coucou. Dans mon baluchon, j'ai une ficelle et un hameçon ramassé sur le quai. La clef pend à deux mètres. Un bon lancer, et je la décroche sans bruit. Mais c'est du vol, soyons honnêtes. L'autre façon, c'est de me planter devant lui et de dire : « Basile, il faut qu'on parle du phare. Pour de vrai. » Ça me fait plus peur que le lancer. Je fais quoi ?"
       ],
@@ -111,6 +117,7 @@
     "ch5a-clef-ok": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "basile",
       "effets": [ { "objet": "clef-service", "donne": true } ],
       "texte": [
         "Dans l'anneau, du premier coup ! La clef a glissé le long de la ficelle comme une perle et je l'ai reçue dans les bras. Je suis sorti à reculons, la clef sur l'épaule comme une rame. Basile n'a rien vu. Enfin, je croyais. Arrivé sur le trottoir, j'ai entendu sa voix, toute petite, derrière la vitre : « Dites-lui… Non. Ne lui dites rien. » Il avait donc vu. Et il m'a laissé faire."
@@ -120,6 +127,7 @@
     "ch5a-clef-rate": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "basile",
       "effets": [ { "objet": "clef-service", "donne": true }, { "drapeau": "basile-prive" }, { "drapeau": "c-jeudi" } ],
       "texte": [
         "L'hameçon a pris le clou, le clou a lâché, et la clef est tombée sur le carillon. Deux cents pendules ont sursauté. Basile aussi. Il m'a trouvé au milieu de l'atelier, une ficelle à la main, avec l'air de quelqu'un qui n'a rien fait. Il a ramassé la clef.",

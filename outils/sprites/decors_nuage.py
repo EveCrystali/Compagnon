@@ -7,6 +7,7 @@ sont sarcelle, l'automne est doré. Les montagnes ont un versant éclairé et un
 import math
 
 import toile
+import decors_campagnes as dc
 from decors_campagnes import decor
 from peinture import (Palette, degrade, relief, voile, eclat, lueur, semis, ell, poly, rect, point, trait, hline, vline,
                       courbe, nuage, etoile4, hasard)
@@ -69,7 +70,7 @@ def meleze(t, x, base, h, k=0, dore=True):
         poly(t, [(x - l, y + h / 6), (x, y), (x + l, y + h / 6)], M1 if dore else H2)
         poly(t, [(x, y), (x + l, y + h / 6), (x + l * 0.2, y + h / 6)], M2 if dore else H3)
     for j in range(3):
-        point(t, x + 2 + j * 1.5, base - h / 2 + j * 2 + k, M2)
+        point(t, x + 2 + j * 1.5, base - h / 2 + j * 2 + 0.6 * (1 + dc.onde(j * 0.31 + x * 0.07)), M2)
 
 
 def nuage_vivant(t, x, y, l, h, c=NE4, cl=NE4, o=NE2, yeux=False):
@@ -157,7 +158,7 @@ def pre_draps(t, k):
             x = x0 + 2 + i * (x1 - x0 - 4) / n
             w = (x1 - x0 - 4) / n - 1.5
             y = y0 + 0.6 * math.sin(i)
-            onde = 1.5 * s if (i + k) % 2 else -1 * s
+            onde = s * (0.25 + 1.25 * dc.onde(i * 0.23 + ligne * 0.5))
             poly(t, [(x, y), (x + w, y), (x + w + onde, y + 9 * s), (x + onde * 0.5, y + 10 * s)], NE4)
             poly(t, [(x + w * 0.6, y), (x + w, y), (x + w + onde, y + 9 * s), (x + w * 0.6 + onde, y + 9.5 * s)], NE3)
             trait(t, x + w * 0.3, y + 0.5, x + w * 0.3 + onde * 0.6, y + 9 * s, NE2, ep=1)
@@ -165,7 +166,7 @@ def pre_draps(t, k):
             rect(t, x + w - 1, y - 0.5, 0.5, 1, TE2)
     # Ombres mouvantes sur l'herbe.
     for i in range(6):
-        x = 8 + i * 15 + k * 2
+        x = 8 + i * 15 + 1.2 * dc.onde(i * 0.23)
         ell(t, x, f(x) + 6, 4, 0.8, H2)
     # Les poteaux, le panier d'osier.
     for x in (5, 49, 95):
@@ -205,7 +206,7 @@ def etang(t, k):
         ell(t, x, y, 3, 1.2, H3, cond=lambda a, b, u, v: not (u > 0 and abs(v) < 0.3))
         point(t, x - 1, y - 0.4, H4)
     # La brume épaisse posée sur l'eau, qui glisse.
-    voile(t, lambda x, y: math.sin((y - 19) / 11 * math.pi) * (0.75 + 0.35 * math.sin((x + k * 6) / 9)) if 19 < y < 30 else 0,
+    voile(t, lambda x, y: math.sin((y - 19) / 11 * math.pi) * (0.75 + 0.35 * math.sin(x / 9 + 0.5 * dc.onde())) if 19 < y < 30 else 0,
           NE3, PAL, (0, 18, 96, 30), famille=[NE1, NE2, NE3])
     # Roseaux au premier plan.
     for i in range(30):
@@ -379,7 +380,7 @@ def col_blanc(t, k):
         for j in range(3):
             ell(t, x, y - j * 1.6 * s, (2.4 - j * 0.6) * s, 0.9 * s, R3 if i < 2 else R4)
         ell(t, x, y + 0.6, 3 * s, 1 * s, NE4)
-    voile(t, lambda x, y: math.sin(y / 28 * math.pi) * (0.7 + 0.3 * math.sin((x + k * 8) / 14)) if y < 28 else 0, NE4, PAL,
+    voile(t, lambda x, y: math.sin(y / 28 * math.pi) * (0.7 + 0.3 * math.sin(x / 14 + 0.6 * dc.onde())) if y < 28 else 0, NE4, PAL,
           (0, 0, 96, 30), famille=[NE3, NE4])
     eclat(t, lambda x, y: 1 if y > 26 and x < 30 + (y - 26) * 2 else 0, PAL, n=1, sens=-1, cadre=(0, 26, 96, 40),
           sur=(NE4,))
@@ -468,12 +469,12 @@ def abreuvoir(t, k, aube=False):
     if not aube:
         for i, (x, y, l) in enumerate(((14, 24, 10), (30, 25, 8), (46, 23.5, 12), (64, 25, 9), (80, 24, 11),
                                          (90, 26, 6), (22, 28, 7), (56, 29, 8))):
-            nuage(t, x, y + (0.3 if (i + k) % 2 else 0), l, 2.2, L3, NE4, SO3)
+            nuage(t, x, y + 0.3 * dc.onde(i * 0.29), l, 2.2, L3, NE4, SO3)
     else:
         for i in range(7):
-            x, y = 18 + i * 11, 22 - i * 2.6 - k * 0.6
+            x, y = 18 + i * 11 + 0.4 * dc.onde(i * 0.21), 22 - i * 2.6 - 0.4 * (1 + dc.onde(i * 0.17))
             nuage(t, x, y, 8 - i * 0.6, 2 - i * 0.12, NE4, NE4, AU1)
-        voile(t, lambda x, y: 0.5 if (y < 30 and math.sin(x / 3 + k) > 0.3) else 0, NE3, PAL, (0, 23, 96, 31),
+        voile(t, lambda x, y: 0.5 if (y < 30 and math.sin(x / 3 + 0.8 * dc.onde()) > 0.3) else 0, NE3, PAL, (0, 23, 96, 31),
               famille=[NE2, NE3, C3])
     # La rive de galets, le rocher plat.
     rect(t, 0, 34, 96, 6, R2 if not aube else NE3)
@@ -500,7 +501,7 @@ def fenetre(t, k):
     rect(t, 14, 2, 68, 28, B1)
     degrade(t, 3, 29, [SO1, SO2, SO3, SO4], x0=15, x1=81)
     for i, (x, y, l) in enumerate(((26, 10, 16), (58, 7, 20), (72, 16, 12), (40, 20, 14))):
-        nuage(t, x + k * (1 + i % 2), y, l, 2.2, SO4, L2, SO2)
+        nuage(t, x + 0.7 * (1 + i % 2) * dc.onde(i * 0.19), y, l, 2.2, SO4, L2, SO2)
     relief(t, lambda x: 26 + 1.5 * math.sin(x / 6), NE2, lisere=NE4, x0=15, x1=81, bas=29)
     # La buée, et ce qu'on y a dessiné du doigt : un petit nuage qui sourit.
     voile(t, lambda x, y: (y - 8) / 16 + 0.15 * math.sin(x / 4) if x < 47 else (y - 16) / 20, NE2, PAL, (15, 3, 81, 29),

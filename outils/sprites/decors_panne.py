@@ -7,6 +7,7 @@ Tout s'est arrêté à 13 h 37 : les horloges, l'afficheur, la barre de chargeme
 import math
 
 import toile
+import decors_campagnes as dc
 from decors_campagnes import decor
 from peinture import (Palette, degrade, relief, voile, eclat, lueur, semis, ell, poly, rect, point, trait, hline, vline,
                       courbe, nuage, etoile4, hasard)
@@ -403,7 +404,7 @@ def citadelle(t, k):
         point(t, x, y, (O2, J3, C2)[i % 3] if (i + k) % 5 else N2)
     # La mer de brume.
     for i, (x, y, l) in enumerate(((10, 31, 30), (44, 33, 34), (80, 31, 30), (30, 35, 30), (70, 36, 36))):
-        nuage(t, x + (k * 0.5 if i % 2 else 0), y, l, 3, CIEL2, BLANC, V4)
+        nuage(t, x + 0.7 * dc.onde(i * 0.21), y, l, 3, CIEL2, BLANC, V4)
     # Les remparts blancs, le donjon, la gargouille au bord du vide.
     rect(t, 30, 18, 46, 12, E5)
     for x in range(30, 76, 4):
@@ -509,7 +510,7 @@ def horloge(t, k):
     # La lumière bleutée qui tombe d'en haut.
     eclat(t, lambda x, y: 1 if abs(x - 48) < 10 + y * 0.35 else 0, PAL, n=1, cadre=(0, 0, 96, 40))
     # Le grand balancier doré, arrêté, penché d'un côté.
-    a = math.radians(14)
+    a = math.radians(14 + 1.5 * dc.onde())  # il frémit : il voudrait repartir
     ox, oy, l = 48, 2, 26
     ex, ey = ox + l * math.sin(a), oy + l * math.cos(a)
     trait(t, ox, oy, ex, ey, J1, ep=t.e + 1)

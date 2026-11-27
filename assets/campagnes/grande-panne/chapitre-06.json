@@ -4,6 +4,7 @@
     "ch6-entree": {
       "type": "hasard",
       "humeur": "fatigue",
+      "personnage": "grumeau",
       "checkpoint": true,
       "texte": [
         "J'ai attendu. Longtemps. Grumeau dit vingt-quatre retournements, et il ajoute qu'il n'est toujours pas un minuteur, au cas où j'aurais oublié. Je n'ai pas bougé, pas parlé, à peine respiré. Et ce que j'attendais vient d'arriver. Je ne sais pas encore si c'est une bonne nouvelle. Dans cette maison, les bonnes nouvelles ont toujours un astérisque. Je te raconte."
@@ -18,6 +19,7 @@
       "lieu": "L'antichambre",
       "decor": "bureau-echeance",
       "humeur": "neutre",
+      "personnage": "mme-echeance",
       "texte": [
         "La porte s'est rouverte, en grand cette fois. Une secrétaire, un petit calendrier à spirale, nous a fait entrer dans une antichambre. « Mme Échéance va vous recevoir tout de suite. Asseyez-vous. » Je me suis assis. « Non, attendez debout, c'est plus rapide. » Je me suis relevé. Elle a tourné une de ses pages et elle a soupiré : « C'est toujours la même. » On attend qu'on nous appelle. Encore. Mais c'est la dernière fois, je le sens."
       ],
@@ -31,6 +33,7 @@
       "type": "choix",
       "lieu": "Bureau de Mme Échéance",
       "humeur": "surpris",
+      "personnage": "mme-echeance",
       "texte": [
         "Le bureau de la Planificatrice. Un mur entier couvert de petites cartes, une par minute de la journée, épinglées en rangs. Celles du matin sont cochées. À partir de 13 h 38, elles pendent toutes, pas cochées, à perte de vue. Mme Échéance est une grande dame en gris, un crayon derrière chaque oreille. Elle fait une réussite avec les cartes de 15 h. « Ne touchez pas aux cartes. »",
         "Elle sait pourquoi on vient. « Le règlement m'autorise à vous montrer une carte. Une seule. » Elle en a décroché deux, qu'elle tient retournées contre elle : celle de 13 h 37, la dernière minute qui a eu lieu, et celle de 13 h 38, la première qui n'arrive pas. Laquelle je demande ?"
@@ -43,6 +46,7 @@
     "ch6a-carte-1337": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "mme-echeance",
       "texte": [
         "Elle a retourné la carte. « 13 h 37. Tic-Tac : première pause. Lieu : dossier Temp. Invité par : sans titre. » J'ai relu. Invité ! Pas emporté, pas volé : invité. Mme Échéance a tapoté le mot. « Je planifie tout, jeune goutte. Cette ligne-là, je ne l'ai pas écrite. Elle s'est ajoutée toute seule, à la main, d'une écriture qui tremble. » Grumeau a dit : « Une pause. En trente ans, il n'en avait jamais pris. » Il avait l'air de calculer quelque chose."
       ],
@@ -51,6 +55,7 @@
     "ch6a-carte-1338": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "mme-echeance",
       "texte": [
         "Elle a retourné la carte. « 13 h 38. Grand Nettoyage du dossier Temp. Fichiers à supprimer : un. Document sans titre. » J'ai mis un moment à comprendre. Le Sans-Titre n'est pas un monstre de trois étages : c'est un fichier temporaire, caché dans le dossier Temp, et à 13 h 38 il est effacé. Sauf s'il n'est jamais 13 h 38. Mme Échéance a dit doucement : « Voilà. Quelqu'un avait une très bonne raison d'arrêter l'heure. »"
       ],
@@ -61,6 +66,7 @@
       "lieu": "Bureau de Mme Échéance",
       "decor": "bureau-echeance",
       "humeur": "malice",
+      "personnage": "mme-echeance",
       "checkpoint": true,
       "texte": [
         "Quelqu'un a frappé. Mme Échéance est sortie « vérifier que rien n'arrive », ce qui est son métier en ce moment. Elle a laissé les deux cartes sur le bureau. Celle que je n'ai pas vue est là, retournée, à une longueur de bras. Grumeau a lu dans mes pensées : « Elle a dit une seule. Elle a dit ne touchez pas. Ici, celui qui touche une carte devient prévu. » Je ne sais pas ce que ça veut dire. Ça me démange. Je fais quoi ?"
@@ -82,6 +88,7 @@
     "ch6a-offre": {
       "type": "choix",
       "humeur": "tendre",
+      "personnage": "grumeau",
       "texte": [
         "Je n'ai rien touché. Mme Échéance est revenue, a regardé les cartes, puis moi, et son crayon gauche a frémi : c'était un test, et on est les premiers à le réussir depuis l'invention du mardi. Alors elle a parlé. Dans le dossier Temp, un fichier temporaire ne dure que s'il est enregistré : une demande exceptionnelle, trois tampons. Sinon, il reste la Corbeille. « On n'y est pas effacé. On y est rangé. »",
         "Puis elle a reconnu Grumeau. « Matricule 0003. Votre réintégration était prévue, vous savez. » Il a demandé quand. Tu connais la réponse. Elle soupire : il lui reste de l'encre pour un seul coup de tampon aujourd'hui. Un visa sur mon formulaire, ou le dossier de Grumeau remonté en haut de la pile. Il dit : « Prends le visa. Je m'en fiche. » Il ne s'en fiche pas."
@@ -94,6 +101,7 @@
     "ch6a-visa": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "mme-echeance",
       "texte": [
         "J'ai pris le visa. Mme Échéance a tamponné, sec, précis, sans une goutte de trop, et sans lire la case « Objet de la demande », elle non plus. Grumeau a dit « très bien » d'une voix parfaitement normale, et il a regardé la pile où dort son dossier, tout en bas, sous trente ans de poussière. Je lui ai promis qu'on reviendrait. Il a répondu qu'il ne fallait rien promettre à 13 h 37, que ça n'engageait à rien. Mais il a retenu que j'avais promis."
       ],
@@ -102,6 +110,7 @@
     "ch6a-dossier": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "mme-echeance",
       "texte": [
         "J'ai dit : « Le dossier de Grumeau. » Il s'est retourné si vite qu'il a failli tomber de la chaise. Mme Échéance a tiré une chemise grise de tout en bas de la pile, a soufflé dessus, a tamponné, et l'a posée tout en haut. « Premier dossier traité à la reprise. » Grumeau n'a rien dit pendant un long moment. Puis : « C'était idiot. Il te fallait ce tampon. » Puis, très bas : « Merci, pâté. »"
       ],
@@ -110,6 +119,7 @@
     "ch6a-ascenseur": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "mme-echeance",
       "texte": [
         "Dernière chose. Le dossier Temp est immense, et il change de forme toutes les minutes, enfin, toutes les anciennes minutes. Pour savoir où s'y cache quelqu'un, Mme Échéance ne connaît qu'une adresse : la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Il y a un monte-charge derrière son bureau. Il est lent, il grince, il s'arrête à chaque nuage. Grumeau y est entré le premier : « J'allais dans cette direction. » On monte. Je t'écris d'en haut."
       ],
@@ -125,6 +135,7 @@
       "lieu": "Au milieu du Marais",
       "decor": "marais-majs",
       "humeur": "peur",
+      "personnage": "raccourcis",
       "texte": [
         "Ça a fini par sortir de l'eau. Une tête. Puis une autre. Sept en tout, sur sept longs cous, autour de la barque. L'hydre des dépendances. Ctrl a dit poliment qu'on voulait juste passer. La tête 1 a répondu : « D'accord, si la 4 est d'accord. » La 4 : « Il me faut l'avis de la 6. » La 6 attend la 2. La 2 attend la 7. La 7 attend la 1.",
         "Elles ne sont pas méchantes. Elles ne peuvent juste rien décider seules, et elles ont faim comme tout le monde : on entend sept estomacs. Alt dit qu'il faut leur parler dans le bon ordre, en cadence, pour que les « oui » tombent à la suite. Ou alors trouver autre chose. Je tente quoi ?"
@@ -150,6 +161,7 @@
     "ch6b-hydre-ok": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "raccourcis",
       "texte": [
         "Oui. Oui. Oui. Oui. Oui… et la 3 et la 5 ont suivi, par entraînement ! Sept « oui » à la file, sans un trou. Les têtes se sont regardées, stupéfaites : c'est la première fois qu'elles sont d'accord depuis leur installation. Elles en ont pleuré de soulagement, ce qui a fait monter le niveau du Marais. La 3, à qui personne ne demande jamais rien, m'a fait un clin d'œil. On passe. Ctrl a dit « pas mal ». Dans sa bouche, c'est un discours."
       ],
@@ -166,6 +178,7 @@
     "ch6b-hydre-galette": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "grumeau",
       "texte": [
         "J'ai sorti ma galette. Sept têtes se sont tournées d'un seul mouvement : enfin un sujet sur lequel elles sont d'accord. Je l'ai coupée en sept parts, avec mon épée en bois, le plus équitablement possible. La 3 a eu la plus grosse, par erreur, et personne n'a protesté, parce qu'il aurait fallu l'accord des autres. Elles mâchent. On passe. Adieu, goûter. Grumeau dit que c'était « un investissement ». Mon ventre dit autre chose."
       ],
@@ -174,6 +187,7 @@
     "ch6b-hydre-suppr": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "raccourcis",
       "texte": [
         "J'ai demandé à Suppr si elle voulait bien se lever. Elle s'est levée. C'est tout. Les sept têtes l'ont vue, et elles ont dit « oui » toutes ensemble, tout de suite, sans consulter personne, pour la première fois de leur vie. Puis elles sont rentrées sous l'eau très vite. Suppr s'est rassise, un peu triste. « Tu vois. » Je lui ai dit que cette fois, ça nous avait bien arrangés. Elle a presque souri."
       ],
@@ -182,6 +196,7 @@
     "ch6b-hydre-attend": {
       "type": "attente",
       "humeur": "fatigue",
+      "personnage": "raccourcis",
       "texte": [
         "On attend. La 1 attend la 4, qui attend la 6, qui attend la 2, qui attend la 7, qui attend la 1. Elles sont très polies, elles s'excusent à tour de rôle. Grumeau s'est mis à compter, par habitude. Ctrl a sorti un jeu de cartes. Alt parie que la 5 s'endormira la première, et qu'on se faufilera de son côté, « ou alors de l'autre ». Je regarde sept têtes tourner en rond. Je t'écris dès que ça passe."
       ],
@@ -196,6 +211,7 @@
       "lieu": "La file d'impression",
       "decor": "file-impression",
       "humeur": "surpris",
+      "personnage": "imprimante",
       "texte": [
         "L'hydre est loin derrière. La barque a accosté à un quai de papier. Du papier partout : des rames, des piles, des feuilles qui attendent debout, en rang, depuis si longtemps que certaines ont jauni. C'est la file d'impression. Tout au bout, sur une estrade, trône l'Imprimante. Énorme, beige, un voyant orange. Elle répète à tout le monde, sans regarder personne : « Plus de cyan. »",
         "Ctrl dit que le Sans-Titre est passé par ici, et que l'Imprimante sait tout ce qui a demandé à sortir. Mais elle ne reçoit que dans l'ordre, et le premier document attend depuis trois ans. Les Raccourcis nous laissent là : ils n'aiment pas le papier. Alt m'a montré l'estrade : « C'est par là. » Rien après. Pas de « ou alors ». Ctrl l'a regardée, très inquiète. Comment j'arrive jusqu'à l'Imprimante ?"
@@ -209,6 +225,7 @@
     "ch6b-impr-coupe": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "grumeau",
       "texte": [
         "J'ai brandi le coupe-file. Une vieille facture, en tête de file, a lu l'astérisque à voix haute : « Non valable dans les files d'attente. » Murmures. Grumeau s'est avancé, très avocat : « Ceci est une file d'impression. Pas une file d'attente. Nuance. » Les feuilles ont délibéré en se froissant. La facture a fini par s'écarter : « Le sablier a raison sur la forme. » Sur la forme ! Grumeau n'a jamais reçu de plus beau compliment. On passe devant tout le monde."
       ],
@@ -229,6 +246,7 @@
     "ch6b-imprimante": {
       "type": "choix",
       "humeur": "surpris",
+      "personnage": "imprimante",
       "texte": [
         "Je suis devant l'Imprimante. De près, elle est encore plus beige. Son voyant a clignoté dans ma direction, et pour la première fois elle a dit autre chose : « Du bleu. » Je lui en ai laissé une goutte, dans son tiroir. Elle a ronronné. Puis elle a parlé du Sans-Titre : il est venu, tremblant, supplier qu'on l'imprime « avant 13 h 38 ». Elle a refusé. Plus de cyan.",
         "« Alors il a dit : il ne sera jamais 13 h 38. Et il est parti vers le dossier Temp. » Elle ajoute que pour sauver un temporaire il n'y a que deux sorties : le papier, ou Ctrl et S ensemble. Mais S se cache derrière le bac à feuilles et n'ose plus rien. J'ai le temps d'une seule chose avant que la file gronde. Laquelle ?"
@@ -241,6 +259,7 @@
     "ch6b-liste": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "grumeau",
       "texte": [
         "La liste est un rouleau long comme la file. Tout en bas, la dernière ligne : « Document sans titre, une page. Annulé. Motif : fichier temporaire, suppression prévue à 13 h 38 par le Grand Nettoyage. » J'ai relu trois fois. Le Sans-Titre n'est pas un monstre. C'est une page, une seule, qui doit être effacée à 13 h 38. Et qui a trouvé le seul moyen pour que 13 h 38 n'arrive pas. Grumeau a dit : « Ah. » Rien d'autre. C'est rare."
       ],
@@ -257,6 +276,7 @@
     "ch6b-depart": {
       "type": "attente",
       "humeur": "determine",
+      "personnage": "imprimante",
       "texte": [
         "L'Imprimante nous a donné une dernière adresse. Le dossier Temp est immense et il change de forme sans arrêt : pour savoir où s'y cache une page, il faut demander à la Citadelle du nuage. « Là-haut, la gargouille voit tout. Avec du retard. » Un câble monte depuis l'arrière de l'estrade, droit dans la brume. Grumeau a dit non. Puis il a regardé la file d'impression, et il est monté dans mon baluchon, « parce que c'est la même direction ». La chaleur de l'Imprimante l'a séché : il est revenu à quatre secondes. Il refuse de la remercier. On grimpe. Je t'écris d'en haut."
       ],

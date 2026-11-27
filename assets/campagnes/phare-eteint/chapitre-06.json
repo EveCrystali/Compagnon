@@ -54,6 +54,7 @@
     "ch6a-cache": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "vernier",
       "effets": [ { "var": "courage", "plus": 1 }, { "var": "confiance", "plus": 1 } ],
       "texte": [
         "J'ai soufflé ma lanterne et je me suis glissé entre deux rochers, à plat ventre dans le goémon, ce qui pour une goutte d'encre est presque une baignade. Les bottes sont passées à un mètre de ma tête. Il a frappé à la grande porte, longtemps. Puis : « Monsieur le gardien. Achille Vernier, Service des Feux. Mercredi, cinq heures. Je préférerais vous entendre. »",
@@ -91,6 +92,7 @@
     "ch6a-bidons": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "tudal",
       "effets": [ { "drapeau": "k-tudal" } ],
       "texte": [
         "Sur chaque bidon, un dessin à la craie : une petite puce. La Puce, la barque de Tudal. Et dessous, à chaque fois : « payé ». Vingt-deux bidons, vingt-deux puces. Cloué au mur, un vieux bon de livraison du Service des Feux, barré d'un tampon : « Fournitures suspendues. Phare en instance de fermeture. » Il date du printemps.",

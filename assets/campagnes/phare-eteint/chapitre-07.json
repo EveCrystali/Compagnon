@@ -62,6 +62,7 @@
     "ch4b-boite": {
       "type": "recit",
       "humeur": "surpris",
+      "personnage": "tudal",
       "effets": [ { "objet": "pages-carnet", "donne": true }, { "drapeau": "pages-volees" }, { "var": "confiance", "plus": -1 } ],
       "texte": [
         "J'ai retiré l'élastique. Dedans : quatre pages arrachées à un gros carnet, pliées avec soin. Une écriture d'écolier, bien posée sur les lignes. « Jeudi soir. Allumé à l'heure. Réglé comme toujours, onze à gauche, deux à droite. » Puis : « Vendredi, aube. Tudal crie sous la tour. Le feu a rendu trois éclats cette nuit. Feu faux, par ma faute. Un phare qui ment est pire qu'un phare éteint. J'éteins. Je ne suis plus gardien. »",
@@ -103,6 +104,7 @@
     "ch4b-face": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "vernier",
       "effets": [ { "drapeau": "c-feu-faux" }, { "var": "courage", "plus": 1 } ],
       "texte": [
         "Je suis sorti sur le seuil, les poings sur les hanches. Il s'est arrêté net. Puis il a sorti une carte et s'est plié en trois pour me la tendre : « Achille Vernier. Inspecteur. Service des Feux. » Et tout de suite : « Demain, 17 heures, au Bigorneau. Si personne ne m'explique, je signe la fermeture. »",

@@ -7,6 +7,7 @@
       "lieu": "Le Trou-qui-Siffle",
       "decor": "trou-qui-siffle",
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "On y est. C'est un trou dans le pied de la montagne, haut comme une porte de grange. Il en sort du vent, tout le temps, et ce vent siffle une note. Une seule, grave, tenue. Le la de Tournebise. Quand ça monte au si, on ne bouge plus. Je ne sais pas reconnaître un si. J'espère que ça s'entend.",
         "Dedans, c'est noir. Pas sombre : noir. Je n'aime pas le noir, tu le sais : à la maison, je m'arrange toujours pour m'endormir avant que tu éteignes l'écran. Brouillon, lui, regarde le trou avec intérêt. Et je remarque une chose : dans le noir, il se voit. Il n'éclaire pas. Mais il est moins noir que le reste, comme un drap dans une chambre, la nuit."
@@ -39,6 +40,7 @@
     "ch8-derriere": {
       "type": "attente",
       "humeur": "peur",
+      "personnage": "brouillon", "expression": "peur",
       "duree_min": 10,
       "duree_max": 15,
       "pendant": "Pilou avance à tâtons, un nuage dans le dos",
@@ -51,6 +53,7 @@
     "ch8-echo": {
       "type": "choix",
       "humeur": "joie",
+      "personnage": "brouillon",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "On a fait une découverte. J'ai éternué, à cause du courant d'air, et la galerie a éternué après moi. Trois fois. Brouillon s'est figé. Puis il a essayé : « Goutte ! » Et le noir a répondu : « outte… outte… outte… » Il a été fou de joie pendant dix secondes. Puis inquiet : « Qui ? »",
@@ -137,6 +140,7 @@
     "ch8-oreiller": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "J'ai demandé à Brouillon. Il a dit oui avant la fin de ma phrase. Il est monté au plafond et elles se sont toutes couchées contre lui, à trois cents, avec des soupirs. Il va passer la nuit là-haut, aplati, immobile, très digne. Il y laissera sûrement un bord : trois cents chauves-souris, ça pèse. Il m'a soufflé, tout bas, pour ne pas les réveiller : « Ronflent en papier. » Marché conclu : demain, elles viennent avec nous."
       ],

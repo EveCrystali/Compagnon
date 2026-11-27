@@ -17,6 +17,7 @@
       "type": "choix",
       "checkpoint": true,
       "humeur": "peur",
+      "personnage": "brouillon",
       "texte": [
         "Cent pas dans le vent, sur la corniche. Moi, je suis lourd, avec ma casserole : je passerai courbé. C'est pour lui que j'ai peur. Tout en moi voudrait le prendre dans mes bras et le serrer très fort, tout le long. Je sais ce qu'a dit Tournebise, un nuage qu'on serre… Mais c'est facile à dire, sur un toit. Brouillon regarde le fleuve. Il attend que je décide. Comment on traverse ?"
       ],
@@ -46,6 +47,7 @@
     "ch9-dechire": {
       "type": "recit",
       "humeur": "peur",
+      "personnage": "tournebise",
       "texte": [
         "Je l'ai serré de toutes mes forces et je suis entré dans le vent. Au trentième pas, j'ai senti que mes bras se refermaient sur rien. Il filait. Entre mes doigts, par les côtés, par en dessous, en longues mèches. Plus je serrais, plus il filait. Quand j'ai rouvert les bras, il n'y avait plus personne dedans. Et dans la salle, partout, des petits bouts de lui qui tournaient, blancs dans le noir. Tournebise l'avait dit. Je l'avais entendu."
       ],
@@ -77,6 +79,7 @@
     "ch9-aident": {
       "type": "recit",
       "humeur": "joie",
+      "personnage": "froisseuses",
       "texte": [
         "J'ai crié vers le plafond, et le plafond est descendu. Trois cents Froisseuses, d'un seul bloc, dans un bruit de journal qu'on secoue. Elles ne voient rien, mais elles entendent tout, même un bout de nuage qui tourne. Elles les ont rabattus un par un avec leurs ailes, comme des chiens de berger, jusqu'à ma casserole. Six. Le compte y est. La plus vieille m'a dit : « On ne serre pas, petit. On entoure. » Je sais. Maintenant, je sais."
       ],
@@ -93,6 +96,7 @@
     "ch9-remonte": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "effets": [ { "var": "taille", "plus": -1 } ],
       "texte": [
         "Il s'est remonté tout seul, dans la casserole, comme une pâte qui lève. Ça a pris un moment. Il manque un peu de matière, et il ne s'est pas tout à fait remis dans l'ordre : il a une bosse d'un côté, qui ressemble à une oreille. Les nuages n'ont pas d'oreille. Il s'est tâté partout, il s'est compté. Il sait compter jusqu'à deux. Il a dit : « Brouillon un. » Puis il est venu contre moi, et je n'ai pas serré."
@@ -115,6 +119,7 @@
       "type": "choix",
       "lieu": "La cheminée",
       "humeur": "surpris",
+      "personnage": "brouillon",
       "texte": [
         "La lueur, c'est une cheminée. Un puits tout droit dans la roche, avec le jour en haut, très loin, gros comme une pièce de monnaie. Le vent y monte doucement. C'est la sortie. Il y a des prises, des creux, des bosses : ça se grimpe. Moi, il me faudra des heures.",
         "Brouillon, lui, n'a qu'à se laisser monter. Il a regardé le puits, puis moi, puis mes petits bras. Et il a dit : « Brouillon porte Goutte. » Il s'est mis à plat devant moi, comme un tapis. Il veut que je monte dessus. Je ne sais pas s'il est assez gros pour ça. Je ne sais pas si j'ose. Je fais quoi ?"
@@ -136,6 +141,7 @@
     "ch9-lumiere": {
       "type": "attente",
       "humeur": "surpris",
+      "personnage": "brouillon", "expression": "peur",
       "duree_min": 120,
       "duree_max": 150,
       "pendant": "Pilou monte vers le jour",

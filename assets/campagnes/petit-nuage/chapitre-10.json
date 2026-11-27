@@ -7,6 +7,7 @@
       "lieu": "Au-dessus de l'Abreuvoir",
       "decor": "abreuvoir",
       "humeur": "surpris",
+      "personnage": "brouillon",
       "texte": [
         "Ça brille. Et ça boit. C'est un lac. Immense, tout en bas, dans un creux de montagnes. On l'appelle l'Abreuvoir. Et sur le lac, il y a des nuages. Pas dix. Des centaines. Descendus du ciel, le ventre posé sur l'eau, les uns contre les autres, comme un troupeau à la rivière.",
         "Ils boivent. Ça fait un bruit de mille personnes qui soufflent sur leur soupe. Brouillon ne bouge plus. Il ne dit rien. Il n'a pas crié, il n'a pas foncé comme pour les draps. Il regarde, et il s'est mis tout contre moi. C'est eux. Cette fois, c'est vraiment eux. On y est arrivés."
@@ -16,6 +17,7 @@
     "ch10-heure": {
       "type": "hasard",
       "humeur": "neutre",
+      "personnage": "bergeronnette",
       "texte": [
         "J'ai regardé le soleil, et j'ai fait le compte des jours sur mes doigts, ce qui est vite fait. La bergeronnette avait dit : ils repartent à la première gelée. Tournebise avait dit : la veille, ils se serrent. Ils sont serrés. C'est pour cette nuit. On est arrivés le bon jour, de justesse, avec une casserole cabossée et un nuage qui tient debout. Reste à savoir combien d'heures on a devant nous."
       ],
@@ -53,6 +55,7 @@
     "ch10-cafe": {
       "type": "recit",
       "humeur": "determine",
+      "personnage": "brouillon",
       "texte": [
         "J'ai ouvert le sachet de Tournebise et je l'ai vidé d'un coup, à sec, à même la poudre. C'est infect. Ça a le goût d'une gouttière en hiver. Je n'avais pas fini de tousser que mes jambes se sont réveillées avant moi, puis mes yeux, puis mon antenne, qui vibre toute seule. Il avait raison : ça ferait courir un escargot. C'est la dernière nuit, je le bois la dernière nuit. Brouillon m'a regardé, inquiet. J'ai dit : « On ne descend pas. On dévale. »"
       ],
@@ -100,6 +103,7 @@
       "type": "choix",
       "lieu": "La rive de l'Abreuvoir",
       "humeur": "joie",
+      "personnage": "brouillon", "expression": "peur",
       "texte": [
         "On a le temps ! Il est midi, on sera sur la rive dans une heure, et ils ne partent que demain à l'aube. Tu te rends compte ? Tout un après-midi. Je n'ai jamais eu tout un après-midi devant moi de ma vie, sans route à faire, avec quelqu'un.",
         "Brouillon a voulu aller au troupeau tout de suite, puis il a eu peur, puis il a dit : « D'abord Goutte. » D'abord moi. Alors voilà : on a un rocher plat au bord de l'eau, du soleil, et quelques heures. Une seule chose à faire, pas deux. On fait quoi de notre dernier après-midi ?"
@@ -137,6 +141,7 @@
       "type": "choix",
       "lieu": "La rive de l'Abreuvoir",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "texte": [
         "Le soir tombe sur le lac, et on est au bord. De près, ils sont énormes. Le plus petit des grands ferait trente Brouillon. Il y a aussi des jeunes, à peine plus gros que lui, qui jouent entre les pattes des vieux, enfin, entre leurs bords. L'un d'eux est venu le renifler. Il a dit quelque chose en pff. Brouillon a répondu en pff.",
         "Chaque soir, m'a expliqué une sarcelle, les petits vont au bord et rendent un peu d'eau au lac. Trois gouttes, n'importe quoi. C'est comme ça qu'on entre dans le troupeau. C'est maintenant. Les autres petits y vont. Brouillon me regarde, puis eux, puis moi. Comment je l'aide ?"
@@ -177,6 +182,7 @@
     "ch10-reflet": {
       "type": "hasard",
       "humeur": "neutre",
+      "personnage": "brouillon",
       "texte": [
         "Après, le vent est tombé et le lac est devenu lisse comme une vitre. Brouillon est revenu vers moi, au ras de l'eau. Et il s'est arrêté net. Dans le lac, il y avait tout le monde, à l'envers : les grands, immenses, les montagnes, et lui, au milieu. Et moi, sur le bord. Il ne s'était jamais vu. Il est resté longtemps au-dessus de son reflet, à comparer."
       ],
@@ -188,6 +194,7 @@
     "ch10-reflet-menti": {
       "type": "recit",
       "humeur": "triste",
+      "personnage": "brouillon", "expression": "peur",
       "effets": [ { "var": "lien", "plus": -2 } ],
       "texte": [
         "Il a dit : « Goutte pas grande. » Puis : « Brouillon petit. » Il a tout compris d'un coup, là, dans l'eau. Que je n'avais pas grandi. Que c'était lui, depuis le début. « Goutte a dit faux. » J'ai dit oui. Que je ne voulais pas qu'il ait peur. Il a réfléchi. « Brouillon peur quand même. Peur tout seul. » Il n'était pas fâché. C'est pire. Il est resté à côté de moi, mais un peu moins près qu'avant, de l'épaisseur d'une feuille."
@@ -197,6 +204,7 @@
     "ch10-reflet-vrai": {
       "type": "recit",
       "humeur": "tendre",
+      "personnage": "brouillon",
       "effets": [ { "var": "lien", "plus": 1 } ],
       "texte": [
         "Il a dit : « Petit. » J'ai dit oui. Il s'est comparé aux grands, puis à moi, puis encore aux grands. « Goutte avait dit. » Oui. À l'arbre mort, je le lui avais dit. Il a hoché tout son corps. Puis : « Goutte dit aussi Brouillon grand, après ? » Je ne lui ai jamais dit ça. Mais j'ai regardé les vieux, larges comme des collines, qui ont tous eu sa taille un jour. J'ai dit oui. Et ça non plus, ce n'était pas un mensonge."
@@ -206,6 +214,7 @@
     "ch10-question": {
       "type": "choix",
       "humeur": "triste",
+      "personnage": "brouillon",
       "texte": [
         "Il fait presque nuit. Les grands se serrent, c'est le signe. Brouillon fait des allers-retours entre eux et moi, il n'arrive pas à choisir un côté. Et tout à l'heure, il a posé la question que j'attendais depuis les ronces, je crois. Il a montré le troupeau, puis le ciel, puis moi : « Goutte vient aussi ? »",
         "Il le croit possible. Pour lui, je suis une goutte de pluie qui a mis du temps à remonter, c'est tout. Il a déjà repéré une place à côté de la sienne. Je n'ai pas le droit de rater cette réponse-là. Qu'est-ce que je lui dis ?"
@@ -219,6 +228,7 @@
     "ch10-draps": {
       "type": "recit",
       "humeur": "malice",
+      "personnage": "brouillon",
       "texte": [
         "Avant de répondre, j'ai avoué. Les draps, dans le pré. La grosse voix. C'était moi, caché derrière le plus grand. Il m'a regardé un moment, et d'un coup, son bruit de bulle : « Brouillon savait. Draps parlent pas. Goutte parle drap très mal. » Il le savait depuis le début, et il avait fait semblant, pour me faire plaisir. Ensuite seulement, j'ai répondu à sa question. Que non. Que moi, je reste en bas. Il a dit : « Savait aussi. »"
       ],
