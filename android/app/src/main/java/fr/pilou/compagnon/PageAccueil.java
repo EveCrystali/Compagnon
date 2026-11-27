@@ -286,13 +286,17 @@ final class PageAccueil extends Page {
         else pilou.stade(stade);
         stadeVu = stade;
         Soins.EtatSoins s = soins(e, stade, maintenant);
-        niveau.setText("Niveau " + n + " · " + Butin.titre(n));
+        // Même titre que le bandeau : celui que Pilou porte, sinon celui du niveau.
+        String titrePorte = Boutique.nomTitre(Gains.porte(app, e).get(Boutique.TITRE));
+        niveau.setText("Niveau " + n + " · " + (titrePorte != null ? titrePorte : Butin.titre(n)));
         barre.part((total - bas) / (float) Math.max(1, haut - bas));
         int attente = Gains.enAttente(app);
         String humeur = Soins.amadoue(s) ? "\n☁  Pilou se laisse amadouer : gains ×0,6"
                 : Soins.boudeur(s) ? "\n☁  Pilou boude : gains ×0,6" : "";
         String energie = e.expedition != null && e.expedition.energie >= 0 ? "   ·   ⚡ " + e.expedition.energie : "";
-        xp.setText(total + " / " + haut + " xp" + energie + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
+        // Même lecture que le bandeau (et le PC) : l'XP dans le niveau, puis ce qu'il manque pour le suivant.
+        String dansNiveau = Math.max(0, total - bas) + " / " + Math.max(1, haut - bas) + " xp · niv " + (n + 1) + " dans " + Math.max(0, haut - total) + " xp";
+        xp.setText(dansNiveau + energie + (attente > 0 ? "   ·   +" + attente + " en route vers le PC" : "") + humeur);
         expedition(e, appaire, maintenant, p);
 
         if (!appaire) {
