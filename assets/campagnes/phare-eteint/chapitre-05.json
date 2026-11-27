@@ -1,0 +1,171 @@
+{
+  "chapitre": "ch5a",
+  "noeuds": {
+    "ch5a-vitrine": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "L'atelier de Basile",
+      "decor": "atelier-basile",
+      "humeur": "surpris",
+      "texte": [
+        "Deux heures pile : Basile a rouvert. Sa boutique s'appelle « Basile : horlogerie, mécanique fine, réparations de tout ». Dedans, deux cents pendules, et pas deux d'accord. Ici il est midi, minuit, quatre heures dix et l'heure du thé, tout ça en même temps.",
+        "Basile est à son établi, loupe à l'œil, de la poussière dorée jusque dans les sourcils. Au mur, derrière lui, un tableau de clefs étiquetées. J'en vois une grosse, tout en haut : « D.-C. service ». Dent-Creuse. Et au fond, sur une étagère, une forme ronde sous un drap. Il lève la tête : « C'est pour une réparation ? » Je l'aborde comment ?"
+      ],
+      "options": [
+        { "id": "franc", "libelle": "Demande-lui la clef du phare, franchement", "vers": "ch5a-franc" },
+        { "id": "billet", "libelle": "Pose le billet de cette nuit sur son établi", "vers": "ch5a-billet", "si": { "objet": "billet" } },
+        { "id": "ruse", "libelle": "Dis que ta boussole est détraquée, et ouvre l'œil", "vers": "ch5a-ruse" }
+      ]
+    },
+    "ch5a-franc": {
+      "type": "recit",
+      "humeur": "neutre",
+      "texte": [
+        "J'ai dit : « Je voudrais la clef de la Dent-Creuse. » Il a posé sa pince si doucement que ça faisait peur. « La clef de service appartient au Service. Moi, je ne monte là-haut que pour graisser la machine, et je n'y ai pas mis les pieds depuis… longtemps. » Puis il s'est mis à trier des vis par taille, très vite, des vis qui étaient déjà triées. Et il n'a même pas eu l'air surpris."
+      ],
+      "suite": "ch5a-sonnette"
+    },
+    "ch5a-billet": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "drapeau": "c-limaille" } ],
+      "texte": [
+        "J'ai déplié le billet sur l'établi. « Repars à la prochaine marée. » La poussière du pli a brillé sous sa lampe, pareille à celle de ses manches. De la limaille de laiton. Basile est devenu de la couleur de son papier.",
+        "« Ce n'est pas… Je ne voulais pas vous faire peur. Enfin si. Un peu. » Il a retiré sa loupe. « Je voulais qu'on laisse Anselme en paix. Si on fouille, on trouvera des choses qui lui feront du mal. » Quelles choses ? Il a secoué la tête et m'a rendu le billet plié en quatre, bien proprement, comme on rend un objet réparé."
+      ],
+      "suite": "ch5a-sonnette"
+    },
+    "ch5a-ruse": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "J'ai sorti ma boussole, celle qui indique surtout l'heure du goûter. Basile l'a prise entre deux doigts et l'a regardée à la loupe, ravi : enfin un malade intéressant. Moi, pendant ce temps, j'ai regardé le reste. Les crayons gras, taillés fin comme des aiguilles. La limaille dorée partout : du laiton. Un gros registre noir, « Travaux », ouvert près de la caisse. Et sous le drap du fond, quelque chose de rond, grand comme une assiette."
+      ],
+      "suite": "ch5a-sonnette"
+    },
+    "ch5a-sonnette": {
+      "type": "choix",
+      "humeur": "malice",
+      "texte": [
+        "Ding ! La porte. C'est Perrine, le coucou de l'auberge sous le bras : « Il chante faux, Basile, et à des heures indécentes. » Basile part vers elle en s'essuyant les mains. Je crois même qu'elle m'a fait un clin d'œil. J'ai une minute, seul au fond de l'atelier. Deux choses me démangent : le drap sur l'étagère, et le registre noir près de la caisse. Une seule. Laquelle ?"
+      ],
+      "options": [
+        { "id": "drap", "libelle": "Soulève le drap", "vers": "ch5a-drap" },
+        { "id": "registre", "libelle": "Lis le registre", "vers": "ch5a-registre" }
+      ]
+    },
+    "ch5a-drap": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "k-basile" } ],
+      "texte": [
+        "Sous le drap : un grand cadran de laiton, gradué, superbe. Gravé au dos : « Phare de la Dent-Creuse : cadran de réglage. » La pièce qui règle le feu est donc ici, et pas là-haut.",
+        "À côté de chaque cran, il y a un petit point en relief, soudé de frais. La moitié du cadran est faite, l'autre attend. Dessous, un croquis au crayon fin : « Repères au toucher. Pour A. Ne rien lui dire. » Des repères au toucher. Qui a besoin de lire un cadran avec ses doigts ? J'ai rabattu le drap. Basile revenait."
+      ],
+      "suite": "ch5a-patience"
+    },
+    "ch5a-registre": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-jeudi" } ],
+      "texte": [
+        "Le registre « Travaux », à la page de la semaine dernière. « Jeudi. Dent-Creuse, pendant la sieste d'A. Cadran de réglage démonté, emporté pour gravure. Posé le cadran de rechange en fer-blanc. Pas eu le temps d'essayer le feu : la marée. À vérifier. » Et « à vérifier » est souligné trois fois, d'un trait de plus en plus appuyé.",
+        "Jeudi. C'est la veille de la première nuit noire. Et ce « à vérifier », il ne l'a jamais vérifié : depuis vendredi, la porte du phare est barrée. Basile revenait, le coucou dans les bras."
+      ],
+      "suite": "ch5a-patience"
+    },
+    "ch5a-patience": {
+      "type": "attente",
+      "humeur": "neutre",
+      "texte": [
+        "Basile a posé le coucou sur l'établi et m'a dit d'attendre : « J'en ai pour dix minutes, il a juste avalé une plume. » Dix minutes à faire l'innocent au milieu de deux cents pendules. La clef « D.-C. service » pend toujours là-haut, à son clou. Je réfléchis à la façon de repartir avec."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou patiente au milieu des pendules",
+      "tenue": "attend",
+      "suite": "ch5a-clef"
+    },
+    "ch5a-clef": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "Basile a le dos tourné, le nez dans le coucou. Dans mon baluchon, j'ai une ficelle et un hameçon ramassé sur le quai. La clef pend à deux mètres. Un bon lancer, et je la décroche sans bruit. Mais c'est du vol, soyons honnêtes. L'autre façon, c'est de me planter devant lui et de dire : « Basile, il faut qu'on parle du phare. Pour de vrai. » Ça me fait plus peur que le lancer. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "ficelle", "libelle": "Décroche la clef à la ficelle", "vers": "ch5a-ficelle" },
+        { "id": "face", "libelle": "Parle-lui en face", "vers": "ch5a-face" }
+      ]
+    },
+    "ch5a-ficelle": {
+      "type": "epreuve",
+      "humeur": "malice",
+      "texte": [
+        "D'accord, à la ficelle. Je fais tourner l'hameçon au-dessus de ma tête, comme un cow-boy de poche. Il faut viser l'anneau de la clef. Pas le clou, pas le tableau, et surtout pas la pendule à carillon juste à côté, celle qui réveillerait un cimetière. Basile farfouille toujours dans son coucou. J'ai droit à un lancer, peut-être deux. Vise avec moi. Doucement."
+      ],
+      "jeu": "visee",
+      "difficulte": 2,
+      "reussite": "ch5a-clef-ok",
+      "echec": "ch5a-clef-rate"
+    },
+    "ch5a-clef-ok": {
+      "type": "recit",
+      "humeur": "joie",
+      "effets": [ { "objet": "clef-service", "donne": true } ],
+      "texte": [
+        "Dans l'anneau, du premier coup ! La clef a glissé le long de la ficelle comme une perle et je l'ai reçue dans les bras. Je suis sorti à reculons, la clef sur l'épaule comme une rame. Basile n'a rien vu. Enfin, je croyais. Arrivé sur le trottoir, j'ai entendu sa voix, toute petite, derrière la vitre : « Dites-lui… Non. Ne lui dites rien. » Il avait donc vu. Et il m'a laissé faire."
+      ],
+      "suite": "ch5a-dehors"
+    },
+    "ch5a-clef-rate": {
+      "type": "recit",
+      "humeur": "peur",
+      "effets": [ { "objet": "clef-service", "donne": true }, { "drapeau": "basile-prive" }, { "drapeau": "c-jeudi" } ],
+      "texte": [
+        "L'hameçon a pris le clou, le clou a lâché, et la clef est tombée sur le carillon. Deux cents pendules ont sursauté. Basile aussi. Il m'a trouvé au milieu de l'atelier, une ficelle à la main, avec l'air de quelqu'un qui n'a rien fait. Il a ramassé la clef.",
+        "Il me l'a tendue. « Prenez-la. Allez voir s'il va bien. Moi, je n'ose pas. » Sa main tremblait. « J'ai peut-être fait une bêtise là-haut, jeudi. Je n'ai pas eu le temps d'essayer le feu, la marée montait. Si vous voyez la machine… vous me direz ? » J'ai promis. Je suis sorti avec la clef sur l'épaule, et beaucoup plus de questions qu'en entrant."
+      ],
+      "suite": "ch5a-dehors"
+    },
+    "ch5a-face": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "objet": "clef-service", "donne": true }, { "drapeau": "basile-prive" }, { "drapeau": "c-jeudi" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Je me suis planté devant l'établi et j'ai dit ma phrase. Il a mis longtemps à lever les yeux. Puis il est monté sur un tabouret, il a décroché la clef lui-même et il me l'a posée dans les bras. « Allez voir s'il va bien. Moi, je n'ose pas. »",
+        "J'ai demandé de quoi il avait peur. « J'ai peut-être fait une bêtise là-haut, jeudi. Je voulais l'aider sans qu'il le sache. Je n'ai pas eu le temps d'essayer le feu, la marée montait. Et le lendemain soir, plus de lumière. Si vous voyez la machine, vous me direz ? » J'ai dit oui. C'est la première personne de Trébrume qui me demande quelque chose au lieu de me cacher quelque chose."
+      ],
+      "suite": "ch5a-dehors"
+    },
+    "ch5a-dehors": {
+      "type": "choix",
+      "lieu": "La rue",
+      "decor": "place-mairie",
+      "humeur": "malice",
+      "texte": [
+        "Me voilà dans la rue avec une clef plus longue que mes bras. Discret comme un clocher. Et devine : les petits pas sont revenus. Depuis hier, quelqu'un me suit partout sans jamais m'attaquer ni me parler. Ça finit par ressembler à de la timidité.",
+        "Je peux m'arrêter à la fontaine et dire tout haut, comme si je me parlais, que j'ai une clef et que je traverse ce soir. Ou bien semer mon ombre dans les ruelles, pour que personne au monde ne sache où va cette clef. Tu ferais quoi ?"
+      ],
+      "options": [
+        { "id": "haut", "libelle": "Dis tout haut où tu vas ce soir", "vers": "ch5a-fin", "effets": [ { "drapeau": "rdv-lison" }, { "var": "confiance", "plus": 1 } ] },
+        { "id": "semer", "libelle": "Sème ton ombre dans les ruelles", "vers": "ch5a-fin", "effets": [ { "var": "courage", "plus": 1 } ] }
+      ]
+    },
+    "ch5a-fin": {
+      "type": "attente",
+      "lieu": "Le quai",
+      "decor": "port-trebrume",
+      "humeur": "determine",
+      "texte": [
+        "La mer se retire à 18 h 40. Je me suis installé sous une barque retournée, au bout du quai, la clef contre moi. Le phare n'a pas gémi de la journée : la brume s'était levée. C'est drôle, il ne gémit que par brouillard. Comme le ferait une corne de brume.",
+        "Ce soir, j'aurai le Passe-Pied et la clef d'une petite porte de fer. Et derrière, quelqu'un qui a barré la grande, bouché la serrure, et qui ne veut voir personne. Dis-moi, toi : est-ce qu'on a le droit d'entrer chez les gens qui se barricadent ?"
+      ],
+      "duree_min": 120,
+      "duree_max": 150,
+      "pendant": "Pilou attend la basse mer sous une barque",
+      "tenue": "attend",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch6a-traversee"
+    }
+  }
+}

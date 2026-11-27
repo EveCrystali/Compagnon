@@ -1,0 +1,154 @@
+{
+  "chapitre": "ch5b",
+  "noeuds": {
+    "ch5b-greve": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le Souffleur",
+      "decor": "grotte-souffleur",
+      "humeur": "peur",
+      "texte": [
+        "La mer est descendue, et moi aussi. Me voilà sur la grève, devant le Souffleur. La grotte respire. Plus un petit ronflement, tout au fond, chaque fois que la vague se retire. Je vais entrer dans quelque chose qui ronfle.",
+        "À l'intérieur, sur le sable mouillé : le canot, tiré au sec. Et une lanterne posée sur un rocher, qui éclaire un grand dos. C'est Tudal, le pêcheur. Il décharge des bidons, un sous chaque bras, et il les porte vers le fond de la grotte. Je peux rester caché derrière le canot et regarder ce qu'il fabrique. Ou l'appeler, bien en face, les mains vides. Il est très grand, tu sais."
+      ],
+      "options": [
+        { "id": "observer", "libelle": "Reste caché et observe", "vers": "ch5b-observe" },
+        { "id": "appeler", "libelle": "Appelle-le, les mains vides", "vers": "ch5b-appelle" }
+      ]
+    },
+    "ch5b-observe": {
+      "type": "attente",
+      "humeur": "malice",
+      "texte": [
+        "Je me cache derrière le canot. Au fond de la grotte, il y a un conduit dans le plafond, un trou noir d'où pend une corde, avec un panier au bout. Tudal y pose deux bidons, tire trois fois sur une ficelle, et attend. Il grommelle : « Quatre nuits que tu boudes, vieille bernique. » Puis il s'assoit sur un bidon et sort sa pipe. J'attends aussi, sans bouger un cil. Le problème, c'est l'iode : ça me chatouille le nez. Si j'éternue, tu ne m'en voudras pas ?"
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou se cache derrière le canot",
+      "tenue": "cache",
+      "suite": "ch5b-tudal"
+    },
+    "ch5b-appelle": {
+      "type": "attente",
+      "humeur": "determine",
+      "effets": [ { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "J'ai dit : « Bonsoir ! » Tudal a sursauté, lâché un bidon sur son pied, et dit un mot que je ne répéterai pas. Puis il m'a regardé, tout petit sur le sable, les mains en l'air. « La tache d'encre. Évidemment. » Il a pointé un doigt gros comme moi. « Tu bouges pas. Je finis, et après on cause. » Il porte ses bidons vers un trou du plafond, d'où pend un panier au bout d'une corde. J'attends, assis sur un galet."
+      ],
+      "duree_min": 5,
+      "duree_max": 8,
+      "pendant": "Pilou attend que Tudal ait fini",
+      "tenue": "attend",
+      "suite": "ch5b-tudal"
+    },
+    "ch5b-tudal": {
+      "type": "choix",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "k-tudal" } ],
+      "texte": [
+        "Nous voilà face à face : lui assis sur un bidon, moi debout sur un galet pour gagner dix centimètres. Il a parlé le premier. « C'est de l'huile de lampe. Le Service a coupé les livraisons au printemps, vu qu'ils veulent le fermer. Alors c'est moi qui paie. Et pour payer, je pêche des homards que j'ai pas le droit de pêcher. Voilà. T'iras le dire aux gendarmes ? » J'ai fait non de la tête.",
+        "Je sens qu'il répondra à une question, pas à dix. J'en ai deux qui me brûlent. Pourquoi il a l'air d'en vouloir à Anselme, lui qui paie son huile. Et qui tire ce panier, là-haut, puisque le phare est censé ne répondre à personne. Laquelle je pose ?"
+      ],
+      "options": [
+        { "id": "contre", "libelle": "« Qu'est-ce que tu as contre Anselme ? »", "vers": "ch5b-temoin" },
+        { "id": "panier", "libelle": "« Qui tire le panier, là-haut ? »", "vers": "ch5b-panier" }
+      ]
+    },
+    "ch5b-temoin": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-temoin" } ],
+      "texte": [
+        "« Contre lui ? Rien. C'est contre moi que j'en ai. » Il a craché par terre. « Jeudi, dans la nuit, j'étais dehors avec mes casiers. Brume à couper. Je cherche la Dent : deux éclats, un long. Et je vois trois éclats. Trois, c'est Roche-Douce, dix milles au nord. Je me crois là-bas, je vire, et je m'ouvre le flanc sur la Mâchoire. »",
+        "« À l'aube, je suis allé gueuler sous sa tour. Le soir même, il n'a pas allumé. Ni le lendemain. » Il a regardé ses mains. « Trente ans qu'il nous ramène tous, et moi je lui hurle dessus pour une nuit. C'est peut-être bien moi qui l'ai éteint, ce phare. » La grotte a soupiré à sa place."
+      ],
+      "suite": "ch5b-boyau"
+    },
+    "ch5b-panier": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "« Qui tu veux que ce soit ? Lui. Ou la petite. » Il a soufflé sa fumée vers le trou. « Il est là-haut. Il mange, il sonne sa corne quand la brume tombe, et il boude. Il ouvre plus à personne. Même plus à moi, et pourtant je frappe mes trois coups, comme toujours. »",
+        "J'ai demandé qui était la petite. « Lison. La fille du patron de la Tape-Dur. Son père est au large avec les autres, il rentre demain soir. Elle passe par ce boyau-là, comme un furet. Elle te suit depuis hier, t'as pas remarqué ? Si elle t'a pas encore jeté à la mer, c'est que tu lui plais. Mais va pas lui dire que je sais qu'elle monte. Elle se croit la seule. »"
+      ],
+      "suite": "ch5b-boyau"
+    },
+    "ch5b-boyau": {
+      "type": "choix",
+      "checkpoint": true,
+      "humeur": "peur",
+      "texte": [
+        "Tudal remet son canot à l'eau : « La mer remonte dans une demi-heure. Après, la grotte se remplit. Moi je file avec. » Il m'a montré le conduit : « Le boyau. Trop étroit pour un homme. Pour toi, c'est un boulevard. Traîne pas. » Et il est parti à la rame, en me laissant sa lanterne.",
+        "Au pied du conduit, il y a une caisse en bois que la marée a poussée dans un coin. Sur le couvercle, une étiquette, et dedans quelque chose qui brille. Elle est à moitié dans l'eau, et l'eau revient. Fouiller cette caisse, c'est jouer contre la mer, et c'est elle qui lance les dés. Sinon, je grimpe tout de suite. Qu'est-ce que tu en dis ?"
+      ],
+      "options": [
+        { "id": "grimper", "libelle": "Grimpe tout de suite", "vers": "ch5b-monte" },
+        { "id": "fouiller", "libelle": "Fouille la caisse, vite", "vers": "ch5b-fouille" }
+      ]
+    },
+    "ch5b-fouille": {
+      "type": "epreuve",
+      "humeur": "peur",
+      "texte": [
+        "Je patauge jusqu'à la caisse. L'eau me monte aux genoux, et mes genoux sont très près de ma tête. Une vague arrive, là-bas, à l'entrée de la grotte : une grosse, ou une petite ? D'ici, impossible à dire. Si c'est une petite, j'ai le temps. Si c'est une grosse… Je n'y peux rien : c'est la mer qui décide. Croise les doigts pour moi."
+      ],
+      "jeu": "des",
+      "difficulte": 1,
+      "bonus": "courage",
+      "reussite": "ch5b-caisse",
+      "echec": "ch5b-echec-maree"
+    },
+    "ch5b-caisse": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-jeudi" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Une petite ! J'ai eu le temps. L'étiquette dit : « Basile, horlogerie. Fragile. » Et dedans, dans la paille mouillée, il reste des copeaux dorés, du laiton, et un bon de travail au crayon très fin : « Jeudi. Dent-Creuse. Cadran de réglage démonté pour gravure. Posé cadran de rechange, fer-blanc. Pas essayé le feu : la marée. »",
+        "Jeudi. L'horloger du village est monté là-haut jeudi, il a changé une pièce de la machine, et il est reparti sans essayer le feu. Jeudi, c'est la veille de la première nuit noire. J'ai fourré le bon dans mon baluchon et j'ai couru vers le boyau, parce que la vague suivante, elle, n'avait pas l'air petite du tout."
+      ],
+      "suite": "ch5b-monte"
+    },
+    "ch5b-echec-maree": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "C'était une grosse. Elle a rempli la grotte d'un coup, et elle m'a emporté avec la caisse, la lanterne et ma dignité. C'est Tudal qui m'a repêché, à la sortie, en jurant. Il m'a posé au sec sur la corniche : « Je t'avais dit de pas traîner. » Je suis bleu ciel, presque transparent. La mer lançait les dés, et je savais bien qu'elle triche."
+      ],
+      "repos_min": 45
+    },
+    "ch5b-monte": {
+      "type": "choix",
+      "lieu": "Le boyau",
+      "humeur": "peur",
+      "texte": [
+        "Je suis dans le boyau. Dix mètres plus haut, il se sépare en deux. À gauche : étroit, sec, froid, avec un petit courant d'air qui sent le charbon. À droite : plus large, plus facile, mais les parois sont mouillées, couvertes d'une croûte de sel, et de temps en temps il en sort un grand souffle tiède, avec un bruit de baleine qui dort. En bas, j'entends la mer rentrer dans la grotte. Gauche ou droite ?"
+      ],
+      "options": [
+        { "id": "gauche", "libelle": "À gauche : étroit et sec", "vers": "ch5b-fin" },
+        { "id": "droite", "libelle": "À droite : large et facile", "vers": "ch5b-echec-souffle" }
+      ],
+      "checkpoint": true
+    },
+    "ch5b-echec-souffle": {
+      "type": "echec",
+      "humeur": "triste",
+      "texte": [
+        "À droite, c'était le souffleur lui-même. J'étais à mi-chemin quand la mer est entrée en bas : tout l'air du conduit est remonté d'un coup, et moi avec, comme un bouchon. J'ai été éternué par une falaise. Je suis ressorti par un trou du rocher, et j'ai plané jusqu'à un tas de goémon. Rien de cassé, mais je suis vexé, et salé. Les parois mouillées, le sel, le souffle : tout me le disait."
+      ],
+      "repos_min": 30
+    },
+    "ch5b-fin": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "À gauche. C'est étroit, mais sec, et quelqu'un est passé avant moi : il y a des prises creusées dans la pierre, petites, usées, et tous les trois mètres un coquillage coincé dans une fente, comme pour dire « c'est par ici ». Je grimpe. L'odeur de charbon grandit. Au-dessus de moi, très loin, il y a un trait de lumière jaune, fin comme un cheveu : le tour d'une trappe. Derrière cette trappe, c'est le phare. J'y serai dans un quart d'heure, si mes bras tiennent."
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou grimpe dans le boyau",
+      "tenue": "grimpe",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch6b-puits"
+    }
+  }
+}

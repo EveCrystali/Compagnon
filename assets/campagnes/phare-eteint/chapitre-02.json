@@ -1,0 +1,188 @@
+{
+  "chapitre": "ch2",
+  "noeuds": {
+    "ch2-soupe": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le Bigorneau Qui Tousse",
+      "decor": "auberge-bigorneau",
+      "humeur": "peur",
+      "texte": [
+        "Je suis à l'auberge, Le Bigorneau Qui Tousse, et j'y reste : dehors il n'y a plus que la brume et des pas. Quand je suis entré dans la salle, tout le monde s'est tu. Tu connais ce silence-là ? Celui où même les cuillères attendent. Puis Perrine, la patronne, a lancé : « Une soupe pour le petit bleu ! » et les cuillères sont reparties.",
+        "À la grande table, une dame en gilet strict trie des papiers à en-tête : Odile, la maire. Près de la grande horloge arrêtée, un monsieur maigre, une loupe vissée à l'œil, lui ouvre le ventre avec des tournevis de poupée : Basile, l'horloger. Au portemanteau, un ciré jaune qui goutte. Au fond, Tudal le pêcheur boude devant son verre. Perrine me demande où je veux m'asseoir."
+      ],
+      "options": [
+        { "id": "odile", "libelle": "À la table de la maire", "vers": "ch2-table-odile" },
+        { "id": "basile", "libelle": "Près de l'horloge, à côté de l'horloger", "vers": "ch2-table-basile" }
+      ]
+    },
+    "ch2-table-odile": {
+      "type": "recit",
+      "humeur": "neutre",
+      "texte": [
+        "Odile m'a fait une place en retournant sa pile de papiers, un peu trop vite. Elle a des yeux fatigués et gentils, et des questions pointues. J'ai répondu que j'aimais les phares. « Celui-ci coûte cher, vous savez. Et il y a des décisions pénibles qu'on ne repousse pas éternellement. » Elle a dit ça en regardant le ciré jaune.",
+        "Sur une feuille mal retournée, j'ai lu à l'envers : « Service des Feux », et un mot tamponné en travers, en grosses lettres. Je lis très bien à l'envers, c'est un talent d'encre. Mais elle a posé son coude dessus. « Mangez tant que c'est chaud. » Puis, plus bas, presque pour elle : « Et ne traversez pas demain. Laissez ce pauvre homme tranquille. »"
+      ],
+      "suite": "ch2-nuit"
+    },
+    "ch2-table-basile": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Basile travaille avec des gestes de moineau. Il a un crayon très fin derrière l'oreille et de la poussière dorée plein les manches : on dirait qu'il a serré la main d'un trésor. Je lui ai demandé si l'horloge de l'auberge était très malade. « Elle retarde par timidité. »",
+        "Alors j'ai dit le mot phare, juste pour voir. Sa vis lui a sauté des doigts et a roulé sous la table. Il s'est mis à quatre pattes pour la chercher, longtemps, et d'en dessous il a dit : « La mécanique de là-haut, c'est du solide. Ça ne se dérègle pas tout seul. » Personne ne lui avait parlé de mécanique déréglée. Moi, j'avais juste dit phare."
+      ],
+      "suite": "ch2-nuit"
+    },
+    "ch2-nuit": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "La soupe est finie. Perrine me propose une chambre sous le toit : « J'ai de la place, mes pensionnaires sont au large. Les six bateaux ne rentrent que mercredi soir. » Seulement la lettre dit de ne me fier à personne, et ici tout le monde me regarde par-dessus son bol. Sur le quai, j'ai vu un hangar à bateaux entrouvert. Je dors où ?"
+      ],
+      "options": [
+        { "id": "chambre", "libelle": "Prends la chambre : autant les voir venir", "vers": "ch2-chambre" },
+        { "id": "hangar", "libelle": "Va au hangar : obéis à la lettre", "vers": "ch2-hangar" }
+      ]
+    },
+    "ch2-chambre": {
+      "type": "attente",
+      "lieu": "La chambre sous le toit",
+      "decor": "guet-de-nuit",
+      "humeur": "fatigue",
+      "texte": [
+        "La chambre est grande comme un tiroir, et j'aime bien les tiroirs. Un édredon rouge, une chandelle, et un carreau qui donne pile sur la mer. Perrine m'a monté un bol de soupe en plus. En redescendant, elle a marmonné : « J'en fais toujours trop, c'est bête. » Je coince la chaise sous la poignée et je m'installe au carreau. Si quelque chose bouge cette nuit du côté du phare, je le verrai."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou s'installe sous le toit",
+      "tenue": "attend",
+      "suite": "ch2-billet"
+    },
+    "ch2-hangar": {
+      "type": "attente",
+      "lieu": "Le hangar à bateaux",
+      "decor": "guet-de-nuit",
+      "humeur": "peur",
+      "texte": [
+        "Le hangar sent le goudron, la corde mouillée et le poisson d'avant-hier. Je me suis fait un nid dans un rouleau de filet, entre une ancre et une bouée qui me dévisage. Un carreau cassé, juste à ma hauteur, donne sur le quai et sur la mer. J'allume ma chandelle et je m'installe. Si quelque chose bouge cette nuit du côté du phare, je le verrai."
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou se cache dans le hangar",
+      "tenue": "cache",
+      "suite": "ch2-bidons"
+    },
+    "ch2-billet": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Tu ne vas pas aimer. Je regardais la mer quand j'ai entendu un frottement, derrière moi. Sous la porte, quelqu'un a glissé un papier plié en deux. J'ai attendu que mes jambes reviennent, puis j'ai lu : « Repars à la prochaine marée. Le phare ne te regarde pas. » Écrit au crayon, en petites lettres penchées.",
+        "Dans le couloir, un pas s'éloigne, pas pressé du tout. Je peux ouvrir la porte tout de suite et voir qui c'est. Ou bien regarder ce billet de très près : un papier, pour quelqu'un comme moi, ça raconte bien plus que ce qui est écrit dessus. Je fais quoi ?"
+      ],
+      "options": [
+        { "id": "porte", "libelle": "Ouvre la porte, vite !", "vers": "ch2-billet-porte" },
+        { "id": "loupe", "libelle": "Examine le billet de près", "vers": "ch2-billet-loupe" }
+      ]
+    },
+    "ch2-billet-porte": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "objet": "billet", "donne": true }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "J'ai retiré la chaise, tourné la poignée en me pendant après, et bondi dans le couloir. Vide. En bas, la porte de la salle se refermait doucement. Je suis descendu : Odile rangeait ses papiers, Basile revissait l'horloge, Tudal finissait son verre, et le ciré jaune n'était plus au portemanteau. Quelqu'un ment très bien dans cette pièce. Je garde le billet : c'est ma deuxième lettre sans timbre de la journée."
+      ],
+      "suite": "ch2-guet"
+    },
+    "ch2-billet-loupe": {
+      "type": "recit",
+      "humeur": "malice",
+      "effets": [ { "objet": "billet", "donne": true }, { "drapeau": "c-limaille" } ],
+      "texte": [
+        "Je l'ai posé sous la chandelle et j'ai fait ce que je sais faire : lire le papier, pas les mots. Le crayon est gras, taillé très, très fin, comme pour dessiner des choses minuscules. Et dans le pli, ça brille. Une poussière dorée, lourde, qui ne s'envole pas quand je souffle. C'est du métal. Celui qui veut que je reparte a les mains pleines d'un or qui n'en est pas."
+      ],
+      "suite": "ch2-guet"
+    },
+    "ch2-bidons": {
+      "type": "choix",
+      "humeur": "surpris",
+      "texte": [
+        "Il se passe quelque chose sur le quai. Par mon carreau, je vois Tudal, le grand pêcheur. Il porte deux bidons. Il les descend dans un canot, regarde à droite, à gauche, et il rame. Vers le phare. En pleine nuit, à marée haute, dans la brume, sans lanterne. Les honnêtes gens allument une lanterne, non ?",
+        "Je peux le suivre des yeux en courant le long de la jetée, au risque qu'il me voie. Ou profiter qu'il est loin pour fouiller son coin de hangar, celui avec la grande bâche, où il a pris ses bidons. Qu'est-ce que tu ferais ?"
+      ],
+      "options": [
+        { "id": "suivre", "libelle": "Suis-le le long de la jetée", "vers": "ch2-bidons-suit" },
+        { "id": "fouiller", "libelle": "Fouille son coin tant qu'il est loin", "vers": "ch2-bidons-fouille" }
+      ]
+    },
+    "ch2-bidons-suit": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "drapeau": "trois-coups" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "J'ai couru jusqu'au bout de la jetée, au ras des bittes pour ne pas me faire voir. Tudal a accosté au rocher et monté ses bidons jusqu'à la porte du phare. Et là, il a frappé. Trois coups lents, que l'eau m'a portés : toc, toc, toc. Personne n'a ouvert. Il a posé les bidons sur le seuil et il est reparti. On ne frappe pas chez les gens qu'on cambriole."
+      ],
+      "suite": "ch2-guet"
+    },
+    "ch2-bidons-fouille": {
+      "type": "recit",
+      "humeur": "malice",
+      "texte": [
+        "Sous la bâche : des casiers à homards, une dizaine, encore mouillés de ce soir. Or la pêche au homard est fermée jusqu'au retour des six bateaux. Sur une planche, des comptes à la craie : « Homards : 14. Huile : 6 bidons. Reste : rien. » Tudal braconne la nuit, et tout ce qu'il gagne part en huile. De l'huile pour quoi faire ? J'ai remis la bâche, avec une petite trace bleue dessus. Zut."
+      ],
+      "suite": "ch2-guet"
+    },
+    "ch2-guet": {
+      "type": "epreuve",
+      "decor": "guet-de-nuit",
+      "humeur": "peur",
+      "texte": [
+        "Minuit passé. Je veille derrière mon carreau et, écoute bien, il y a une lueur dans le phare. Toute petite, jaune, à une fenêtre du milieu. Un phare éteint, un gardien qui ne répond plus, et quelqu'un qui s'y promène avec une bougie.",
+        "Et ce n'est pas tout. Les pas légers sont revenus. Ils viennent droit sur moi, sur les pavés. Si je reste dans la lumière de ma chandelle, on me verra comme en plein jour. Il faut que je la souffle et que je me baisse pile au bon moment : ni trop tôt, ni trop tard. Tu m'aides ?"
+      ],
+      "jeu": "reflexe",
+      "difficulte": 1,
+      "bonus": "courage",
+      "reussite": "ch2-guet-ok",
+      "echec": "ch2-guet-rate"
+    },
+    "ch2-guet-ok": {
+      "type": "choix",
+      "humeur": "tendre",
+      "texte": [
+        "Soufflée, baissé, invisible. Je suis très fort quand tu m'aides. La silhouette s'est arrêtée sur les pavés, juste en face, et je l'ai vue comme je te vois : petite, une natte, des bottes jaunes trop grandes. Un enfant ! Elle a regardé vers le phare, longtemps. Puis elle a posé quelque chose sur la borne d'en face, bien en vue de mon carreau, et elle a filé.",
+        "C'est un coquillage. Rose, lisse, posé bien droit, exprès. Un cadeau ? Un piège ? Une façon de dire bonjour quand on n'a pas le droit de parler ? Je sors le chercher, ou je le laisse où il est ?"
+      ],
+      "options": [
+        { "id": "prendre", "libelle": "Va le chercher", "vers": "ch2-fin", "effets": [ { "objet": "coquillage", "donne": true }, { "var": "confiance", "plus": 1 } ] },
+        { "id": "laisser", "libelle": "Laisse-le : c'est peut-être un piège", "vers": "ch2-fin" }
+      ]
+    },
+    "ch2-guet-rate": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Raté. J'ai soufflé la chandelle, mais en me baissant j'ai renversé quelque chose qui a fait un vacarme de casserole. Dehors, les pas se sont figés. J'ai juste eu le temps de voir une petite ombre détaler dans la brume. Et là-bas, dans le phare, la lueur s'est éteinte d'un coup.",
+        "Maintenant tout est noir, et tout Trébrume sait que je veille. Mais l'ombre n'est pas partie loin : je sens qu'elle écoute, quelque part derrière les casiers. Je lui dis quelque chose, ou je ne bouge plus ?"
+      ],
+      "options": [
+        { "id": "ami", "libelle": "Dis tout bas : « Je suis un ami »", "vers": "ch2-fin", "effets": [ { "var": "confiance", "plus": 1 } ] },
+        { "id": "silence", "libelle": "Ne bouge plus, ne dis rien", "vers": "ch2-fin" }
+      ]
+    },
+    "ch2-fin": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Je ne dormirai pas. Vers deux heures, la petite lueur est reparue dans le phare : elle est montée tout en haut, elle a fait le tour de la lanterne sans l'allumer, puis elle est redescendue. Comme quelqu'un qui vient voir si une chose cassée est toujours cassée.",
+        "La mer se retire à 6 h 10. Je vais veiller jusque-là, et à la première pierre sèche, je traverse. Un phare vide ne gémit pas et n'allume pas de bougie. Donc il n'est pas vide. Alors qui est là-dedans ? Et pourquoi est-ce qu'il n'ouvre à personne ?"
+      ],
+      "duree_min": 120,
+      "duree_max": 150,
+      "pendant": "Pilou veille en attendant la basse mer",
+      "tenue": "nuit",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch3-aube"
+    }
+  }
+}

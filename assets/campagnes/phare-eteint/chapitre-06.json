@@ -1,0 +1,91 @@
+{
+  "chapitre": "ch6a",
+  "noeuds": {
+    "ch6a-traversee": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le Passe-Pied, le soir",
+      "decor": "passe-pied",
+      "humeur": "peur",
+      "texte": [
+        "18 h 40. La mer m'a rendu le Passe-Pied, mais elle a gardé le jour : il fait presque nuit, et la brume est revenue s'asseoir sur l'eau. J'ai ma lanterne de poche. Mais si je l'allume, du quai, on verra une petite lumière traverser vers le phare, et le monsieur aux jumelles ne dort jamais. Sans elle, personne ne saura. Mes pieds non plus. J'allume, ou je traverse dans le noir ?"
+      ],
+      "options": [
+        { "id": "lanterne", "libelle": "Allume la lanterne", "vers": "ch6a-lanterne" },
+        { "id": "noir", "libelle": "Traverse dans le noir", "vers": "ch6a-noir" }
+      ]
+    },
+    "ch6a-lanterne": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "J'allume. Tant pis pour le secret : une goutte d'encre tombée dans la mer, c'est un secret aussi, mais pour toujours. Je porte la clef sur l'épaule, la lanterne devant, et j'avance comme une procession d'une seule personne. Derrière moi, sur le quai, je parierais qu'une paire de jumelles vient de se lever. Qu'il regarde. Je traverse."
+      ],
+      "duree_min": 12,
+      "duree_max": 18,
+      "pendant": "Pilou traverse le Passe-Pied, lanterne au poing",
+      "tenue": "marche",
+      "suite": "ch6a-serrure"
+    },
+    "ch6a-noir": {
+      "type": "attente",
+      "humeur": "peur",
+      "effets": [ { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Dans le noir, alors. Je me rappelle le chemin de ce matin : une à gauche, deux à droite, celle sous le goémon. Je tâte chaque pierre du bout du pied avant d'y poser le reste de moi. La mer chuchote des deux côtés, et je ne vois pas mes propres mains, ce qui est normal : elles sont bleu nuit. Personne ne me verra. Je traverse."
+      ],
+      "duree_min": 12,
+      "duree_max": 18,
+      "pendant": "Pilou traverse le Passe-Pied à tâtons",
+      "tenue": "marche",
+      "suite": "ch6a-serrure"
+    },
+    "ch6a-serrure": {
+      "type": "choix",
+      "lieu": "La porte du charbon",
+      "decor": "cave-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "J'y suis. J'ai contourné la tour jusqu'à la petite porte de fer, celle du charbon. La clef est entrée toute seule et elle a tourné comme dans du beurre : quelqu'un huile cette serrure. La porte s'est ouverte sans un cri.",
+        "Dedans, c'est la réserve : un tas de charbon, une odeur d'huile, et des bidons. Des rangées de bidons bien alignés, avec quelque chose d'écrit à la craie sur chacun. Au fond, un escalier de pierre qui tourne et qui monte. Et de tout là-haut descend une voix. Deux voix ? Je regarde ces bidons de près, ou je monte tout de suite écouter ?"
+      ],
+      "options": [
+        { "id": "bidons", "libelle": "Regarde les bidons de près", "vers": "ch6a-bidons" },
+        { "id": "monter", "libelle": "Monte écouter les voix", "vers": "ch6a-monte" }
+      ]
+    },
+    "ch6a-bidons": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-tudal" } ],
+      "texte": [
+        "Sur chaque bidon, un dessin à la craie : une petite puce. La Puce, la barque de Tudal. Et dessous, à chaque fois : « payé ». Vingt-deux bidons, vingt-deux puces. Cloué au mur, un vieux bon de livraison du Service des Feux, barré d'un tampon : « Fournitures suspendues. Phare en instance de fermeture. » Il date du printemps.",
+        "Donc le Service ne livre plus d'huile depuis des mois. Et la lampe a brûlé quand même, tous les soirs, jusqu'à la semaine dernière. Parce qu'un grand pêcheur bourru rame la nuit avec des bidons qu'il paie de sa poche, sans en parler à personne. Je lui dois des excuses, et une sardine."
+      ],
+      "suite": "ch6a-fin"
+    },
+    "ch6a-monte": {
+      "type": "recit",
+      "humeur": "surpris",
+      "texte": [
+        "J'ai monté vingt marches sur la pointe des pieds et je me suis collé au mur. Deux voix. Une très vieille, lente comme une marée basse. Et une toute jeune, qui chuchote fort. La vieille disait : « Mes doigts ne se trompent pas. Trente ans que je compte les crans. Onze à gauche, deux à droite. » La jeune : « C'est pas tes doigts, c'est tes yeux, et on s'en fiche. »",
+        "Puis la vieille voix, plus bas : « Et pourtant le feu a menti. » Un long silence. Anselme est vivant. Il est là-haut, il mange de la soupe, et il parle de ses yeux et d'un feu qui ment. Je n'ose plus respirer."
+      ],
+      "suite": "ch6a-fin"
+    },
+    "ch6a-fin": {
+      "type": "attente",
+      "humeur": "peur",
+      "texte": [
+        "Je monte. Au premier palier, mon pied s'arrête tout seul : un fil est tendu en travers des marches, à hauteur de cheville d'homme, c'est-à-dire à hauteur de mon nez. Avec des coquillages enfilés dessus. Une sonnette ! Quelqu'un a piégé l'escalier avec ce qu'on ramasse sur une plage. Quelqu'un de pas très grand, à en juger par les nœuds, et qui tient beaucoup à savoir qui monte. Je m'arrête. Je souffle. Je réfléchis."
+      ],
+      "duree_min": 5,
+      "duree_max": 10,
+      "pendant": "Pilou reprend son souffle devant le fil à coquillages",
+      "tenue": "attend",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch7-fil",
+      "lieu": "L'escalier du phare"
+    }
+  }
+}

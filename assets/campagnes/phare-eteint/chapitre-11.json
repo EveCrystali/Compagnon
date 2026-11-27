@@ -1,0 +1,275 @@
+{
+  "chapitre": "ch8",
+  "noeuds": {
+    "ch8-coups": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Derrière la grande porte",
+      "decor": "cave-du-phare",
+      "humeur": "peur",
+      "texte": [
+        "Je suis descendu. J'ai passé le reste de la nuit derrière la grande porte, dans le noir, à écouter quelqu'un respirer de l'autre côté. Ni lui ni moi n'avons bougé. Lison m'a rejoint avec son seau, par principe.",
+        "Le jour se lève par la meurtrière, la mer s'est retirée, et il frappe encore. Trois coups. Puis une grosse voix : « Anselme. C'est moi. J'ai ton huile. Et j'ai un pardon à te dire, ça fait cinq jours qu'il me reste en travers. » Lison secoue la tête : n'ouvre pas. La barre de la porte est à ma hauteur, je peux la faire glisser. Ou rester derrière le bois et écouter ce qu'il a à dire."
+      ],
+      "options": [
+        { "id": "ouvrir", "libelle": "Fais glisser la barre : ouvre", "vers": "ch8-tudal-entre", "effets": [ { "var": "confiance", "plus": -1 } ] },
+        { "id": "ecouter", "libelle": "N'ouvre pas : écoute à travers la porte", "vers": "ch8-tudal-porte" },
+        { "id": "signal", "libelle": "Rassure Lison : trois coups, c'est le signal de Tudal. Puis ouvre", "vers": "ch8-tudal-entre", "si": { "drapeau": "trois-coups" }, "effets": [ { "var": "confiance", "plus": 1 } ] }
+      ]
+    },
+    "ch8-tudal-entre": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "c-temoin" }, { "drapeau": "k-tudal" } ],
+      "texte": [
+        "La barre a glissé. Tudal a rempli toute la porte, un bidon au bout de chaque bras, les yeux rouges. « La tache d'encre et le furet. Y a donc que moi qui passe par la porte. » Anselme descendait l'escalier, la main sur le mur. Tudal a posé ses bidons.",
+        "« Jeudi, t'as fait trois éclats, vieux fou. Je suis venu te hurler dessus et j'aurais pas dû. On éteint pas un phare parce qu'un imbécile a crié. » Puis, plus bas : « L'huile, c'est moi, depuis le printemps. Le Service livre plus. Je te l'aurais jamais dit. » Anselme a cherché son épaule de la main, et il l'a trouvée. Ils sont restés comme ça, sans un mot."
+      ],
+      "suite": "ch8-traversee"
+    },
+    "ch8-tudal-porte": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "c-temoin" } ],
+      "texte": [
+        "J'ai laissé la barre où elle était. De l'autre côté, Tudal a attendu, puis il a parlé au bois de la porte, comme on parle à quelqu'un qui boude. « Jeudi, t'as fait trois éclats, vieux fou. Je suis venu te hurler dessus. J'aurais pas dû. On éteint pas un phare parce qu'un imbécile a crié. »",
+        "Un silence. Quelque chose de lourd qu'on pose sur le seuil, deux fois. « Bon. Je te laisse ça. Ce soir, les six bateaux rentrent. Fais ce que tu peux, vieux. » Ses pas se sont éloignés sur le rocher. Lison a murmuré : « Il est venu s'excuser. Je croyais qu'il revenait crier. »"
+      ],
+      "suite": "ch8-traversee"
+    },
+    "ch8-traversee": {
+      "type": "attente",
+      "lieu": "Le Passe-Pied",
+      "decor": "passe-pied",
+      "humeur": "determine",
+      "texte": [
+        "La mer est basse, il faut que je traverse : la réunion est à cinq heures, et d'ici là j'ai un village à regarder dans les yeux. Lison m'a accompagné jusqu'à la petite porte. « Tu reviens ce soir ? » J'ai dit oui, avec la marée. « Si t'es pas là, je… » Elle n'a pas fini. Elle m'a fourré un biscuit dans le baluchon et elle a refermé."
+      ],
+      "duree_min": 12,
+      "duree_max": 18,
+      "pendant": "Pilou retraverse le Passe-Pied",
+      "tenue": "marche",
+      "suite": "ch8-visite"
+    },
+    "ch8-visite": {
+      "type": "choix",
+      "lieu": "Trébrume",
+      "decor": "place-mairie",
+      "humeur": "determine",
+      "texte": [
+        "Trébrume, neuf heures du matin. J'ai jusqu'à cinq heures, mais la moitié du village est aux moules et l'autre fait semblant de ne pas me voir. J'aurai le temps d'une vraie conversation, d'une seule.",
+        "La mairie, où Odile range ses dossiers. L'atelier, où Basile n'a pas ouvert ses volets ce matin. Le quai, où Tudal recoud un filet. La cuisine du Bigorneau, où Perrine épluche pour un régiment. Chez qui je frappe ?"
+      ],
+      "options": [
+        { "id": "mairie", "libelle": "À la mairie, chez Odile", "vers": "ch8-v-mairie" },
+        { "id": "atelier", "libelle": "À l'atelier, chez Basile", "vers": "ch8-v-atelier" },
+        { "id": "quai", "libelle": "Au quai, près de Tudal", "vers": "ch8-v-quai" },
+        { "id": "cuisine", "libelle": "En cuisine, chez Perrine", "vers": "ch8-v-cuisine" }
+      ]
+    },
+    "ch8-v-mairie": {
+      "type": "recit",
+      "lieu": "La mairie",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-odile" } ],
+      "texte": [
+        "Odile m'a ouvert elle-même ; elle n'avait pas dormi non plus. Sans que je demande rien, elle a posé sur le bureau l'ordre d'inspection, tamponné deux fois REPORTÉE, et une pile de rapports signés « Anselme » à l'encre verte. Son encre à elle. « Je signe à sa place depuis un an. Je l'ai su le jour où il a signé à côté de la feuille, sur mon buvard. C'est mon parrain : il m'a appris à nager au pied de sa tour. Personne d'autre ne sait. » Elle a tout rangé. « Ce soir, je ne pourrai plus mentir pour lui. »"
+      ],
+      "suite": "ch8-avant"
+    },
+    "ch8-v-atelier": {
+      "type": "recit",
+      "lieu": "L'atelier de Basile",
+      "decor": "atelier-basile",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "c-jeudi" }, { "drapeau": "k-basile" }, { "drapeau": "basile-prive" } ],
+      "texte": [
+        "Les volets étaient clos. Basile était assis dans le noir, au milieu de ses pendules arrêtées. Sur l'établi, un grand cadran de laiton, un petit point en relief à côté de chaque cran. « Des repères au toucher. J'avais deviné, pour ses yeux. Jeudi, j'ai emporté son cadran et j'en ai posé un de rechange. La marée montait, je n'ai pas essayé le feu. Et le soir, trois éclats. » J'ai dit qu'à cinq heures, il pourrait le dire lui-même. « Si quelqu'un me regarde à ce moment-là, je crois que j'y arriverai. »"
+      ],
+      "suite": "ch8-avant"
+    },
+    "ch8-v-quai": {
+      "type": "recit",
+      "lieu": "Le quai",
+      "decor": "port-trebrume",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-tudal" }, { "drapeau": "c-temoin" } ],
+      "texte": [
+        "Tudal recousait un filet avec une aiguille plus grande que moi. Il a parlé sans lever le nez. « L'huile, c'est moi, depuis le printemps. Le Service a coupé. Alors je lève des casiers la nuit, où j'ai pas le droit, et ça fait des bidons. Il s'en doutait pas : il lit plus les étiquettes. » Il m'a regardé enfin. « Ouais. Je sais, pour ses yeux. Cet hiver, il m'a salué en m'appelant par le nom de mon père. J'ai rien dit. Ça le tuerait, qu'on sache. Je suis le seul au courant, et ça restera comme ça. »"
+      ],
+      "suite": "ch8-avant"
+    },
+    "ch8-v-cuisine": {
+      "type": "recit",
+      "lieu": "La cuisine du Bigorneau",
+      "decor": "auberge-bigorneau",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-perrine" } ],
+      "texte": [
+        "Perrine m'a posé sur la table, entre les poireaux et les épluchures. Elle a sorti du buffet une boîte à biscuits : les lettres d'Anselme, ouvertes, classées par jeudi. « Je les lui lis depuis deux hivers. Les tiennes aussi, mon petit. Et j'écris ses réponses. Il dit qu'il a cassé ses lunettes. Deux ans qu'elles sont cassées, ses lunettes ! Je fais celle qui le croit. Et je fais trop de soupe exprès, pour que la petite Lison en chipe sans se sentir voleuse. Je suis seule à savoir tout ça, et je l'emporterai dans ma tombe, avec ma recette. »"
+      ],
+      "suite": "ch8-avant"
+    },
+    "ch8-avant": {
+      "type": "attente",
+      "lieu": "Le Bigorneau Qui Tousse",
+      "decor": "auberge-bigorneau",
+      "humeur": "peur",
+      "texte": [
+        "Cinq heures moins vingt. Je suis au Bigorneau, perché sur le rebord de la fenêtre, et la salle se remplit. Odile a mis son écharpe. Basile s'est assis au fond, contre l'horloge. Tudal reste debout près de la porte, les bras croisés. Perrine sert de la soupe à des gens qui n'osent pas la manger. Et M. Vernier, sans son ciré, aligne trois crayons sur la table, bien parallèles."
+      ],
+      "duree_min": 20,
+      "duree_max": 30,
+      "pendant": "Pilou attend la réunion sur le rebord de la fenêtre",
+      "tenue": "attend",
+      "suite": "ch8-salle"
+    },
+    "ch8-salle": {
+      "type": "hasard",
+      "humeur": "peur",
+      "texte": [
+        "Cinq heures. L'horloge du Bigorneau, réparée de l'avant-veille, sonne juste, et ça fait sursauter tout le monde. Vernier se lève. « Mesdames, messieurs. Le phare de la Dent-Creuse est éteint depuis cinq nuits. Jeudi, il a donné la signature d'un autre. Son gardien ne répond à personne. J'ai un ordre de fermeture dans cette serviette. Dites-moi pourquoi je ne le signerais pas. »"
+      ],
+      "issues": [
+        { "poids": 1, "vers": "ch8-reunion-a", "si": { "drapeau": "c-came" } },
+        { "poids": 1, "vers": "ch8-reunion-b", "si": { "non": { "drapeau": "c-came" } } }
+      ]
+    },
+    "ch8-reunion-a": {
+      "type": "choix",
+      "humeur": "determine",
+      "texte": [
+        "C'est là que la porte s'est ouverte. Anselme. Au bras de Lison, en casquette, la barbe peignée. Ils sont venus par la mer, dans la plate, Lison aux avirons. Trente ans qu'il n'était pas descendu à une réunion. « Le gardien répond, monsieur. C'est moi qui ai éteint. Je n'y vois plus, depuis deux hivers. J'ai cru que mes mains s'étaient trompées de cran. »",
+        "Il m'a cherché de la tête. J'ai raconté le reste, debout sur la table : le cadran de fer-blanc, la vis neuve, le zéro posé un cran trop loin. Ses doigts ont compté juste ; c'est le cadran qui était faux. Vernier a noté, longtemps. « Soit. Quelqu'un a donc changé ce cadran, l'a mal posé, et s'est tu pendant qu'un homme se croyait fini. Qui ? »",
+        "Alors ça a éclaté. Tudal grogne que la maire garde dans son tiroir l'offre d'un hôtel, pour le jour où le feu sera éteint. Odile réplique qu'il braconne la nuit et que le noir l'arrange bien. Basile, au fond, regarde ses mains. Puis tout le monde se tait, et c'est moi qu'on regarde. Qu'est-ce que je réponds ?"
+      ],
+      "options": [
+        { "id": "basile", "libelle": "Tourne-toi vers Basile : c'est lui, jeudi", "vers": "ch8-aveu", "si": { "un": [ { "drapeau": "c-jeudi" }, { "drapeau": "basile-prive" } ] } },
+        { "id": "sans-nom", "libelle": "« Je ne sais pas qui. Mais ce n'est pas la faute d'Anselme »", "vers": "ch8-sans-nom" },
+        { "id": "delai", "libelle": "Demande une nuit de plus pour trouver", "vers": "ch8-sans-nom" }
+      ]
+    },
+    "ch8-reunion-b": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "Personne ne répond. Puis tout le monde, en même temps. Tudal grogne que la maire garde dans son tiroir l'offre d'un hôtel, pour le jour où le feu sera « officiellement éteint ». Odile réplique qu'il braconne la nuit et que le noir l'arrange bien. Basile, au fond, regarde ses mains. Et Vernier lève un crayon : silence.",
+        "« Monsieur l'encre. Vous avez passé la nuit là-bas, on vous a vu revenir ce matin. Vous savez quelque chose. » Anselme n'est pas venu : il est resté là-haut, avec sa corne. Lison non plus. Je suis seul sur ma table, avec ce que je sais, ce que j'ai promis ou pas, et ce que je n'ai pas réussi à comprendre. Qu'est-ce que je dis ?"
+      ],
+      "options": [
+        { "id": "verite", "libelle": "La vérité : le gardien a éteint lui-même, il n'y voit plus", "vers": "ch8-verite-nue" },
+        { "id": "accuser", "libelle": "« Je sais qui est responsable »", "vers": "ch8-accuse" },
+        { "id": "silence", "libelle": "« Rien. Ce n'est pas à moi de le dire »", "vers": "ch8-silence" }
+      ]
+    },
+    "ch8-accuse": {
+      "type": "choix",
+      "humeur": "peur",
+      "texte": [
+        "J'ai dit que je savais qui était responsable. Vernier a repris son crayon. « Je vous écoute. Un nom, et ce qui vous le fait dire. » Je regarde les visages. Tudal, ses nuits sans lanterne et sa coque éraflée. Odile, ses papiers retournés et son hôtel. Basile, sa poussière dorée et ses yeux qui fuient. Un nom dit tout haut, ici, on ne le reprend pas. Lequel ?"
+      ],
+      "options": [
+        { "id": "tudal", "libelle": "Tudal, le pêcheur", "vers": "ch8-faux-tudal" },
+        { "id": "odile", "libelle": "Odile, la maire", "vers": "ch8-faux-odile" },
+        { "id": "basile", "libelle": "Basile, l'horloger", "vers": "ch8-aveu-b", "si": { "drapeau": "basile-prive" } },
+        { "id": "basile-seul", "libelle": "Basile, l'horloger", "vers": "ch8-basile-faible", "si": { "tous": [ { "un": [ { "drapeau": "c-jeudi" }, { "drapeau": "c-limaille" } ] }, { "non": { "drapeau": "basile-prive" } } ] } }
+      ]
+    },
+    "ch8-aveu": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "issue-aveu" } ],
+      "texte": [
+        "Je me suis tourné vers Basile. Je n'ai presque rien eu à dire : il s'est levé avant la fin de ma phrase, comme un homme qui attend ce moment depuis cinq jours. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. »",
+        "« Et après, j'ai eu peur, et j'ai laissé un homme croire qu'il était fini. » Anselme a traversé la salle, la main en avant, jusqu'à lui. « Des repères. Pour mes doigts. » Il a trouvé son épaule. « Imbécile. Fallait me le dire. Tu l'as, mon cadran ? » Basile a fait oui. Vernier a reposé son crayon. « La mer baisse à sept heures et demie. Montrez-moi un phare qui dit vrai, et nous reparlerons de cet ordre. »"
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-aveu-b": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "issue-aveu" } ],
+      "texte": [
+        "J'ai dit Basile. Et je l'ai regardé bien en face, comme on tient une lampe à quelqu'un. Il s'est levé avant la fin de ma phrase. « C'est moi. Jeudi. J'ai emporté son cadran pour y graver des repères, des points qu'on lit avec les doigts. J'avais deviné, pour ses yeux. J'ai posé un cadran de rechange, la marée montait, j'ai couru. Je n'ai pas essayé le feu. Et le soir, trois éclats. »",
+        "La salle n'a plus fait un bruit. « Depuis cinq jours, un homme se croit fini, là-haut, et c'est ma faute. J'ai son vrai cadran. Je peux le remonter ce soir. » Vernier a reposé son crayon. « Ses yeux, donc. Et votre cadran. » Il a regardé la mer par la fenêtre. « Elle baisse à sept heures et demie. Vous irez le lui dire vous-même. Montrez-moi un phare qui dit vrai, et nous reparlerons de cet ordre. »"
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-faux-tudal": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-faux" } ],
+      "texte": [
+        "J'ai dit Tudal. Les bidons, les nuits sans lanterne, la coque éraflée. Il ne s'est pas défendu. Il a décroisé ses grands bras et il a dit : « Les bidons, c'est de l'huile de lampe. Je la paie avec des homards que j'ai pas le droit de pêcher. Voilà, c'est dit, verbalisez. » Et il est sorti. La porte a claqué si fort que le ciré jaune est tombé du portemanteau.",
+        "Vernier a noté le braconnage. Puis il m'a regardé, presque triste. « Un homme qui paie l'huile d'un phare ne l'éteint pas, monsieur. Vous m'avez donné un coupable. Pas une explication. » Il a ouvert sa serviette, sorti l'ordre, et signé. Dans la salle, plus personne ne me regardait. J'aurais préféré qu'on me crie dessus."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-faux-odile": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-faux" } ],
+      "texte": [
+        "J'ai dit la maire. L'ordre de fermeture, l'hôtel, les papiers cachés. Odile s'est levée, toute droite. Elle a sorti de son sac une feuille pliée et l'a lue : « Messieurs de l'Hôtel du Grand Large : le phare de Trébrume n'est pas à vendre, ni éteint, ni allumé. » Datée du printemps. Puis l'ordre d'inspection, tamponné deux fois REPORTÉE. « Voilà ce que je cachais. »",
+        "Elle a retiré son écharpe et l'a posée sur la table. Vernier a regardé les tampons, puis moi, presque triste. « Une maire qui retarde une fermeture de six mois n'éteint pas son phare, monsieur. Vous m'avez donné un coupable. Pas une explication. » Il a sorti l'ordre et il a signé. Dans la salle, plus personne ne me regardait. J'aurais préféré qu'on me crie dessus."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-sans-nom": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-auto" } ],
+      "texte": [
+        "Je n'avais pas de nom à donner. Je l'ai dit comme j'ai pu : que ce n'était pas la faute d'Anselme, qu'il me fallait du temps. Vernier a attendu. Il a regardé la salle, visage après visage. Personne n'a parlé. Basile a ouvert la bouche, je l'ai vu, et il l'a refermée. Une horloge peut sonner juste et son horloger rester muet.",
+        "« Du temps, je n'en ai pas : les bateaux rentrent ce soir. Voici ce que j'ai. Un cadran de travers, posé par je ne sais qui. Et un gardien qui n'y voit plus, et qui ne pouvait pas s'en apercevoir. Je ne ferme pas ce phare. Mais je ne peux plus le laisser à un homme seul. J'ai une balise automatique dans mon fourgon ; nous la montons ce soir. » Anselme a hoché la tête, très digne. Sa main cherchait celle de Lison."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-verite-nue": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-auto" } ],
+      "texte": [
+        "Je l'ai dit. Que le gardien était là-haut, vivant. Qu'il avait éteint lui-même, parce que son feu avait menti jeudi. Et qu'il n'y voyait plus, depuis deux hivers. Il y a eu un grand silence, et dans ce silence j'ai vu quatre personnes baisser les yeux en même temps : Odile, Tudal, Perrine, Basile. Comme si chacune venait de perdre quelque chose qu'elle croyait être seule à porter.",
+        "Vernier a noté. « Je vous remercie. C'est triste, mais c'est clair. Je ne ferme pas ce phare : un village a besoin d'un feu. Mais un gardien aveugle ne peut plus en répondre. J'ai une balise automatique dans mon fourgon ; nous la montons ce soir. » Il a rebouché son stylo. C'était la vérité, et je l'ai dite. Alors pourquoi est-ce que j'ai l'impression d'avoir oublié la moitié de la phrase ?"
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-basile-faible": {
+      "type": "recit",
+      "humeur": "triste",
+      "effets": [ { "drapeau": "issue-sursis" } ],
+      "texte": [
+        "J'ai dit Basile. Qu'il avait touché à la machine. Il est devenu gris. Vernier a levé un sourcil : « Vous avez une preuve ? Vous avez vu cette machine de vos yeux ? » J'ai dû dire non. J'avais des paillettes de laiton, des choses lues, des choses entendues. « Des paillettes et des on-dit », a résumé Vernier. Basile a bredouillé qu'il graissait la mécanique, comme toujours, et il est sorti sans son chapeau.",
+        "« Je ne signe pas sur des soupçons », a dit Vernier. « Ni une fermeture, ni une accusation. Je signerai demain, à la première heure. Sauf si d'ici là ce phare me prouve qu'il sait encore dire son nom. » Il a regardé par la fenêtre, vers le large. « Deux éclats, un long. Toute une nuit. Sans une faute. » Il n'y croit pas. Moi, j'ai une nuit pour lui donner tort."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-silence": {
+      "type": "recit",
+      "humeur": "determine",
+      "effets": [ { "drapeau": "issue-sursis" } ],
+      "texte": [
+        "J'ai dit : « Rien. Ce n'est pas à moi de le dire. » Un murmure a couru la salle. Vernier m'a regardé longtemps, et pour la première fois il n'a rien noté. « Vous savez, donc. Et vous vous taisez pour quelqu'un. » Il a rangé ses trois crayons, un par un.",
+        "« Je ne signe pas contre un silence. Je signerai demain, à la première heure. Sauf si d'ici là ce phare me prouve qu'il sait encore dire son nom. » Il a regardé par la fenêtre, vers le large. « Deux éclats, un long. Toute une nuit. Sans une faute. » Il n'y croit pas. Odile, Tudal, Perrine et Basile me regardent tous les quatre, chacun comme s'il était le seul à comprendre pourquoi je me tais. Moi, j'ai une nuit."
+      ],
+      "suite": "ch8-fin"
+    },
+    "ch8-fin": {
+      "type": "attente",
+      "lieu": "La jetée",
+      "decor": "jetee-nuit",
+      "humeur": "determine",
+      "texte": [
+        "La salle s'est vidée. Je suis sur la jetée, les jambes dans le vide, et j'attends la mer : elle rendra le Passe-Pied vers sept heures et demie, une dernière fois avant la nuit. La brume arrive du large, par paquets, comme une lessive qu'on rentre. Elle sera épaisse ce soir.",
+        "Quelque part là-dedans, six bateaux font route vers la maison. Ils passeront la Mâchoire vers dix heures, et ils chercheront la Dent des yeux, comme toujours. Je repasse dans ma tête tout ce que j'ai dit dans cette salle, et tout ce que je n'ai pas dit. Est-ce que c'était ce qu'il fallait ? Je le saurai cette nuit."
+      ],
+      "duree_min": 100,
+      "duree_max": 130,
+      "pendant": "Pilou attend la dernière basse mer sur la jetée",
+      "tenue": "attend",
+      "recompense": { "po": 25, "xp": 12 },
+      "suite": "ch9-nuit"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "chapitre": "ch4a",
+  "noeuds": {
+    "ch4a-place": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "La place de Trébrume",
+      "decor": "place-mairie",
+      "humeur": "neutre",
+      "texte": [
+        "La place de Trébrume : une fontaine, un banc, quatre goélands, et une mairie si petite qu'on dirait une boîte aux lettres avec un drapeau. Sur le panneau d'affichage, une feuille toute neuve : « Réunion publique mercredi à 17 h, au Bigorneau. En présence de M. Vernier, du Service des Feux. Objet : avenir du phare de la Dent-Creuse. » Mercredi, c'est demain.",
+        "Par la fenêtre, je vois Odile, la maire, à son bureau, derrière ses piles de papiers. Je peux entrer par la grande porte et lui parler en face, comme un visiteur honnête. Ou attendre qu'elle sorte et aller lire ses papiers sans elle, comme un visiteur moins honnête mais mieux renseigné. Qu'est-ce que tu en dis ?"
+      ],
+      "options": [
+        { "id": "porte", "libelle": "Entre et parle-lui en face", "vers": "ch4a-antichambre" },
+        { "id": "douce", "libelle": "Attends qu'elle sorte, et va lire", "vers": "ch4a-guette" }
+      ]
+    },
+    "ch4a-antichambre": {
+      "type": "attente",
+      "lieu": "La mairie",
+      "humeur": "neutre",
+      "texte": [
+        "J'ai frappé. Une voix a crié : « Un instant ! » et j'attends dans le couloir, sur une chaise beaucoup trop haute, les jambes dans le vide. Au mur, les portraits de tous les maires de Trébrume. Le dernier cadre est une photo, plus petite : une fillette à couettes sur la galerie du phare, et un grand gaillard en casquette qui lui montre la mer. Dessous, au crayon : « Odile et son parrain. »"
+      ],
+      "duree_min": 8,
+      "duree_max": 12,
+      "pendant": "Pilou fait antichambre à la mairie",
+      "tenue": "attend",
+      "suite": "ch4a-odile"
+    },
+    "ch4a-guette": {
+      "type": "attente",
+      "humeur": "malice",
+      "texte": [
+        "Je me suis posté derrière la fontaine, avec l'air d'une tache qui a toujours été là. Odile finira bien par sortir : les maires, ça va chercher du pain comme tout le monde. En attendant, je regarde sa fenêtre. Elle ne travaille pas vraiment. À un moment, elle a mis sa tête dans ses mains. Les gens qui manigancent n'ont pas cet air-là. Ou alors ils manigancent très mal."
+      ],
+      "duree_min": 10,
+      "duree_max": 15,
+      "pendant": "Pilou guette la mairie derrière la fontaine",
+      "tenue": "cache",
+      "suite": "ch4a-fente"
+    },
+    "ch4a-odile": {
+      "type": "choix",
+      "lieu": "Le bureau de la maire",
+      "humeur": "neutre",
+      "texte": [
+        "Odile m'a fait asseoir sur un dictionnaire posé sur une chaise. « Vous n'aimez pas les phares en général. Vous aimez celui-là. Qui vous a fait venir ? » Sur son bureau, un dossier fermé, épais, avec « Dent-Creuse » sur la tranche. Je lui dis la vérité, la lettre sans timbre et tout le reste ? Ou je joue le touriste ?"
+      ],
+      "options": [
+        { "id": "vrai", "libelle": "Dis-lui la vérité", "vers": "ch4a-odile-vrai" },
+        { "id": "faux", "libelle": "Joue le touriste", "vers": "ch4a-odile-faux" }
+      ]
+    },
+    "ch4a-odile-vrai": {
+      "type": "recit",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-odile" } ],
+      "texte": [
+        "J'ai tout dit : la lettre, le maquereau, « ne te fie à personne ». Elle est devenue blanche. Puis elle a ouvert le dossier, lentement. Dedans, un ordre d'inspection du Service des Feux, daté du printemps, tamponné deux fois : REPORTÉE. « La première fois, j'ai invoqué une tempête. La seconde, une épidémie de varicelle chez les goélands. Ils ont fini par envoyer quelqu'un. »",
+        "Dessous, les rapports mensuels du phare, tous signés « Anselme », d'une belle encre verte. « C'est moi qui signe, depuis un an. Il ne peut plus… il n'aime plus écrire. Gardez ça pour vous : je suis la seule à le savoir, et c'est mon parrain. » La seule à savoir quoi, au juste ? Elle a refermé le dossier avant que je demande."
+      ],
+      "suite": "ch4a-sortie"
+    },
+    "ch4a-odile-faux": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "J'ai dit que je faisais le tour des côtes pour mon plaisir. Elle a souri comme on sourit à un enfant qui cache un biscuit. « Bien sûr. » Elle a rangé le dossier dans un tiroir, et en l'ouvrant elle m'a laissé voir ce qu'il y avait dedans : une brochure en couleurs. « Hôtel du Grand Large : votre nuit dans un phare d'exception. »",
+        "Elle a vu que j'avais vu. Le tiroir a claqué. « La mairie ferme à midi », elle a dit, et il était dix heures. Me voilà dehors avec une idée désagréable : quelqu'un, dans ce village, a un phare à vendre. Et un phare éteint se vend sûrement mieux qu'un phare qui marche."
+      ],
+      "suite": "ch4a-sortie"
+    },
+    "ch4a-fente": {
+      "type": "choix",
+      "lieu": "Le bureau de la maire",
+      "humeur": "malice",
+      "texte": [
+        "Elle est sortie avec un panier. J'ai compté jusqu'à dix et je suis passé par la fente de la boîte aux lettres, comme un prospectus. Je n'ai que quelques minutes. Sur le bureau, un dossier épais marqué « Dent-Creuse », resté ouvert, un encrier vert à côté. Et dessous, un tiroir mal fermé d'où dépasse un coin de papier glacé, en couleurs. Je lis lequel ?"
+      ],
+      "options": [
+        { "id": "dossier", "libelle": "Le dossier ouvert", "vers": "ch4a-dossier" },
+        { "id": "tiroir", "libelle": "Le tiroir mal fermé", "vers": "ch4a-tiroir" }
+      ]
+    },
+    "ch4a-dossier": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "k-odile" } ],
+      "texte": [
+        "Le dossier, donc. Un ordre d'inspection du Service des Feux, daté du printemps, tamponné deux fois : REPORTÉE. Motifs : « tempête », puis « épidémie de varicelle chez les goélands ». Quelqu'un, ici, fait traîner les choses avec imagination.",
+        "Dessous, les rapports mensuels du phare, tous signés « Anselme ». Alors j'ai fait mon tour à moi : j'ai goûté la signature. Encre verte, un peu acide, arrière-goût de café. La même que dans l'encrier d'Odile. Anselme, lui, écrit au bleu-noir, je le sais mieux que personne. Depuis un an, la maire signe les rapports à la place du gardien. Pour le perdre ? Ou pour le couvrir ?"
+      ],
+      "suite": "ch4a-sortie"
+    },
+    "ch4a-tiroir": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "Le tiroir. Le papier glacé est une brochure : « Hôtel du Grand Large : votre nuit dans un phare d'exception. » Avec un dessin de la Dent-Creuse, des parasols sur la galerie et un monsieur en peignoir à la place de la lanterne. Agrafée dessus, une lettre : la société offre une belle somme à la commune « dès que le feu sera officiellement éteint ».",
+        "Officiellement éteint. Il y avait autre chose sous la brochure, un brouillon de réponse de la main d'Odile, mais la porte d'entrée a grincé et j'ai filé par la fente sans le lire. Quelqu'un a un phare à vendre. Et un phare éteint, ça se vend mieux qu'un phare qui marche."
+      ],
+      "suite": "ch4a-sortie"
+    },
+    "ch4a-sortie": {
+      "type": "choix",
+      "lieu": "La place de Trébrume",
+      "humeur": "peur",
+      "texte": [
+        "Sur la place, j'ai failli rentrer dans une paire de bottes. Au-dessus des bottes, un ciré jaune. Au-dessus du ciré, des jumelles, et tout en haut, un visage long qui me regardait de très loin. « Vous regardez beaucoup ce phare, vous aussi », a dit l'homme. Je peux lui demander en face qui il est. Ou filer entre ses bottes."
+      ],
+      "options": [
+        { "id": "demander", "libelle": "Demande-lui qui il est", "vers": "ch4a-vernier-carte" },
+        { "id": "filer", "libelle": "File entre ses bottes", "vers": "ch4a-midi" }
+      ]
+    },
+    "ch4a-vernier-carte": {
+      "type": "recit",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-feu-faux" }, { "var": "courage", "plus": 1 } ],
+      "texte": [
+        "Il m'a tendu une carte, en se pliant en trois pour arriver jusqu'à moi. « Achille Vernier. Inspecteur. Service des Feux. » Et tout de suite : « Demain, 17 heures. Si personne ne m'explique ce qui se passe là-bas, je signe la fermeture. »",
+        "J'ai dit qu'un phare avait bien le droit d'être en panne. « Un feu éteint, je peux comprendre. Mais j'ai sur mon bureau la plainte d'un caboteur : dans la nuit de jeudi, la Dent-Creuse a donné trois éclats, au lieu de deux éclats et un long. La signature d'un autre phare. Un feu qui ment, monsieur, c'est pire qu'un feu éteint. Cela, je ne peux pas le comprendre. » Moi non plus. Pas encore."
+      ],
+      "suite": "ch4a-midi"
+    },
+    "ch4a-midi": {
+      "type": "choix",
+      "humeur": "neutre",
+      "texte": [
+        "Midi. L'horloger a fermé boutique jusqu'à deux heures. Et c'est chez lui que je veux aller ensuite : un phare, c'est de la mécanique, et la mécanique, à Trébrume, c'est lui. Perrine m'a fait signe par la fenêtre de sa cuisine. Et sur le quai, Tudal mange des sardines, tout seul, à côté de sa barque éraflée. Je déjeune avec qui ?"
+      ],
+      "recompense": { "po": 25, "xp": 12 },
+      "options": [
+        { "id": "perrine", "libelle": "En cuisine, avec Perrine", "vers": "ch4a-midi-perrine" },
+        { "id": "tudal", "libelle": "Sur le quai, avec Tudal", "vers": "ch4a-midi-tudal" }
+      ]
+    },
+    "ch4a-midi-perrine": {
+      "type": "attente",
+      "lieu": "La cuisine du Bigorneau",
+      "decor": "auberge-bigorneau",
+      "humeur": "tendre",
+      "effets": [ { "drapeau": "k-perrine" } ],
+      "texte": [
+        "Perrine m'a assis au bord de la table, entre le sel et les poireaux. Et sans que je demande rien, elle a sorti une boîte à biscuits. Dedans : mes cartes. Toutes celles que j'ai envoyées à Anselme. « C'est moi qui les lui lis, le jeudi, avec la soupe. Et c'est moi qui te répondais, sous sa dictée, depuis deux hivers. Il ne voulait pas que tu saches. »",
+        "L'écriture ronde, c'était donc elle. J'ai demandé pourquoi on lit son courrier à un homme qui sait lire. Elle a mis un doigt sur sa bouche. « Ça, mon petit, je suis la seule à le savoir, et ça ne sortira pas de ma cuisine. Mange. » Je mange et je réfléchis, ce qui chez moi prend à peu près le même temps."
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou déjeune dans la cuisine de Perrine",
+      "tenue": "attend",
+      "suite": "ch5a-vitrine"
+    },
+    "ch4a-midi-tudal": {
+      "type": "attente",
+      "lieu": "Le quai",
+      "decor": "port-trebrume",
+      "humeur": "surpris",
+      "effets": [ { "drapeau": "c-temoin" } ],
+      "texte": [
+        "Tudal m'a regardé grimper sur le plat-bord de la Puce, puis il a poussé vers moi une sardine, ce qui chez lui doit valoir un discours. Il a fini par grogner : « Demande, puisque t'en crèves. » J'ai demandé. « Jeudi, dans la nuit. J'étais dehors, peu importe pourquoi. Brume à couper. Je cherche la Dent : deux éclats, un long. Et qu'est-ce que je vois ? Trois éclats. »",
+        "« Trois éclats, c'est Roche-Douce, dix milles au nord. Je me crois là-bas, je vire, et je m'ouvre le flanc sur la Mâchoire. À l'aube, je suis allé gueuler sous sa tour que son feu mentait. Le soir même, il n'a plus allumé. » Il a regardé ses grosses mains. « C'est peut-être bien moi qui l'ai éteint, ce phare. Avec ma grande gueule. »"
+      ],
+      "duree_min": 15,
+      "duree_max": 20,
+      "pendant": "Pilou déjeune sur le quai avec Tudal",
+      "tenue": "attend",
+      "suite": "ch5a-vitrine"
+    }
+  }
+}
