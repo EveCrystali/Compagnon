@@ -138,7 +138,8 @@ du Tic-Tac (ch. 9).
 | **13 h 37 et 60 secondes** | secrète | `ticket` gardé + `sait-seconde` + `complicite` ≥ 5 | à 13 h 38 on appelle le 1 338 : Pilou réclame le remboursement du temps perdu — une seconde, rétroactive. Brouillon s'y installe ; le Tic-Tac y prend sa pause |
 
 Chaque fin : un titre, l'objet `sablier-de-poche`, un souvenir. Meilleur parcours (fin secrète) :
-210 po + 350 po, 105 xp + 180 xp.
+210 po + 320 po, 105 xp + 160 xp (et même en additionnant
+les récompenses de chapitre des deux routes, on reste sous 600 po et 300 xp).
 
 ## Échecs (jamais sans avertissement)
 

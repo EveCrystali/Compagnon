@@ -207,7 +207,7 @@
       ],
       "issue": "bonne",
       "titre": "Enregistré sous…",
-      "recompenses": { "po": 300, "xp": 150, "souvenir": "point-final", "titre": "Greffier du temps", "objet": "sablier-de-poche" }
+      "recompenses": { "po": 280, "xp": 140, "souvenir": "point-final", "titre": "Greffier du temps", "objet": "sablier-de-poche" }
     },
     "ch10-fin-corbeille": {
       "type": "fin",
@@ -219,7 +219,7 @@
       ],
       "issue": "douce-amere",
       "titre": "Corbeille avec vue",
-      "recompenses": { "po": 200, "xp": 100, "souvenir": "registre-corbeille", "titre": "Visiteur du dimanche", "objet": "sablier-de-poche" }
+      "recompenses": { "po": 180, "xp": 90, "souvenir": "registre-corbeille", "titre": "Visiteur du dimanche", "objet": "sablier-de-poche" }
     },
     "ch10-fin-papier": {
       "type": "fin",
@@ -231,7 +231,7 @@
       ],
       "issue": "douce-amere",
       "titre": "Sorti sur papier",
-      "recompenses": { "po": 200, "xp": 100, "souvenir": "page-bleue", "titre": "Bleu d'imprimerie", "objet": "sablier-de-poche" }
+      "recompenses": { "po": 180, "xp": 90, "souvenir": "page-bleue", "titre": "Bleu d'imprimerie", "objet": "sablier-de-poche" }
     },
     "ch10-fin-seconde": {
       "type": "fin",
@@ -246,7 +246,7 @@
       ],
       "issue": "secrete",
       "titre": "13 h 37 et 60 secondes",
-      "recompenses": { "po": 350, "xp": 180, "souvenir": "seconde-en-plus", "titre": "Le Prochain", "objet": "sablier-de-poche" }
+      "recompenses": { "po": 320, "xp": 160, "souvenir": "seconde-en-plus", "titre": "Le Prochain", "objet": "sablier-de-poche" }
     },
     "ch10-pause": {
       "type": "choix",
