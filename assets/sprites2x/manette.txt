@@ -3,29 +3,29 @@ id: manette
 slot: main
 ancre: main
 decalage: -22 -16
-palette: a=#1c2128 b=#adbac7 c=#3b4654 d=#f69d50 e=#6cb6ff
+palette: a=#1c2128 b=#adbac7 c=#ccd4dc d=#8e9aa9 e=#858c95 f=#f69d50 g=#3b4654 h=#6cb6ff
 images:
 ............................................
 ............................................
 ........aaaaaaaaaaaaaaaaaaaaaaaaaaaa........
 ......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa......
-..aaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaa..
-.aaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaa.
-aabbbbbbbbccbbbbbbbbbbbbbbbbbbddddbbbbbbbbaa
-aabbbbbbbbccbbbbbbbbbbbbbbbbbbddddbbbbbbbbaa
-aabbbbbbbbccbbbbbbbbccccbbbbbbddddbbbbbbbbaa
-aabbbbbbbbccbbbbbbbbccccbbbbbbddddbbbbbbbbaa
-bbbbbbccccccccccbbbbbbbbbbbbbbddddbbbbbbbbbb
-bbbbbbccccccccccbbbbbbbbbbbbbbddddbbbbbbbbbb
-bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
-bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
-bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
-bbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbeeeeeebbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-aabbbbbbbbbbbbaaaaaaaaaaaaaaaabbbbbbbbbbbbaa
-aabbbbbbbbbbbbaaaaaaaaaaaaaaaabbbbbbbbbbbbaa
-aabbbbbbbbbbbbaaa..........aaabbbbbbbbbbbbaa
-aabbbbbbbbbbbbaa............aabbbbbbbbbbbbaa
+..aaaaaaaabbccccccccccccccccccbbbdaaaaaaaa..
+.aaaaaaaccbbbbbbbbbbbbbbbbbbbbbbbdccaaaaaaa.
+aaccccccbbeebbbbbbbbbbbbbbbbbdffffbbccccccaa
+aabbbbbbbdggbbbbbbbbbbbbbbbbbdffffbbbbbbbdaa
+aabbbbbbbdggbbbbbbbdggggbbbbbdffffbbbbbbbdaa
+aabbbbbdddggddddbbbdggggbbbbbdffffbbbbbbbdaa
+ccbbbdggggggggggbbbdccccbbbbbdffffbbbbbbbdcc
+bbbbbdggggggggggbbbbbbbbbbbbbdffffddddddbbbd
+bbbbbdccccggccccbbbbbbbbbbbbbdcccchhhhhhbbbd
+bbbbbbbbbdggbbbbbbbbbbbbbbbbbbbbbdhhhhhhbbbd
+bbbbbbbbbdggbbbbbbbbbbbbbbbbbbbbbdhhhhhhbbbd
+bbbbbbbbbdggbbbbbbbbbbbbbbbbbbbbbdhhhhhhbbbd
+bbbbbbbbbdccbbbbbbbbbbbbbbbbbbbbbdccccccbbbd
+ddbbbbbbbbbbbdddddddddddddddddbbbbbbbbbbbddd
+aabbbbbbbbbbbdaaaaaaaaaaaaaaaabbbbbbbbbbbdaa
+aabbbbbbbbbbbdaaaaaaaaaaaaaaaabbbbbbbbbbbdaa
+aabbbbbbbbbbbdaaa..........aaabbbbbbbbbbbdaa
+aaddddddddddddaa............aaddddddddddddaa
 .aaaaaaaaaaaaaa..............aaaaaaaaaaaaaa.
 ..aaaaaaaaaaaa................aaaaaaaaaaaa..

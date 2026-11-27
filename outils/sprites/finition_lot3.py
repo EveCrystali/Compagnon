@@ -155,3 +155,6 @@ for _s in (2, 3, 4):
 
 import finition_effets  # noqa: E402,F401  (effets, bonus d'ensemble)
 import finition_objets  # noqa: E402,F401  (icônes, accessoires, objets)
+import finition_objets2  # noqa: E402,F401  (suite)
+import finition_objets3  # noqa: E402,F401  (objets tenus en main)
+import finition_particules  # noqa: E402,F401  (confettis, bulles, mousse, feu...)

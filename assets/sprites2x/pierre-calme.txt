@@ -3,24 +3,24 @@ id: pierre-calme
 slot: objet
 ancre: aucun
 decalage: 0 0
-palette: a=#1c2128 b=#3b4654 c=#768390 d=#b4dbff
+palette: a=#1c2128 b=#3b4654 c=#768390 d=#5f6b79 e=#8c98a6 f=#b4dbff
 images:
 .........aaaaaaaaaa.........
 ......aaaaaaaaaaaaaaaa......
 ....aaaaaabbbbbbbbaaaaaa....
-..aaaaabccccccccbbbbbaaaaa..
-.aaaaccccccccccccccbbbbaaaa.
-aaabccccccccccccccccbbbbbaaa
-aabcccccccddccddccddcbbbbbaa
-aaccccccccddccddccddccbbbbaa
-abccccccddccccccccccccbbbbba
-abccccccddccccccccccccbbbbba
-bbccccccddccddddccccccddbbbb
-bbbcccccddccddddcccccbddbbbb
-abbbccccccccccccccccbbbbbbba
-abbbbccccccccccccccbbbbbbbba
-aabbbbbbccccccccbbbbbbbbbbaa
-aabbbbbbbbbbbbbbbbbbbbbbbbaa
+..aaaaabcccccccddbbbbaaaaa..
+.aaaabeeefeeeeecdddbbbbaaaa.
+aaabcefffeeeeecccddddbbbbaaa
+aabcefeeecffffffffffddbbbbaa
+aaccfcccffccccccccdffddbbbaa
+abccfccffccfffffffddffdbbbba
+abccfccfcccfcccccffddffbbbba
+bbdcfccffccffffcddfdddfbbbbb
+bbbdfcccffcccccddffddfdbbbbb
+abbddfddcffffffffdddffbbbbba
+abbbddffddddddddddfffbbbbbba
+aabbbbddffffffffffdbbbbbbbaa
+aabbbbbbbdddddddbbbbbbbbbbaa
 aaabbbbbbbbbbbbbbbbbbbbbbaaa
 .aaaabbbbbbbbbbbbbbbbbbaaaa.
 ..aaaaabbbbbbbbbbbbbbaaaaa..
