@@ -34,7 +34,7 @@
       "jeu": "visee",
       "difficulte": 2,
       "texte": [
-        "Bon. Les rochers. La méthode : je fais tourner le baluchon, je le lance par-dessus le bloc, il se coince, et je grimpe à la ficelle. Si je vise mal, il redescend, et moi avec. Brouillon s'est mis au-dessus du premier rocher pour me montrer où viser. C'est gentil. Il bouge tout le temps. Allez : je lance."
+        "Bon. Les rochers. La méthode : je fais tourner le baluchon, je le lance par-dessus le bloc, il se coince, et je me hisse derrière lui. Si je vise mal, il redescend, et moi avec. Brouillon s'est mis au-dessus du premier rocher pour me montrer où viser. C'est gentil. Il bouge tout le temps. Allez : je lance."
       ],
       "reussite": "ch6-grimpe-ok",
       "echec": "ch6-grimpe-rate"
@@ -81,13 +81,15 @@
       "texte": [
         "En haut du raidillon, il y a une porte ronde dans le talus, et derrière, une marmotte en tablier : Madame Bocal. Elle ferme pour l'hiver dans deux jours, et elle met tout en conserve avant de dormir. Tout. Elle veut absolument nous montrer. J'ai lu les étiquettes : « Mirabelles. » « Courant d'air du mois d'août. » « Odeur de foin. » « Un fond de sieste. » Il y a quatre cents étagères. Je reviens."
       ],
-      "suite": "ch6-bocaux"
+      "suite": "ch6-meteo"
     },
     "ch6-bocaux": {
       "type": "choix",
+      "lieu": "Chez Madame Bocal",
+      "decor": "terrier-aux-bocaux",
       "humeur": "neutre",
       "texte": [
-        "Elle a fini la visite devant Brouillon, les pattes sur les hanches. « Il ne passera pas le col comme ça, votre petit. Il va geler en route, ça fera de la neige, c'est joli, mais ce ne sera plus lui. » Elle a sorti son plus grand bocal. « Mettez-le là-dedans. Je vous le prête. Il ne perdra pas une miette jusqu'au lac. »",
+        "On dort chez elle, finalement. Avant d'éteindre sa lampe, Madame Bocal s'est plantée devant Brouillon, les pattes sur les hanches. « Il ne passera pas le col comme ça, votre petit. Il va geler en route, ça fera de la neige, c'est joli, mais ce ne sera plus lui. » Elle a sorti son plus grand bocal. « Mettez-le là-dedans. Je vous le prête. Il ne perdra pas une miette jusqu'au lac. »",
         "Elle a raison, il ne perdrait rien. Il ne verrait rien non plus. Ni le col, ni le vent, ni la neige. Un nuage en conserve. Je regarde le bocal, je regarde Brouillon, qui renifle le couvercle. Je ne sais pas ce qui est le mieux pour lui. Toi, tu sais ?"
       ],
       "options": [
@@ -102,7 +104,7 @@
       "texte": [
         "Il est entré dedans sans discuter, puisque c'est moi qui le demandais. Il s'est plié comme une chaussette. J'ai vissé le couvercle, pas trop fort. Il remplit tout le verre, tout blanc, on dirait un bocal de lait. Il a posé un bord contre la paroi, là où est ma main. Il est à l'abri. C'est ce que je voulais. Alors pourquoi est-ce que je porte ce bocal comme si j'avais fait une bêtise ?"
       ],
-      "suite": "ch6-meteo"
+      "suite": "ch6-nuit"
     },
     "ch6-bocal-non": {
       "type": "recit",
@@ -110,15 +112,15 @@
       "texte": [
         "J'ai dit non merci. Qu'il n'est pas une mirabelle. Madame Bocal n'a pas été vexée : « C'est vous qui voyez. Moi, je conserve. Chacun son métier. » Elle nous a donné un petit pot de vapeur de tilleul pour la route, étiqueté de sa main. Brouillon n'a pas compris de quoi on parlait, mais il a compris qu'il restait dehors, à côté de moi, et il a fait trois tours autour de ma casserole."
       ],
-      "suite": "ch6-meteo"
+      "suite": "ch6-nuit"
     },
     "ch6-bocal-lui": {
       "type": "recit",
       "humeur": "tendre",
       "texte": [
-        "Je me suis accroupi et je lui ai expliqué. Dans le bocal, tu ne perds rien, mais tu ne vois rien. Dehors, tu vois tout, mais tu peux fondre. C'est toi qui choisis. Personne ne lui avait jamais demandé ça. Il a regardé le bocal. Il a regardé la porte ronde, et le ciel dedans. Il a mis un temps fou. Puis il a dit : « Dehors. Avec Goutte. » Madame Bocal a haussé les épaules et lui a donné une mirabelle, pour l'odeur."
+        "Je me suis accroupi et je lui ai expliqué. Dans le bocal, tu ne perds rien, mais tu ne vois rien. Dehors, tu vois tout, mais tu peux fondre. C'est toi qui choisis. Personne ne lui avait jamais demandé ça. Il a regardé le bocal. Il a regardé la porte ronde, et la nuit derrière. Il a mis un temps fou. Puis il a dit : « Dehors. Avec Goutte. » Madame Bocal a haussé les épaules et lui a donné une mirabelle, pour l'odeur."
       ],
-      "suite": "ch6-meteo"
+      "suite": "ch6-nuit"
     },
     "ch6-meteo": {
       "type": "choix",
@@ -127,7 +129,7 @@
         "Le soir tombe. Madame Bocal a sorti le museau, elle a reniflé vers le col, et elle a dit : « Vous ne montez pas ce soir. Le ciel a sa tête de couvercle. Il neigera cette nuit. Demain matin, à la première heure, ou pas du tout. » Elle nous offre son paillasson pour dormir. Mais le col est juste là, on le voit, et chaque heure compte. Je l'écoute, ou on tente ?"
       ],
       "options": [
-        { "id": "ch6-meteo-dormir", "libelle": "Écoute-la : dors ici, pars à l'aube", "vers": "ch6-nuit" },
+        { "id": "ch6-meteo-dormir", "libelle": "Écoute-la : dors ici, pars à l'aube", "vers": "ch6-bocaux" },
         { "id": "ch6-meteo-monter", "libelle": "Monte ce soir : le col est tout près", "vers": "ch6-ce-soir" }
       ]
     },
@@ -140,7 +142,7 @@
         "On est partis quand même. Au bout d'une heure, il s'est mis à neiger, d'abord trois flocons, puis tous les autres. Je ne vois plus mes pieds. Et Brouillon fait un bruit nouveau : il craque. Un petit bruit de papier qu'on froisse, à chaque mouvement. Ses bords sont raides. Il dit : « Brouillon dur. » Le terrier est à une heure derrière nous. Le col, je ne sais pas, je ne le vois plus. Qu'est-ce que je fais ?"
       ],
       "options": [
-        { "id": "ch6-ce-soir-redescendre", "libelle": "Redescends au terrier, tout de suite", "vers": "ch6-nuit", "effets": [ { "var": "taille", "plus": -1 } ] },
+        { "id": "ch6-ce-soir-redescendre", "libelle": "Redescends au terrier, tout de suite", "vers": "ch6-bocaux", "effets": [ { "var": "taille", "plus": -1 } ] },
         { "id": "ch6-ce-soir-continuer", "libelle": "Continue : vous y êtes presque", "vers": "ch6-echec-tourmente" }
       ]
     },
