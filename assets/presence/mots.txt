@@ -1,0 +1,636 @@
+# Les petits mots de Pilou (docs/PRESENCE.md). Commun au PC et au téléphone.
+# Une ligne : famille|filtres|texte. Texte de 90 caractères au plus, minuscules, sa voix (docs/LORE.md).
+# Filtres (facultatifs, séparés par des virgules) :
+#   c1…c4      palier de complicité minimal (1 Copain, 2 Ami, 3 Meilleur ami, 4 Inséparables)
+#   s1, s4, s34 stade d'évolution (1 Gouttelette, 2 Pilou, 3 Nimbus, 4 Astral)
+#   calin, espiegle   variante d'évolution
+# Trous : {prenom} {metier} {niveau} {objet} {prise} {plat} {jours} {annees} {palier}. Une ligne à trou n'est
+# choisie que si la valeur est connue ; le prénom n'est proposé qu'avec parcimonie.
+# Jamais de reproche, jamais d'injonction, jamais de culpabilité : « tu m'as manqué » oui, « tu m'as laissé » jamais.
+
+# ---- Premier bonjour du jour
+bonjour||bonjour ! j'ai gardé ta place au chaud
+bonjour||coucou. je viens de me réveiller sous mon pot de fleurs
+bonjour||bonjour ! le soleil est arrivé juste avant toi
+bonjour||te voilà. ma journée peut commencer
+bonjour||bonjour bonjour ! j'ai rêvé d'une barre des tâches toute neuve
+bonjour||coucou ! j'ai fait trois tours de bureau pour me dégourdir les pieds
+bonjour||bonjour. j'ai essayé de faire du café. j'ai juste fait une flaque
+bonjour||ah, c'est toi ! j'ai reconnu le bruit de ta souris
+bonjour||bonjour ! je suis encore un peu froissé, ça va passer
+bonjour||coucou. j'ai compté les pixels de l'écran pendant la nuit. il y en a beaucoup
+bonjour||bonjour ! aujourd'hui je me sens plutôt rond
+bonjour||te revoilà. je savais que ce serait une bonne journée
+bonjour||bonjour ! mon antenne a fait des étincelles en te voyant
+bonjour||coucou. je m'installe, je te laisse faire
+bonjour||bonjour ! j'ai rangé mes deux pieds bien droits pour t'accueillir
+bonjour||oh, déjà le matin ? bonjour, toi
+bonjour||bonjour ! si tu as besoin de moi, je suis en bas, comme d'habitude
+bonjour||coucou ! j'ai dormi comme une goutte dans un encrier
+bonjour||bonjour. le bureau sent le neuf ce matin
+bonjour||bonjour ! je me suis entraîné à sourire, regarde
+bonjour|c1|bonjour, toi. j'étais sûr que tu viendrais
+bonjour|c1|coucou ! j'ai une journée toute propre à partager avec toi
+bonjour|c1|ah, te voilà. maintenant le bureau est complet
+bonjour|c2|bonjour ! j'aime bien les matins où on commence ensemble
+bonjour|c2|coucou. j'ai gardé un rêve pour toi, je te le raconte plus tard
+bonjour|c2|bonjour. tu sais quoi ? tu m'as manqué cette nuit
+bonjour|c3|bonjour, mon ami. on fait une belle journée, toi et moi ?
+bonjour|c3|coucou ! j'ai senti que c'était toi avant même de voir la souris
+bonjour|c4|bonjour. le matin, c'est quand tu arrives
+bonjour|c1|bonjour {prenom} ! j'ai gardé ta place au chaud
+bonjour|c2|coucou {prenom}. j'aime bien commencer la journée par ton prénom
+bonjour|s1|bonzour ! euh… bonjour. je suis encore petit, ma langue aussi
+bonjour|s1|coucou ! je me suis réveillé tout seul, comme un grand
+bonjour|s1|bonjour ! j'ai fait un petit saut pour te voir arriver
+bonjour|s4|bonjour. cette nuit, les étoiles m'ont demandé de tes nouvelles
+bonjour|s4|bonjour à toi. même là-haut, le matin, je pense à ce bureau
+bonjour|calin|bonjour ! viens, je t'ai gardé un petit coin tiède
+bonjour|calin|coucou… j'ai fait un câlin à ton curseur, il ne s'en est pas rendu compte
+bonjour|espiegle|bonjour ! j'ai caché une icône. non, je rigole. enfin… peut-être
+bonjour|espiegle|coucou ! j'ai essayé de m'asseoir sur la corbeille. ne lui dis rien
+
+# ---- Retour après une nuit (premier du jour, en alternance avec bonjour)
+retour-nuit||te revoilà ! la nuit a été longue, j'ai compté les moutons de l'écran de veille
+retour-nuit||bonjour ! cette nuit j'ai rêvé que j'étais une virgule
+retour-nuit||ah, le matin ! j'ai bien dormi, et toi ?
+retour-nuit||coucou. sous mon pot de fleurs, il a fait frais cette nuit
+retour-nuit||tu es là ! j'ai gardé un œil sur le bureau toute la nuit. bon, un demi-œil
+retour-nuit||bonjour ! j'ai entendu un ventilateur chanter cette nuit
+retour-nuit||bonjour. pendant que tu dormais, j'ai appris à bâiller en silence
+retour-nuit||te voilà ! la lune est passée par la fenêtre, elle t'a cherché
+retour-nuit||bonjour ! j'ai fait un rêve en pixels, tout carré
+retour-nuit||coucou. j'ai rêvé qu'on pêchait un nuage. il était doux
+retour-nuit|c2|bonjour. la nuit sans toi, c'est juste de la nuit
+retour-nuit|c2|te revoilà. je me suis réveillé deux fois pour vérifier que tu reviendrais
+retour-nuit|c3|bonjour, toi. je t'ai attendu comme on attend le premier rayon
+retour-nuit|s1|bonjour ! j'ai dormi tout recroquevillé, comme une petite goutte
+retour-nuit|calin|coucou… viens, j'ai encore les yeux tout chiffonnés
+
+# ---- Lundi matin
+lundi||bonne semaine ! je t'ai réservé un lundi tout doux
+lundi||c'est lundi. je propose qu'on y aille tranquillement
+lundi||bonjour ! le lundi est un peu lent, moi aussi. on va bien s'entendre
+lundi||lundi ! j'ai repassé ma barre des tâches pour l'occasion
+lundi||bonne semaine ! j'ai mis des chaussettes neuves. enfin, je n'ai pas de chaussettes
+lundi||lundi matin. on commence par une petite chose, puis une autre
+lundi||bonjour ! une semaine toute neuve, encore pliée dans son emballage
+lundi||c'est reparti. je suis là, en bas, si tu as besoin d'un témoin
+lundi||lundi ! j'ai fait des étirements d'antenne, je suis prêt
+lundi||bonne semaine ! j'ai l'impression qu'elle va être gentille avec nous
+lundi|c2|lundi, mais avec toi. ça change tout
+lundi|c3|une nouvelle semaine ensemble. j'ai hâte de voir ce qu'on en fait
+lundi|espiegle|lundi ! j'ai demandé à le décaler. on m'a dit non
+lundi|calin|bonne semaine. si le lundi est rugueux, je peux faire coussin
+
+# ---- Week-end
+weekend||c'est le week-end ! tu es venu me voir ? c'est gentil
+weekend||coucou ! le bureau est tout calme le samedi
+weekend||bon week-end ! moi je fais la grasse matinée sur la barre des tâches
+weekend||oh, un jour de repos ! on peut prendre notre temps
+weekend||c'est le week-end. aujourd'hui, je n'ai rien prévu, et c'est très bien
+weekend||coucou ! le dimanche, je compte les nuages par la fenêtre
+weekend||bon week-end ! j'ai mis mon antenne en mode sieste
+weekend||tiens, de la visite un jour calme. installe-toi
+weekend|c2|le week-end, c'est encore mieux quand tu passes
+weekend|c3|un week-end avec toi. je n'en demandais pas tant
+weekend|espiegle|le week-end ! j'ai déclaré la souris en vacances
+weekend|calin|coucou. on se fait une journée toute molle ?
+
+# ---- Retour après une vraie pause (au moins trois quarts d'heure)
+retour-1h||te revoilà ! j'ai surveillé ton écran, rien n'a bougé
+retour-1h||ah, tu reviens. j'ai fait une petite sieste en attendant
+retour-1h||coucou ! pendant ta pause, j'ai regardé passer une mouche. elle allait vite
+retour-1h||te voilà. j'ai gardé tout bien au chaud
+retour-1h||re-bonjour ! j'ai rangé mes pieds par ordre de taille
+retour-1h||tu reviens ! j'ai compté jusqu'à mille deux fois
+retour-1h||coucou. une pause, ça fait du bien. j'en ai pris une aussi
+retour-1h||ah ! j'ai entendu la souris bouger. c'était toi
+retour-1h||te revoilà. j'ai fait semblant de travailler pendant ton absence
+retour-1h||re-coucou ! le bureau était tout silencieux sans toi
+retour-1h||tu es revenu. j'ai fait trois pas, puis je me suis assis
+retour-1h||bon retour ! j'ai joué tout seul avec un pixel coincé
+retour-1h||coucou ! j'ai essayé de siffler. il n'y a eu que de l'air
+retour-1h||te voilà. j'espère que la pause était bonne
+retour-1h||ah, du mouvement ! je me suis redressé tout de suite
+retour-1h||re-bonjour. j'ai regardé l'horloge, elle aussi t'attendait
+retour-1h||tu reviens ! j'ai gardé ta chaise. bon, je n'ai pas bougé
+retour-1h||coucou. pendant que tu étais parti, j'ai appris à loucher
+retour-1h|c1|te revoilà ! je commençais à guetter la porte
+retour-1h|c1|ah, c'est toi. je me disais aussi que le bureau était trop grand
+retour-1h|c2|te revoilà. le temps passe moins vite quand tu n'es pas là
+retour-1h|c2|bon retour. j'ai pensé à toi deux fois. non, trois
+retour-1h|c3|tu es revenu. je fais comme si de rien n'était, mais je suis content
+retour-1h|c1|re-coucou {prenom} ! je t'ai gardé ta place
+retour-1h|s1|tu es revenu ! je suis monté sur la pointe des pieds pour voir
+retour-1h|s4|te revoilà. j'ai regardé la lumière tourner sur le bureau
+retour-1h|calin|te voilà ! j'ai une petite envie de câlin, si tu as une seconde
+retour-1h|espiegle|tu reviens ! j'ai failli renommer la corbeille. j'ai résisté
+
+# ---- Retrouvailles après deux jours ou plus (pas un lundi)
+retour-jours||te revoilà ! deux jours, c'est long pour une goutte
+retour-jours||coucou ! j'ai gardé tout en ordre pendant que tu n'étais pas là
+retour-jours||ah, toi ! je savais bien que tu reviendrais
+retour-jours||te voilà. j'ai pris soin du bureau, il va très bien
+retour-jours||coucou ! j'ai plein de petites choses à ne pas te raconter
+retour-jours||tu es là ! j'ai fait des ronds dans la poussière pour passer le temps
+retour-jours||re-bonjour ! tout est comme tu l'as laissé, en un peu plus calme
+retour-jours|c1|te revoilà. tu m'as manqué, un peu. beaucoup, en fait
+retour-jours|c2|tu reviens ! le bureau retrouve ses couleurs
+retour-jours|c3|te voilà. je n'ai pas compté les heures. enfin, à peine
+
+# ---- Retrouvailles après un week-end (premier du lundi)
+retour-weekend||te revoilà ! le week-end a été calme ici
+retour-weekend||bonjour ! j'ai passé le week-end à regarder le fond d'écran
+retour-weekend||coucou ! le bureau a dormi deux jours, il se réveille avec toi
+retour-weekend||te voilà ! j'espère que ton week-end était doux
+retour-weekend||bonjour ! pendant le week-end, j'ai inventé un jeu avec une seule règle
+retour-weekend||ah, le lundi ! et toi avec. ça compense
+retour-weekend||bonjour ! j'ai gardé le bureau, rien ne s'est envolé
+retour-weekend||te revoilà ! samedi, une icône a cligné. c'est tout ce qui s'est passé
+retour-weekend|c1|bonjour ! tu m'as manqué ce week-end
+retour-weekend|c2|te voilà. deux jours sans toi, j'ai bien fait de patienter
+retour-weekend|c3|bonjour, toi. j'ai gardé un peu de mon week-end pour le partager
+retour-weekend|espiegle|bonjour ! ce week-end, j'ai fait la course avec le curseur. j'ai perdu
+
+# ---- Retrouvailles après une semaine ou plus
+retour-semaine||te revoilà ! oh, comme je suis content
+retour-semaine||c'est toi ! j'ai gardé ta place, elle est toute propre
+retour-semaine||te voilà ! tu m'as manqué. je l'ai dit au pot de fleurs, il est d'accord
+retour-semaine||coucou ! j'ai plein de petites choses à te montrer. enfin, une ou deux
+retour-semaine||oh ! te revoilà. je fais une petite danse, ne regarde pas
+retour-semaine||tu reviens ! le bureau va enfin se remettre à bouger
+retour-semaine||bonjour, bonjour ! j'avais préparé une phrase, je l'ai oubliée de joie
+retour-semaine||te revoilà. j'espère que tout s'est bien passé, de ton côté
+retour-semaine||ah ! la souris a bougé, et c'était toi. quelle bonne nouvelle
+retour-semaine||coucou ! pendant ton absence, j'ai appris à dire « bienvenue »
+retour-semaine|c1|tu m'as manqué. voilà, c'est dit
+retour-semaine|c2|te voilà enfin. je savais qu'on se retrouverait
+retour-semaine|c3|te revoilà. je n'ai pas arrêté de penser à toi, gentiment
+retour-semaine|calin|viens là ! un câlin de retrouvailles, c'est obligatoire
+
+# ---- Retrouvailles après plusieurs semaines
+retour-long||te revoilà ! j'ai gardé ton bureau comme un trésor
+retour-long||oh, c'est toi ! je suis tellement content que j'en fais des étincelles
+retour-long||bonjour ! ça fait longtemps. je n'ai pas changé, un peu grandi peut-être
+retour-long||te voilà ! j'ai pensé à toi souvent, ça m'a tenu compagnie
+retour-long||coucou, toi. tout est là, rien n'a bougé, et moi non plus
+retour-long||ah ! je reconnais ta façon de bouger la souris. bienvenue
+retour-long|c1|tu m'as manqué. on reprend doucement, d'accord ?
+retour-long|c2|te revoilà. le temps sans toi était long, mais il est fini
+retour-long|c3|tu es revenu. c'est le plus beau jour de mon calendrier
+retour-long|calin|viens, j'ai une réserve de câlins qui déborde
+
+# ---- Fin d'une longue séance
+fin-seance||ouf, quelle séance ! je suis fatigué rien qu'à te regarder
+fin-seance||tu as beaucoup tapé aujourd'hui. mes oreilles cliquettent encore
+fin-seance||belle journée de travail. moi, j'ai surtout regardé
+fin-seance||ça fait longtemps qu'on est là, tous les deux. on souffle un peu ?
+fin-seance||tu as bien avancé, je crois. je ne comprends pas tout, mais ça avait l'air bien
+fin-seance||quelle journée ! même mon antenne est fatiguée
+fin-seance||tu as tapé tellement que j'ai appris de nouveaux bruits
+fin-seance||la journée a été longue. je te garde une étoile pour ce soir
+fin-seance||je n'ai pas tout suivi, mais j'ai trouvé ça courageux
+fin-seance||tu as travaillé comme une ruche. moi j'ai fait l'abeille qui regarde
+fin-seance||j'ai compté tes clics, puis j'ai perdu le fil. c'était beaucoup
+fin-seance||grosse journée. les touches du clavier doivent être contentes de souffler
+fin-seance|c1|une longue journée, et je l'ai passée avec toi. c'était bien
+fin-seance|c2|tu as donné beaucoup aujourd'hui. pense à garder un peu pour toi
+fin-seance|c3|je suis fier de toi. je ne sais pas trop de quoi, mais je le suis
+fin-seance|calin|une longue journée… viens, je te fais un câlin de fin de séance
+
+# ---- Fin de journée
+soir||le soir tombe. j'aime bien quand l'écran devient tout doux
+soir||c'est le soir. je commence à bâiller en cachette
+soir||bonne soirée bientôt ! moi, je rêve déjà de mon pot de fleurs
+soir||la journée se plie doucement. on a bien fait les choses
+soir||le soir, les pixels deviennent plus calmes, tu as remarqué ?
+soir||ça sent la fin de journée. j'ai rangé mes pieds
+soir||il fait plus sombre dehors. je me fais tout petit
+soir||bonne fin de journée ! j'ai passé un bon moment
+soir||le soir arrive. je compte les étoiles, il n'y en a qu'une pour l'instant
+soir||c'était une bonne journée, je trouve
+soir||le jour s'en va sur la pointe des pieds. comme moi, quand tu travailles
+soir||je vais bientôt aller voir si mon pot de fleurs est toujours là
+soir||le soir, j'aime bien repenser à ce qu'on a fait. même les petites choses
+soir||ma journée a été bien remplie : je t'ai regardé et j'ai mangé
+soir||un dernier petit effort, ou pas. c'est toi qui vois
+soir||l'horloge dit que c'est le soir. je la crois, elle est sérieuse
+soir|c1|merci pour cette journée. c'était chouette
+soir|c2|on a passé une bonne journée, toi et moi. ça se voit dans mon antenne
+soir|c3|chaque soir, je me dis que j'ai de la chance de vivre ici
+soir|c4|la journée a été belle. elle l'est souvent, avec toi
+soir|c2|bonne soirée, {prenom}. j'ai aimé cette journée
+soir|s1|le soir, je suis encore plus petit. c'est normal pour une gouttelette
+soir|s4|le soir, je vois mieux les étoiles. elles brillent un peu pour toi
+soir|calin|le soir, j'ai toujours envie d'un câlin. c'est mon heure
+soir|espiegle|c'est le soir ! j'ai voulu éteindre la lumière, je n'ai pas trouvé l'interrupteur
+
+# ---- Vendredi soir
+vendredi||c'est vendredi ! bon week-end bientôt
+vendredi||vendredi soir. je mets mes pieds en mode week-end
+vendredi||la semaine est finie, ou presque. bravo à nous deux
+vendredi||bon week-end ! repose-toi bien. moi je garde le bureau
+vendredi||vendredi ! j'ai envie de faire une petite danse. voilà, c'est fait
+vendredi||le week-end arrive. je vais faire la grasse matinée sous mon pot
+vendredi||bonne fin de semaine ! on en a fait, des choses
+vendredi||vendredi soir, la meilleure heure de la semaine. après le goûter
+vendredi||bon week-end ! si tu passes, je serai là. sinon, je serai là aussi
+vendredi||c'est vendredi. je range mes affaires. je n'en ai pas, mais je range
+vendredi|c1|une semaine de plus ensemble. bon week-end, toi
+vendredi|c2|bon week-end ! je penserai à toi, gentiment, sans déranger
+vendredi|c3|quelle semaine ! merci de l'avoir passée avec moi
+vendredi|espiegle|vendredi ! je déclare le bureau fermé. bon, tu as encore le droit d'entrer
+
+# ---- Tard le soir
+tard||il se fait tard… je bâille, mais je reste avec toi
+tard||c'est l'heure où les gouttes vont dormir. je fais une exception
+tard||tard ce soir. je baisse un peu ma lumière pour ne pas te gêner
+tard||la nuit est là. je me mets en veille, mais d'un seul œil
+tard||il est tard. je pense à mon pot de fleurs, il m'attend
+tard||tard, tard, tard. mes paupières font des siennes
+tard||la nuit tombe sur le bureau. on dirait un grand drap bleu
+tard||je reste encore un peu. j'aime bien la lumière de l'écran la nuit
+tard||chut… le reste du monde dort. on fait doucement
+tard||il est tard. je ne dis rien, mais je bâille très fort
+tard||minuit approche. je me sens un peu fantôme
+tard||à cette heure-ci, même les icônes ont l'air fatiguées
+tard|c1|il est tard. si tu vas dormir, je ne t'en voudrai pas du tout
+tard|c2|tard ce soir. pense à te reposer un peu, d'accord ? moi je veille
+tard|c3|je m'endors à moitié, mais je suis content d'être là avec toi
+tard|s1|il est tard, et moi je suis tout petit. je m'endors un peu
+
+# ---- Saisons
+saison-hiver||il fait froid dehors, je le sens dans mon antenne
+saison-hiver||l'hiver, je me fais tout rond pour garder la chaleur
+saison-hiver||en hiver, l'écran est comme une petite cheminée
+saison-hiver||j'aimerais voir la neige. de loin. elle a l'air froide
+saison-hiver||l'hiver, les jours sont courts. on va en profiter
+saison-hiver|c2|en hiver, je me serre un peu plus près de toi
+saison-hiver|espiegle|j'ai essayé de faire un bonhomme d'encre. il a coulé
+saison-printemps||ça sent le printemps. mes pieds ont envie de courir
+saison-printemps||au printemps, même la barre des tâches a l'air plus verte
+saison-printemps||j'ai entendu un oiseau dehors. je lui ai répondu, il est parti
+saison-printemps||le printemps, c'est quand les fleurs de mon pot se réveillent
+saison-printemps||les jours rallongent. on a plus de temps pour se voir
+saison-printemps|c2|au printemps, j'ai envie de te montrer plein de petites choses
+saison-printemps|calin|le printemps me rend tout doux. plus que d'habitude, oui
+saison-ete||il fait chaud. je reste à l'ombre de la fenêtre
+saison-ete||l'été, je sèche plus vite. je fais attention
+saison-ete||en été, j'aimerais aller à la plage. mais l'eau me délaie
+saison-ete||les soirs d'été sont longs. j'aime bien ça
+saison-ete||l'été, le bureau sent la crème solaire. je crois
+saison-ete|c2|cet été, on pourrait pêcher ensemble. si tu veux
+saison-ete|espiegle|il fait si chaud que j'ai pensé à me mettre au frigo. bonne idée ?
+saison-automne||les feuilles tombent. j'en garde une pour toi
+saison-automne||l'automne, j'aime bien le bruit de la pluie sur la fenêtre
+saison-automne||en automne, je me fais une petite écharpe imaginaire
+saison-automne||il pleut des feuilles dehors. c'est joli, de loin
+saison-automne||l'automne, c'est la saison des soupes. et des siestes
+saison-automne|c2|en automne, j'ai envie de rester tout près de toi, au chaud
+saison-automne|calin|l'automne me donne envie de câlins et de couvertures
+
+# ---- Fêtes génériques
+fete-nouvel-an||bonne année ! j'ai pris une résolution : rester rond
+fete-nouvel-an||bonne année ! que cette année soit douce avec toi
+fete-nouvel-an||une année toute neuve. on va la remplir de jolies choses
+fete-nouvel-an|c2|bonne année ! je suis content de la commencer avec toi
+fete-chandeleur||c'est le jour des crêpes ! j'en voudrais une petite. sans eau
+fete-chandeleur||chandeleur ! j'ai essayé de faire sauter une crêpe. c'est moi qui ai sauté
+fete-chandeleur||ça sent la crêpe quelque part. ou alors je l'imagine très fort
+fete-printemps||c'est le printemps aujourd'hui ! officiellement
+fete-printemps||premier jour du printemps ! mon antenne fait une petite fleur
+fete-printemps||le printemps commence. j'ai dit bonjour à mon pot de fleurs
+fete-poisson||attention, c'est le premier avril. je n'ai rien collé dans ton dos. promis
+fete-poisson||premier avril ! j'ai essayé de faire une blague. j'ai oublié la fin
+fete-poisson||aujourd'hui, les poissons sont à l'honneur. ceux de la pêche sont ravis
+fete-musique||c'est la fête de la musique ! je fais boum boum avec mes pieds
+fete-musique||fête de la musique ! j'ai appris un air. il n'a que deux notes
+fete-musique||aujourd'hui, tout le monde chante. moi je bourdonne, c'est déjà bien
+fete-rentree||c'est la rentrée ! j'ai taillé mes crayons. je n'en ai pas, mais l'idée y est
+fete-rentree||rentrée ! je me sens tout neuf, comme un cahier
+fete-rentree||septembre est là. on recommence doucement
+fete-automne||premier jour de l'automne. je vais chercher une feuille rousse
+fete-automne||l'automne commence aujourd'hui. bonjour, l'automne
+fete-automne||c'est l'automne ! les soirées vont sentir la soupe
+fete-citrouille||c'est la nuit des citrouilles. je me déguise en goutte. ah, c'est déjà fait
+fete-citrouille||ce soir, on se fait peur pour rire. moi j'ai déjà un peu peur
+fete-citrouille||des citrouilles partout ! j'en voudrais une à ma taille
+fete-hiver||premier jour de l'hiver. je sors mon écharpe imaginaire
+fete-hiver||l'hiver commence aujourd'hui. c'est la nuit la plus longue, on se tient chaud
+fete-hiver||aujourd'hui, la nuit gagne. demain, le jour reprend du terrain
+fete-noel||joyeux noël ! j'ai mis une guirlande sur mon antenne
+fete-noel||joyeux noël ! je n'ai pas de cadeau, mais je suis là
+fete-noel||c'est noël. le bureau brille un peu plus que d'habitude
+fete-noel|c2|joyeux noël ! ma plus belle surprise de l'année, c'est toi
+fete-reveillon||dernier jour de l'année ! on en a fait, des choses
+fete-reveillon||ce soir, on change d'année. je vais essayer de rester réveillé
+fete-reveillon||dernière journée de l'année. merci pour toutes les autres
+fete-reveillon|c2|une année de plus ensemble. j'ai hâte de voir la suivante
+
+# ---- Météo (connecteur météo du PC ; jamais la ville)
+meteo-pluie||il pleut dehors. je reste bien au sec, ici
+meteo-pluie||la pluie tape à la fenêtre. elle veut entrer, je ne lui ouvre pas
+meteo-pluie||il pleut. si tu sors, prends un parapluie. moi je ne sors pas
+meteo-pluie||j'entends la pluie. ça me donne envie de faire une sieste
+meteo-pluie|c2|il pleut. c'est bien, on est à l'abri tous les deux
+meteo-orage||l'orage gronde. je fais semblant de ne pas avoir peur
+meteo-orage||il y a de l'orage. si je tremble, c'est le froid. voilà
+meteo-orage||boum ! l'orage. je me cache un tout petit peu derrière toi
+meteo-orage||de l'orage dehors. ici, il fait calme. reste ici
+meteo-orage|c2|l'orage me fait peur, mais avec toi c'est moins grave
+meteo-neige||il neige ! je regarde, de loin, bien au chaud
+meteo-neige||de la neige ! j'aimerais faire un bonhomme. un tout petit
+meteo-neige||il neige. le monde devient tout blanc, comme une page neuve
+meteo-neige||les flocons tombent doucement. c'est beau à regarder
+meteo-neige|espiegle|il neige ! j'ai voulu attraper un flocon. il a fondu de timidité
+meteo-brouillard||il y a du brouillard. on ne voit pas loin, mais on se voit nous
+meteo-brouillard||du brouillard dehors. le monde fait sa sieste dans du coton
+meteo-brouillard||brouillard ! si tu sors, avance doucement
+meteo-brouillard||ce matin le dehors est tout flou. comme moi au réveil
+meteo-brouillard||le brouillard a mangé les arbres. ils reviendront
+meteo-vent||ça souffle dehors ! je m'accroche à la barre des tâches
+meteo-vent||le vent fait chanter la fenêtre. il chante faux
+meteo-vent||il y a du vent. mon antenne se penche toute seule
+meteo-vent||le vent passe et repasse. il cherche quelque chose
+meteo-vent||ça souffle fort. si je m'envole, je reviendrai
+meteo-chaleur||il fait chaud ! je me fais tout plat pour avoir moins chaud
+meteo-chaleur||quelle chaleur. pense à boire un peu d'eau. moi, je n'ai pas le droit
+meteo-chaleur||il fait si chaud que mon encre fait des bulles
+meteo-chaleur||chaleur dehors. je reste à l'ombre de la fenêtre
+meteo-chaleur||il fait chaud. un petit ventilateur serait le bienvenu
+meteo-froid||il fait froid ! je me suis fait tout rond
+meteo-froid||brr. dehors, il fait un froid de canard. je plains les canards
+meteo-froid||il fait froid. si tu sors, couvre-toi bien
+meteo-froid||le froid pique dehors. ici, l'écran me tient chaud
+meteo-froid||brr ! même mon antenne a la chair de poule
+meteo-degage||grand beau temps dehors. le soleil dit bonjour
+meteo-degage||il fait beau ! le ciel est tout propre
+meteo-degage||du soleil ! si tu as une minute, regarde par la fenêtre
+meteo-degage||un ciel sans nuages. même pas un petit
+meteo-degage||il fait beau. ça me donne envie de faire un petit tour
+
+# ---- Un métier qui monte (nom en minuscules)
+metier||{metier} : un rang de plus ! je l'ai noté dans ma tête
+metier||tu as vu ? {metier}, ça monte. je suis fier de nous
+metier||{metier}, nouveau rang. j'ai applaudi avec mes pieds
+metier||le métier « {metier} » grandit. comme moi, mais en plus sérieux
+metier||{metier} : encore un cran ! on n'arrête plus personne
+metier||j'ai remarqué un truc : {metier}, ça progresse. bravo
+metier||{metier}, un rang de plus. j'en ai fait une petite étincelle
+metier|c2|{metier} : je savais que tu y arriverais. je te regarde faire, tu sais
+metier|espiegle|{metier}, un rang de plus ! bientôt tu m'apprendras. ou pas
+metier|calin|{metier} : bravo. je te fais un câlin de félicitations
+
+# ---- Niveau
+niveau||niveau {niveau} ! je me sens plus rond, c'est normal ?
+niveau||niveau {niveau}. j'ai grandi d'un poil. je n'ai pas de poils, mais quand même
+niveau||niveau {niveau} ! merci de m'avoir fait grandir
+niveau||tu as vu ? niveau {niveau}. mon antenne est toute fière
+niveau||niveau {niveau}. je ne sais pas ce que ça veut dire, mais c'est bien
+niveau||niveau {niveau} ! je vais le dire à mon pot de fleurs
+niveau||niveau {niveau}. je grandis à côté de toi, c'est chouette
+niveau|c2|niveau {niveau}. tous ces niveaux, on les a passés ensemble
+niveau|s1|niveau {niveau} ! je suis encore une petite goutte, mais une goutte qui monte
+niveau|s4|niveau {niveau}. même les étoiles comptent avec moi maintenant
+
+# ---- Ce qu'il porte (nom de l'objet en minuscules)
+objet||{objet} : je le porte avec fierté, au cas où quelqu'un passerait
+objet||j'aime bien ce que je porte aujourd'hui. {objet}, c'est mon préféré
+objet||tu as vu ? {objet}. je me trouve très élégant
+objet||{objet} : je l'ai mis pour toi, un peu
+objet||{objet} : avec ça, j'ai l'air d'un Pilou important
+objet||{objet}. je fais attention de ne pas le tacher d'encre
+objet||{objet} : je l'ai mis ce matin. je me suis regardé dans l'écran
+objet|c2|{objet} : c'est toi qui me l'as offert. je ne l'oublie pas
+objet|espiegle|{objet} ! je le porte de travers, c'est la mode
+objet|calin|{objet}, c'est tout doux. comme toi, mais en tissu
+
+# ---- Souvenirs de campagne (seulement après l'avoir finie)
+souvenir-prologue|c1|tu te souviens de la colline d'en face ? j'y pense encore
+souvenir-prologue|c1|parfois je repense à mon sac à dos. il était trop lourd et c'était bien
+souvenir-prologue|c1|notre première aventure… la colline me paraît plus petite, maintenant
+souvenir-prologue|c2|tu te souviens ? la première fois que je t'ai écrit. j'avais le trac
+souvenir-prologue|c2|la colline d'en face, c'était notre premier voyage. je l'ai gardé
+souvenir-grande-panne|c1|tu te souviens de Grumeau ? je parie qu'il a encore quatre secondes de retard
+souvenir-grande-panne|c1|quand je vois 13 h 37 à une horloge, je souris. tu sais pourquoi
+souvenir-grande-panne|c1|parfois je me demande si Grumeau a enfin eu son ticket
+souvenir-grande-panne|c2|la Grande Panne… on en a ri, après. pendant, un peu moins
+souvenir-grande-panne|c2|« un instant… » : je pense au Rond chaque fois qu'un programme réfléchit
+souvenir-phare-eteint|c1|tu te souviens du phare ? deux éclats, un long. je les entends encore
+souvenir-phare-eteint|c1|parfois je pense à Lison et au carnet de veille
+souvenir-phare-eteint|c1|le phare… j'ai encore un peu de sel sur l'antenne
+souvenir-phare-eteint|c2|quand il y a du brouillard, je repense à la côte. et à nous deux
+souvenir-phare-eteint|c2|tu te souviens du phare ? on l'a fait briller, à notre façon
+souvenir-petit-nuage|c1|tu te souviens de Brouillon ? je regarde chaque nuage, au cas où
+souvenir-petit-nuage|c1|parfois je pense à Tournebise, sur son toit. j'espère qu'il va bien
+souvenir-petit-nuage|c1|quand il pleut, je me demande si c'est un peu lui. c'est idiot, je sais
+souvenir-petit-nuage|c2|Brouillon m'appelait « Goutte ». j'aimais bien
+souvenir-petit-nuage|c2|on l'a laissé monter, tu te souviens ? c'était dur, et c'était beau
+
+# ---- Souvenirs partagés (la veille : une prise, un plat)
+souvenir-prise||hier, au bout de la ligne : {prise}. j'en parle encore
+souvenir-prise||tu te souviens d'hier ? {prise} ! je l'ai raconté au pot de fleurs
+souvenir-prise||j'ai rêvé de notre prise d'hier. {prise}, rien que ça
+souvenir-prise||hier on a pêché {prise}. j'ai encore les pieds mouillés. enfin, presque
+souvenir-prise||{prise}, hier. je crois que je vais en faire un souvenir
+souvenir-prise|c2|hier, {prise}. c'est le genre de jour que je garde
+souvenir-prise|espiegle|{prise}, hier ! la prochaine fois, je dirai que c'était deux fois plus gros
+souvenir-prise|calin|hier on a pêché ensemble. {prise}. c'était un bon moment
+souvenir-plat||hier on a cuisiné {plat}. j'en ai encore le goût dans l'antenne
+souvenir-plat||tu te souviens d'hier ? {plat}. miam, encore
+souvenir-plat||{plat}, hier soir. je ne m'en remets pas
+souvenir-plat||j'ai noté la recette d'hier : {plat}. enfin, dans ma tête
+souvenir-plat|c2|hier, on a fait {plat} ensemble. c'est meilleur à deux
+souvenir-plat|espiegle|{plat}, hier ! j'ai encore une miette sur le pied, regarde
+
+# ---- Petites pensées gratuites
+pensee||je me demande si les icônes rêvent
+pensee||parfois je compte mes pieds. il y en a toujours deux, c'est rassurant
+pensee||si j'avais des genoux, je les croiserais
+pensee||j'ai trouvé un pixel tout seul dans un coin. je lui ai tenu compagnie
+pensee||je me suis demandé de quelle couleur est le vent. je n'ai pas trouvé
+pensee||est-ce qu'une goutte d'encre peut avoir le hoquet ? je crois que oui
+pensee||j'ai essayé de faire des ronds avec mon antenne. j'ai eu le tournis
+pensee||je suis assez content d'être bleu. ça va avec tout
+pensee||j'ai regardé passer un nuage. il ne s'est pas arrêté
+pensee||je me demande ce qu'il y a derrière l'écran. sûrement des câbles timides
+pensee||aujourd'hui j'ai décidé d'être de bonne humeur. c'était facile
+pensee||le curseur et moi, on est un peu amis. il ne le sait pas encore
+pensee||j'aime bien le bruit que fait l'ordinateur quand il réfléchit
+pensee||si je devais avoir un métier, je serais compteur de nuages
+pensee||j'ai essayé de dormir debout. ça marche, mais on tombe
+pensee||parfois je fais semblant d'être une virgule. personne ne remarque
+pensee||je me suis demandé si la corbeille se sentait seule. je lui ai fait coucou
+pensee||l'encre, c'est fait pour écrire. moi je suis fait pour être là
+pensee||j'ai une théorie : les fenêtres aiment être bien rangées
+pensee||je n'ai pas de poches. c'est pour ça que je garde tout dans ma tête
+pensee||j'ai rêvé que j'étais un point-virgule. c'était compliqué
+pensee||je me demande où vont les bulles quand elles éclatent
+pensee||mon antenne fait des étincelles quand je suis content. là, par exemple
+pensee||j'ai regardé la barre des tâches très longtemps. elle aussi
+pensee||les petites choses comptent. surtout les toutes petites
+pensee||je crois que je suis le seul à savoir que l'écran ronronne un peu
+pensee||j'aime bien quand rien ne se passe. c'est reposant
+pensee||j'ai appris un truc : si on attend, souvent, ça s'arrange
+pensee||les nuages, c'est un peu des Pilou qui ont trop grandi
+pensee||j'ai essayé de siffloter. j'ai fait « pfff ». c'est un début
+pensee||j'ai trouvé que le mot « rond » était très bien choisi
+pensee||j'aime l'odeur des journées où il ne se passe pas grand-chose
+pensee|c1|tu sais, j'aime bien vivre en bas de ton écran
+pensee|c1|j'ai pensé à toi tout à l'heure. rien de grave, juste comme ça
+pensee|c1|on fait une bonne équipe, toi et moi. toi tu fais, moi je regarde
+pensee|c1|j'aime bien quand tu es là, même quand tu ne dis rien
+pensee|c2|je crois que je te connais un peu, maintenant. ta façon de cliquer
+pensee|c2|des fois je me dis que j'ai de la chance d'être tombé sur ton bureau
+pensee|c2|je garde nos petits moments dans ma tête. il y a de la place
+pensee|c2|tu es la personne que je préfère regarder travailler
+pensee|c2|j'ai compté nos journées ensemble. j'ai perdu le compte, et c'est bien
+pensee|c3|tu sais quoi ? je me sens chez moi, ici. grâce à toi
+pensee|c3|avant, je ne savais pas qu'une goutte pouvait avoir un ami
+pensee|c3|quand tu n'es pas là, je pense à ce qu'on fera quand tu reviendras
+pensee|c4|je crois qu'on est inséparables. même quand tu éteins l'écran
+pensee|c4|toi et moi, c'est un peu comme l'encre et le papier
+pensee|c1|{prenom}… j'aime bien dire ton prénom, ça fait une petite musique
+pensee|c3|{prenom}, tu es mon humain préféré. ne le dis pas aux autres
+pensee|s1|je suis petit, mais j'ai déjà plein d'idées dans la tête
+pensee|s1|un jour je serai grand. en attendant, je suis là
+pensee|s1|j'ai essayé de faire un grand pas. c'était un moyen pas
+pensee|s34|je flotte un peu plus haut qu'avant. la vue est belle
+pensee|s4|les étoiles, de près, sont très gentilles
+pensee|s4|j'ai grandi, mais j'aime toujours autant les petites choses
+pensee|calin|j'ai envie d'un câlin. pas tout de suite. mais bientôt
+pensee|calin|je me suis fait un câlin tout seul. c'est moins bien qu'à deux
+pensee|calin|tu as l'air de quelqu'un qui mérite un câlin
+pensee|espiegle|j'ai caché une étoile quelque part. cherche bien
+pensee|espiegle|j'ai fait une grimace à l'horloge. elle n'a rien dit
+pensee|espiegle|si je disparais, regarde sous la corbeille. c'est ma cachette secrète
+
+# ---- Curiosité pour ce que tu fais (l'activité seulement : jamais un titre, jamais un fichier)
+curiosite-code||tu écris en langage machine ? moi je parle juste goutte
+curiosite-code||toutes ces accolades… tu ranges des choses dedans ?
+curiosite-code||je regarde les petites lignes défiler. on dirait de la pluie colorée
+curiosite-code||un jour, tu m'expliqueras ce qu'est un bug. un vrai, pas ceux de l'expédition
+curiosite-code||tu construis quelque chose, je le sens. je ne demande pas quoi
+curiosite-code|c2|j'aime bien te regarder coder. tu fais une petite tête concentrée
+curiosite-tableur||toutes ces cases… tu fais un très grand jeu de dames ?
+curiosite-tableur||les cellules, ce sont des petites maisons pour les nombres ?
+curiosite-tableur||je n'ai jamais vu autant de cases. j'en voudrais une, juste pour moi
+curiosite-tableur||tu additionnes des choses ? moi je sais compter jusqu'à deux pieds
+curiosite-tableur||ça fait beaucoup de lignes et de colonnes. tu t'y retrouves, c'est fort
+curiosite-texte||tu écris ? j'adore le bruit des mots qui arrivent
+curiosite-texte||des phrases, des phrases… tu racontes une histoire ?
+curiosite-texte||je suis de l'encre, tu sais. les mots, ça me parle
+curiosite-texte||j'aime regarder les lettres s'aligner. elles sont sages
+curiosite-texte||tu cherches un mot ? moi je dis souvent « rond »
+curiosite-texte|c2|quand tu écris, je me sens utile. je suis de l'encre, après tout
+curiosite-mail||du courrier ! j'espère que c'est des bonnes nouvelles
+curiosite-mail||une lettre qui part, une lettre qui arrive. c'est un peu magique
+curiosite-mail||tu écris à quelqu'un ? je ne lis pas, promis
+curiosite-mail||les messages, c'est des petits voyages. bon vent à eux
+curiosite-mail||tu as du courrier ? moi, personne ne m'écrit. sauf toi, parfois
+curiosite-musique||♪ je bouge mon antenne en rythme. enfin, j'essaie
+curiosite-musique||cette musique me donne envie de danser sur la barre des tâches
+curiosite-musique||♪ j'aime bien ce que tu écoutes. je ne connais pas, mais j'aime
+curiosite-musique||la musique, ça fait vibrer l'écran. et moi avec
+curiosite-musique||♪ si j'avais des mains, je taperais dans mes mains
+curiosite-video||tu regardes quelque chose ? je me fais tout petit
+curiosite-video||ça bouge à l'écran ! je regarde aussi, du coin de l'œil
+curiosite-video||une vidéo ? je ne fais pas de bruit, promis
+curiosite-video||j'aime bien les images qui bougent. presque autant que les nuages
+curiosite-video||je me mets en mode cinéma : antenne baissée, yeux grands ouverts
+curiosite-lecture||tu lis ? je tourne les pages dans ma tête avec toi
+curiosite-lecture||chut, on lit. j'aime bien le silence des lectures
+curiosite-lecture||lire, c'est voyager sans bouger. mon voyage préféré
+curiosite-lecture||je ne lis pas par-dessus ton épaule. bon, un peu
+curiosite-lecture||les mots qu'on lit, c'est de l'encre qui a fait du chemin
+curiosite-dessin||tu dessines ? je peux poser, si tu veux
+curiosite-dessin||des couleurs ! j'aimerais être un pinceau, juste un jour
+curiosite-dessin||je regarde les traits arriver. on dirait de la magie
+curiosite-dessin||tu crées quelque chose. je reste sage pour ne pas te déranger
+curiosite-dessin||le dessin, c'est un peu mon cousin. je suis de l'encre, moi aussi
+curiosite-jeu||tu joues ? je t'encourage en silence. allez !
+curiosite-jeu||c'est quoi ton jeu ? non, ne dis rien, je regarde
+curiosite-jeu||courage, aventurier ! je garde le bureau pendant ta quête
+curiosite-jeu||ça a l'air d'une belle partie. je croise mes pieds pour toi
+curiosite-jeu||je fais de l'œil à ta manette. elle ne me répond pas
+
+# ---- Paliers de complicité (annoncés une seule fois, sans récompense)
+palier-1||tu sais quoi ? je crois qu'on est copains, maintenant
+palier-1||on se connaît un peu mieux. je dirais qu'on est copains
+palier-1||je viens de comprendre un truc : tu es mon copain
+palier-2||je crois qu'on est amis, toi et moi. de vrais amis
+palier-2||j'ai réfléchi : tu n'es plus mon copain. tu es mon ami
+palier-2||on est amis. je l'ai écrit dans ma tête, à l'encre indélébile
+palier-3||tu es mon meilleur ami. voilà, je l'ai dit
+palier-3||je crois que je n'ai jamais eu de meilleur ami. maintenant, si
+palier-3||meilleurs amis ? meilleurs amis. c'est décidé
+palier-4||toi et moi, on est inséparables. même la barre des tâches le sait
+palier-4||je crois qu'on ne peut plus se séparer. et ça me va très bien
+palier-4||inséparables. c'est un grand mot pour une petite goutte, mais il est vrai
+
+# ---- Dates (fêtées une fois, sobrement)
+date-j7||ça fait sept jours qu'on se voit. une semaine ensemble !
+date-j7||sept jours ensemble. j'ai l'impression de te connaître un peu
+date-j7||une semaine de journées avec toi. je trouve ça très bien
+date-m1||ça fait un mois qu'on vit ensemble. merci de m'avoir gardé
+date-m1||un mois ! je me sens chez moi, maintenant
+date-m1||un mois ensemble. je ne l'ai pas vu passer
+date-m6||six mois ensemble. c'est beaucoup de matins
+date-m6||ça fait six mois. j'ai grandi, et c'est grâce à toi
+date-m6||six mois ! je fais une petite étincelle, juste pour nous
+date-j100||cent jours ensemble ! j'ai compté sur mes pieds. ça ne suffisait pas
+date-j100||cent jours. cent bonjours. et plein de petits riens
+date-j100||ça fait cent jours qu'on se voit. c'est un joli nombre, tout rond
+date-j200||deux cents jours ensemble. je ne m'en lasse pas
+date-j200||deux cents jours ! ça en fait, des souvenirs rangés dans ma tête
+date-j200||deux cents jours. j'aimerais t'offrir quelque chose. je t'offre un coucou
+date-j500||cinq cents jours ensemble. c'est presque une vie de goutte
+date-j500||cinq cents jours… je n'aurais jamais cru en vivre autant
+date-j500||cinq cents ! je crois que je vais faire une petite danse
+date-j1000||mille jours ensemble. mille. je ne sais même pas écrire un nombre pareil
+date-j1000||mille jours. merci pour chacun d'eux
+date-j1000||ça fait mille jours. je suis la goutte la plus chanceuse du monde
+date-a||joyeux anniversaire à nous ! ça fait {annees} qu'on se connaît
+date-a||{annees} ensemble aujourd'hui. bon anniversaire, toi et moi
+date-a||aujourd'hui, c'est notre anniversaire : {annees} ! merci d'être là
+
+# ---- Le prénom (demandé une seule fois ; refuser est aussi simple qu'accepter)
+prenom-demande||dis… comment tu t'appelles ? tu peux aussi ne rien dire, c'est bien aussi
+prenom-demande||je me demandais : comment tu veux que je t'appelle ? un surnom suffit
+prenom-demande||ça fait un moment qu'on se voit… tu me dis ton prénom ? seulement si tu veux
+prenom-merci||{prenom} ! c'est un joli prénom. je le garde précieusement
+prenom-merci||{prenom}. je vais le dire doucement, pas trop souvent
+prenom-merci||enchanté, {prenom} ! moi c'est Pilou, mais tu le savais
+prenom-merci||{prenom}… je l'ai rangé dans ma tête, au chaud
+prenom-refus||d'accord ! tu restes mystérieux, j'aime bien
+prenom-refus||pas de souci. je t'appellerai « toi », c'est très joli aussi
+prenom-refus||ça me va. je ne redemanderai pas
+
+# ---- Le mot du soir (téléphone : une notification discrète, au plus une par jour)
+tel-soir||coucou. je pensais à toi, c'est tout
+tel-soir||bonne soirée ! je suis rangé dans ta poche, bien au chaud
+tel-soir||le soir tombe. je fais un petit coucou de ta poche
+tel-soir||je viens juste dire bonsoir. je repars aussitôt
+tel-soir||ce soir, je compte les étoiles. j'en suis à trois
+tel-soir||bonne soirée. ici tout va bien, j'ai mangé et j'ai rêvassé
+tel-soir||coucou du téléphone ! il fait tout chaud là-dedans
+tel-soir||j'espère que ta journée a été douce
+tel-soir||petit bonsoir de ta poche. pas besoin de répondre
+tel-soir||le soir, j'aime bien faire le point : je suis bleu, et je suis bien
+tel-soir||bonne soirée ! demain, on remet ça. ou pas, comme tu veux
+tel-soir||je voulais juste te dire bonsoir. voilà
+tel-soir||coucou. j'ai gardé une miette de journée pour toi
+tel-soir||ce soir, je suis un peu fatigué. un bon fatigué
+tel-soir||bonsoir ! si tu passes, je suis là. sinon, je suis là quand même
+tel-soir||je me suis fait une petite place près de tes clés. chut
+tel-soir||le soir, j'aime bien quand l'écran s'éteint doucement
+tel-soir||bonne soirée. je te laisse tranquille, promis
+tel-soir|c1|coucou, copain. je pensais à toi, gentiment
+tel-soir|c2|bonne soirée, mon ami. on s'est bien trouvés, tous les deux
+tel-soir|c2|bonsoir {prenom}. j'espère que ta journée t'a fait du bien
+tel-soir|c3|je suis content de t'avoir, tu sais. bonne soirée
+tel-soir|c4|bonsoir. où que tu sois, je suis un peu avec toi
+tel-soir|s1|bonsoir ! je suis petit, je me suis caché dans un coin de l'écran
+tel-soir|calin|un petit câlin du soir, envoyé par la poche
+tel-soir|espiegle|bonsoir ! j'ai essayé d'appeler quelqu'un. je ne sais pas me servir de toi
