@@ -293,7 +293,7 @@ public sealed partial class FenetrePilou
                 case "depart":
                     _visiteX0 = _x;
                     _retourX = _x;
-                    _visiteSens = _x - _zone.Left < _zone.Right - _x ? -1 : 1;
+                    _visiteSens = Placement.SensSortie(_x, _zone.Left, _zone.Right);
                     _geste = Geste.Rien;
                     Dire($"je vais voir {nom} ! à tout'", 4500);
                     break;
@@ -390,13 +390,22 @@ public sealed partial class FenetrePilou
     // ---- Mon Pilou : départ, pancarte, retour
 
     // Pendant une visite, Pilou ne se promène pas : il part, attend (pancarte) ou revient. Renvoie s'il marche.
+    // Abscisse qui décide de l'écran de Pilou : pendant une visite ou une expédition, celle d'où il est parti
+    // (en route, ses pieds passent sur l'écran voisin, qui ne doit pas devenir le sien).
+    private double XEcran =>
+        _visites.Sortie is not null && _visiteX0 != 0 ? _visiteX0 : EnExpedition && _expX0 != 0 ? _expX0 : _x;
+
     private bool VisiteBouge(double dt, out bool marche)
     {
         marche = false;
         double e = Epoque;
         if (_visites.Sortie is { } s)
         {
-            double sortie = _visiteSens < 0 ? _zone.Left - 90 * K : _zone.Right + 90 * K;
+            // Visite en cours au lancement de Pilou : la pancarte reste où il est (pas en X = 0).
+            if (_visiteX0 == 0) _visiteX0 = _x;
+            var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+            _visiteX0 = Math.Clamp(_visiteX0, min, max);
+            double sortie = Placement.Sortie(_visiteSens, _zone.Left, _zone.Right, K);
             switch (s.Etape)
             {
                 case Etape.Depart:
@@ -424,7 +433,8 @@ public sealed partial class FenetrePilou
         if (_visites.Venue is not null)
         {
             // L'hôte reste là pour son invité (il le regarde, il joue avec lui).
-            _x = Math.Clamp(_x, _zone.Left + Scene.Largeur / 2 * K, _zone.Right - Scene.Largeur / 2 * K);
+            var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+            _x = Math.Clamp(_x, min, max);
             return true;
         }
         return false;
@@ -509,12 +519,13 @@ public sealed partial class FenetrePilou
         if (_jeuEnCours != Jeu.Aucun) Arreter("");
         _geste = Geste.Rien;
         // Il arrive par le côté où il y a le plus de place, et s'arrête à côté de Pilou.
-        _inviteSens = _x - _zone.Left > _zone.Right - _x ? 1 : -1;
-        _inviteDepart = _inviteSens > 0 ? _zone.Left - 90 * K : _zone.Right + 90 * K;
+        _inviteSens = -Placement.SensSortie(_x, _zone.Left, _zone.Right);
+        _inviteDepart = Placement.Sortie(-_inviteSens, _zone.Left, _zone.Right, K);
         _inviteCible = _x - _inviteSens * 118 * K;
         _inviteX = _inviteDepart;
         _invite?.Close();
         _invite = new FenetreInvite(nom, K, _sombre);
+        _invite.Borner(_zone.Left, _zone.Right);
         _invite.Caresse += CaresserInvite;
         _invite.Show();
         Dire($"oh ! {nom} vient me rendre visite !", 4500);
@@ -791,8 +802,8 @@ public sealed partial class FenetrePilou
             }
             case "retour":
                 _visiteX0 = _x;
-                _visiteSens = _x - _zone.Left < _zone.Right - _x ? -1 : 1;
-                _retourX = _visiteSens < 0 ? _zone.Left - 90 * K : _zone.Right + 90 * K;
+                _visiteSens = Placement.SensSortie(_x, _zone.Left, _zone.Right);
+                _retourX = Placement.Sortie(_visiteSens, _zone.Left, _zone.Right, K);
                 _visites.Sortie = new Sortie
                 {
                     Ami = leo.Code, Id = "essai", Etape = Etape.Retour, Depuis = e, Debut = e - 6 * 60_000, Fin = e, Accueilli = true, Raison = "fini",

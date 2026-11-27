@@ -175,7 +175,7 @@ public sealed partial class FenetrePilou
         _expDepart = Maintenant;
         _expX0 = _x;
         _expRetourX = _x;
-        _expSens = _x - _zone.Left < _zone.Right - _x ? -1 : 1;
+        _expSens = Placement.SensSortie(_x, _zone.Left, _zone.Right);
         _geste = Geste.Rien;
         _expAnime = null;
         Dire($"en route pour {Expeditions.De(l.Nom)} ! −{l.Cout} ⚡ (reste {Jauge.Affiche(Exp.Energie)}) · retour vers {Amis.Heure(DateTime.Now.AddMinutes(l.Minutes))}", 5000);
@@ -198,8 +198,9 @@ public sealed partial class FenetrePilou
         if (_expDepart >= 0 && Maintenant - _expDepart < DepartExpMs) _expRetourX = _x;
         else
         {
-            _expX0 = _zoneConnue ? Math.Clamp(_x, _zone.Left + Scene.Largeur / 2 * K, _zone.Right - Scene.Largeur / 2 * K) : _x;
-            _expRetourX = _expSens < 0 ? _zone.Left - 90 * K : _zone.Right + 90 * K;
+            var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+            _expX0 = _zoneConnue ? Math.Clamp(_x, min, max) : _x;
+            _expRetourX = Placement.Sortie(_expSens, _zone.Left, _zone.Right, K);
         }
         _expDepart = -1;
     }
@@ -237,7 +238,7 @@ public sealed partial class FenetrePilou
     {
         marche = false;
         if (!EnExpedition) return false;
-        double sortie = _expSens < 0 ? _zone.Left - 90 * K : _zone.Right + 90 * K;
+        double sortie = Placement.Sortie(_expSens, _zone.Left, _zone.Right, K);
         if (_expRetour >= 0)
         {
             double k = Math.Clamp((Maintenant - _expRetour) / (RetourExpMs - 900), 0, 1);
@@ -254,7 +255,8 @@ public sealed partial class FenetrePilou
         {
             // Absent : la pancarte reste là où il était.
             if (_expDepart < 0 && _expX0 == 0) _expX0 = _x;
-            _x = Math.Clamp(_expX0, _zone.Left + Scene.Largeur / 2 * K, _zone.Right - Scene.Largeur / 2 * K);
+            var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+            _x = Math.Clamp(_expX0, min, max);
             _expX0 = _x;
             _expRetourX = sortie;
         }
@@ -335,7 +337,7 @@ public sealed partial class FenetrePilou
         }
         if (_badgeJournal is null) return;
         if (Bandeau.Anime) _badgeJournal.Changer("coffre-expedition", t);
-        Canvas.SetLeft(_badgeJournal, TeteX + (_aGauche ? 34 : -70));
+        Canvas.SetLeft(_badgeJournal, Placement.ACote(_aGauche, CoteJeu, 34, _badgeJournal.Width));
         Canvas.SetTop(_badgeJournal, TeteY + 22 + (Bandeau.Anime ? Math.Round(Math.Sin(t / 600) * 2) : 0));
     }
 
@@ -459,7 +461,7 @@ public sealed partial class FenetrePilou
                 _essaiExp.Dernier = r;
                 _essaiExp.DernierLu = false;
                 _expX0 = _x;
-                _expSens = _x - _zone.Left < _zone.Right - _x ? -1 : 1;
+                _expSens = Placement.SensSortie(_x, _zone.Left, _zone.Right);
                 Revenir(r);
                 break;
             }

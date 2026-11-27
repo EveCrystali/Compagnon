@@ -12,7 +12,6 @@ namespace PilouBureau;
 public sealed partial class FenetrePilou
 {
     private const double FenetreMorsure = Clics.FenetreMorsure;
-    private const double LargeurEau = 28 * 4;
     private int _tropTot;
 
     private Pixels? _eau, _canne, _bouchon, _alerte, _marmite, _feu, _trophee, _cadre;
@@ -20,7 +19,13 @@ public sealed partial class FenetrePilou
     private readonly List<(Pixels Forme, double Ne, double X, double Y, double Vx, bool Goutte)> _volutes = new();
     private double _mordA, _resultatJusque, _cuitA;
     private bool _remue, _resultat;
-    private Point _posBouchon, _posMarmite;
+    private Point _posMarmite;
+    private Size _tailleMarmite;
+    private GeoPeche? _geoPeche;
+    private (Pt Prise, Pt Bout) _reperesCanne;
+    private int _largeurCanne;
+    private double _tailleCanne = Placement.TailleCanne;
+    private double _attacheBouchonX, _attacheBouchonY; // point d'attache du fil sur le bouchon, depuis son coin
 
     private static readonly Brush EauBase = Geler(Color.FromRgb(0x4a, 0x8f, 0xdc));
     private static readonly Brush EauClaire = Geler(Color.FromRgb(0xb4, 0xdb, 0xff));
@@ -31,9 +36,22 @@ public sealed partial class FenetrePilou
     private static readonly Brush FumeeClaire = Geler(Color.FromRgb(0x76, 0x83, 0x90));
     private static readonly Brush Ambre = Geler(Color.FromRgb(0xc9, 0x7a, 0x28));
 
-    private int CoteJeu => _aGauche ? 1 : -1;
-    private double EauX => CoteJeu > 0 ? TeteX + 70 : TeteX - 70 - LargeurEau;
-    private double SolY => HauteurBulle + Scene.Sol;
+    // Côté de la fenêtre où il y a de la place (eau, marmite, main du tape m'en cinq, badges) : Placement.Sens.
+    private int CoteJeu => Placement.Sens(_aGauche);
+
+    // Repères du dernier dessin de Pilou (avant le premier, ceux de Pilou au repos).
+    private Geometrie GeoPilou
+    {
+        get
+        {
+            if (_scene.Geo.Rx > 0) return _scene.Geo;
+            RenduPilou.Rendre(new Allure { Stade = StadeAffiche() }, Banque.Commune, out var g);
+            return g;
+        }
+    }
+
+    // La pêche entière se recalcule à chaque image : la canne suit la main de Pilou (stade, respiration).
+    private GeoPeche GeometriePeche() => Placement.Peche(_aGauche, GeoPilou, _largeurCanne, _reperesCanne, _tailleCanne);
 
     // ---- Sprites
 
@@ -115,23 +133,35 @@ public sealed partial class FenetrePilou
     {
         _resultat = false;
         _mordA = t + 700 + 3000 + _hasard.NextDouble() * 12000;
-        double y = SolY - 12;
+        // Canne : sa prise et son bout se lisent sur le dessin non retourné ; retournée quand l'eau est à gauche.
+        // (Avant : posée à un décalage fixe calculé pour l'ancien petit dessin de 9 pixels ; avec le dessin de la
+        // banque, trois fois plus grand, elle partait sous Pilou, loin de sa main, et le fil partait dans le vide.)
+        var dessin = Pixels.DeSprite("canne");
+        var motifCanne = dessin?.Motif ?? MotifCanne;
+        _reperesCanne = Placement.ReperesCanne(motifCanne);
+        _largeurCanne = motifCanne.GetLength(1);
+        double tailleCanne = _tailleCanne = dessin is null ? 4 : Placement.TailleCanne;
+        var g = Placement.Peche(_aGauche, GeoPilou, _largeurCanne, _reperesCanne, tailleCanne);
+        _geoPeche = g;
         _eau = new Pixels(Eau(t), new Brush?[] { null, EauBase, EauClaire, EauSombre }, null, 4) { IsHitTestVisible = false };
-        Canvas.SetLeft(_eau, EauX - 4);
-        Canvas.SetTop(_eau, y - 4);
+        Canvas.SetLeft(_eau, g.Eau.X - 4);
+        Canvas.SetTop(_eau, g.Eau.Y - 4);
         _jeu.Children.Add(_eau);
 
-        var canne = CoteJeu > 0 ? MotifCanne : Miroir(MotifCanne);
-        _canne = Pixels.Sprite("canne", 1.2 * Scene.PX, 0, CoteJeu < 0) ?? new Pixels(canne, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, 4);
+        var motif = g.CanneMiroir ? Miroir(motifCanne) : motifCanne;
+        _canne = dessin is { } d ? new Pixels(motif, d.Palette, null, tailleCanne) : new Pixels(motif, new Brush?[] { null, ArgentSombre, OrangeJeu }, null, tailleCanne);
         _canne.IsHitTestVisible = false;
-        double baseX = TeteX + CoteJeu * 22;
-        Canvas.SetLeft(_canne, CoteJeu > 0 ? baseX - 4 : baseX - 36);
-        Canvas.SetTop(_canne, SolY - 64);
         _jeu.Children.Add(_canne);
 
-        _posBouchon = new Point(CoteJeu > 0 ? EauX + 44 : EauX + LargeurEau - 56, y - 18);
-        _bouchon = Pixels.Sprite("bouchon", 1.6) ?? new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
+        var bouchon = Pixels.DeSprite("bouchon");
+        _bouchon = bouchon is { } b ? new Pixels(b.Motif, b.Palette, null, 1.6) : new Pixels(MotifBouchon, new Brush?[] { null, Creme, OrangeJeu, OrangeClair }, ContourXp, 3);
+        // Le fil s'attache en haut, au milieu du bouchon.
+        int bw = bouchon?.Motif.GetLength(1) ?? MotifBouchon.GetLength(1);
+        double tb = bouchon is null ? 3 : 1.6;
+        _attacheBouchonX = (bw / 2.0 + 1) * tb;
+        _attacheBouchonY = tb;
         _jeu.Children.Add(_bouchon);
+        PlacerPeche(g, 0, false, t);
         // On ferre en cliquant le bouchon, l'eau (marge comprise) ou Pilou lui-même (ClicJeuSurPilou).
         _tropTot = 0;
         Cibler(_bouchon, () => ClicBouchon(Maintenant));
@@ -256,36 +286,51 @@ public sealed partial class FenetrePilou
             if (t > _resultatJusque) Arreter("");
             return;
         }
-        if (_bouchon is null || _fil is null) return;
+        if (_bouchon is null || _fil is null || _geoPeche is null) return;
         bool mord = t >= _mordA && t < _mordA + FenetreMorsure;
         double lance = Math.Clamp((t - _jeuDebut) / 700, 0, 1);
-        // Lancer : le bouchon part du bout de la canne et décrit un arc jusqu'à l'eau.
-        var bout = new Point(TeteX + CoteJeu * 22 + CoteJeu * 32, SolY - 64);
-        double bx = bout.X + (_posBouchon.X - bout.X) * lance;
-        double by = bout.Y + (_posBouchon.Y - bout.Y) * lance - Math.Sin(Math.PI * lance) * 30;
-        if (lance >= 1) by += mord ? 8 + ((int)(t / 90) % 2) * 3 : ((int)(t / 600) % 2) * 3;
-        Canvas.SetLeft(_bouchon, Math.Round(bx / 3) * 3);
-        Canvas.SetTop(_bouchon, Math.Round(by / 3) * 3);
-        _fil.X1 = bout.X + 2;
-        _fil.Y1 = bout.Y + 2;
-        _fil.X2 = bx + 7;
-        _fil.Y2 = by + 2;
+        var g = GeometriePeche(); // la main bouge avec la respiration : la canne la suit
+        _geoPeche = g;
+        PlacerPeche(g, lance, mord, t);
 
         if (mord && _alerte is null)
         {
             _alerte = new Pixels(Pixels.Texte("!"), new Brush?[] { null, OrangeJeu }, ContourXp, 4) { IsHitTestVisible = false };
             _jeu.Children.Add(_alerte);
-            Eclabousser(new Point(_posBouchon.X + 4, _posBouchon.Y + 10), t);
+            Eclabousser(new Point(g.Attache.X, g.Eau.Y), t);
             _tSaut = t;
         }
         if (_alerte is not null)
         {
-            Canvas.SetLeft(_alerte, _posBouchon.X + 2);
-            Canvas.SetTop(_alerte, _posBouchon.Y - 30 - ((int)(t / 120) % 2) * 4);
+            Canvas.SetLeft(_alerte, Math.Round(g.Attache.X - _alerte.Width / 2));
+            Canvas.SetTop(_alerte, g.Attache.Y - 32 - ((int)(t / 120) % 2) * 4);
         }
         // Personne n'a ferré à temps : Pilou tente le coup tout seul.
         if (t >= _mordA + FenetreMorsure) FinPeche(Butin.Tirer(_hasard, Niveau, seul: true, canneDoree: Possede(PilouBureau.Boutique.CanneDoree)), true, t);
         AnimerVolutes(t);
+    }
+
+    // Canne dans la main, bouchon en vol (lance < 1) ou posé (qui danse, qui plonge quand ça mord), fil du bout
+    // de la canne au haut du bouchon.
+    private void PlacerPeche(GeoPeche g, double lance, bool mord, double t)
+    {
+        if (_canne is not null)
+        {
+            Canvas.SetLeft(_canne, g.CanneX);
+            Canvas.SetTop(_canne, g.CanneY);
+        }
+        if (_bouchon is null) return;
+        var a = Placement.Lancer(g, lance);
+        double ay = a.Y;
+        if (lance >= 1) ay += mord ? 8 + ((int)(t / 90) % 2) * 3 : ((int)(t / 600) % 2) * 3;
+        double bx = Math.Round((a.X - _attacheBouchonX) / 3) * 3, by = Math.Round((ay - _attacheBouchonY) / 3) * 3;
+        Canvas.SetLeft(_bouchon, bx);
+        Canvas.SetTop(_bouchon, by);
+        if (_fil is null) return;
+        _fil.X1 = g.Bout.X;
+        _fil.Y1 = g.Bout.Y;
+        _fil.X2 = bx + _attacheBouchonX;
+        _fil.Y2 = by + _attacheBouchonY;
     }
 
     private void Eclabousser(Point ou, double t)
@@ -311,13 +356,24 @@ public sealed partial class FenetrePilou
         _remue = false;
         _resultat = false;
         _cuitA = t + 4500;
-        _posMarmite = new Point(CoteJeu > 0 ? TeteX + 60 : TeteX - 60 - 15 * 4, SolY - 40);
-        _feu = Pixels.Sprite("feu", 1.6) ?? new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, 4);
+        // Marmite du côté de la place, posée sur son feu, le feu au sol (avant : le feu était caché derrière la
+        // marmite, qui débordait sous le sol, et seule la largeur du petit dessin de repli servait au miroir).
+        var dFeu = Pixels.DeSprite("feu");
+        var dMarmite = Pixels.DeSprite("marmite");
+        double tf = dFeu is null ? 4 : 1.6, tm = dMarmite is null ? 4 : 2.2;
+        var mFeu = dFeu?.Motif ?? MotifFeu1;
+        var mMarmite = dMarmite?.Motif ?? MotifMarmite;
+        var (hautFeu, basFeu) = Placement.Rangs(mFeu);
+        var (_, basMarmite) = Placement.Rangs(mMarmite);
+        _feu = dFeu is { } f ? new Pixels(f.Motif, f.Palette, null, tf) : new Pixels(MotifFeu1, new Brush?[] { null, OrangeJeu, OrangeClair }, null, tf);
         _feu.IsHitTestVisible = false;
-        Canvas.SetLeft(_feu, _posMarmite.X + 8);
-        Canvas.SetTop(_feu, _posMarmite.Y + 26);
+        _marmite = dMarmite is { } m ? new Pixels(m.Motif, m.Palette, null, tm) : new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, tm);
+        var (pm, pf) = Placement.Cuisine(_aGauche, _marmite.Width, (basMarmite + 2) * tm, _feu.Width, (hautFeu + 1) * tf, (basFeu + 2) * tf);
+        _posMarmite = new Point(pm.X, pm.Y);
+        _tailleMarmite = new Size(_marmite.Width, _marmite.Height);
+        Canvas.SetLeft(_feu, pf.X);
+        Canvas.SetTop(_feu, pf.Y);
         _jeu.Children.Add(_feu);
-        _marmite = Pixels.Sprite("marmite", 2.2) ?? new Pixels(MotifMarmite, new Brush?[] { null, ArgentSombre, Argent, EauSombre }, ContourXp, 4);
         _marmite.ToolTip = "remuer";
         Canvas.SetLeft(_marmite, _posMarmite.X);
         Canvas.SetTop(_marmite, _posMarmite.Y);
@@ -337,7 +393,7 @@ public sealed partial class FenetrePilou
         if (_marmite is not null && !_resultat && Banque.Commune["marmite"] is not null) _marmite.Changer("marmite", t);
         if (!_resultat)
         {
-            if ((int)(t / 420) != (int)((t - 33) / 420)) Volute(new Point(_posMarmite.X + 18 + _hasard.Next(20), _posMarmite.Y - 4), t, Creme);
+            if ((int)(t / 420) != (int)((t - 33) / 420)) Volute(new Point(_posMarmite.X + _tailleMarmite.Width / 2 - 12 + _hasard.Next(20), _posMarmite.Y + 8), t, Creme);
             if (t >= _cuitA) Servir(t);
         }
         else if (t > _resultatJusque) Arreter("");
@@ -361,7 +417,7 @@ public sealed partial class FenetrePilou
         if (_feu is not null) _feu.Visibility = Visibility.Hidden;
         if (plat.Rate)
         {
-            for (int i = 0; i < 6; i++) Volute(new Point(_posMarmite.X + 10 + i * 6, _posMarmite.Y - 2), t + i * 90, i % 2 == 0 ? Fumee : FumeeClaire);
+            for (int i = 0; i < 6; i++) Volute(new Point(_posMarmite.X + _tailleMarmite.Width / 2 - 18 + i * 6, _posMarmite.Y + 10), t + i * 90, i % 2 == 0 ? Fumee : FumeeClaire);
             Dire("oups… c'est brûlé", 2600);
             Gagner(plat.Xp, new Point(TeteX - 18, TeteY - 40));
             return;
@@ -417,6 +473,7 @@ public sealed partial class FenetrePilou
         _volutes.Clear();
         _eau = _canne = _bouchon = _alerte = _marmite = _feu = _trophee = _cadre = null;
         _fil = null;
+        _geoPeche = null;
         if (_resultat) _profil.Ecrire(DossierPartage);
         _resultat = false;
     }

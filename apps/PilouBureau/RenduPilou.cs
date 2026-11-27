@@ -62,7 +62,10 @@ public static class RenduPilou
     // Image ARGB H × W (ligne par ligne), animation d'évolution comprise.
     public static uint[] Rendre(Allure a, Banque b) => Rendre(a, b, out _);
 
-    public static uint[] Rendre(Allure a, Banque b, out Geometrie geo)
+    // debord : s'il est donné, reçoit les pixels des objets qui sortent de la grille 48 × 56 (parapluie, longue-vue,
+    // livre tenus au bout de la main…), en coordonnées de la grille, dans l'ordre de dessin. Le PC les dessine dans
+    // la marge de sa scène au lieu de les couper au bord de la grille ; le rendu dans la grille ne change pas.
+    public static uint[] Rendre(Allure a, Banque b, out Geometrie geo, List<(int X, int Y, uint C)>? debord = null)
     {
         double e = a.Evolution;
         if (e > 0 && e < 1 && a.Stade > 1)
@@ -79,11 +82,11 @@ public static class RenduPilou
             }
             var n = a.Copie();
             n.Evolution = 0;
-            var g = RendreStade(n, b, out geo);
+            var g = RendreStade(n, b, out geo, debord);
             Eclats(g, (e - 0.85) / 0.15);
             return g;
         }
-        return RendreStade(a, b, out geo);
+        return RendreStade(a, b, out geo, debord);
     }
 
     private static uint[] Silhouetter(uint[] g)
@@ -114,12 +117,14 @@ public static class RenduPilou
 
     private static readonly (int, int)[] Croix = { (0, 0), (-1, 0), (1, 0), (0, -1), (0, 1) };
 
-    private static uint[] RendreStade(Allure a, Banque b, out Geometrie geo)
+    private static uint[] RendreStade(Allure a, Banque b, out Geometrie geo, List<(int X, int Y, uint C)>? debord = null)
     {
         var g = new uint[W * H];
         void Px(int x, int y, uint c)
         {
-            if (c != 0 && x >= 0 && y >= 0 && x < W && y < H) g[y * W + x] = c;
+            if (c == 0) return;
+            if (x >= 0 && y >= 0 && x < W && y < H) g[y * W + x] = c;
+            else debord?.Add((x, y, c));
         }
 
         int st = a.Stade is >= 1 and <= 4 ? a.Stade : 2;
@@ -169,8 +174,8 @@ public static class RenduPilou
             "bouche" => (C + dxf, ey + 9),
             "cou" => (C + dx, Rond(cy + ry * 0.45)),
             "corps" => (C + dx, Rond(cy)),
-            "main" => (Rond(cx + rx) - 1, Rond(cy + ry * 0.15)),
-            "main-g" => (Rond(cx - rx), Rond(cy + ry * 0.15)),
+            "main" => AncreMain(new Geometrie(cx, cy, rx, ry, sommet, ey, pied), 1),
+            "main-g" => AncreMain(new Geometrie(cx, cy, rx, ry, sommet, ey, pied), -1),
             "pieds" => (C + dx, pied),
             "cote" => (Rond(cx + rx * 0.45), pied + 2),
             "antenne" => (C + dx + 2 * balance, sommet - hautAntenne),
@@ -395,5 +400,9 @@ public static class RenduPilou
     }
 
     // Arrondi « au pair », comme round() de Python : les trois rendus tombent sur les mêmes pixels.
+    // Ancre de la main de Pilou du côté sens (+1 : « main », à droite à l'écran ; −1 : « main-g »), grille 48 × 56.
+    public static (int X, int Y) AncreMain(Geometrie g, int sens) =>
+        (sens >= 0 ? Rond(g.Cx + g.Rx) - 1 : Rond(g.Cx - g.Rx), Rond(g.Cy + g.Ry * 0.15));
+
     private static int Rond(double v) => (int)Math.Round(v, MidpointRounding.ToEven);
 }

@@ -67,22 +67,28 @@ public sealed class Pose
 public sealed class Scene : FrameworkElement
 {
     // Pixel de l'ancienne grille (26 × 30) : unité des positions des effets et de Pixels par défaut.
-    public const double P = 4;
+    // (Valeurs communes avec Placement.cs, la géométrie testable sans WPF.)
+    public const double P = Placement.P;
     // « Ancien » pixel (5 unités WPF), unité des déplacements de la fenêtre.
-    public const double PA = 5;
-    public const int W = 26;
-    public const int H = 30;
-    public const double MargeX = 28;
-    public const double MargeY = 26;
+    public const double PA = Placement.PA;
+    public const int W = Placement.W;
+    public const int H = Placement.H;
+    public const double MargeX = Placement.MargeX;
+    public const double MargeY = Placement.MargeY;
     // Pixel de la grille fine : 48 × 56 sur la même largeur que l'ancienne grille.
-    public const double PX = W * P / RenduPilou.W;
+    public const double PX = Placement.PX;
     private const double E = 1.25;      // anciens pixels → pixels de l'ancienne grille
     private const double C = 13;        // axe du corps dans l'ancienne grille
     private const double F = RenduPilou.W / (double)W; // ancienne grille → grille fine
-    public static double Largeur => MargeX * 2 + W * P;
-    public static double Hauteur => MargeY + H * P + 6;
+    public static double Largeur => Placement.LargeurScene;
+    public static double Hauteur => Placement.HauteurScene;
     // Ordonnée des pieds dans la scène.
-    public static double Sol => MargeY + 28.75 * P;
+    public static double Sol => Placement.SolScene;
+
+    // Repères du dernier dessin (grille fine) : la main qui tient la canne, par exemple (Placement.MainDe).
+    public Geometrie Geo { get; private set; }
+
+    private readonly List<(int X, int Y, uint C)> _debord = new();
 
     public Pose Pose { get; set; } = new();
 
@@ -257,8 +263,10 @@ public sealed class Scene : FrameworkElement
 
     private void Dessiner(DrawingContext dc, Pose p)
     {
-        var pixels = RenduPilou.Rendre(Allure(p), Banque.Commune, out var geo);
+        _debord.Clear();
+        var pixels = RenduPilou.Rendre(Allure(p), Banque.Commune, out var geo, _debord);
         _pixels = pixels;
+        Geo = geo;
         var bgra = new byte[pixels.Length * 4];
         for (int i = 0; i < pixels.Length; i++)
         {
@@ -271,6 +279,10 @@ public sealed class Scene : FrameworkElement
         var image = BitmapSource.Create(RenduPilou.W, RenduPilou.H, 96, 96, PixelFormats.Bgra32, null, bgra, RenduPilou.W * 4);
         image.Freeze();
         dc.DrawImage(image, new Rect(MargeX, MargeY, RenduPilou.W * PX, RenduPilou.H * PX));
+        // Ce qui dépasse de la grille (parapluie, longue-vue tenus au bout de la main) : dans la marge de la scène
+        // (12 pixels de grille de chaque côté), au lieu d'être coupé au bord de la grille.
+        foreach (var (x, y, c) in _debord)
+            if (y < RenduPilou.H) dc.DrawRectangle(Pinceau(c), null, new Rect(MargeX + x * PX, MargeY + y * PX, PX, PX));
 
         // Repères dans l'ancienne grille, pour les effets.
         double cx = geo.Cx / F;

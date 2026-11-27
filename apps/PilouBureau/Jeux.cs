@@ -171,8 +171,8 @@ public sealed partial class FenetrePilou
     }
 
     // Repères dans la fenêtre (unités avant mise à l'échelle) : sommet de la tête de Pilou.
-    private double TeteX => _aGauche ? Scene.Largeur / 2 : LargeurBase - Scene.Largeur / 2;
-    private double TeteY => HauteurBulle + Scene.Sol - 15 * Scene.PA;
+    private double TeteX => Placement.TeteX(_aGauche);
+    private double TeteY => Placement.TeteY;
     // Courbe actuelle, jamais sous le plus haut niveau acquis (de cet appareil et du groupe).
     private int Niveau => Acces.Niveau(_xpTotal, NiveauAcquisGroupe());
     private string DossierPartage => _reglages.Partage(_dossier);
@@ -211,6 +211,13 @@ public sealed partial class FenetrePilou
     public void Essai(string nom)
     {
         var t = Maintenant;
+        // --essai=peche:gauche|droite (et mord:, cuisine:, tape:, etoile:, bulles:) : Pilou collé au bord gauche ou
+        // droit de son écran (l'eau, la marmite, la main vont alors du côté de la place), puis le jeu.
+        if (Tournage.EssaiAuBord(nom) is { } bord)
+        {
+            PlacerAuBord(bord.Gauche);
+            nom = bord.Jeu;
+        }
         if (nom.StartsWith("stade:") && int.TryParse(nom[6..], out var st)) _essaiStade = Math.Clamp(st, 1, 4);
         if (nom.StartsWith("tenue:")) _essaiTenue = nom[6..];
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
@@ -256,6 +263,15 @@ public sealed partial class FenetrePilou
                 break;
             case "niveau": Flotter("+10 xp"); Flotter("NIVEAU 5", 1.6, new Point(TeteX - 50, TeteY - 70)); Dire("niveau 5 ! nouveau : lunettes de soleil", 5000); break;
         }
+    }
+
+    private void PlacerAuBord(bool gauche)
+    {
+        if (!_zoneConnue) PlacerAuDepart();
+        var (min, max) = Placement.BornesPieds(_zone.Left, _zone.Right, K);
+        _x = _cible = gauche ? min : max;
+        _marcheVers = null;
+        Placer(Placement.AGauche(_x, _zone.Left, _zone.Right));
     }
 
     // ---- Niveaux et XP
@@ -374,7 +390,9 @@ public sealed partial class FenetrePilou
         var tb = new Pixels(Pixels.Texte(texte), new Brush?[] { null, OrangeJeu }, ContourXp, taille >= 1.5 ? 3 : 2) { IsHitTestVisible = false };
         var p = ou ?? new Point(TeteX - 18, TeteY - 10);
         _jeu.Children.Add(tb);
-        _flottants.Add(new Flottant { Texte = tb, Ne = Maintenant, X = p.X, Y = p.Y });
+        // Un long mot (« PILOU NIMBUS ») ne déborde ni de la fenêtre ni de l'écran de Pilou.
+        double x = Placement.Borner(p.X, tb.Width, _visible.X0 + 2, _visible.X1 - 2);
+        _flottants.Add(new Flottant { Texte = tb, Ne = Maintenant, X = x, Y = p.Y });
     }
 
     // ---- Sommeil de bureau
@@ -449,7 +467,9 @@ public sealed partial class FenetrePilou
         {
             case Jeu.Etoile:
                 _etoile = Pixels.Sprite("etoile", 2.2) ?? new Pixels(MotifEtoile, new Brush?[] { null, OrangeJeu, OrangeClair, Blanc }, ContourXp);
-                _etoilePos = new Point(Math.Clamp(TeteX + (_hasard.NextDouble() * 2 - 1) * 120, 16, LargeurBase - 40), 24 + _hasard.NextDouble() * 70);
+                // Dans la partie de la fenêtre qui est sur l'écran de Pilou (Borner), pas sur l'écran voisin.
+                _etoilePos = new Point(Placement.Borner(TeteX + (_hasard.NextDouble() * 2 - 1) * 120, _etoile.Width + 12,
+                    _visible.X0 + 16, _visible.X1 - 12), 24 + _hasard.NextDouble() * 70);
                 _jeu.Children.Add(_etoile);
                 Cibler(_etoile, () =>
                 {
@@ -502,7 +522,8 @@ public sealed partial class FenetrePilou
                 DemarrerCuisine(t);
                 break;
             case Jeu.TapeCinq:
-                _main = Pixels.Sprite("main", 2.2) ?? new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu);
+                // Le pouce vers Pilou, des deux côtés (dessin retourné quand la main est à sa droite).
+                _main = Pixels.Sprite("main", 2.2, 0, CoteJeu > 0) ?? new Pixels(MotifMain, new Brush?[] { null, Creme }, ContourBleu);
                 _jeu.Children.Add(_main);
                 Cibler(_main, TapeReussi);
                 _indiceSur = _main;
@@ -603,8 +624,8 @@ public sealed partial class FenetrePilou
                 }
                 // Elle s'agite d'un pixel, au lieu de grossir (le pixel reste net).
                 _main.Palette = new Brush?[] { null, (int)(t / 250) % 2 == 0 ? Creme : OrangeClair };
-                // À côté de sa tête, du côté où il y a de la place dans la fenêtre.
-                Canvas.SetLeft(_main, _aGauche ? TeteX + 34 : TeteX - 70);
+                // À côté de sa tête, du côté où il y a de la place dans la fenêtre (miroir exact).
+                Canvas.SetLeft(_main, Placement.ACote(_aGauche, CoteJeu, 34, _main.Width));
                 Canvas.SetTop(_main, TeteY - 6 + ((int)(t / 200) % 2) * 4);
                 if ((int)(age / 900) != (int)((age - 33) / 900)) _tSaut = t;
                 break;

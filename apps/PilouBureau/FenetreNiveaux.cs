@@ -122,9 +122,20 @@ public sealed partial class FenetrePilou
         try
         {
             var f = new FenetreRangees(avant, apres, rayon => OuvrirBoutique(rayon));
-            f.Left = Math.Max(0, Left + (_aGauche ? Width - 40 : -f.Width + 40));
-            f.Top = Math.Max(0, Top + HauteurBulle * K - 60);
+            // Taille connue seulement une fois mesurée (SizeToContent) : posée près de Pilou, sur SON écran (qui peut
+            // être à gauche du principal, en X négatif ; l'ancien Math.Max(0, …) la renvoyait sur le principal).
+            var zone = _zone;
+            void Poser()
+            {
+                var (x, y) = Placement.PresDe(Left, Top, K, _aGauche, f.ActualWidth, f.ActualHeight, zone.Left, zone.Top, zone.Right, zone.Bottom);
+                f.Left = x;
+                f.Top = y;
+            }
+            f.WindowStartupLocation = WindowStartupLocation.Manual;
+            (f.Left, f.Top) = Placement.PresDe(Left, Top, K, _aGauche, 320, 200, zone.Left, zone.Top, zone.Right, zone.Bottom);
+            f.ContentRendered += (_, _) => Poser();
             f.Show();
+            if (f.ActualWidth > 0) Poser();
         }
         catch (InvalidOperationException)
         {
