@@ -25,7 +25,7 @@
     { "id": "gouter", "nom": "Galette de route" },
     { "id": "coupe-file", "nom": "Coupe-file*" },
     { "id": "formulaire", "nom": "Formulaire jaune poussin" },
-    { "id": "sablier-de-poche", "nom": "Sablier de poche (quatre secondes de retard)" }
+    { "id": "sablier-de-poche", "nom": "Sablier de poche (quatre secondes de retard)", "portable": true, "emplacement": "cou" }
   ],
   "souvenirs": [
     { "id": "point-final", "nom": "Le point final", "texte": "Brouillon a un nom, un emplacement, et une phrase qui se termine. Tu l'as enregistré juste avant 13 h 38." },
