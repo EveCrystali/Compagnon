@@ -77,6 +77,12 @@ motifs écrits à la main sont agrandis par la règle commune.
 3. `python3 outils/sprites/generer.py && python3 outils/sprites/planches_hd.py`, regarder
    `planches/hd/cosmetiques-redessines.png`, corriger ; puis `python3 outils/sprites/reference.py`.
 
+Seconde série (`fin.SERIE2` : boutique garnie, tenues d'activité, météo, créatures et trophées d'expédition, 133
+sprites) : rejouée en fin comme la première ; quand un dessin est fait de pixels posés à la main (le rejeu ne serait
+qu'un agrandissement au plus proche voisin), sa base fine est l'agrandissement commun, puis `retouche_auto` pose un
+liseré de lumière et une ombre d'un pixel fin sur ses couleurs principales (ou une recette de `RECETTES2`). Avant /
+après : `python3 outils/sprites/planches_campagnes.py` (`redessines-<n>.png`).
+
 `python3 outils/sprites/fin.py` liste les sprites redessinés et ceux encore agrandis automatiquement
 (`planches/hd/rapport.txt`). Le visage est entièrement dessiné en pixels fins (`visage_sprites.py`).
 
@@ -95,6 +101,48 @@ Huit tenues de voyage (`voyage_sprites.py`, `assets/tenues.txt`), pour Pilou « 
 chaque mode (marche, tangage, guet…) est imposée par le rendu commun (`voyager` / `Voyager`) : il suffit de
 donner la tenue. Sur le PC : `Pose.Tenue` et `Pose.Humeur` ; essais `--essai=tenue:voyage-marche`,
 `--essai=humeur:joie`, `--essai=dessin:origine`.
+
+## Décors et illustrations des campagnes
+
+Tout ce que déclare une fiche `assets/campagnes/<campagne>/campagne.json` a son dessin, aux deux échelles, dessiné
+nativement en fin (`fin.ids_campagnes`) :
+
+| Sprite | Format | Contenu |
+|---|---|---|
+| `decor-<campagne>-<décor>` | **96 × 40** (fin **192 × 80**), opaque, `ancre: aucun` | le décor d'une scène (`decors` de la fiche, champ `decor` des nœuds), en bandeau paysage |
+| `<objet>` (l'identifiant de l'objet) | selon l'emplacement | objet exclusif `"portable": true` : `slot` = son `emplacement`, ancre de cet emplacement (`tete`, `cou` ; `dos` → `cou` en `couche: derriere` ; `main`) |
+| `souvenir-<campagne>-<souvenir>` | 24 × 24 (48 × 48) | timbre dentelé, une scène dedans, liseré à la couleur de la campagne |
+| `campagne-<campagne>` | 32 × 32 (64 × 64) | vignette de la liste des campagnes (carte aux coins ronds) |
+| `ton-humour`, `ton-mystere`, `ton-emotion`, `ton-epique` | 12 × 12 (24 × 24) | emblème du ton, chacun d'une **forme** à lui : rond rieur, losange à serrure, cœur, étoile |
+
+**Décors.** Format commun paysage 96 × 40 (rapport 2,4 : un bandeau d'en-tête), 192 × 80 en fin. Trois plans au
+moins, une lumière qui vient d'un côté, un détail charmant par décor ; quelques-uns s'animent (deux ou trois images,
+`duree` : vagues, néon, brume, draps, poussière), avec autant d'images et la même `duree` aux deux échelles. Une palette
+restreinte par campagne (`PAL` de chaque module, et ses rampes de lumière) : prologue (fin d'après-midi dorée, herbes
+sarcelle), grande-panne (plastique beige, néons cyan et orange, gelée sarcelle), phare-eteint (nuit bleue, brume,
+granit, lanternes orange), petit-nuage (ciels lavés, soirs lavande, neige, mélèzes dorés). Les lecteurs n'ont aucune
+limite de taille ; une illustration garde au plus 62 couleurs (les lettres de `toile.LETTRES`).
+
+Modules : `decors_campagnes.py` (registre, format), `decors_prologue.py`, `decors_panne.py`, `decors_phare.py`,
+`decors_nuage.py` ; `peinture.py` (pinceaux qui travaillent pixel par pixel sur la grille réelle : dégradés tramés,
+reliefs à crête éclairée, brume en paliers, lueurs en anneaux le long des rampes de la palette — rejoués en fin, ils
+donnent une trame et des liserés d'un pixel fin au lieu d'être agrandis) ; `campagnes_sprites.py` (objets exclusifs,
+souvenirs, vignettes, emblèmes). Planches : `python3 outils/sprites/planches_campagnes.py [dossier]`
+(`decors-<campagne>.png`, `exclusifs-portes.png`, `souvenirs.png`, `vignettes.png`).
+
+**Afficher une illustration** (rien à charger de plus : la banque commune les a) :
+
+| | Décor | Souvenir, vignette, ton |
+|---|---|---|
+| C# | `Illustrations.Decor(Banque.Commune, campagne, etat.Decor, 2)` → `Sprite?` (null : garder le repli) | `Illustrations.Souvenir(b, campagne, id)`, `Illustrations.Vignette(b, campagne)`, `Illustrations.Ton(b, ton)` |
+| Java | `Sprites.decor(Sprites.banque(), campagne, etat.decor, 2)` → `Sprite` ou `null` | `Sprites.souvenir(b, campagne, id, 2)`, `Sprites.vignette(b, campagne, 2)`, `Sprites.ton(b, ton, 2)` |
+
+Le sprite rendu se peint comme tout objet de la banque : `Banque.Grille(s, t)` ou `Pixels.Sprite(id, …)` /
+`Apercu.Sprite(id, t)` sur le PC, `Sprites.dessiner(peintre, s, x, y, p, t, false)` sur le téléphone (`t` en ms pour
+les décors animés). Échelle 2 = dessin fin natif (192 × 80) ; échelle 1 = 96 × 40.
+Vérifié par `IllustrationsTests.cs` et `IllustrationsTest.java` (chaque décor, souvenir, objet exclusif et vignette
+déclaré a son sprite, au bon format, opaque, natif en fin ; chaque exclusif se voit porté aux quatre stades ; les
+emblèmes de ton ont quatre silhouettes différentes), et par quatre poses de `rendus-reference.txt`.
 
 ## Format d'un sprite
 

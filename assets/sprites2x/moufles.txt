@@ -1,0 +1,31 @@
+# Moufles
+id: moufles
+slot: main
+ancre: main
+decalage: -8 -12
+palette: a=#8a4a1f b=#f9c292 c=#b68f74 d=#f69d50 e=#724022 f=#c9824a g=#ffc89a h=#d9803a i=#f6f8fa j=#c9d1d9 k=#768390
+images:
+......aaaaaaaaaaaa......
+.....aaaaaaaaaaaaaa.....
+....aaabbbbbbbbbbaaa....
+...caabddddddddddbaac...
+..caabddddddddddddbaac..
+..aadddddddddddddddbaa..
+..aaddddddddddddddddaac.
+.aaeddddffddffddffddeaa.
+aaebggddggddggddggddggac
+aabdggddggddggddggddggaa
+bbddbbddbbddbbddbbddccaa
+ddddddffddffddffddffaaea
+ddddddhhddhhddhhddhhaahh
+ddddddhhddhhddhhddhhaahh
+aafdddbbddbbddbbdddcaaaa
+aacfffdddddddddddddaeeaa
+.aacaaddddddddddddaa....
+..aaaaddffddffddffaa....
+..aaiiiiiiiiiiiiiiiicc..
+..aaiiiiiiiiiiiiiiiiaa..
+..aajjjjjjjjjjjjjjjjaa..
+..eajjjjjjjjjjjjjjjjaa..
+...eaaaaaaaakkaaaaaae...
+....aaaaaaaakkaaaaaa....

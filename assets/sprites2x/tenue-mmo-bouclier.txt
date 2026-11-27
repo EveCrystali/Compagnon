@@ -1,0 +1,38 @@
+id: tenue-mmo-bouclier
+slot: main
+ancre: main-g
+decalage: -22 -12
+palette: a=#1c2128 b=#7a4b26 c=#ad8f78 d=#a4d2ff e=#6cb6ff f=#dec579 g=#c9a227 h=#8fbae9 i=#4a8fdc j=#5a96d6 k=#664128 l=#a58629 m=#f5d76e n=#3f77ba
+images:
+......aaaaaabbbbbbbbaaaaaa......
+.....aaaacbbbbbbbbbbbbcaaaa.....
+....aaacbbbbbbbbbbbbbbbbcaaa....
+...aaacbbbbbddeeeeddbbbbbcaaa...
+..aaacbbbbddeeffffeedebbbbcaaa..
+.aaacbbbddeeeeggggeeeeehbbbcaaa.
+aaacbbbdeeeeeeggggeeeehihbbbcaaa
+aacbbbdeeeeeeeggggeeehiiihbbbcaa
+aabbbdeeeeeeeeggggejhiiiiihbbbaa
+acbbkeeeeeeeeeggggjhiiiiiiikbbca
+abbbdeeeeeeeeeggggiiiiiiiiihbbba
+abbkeeeeeeeeeelllliiiiiiiiiikbba
+cbbdeeeeeeeeejmmmmiiiiiiiiiihbbc
+bbbeejjjjjjjjmmmmmmnnnnnnnniibbb
+bbbeffffffffmmmmmmmmffffffffibbb
+bbbeggggggggmmmmmmmmggggggggibbb
+bbbeggggggggmmmmmmmmggggggggibbb
+bbbeggggggggmmmmmmmmggggggggibbb
+bbbedddeeehhhmmmmmmhhhhhhhhhibbb
+kbbjeeeeehiiihmmmmhiiiiiiiiinbbk
+abbceeeehiiiiiffffiiiiiiiiiicbba
+abbbeeehiiiiiiggggiiiiiiiiiibbba
+akbbcjiiiiiiiiggggiiiiiiiiicbbka
+aabbbiiiiiiiiiggggiiiiiiiinbbbaa
+aakbbciiiiiiiiggggiiiiiiincbbkaa
+aaakbbcniiiiiiggggiiiiiincbbkaaa
+.aaakbbcnniiiiggggiiiinncbbkaaa.
+..aaabbbbcnniilllliinncbbbbaaa..
+...aaabbbbbbnniiiinnbbbbbbaaa...
+....aaabbbbbbbbbbbbbbbbbbaaa....
+.....aaaabbbbbbbbbbbbbbaaaa.....
+......aaaaaabbbbbbbbaaaaaa......

@@ -1,0 +1,55 @@
+# Souvenir de campagne (prologue)
+id: souvenir-prologue-coucher-de-soleil
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#ffc89a b=#d9803a c=#6a5acd d=#c76f9a e=#0f4a63 f=#f69d50 g=#fff6cc h=#4a2e17
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbccccccccccccccccccccccccccccccccccccbbaaaa
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbccccccccccccccccccccccccccccccccccccbbaaa.
+.aaabbdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcbbaaa.
+aaaabbddcdddcdddcdddcdddcdddcdddcdddcdddcdbbaaaa
+aaaabbddddddddddddddddddddddddddddddddddddbbaaaa
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbbaaa.
+aaaabbdbdbeeeedbdbdbdbdbdbdbdbdbdbdbdbdbdbbbaaaa
+aaaabbbbeeeeeeeebbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbbbeeeeeeeebbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbbbeeeeeeeebbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbbbeeeeeeeebbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbfbfbeeeefbfbfbfggggggbfbfbfbfbfbfbfbbbaaa.
+aaaabbffbfffhhffbffggggggggggfffbfffbfffbfbbaaaa
+aaaabbffffffhhffffggggggggggggffffffffffffbbaaaa
+.aaabbffffffhhfffggggggggggggggfffffffffffbbaaa.
+.aaabbffffffhhfffggggggggggggggfffffffffffbbaaa.
+.aaabbffffffhhffggggggggggggggggffffffffffbbaaa.
+.aaabbafafafhhafggggggggggggggggafafafafafbbaaa.
+aaaabbfafafahhfaggggggggggggggggfafafafafabbaaaa
+aaaabbbbbbbbbbbbbbbbffffffffbbbbbbbbbbbbbbbbaaaa
+.aaabbbbbbbbbbbbffffeeeeeeeeffffbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbffeeeeeeeeeeeeeeeeffbbbbbbbbbbaaa.
+.aaabbbbbbbbffeeeeeeeeeeeeeeeeeeeeffbbbbbbbbaaa.
+.aaabbbbbbbfeeeeeeeeeeeeeeeeeeeeeeeefbbbbbbbaaa.
+aaaabbbbbffeeeeeeeeeeeeeeeeeeeeeeeeeeffbbbbbaaaa
+aaaabbbbfeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefbbbbaaaa
+.aaabbbfeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefbbbaaa.
+.aaabbfeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefbbaaa.
+.aaabbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebbaaa.
+.aaabbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebbaaa.
+aaaabbeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

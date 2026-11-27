@@ -1,0 +1,39 @@
+# Vignette de campagne : petit-nuage
+id: campagne-petit-nuage
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#8a79b8 b=#6cb6ff c=#ffffff d=#b4dbff e=#1c2128 f=#b8c4d2 g=#e6ecf2 h=#2689b8
+images:
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbccbbbbbbbbbbbbbaa
+aabbbbbbbbbbccccccccbbbbbbbbbbaa
+aabbbbbbbbcccccccccccbbbbbbbbbaa
+aabbbbbbbbccccccccccccbbbbbbbbaa
+aadbbbdbbbccccecceccccdbbbdbbbaa
+aabdbbbdbbddddddddddddbdbbbdbbaa
+aadbdbdbdbdbdbccdbdbdbdbdbdbdbaa
+aabdbdbdbdbdbdccbdbdbdbdbdbdbdaa
+aaddddddddddddccddddddddddddddaa
+aaddddddddddddffdddddccdddddddaa
+aadddddccddddffffddddccdddddddaa
+aadddddccddddffffdddccccddddddaa
+aadddddccddddffffdddffffddddddaa
+aaddddffffdddffffdddffffddddddaa
+aaddddffffddffffffdffffffdddddaa
+aadddffffffdffffffdffffffdddddaa
+aadddffffffdffffffffffffffddddaa
+aaddffffffffffffffffffffffddddaa
+aaddffffffffffffffffffffffddgdaa
+aaddfffffffffffffffffffffffdddaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhhhhaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhhhhaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhhhhaa
+aahhhhhhhhhhhhhhhhhhhhhhhhhhhhaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.

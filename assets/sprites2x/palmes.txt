@@ -1,0 +1,23 @@
+# Palmes
+id: palmes
+slot: pieds
+ancre: pieds
+decalage: -36 -6
+palette: a=#1c2128 b=#8fbae9 c=#4a8fdc d=#7492b6 e=#1f4f8a f=#3f77ba g=#1d4478
+images:
+.....aaabbbcccbbbbccbbbbccaaa..............aaabbbcccbbbbccbbbbccaaa.....
+.....aabccccccccccccccccccbaa..............aabccccccccccccccccccbaa.....
+....aaacccccdeccccddccccddcaaa............aaacccccdeccccddccccddcaaa....
+...aaabccccdeecccceecccceecbaaa..........aaabccccdeecccceecccceecbaaa...
+...aabccccfeebcccfeecccceeccbaa..........aabccccfeebcccfeecccceeccbaa...
+..aaacccccdeeccccdeecccceedccaaa........aaacccccdeeccccdeecccceedccaaa..
+..aabccccfeebcccceebccccbeeccbaa........aabccccfeebcccceebccccbeeccbaa..
+.aaaccccfdegccccceecccccceecccaaa......aaaccccfdegccccceecccccceecccaaa.
+.aabccccdeebccccceecccccceecccbaa......aabccccdeebccccceecccccceecccbaa.
+aaaccccfeebcccccfeecccccceefcccaaa....aaaccccfeebcccccfeecccccceefcccaaa
+aabccccdeeccccccdegccccccgedcccbaaa..aaabccccdeeccccccdegccccccgedcccbaa
+acccccfeeccccccceecccccccceecccccaa..aacccccfeeccccccceecccccccceeccccca
+accccceegccccccceecccccccceecccccaaaaaaccccceegccccccceecccccccceeccccca
+cccfffeeccffffffegcffffffcgefffcccaaaacccfffeeccffffffegcffffffcgefffccc
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

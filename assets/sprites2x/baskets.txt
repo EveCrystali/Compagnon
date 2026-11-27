@@ -1,0 +1,23 @@
+# Baskets
+id: baskets
+slot: pieds
+ancre: pieds
+decalage: -28 -10
+palette: a=#1c2128 b=#f6f8fa c=#f69d50 d=#6cb6ff e=#7492b6 f=#1f4f8a
+images:
+..aaaaaaaaaaaaaaaaaaaa..........aaaaaaaaaaaaaaaaaaaa....
+.aaaaaaaaaaaaaaaaaaaaaa........aaaaaaaaaaaaaaaaaaaaaa...
+aabbbbbbbbccbbccbbbbbaaa......aabbbbbbbbccbbccbbbbbaaa..
+aabbbbbbbbccbbccbbbbbbaaa.....aabbbbbbbbccbbccbbbbbbaaa.
+aabbbbddddddddddddbbbbbaaa....aabbbbddddddddddddbbbbbaaa
+aabbbbddddddddddddbbbbbbaaa...aabbbbddddddddddddbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbaaa..aabbbbbbbbbbbbbbbbbbbbbbbb
+aabbbbbbbbbbbbbbbbbbbbbbbbaa..aabbbbbbbbbbbbbbbbbbbbbbbb
+aabbbbbbbbbbbbbbbbbbbbbbbbaa..aabbbbbbbbbbbbbbbbbbbbbbbb
+aabbbbbbbbbbbbbbbbbbbbbbbaaa..aabbbbbbbbbbbbbbbbbbbbbbbb
+aabbbbbbbbbbbbbbbbbbbbbbaa....aabbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbaa....aabbbbbbbbbbbbbbbbbbbbbbaa
+eeeeeeeeeeeeeeeeeeeeeeeeeeaaaaeeeeeeeeeeeeeeeeeeeeeeeeee
+ffffffffffffffffffffffffffaaaaffffffffffffffffffffffffff
+ffffffffffffffffffffffffffaaaaffffffffffffffffffffffffff
+ffffffffffffffffffffffffffaaaaffffffffffffffffffffffffff

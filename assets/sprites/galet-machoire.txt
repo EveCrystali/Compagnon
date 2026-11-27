@@ -1,0 +1,17 @@
+# Objet exclusif (Le phare éteint) : galet de la Mâchoire
+id: galet-machoire
+slot: main
+ancre: main
+decalage: -2 -7
+palette: a=#3b4654 b=#768390 c=#adbac7 d=#ffffff e=@contour f=@ombre
+images:
+...aaaaaa...
+..abccbbba..
+.accccccbba.
+accccccccbba
+accccccccbba
+abccccccbdda
+abeddcbdddba
+.fffddddbba.
+.fffbbbbba..
+..eaaaaaa...

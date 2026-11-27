@@ -1,0 +1,55 @@
+# Souvenir de campagne (grande-panne)
+id: souvenir-grande-panne-page-bleue
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d2caff b=#6a5acd c=#ffffff d=#4a8fdc e=#6cb6ff
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccddddddddddddddddccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccddddddddddddddddccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+.aaabbaaaaaaccccddddddddddddddddccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+aaaabbaaaaaaccccddddddddccccecccccccaaaaaabbaaaa
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+aaaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaaa
+.aaabbaaaaaaccccccccccccccccccccccccaaaaaabbaaa.
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+aaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

@@ -1,0 +1,38 @@
+id: tenue-video-popcorn
+slot: main
+ancre: main
+decalage: -8 -18
+palette: a=#8a4a1f b=#fff6cc c=#b68f74 d=#f5d76e e=#724022 f=#f9c292 g=#f69d50 h=#f6f8fa i=#c9824a
+images:
+........aabbbbbbbbaaa.......
+.......aaabbbbbbbbaaaa......
+...aaaaaabbbbbbbbbbbaaa.....
+..aaaaaabbbbbbbbbbbbbaaaaa..
+.caabbbbbbbbddbbbbbbbbaaaaa.
+caabbbbbbbbbddbbbbbbbbbbbaac
+aabbbbbbbbbbbbbbbbddbbbbbbaa
+aabbbbbbbbbbbbbbbbddbbbbbbba
+aabbbbbbbbbbbbbbbbbbbbbbbbba
+aabbbbbbbbbbbbbbbbbbbbbbbbbe
+aafbbbbbbbbbbbbbbbbbbbbbbbbf
+aagfbbbbbbbbbbbbbbbbbbbbbbfg
+aaggffhbbbbbbbbbbbbbfbbbbhgg
+aagggghhbbbbfbbbbbbfgfhhhcgg
+aagggghhhhffgfbbbbfggghhhagg
+aagggghhhhgggghhhhgggghhhagg
+aagggghhhhgggghhhhgggghhhagg
+aagggghhhhgggghhhhgggghhhagg
+aagggihhhhgggihhhhgggihhcagg
+aaggghhhhhggghhhhhggghhhaagg
+aaggghhhhhggghhhhhggghhhaagg
+aaggghhhhhggghhhhhggghhhaagg
+aaggghhhhhggghhhhhggghhhaagg
+aaigghhhhhigghhhhhigghhhaaig
+eacgghhhhhhgghhhhhhgghhcaacg
+.aagghhhhhhgghhhhhhgghhaaaag
+.aagghhhhhhgghhhhhhgghhaaaag
+.aagghhhhhhgghhhhhhgghhaaaag
+.aagghhhhhhgghhhhhhgghhaaaag
+.aaggahhhhhgghhhhhhgghaaeaag
+.aaggahhhhhgghhhhhhgghaa.aag
+.eeiiahhhhhiihhhhhhiihae.eei

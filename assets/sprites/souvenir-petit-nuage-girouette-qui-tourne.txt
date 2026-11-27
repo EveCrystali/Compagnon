@@ -1,0 +1,31 @@
+# Souvenir de campagne (petit-nuage)
+id: souvenir-petit-nuage-girouette-qui-tourne
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#e6ecf2 b=#8a79b8 c=#768390 d=#b4dbff e=#b8652e f=#8a4a1f g=#1c2128 h=#adbac7 i=#f6f1e4
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abcdccccccccccccccccba.
+aabcdcccccccdccccccccbaa
+aabccccccccddccccccccbaa
+.abccccccccdcccccccccba.
+aabccccccccdceeccccdcbaa
+aabccccfcceeeeeccddccbaa
+.abccccfdeeeeeeccdcccba.
+aabcccccdeeeeecccdcccbaa
+aabcccccccccgccccccccbaa
+.abcccccccccgccccccccba.
+aabcccccccccgccccccccbaa
+aabhchchchchghchcichcbaa
+.abchciihchcgchchiichba.
+aabhchchiiiiiiiiihchcbaa
+aabchchchchcgchchchchbaa
+.abhhhhhhhhhghhhhhhhhba.
+aabhhhhhhhhhghhhhhhhhbaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

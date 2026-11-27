@@ -1,0 +1,27 @@
+# Masque de sommeil
+id: masque-sommeil
+slot: yeux
+ancre: yeux
+decalage: -32 -2
+palette: a=#3a2a7a b=#857bad c=#d2caff d=#c1b8ff e=#9b8cff f=#8075d6 g=#32266b
+images:
+..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+.baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bacccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+aacccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+aadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddebb
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeebaa
+aaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaaa
+aabeeeeeeeaafeeeeeeeefaaeeeeeeeeeeeeeeeeeeaafeeeeeeeefaaeeeebaa.
+gaafeeeeeeaaafeeeeeefaaaeeeeeeeeeeeeeeeeeeaaafeeeeeefaaaeeeeaag.
+.aabeeeeeedaaafeeeefaaadeeeeeeeeeeeeeeeeeedaaafeeeefaaadeeeeaa..
+.gaaeeeeeeeeaaaffffaaaeeeeeeeeeeeeeeeeeeeeeeaaaffffaaaeeeeeeaa..
+..aaeeeeeeeeeaaabbaaadeeeeeeeeeeeeeeeeeeeeeedaaabbaaaeeeeeeeaa..
+..aaeeeeeeeeeeaaaaaadeeeeeeeeeffeeeeeeeeeeeeedaaaaaaeeeeeeeeaa..
+..aaeeeeefbbeeeeaaddeeaaeeeeefaafeeeeeeeeeaaeeddaaeeeebbfeeeaa..
+..gafffffaaaaeeeaaeeeeaaeeeefaaaafeeeeeeeeaaeeeeaaeeeaaaafffag..
+...gaaaaaaaaaaeeeeeeeeeeeeefaaaaaafeeeeeeeeeeeeeaaaaaaaaaaaag...
+....aaaaaaaaaaaaeeeeffeefffaaa..aaafffffffeeffeeaaaaaaaaaaaa....
+..............aaaaaaaaaaaaaaa....aaaaaaaaaaaaaaagg..............
+................aaaaaaaaaaaa......aaaaaaaaaaaaaa................

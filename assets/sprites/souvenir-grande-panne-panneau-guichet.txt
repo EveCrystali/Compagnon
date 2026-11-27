@@ -1,0 +1,31 @@
+# Souvenir de campagne (grande-panne)
+id: souvenir-grande-panne-panneau-guichet
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#d2caff b=#6a5acd c=#768390 d=#3b4654 e=#adbac7 f=#ffffff g=#1f4f8a h=#8a4a1f i=#1c2128
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabcccccccccdccccccccbaa
+.abeeeeeeeeedeeeeeeeeba.
+aabcccccccccdccccccccbaa
+aabeeeeeeeeedeeeeeeeebaa
+.abcccccccccdccccccccba.
+aabeeeeeeeeedeeeeeeeebaa
+aabcccffffffffffffcccbaa
+.abeeeffffffffffffeeeba.
+aabcccfffgggfhhhhhcccbaa
+aabeeefffggifhhhhheeebaa
+.abcccfffgfgffhhfhcccba.
+aabeeefffgggfhhhhheeebaa
+aabcccffffffffffffcccbaa
+.abeeeeeeeeeeeeeeeeeeba.
+aabccccccccccccccccccbaa
+aabeeeeeeeeeeeeeeeeeebaa
+.abccccccccccccccccccba.
+aabeeeeeeeeeeeeeeeeeebaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

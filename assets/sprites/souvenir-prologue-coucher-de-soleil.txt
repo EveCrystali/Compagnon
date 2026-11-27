@@ -1,0 +1,31 @@
+# Souvenir de campagne (prologue)
+id: souvenir-prologue-coucher-de-soleil
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#ffc89a b=#d9803a c=#6a5acd d=#c76f9a e=#0f4a63 f=#f69d50 g=#fff6cc h=#4a2e17
+images:
+a.aa.aa.aa.aa.aa.aa.aa.a
+.aaaaaaaaaaaaaaaaaaaaaa.
+aabbbbbbbbbbbbbbbbbbbbaa
+aabccccccccccccccccccbaa
+.abccccccccccccccccccba.
+aabdcdddcdddcdddcdddcbaa
+aabddddddddddddddddddbaa
+.abddddddddddddddddddba.
+aabdbeedbdbdbdbdbdbdbbaa
+aabbeeeebbbbbbbbbbbbbbaa
+.abbeeeebbbbbbbbbbbbbba.
+aabffeefffggggbfffbffbaa
+aabfffhffggggggffffffbaa
+.abfffhfggggggggfffffba.
+aabfafhfggggggggafafabaa
+aabbbbbbbffffffbbbbbbbaa
+.abbbbbffeeeeeeffbbbbba.
+aabbbffeeeeeeeeeeffbbbaa
+aabbfeeeeeeeeeeeeeefbbaa
+.abfeeeeeeeeeeeeeeeefba.
+aabeeeeeeeeeeeeeeeeeebaa
+aabbbbbbbbbbbbbbbbbbbbaa
+.aaaaaaaaaaaaaaaaaaaaaa.
+a.aa.aa.aa.aa.aa.aa.aa.a

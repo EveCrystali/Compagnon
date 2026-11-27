@@ -1,0 +1,55 @@
+# Souvenir de campagne (phare-eteint)
+id: souvenir-phare-eteint-feu-automatique
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#b4dbff b=#1f4f8a c=#b8c4d2 d=#3b4654 e=#fff6cc f=#4a8fdc g=#6cb6ff
+images:
+a....aa....aa....aa....aa....aa....aa....aa....a
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbbbbbbbbbbbbbbbbbbbcbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbbbcbbccccbbcbbbbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbbbbbccccccbbbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbccbbbbccbbbbbbbbbbbbbbbbaaaa
+aaaabbbbbbbbbbbbbbbccbbbbbbccbbbbbbbbbbbbbbbaaaa
+.aaabbbbbbbbbbbbbbbccbbdbbbccbbbbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbcbcbbdddbbbcbbcbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbbbccbeeeebccbbbbbbbbbbbbbbbaaa.
+.aaabbbbbbbbbbbbbbbccbeeeebccbbbbbbbbbbbbbbbaaa.
+aaaabbbbbbbbbbbbbbbbcceeeeccbbbbbbbbbbbbbbbbaaaa
+aaaabbfbfbfbfbfbfbfbfccccccbfbfbfbfbfbfbfbbbaaaa
+.aaabbbfbfbfbfbfbfbcbddccddfcfbfbfbfbfbfbfbbaaa.
+.aaabbfbfbfbfbfbfbfbfbddddfbfbfbfbfbfbfbfbbbaaa.
+.aaabbbfbfbfbfbfbfbfbfddcdbfbfbfbfbfbfbfbfbbaaa.
+.aaabbffffffffffffffffddddffffffffffffffffbbaaa.
+aaaabbffffffffffffffffddddffffffffffffffffbbaaaa
+aaaabbffffffffffffffffddddffffffffffffffffbbaaaa
+.aaabbffffffffffffffffddddffffffffffffffffbbaaa.
+.aaabbffffffffffffffffddddffffffffffffffffbbaaa.
+.aaabbfffffffffffffffddddddfffffffffffffffbbaaa.
+.aaabbfffffffffffffffddddddfffffffffffffffbbaaa.
+aaaabbfffffffffffffffddddddfffffffffffffffbbaaaa
+aaaabbfffffffffffffffddddddfffffffffffffffbbaaaa
+.aaabbfffffffffffffffddddddfffffffffffffffbbaaa.
+.aaabbfffffffffffffffddddddfffffffffffffffbbaaa.
+.aaabbfffffffffffffffddddddfffffffffffffffbbaaa.
+.aaabbgfffgfffgfffgffddddddfffgfffgfffgfffbbaaa.
+aaaabbfffffffffffffffddddddfffffffffffffffbbaaaa
+aaaabbddddddddddddddddddddddddddddddddddddbbaaaa
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+.aaabbddddddddddddddddddddddddddddddddddddbbaaa.
+aaaabbddddddddddddddddddddddddddddddddddddbbaaaa
+aaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaa
+.aaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+a....aa....aa....aa....aa....aa....aa....aa....a

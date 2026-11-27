@@ -1,0 +1,37 @@
+# Nœud géant
+id: noeud-geant
+slot: cou
+ancre: cou
+decalage: -32 -8
+palette: a=#f9c292 b=#8a4a1f c=#f69d50 d=#c9824a e=#f6f8fa f=#e7b085 g=#d9803a h=#b26b38
+images:
+aabbbb..................................................bbbbbbaa
+ccbbbbbb..............................................bbbbbbbbcc
+ccaabbbbbbbb........................................bbbbbbaaaacc
+ccccaabbbbbbbb....................................bbbbbbaacccccc
+ccccccaaaabbbbbb................................bbbbbbaacccccccc
+ccccccccccaabbbbbb............................bbbbbbaacccccccccc
+ccccccccccccaabbbbbb......................bbbbbbbbaacccccccccccc
+ccccccccccccccaabbbbbb..................bbbbbbbbaaccccccddcccccc
+cccccceeccccccccaabbbbbbbbbbbbbbbbbbbbbbbbbbaaaacccccccceecccccc
+cccccceeccccccccccaabbbbbbbbbbbbbbbbbbbbbbaacccccccccccceecccccc
+ccccccaaccccccccccccaaaaaaffffffffffffaaaaccccccccccccccaacccccc
+ccccccccccccccccccccccccccggggggggggggcccccccccccccccccccccccccc
+cccccccccccccccceeccccccccggggggggggggcccccccceecccccccccccccccc
+cccccccccccccccceeccccccccggggggggggggcccccccceecccccccccccccccc
+ccccccccccccccccaaccccccccggggggggggggccccccccaacccccccccccccccc
+ccccccccccccccccccccccccccggggggggggggcccccccccccccccccccccccccc
+ccccccccccccccccccccccccccggggggggggggcccccccccccccccccccccccccc
+ccccccccccccddccccccccccccggggggggggggccccccccccccddcccccccccccc
+cccccccccccceeccccccccccccggggggggggggcccccccccccceecccccccccccc
+cccccccccccceeccccccddddddggggggggggggddddcccccccceecccccccccccc
+ccccccccccccaaccccddbbbbbbggggggggggggbbbbddccccccaacccccccccccc
+ccccccddccccccccddbbbbbbbbhhhhhhhhhhhhbbbbbbddddccccccccddcccccc
+cccccceeccccccddbbbbbb..bbbbbbbbbbbbbbbbbbbbbbbbddcccccceecccccc
+cccccceeccccccbbbbbb......bbbbbbbbbbbb....bbbbbbbbcccccceecccccc
+ccccccccccddbbbbbb............................bbbbbbddcccccccccc
+ccccccccddbbbbbb................................bbbbbbddcccccccc
+ccccddbbbbbbbb....................................bbbbbbcccccccc
+ccddbbbbbbbb........................................bbbbbbddddcc
+ccbbbbbb..............................................bbbbbbbbcc
+ddbbbb..................................................bbbbbbdd
