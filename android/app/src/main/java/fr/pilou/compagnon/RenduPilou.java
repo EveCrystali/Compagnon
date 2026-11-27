@@ -48,6 +48,12 @@ public final class RenduPilou {
         /** Il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage). */
         public boolean boude, dos;
         public int regard, regardY, stade = 2;
+        /** Vie du personnage (Vie.java) : étirement du corps (−1 écrasé … 1 étiré), retard de l'antenne (−1 … 1,
+         *  positif : pointe plus haute), ms depuis l'atterrissage (−1 : aucun), lumière du moment (« matin », « soir »,
+         *  « nuit » ou "") ; vie : animations complètes (ombre tramée en l'air, bouffées de poussière). */
+        public double etire, antenne, atterri = -1;
+        public String lumiere = "";
+        public boolean vie;
 
         public Allure copie() {
             try {
@@ -349,6 +355,7 @@ public final class RenduPilou {
         Toile to = new Toile(g, w, h);
         int st = a.stade >= 1 && a.stade <= 4 ? a.stade : 2;
         int[] te = teinte(a, b);
+        if (a.lumiere != null && !a.lumiere.isEmpty() && !a.expr.equals("inquiet")) te = Vie.eclairer(te, a.lumiere); // l'alerte garde sa couleur franche
         to.te = te;
         double t = a.t;
         to.t = t;
@@ -359,6 +366,8 @@ public final class RenduPilou {
         if (a.expr.equals("dort")) { rx += 0.6; ry -= 0.9; }
         rx += 1.2 * a.chute + 0.7 * a.assis - 0.8 * a.suspendu;
         ry -= 1.4 * a.chute + 0.8 * a.assis - 1.1 * a.suspendu;
+        rx -= 0.9 * a.etire;
+        ry += 1.1 * a.etire;
         rx *= stadeX(st);
         ry *= stadeY(st);
         double cadence = a.course ? 70 : 160;
@@ -402,7 +411,7 @@ public final class RenduPilou {
         double vitesse = a.salue || a.expr.equals("fete") ? 90 : a.expr.equals("concentre") ? 300 : 650;
         int balance = a.expr.equals("dort") ? 0
                 : Math.max(-ec, Math.min(ec, rond(Math.sin(t / vitesse) * 0.9 * ec) + (a.marche ? -Integer.signum(a.regard) * ec : 0)));
-        int hautAntenne = (st == 1 ? 3 : 6) * ec;
+        int hautAntenne = Math.max(2 * ec, (st == 1 ? 3 : 6) * ec + rond(a.antenne * 2 * ec));
         if (geo != null) {
             geo.cx = cx / ec; geo.cy = cy / ec; geo.rx = rx / ec; geo.ry = ry / ec;
             geo.sommet = Math.floorDiv(sommet, ec); geo.ey = Math.floorDiv(ey, ec); geo.pied = Math.floorDiv(pied, ec);
@@ -432,18 +441,20 @@ public final class RenduPilou {
         // Ombre au sol.
         if (a.suspendu < 0.1) {
             int demi = (int) (Math.max(6, 15 * stadeX(st) - a.saut * 2.8) * ec);
+            // Vie : en l'air, l'ombre s'éclaircit en trame (d'abord le bas de l'ombre, puis toute l'ombre).
+            int trame = a.vie ? a.saut >= 2.4 ? 2 : a.saut >= 1.0 ? 1 : 0 : 0;
             if (ec == 1) {
                 for (int x = C - demi; x < C + demi; x++) {
                     if (x < 0 || x >= W) continue;
-                    if (g[52 * W + x] == 0) g[52 * W + x] = OMBRE_SOL;
-                    if (Math.abs(x - C + 0.5) < demi - 3 && g[53 * W + x] == 0) g[53 * W + x] = OMBRE_SOL;
+                    if (g[52 * W + x] == 0 && ombre(trame, x, 0, false)) g[52 * W + x] = OMBRE_SOL;
+                    if (Math.abs(x - C + 0.5) < demi - 3 && g[53 * W + x] == 0 && ombre(trame, x, 1, true)) g[53 * W + x] = OMBRE_SOL;
                 }
             } else {
                 // Quatre lignes fines, bouts arrondis.
                 for (int j = 0; j < 4; j++) {
                     int retrait = OMBRE_FINE[j];
                     for (int x = c0 - demi + retrait; x < c0 + demi - retrait; x++)
-                        if (x >= 0 && x < w && g[(104 + j) * w + x] == 0) g[(104 + j) * w + x] = OMBRE_SOL;
+                        if (x >= 0 && x < w && g[(104 + j) * w + x] == 0 && ombre(trame, x, j, j >= 2)) g[(104 + j) * w + x] = OMBRE_SOL;
                 }
             }
         }
@@ -690,7 +701,38 @@ public final class RenduPilou {
                     to.motif(x - 2, y - 2, SUEUR_FINE, 'g', GOUTTE, 'c', GOUTTE_CLAIRE, 'w', BLANC);
                 }
             }
+
+        // Vie : bouffées de poussière au ras du sol (le pied arrière en marchant, les deux côtés à l'atterrissage), en
+        // blocs d'un pixel de la grille 1× ; posées seulement sur le vide ou l'ombre, jamais sur Pilou.
+        if (a.vie && a.suspendu < 0.1 && a.assis <= 0.5) {
+            int pg = (st == 1 ? C - 8 : C - 10) * ec, pd = (st == 1 ? C + 3 : C + 4) * ec, largeur = (st == 1 ? 5 : 6) * ec;
+            if (a.marche && !a.course) {
+                int sens = a.regard >= 0 ? 1 : -1;
+                int ib = Vie.bouffee((long) Math.floor(t), (int) cadence, sens);
+                if (ib >= 0) bouffee(g, w, h, ec, pied, sens > 0 ? pg + dx - ec : pd + dx + largeur, -sens, Vie.BOUFFEES[ib]);
+            }
+            int ia = a.atterri >= 0 ? Vie.bouffeeAtterrissage((long) Math.floor(a.atterri)) : -1;
+            if (ia >= 0) {
+                bouffee(g, w, h, ec, pied, pg + dx - ec, -1, Vie.BOUFFEES_ATTERRISSAGE[ia]);
+                bouffee(g, w, h, ec, pied, pd + dx + largeur, 1, Vie.BOUFFEES_ATTERRISSAGE[ia]);
+            }
+        }
         return g;
+    }
+
+    /** Ombre tramée en l'air (trame 1 : le bas de l'ombre ; 2 : toute l'ombre). */
+    private static boolean ombre(int trame, int x, int j, boolean bas) {
+        return trame == 0 || (trame == 1 && !bas) || (x + j) % 2 == 0;
+    }
+
+    private static void bouffee(int[] g, int w, int h, int ec, int pied, int x0, int sg, int[][] points) {
+        for (int[] p : points)
+            for (int j = 0; j < ec; j++)
+                for (int i = 0; i < ec; i++) {
+                    int x = x0 + sg * p[0] * ec + i, y = pied + ec + p[1] * ec + j;
+                    if (x >= 0 && x < w && y >= 0 && y < h && (g[y * w + x] == 0 || g[y * w + x] == OMBRE_SOL))
+                        g[y * w + x] = p[2] == 1 ? Vie.POUSSIERE : Vie.POUSSIERE_LEGERE;
+                }
     }
 
     private static final List<String> ANCRES = Arrays.asList("tete", "yeux", "bouche", "cou", "corps", "main", "main-g", "pieds", "cote", "antenne");

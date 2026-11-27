@@ -63,6 +63,11 @@ public sealed class Pose
     public IReadOnlyList<string> Gestes = Array.Empty<string>();
     public double Flash;
     public string Bruit = "";
+    // Vie du personnage (Vie.cs, VieFenetre.cs) : étirement, antenne en retard, ms depuis l'atterrissage (−1 : aucun),
+    // lumière du moment, animations complètes (ombre tramée, poussière).
+    public double Etire, Antenne, Atterri = -1;
+    public string Lumiere = "";
+    public bool Vie;
 }
 
 // Pilou en pixel art, grille de 48 × 56 commune avec l'app Android (RenduPilou), ou sa version fine de 96 × 112
@@ -190,6 +195,7 @@ public sealed class Scene : FrameworkElement
             Regard = p.Regard, RegardY = p.RegardY,
             Saut = p.Saut, Chute = p.Chute, Assis = p.Assis, Suspendu = p.Suspendu, Tremble = p.Tremble,
             Stade = p.Stade, Evolution = p.Evolution, Reaction = p.Reaction,
+            Etire = p.Etire, Antenne = p.Antenne, Atterri = p.Atterri, Lumiere = p.Lumiere, Vie = p.Vie,
         };
     }
 

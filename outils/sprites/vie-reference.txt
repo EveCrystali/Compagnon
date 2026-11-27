@@ -1,0 +1,523 @@
+# Vie du personnage : valeurs de référence (outils/sprites/vie.py, écrites par reference.py).
+# Relues par VieTests.cs (PC) et VieTest.java (téléphone).
+duree completes 520 930
+bond completes 520 2000 -5 0 0 0
+bond completes 520 2000 0 0 0 0
+bond completes 520 2000 20 0 -225 0
+bond completes 520 2000 40 0 -450 0
+bond completes 520 2000 69 0 -209 81
+bond completes 520 2000 70 0 350 90
+bond completes 520 2000 100 434 309 360
+bond completes 520 2000 200 1500 175 -204
+bond completes 520 2000 330 2000 0 -64
+bond completes 520 2000 589 15 348 -214
+bond completes 520 2000 590 0 -600 -216
+bond completes 520 2000 600 0 -620 -226
+bond completes 520 2000 640 0 -700 -269
+bond completes 520 2000 700 0 122 560
+bond completes 520 2000 760 0 2 -98
+bond completes 520 2000 869 0 1 30
+bond completes 520 2000 870 0 0 28
+bond completes 520 2000 930 0 0 0
+bond completes 520 2000 2000 0 0 0
+duree completes 340 750
+bond completes 340 1500 -5 0 0 0
+bond completes 340 1500 0 0 0 0
+bond completes 340 1500 20 0 -225 0
+bond completes 340 1500 40 0 -450 0
+bond completes 340 1500 69 0 -209 81
+bond completes 340 1500 70 0 350 90
+bond completes 340 1500 100 482 288 360
+bond completes 340 1500 200 1416 82 -164
+bond completes 340 1500 330 1079 185 -49
+bond completes 340 1500 589 0 -44 -197
+bond completes 340 1500 590 0 -49 -208
+bond completes 340 1500 600 0 -100 -167
+bond completes 340 1500 640 0 -14 -2
+bond completes 340 1500 700 0 0 11
+bond completes 340 1500 760 0 0 0
+bond completes 340 1500 869 0 0 0
+bond completes 340 1500 870 0 0 0
+bond completes 340 1500 930 0 0 0
+bond completes 340 1500 2000 0 0 0
+duree completes 520 930
+bond completes 520 3000 -5 0 0 0
+bond completes 520 3000 0 0 0 0
+bond completes 520 3000 20 0 -225 0
+bond completes 520 3000 40 0 -450 0
+bond completes 520 3000 69 0 -209 81
+bond completes 520 3000 70 0 350 90
+bond completes 520 3000 100 652 309 360
+bond completes 520 3000 200 2250 175 -204
+bond completes 520 3000 330 3000 0 -64
+bond completes 520 3000 589 23 348 -214
+bond completes 520 3000 590 0 -600 -216
+bond completes 520 3000 600 0 -620 -226
+bond completes 520 3000 640 0 -700 -269
+bond completes 520 3000 700 0 122 560
+bond completes 520 3000 760 0 2 -98
+bond completes 520 3000 869 0 1 30
+bond completes 520 3000 870 0 0 28
+bond completes 520 3000 930 0 0 0
+bond completes 520 3000 2000 0 0 0
+sautille completes 450 3000 -1 0 0 0
+sautille completes 450 3000 0 0 -500 -129
+sautille completes 450 3000 30 746 -150 -152
+sautille completes 450 3000 59 1367 188 -176
+sautille completes 450 3000 60 1386 161 400
+sautille completes 450 3000 61 1406 160 391
+sautille completes 450 3000 225 3000 0 -47
+sautille completes 450 3000 449 26 219 -128
+sautille completes 450 3000 450 0 -500 -129
+sautille completes 450 3000 470 509 -267 -144
+sautille completes 450 3000 900 0 -500 -129
+sautille completes 450 3000 1349 26 219 -128
+sautille completes 450 3000 12345 2946 29 -71
+reception completes -1 0 0
+reception completes 0 -600 0
+reception completes 25 -650 0
+reception completes 50 -700 0
+reception completes 85 -220 520
+reception completes 120 260 450
+reception completes 190 -100 -167
+reception completes 250 30 80
+reception completes 279 1 30
+reception completes 280 0 28
+reception completes 300 0 -7
+reception completes 339 0 -1
+reception completes 340 0 0
+lumiere 0 - completes nuit
+lumiere 0 degage completes nuit
+lumiere 0 nuageux completes nuit
+lumiere 0 pluie completes nuit
+lumiere 0 neige completes nuit
+lumiere 0 chaleur completes nuit
+lumiere 5 - completes nuit
+lumiere 5 degage completes nuit
+lumiere 5 nuageux completes nuit
+lumiere 5 pluie completes nuit
+lumiere 5 neige completes nuit
+lumiere 5 chaleur completes nuit
+lumiere 6 - completes matin
+lumiere 6 degage completes matin
+lumiere 6 nuageux completes -
+lumiere 6 pluie completes -
+lumiere 6 neige completes -
+lumiere 6 chaleur completes matin
+lumiere 8 - completes matin
+lumiere 8 degage completes matin
+lumiere 8 nuageux completes -
+lumiere 8 pluie completes -
+lumiere 8 neige completes -
+lumiere 8 chaleur completes matin
+lumiere 9 - completes -
+lumiere 9 degage completes -
+lumiere 9 nuageux completes -
+lumiere 9 pluie completes -
+lumiere 9 neige completes -
+lumiere 9 chaleur completes -
+lumiere 12 - completes -
+lumiere 12 degage completes -
+lumiere 12 nuageux completes -
+lumiere 12 pluie completes -
+lumiere 12 neige completes -
+lumiere 12 chaleur completes -
+lumiere 16 - completes -
+lumiere 16 degage completes -
+lumiere 16 nuageux completes -
+lumiere 16 pluie completes -
+lumiere 16 neige completes -
+lumiere 16 chaleur completes -
+lumiere 17 - completes soir
+lumiere 17 degage completes soir
+lumiere 17 nuageux completes -
+lumiere 17 pluie completes -
+lumiere 17 neige completes -
+lumiere 17 chaleur completes soir
+lumiere 20 - completes soir
+lumiere 20 degage completes soir
+lumiere 20 nuageux completes -
+lumiere 20 pluie completes -
+lumiere 20 neige completes -
+lumiere 20 chaleur completes soir
+lumiere 21 - completes nuit
+lumiere 21 degage completes nuit
+lumiere 21 nuageux completes nuit
+lumiere 21 pluie completes nuit
+lumiere 21 neige completes nuit
+lumiere 21 chaleur completes nuit
+lumiere 23 - completes nuit
+lumiere 23 degage completes nuit
+lumiere 23 nuageux completes nuit
+lumiere 23 pluie completes nuit
+lumiere 23 neige completes nuit
+lumiere 23 chaleur completes nuit
+lumiere 24 - completes nuit
+lumiere 24 degage completes nuit
+lumiere 24 nuageux completes nuit
+lumiere 24 pluie completes nuit
+lumiere 24 neige completes nuit
+lumiere 24 chaleur completes nuit
+lumiere 30 - completes matin
+lumiere 30 degage completes matin
+lumiere 30 nuageux completes -
+lumiere 30 pluie completes -
+lumiere 30 neige completes -
+lumiere 30 chaleur completes matin
+duree reduites 520 520
+bond reduites 520 2000 -5 0 0 0
+bond reduites 520 2000 0 0 0 0
+bond reduites 520 2000 20 295 0 0
+bond reduites 520 2000 40 568 0 0
+bond reduites 520 2000 69 920 0 0
+bond reduites 520 2000 70 931 0 0
+bond reduites 520 2000 100 1242 0 0
+bond reduites 520 2000 200 1893 0 0
+bond reduites 520 2000 330 1855 0 0
+bond reduites 520 2000 589 0 0 0
+bond reduites 520 2000 590 0 0 0
+bond reduites 520 2000 600 0 0 0
+bond reduites 520 2000 640 0 0 0
+bond reduites 520 2000 700 0 0 0
+bond reduites 520 2000 760 0 0 0
+bond reduites 520 2000 869 0 0 0
+bond reduites 520 2000 870 0 0 0
+bond reduites 520 2000 930 0 0 0
+bond reduites 520 2000 2000 0 0 0
+duree reduites 340 340
+bond reduites 340 1500 -5 0 0 0
+bond reduites 340 1500 0 0 0 0
+bond reduites 340 1500 20 332 0 0
+bond reduites 340 1500 40 622 0 0
+bond reduites 340 1500 69 970 0 0
+bond reduites 340 1500 70 980 0 0
+bond reduites 340 1500 100 1245 0 0
+bond reduites 340 1500 200 1453 0 0
+bond reduites 340 1500 330 171 0 0
+bond reduites 340 1500 589 0 0 0
+bond reduites 340 1500 590 0 0 0
+bond reduites 340 1500 600 0 0 0
+bond reduites 340 1500 640 0 0 0
+bond reduites 340 1500 700 0 0 0
+bond reduites 340 1500 760 0 0 0
+bond reduites 340 1500 869 0 0 0
+bond reduites 340 1500 870 0 0 0
+bond reduites 340 1500 930 0 0 0
+bond reduites 340 1500 2000 0 0 0
+duree reduites 520 520
+bond reduites 520 3000 -5 0 0 0
+bond reduites 520 3000 0 0 0 0
+bond reduites 520 3000 20 443 0 0
+bond reduites 520 3000 40 852 0 0
+bond reduites 520 3000 69 1381 0 0
+bond reduites 520 3000 70 1397 0 0
+bond reduites 520 3000 100 1863 0 0
+bond reduites 520 3000 200 2840 0 0
+bond reduites 520 3000 330 2782 0 0
+bond reduites 520 3000 589 0 0 0
+bond reduites 520 3000 590 0 0 0
+bond reduites 520 3000 600 0 0 0
+bond reduites 520 3000 640 0 0 0
+bond reduites 520 3000 700 0 0 0
+bond reduites 520 3000 760 0 0 0
+bond reduites 520 3000 869 0 0 0
+bond reduites 520 3000 870 0 0 0
+bond reduites 520 3000 930 0 0 0
+bond reduites 520 3000 2000 0 0 0
+sautille reduites 450 3000 -1 0 0 0
+sautille reduites 450 3000 0 0 0 0
+sautille reduites 450 3000 30 746 0 0
+sautille reduites 450 3000 59 1367 0 0
+sautille reduites 450 3000 60 1386 0 0
+sautille reduites 450 3000 61 1406 0 0
+sautille reduites 450 3000 225 3000 0 0
+sautille reduites 450 3000 449 26 0 0
+sautille reduites 450 3000 450 0 0 0
+sautille reduites 450 3000 470 509 0 0
+sautille reduites 450 3000 900 0 0 0
+sautille reduites 450 3000 1349 26 0 0
+sautille reduites 450 3000 12345 2946 0 0
+reception reduites -1 0 0
+reception reduites 0 0 0
+reception reduites 25 0 0
+reception reduites 50 0 0
+reception reduites 85 0 0
+reception reduites 120 0 0
+reception reduites 190 0 0
+reception reduites 250 0 0
+reception reduites 279 0 0
+reception reduites 280 0 0
+reception reduites 300 0 0
+reception reduites 339 0 0
+reception reduites 340 0 0
+lumiere 0 - reduites nuit
+lumiere 0 degage reduites nuit
+lumiere 0 nuageux reduites nuit
+lumiere 0 pluie reduites nuit
+lumiere 0 neige reduites nuit
+lumiere 0 chaleur reduites nuit
+lumiere 5 - reduites nuit
+lumiere 5 degage reduites nuit
+lumiere 5 nuageux reduites nuit
+lumiere 5 pluie reduites nuit
+lumiere 5 neige reduites nuit
+lumiere 5 chaleur reduites nuit
+lumiere 6 - reduites matin
+lumiere 6 degage reduites matin
+lumiere 6 nuageux reduites -
+lumiere 6 pluie reduites -
+lumiere 6 neige reduites -
+lumiere 6 chaleur reduites matin
+lumiere 8 - reduites matin
+lumiere 8 degage reduites matin
+lumiere 8 nuageux reduites -
+lumiere 8 pluie reduites -
+lumiere 8 neige reduites -
+lumiere 8 chaleur reduites matin
+lumiere 9 - reduites -
+lumiere 9 degage reduites -
+lumiere 9 nuageux reduites -
+lumiere 9 pluie reduites -
+lumiere 9 neige reduites -
+lumiere 9 chaleur reduites -
+lumiere 12 - reduites -
+lumiere 12 degage reduites -
+lumiere 12 nuageux reduites -
+lumiere 12 pluie reduites -
+lumiere 12 neige reduites -
+lumiere 12 chaleur reduites -
+lumiere 16 - reduites -
+lumiere 16 degage reduites -
+lumiere 16 nuageux reduites -
+lumiere 16 pluie reduites -
+lumiere 16 neige reduites -
+lumiere 16 chaleur reduites -
+lumiere 17 - reduites soir
+lumiere 17 degage reduites soir
+lumiere 17 nuageux reduites -
+lumiere 17 pluie reduites -
+lumiere 17 neige reduites -
+lumiere 17 chaleur reduites soir
+lumiere 20 - reduites soir
+lumiere 20 degage reduites soir
+lumiere 20 nuageux reduites -
+lumiere 20 pluie reduites -
+lumiere 20 neige reduites -
+lumiere 20 chaleur reduites soir
+lumiere 21 - reduites nuit
+lumiere 21 degage reduites nuit
+lumiere 21 nuageux reduites nuit
+lumiere 21 pluie reduites nuit
+lumiere 21 neige reduites nuit
+lumiere 21 chaleur reduites nuit
+lumiere 23 - reduites nuit
+lumiere 23 degage reduites nuit
+lumiere 23 nuageux reduites nuit
+lumiere 23 pluie reduites nuit
+lumiere 23 neige reduites nuit
+lumiere 23 chaleur reduites nuit
+lumiere 24 - reduites nuit
+lumiere 24 degage reduites nuit
+lumiere 24 nuageux reduites nuit
+lumiere 24 pluie reduites nuit
+lumiere 24 neige reduites nuit
+lumiere 24 chaleur reduites nuit
+lumiere 30 - reduites matin
+lumiere 30 degage reduites matin
+lumiere 30 nuageux reduites -
+lumiere 30 pluie reduites -
+lumiere 30 neige reduites -
+lumiere 30 chaleur reduites matin
+duree aucune 520 0
+bond aucune 520 2000 -5 0 0 0
+bond aucune 520 2000 0 0 0 0
+bond aucune 520 2000 20 0 0 0
+bond aucune 520 2000 40 0 0 0
+bond aucune 520 2000 69 0 0 0
+bond aucune 520 2000 70 0 0 0
+bond aucune 520 2000 100 0 0 0
+bond aucune 520 2000 200 0 0 0
+bond aucune 520 2000 330 0 0 0
+bond aucune 520 2000 589 0 0 0
+bond aucune 520 2000 590 0 0 0
+bond aucune 520 2000 600 0 0 0
+bond aucune 520 2000 640 0 0 0
+bond aucune 520 2000 700 0 0 0
+bond aucune 520 2000 760 0 0 0
+bond aucune 520 2000 869 0 0 0
+bond aucune 520 2000 870 0 0 0
+bond aucune 520 2000 930 0 0 0
+bond aucune 520 2000 2000 0 0 0
+duree aucune 340 0
+bond aucune 340 1500 -5 0 0 0
+bond aucune 340 1500 0 0 0 0
+bond aucune 340 1500 20 0 0 0
+bond aucune 340 1500 40 0 0 0
+bond aucune 340 1500 69 0 0 0
+bond aucune 340 1500 70 0 0 0
+bond aucune 340 1500 100 0 0 0
+bond aucune 340 1500 200 0 0 0
+bond aucune 340 1500 330 0 0 0
+bond aucune 340 1500 589 0 0 0
+bond aucune 340 1500 590 0 0 0
+bond aucune 340 1500 600 0 0 0
+bond aucune 340 1500 640 0 0 0
+bond aucune 340 1500 700 0 0 0
+bond aucune 340 1500 760 0 0 0
+bond aucune 340 1500 869 0 0 0
+bond aucune 340 1500 870 0 0 0
+bond aucune 340 1500 930 0 0 0
+bond aucune 340 1500 2000 0 0 0
+duree aucune 520 0
+bond aucune 520 3000 -5 0 0 0
+bond aucune 520 3000 0 0 0 0
+bond aucune 520 3000 20 0 0 0
+bond aucune 520 3000 40 0 0 0
+bond aucune 520 3000 69 0 0 0
+bond aucune 520 3000 70 0 0 0
+bond aucune 520 3000 100 0 0 0
+bond aucune 520 3000 200 0 0 0
+bond aucune 520 3000 330 0 0 0
+bond aucune 520 3000 589 0 0 0
+bond aucune 520 3000 590 0 0 0
+bond aucune 520 3000 600 0 0 0
+bond aucune 520 3000 640 0 0 0
+bond aucune 520 3000 700 0 0 0
+bond aucune 520 3000 760 0 0 0
+bond aucune 520 3000 869 0 0 0
+bond aucune 520 3000 870 0 0 0
+bond aucune 520 3000 930 0 0 0
+bond aucune 520 3000 2000 0 0 0
+sautille aucune 450 3000 -1 0 0 0
+sautille aucune 450 3000 0 0 0 0
+sautille aucune 450 3000 30 0 0 0
+sautille aucune 450 3000 59 0 0 0
+sautille aucune 450 3000 60 0 0 0
+sautille aucune 450 3000 61 0 0 0
+sautille aucune 450 3000 225 0 0 0
+sautille aucune 450 3000 449 0 0 0
+sautille aucune 450 3000 450 0 0 0
+sautille aucune 450 3000 470 0 0 0
+sautille aucune 450 3000 900 0 0 0
+sautille aucune 450 3000 1349 0 0 0
+sautille aucune 450 3000 12345 0 0 0
+reception aucune -1 0 0
+reception aucune 0 0 0
+reception aucune 25 0 0
+reception aucune 50 0 0
+reception aucune 85 0 0
+reception aucune 120 0 0
+reception aucune 190 0 0
+reception aucune 250 0 0
+reception aucune 279 0 0
+reception aucune 280 0 0
+reception aucune 300 0 0
+reception aucune 339 0 0
+reception aucune 340 0 0
+lumiere 0 - aucune -
+lumiere 0 degage aucune -
+lumiere 0 nuageux aucune -
+lumiere 0 pluie aucune -
+lumiere 0 neige aucune -
+lumiere 0 chaleur aucune -
+lumiere 5 - aucune -
+lumiere 5 degage aucune -
+lumiere 5 nuageux aucune -
+lumiere 5 pluie aucune -
+lumiere 5 neige aucune -
+lumiere 5 chaleur aucune -
+lumiere 6 - aucune -
+lumiere 6 degage aucune -
+lumiere 6 nuageux aucune -
+lumiere 6 pluie aucune -
+lumiere 6 neige aucune -
+lumiere 6 chaleur aucune -
+lumiere 8 - aucune -
+lumiere 8 degage aucune -
+lumiere 8 nuageux aucune -
+lumiere 8 pluie aucune -
+lumiere 8 neige aucune -
+lumiere 8 chaleur aucune -
+lumiere 9 - aucune -
+lumiere 9 degage aucune -
+lumiere 9 nuageux aucune -
+lumiere 9 pluie aucune -
+lumiere 9 neige aucune -
+lumiere 9 chaleur aucune -
+lumiere 12 - aucune -
+lumiere 12 degage aucune -
+lumiere 12 nuageux aucune -
+lumiere 12 pluie aucune -
+lumiere 12 neige aucune -
+lumiere 12 chaleur aucune -
+lumiere 16 - aucune -
+lumiere 16 degage aucune -
+lumiere 16 nuageux aucune -
+lumiere 16 pluie aucune -
+lumiere 16 neige aucune -
+lumiere 16 chaleur aucune -
+lumiere 17 - aucune -
+lumiere 17 degage aucune -
+lumiere 17 nuageux aucune -
+lumiere 17 pluie aucune -
+lumiere 17 neige aucune -
+lumiere 17 chaleur aucune -
+lumiere 20 - aucune -
+lumiere 20 degage aucune -
+lumiere 20 nuageux aucune -
+lumiere 20 pluie aucune -
+lumiere 20 neige aucune -
+lumiere 20 chaleur aucune -
+lumiere 21 - aucune -
+lumiere 21 degage aucune -
+lumiere 21 nuageux aucune -
+lumiere 21 pluie aucune -
+lumiere 21 neige aucune -
+lumiere 21 chaleur aucune -
+lumiere 23 - aucune -
+lumiere 23 degage aucune -
+lumiere 23 nuageux aucune -
+lumiere 23 pluie aucune -
+lumiere 23 neige aucune -
+lumiere 23 chaleur aucune -
+lumiere 24 - aucune -
+lumiere 24 degage aucune -
+lumiere 24 nuageux aucune -
+lumiere 24 pluie aucune -
+lumiere 24 neige aucune -
+lumiere 24 chaleur aucune -
+lumiere 30 - aucune -
+lumiere 30 degage aucune -
+lumiere 30 nuageux aucune -
+lumiere 30 pluie aucune -
+lumiere 30 neige aucune -
+lumiere 30 chaleur aucune -
+eclaire matin #1f4f8a #355c8d
+eclaire matin #4a8fdc #5c96d7
+eclaire matin #6cb6ff #7ab9f7
+eclaire matin #b4dbff #bbdaf7
+eclaire matin #000000 #191511
+eclaire matin #ffffff #fffbf7
+eclaire soir #1f4f8a #375896
+eclaire soir #4a8fdc #5b8edb
+eclaire soir #6cb6ff #78aef8
+eclaire soir #b4dbff #b4cef8
+eclaire soir #000000 #1d1622
+eclaire soir #ffffff #f3ecf8
+eclaire nuit #1f4f8a #1e477e
+eclaire nuit #4a8fdc #417bc1
+eclaire nuit #6cb6ff #5d9bde
+eclaire nuit #b4dbff #98bade
+eclaire nuit #000000 #05060c
+eclaire nuit #ffffff #d6d7de
+eclaire jour #1f4f8a #1f4f8a
+eclaire jour #4a8fdc #4a8fdc
+eclaire jour #6cb6ff #6cb6ff
+eclaire jour #b4dbff #b4dbff
+eclaire jour #000000 #000000
+eclaire jour #ffffff #ffffff
+bouffee 160 1 2 2 2 2 2 2 2 2 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2
+bouffee 160 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0
+bouffee 70 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0
+bouffee 70 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1
+atterrissage -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 -1 -1 -1 -1 -1 -1

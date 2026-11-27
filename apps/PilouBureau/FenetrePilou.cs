@@ -828,11 +828,11 @@ public sealed partial class FenetrePilou : Window
         var montre = _attrape ? Expr.Inquiet : _geste == Geste.SauteSouris ? Expr.Fete : ronron ? Expr.Caresse : ExprJeu(expr, t);
 
         double depuis = _suivi.DepuisHumeur(epoque);
-        double saut = 0;
-        if (expr == Expr.Fete) saut = Math.Abs(Math.Sin(Math.PI * depuis / 450)) * 3;
-        else if (expr == Expr.Caresse && t - _tCaresse < 400) saut = Math.Sin(Math.PI * (t - _tCaresse) / 400) * 1.5;
-        else if (t - _tSaut < 600) saut = Math.Sin(Math.PI * (t - _tSaut) / 600) * 2;
-        if (_attrape) saut = 0;
+        // Sauts, ressorts et réception d'une chute (VieFenetre.cs) : forme selon le réglage ✧.
+        string niveauVie = NiveauVie;
+        var mouvement = Bondir(expr, t, depuis, niveauVie);
+        if (_attrape) mouvement = mouvement with { Saut = 0, Etire = 0, Antenne = 0 };
+        double saut = mouvement.Saut;
 
         // Météo vécue : gouttes, flocons, soleil ; mouillé ou gelé sans l'équipement, il frissonne et grimace.
         var meteo = EffetMeteoCourant(t);
@@ -857,7 +857,7 @@ public sealed partial class FenetrePilou : Window
                 : etourdi ? Math.Sin(t / 120.0) * 0.4
                 : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6)
                 : Balancement(t) + meteo.Tremble,
-            Chute = Math.Max(0, 1 - (t - _atterri) / 220),
+            Chute = mouvement.Chute,
             Assis = _assis,
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
@@ -886,6 +886,7 @@ public sealed partial class FenetrePilou : Window
         HabillerExpedition(_scene.Pose, t);
         HabillerGestes(_scene.Pose, t);
         HabillerCampagne(_scene.Pose);
+        HabillerVie(_scene.Pose, mouvement, niveauVie);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
@@ -893,6 +894,7 @@ public sealed partial class FenetrePilou : Window
         AnimerBoutique(t);
         AnimerExpedition(t);
         AnimerRetour(t);
+        AnimerEssaiVie(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = Placement.AGauche(_x, _zone.Left, _zone.Right);
