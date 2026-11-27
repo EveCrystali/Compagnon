@@ -226,6 +226,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
         // --essai=expedition:depart|absent|retour|defaite|journal : une expédition sans attendre (rien n'est écrit).
         if (nom.StartsWith("expedition:")) EssaiExpedition(nom[11..]);
+        // --essai=campagne:prologue : une campagne déroulée en accéléré dans la bulle (rien n'est écrit ni publié).
+        if (nom.StartsWith("campagne:")) EssaiCampagne(nom[9..]);
         // --essai=clavier, photo, notif, notif:masque : les petits gestes sans conditions réelles.
         if (nom is "clavier" or "photo" or "notif" or "notif:masque") EssaiGeste(nom);
         // --essai=defense : une partie de Défense du bureau où Pilou joue seul (captures).

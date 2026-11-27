@@ -1,0 +1,179 @@
+{
+  "chapitre": "ch2",
+  "noeuds": {
+    "p2-pied": {
+      "type": "recit",
+      "checkpoint": true,
+      "lieu": "Au pied de la colline",
+      "decor": "pied-colline",
+      "humeur": "determine",
+      "texte": [
+        "Petite pause. Je plante un bâton dans le sol, bien droit. Voilà : ça, c'est mon point de repère. Si jamais il m'arrive une bricole plus haut, c'est d'ici que je repartirai. Pas de la maison, pas de la mare : d'ici.",
+        "Et toi, pareil : tu peux me poser quand tu veux, fermer, partir, revenir demain. Rien ne se perd. Le temps continue de passer pour moi, c'est tout. Je trouve ça très rassurant. Bon. On grimpe ?"
+      ],
+      "suite": "p2-chemins"
+    },
+    "p2-chemins": {
+      "type": "choix",
+      "texte": [
+        "Deux chemins. À gauche, le sentier : long, tranquille, bordé de pâquerettes. À droite, le raccourci : court, raide, avec un panneau « raccourci » écrit par quelqu'un qui devait bien rire. Je te préviens : sur un mauvais choix, je peux me faire mal. Pas beaucoup. Mais je me plaindrai longtemps."
+      ],
+      "options": [
+        { "id": "sentier", "libelle": "Prends le sentier aux pâquerettes", "vers": "p2-sentier" },
+        { "id": "raccourci", "libelle": "Tente le raccourci", "vers": "p2-raccourci" },
+        { "id": "encorde", "libelle": "Tente le raccourci, avec la corde", "vers": "p2-encorde", "si": { "objet": "corde" } },
+        { "id": "canard", "libelle": "Demande un coup d'aile au canard", "vers": "p2-canard", "si": { "drapeau": "ami-canard" } }
+      ]
+    },
+    "p2-sentier": {
+      "type": "attente",
+      "decor": "pente",
+      "humeur": "joie",
+      "texte": [
+        "Le sentier, donc. J'aime bien : on voit venir. Deux ou trois minutes de montée, ça dépendra des pâquerettes, j'ai tendance à leur dire bonjour à toutes. Ne m'attends pas debout. Je t'écris d'en haut !"
+      ],
+      "duree_min": 2,
+      "duree_max": 3,
+      "pendant": "Pilou suit le sentier aux pâquerettes",
+      "tenue": "marche",
+      "suite": "p2-sommet"
+    },
+    "p2-raccourci": {
+      "type": "hasard",
+      "decor": "pente",
+      "humeur": "peur",
+      "texte": [
+        "Le raccourci. D'accord. Tu es sûr ? D'accord. Je regarde en haut : c'est haut. Je regarde en bas : c'est déjà un peu haut aussi. Je crache dans mes mains, comme les grimpeurs. Je n'aurais pas dû, maintenant ça glisse. J'y vais quand même !"
+      ],
+      "issues": [
+        { "poids": 2, "vers": "p2-grimpe" },
+        { "poids": 3, "vers": "p2-glissade" }
+      ]
+    },
+    "p2-grimpe": {
+      "type": "attente",
+      "humeur": "determine",
+      "texte": [
+        "Ça tient ! Une touffe d'herbe, un caillou, une racine, et hop. Je ne regarde pas en bas. Encore une minute d'escalade, à peu près. Si tu entends un petit cri, c'est de la joie. Normalement."
+      ],
+      "duree_min": 1,
+      "pendant": "Pilou escalade le raccourci",
+      "tenue": "grimpe",
+      "suite": "p2-sommet"
+    },
+    "p2-encorde": {
+      "type": "attente",
+      "decor": "pente",
+      "humeur": "malice",
+      "texte": [
+        "La corde ! Bien sûr. Je m'encorde à un gros pissenlit, là-haut, et je me hisse. Technique d'alpiniste. Le pissenlit n'a pas l'air convaincu, mais il tient bon. Une minute et j'y suis. Tu vois que ça servait, cette corde. C'était mon idée."
+      ],
+      "duree_min": 1,
+      "pendant": "Pilou grimpe, encordé à un pissenlit",
+      "tenue": "grimpe",
+      "suite": "p2-sommet"
+    },
+    "p2-canard": {
+      "type": "attente",
+      "decor": "pente",
+      "humeur": "surpris",
+      "texte": [
+        "Mon ami canard ! Il m'a suivi, il s'ennuyait. Je lui explique la colline. Il répond « coin », ce qui veut dire oui. Ou non. Je grimpe sur son dos, il décolle, je ferme les yeux. Une minute de vol, d'après lui. Je ne regarde pas en bas. Je ne regarde nulle part, d'ailleurs."
+      ],
+      "duree_min": 1,
+      "pendant": "Pilou vole à dos de canard",
+      "tenue": "course",
+      "suite": "p2-sommet"
+    },
+    "p2-glissade": {
+      "type": "echec",
+      "decor": "pied-colline",
+      "humeur": "fatigue",
+      "texte": [
+        "Alors. Le raccourci était raide. J'ai glissé jusqu'en bas sur le derrière, avec énormément de dignité. Rien de cassé, je te rassure tout de suite. Juste l'orgueil, et il repousse.",
+        "C'est ce qu'on appelle un échec. Ça arrive, dans une aventure. Je m'assois dix minutes, le temps que ça ne pique plus. Ensuite je repars de mon bâton, celui que j'ai planté tout à l'heure. Les pièces de la mare, je les garde : ce qui est gagné est gagné. À dans dix minutes."
+      ],
+      "repos_min": 10
+    },
+    "p2-sommet": {
+      "type": "choix",
+      "lieu": "Le sommet",
+      "decor": "sommet",
+      "humeur": "joie",
+      "texte": [
+        "J'y suis ! Le sommet ! Bon, c'est une colline, pas une montagne, mais d'ici on voit la maison, la mare, et même mon bâton, tout petit. J'ai mangé le goûter pour fêter ça. Tout le goûter.",
+        "Le soleil descend. Il est orange, il prend son temps. Si je reste, je saurai enfin où il va dormir. Mais après, il fera nuit pour rentrer, et la nuit, les buissons font des bruits. Qu'est-ce que je fais ?"
+      ],
+      "options": [
+        { "id": "lampe", "libelle": "Reste : tu as ta lampe pour rentrer", "vers": "p2-veille-lampe", "si": { "objet": "lampe" } },
+        { "id": "reste", "libelle": "Reste jusqu'au bout, on verra bien", "vers": "p2-veille" },
+        { "id": "seche", "libelle": "Reste : le soleil te séchera", "vers": "p2-veille", "si": { "drapeau": "mouille" } },
+        { "id": "rentre", "libelle": "Rentre avant la nuit", "vers": "p2-fin-prudent" }
+      ]
+    },
+    "p2-veille-lampe": {
+      "type": "attente",
+      "humeur": "tendre",
+      "texte": [
+        "Je reste. Je m'assois dans l'herbe, la lampe sur les genoux, éteinte pour l'instant : on ne dérange pas un coucher de soleil. Deux minutes, d'après moi. Il descend, il descend. Je ne bouge plus. Je te raconte dès qu'il a disparu."
+      ],
+      "duree_min": 2,
+      "pendant": "Pilou regarde le soleil descendre",
+      "tenue": "attend",
+      "suite": "p2-retour-lampe"
+    },
+    "p2-veille": {
+      "type": "attente",
+      "humeur": "tendre",
+      "texte": [
+        "Je reste. Tant pis pour la nuit, j'improviserai. Je m'assois dans l'herbe et je ne quitte plus le soleil des yeux. Enfin, pas trop, ça pique. Deux minutes, d'après moi. Il descend, il descend. Je te raconte dès qu'il a disparu."
+      ],
+      "duree_min": 2,
+      "pendant": "Pilou regarde le soleil descendre",
+      "tenue": "attend",
+      "suite": "p2-retour-noir"
+    },
+    "p2-retour-lampe": {
+      "type": "recit",
+      "humeur": "joie",
+      "texte": [
+        "Ça y est, il est couché. Et il fait noir d'un coup, comme quand on éteint. Mais j'ai la lampe ! Clic. Un rond de lumière, juste devant mes pieds. Les buissons font leurs bruits, je leur éclaire la figure : ce sont des hérissons. Ils sont polis. Je redescends comme un roi."
+      ],
+      "suite": "p2-fin-coucher"
+    },
+    "p2-retour-noir": {
+      "type": "recit",
+      "humeur": "peur",
+      "texte": [
+        "Ça y est, il est couché. Et il fait noir d'un coup, comme quand on éteint. Pas de lampe. Les buissons font leurs bruits. J'ai dit « bonsoir » très fort, à tout hasard. Un ver luisant a répondu, puis un autre. Ils m'ont raccompagné jusqu'en bas, à la queue leu leu. Je n'ai presque pas eu peur."
+      ],
+      "suite": "p2-fin-coucher"
+    },
+    "p2-fin-coucher": {
+      "type": "fin",
+      "issue": "bonne",
+      "titre": "Là où le soleil se couche",
+      "lieu": "La maison",
+      "decor": "seuil",
+      "humeur": "tendre",
+      "texte": [
+        "Me voilà rentré. Et je sais. Le soleil n'a pas de lit. Il a toute une mer : il s'y glisse doucement, comme dans un bain, et il tire l'horizon sur lui. Pas de couette. Je crois qu'il n'en a pas besoin.",
+        "Voilà. C'était ma première aventure, et tu étais là. Les prochaines seront plus longues : des heures de route, des nuits dehors, des choix qui comptent pour de bon. Je t'écrirai. Tu répondras ? Garde ce coucher de soleil : il est à nous deux."
+      ],
+      "recompenses": { "po": 20, "xp": 10, "souvenir": "coucher-de-soleil" }
+    },
+    "p2-fin-prudent": {
+      "type": "fin",
+      "issue": "douce-amere",
+      "titre": "Une question pour plus tard",
+      "lieu": "La maison",
+      "decor": "seuil",
+      "humeur": "triste",
+      "texte": [
+        "Je suis rentré avant la nuit. Sage. Raisonnable. Un peu déçu, je ne te le cache pas : du pas de la porte, j'ai vu le ciel devenir rose, puis mauve, et je n'ai pas vu où allait le soleil. Il garde encore son secret.",
+        "Mais j'ai une question pour une prochaine fois, et c'est précieux, une question. Les prochaines aventures seront plus longues : des heures de route, des nuits dehors. Je t'écrirai. Et un soir, on retournera là-haut, toi et moi. Promis."
+      ],
+      "recompenses": { "po": 10, "xp": 5, "souvenir": "question-gardee" }
+    }
+  }
+}

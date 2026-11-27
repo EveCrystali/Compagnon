@@ -77,6 +77,14 @@ public final class Veille extends Service {
         // Mise à jour de l'app : une minute après le démarrage, puis une fois par jour (MiseAJour décide).
         principal.postDelayed(this::verifierMise, 60_000);
         principal.postDelayed(this::envoyerGains, 20_000);
+        principal.postDelayed(this::synchroniserCampagnes, 30_000);
+    }
+
+    // Campagnes : le carnet du groupe (sujet à part du relais), relu et publié toutes les 5 min. Une décision prise sur
+    // le téléphone part tout de suite (CampagnesTel) ; l'histoire, elle, avance sans réseau.
+    private void synchroniserCampagnes() {
+        new Thread(() -> CampagnesTel.synchroniser(this), "pilou-campagnes").start();
+        principal.postDelayed(this::synchroniserCampagnes, 5 * 60_000L);
     }
 
     private void verifierMise() {

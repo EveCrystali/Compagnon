@@ -251,6 +251,12 @@ public sealed partial class FenetrePilou
             if (!spontanee) Dire("Pilou est en expédition : la visite attendra son retour", 3500);
             return;
         }
+        // Ni pendant l'attente d'une campagne (Pilou est en route, ou se repose) : FenetreCampagne.cs.
+        if (CampagneEnAttente)
+        {
+            if (!spontanee) Dire("Pilou est en campagne : la visite attendra son retour", 3500);
+            return;
+        }
         if (_jeuEnCours != Jeu.Aucun) Arreter("");
         Visites.Actualiser(MesAmis.Jour, DateTime.Now);
         Appliquer(_visites.Partir(ami, MesAmis.Moi.Code, MaVitrine(), Epoque, Visites.Duree(_hasard), spontanee, MesAmis.Jour));

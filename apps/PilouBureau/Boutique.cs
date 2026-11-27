@@ -556,6 +556,8 @@ public sealed class Bourse
     public int PoGagnes { get; set; }
     public int PoDepenses { get; set; }
     public int PoDepTelephone { get; set; }
+    // Po gagnées en campagne (Campagnes.Crediter) : chaque PC du groupe verse les mêmes, comptées au maximum.
+    public int PoCampagnes { get; set; }
     public List<string> Inventaire { get; set; } = new();
     // Consommables achetés et pas encore utilisés (pierre de calme…), propres à cet appareil.
     public Dictionary<string, int> Consommables { get; set; } = new();

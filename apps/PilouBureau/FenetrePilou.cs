@@ -405,6 +405,7 @@ public sealed partial class FenetrePilou : Window
             SuivreQuetes(vivantes);
             SuivreSoins();
             SuivreExpedition();
+            SuivreCampagne(epoque);
             if (Maintenant - _themeLu > 5000)
             {
                 _sombre = _reglages.Sombre();
