@@ -26,6 +26,9 @@ Dernière mise à jour : 28 novembre 2026.
   anciens décors 192 × 80 restent en service jusqu'à la bascule. Jamais vus sur un vrai Windows ni un vrai téléphone.
   Seconde passe faite sur les trois grandes campagnes (matière au lieu du damier, douze détails vivants au moins par
   décor, les deux pics de Petit Nuage en fil du voyage) ; le prologue n'a pas eu de seconde passe.
+  Troisième passe « en profondeur » en cours sur La Grande Panne (méthode dans docs/PEINTURE.md, étalon : la mare) :
+  faits, le bureau 13 h 37, le hall des Pas Comptés, le pied de la Tour (3 sur 12) ; avant / après en taille réelle
+  dans `docs/maquettes/paysages/grande-panne/profondeur/`.
 - **Personnages haute définition** (docs/SPRITES.md) : les 29 personnages en pied des trois campagnes sont redessinés
   à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, 69 fichiers, 438 Ko, format de docs/SCENES-HD.md, référence
   `personnages-hd-reference.txt`). Pas encore affichés dans l'app (le Théâtre HD ne les lit pas encore) ; jamais vus

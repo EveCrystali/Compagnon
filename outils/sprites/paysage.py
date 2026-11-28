@@ -1026,6 +1026,26 @@ def roue(P, x, y, r, dents, coul, clair, sombre, angle=0.0, moyeu=None):
     P.remplir(d < r * 0.12, moyeu if moyeu is not None else clair)
 
 
+def reflet(P, masque, derriere, axe, force=0.35, etire=1.0, ondule=0.0):
+    """Le reflet d'un sol poli : sous la ligne y = axe, chaque pixel du masque reçoit un peu de la couleur qui se trouve à
+    la même distance au-dessus (dans `derriere`, Tableau.derriere()), mélangée en tons pleins. force : part du reflet ;
+    etire : combien le reflet s'allonge ; ondule : léger flottement horizontal (en pixels) qui suit la boucle."""
+    src_y = np.clip(np.floor((axe - (P.Y - axe) / etire - P.y0) * P.s), 0, P.H - 1).astype(np.int64)
+    dec = np.round(ondule * np.sin(P.Y * 1.7 + 2 * math.pi * P.p)).astype(np.int64) if ondule else 0
+    haut = derriere[src_y, np.clip(P.XI + dec, 0, P.Wt - 1)]
+    m = masque & (P.a >= 0) & (haut >= 0) & (P.Y > axe)
+    if not m.any():
+        return
+    code = P.a.astype(np.int64) * 4096 + haut.astype(np.int64)
+    cand = sorted({int(v) for v in np.unique(P.a[m])} | {int(v) for v in np.unique(haut[m])} | _tons_en_cours())
+    rgb = np.array([rvb(PAL[i]) for i in cand], dtype=float)
+    poids = np.array([1.0, 1.2, 0.8])
+    for cle in np.unique(code[m]):
+        s_, r_ = int(cle) // 4096, int(cle) % 4096
+        cible = np.array(rvb(PAL[s_]), dtype=float) * (1 - force) + np.array(rvb(PAL[r_]), dtype=float) * force
+        P.a[m & (code == cle)] = cand[int(np.argmin((((rgb - cible) ** 2) * poids).sum(axis=1)))]
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Petite vie : de quoi peupler un lieu de détails qui bougent (chacun boucle avec P.p)
 # ---------------------------------------------------------------------------------------------------------------
