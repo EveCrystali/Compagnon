@@ -1,0 +1,107 @@
+# Scènes du « Phare éteint » (docs/SCENES.md) : une section par décor (assets/sprites2x/decor-phare-eteint-<décor>).
+# Coordonnées en pixels du décor fin (192 × 80). Format : voir assets/scenes/prologue.txt et grande-panne.txt.
+# La côte la nuit : mouettes, un chat sur les casiers, des papillons de nuit autour des lanternes, des crabes.
+
+scene chez-pilou
+sol 4 52 188 52
+place 120
+interlocuteur 160
+cle 46 20 90 54
+
+scene port-trebrume
+sol 4 66 188 66
+place 26
+interlocuteur 80
+cle 130 0 156 50
+acteur mouette traverse 8 26 11000 0 22
+acteur mouette traverse 12 30 11000 5200 18
+acteur chat pose 112 52
+acteur papillon-nuit vol 168 22 184 36 71
+acteur papillon-nuit vol 168 24 186 38 73
+acteur rond rond 60 60 4200 0
+
+scene auberge-bigorneau
+sol 4 78 188 78
+place 40
+interlocuteur 150
+cle 50 10 68 56
+acteur papillon-nuit vol 132 36 146 48 75
+
+scene guet-de-nuit
+sol 4 78 188 78
+place 40
+interlocuteur 156
+cle 44 0 148 58
+
+scene passe-pied
+sol 4 78 188 78
+place 40
+interlocuteur 150
+cle 130 0 162 36
+acteur mouette traverse 6 24 13000 2000 20
+acteur crabe traverse 74 76 16000 4000 8
+acteur rond rond 30 64 3800 0
+acteur rond rond 150 62 4600 2100
+
+scene pied-du-phare
+sol 4 68 188 68
+place 40
+interlocuteur 150
+cle 78 12 122 60
+acteur mouette traverse 4 20 12000 0 24
+acteur crabe traverse 66 68 18000 7000 7
+
+scene place-mairie
+sol 4 78 188 78
+place 40
+interlocuteur 150
+cle 62 16 128 52
+acteur mouette traverse 4 18 14000 3000 22
+
+scene atelier-basile
+sol 4 78 188 78
+place 30
+interlocuteur 150
+
+scene sentier-douaniers
+sol 4 64 130 64
+place 30
+interlocuteur 100
+acteur mouette traverse 6 24 10000 1000 20
+acteur mouette traverse 10 28 10000 6000 26
+
+scene grotte-souffleur
+sol 4 78 188 78
+place 22
+interlocuteur 120
+acteur papillon-nuit vol 46 40 66 56 77
+acteur rond rond 160 60 3000 0
+sensible mer 100 54 192 64 rond
+
+scene cave-du-phare
+sol 4 76 188 76
+place 40
+interlocuteur 150
+cle 84 50 108 72
+acteur papillon-nuit vol 86 54 106 70 79
+
+scene chambre-de-veille
+sol 4 78 188 78
+place 40
+interlocuteur 112
+acteur papillon-nuit vol 140 32 158 46 83
+
+scene lanterne-du-phare
+sol 4 76 188 76
+place 40
+interlocuteur 150
+cle 70 0 122 58
+
+scene jetee-nuit
+sol 4 61 64 66
+place 28
+interlocuteur 56
+cle 156 0 192 36
+acteur mouette traverse 6 22 12000 4000 20
+acteur papillon-nuit vol 36 30 54 44 89
+acteur papillon-nuit vol 34 32 52 46 97

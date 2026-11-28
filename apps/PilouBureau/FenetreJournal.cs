@@ -35,18 +35,18 @@ internal sealed class FenetreJournal : Window
     // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (détails) ou
     // « corps » (à partir de 14) ; gras : la police « titre ».
     private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
-        StylePixel.Texte("", couleur, taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
+        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : StylePixel.Corps, gras);
 
-    private static BoutonPixel Bouton(string texte) => new(texte, false, StylePixel.Petit) { Margin = new Thickness(0, 0, 8, 0) };
+    private static BoutonPixel Bouton(string texte) => new(texte, false, StylePixel.Corps) { Margin = new Thickness(0, 0, 8, 0) };
 
     public FenetreJournal(FenetrePilou pilou, string? jour)
     {
         _pilou = pilou;
         Title = "Journal de Pilou";
-        Width = 680;
-        Height = 470;
-        MinWidth = 520;
-        MinHeight = 380;
+        Width = 800;
+        Height = 600;
+        MinWidth = 700;
+        MinHeight = 520;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
         Background = Fond;
@@ -229,7 +229,7 @@ internal sealed class FenetrePrenom : Window
         p.Children.Add(_champ);
         var boutons = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 14, 0, 0) };
         // Champ de saisie : police du système (docs/STYLE.md), cadre carré. Boutons : cadre pixel, « C'est ça » en principal.
-        BoutonPixel B(string t, bool principal) => new(t, principal, StylePixel.Petit) { Margin = new Thickness(0, 0, 10, 0) };
+        BoutonPixel B(string t, bool principal) => new(t, principal, StylePixel.Corps) { Margin = new Thickness(0, 0, 10, 0) };
         var oui = B("C'est ça", true);
         oui.IsDefault = true;
         var non = B("Je préfère ne pas dire", false);

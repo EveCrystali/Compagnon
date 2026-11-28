@@ -45,9 +45,9 @@ final class PageCollection extends Page {
         segments.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
         // Les cinq noms tiennent chacun dans sa case, avec un module d'air de chaque côté, même en grande police.
         int caseOnglet = (a.getResources().getDisplayMetrics().widthPixels - Ui.dp(a, 44)) / ONGLETS.length - 4 * Style.u(a);
-        int pixelOnglet = Style.pixelQuiTient(a, ONGLETS, Style.PETIT, true, caseOnglet);
+        int pixelOnglet = Style.pixelQuiTient(a, ONGLETS, Style.CORPS, false, caseOnglet);
         for (int i = 0; i < ONGLETS.length; i++) {
-            TextView t = new Style.Texte(a, ONGLETS[i], pixelOnglet, p.doux, true, true);
+            TextView t = new Style.Texte(a, ONGLETS[i], pixelOnglet, p.doux, false, true);
             t.setGravity(Gravity.CENTER);
             t.setPadding(0, Ui.dp(a, 9), 0, Ui.dp(a, 9));
             int k = i;

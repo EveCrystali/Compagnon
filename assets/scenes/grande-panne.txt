@@ -1,11 +1,13 @@
 # Scènes de « La Grande Panne » (docs/SCENES.md) : une section par décor (assets/sprites2x/decor-grande-panne-<décor>).
-# Coordonnées en pixels du décor fin (192 × 80). Format : voir assets/scenes/prologue.txt.
+# Coordonnées en pixels du décor fin (192 × 80). Format : voir assets/scenes/prologue.txt ; en plus,
+#   cle x0 y0 x1 y1                     l'accessoire dont parle le texte : le panneau des choix (PC) ne le couvre pas
 # L'intérieur de l'ordinateur : des paquets de données passent, des tickets tombent, le curseur rôde.
 
 scene bureau-1337
 sol 4 78 188 78
 place 66
 interlocuteur 150
+cle 102 58 192 80
 acteur curseur vol 30 18 180 48 41
 acteur paquet traverse 10 40 9000 3000 34
 
@@ -13,17 +15,17 @@ scene hall-pas-comptes
 sol 4 78 188 78
 place 46
 interlocuteur 148
+cle 64 4 128 33
 acteur ticket chute 104 12 7000 0
 acteur ticket chute 120 14 7000 3500
-acteur paquet traverse 4 10 11000 6000 30
 
 scene tour-tampon
 sol 4 78 188 78
 place 52
 interlocuteur 142
+cle 74 0 118 80
 acteur ticket chute 60 0 6500 1500
 acteur ticket chute 150 0 6500 4800
-acteur paquet traverse 10 30 12000 2000 26
 
 scene etage-guichets
 sol 4 78 188 78
@@ -60,6 +62,7 @@ scene file-impression
 sol 4 78 188 78
 place 122
 interlocuteur 172
+cle 118 10 190 48
 acteur ticket chute 150 44 6000 0
 acteur ticket chute 168 44 6000 3000
 
@@ -67,6 +70,7 @@ scene citadelle-nuage
 sol 4 70 188 70
 place 44
 interlocuteur 150
+cle 60 16 152 54
 acteur paquet traverse 6 30 7000 0 36
 acteur paquet traverse 8 34 9500 4000 28
 
@@ -89,4 +93,5 @@ scene horloge-systeme
 sol 4 78 188 78
 place 40
 interlocuteur 152
+cle 88 0 120 74
 acteur etincelle vol 20 10 180 50 61

@@ -7,11 +7,21 @@ gardent leur ordre (0 et 1 repos, 2 yeux fermés, 3 et 4 bouche ouverte) : les a
 `parle` sont écrites dans assets/scenes/animations.txt par theatre.py. Un personnage dessiné en buste (Mlle Renvoi)
 se tient derrière un guichet qu'on lui pose devant.
 
+Les humains (Le phare éteint) ont un portrait en buste : ils sont dessinés en pied par humains_pied.py.
+Ceux qui volent (les nuages, les chauves-souris de Petit Nuage) flottent au-dessus du sol : une marge transparente
+sous le dessin, et la seconde image de repos monte d'un pixel (ils se balancent). L'araignée descend au bout de son fil,
+prolongé vers le haut (sous le saule de l'étang).
 Campagnes déjà passées au théâtre en pied : CAMPAGNES (une campagne par PR, décidé avec le pilote le 28 novembre 2026).
 """
 import os
 
-CAMPAGNES = ("grande-panne",)
+CAMPAGNES = ("grande-panne", "phare-eteint", "petit-nuage")
+
+# Ceux qui volent : pixels de vide entre le bas du dessin et le sol.
+VOLANTS = {("petit-nuage", "brouillon"): 10, ("petit-nuage", "ondee"): 16, ("petit-nuage", "enclumes"): 14,
+           ("petit-nuage", "froisseuses"): 20, ("petit-nuage", "dentelle"): 20}
+# Ceux qui pendent à un fil : hauteur totale du sprite, le fil prolongé vers le haut.
+FILS = {("petit-nuage", "dentelle"): 58}
 
 # Personnages en buste : le meuble posé devant eux (lignes d'en bas recouvertes).
 GUICHETS = {("grande-panne", "mlle-renvoi")}
@@ -77,8 +87,15 @@ def tout():
     for (c, p) in sorted(portraits_campagnes.PERSOS):
         if c not in CAMPAGNES:
             continue
-        s = _lire_1x(c, p)
-        ims = _grilles(s)
+        import humains_pied
+        if (c, p) in humains_pied.GENS:
+            # Les humains : dessinés en pied par humains_pied.py (leur portrait est un buste).
+            ims = humains_pied.images((c, p))
+            duree = 150
+        else:
+            s = _lire_1x(c, p)
+            ims = _grilles(s)
+            duree = s.duree
         h, w = len(ims[0]), len(ims[0][0])
         # Recadrage commun à toutes les images : la boîte des pixels pleins.
         xs = [x for g in ims for y in range(h) for x in range(w) if g[y][x] is not None]
@@ -87,19 +104,28 @@ def tout():
         if (c, p) in GUICHETS:
             x0, x1 = max(0, x0 - 3), min(w - 1, x1 + 3)
         cw, ch = x1 - x0 + 1, y1 - y0 + 1
-        W2, H2 = cw + (cw % 2), ch + (ch % 2)          # la toile fine a des côtés pairs : on ajoute en haut et à droite
+        vide = VOLANTS.get((c, p), 0)
+        haut = 1 if vide else 0                         # la place du balancement
+        total = max(FILS.get((c, p), 0), ch + vide + haut)
+        W2, H2 = cw + (cw % 2), total + (total % 2)     # la toile fine a des côtés pairs : on ajoute en haut et à droite
         toiles = []
-        for g in ims:
+        for i, g in enumerate(ims):
             t = Toile(W2 // 2, H2 // 2)
             t.e = 2
             t.g = [[None] * W2 for _ in range(H2)]
+            dy = H2 - ch - vide - (1 if vide and i == 1 else 0)
             for y in range(ch):
                 for x in range(cw):
-                    t.g[y + H2 - ch][x] = g[y0 + y][x0 + x]
+                    t.g[y + dy][x] = g[y0 + y][x0 + x]
+            if (c, p) in FILS:
+                # Le fil : chaque colonne pleine de la première ligne monte jusqu'en haut.
+                for x in range(cw):
+                    if t.g[dy][x] is not None:
+                        for y in range(dy):
+                            t.g[y][x] = t.g[dy][x]
             if (c, p) in GUICHETS:
                 t.g = _guichet(t.g, W2)
             toiles.append(t)
         sid = "pied-%s-%s" % (c, p)
-        ecrire(sid, toiles, duree=s.duree, commentaire="Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après "
-               "portrait-%s-%s" % (c, p))
+        ecrire(sid, toiles, duree=duree, commentaire="Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : %s" % p)
         IDS.append(sid)

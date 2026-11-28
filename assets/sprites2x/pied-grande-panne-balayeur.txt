@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-balayeur
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : balayeur
 id: pied-grande-panne-balayeur
 slot: objet
 ancre: aucun

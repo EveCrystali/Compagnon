@@ -87,6 +87,114 @@ acteur("etincelle", 80, {"o": "#f69d50", "c": "#ffc89a", "w": "#fff6cc"},
        [".....", "..c..", ".cwc.", "..c..", "....."],
        ["o...o", ".c.c.", "..w..", ".c.c.", "o...o"])
 
+
+# ---- Le phare éteint (la côte : nuit bleue, brume, granit, lanternes orange)
+
+acteur("mouette", 140, {"w": "#e6ecf2", "g": "#adbac7", "d": "#3b4654", "o": "#f2a94e"},
+       ["d.......d", ".g.....g.", "..gwwwg..", "...wwwo..", "........."],
+       [".........", "dg.....gd", "..gwwwg..", "...wwwo..", "........."],
+       [".........", ".........", "..gwwwg..", ".g.wwwog.", "d.......d"],
+       [".........", "dg.....gd", "..gwwwg..", "...wwwo..", "........."])
+
+acteur("chat", 260, {"n": "#141a2e", "o": "#f2a94e"},
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn.....", ".nnnnn....", ".nnnnn.nn.", "nnnnnnnnn."],
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn.....", ".nnnnn.n..", ".nnnnn.n..", "nnnnnnnn.."],
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn...n.", ".nnnnn..n.", ".nnnnn.n..", "nnnnnnnn.."],
+       [".n..n.....", ".nnnn.....", ".nnnn.....", ".nnnn.....", "..nnn.....", ".nnnnn.n..", ".nnnnn.n..", "nnnnnnnn.."])
+
+acteur("papillon-nuit", 70, {"w": "#ffe8bf", "g": "#d9c9a0"},
+       ["w.w", ".g."],
+       ["...", "wgw"])
+
+acteur("crabe", 120, {"o": "#d0662e", "c": "#f69d50", "k": "#1c2128"},
+       [".k...k.", "oo.o.oo", ".ocooo.", "o.o.o.o"],
+       [".k...k.", "oo.o.oo", ".ocooo.", ".o.o.o."])
+
+# ---- Petit Nuage (la montagne, le ciel : nuages, brume, vapeur, neige). Aucune couleur semi-transparente : le
+# léger se dit en trame (un pixel sur deux, un sur quatre), comme dans les décors.
+
+def _trame(x, y, densite):
+    """Garde-t-on ce pixel ? densite 4 : tous, 2 : un sur deux (damier), 1 : un sur quatre, 0 : aucun."""
+    if densite >= 4:
+        return True
+    if densite >= 2:
+        return (x + y) % 2 == 0
+    if densite >= 1:
+        return x % 2 == 0 and y % 2 == 0
+    return False
+
+
+# Un petit nuage qui passe, dans le style des nuages des décors : corps blanc à bosses, dessous bleuté, et dessous
+# encore une frange en damier. Ses bosses bougent un peu d'une image à l'autre (il respire).
+acteur("nuage", 520, {"w": "#f7f5ef", "c": "#dbe3f0"},
+       ["......wwww..........", "....wwwwwwww..ww....", "..wwwwwwwwwwwwwwww..", ".wwwwwwwwwwwwwwwwww.",
+        "wwwwwwwwwwwwwwwwwwww", ".cccccccccccccccccc.", "..c.c.c.c.c.c.c.c..."],
+       [".....wwwww..........", "....wwwwwwww.www....", "..wwwwwwwwwwwwwwww..", ".wwwwwwwwwwwwwwwwww.",
+        "wwwwwwwwwwwwwwwwwwww", ".cccccccccccccccccc.", "...c.c.c.c.c.c.c.c.."],
+       [".....wwwww..........", "...wwwwwwwww.wwww...", "..wwwwwwwwwwwwwwww..", ".wwwwwwwwwwwwwwwwww.",
+        "wwwwwwwwwwwwwwwwwwww", ".cccccccccccccccccc.", "..c.c.c.c.c.c.c.c..."],
+       ["......wwww..........", "....wwwwwwww..www...", "..wwwwwwwwwwwwwwww..", ".wwwwwwwwwwwwwwwwww.",
+        "wwwwwwwwwwwwwwwwwwww", ".cccccccccccccccccc.", "...c.c.c.c.c.c.c.c.."])
+
+
+def _brume(w, h, decalage):
+    """Une traînée de brume : un damier au cœur, un pixel sur quatre au bord ; le motif glisse d'une image à l'autre."""
+    lignes = []
+    for y in range(h):
+        l = ""
+        for x in range(w):
+            u, v = (x + 0.5 - w / 2) / (w / 2), (y + 0.5 - h / 2) / (h / 2)
+            d = u * u + v * v
+            dens = 2 if d <= 0.45 else 1 if d <= 1.0 else 0
+            l += "b" if _trame(x + decalage, y, dens) else "."
+        lignes.append(l)
+    return lignes
+
+
+acteur("brume", 600, {"b": "#e3e9f4"}, _brume(22, 5, 0), _brume(22, 5, 1), _brume(22, 5, 2), _brume(22, 5, 3))
+
+
+def _vapeur(etape):
+    """Un filet de vapeur qui monte : dense en bas au début, puis il s'élargit et s'éclaircit (trame)."""
+    w, h = 7, 10
+    lignes = []
+    for y in range(h):
+        l = ""
+        for x in range(w):
+            ondule = [0, 1, 1, 0, -1, -1, 0, 1, 1, 0][(y + etape) % 10]
+            dx = abs(x - 3 - ondule)
+            large = 1 + etape // 2
+            dens = (2 if dx <= large - 1 else 1 if dx <= large else 0) if y >= 2 * (4 - etape) - 4 else 0
+            dens = max(0, dens - (1 if etape >= 3 else 0))
+            l += "v" if dens and _trame(x, y + etape, dens + (1 if dens == 1 and etape < 2 else 0)) else "."
+        lignes.append(l)
+    return lignes
+
+
+acteur("vapeur", 1000, {"v": "#eef2f8"}, *[_vapeur(e) for e in range(5)])
+
+acteur("flocon", 300, {"w": "#ffffff", "c": "#9fb4d8"},
+       [".w.", "wcw", ".w."],
+       [".c.", "cwc", ".c."],
+       ["w.w", ".w.", "w.w"],
+       [".c.", "cwc", ".c."])
+
+acteur("aiguille", 220, {"o": "#e8a03a", "d": "#b8732a"},
+       ["oo.", ".do"],
+       [".o.", "odo"],
+       [".oo", "od."],
+       [".o.", "odo"])
+
+acteur("rafale", 90, {"c": "#c9d3e8", "w": "#eef2f8"},
+       ["..cc.cw.......", "..............", "......cc.cwww."],
+       ["...cc.cw......", "..............", ".......cc.cwww"],
+       ["....cc.cw.....", "..............", "c.......cc.cww"],
+       [".....cc.cw....", "..............", "cc.......cc.cw"])
+
+acteur("poussiere", 160, {"o": "#ffd98a", "w": "#fff6d6"},
+       ["w.", ".."], ["o.", ".."], ["..", ".o"], ["..", ".w"])
+
+
 # ---- Eau
 
 def _rond(r, a):
@@ -104,6 +212,15 @@ def _rond(r, a):
 
 acteur("rond", 280, {"c": "#c7d5f4cc", "p": "#c7d5f488"},
        _rond(2, "c"), _rond(3.5, "c"), _rond(5, "c"), _rond(6.5, "p"), _rond(7.5, "p"))
+
+def _rond_trame(r, densite):
+    return ["".join(ch if ch == "." or _trame(x, y, densite) else "." for x, ch in enumerate(l))
+            for y, l in enumerate(_rond(r, "c"))]
+
+
+# Le rond sans alpha (Petit Nuage) : opaque, puis en damier, puis un pixel sur quatre en s'élargissant.
+acteur("rond-trame", 280, {"c": "#d6e3f4"},
+       _rond_trame(2, 4), _rond_trame(3.5, 4), _rond_trame(5, 2), _rond_trame(6.5, 2), _rond_trame(7.5, 1))
 
 acteur("plouf", 90, {"w": "#ffffff", "c": "#cfe0ff", "b": "#9fb8e8"},
        [".........", "....w....", "...c.c...", "..b...b.."],

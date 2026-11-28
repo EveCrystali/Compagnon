@@ -223,20 +223,20 @@ final class Vitrine {
         }
 
         private int yBarre() {
-            return yTitre() + 13 * pp;
+            return yTitre() + 13 * pc;
         }
 
         private int yXp() {
-            return yBarre() + 3 * u - pp;
+            return yBarre() + 3 * u - pc;
         }
 
         private int basCorps() {
-            return yXp() + 12 * pp + u;
+            return yXp() + 12 * pc + u;
         }
 
         @Override
         protected void onMeasure(int l, int h) {
-            int haut = suites.length == 0 ? basCorps() + 2 * u : basCorps() - pp + 12 * pp + 2 * u;
+            int haut = suites.length == 0 ? basCorps() + 2 * u : basCorps() - pc + 12 * pc + 2 * u;
             setMeasuredDimension(MeasureSpec.getSize(l), Math.max(haut, Ui.dp(getContext(), 52)));
         }
 
@@ -262,7 +262,7 @@ final class Vitrine {
             // Pièces d'or, à gauche de la roue.
             String sPo = po < 0 ? "— po" : po + " po";
             int xPo = w - reserve - Style.largeur(sPo, pc, true);
-            Style.ecrire(cv, sPo, xPo, yTitre() + 2 * pp, pc, ORANGE, true, pt);
+            Style.ecrire(cv, sPo, xPo, yTitre(), pc, ORANGE, true, pt);
             Sprites.Sprite piece = Sprites.banque().get("po-tourne");
             int xPiece = xPo;
             if (piece != null) {
@@ -271,11 +271,13 @@ final class Vitrine {
                     pt.setColor(col);
                     cv.drawRect(g, hh, d, b, pt);
                 };
-                Sprites.dessiner(pe, piece, xPiece, yTitre() + 2 * pp + 3 * pc + (7 * pc - piece.h() * pp) / 2, pp, anime ? SystemClock.uptimeMillis() : 0, false);
+                Sprites.dessiner(pe, piece, xPiece, yTitre() + 3 * pc + (7 * pc - piece.h() * pp) / 2, pp, anime ? SystemClock.uptimeMillis() : 0, false);
             }
             // Titre, barre d'XP en cases, chiffres.
             int x0 = bx + bw + 2 * u, x1 = xPiece - 2 * u;
-            Style.ecrire(cv, Style.tronquer(titre, pp, true, x1 - x0), x0, yTitre(), pp, ARGENT_CLAIR, true, pt);
+            // Le titre au corps s'il tient à côté des pièces d'or, sinon en « petit » : jamais tronqué tant qu'il peut tenir.
+            int pTitre = Style.largeur(titre, pc, true) <= x1 - x0 ? pc : pp;
+            Style.ecrire(cv, Style.tronquer(titre, pTitre, true, x1 - x0), x0, yTitre() + (pc - pTitre) * 6, pTitre, ARGENT_CLAIR, true, pt);
             // Niveau acquis gardé (comme l'Accueil) : si l'XP est sous le palier du niveau, la barre part du palier de la courbe.
             int bas = Butin.xpPourNiveau(Math.min(niveau, Butin.niveau(xp))), haut = Butin.xpPourNiveau(niveau + 1);
             float part = haut > bas ? Math.max(0, Math.min(1, (xp - bas) / (float) (haut - bas))) : 1;
@@ -291,10 +293,10 @@ final class Vitrine {
             }
             String dans = Math.max(0, xp - bas) + " / " + (haut - bas) + " xp";
             String chiffres = Style.choisir(new String[]{dans + " · niveau " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp",
-                    dans + " · niv " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp", dans}, pp, false, w - reserve - x0);
-            Style.ecrire(cv, chiffres, x0, yXp(), pp, ARGENT, false, pt);
+                    dans + " · niv " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp", dans}, pc, false, (yXp() + 3 * pc < Ui.dp(getContext(), 50) ? w - reserve : w - m) - x0);
+            Style.ecrire(cv, chiffres, x0, yXp(), pc, ARGENT, false, pt);
             if (suites.length > 0)
-                Style.ecrire(cv, Style.choisir(suites, pp, false, w - 2 * m), m, basCorps() - pp, pp, VIOLET, false, pt);
+                Style.ecrire(cv, Style.choisir(suites, pc, false, w - 2 * m), m, basCorps() - pc, pc, VIOLET, false, pt);
             if (anime && isShown()) postInvalidateDelayed(120);
         }
     }

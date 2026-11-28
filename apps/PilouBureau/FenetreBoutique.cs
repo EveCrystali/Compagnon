@@ -57,13 +57,13 @@ internal sealed class FenetreBoutique : Window
         return b;
     }
 
-    // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (étiquettes,
-    // détails) ou « corps » (noms, à partir de 14) ; gras : la police « titre ».
+    // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « corps » (plancher de lisibilité de
+    // docs/STYLE.md : jamais de minuscules en « petit ») ; gras : la police « titre ».
     private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
-        StylePixel.Texte("", couleur, taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
+        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : StylePixel.Corps, gras);
 
     private static BoutonPixel Bouton(string texte, bool principal = false) =>
-        new(texte, principal, StylePixel.Petit) { Margin = new Thickness(0, 0, 6, 4) };
+        new(texte, principal, StylePixel.Corps) { Margin = new Thickness(0, 0, 6, 4) };
 
     public FenetreBoutique(FenetrePilou pilou, int vuAvant, string rayon = Vitrine)
     {
@@ -71,8 +71,8 @@ internal sealed class FenetreBoutique : Window
         _vuAvant = vuAvant;
         _rayon = rayon;
         Title = "Boutique de Pilou";
-        Width = 1000;
-        Height = 720;
+        Width = 1060;
+        Height = 760;
         MinWidth = 780;
         MinHeight = 520;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -105,7 +105,7 @@ internal sealed class FenetreBoutique : Window
         racine.Children.Add(tete);
 
         var corps = new Grid();
-        corps.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(290) });
+        corps.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(330) });
         corps.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         Grid.SetRow(corps, 2);
         racine.Children.Add(corps);
@@ -421,7 +421,7 @@ internal sealed class FenetreBoutique : Window
     {
         bool actif = _rayon == rayon;
         var contenu = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5, 0, 5, 0) };
-        var libelle = StylePixel.Texte(texte, actif ? Brushes.White : Bandeau.Argent, StylePixel.Petit, true);
+        var libelle = StylePixel.Etiquette(texte, actif ? Brushes.White : Bandeau.Argent);
         libelle.VerticalAlignment = VerticalAlignment.Center;
         contenu.Children.Add(libelle);
         if (neuf)
@@ -559,8 +559,8 @@ internal sealed class FenetreBoutique : Window
             {
                 Width = 92, Height = 40, BorderBrush = ferme ? Ferme : Gel(Boutique.CouleurRarete(a.Rarete)), BorderThickness = new Thickness(2),
                 Background = Gel("#151a2e"), Padding = new Thickness(3),
-                Child = new TextePixel(a.Nom, ferme ? Bandeau.Argent : Bandeau.ArgentClair)
-                    { Taille = StylePixel.Petit, Centre = true, MaxLignes = 2, VerticalAlignment = VerticalAlignment.Center, PhysiqueParUnite = () => StylePixel.Physique(this) },
+                Child = new TextePixel(StylePixel.Capitales(a.Nom), ferme ? Bandeau.Argent : Bandeau.ArgentClair)
+                    { Taille = StylePixel.Petit, Titre = true, Centre = true, MaxLignes = 3, VerticalAlignment = VerticalAlignment.Center, PhysiqueParUnite = () => StylePixel.Physique(this) },
             };
         if (Boutique.RayonDe(a.Slot) == Boutique.Speciaux && a.Slot != Boutique.Accessoire)
             return Apercu.Sprite(Icone(a.Id), 0, ferme) is { } ic ? Apercu.Vue(ic, Math.Min(4, 48.0 / Math.Max(ic.PixelWidth, ic.PixelHeight)))
@@ -604,7 +604,7 @@ internal sealed class FenetreBoutique : Window
         // Saison en cours : ruban « ⌛ 12 J » (sauf si un autre ruban est déjà là).
         if (ruban is null && !possede && a.Saison != "" && Boutique.EnSaison(a.Saison, Jour)) ruban = $"⌛ {Boutique.JoursRestants(a.Saison, Jour)} J";
 
-        var pile = new StackPanel { Width = 104 };
+        var pile = new StackPanel { Width = 138 };
         var haut = new Grid { Height = 88 };
         var vignette = Vignette(a, !ouvert);
         if (vignette is FrameworkElement fe)
@@ -627,7 +627,7 @@ internal sealed class FenetreBoutique : Window
             {
                 Background = Porte, Padding = new Thickness(4, 0, 4, 1), HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                Child = StylePixel.Texte(ruban, Bandeau.Encre, StylePixel.Petit, true),
+                Child = StylePixel.Etiquette(ruban, Bandeau.Encre),
             });
         // Rareté : son signe, dans sa couleur, en bas à gauche ; le signe de l'ensemble à côté.
         var ens = Boutique.Ensembles.FirstOrDefault(e => e.Pieces.Contains(a.Id));
@@ -641,8 +641,9 @@ internal sealed class FenetreBoutique : Window
         var nom = Texte(10.5, ouvert ? Bandeau.ArgentClair : Bandeau.Argent);
         nom.Texte = a.Nom;
         nom.Centre = true;
-        nom.MaxLignes = 1;
-        nom.Margin = new Thickness(4, 0, 4, 2);
+        nom.MaxLignes = 2;
+        nom.MinHeight = 48; // deux lignes de « corps » : toutes les tuiles d'une étagère ont la même hauteur
+        nom.Margin = new Thickness(4, 0, 4, 6);
         pile.Children.Add(nom);
         pile.Children.Add(Etiquette(a, ouvert, possede, porte, consommable, prix, solde, bord, dispo));
 
@@ -677,7 +678,7 @@ internal sealed class FenetreBoutique : Window
         };
         TextePixel T(string s, Brush c)
         {
-            var t = StylePixel.Texte(s, c, StylePixel.Petit, true);
+            var t = StylePixel.Etiquette(s, c);
             t.VerticalAlignment = VerticalAlignment.Center;
             return t;
         }
@@ -781,11 +782,11 @@ internal sealed class FenetreRangees : Window
         sous.Margin = new Thickness(0, 0, 0, 6);
         pile.Children.Add(sous);
         // Signe et nom insécables : une ligne ne coupe jamais « ▲ Tête » en deux.
-        var noms = StylePixel.Texte(string.Join(" · ", rayons.Select(r => $"{Boutique.Signe(r)}\u00a0{Boutique.NomSlot(r)}")), Bandeau.ArgentClair, StylePixel.Petit, true);
-        noms.MaxWidth = 310;
+        var noms = StylePixel.Texte(string.Join(" · ", rayons.Select(r => $"{Boutique.Signe(r)}\u00a0{Boutique.NomSlot(r)}")), Bandeau.ArgentClair, StylePixel.Corps);
+        noms.MaxWidth = 420;
         noms.HorizontalAlignment = HorizontalAlignment.Left;
         pile.Children.Add(noms);
-        var vitrine = new WrapPanel { Margin = new Thickness(0, 8, 0, 8), MaxWidth = 310 };
+        var vitrine = new WrapPanel { Margin = new Thickness(0, 8, 0, 8), MaxWidth = 420 };
         foreach (var a in neufs.Where(a => Boutique.SurPilou(a.Slot) && Boutique.Slots.Contains(a.Slot)).Take(5))
             vitrine.Children.Add(new Border
             {
@@ -794,13 +795,13 @@ internal sealed class FenetreRangees : Window
             });
         if (vitrine.Children.Count > 0) pile.Children.Add(vitrine);
         var boutons = new StackPanel { Orientation = Orientation.Horizontal };
-        var aller = new BoutonPixel("Voir en boutique", true, StylePixel.Petit);
+        var aller = new BoutonPixel("Voir en boutique", true, StylePixel.Corps);
         aller.Click += (_, _) =>
         {
             Close();
             voir(rayons.FirstOrDefault() ?? "vitrine");
         };
-        var plusTard = new BoutonPixel("Plus tard", false, StylePixel.Petit) { Margin = new Thickness(6, 0, 0, 0) };
+        var plusTard = new BoutonPixel("Plus tard", false, StylePixel.Corps) { Margin = new Thickness(6, 0, 0, 0) };
         plusTard.Click += (_, _) => Close();
         boutons.Children.Add(aller);
         boutons.Children.Add(plusTard);

@@ -46,6 +46,8 @@ internal sealed class FenetreAventure : Window
     private readonly TextBlock _chapitreTitre = Texte(14, Bandeau.ArgentClair, true);
     private readonly StackPanel _progression = new() { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 6, 0, 2) };
     private readonly TextBlock _lieu = Texte(12, Bandeau.BleuClair);
+    private CadrePixel? _legende;
+    private StackPanel? _outils;
     private readonly WrapPanel _sac = new();
     // Le théâtre (docs/SCENES.md) : la scène vivante en haut, la boîte de dialogue dessous, les choix posés sur la scène.
     private readonly VueTheatre _theatre;
@@ -764,11 +766,12 @@ internal sealed class FenetreAventure : Window
         var legende = new StackPanel();
         _decorLieu.Margin = new Thickness(0, 1, 0, 0);
         legende.Children.Add(_decorLieu);
-        _planche.Children.Add(new CadrePixel
+        _legende = new CadrePixel
         {
             HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(10, 10, 0, 0),
             AvecOmbre = false, Retrait = 0.6, IsHitTestVisible = false, Child = legende, Tag = "cadre",
-        });
+        };
+        _planche.Children.Add(_legende);
         _filPanneau.Child = _defile;
         _filPanneau.Visibility = Visibility.Collapsed;
         _planche.Children.Add(_filPanneau);
@@ -838,7 +841,7 @@ internal sealed class FenetreAventure : Window
         _sac.Margin = new Thickness(0, 0, 0, 2);
         infos.Children.Add(_sac);
         // Relire et mettre de côté : en haut à droite de la scène, discrets.
-        var outils = new StackPanel
+        var outils = _outils = new StackPanel
         {
             Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(0, 10, 4, 0),
@@ -870,12 +873,36 @@ internal sealed class FenetreAventure : Window
         {
             _theatre.Ajuster(g.ActualWidth, Math.Max(160, g.ActualHeight - 200));
             _planche.Height = Theatre.H * _theatre.Echelle;
-            foreach (var cp in Cadres(g)) cp.U = _theatre.Echelle;
+            foreach (var cp in Cadres(g).Where(c => c.Tag as string == "cadre")) cp.U = _theatre.Echelle;
             _repliqueDefile.MaxHeight = 5 * LigneEcran();
         });
         _persoCle = "\u0001";
         _dernierPilou = null;
         _corps.Children.Add(g);
+    }
+
+    // Le panneau des choix : mesuré, puis posé en pixels de scène là où il gêne le moins.
+    private void PlacerChoix()
+    {
+        int k = Math.Max(1, _theatre.Echelle);
+        double l = _planche.ActualWidth > 0 ? _planche.ActualWidth : Theatre.W * k, h = _planche.ActualHeight > 0 ? _planche.ActualHeight : Theatre.H * k;
+        _choixScene.Margin = new Thickness(0);
+        _choixScene.Measure(new Size(Math.Min(l, _choixScene.MaxWidth), h));
+        var d = _choixScene.DesiredSize;
+        double ox = Math.Max(0, (l - Theatre.W * k) / 2);
+        // La légende du lieu et les boutons, en pixels de scène (arrondis vers l'extérieur) : le panneau ne les couvre pas.
+        var gene = new List<(int, int, int, int)>();
+        foreach (var e in new FrameworkElement?[] { _legende, _outils })
+        {
+            if (e is not { IsVisible: true } || e.ActualWidth <= 0) continue;
+            var p = e.TransformToAncestor(_planche).Transform(new System.Windows.Point(0, 0));
+            gene.Add(((int)Math.Floor((p.X - ox) / k) - 1, (int)Math.Floor(p.Y / k) - 1,
+                (int)Math.Ceiling((p.X - ox + e.ActualWidth) / k) + 1, (int)Math.Ceiling((p.Y + e.ActualHeight) / k) + 1));
+        }
+        var (x, y) = _theatre.PlacerPanneau((int)Math.Ceiling(d.Width / k), (int)Math.Ceiling(d.Height / k), _t, gene);
+        _choixScene.HorizontalAlignment = HorizontalAlignment.Left;
+        _choixScene.VerticalAlignment = VerticalAlignment.Top;
+        _choixScene.Margin = new Thickness(ox + x * k, y * k, 0, 0);
     }
 
     // Le fil complet, à relire par-dessus la scène.
@@ -1312,13 +1339,19 @@ internal sealed class FenetreAventure : Window
             _action.Child = null;
             _action.Visibility = Visibility.Collapsed;
             _choixScene.Child = contenu;
+            _choixScene.U = _etat is { Phase: Phase.Fin } ? _theatre.Echelle : Math.Max(2, Math.Round(_theatre.Echelle * 0.6));
+            _choixScene.Retrait = 1;
             _choixScene.Visibility = Visibility.Visible;
             _choixScene.MaxWidth = _etat is { Phase: Phase.Fin } ? 760 : 520;
-            // Pilou se tient à gauche, le personnage à droite : les choix se posent au milieu, en haut, sur le décor.
-            bool fin = _etat is { Phase: Phase.Fin };
-            _choixScene.HorizontalAlignment = HorizontalAlignment.Center;
-            _choixScene.VerticalAlignment = fin ? VerticalAlignment.Center : VerticalAlignment.Top;
-            _choixScene.Margin = new Thickness(0, 46, 0, 10);
+            // La fin se centre. Les choix et le départ se posent du côté opposé au personnage, sans couvrir l'accessoire
+            // dont parle le texte (champ « cle » de la scène), ni le personnage, ni Pilou (Theatre.PlacerPanneau).
+            if (_etat is { Phase: Phase.Fin })
+            {
+                _choixScene.HorizontalAlignment = HorizontalAlignment.Center;
+                _choixScene.VerticalAlignment = VerticalAlignment.Center;
+                _choixScene.Margin = new Thickness(0, 46, 0, 10);
+            }
+            else PlacerChoix();
             Apparaitre(_choixScene, 260, 10);
         }
         else
@@ -1372,14 +1405,20 @@ internal sealed class FenetreAventure : Window
 
     private Button BoutonOption(int n, string libelle, Action action)
     {
-        double u = _theatre.Echelle;
+        // Sur la scène, le panneau des choix doit rester petit : cadres d'un pixel de scène réduit (3 unités à ×5).
+        double u = Math.Max(2, Math.Round(_theatre.Echelle * 0.6));
         var texte = new TextePixel(libelle, CadrePixel.Texte) { Taille = 2, VerticalAlignment = VerticalAlignment.Center };
         var puce = CadrePixel.Puce(u * 0.6, CadrePixel.Bord);
         puce.SetValue(MarginProperty, new Thickness(0, 4, 10, 0));
-        var ligne = new StackPanel { Orientation = Orientation.Horizontal };
+        // Une grille (pas une pile horizontale) : le libellé reçoit la largeur qui reste et passe à la ligne au besoin.
+        var ligne = new Grid();
+        ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        puce.SetValue(VerticalAlignmentProperty, VerticalAlignment.Top);
         ligne.Children.Add(puce);
+        Grid.SetColumn(texte, 1);
         ligne.Children.Add(texte);
-        var cadre = new CadrePixel { U = u, Child = ligne, Tag = "cadre" };
+        var cadre = new CadrePixel { U = u, Child = ligne };
         cadre.Change += () => texte.Couleur = cadre.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
         var b = new Button
         {

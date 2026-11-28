@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-imprimante
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : imprimante
 id: pied-grande-panne-imprimante
 slot: objet
 ancre: aucun

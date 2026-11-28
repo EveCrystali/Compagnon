@@ -85,6 +85,7 @@ class Scene:
         self.sol = (0, 78, W, 78)
         self.place = 24
         self.interlocuteur = 150
+        self.cle = None            # (x0, y0, x1, y1) : l'accessoire dont parle le texte (le panneau des choix l'évite)
         self.acteurs = []          # (sprite, comportement, [paramètres entiers])
         self.sensibles = []        # (nom, x0, y0, x1, y1, réaction, [paramètres entiers])
 
@@ -106,6 +107,8 @@ def lire_scenes(texte):
             sc.place = int(m[1])
         elif m[0] == "interlocuteur":
             sc.interlocuteur = int(m[1])
+        elif m[0] == "cle":
+            sc.cle = tuple(int(v) for v in m[1:5])
         elif m[0] == "acteur":
             sc.acteurs.append(("acteur-" + m[1], m[2], [int(v) for v in m[3:]]))
         elif m[0] == "sensible":

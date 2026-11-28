@@ -54,6 +54,8 @@ public static class Theatre
         public (int X0, int Y0, int X1, int Y1) Sol { get; set; } = (0, 78, W, 78);
         public int Place { get; set; } = 24;
         public int Interlocuteur { get; set; } = 150;
+        // L'accessoire dont parle le texte (le panneau des choix l'évite), ou null.
+        public (int X0, int Y0, int X1, int Y1)? Cle { get; set; }
         public List<Acteur> Acteurs { get; } = new();
         public List<Sensible> Sensibles { get; } = new();
     }
@@ -81,6 +83,7 @@ public static class Theatre
             else if (m[0] == "sol") sc.Sol = (Ent(m[1]), Ent(m[2]), Ent(m[3]), Ent(m[4]));
             else if (m[0] == "place") sc.Place = Ent(m[1]);
             else if (m[0] == "interlocuteur") sc.Interlocuteur = Ent(m[1]);
+            else if (m[0] == "cle") sc.Cle = (Ent(m[1]), Ent(m[2]), Ent(m[3]), Ent(m[4]));
             else if (m[0] == "acteur") sc.Acteurs.Add(new Acteur("acteur-" + m[1], m[2], m.Skip(3).Select(Ent).ToArray()));
             else if (m[0] == "sensible")
                 sc.Sensibles.Add(new Sensible(m[1], Ent(m[2]), Ent(m[3]), Ent(m[4]), Ent(m[5]), m[6], m.Skip(7).Select(Ent).ToArray()));
@@ -329,6 +332,50 @@ public static class Theatre
             return new EtatPilou(x, y, P[nom].Premiere, false, true);
         }
         return new EtatPilou(x, y, P[Face(humeur)].Image(t), miroir, true);
+    }
+
+    // ---- Où poser un panneau sur la scène (les choix, sur le PC)
+
+    private static int Recouvre((int X0, int Y0, int X1, int Y1) a, (int X0, int Y0, int X1, int Y1) b) =>
+        Math.Max(0, Math.Min(a.X1, b.X1) - Math.Max(a.X0, b.X0)) * Math.Max(0, Math.Min(a.Y1, b.Y1) - Math.Max(a.Y0, b.Y0));
+
+    // Le coin haut-gauche (pixels de scène) d'un panneau de w × h : il ne couvre jamais ce que la fenêtre pose sur la
+    // scène (gene : la légende du lieu, les boutons), évite d'abord l'accessoire clé de la scène, puis le personnage en
+    // pied (taille : celle de son sprite, sinon 26 × 33), puis Pilou ; à égalité, il se met du côté opposé au personnage,
+    // et plutôt en haut. Sans gene, le haut est réservé sur 9 pixels.
+    public static (int X, int Y) PlacerPanneau(Scene sc, int w, int h, int pilouX, bool perso, (int L, int H)? taille = null,
+        IReadOnlyList<(int X0, int Y0, int X1, int Y1)>? gene = null)
+    {
+        const int marge = 2, pas = 2;
+        int haut = gene is null ? 9 : marge;
+        w = Math.Min(w, W - 2 * marge);
+        h = Math.Min(h, H - haut - marge);
+        int sp = Sol(sc, sc.Interlocuteur), sx = Sol(sc, pilouX);
+        var (pl, ph) = taille ?? (26, 33);
+        var persoR = (sc.Interlocuteur - pl / 2 - 1, sp - ph, sc.Interlocuteur + pl / 2 + 1, sp + 1);
+        var pilouR = (pilouX - 11, sx - 23, pilouX + 11, sx + 1);
+        (int, int) meilleur = (marge, haut);
+        long note = long.MaxValue;
+        for (int x = marge; x <= W - w - marge; x += pas)
+        for (int y = haut; y <= H - h - marge; y += pas)
+        {
+            var r = (x, y, x + w, y + h);
+            long n = 0;
+            if (gene is not null)
+                foreach (var z in gene) n += 100_000_000L * Recouvre(r, z);
+            if (sc.Cle is { } c) n += 1_000_000L * Recouvre(r, c);
+            if (perso) n += 1_000L * Recouvre(r, persoR);
+            n += 1_000L * Recouvre(r, pilouR) / 2;
+            // À égalité : loin du personnage, puis le plus haut possible.
+            int centre = x + w / 2;
+            n = n * 1000 + (perso ? Math.Max(0, W - Math.Abs(centre - sc.Interlocuteur)) : 0) * 4 + y;
+            if (n < note)
+            {
+                note = n;
+                meilleur = (x, y);
+            }
+        }
+        return meilleur;
     }
 
     // ---- Le personnage en pied

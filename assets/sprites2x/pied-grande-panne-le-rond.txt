@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-le-rond
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : le-rond
 id: pied-grande-panne-le-rond
 slot: objet
 ancre: aucun

@@ -1,0 +1,27 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-flocon
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 300
+palette: a=#ffffff b=#9fb4d8
+images:
+....
+.a..
+aba.
+.a..
+---
+....
+.b..
+bab.
+.b..
+---
+....
+a.a.
+.a..
+a.a.
+---
+....
+.b..
+bab.
+.b..

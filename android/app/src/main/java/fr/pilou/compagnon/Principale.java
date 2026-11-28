@@ -91,7 +91,7 @@ public final class Principale extends Activity {
         nav = Ui.rangee(this);
         nav.setBackgroundColor(st.carte);
         int caseNav = getResources().getDisplayMetrics().widthPixels / NAV - 4 * Style.u(this);
-        pixelNav = Style.pixelQuiTient(this, java.util.Arrays.copyOf(NOMS, NAV), Style.PETIT, false, caseNav);
+        pixelNav = Style.pixelQuiTient(this, java.util.Arrays.copyOf(NOMS, NAV), Style.CORPS, false, caseNav);
         for (int i = 0; i < NAV; i++) nav.addView(boutonNav(i), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         racine.addView(nav, Ui.large());
         racine.setOnApplyWindowInsetsListener((v, ins) -> {
