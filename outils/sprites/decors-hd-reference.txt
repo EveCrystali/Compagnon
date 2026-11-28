@@ -1,6 +1,21 @@
 # Décors haute définition (decors_hd.py, docs/SCENES-HD.md) : une ligne par plan,
 # id plan largeur hauteur images duree, puis l'empreinte FNV-1a de chaque image décodée (pixels ARGB
 # 0xFFrrggbb, transparent 0x00000000, rangée par rangée). Lu par les tests C# et Java.
+decor-evolution-fond-du-jardin-matin ciel 480 240 1 0 db10a49f
+decor-evolution-fond-du-jardin-matin nuages 480 240 8 200 98267e0e 33468e66 b3e17b40 5894cd37 39750fc3 fa7f735e fa616989 4fbc0c8d
+decor-evolution-fond-du-jardin-matin lointains 480 240 8 200 1728eccd 93b98f1d b708158d f2272aad 4ebe9f9d fae0784d ce48b9ad 47dd5b3d
+decor-evolution-fond-du-jardin-matin moyen 480 240 8 200 26f15abf 7775fd46 8fa3e6d2 ad1351fa 166c63ab fda6c27c afa7eb36 57d53d91
+decor-evolution-fond-du-jardin-matin premier 480 240 8 200 9d52f515 43d9cccd e562d0aa 890879ef 25c4cea5 43f56fd0 5431e482 fd775fcf
+decor-evolution-fond-du-jardin-nuit ciel 480 240 8 200 b9c16ed9 ebceb864 a7623bf8 0d7fecd9 affa5081 f1d69ff6 10d0fa60 bccf8393
+decor-evolution-fond-du-jardin-nuit nuages 480 240 8 200 b511d243 f08e3286 1664613b 02cdbb46 b511d243 5ca27529 b0806a93 5ca27529
+decor-evolution-fond-du-jardin-nuit lointains 480 240 1 0 69e2ea6a
+decor-evolution-fond-du-jardin-nuit moyen 480 240 8 200 cd014a3d d4956479 63330795 a0e865d5 bbe6d607 fa24ddc7 ec43316b fd2a1aed
+decor-evolution-fond-du-jardin-nuit premier 480 240 8 200 8dff1747 f98c4743 b876f256 b23778a2 4bc3c4fa 3fb3b52c 0fdc8b73 a668c483
+decor-evolution-fond-du-jardin-soir ciel 480 240 8 200 a8b3f686 b908b453 7e49d81d 531eab51 b622592d 9dd97376 8b7b0daa dd7fe9ff
+decor-evolution-fond-du-jardin-soir nuages 480 240 8 200 da6edf0b 0bcd5305 cd7285fd 6dd69a00 8827868f bdacced7 0895460b 7c56a819
+decor-evolution-fond-du-jardin-soir lointains 480 240 8 200 3bc3c0a2 c0f89ae2 ea5eeb32 603aaea2 01b8f6e2 8d9932a2 4f533632 3c710562
+decor-evolution-fond-du-jardin-soir moyen 480 240 8 200 86757562 5975d594 55f28c0b 6dd939d4 624e9684 ac4cdf64 171f6f12 4490716b
+decor-evolution-fond-du-jardin-soir premier 480 240 8 200 19e393ed 9ff2a5ce 9df53aa6 c6b4ac47 7fe68287 c269a906 eefa5fe0 2d9d452e
 decor-grande-panne-bureau-1337 ciel 480 240 1 0 725867da
 decor-grande-panne-bureau-1337 nuages 480 240 8 200 b0fabfd9 679edbe0 47a19a36 87b6b176 9d8acac0 770e58a9 c90feb3b 529afbb4
 decor-grande-panne-bureau-1337 lointains 480 240 1 0 85546a64
