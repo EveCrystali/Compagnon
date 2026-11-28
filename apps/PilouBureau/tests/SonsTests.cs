@@ -64,9 +64,10 @@ public class SonsTests
     }
 
     [Fact]
-    public void Aucun_son_par_defaut()
+    public void Sons_normaux_par_defaut_et_aucun_coupe_tout()
     {
-        Assert.Equal("aucun", new Reglages().Sons);
+        Assert.Equal("normaux", new Reglages().Sons);
+        Assert.Equal("discrets", System.Text.Json.JsonSerializer.Deserialize<Reglages>("""{"Sons":"discrets"}""")!.Sons);
         Assert.False(new GardeSons().Peut(Son.Caresse, 0, "aucun", false, false));
     }
 

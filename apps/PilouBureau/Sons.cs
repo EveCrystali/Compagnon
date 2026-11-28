@@ -17,7 +17,7 @@ public static class Sons
     public const int Taux = 22050;
     private const int AttaqueMs = 4, RelacheMs = 60, QueueMs = 20, FonduMs = 8, Filtre = 120, Discret = 3;
 
-    // Réglage « Sons » : aucun (par défaut), discrets, normaux.
+    // Réglage « Sons » : aucun, discrets, normaux (par défaut).
     public static readonly string[] Niveaux = { "aucun", "discrets", "normaux" };
 
     public static string Id(Son s) => s.ToString().ToLowerInvariant();
