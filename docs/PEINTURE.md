@@ -69,7 +69,9 @@ campagne s'en sert.
 poussière), `voile` et `halo` (lumière, ombre ou brume posées en trame), `poussiere`, `roue` (engrenage). Dans
 `decors_hd_grande_panne.py` (douze intérieurs) : `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`,
 `affiche` (pictogramme sans texte), `cable`, `tickets`, `tour_dossiers`. Dans `decors_hd_phare_eteint.py` (nuit, brume,
-mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`. La profondeur d'un
+mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`.
+Dans `decors_hd_petit_nuage.py` (montagne, neige, ciels) : `sommets` (roche et neige en crête), `deux_dents`, `meleze`,
+`aiguilles`, `petit_nuage` (un nuage du troupeau, avec ses yeux), `flaque`, `cairn`, `bocal`, `brume_claire`. La profondeur d'un
 intérieur vient du point de fuite, des éclairages et d'un premier plan sombre ; le « ciel » est le mur ou le plafond.
 
 **`P.rampe(masque, valeur, rampe, trame)`** est le pinceau central : une valeur de 0 à 1 par pixel devient un ton de

@@ -170,8 +170,8 @@ Ce que la peinture écrit aujourd'hui :
 | Plans | `ciel` 0, `nuages` 8, `lointains` 20, `moyen` 50, `premier` 100 (profondeur) ; tous `fond`, tous de 480 de large |
 | Fixe ou animé | un plan dont les huit images sont identiques n'en garde qu'une (`duree: 0`) : c'est le cas du ciel presque partout |
 | Boucle | 8 images à 200 ms pour les plans animés |
-| Poids mesuré | prologue (6 décors) : 1,2 Mo ; La Grande Panne (12) : 2,0 Mo ; Le phare éteint (14) : 2,5 Mo ; 117 à 276 Ko par décor ; les 32 : 5,6 Mo, 1,1 Mo compressés |
-| Extrapolé à 46 décors | ≈ 8 Mo de texte, ≈ 1,6 Mo compressés (les décors d'aujourd'hui : 4,3 Mo de texte) |
+| Poids mesuré (les 46 décors) | prologue (6) : 1,2 Mo ; La Grande Panne (12) : 2,0 Mo ; Le phare éteint (14) : 2,5 Mo ; Petit Nuage (14) : 2,9 Mo ; 107 à 311 Ko par décor |
+| Total | 8,8 Mo de texte, 1,7 Mo compressés (les décors d'aujourd'hui : 4,3 Mo de texte) |
 
 Limites connues : aucun plan n'est encore `devant` (les troncs et roseaux de premier plan passent derrière les
 personnages) ; les plans ne débordent pas des 480 unités (rien à faire glisser tant que la caméra reste à 0).
