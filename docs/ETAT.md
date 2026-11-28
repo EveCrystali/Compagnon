@@ -30,6 +30,10 @@ Dernière mise à jour : 28 novembre 2026.
   faits, le bureau 13 h 37, le hall des Pas Comptés, le pied de la Tour, les étages de la Tour, le bureau de la
   Planificatrice, la Caverne des câbles (6 sur 12) ; avant / après en taille réelle
   dans `docs/maquettes/paysages/grande-panne/profondeur/`.
+  Même passe sur Petit Nuage (session à part, par groupes de trois) : faits, le col blanc (le grand nuage endormi sur le
+  col, la mer de brouillard, les six cairns), le Trou-qui-Siffle (galerie en perspective, neuf creux de chaque côté) et
+  le sentier des mélèzes (lacets, éboulis) (3 sur 14) ; avant / après dans `docs/maquettes/paysages/petit-nuage/profondeur/` ;
+  vus dans l'exe d'essai sur le PC d'Antoine (`--essai=lieu:petit-nuage:<lieu>`).
   Même passe en cours sur Le phare éteint (`decors_hd_phare_eteint.py`, lumière calculée et matières : bois veiné,
   granit appareillé, dalles mouillées) : faits, l'auberge, le quai de Trébrume, chez Pilou (3 sur 14) ; avant / après et
   personnages posés dans `docs/maquettes/paysages/phare-eteint/profondeur/`.
