@@ -105,6 +105,7 @@ internal sealed class FenetreJournal : Window
         racine.Children.Add(new CadrePixel { U = 3, Fond = Feuille, Couleur = Liseré, Child = page });
         Content = racine;
         StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
 
         _avant.Click += (_, _) => Feuilleter(1);
         _apres.Click += (_, _) => Feuilleter(-1);
@@ -208,7 +209,7 @@ internal sealed class FenetrePrenom : Window
     public FenetrePrenom(string actuel)
     {
         Title = "Pilou et moi";
-        Width = 430;
+        Width = 540;
         SizeToContent = SizeToContent.Height;
         ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -217,7 +218,7 @@ internal sealed class FenetrePrenom : Window
         var p = new StackPanel { Margin = new Thickness(20, 16, 20, 18) };
         p.Children.Add(StylePixel.Texte("Comment veux-tu que je t'appelle ?", Bandeau.ArgentClair, StylePixel.Corps, true));
         var aide = StylePixel.Texte("Un prénom ou un surnom. Il reste entre tes appareils (dans le groupe chiffré), jamais chez tes amis. "
-            + "Tu peux le changer ou l'effacer quand tu veux (clic droit → Réglages).", Bandeau.Argent);
+            + "Tu peux le changer ou l'effacer quand tu veux (clic droit → Réglages).", Bandeau.Argent, StylePixel.Corps);
         aide.Margin = new Thickness(0, 6, 0, 10);
         p.Children.Add(aide);
         _champ = new TextBox
@@ -239,6 +240,7 @@ internal sealed class FenetrePrenom : Window
         boutons.Children.Add(non);
         p.Children.Add(boutons);
         Content = p;
+        HabillageFenetre.Poser(this);
         Loaded += (_, _) =>
         {
             _champ.Focus();
