@@ -242,3 +242,18 @@ embellir l'existant). Les autres demandent une décision.
 4. **Public de la v1** : toi et tes amis, ou une diffusion publique ? La réponse décide de la signature (payante),
    de la page de présentation, de la fiche Android et de l'anglais.
 5. **Après le niveau 50** : plafond assumé ou niveaux de prestige cosmétiques ?
+
+## Réponses d'Antoine (28 novembre 2026)
+
+Reportées dans `DECISIONS.md`, section « Lien avec le joueur ».
+
+| Question | Réponse | Conséquence |
+|---|---|---|
+| 1. Idle | Pas le centre du jeu. Pilou évolue par ce que fait le joueur, jamais sans lui ; aucun mode automatique | « Pendant que tu travaillais » et le jardin passif sont **abandonnés**. Les métiers qui se voient sur Pilou restent, avec les traits |
+| 2. Questions de Pilou | Pas de réponse | En attente |
+| 3. RPG | Personnalité : oui | Chantier des traits lancé ; le niveau aide déjà contre les boss (`Expeditions.cs`, +0,6 point par niveau d'avance, 6 au plus) : à rendre visible |
+| 4. Public de la v1 | Pas de réponse | Signature, page de présentation, anglais : en attente |
+| 5. Après le niveau 50 | Plus tard : nouvelles campagnes, deuxième personnage | Rien à construire ; le moteur doit savoir ouvrir une campagne par un haut fait |
+| Première minute | Pas de gros didacticiel ; bulles d'information très courtes, sans clic obligé ; mode d'emploi dans le dépôt | Chantier lancé |
+| Beauté (capture 0.9.93 du téléphone) | Les bulles de récit et les choix ne sont pas dans le style pixel de Pilou | Chantier prioritaire : style pixel de l'Aventure, puis guide de style et le reste des écrans |
+| Récit | Humour très apprécié, avec le petit stress du bon choix | Étalon pour tout nouveau texte |
