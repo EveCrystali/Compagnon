@@ -387,19 +387,19 @@ tu m'as appelé ? je fais demi-tour !
 = titre 0 0
 Portez ce vieux whisky au juge blond qui fume.
 | 246 Portez ce vieux whisky au juge blond qui fume.
-# 3677930946
+# 2698563481
 
 = titre 120 0
 Portez ce vieux whisky au juge blond qui fume.
 | 83 Portez ce vieux
 | 107 whisky au juge blond
 | 46 qui fume.
-# 2023760927
+# 1977862835
 
 = titre 0 0
 Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis.
 | 354 Voix ambiguë d’un cœur qui, au zéphyr, préfère les jattes de kiwis.
-# 1820331159
+# 4157247295
 
 = titre 120 0
 Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis.
@@ -407,12 +407,12 @@ Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis.
 | 108 cœur qui, au zéphyr,
 | 113 préfère les jattes de
 | 27 kiwis.
-# 1843011169
+# 2258418272
 
 = titre 0 0
 Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d'exquis rôtis de bœuf au kir à l'aÿ d'âge mûr.
 | 588 Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d’exquis rôtis de bœuf au kir à l’aÿ d’âge mûr.
-# 3770831489
+# 2231220780
 
 = titre 120 0
 Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d'exquis rôtis de bœuf au kir à l'aÿ d'âge mûr.
@@ -422,26 +422,26 @@ Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d'exquis
 | 116 dîne d’exquis rôtis de
 | 95 bœuf au kir à l’aÿ
 | 52 d’âge mûr.
-# 1533573074
+# 19066252
 
 = titre 0 0
 ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L'ÎLE DU NORD ! « ÊTRE OU NE PAS ÊTRE ? »
-| 449 ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L’ÎLE DU NORD ! « ÊTRE OU NE PAS ÊTRE ? »
-# 2707849319
+| 450 ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L’ÎLE DU NORD ! « ÊTRE OU NE PAS ÊTRE ? »
+# 2108686023
 
 = titre 120 0
 ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L'ÎLE DU NORD ! « ÊTRE OU NE PAS ÊTRE ? »
-| 92 ÂME ÉPRISE, ŒIL
+| 93 ÂME ÉPRISE, ŒIL
 | 111 VIF : ÇA DÉCOIFFE À
 | 83 L’ÎLE DU NORD !
 | 97 « ÊTRE OU NE PAS
 | 46 ÊTRE ? »
-# 1430933908
+# 3917278064
 
 = titre 0 0
 Deuxième jour : déjà joyeux, Alexis jongle avec six kiwis ! « Alors, on y va ? »
 | 412 Deuxième jour : déjà joyeux, Alexis jongle avec six kiwis ! « Alors, on y va ? »
-# 4204094732
+# 4287139421
 
 = titre 120 0
 Deuxième jour : déjà joyeux, Alexis jongle avec six kiwis ! « Alors, on y va ? »
@@ -449,21 +449,21 @@ Deuxième jour : déjà joyeux, Alexis jongle avec six kiwis ! « Alors, on y va
 | 111 joyeux, Alexis jongle
 | 79 avec six kiwis !
 | 103 « Alors, on y va ? »
-# 4130026559
+# 4228747655
 
 = titre 180 0
 coucou ! je m'installe en bas de ton écran, sans te déranger. on grandit ensemble ♥
 | 164 coucou ! je m’installe en bas de
 | 167 ton écran, sans te déranger. on
 | 101 grandit ensemble ♥
-# 8632457
+# 3492521532
 
 = titre 96 3
 coucou ! je m'installe en bas de ton écran, sans te déranger. on grandit ensemble ♥
 | 55 coucou ! je
 | 88 m’installe en bas
 | 77 de ton écran,…
-# 1143898150
+# 1230856877
 
 = titre 180 0
 toc toc ! Claude t'attend
@@ -481,139 +481,139 @@ je suis rentré… bredouille et un peu cabossé (clic sur le coffre : le journa
 | 168 je suis rentré… bredouille et un
 | 172 peu cabossé (clic sur le coffre :
 | 55 le journal)
-# 1040195174
+# 3199197300
 
 = titre 96 3
 je suis rentré… bredouille et un peu cabossé (clic sur le coffre : le journal)
 | 80 je suis rentré…
 | 83 bredouille et un
 | 91 peu cabossé (cli…
-# 2619125664
+# 3494288
 
 = titre 180 0
 tu m'as appelé ? je fais demi-tour !
 | 155 tu m’as appelé ? je fais demi-
 | 28 tour !
-# 3665732793
+# 4148228819
 
 = titre 96 3
 tu m'as appelé ? je fais demi-tour !
 | 85 tu m’as appelé ?
 | 94 je fais demi-tour !
-# 2533477489
+# 1933309943
 
 = titre 180 0
 c'est oublié. tu restes « toi », c'est très bien
 | 158 c’est oublié. tu restes « toi »,
 | 78 c’est très bien
-# 3184243612
+# 3195749169
 
 = titre 96 3
 c'est oublié. tu restes « toi », c'est très bien
 | 79 c’est oublié. tu
 | 74 restes « toi »,
 | 78 c’est très bien
-# 2669775474
+# 2922408769
 
 = titre 180 0
 ✦ tout propre !
 | 80 ✦ tout propre !
-# 3016755843
+# 2552548253
 
 = titre 96 3
 ✦ tout propre !
 | 80 ✦ tout propre !
-# 3016755843
+# 2552548253
 
 = titre 180 0
 hmpf ! ☁
 | 44 hmpf ! ☁
-# 2684302345
+# 3335315585
 
 = titre 96 3
 hmpf ! ☁
 | 44 hmpf ! ☁
-# 2684302345
+# 3335315585
 
 = titre 180 0
 +12 po · niveau 4 ✓
 | 103 +12 po · niveau 4 ✓
-# 816975849
+# 1900835516
 
 = titre 96 3
 +12 po · niveau 4 ✓
 | 90 +12 po · niveau 4
 | 8 ✓
-# 1564766297
+# 2564752909
 
 = titre 180 0
 je suis plein d'énergie ⚡, garde-le pour plus tard
 | 180 je suis plein d’énergie ⚡, garde-le
 | 76 pour plus tard
-# 2740256678
+# 3240254420
 
 = titre 96 3
 je suis plein d'énergie ⚡, garde-le pour plus tard
 | 63 je suis plein
 | 63 d’énergie ⚡,
 | 78 garde-le pour…
-# 482362583
+# 4069014721
 
 = titre 180 0
 la pierre de calme retient l'évolution (clic droit → Évolution pour la laisser faire)
 | 136 la pierre de calme retient
 | 180 l’évolution (clic droit → Évolution
 | 113 pour la laisser faire)
-# 3167148240
+# 2112167014
 
 = titre 96 3
 la pierre de calme retient l'évolution (clic droit → Évolution pour la laisser faire)
 | 95 la pierre de calme
 | 36 retient
 | 90 l’évolution (clic…
-# 2589834
+# 2196994471
 
 = titre 150 0
 bonne semaine ! j'ai mis des chaussettes neuves. enfin, je n'ai pas de chaussettes
 | 142 bonne semaine ! j’ai mis des
 | 142 chaussettes neuves. enfin,
 | 138 je n’ai pas de chaussettes
-# 4225228729
+# 1461510294
 
 = titre 150 0
 c'est le soir ! j'ai voulu éteindre la lumière, je n'ai pas trouvé l'interrupteur
 | 125 c’est le soir ! j’ai voulu
 | 140 éteindre la lumière, je n’ai
 | 136 pas trouvé l’interrupteur
-# 3894441247
+# 27918202
 
 = titre 150 0
 te revoilà ! la nuit a été longue, j'ai compté les moutons de l'écran de veille
 | 127 te revoilà ! la nuit a été
 | 118 longue, j’ai compté les
 | 149 moutons de l’écran de veille
-# 3380353321
+# 1155619235
 
 = titre 150 0
 tu as bien avancé, je crois. je ne comprends pas tout, mais ça avait l'air bien
 | 144 tu as bien avancé, je crois.
 | 136 je ne comprends pas tout,
 | 120 mais ça avait l’air bien
-# 3453906221
+# 1892495663
 
 = titre 150 0
 coucou. j'ai compté les pixels de l'écran pendant la nuit. il y en a beaucoup
 | 119 coucou. j’ai compté les
 | 148 pixels de l’écran pendant la
 | 121 nuit. il y en a beaucoup
-# 4105584017
+# 867626615
 
 = titre 150 0
 c'est la rentrée ! j'ai taillé mes crayons. je n'en ai pas, mais l'idée y est
 | 144 c’est la rentrée ! j’ai taillé
 | 146 mes crayons. je n’en ai pas,
 | 85 mais l’idée y est
-# 1466999226
+# 2742477350
 
 = titre 150 0
 l'hiver commence aujourd'hui. c'est la nuit la plus longue, on se tient chaud
@@ -621,71 +621,71 @@ l'hiver commence aujourd'hui. c'est la nuit la plus longue, on se tient chaud
 | 143 aujourd’hui. c’est la nuit la
 | 124 plus longue, on se tient
 | 29 chaud
-# 774254175
+# 3505356113
 
 = titre 150 0
 tu te souviens de Grumeau ? je parie qu'il a encore quatre secondes de retard
 | 149 tu te souviens de Grumeau ?
 | 117 je parie qu’il a encore
 | 141 quatre secondes de retard
-# 1772695944
+# 988449065
 
 = titre 150 0
 bonjour ! j'ai gardé ta place au chaud
 | 146 bonjour ! j’ai gardé ta place
 | 45 au chaud
-# 2757906592
+# 358860602
 
 = titre 150 0
 une nouvelle semaine ensemble. j'ai hâte de voir ce qu'on en fait
 | 110 une nouvelle semaine
 | 139 ensemble. j’ai hâte de voir
 | 83 ce qu’on en fait
-# 455557264
+# 806426258
 
 = titre 150 0
 te revoilà ! oh, comme je suis content
 | 128 te revoilà ! oh, comme je
 | 64 suis content
-# 1605555732
+# 1343956854
 
 = titre 150 0
 c'est vendredi ! bon week-end bientôt
 | 138 c’est vendredi ! bon week-
 | 58 end bientôt
-# 1302924163
+# 2608544872
 
 = titre 150 0
 ça sent la crêpe quelque part. ou alors je l'imagine très fort
 | 130 ça sent la crêpe quelque
 | 136 part. ou alors je l’imagine
 | 49 très fort
-# 4130051787
+# 1169075701
 
 = titre 150 0
 brr ! même mon antenne a la chair de poule
 | 145 brr ! même mon antenne a la
 | 74 chair de poule
-# 2382363603
+# 1228929812
 
 = titre 150 0
 je garde nos petits moments dans ma tête. il y a de la place
 | 147 je garde nos petits moments
 | 130 dans ma tête. il y a de la
 | 27 place
-# 352849394
+# 3422009485
 
 = titre 150 0
 courage, aventurier ! je garde le bureau pendant ta quête
 | 126 courage, aventurier ! je
 | 143 garde le bureau pendant ta
 | 28 quête
-# 483012172
+# 437417559
 
 = titre 200 4
 La Grande Panne
 | 86 La Grande Panne
-# 3400301364
+# 479341505
 
 = titre 200 4
 La Citadelle du nuage
@@ -697,34 +697,34 @@ La Citadelle du nuage
 | 177 « Pilou, stagiaire. Pause déjeuner.
 | 199 Retour à 13 h 38. » Tu as choisi de ne
 | 126 jamais relancer l’heure.
-# 3618841934
+# 213022554
 
 = titre 200 4
 L'école des rainettes
 | 112 L’école des rainettes
-# 1571851192
+# 385931915
 
 = titre 200 4
 La dernière nuit
 | 84 La dernière nuit
-# 2857788446
+# 314695084
 
 = titre 200 4
 Il a plu sur le toit de la halte. Le vieux coq de fer a tourné, pour la première fois depuis des années.
 | 177 Il a plu sur le toit de la halte. Le
 | 183 vieux coq de fer a tourné, pour la
 | 172 première fois depuis des années.
-# 2027967496
+# 70186122
 
 = titre 200 4
 L'atelier de Basile
 | 97 L’atelier de Basile
-# 1904427203
+# 541120872
 
 = titre 200 4
 La nuit des six bateaux
 | 123 La nuit des six bateaux
-# 1344214317
+# 2434312345
 
 = titre 40 0
 anticonstitutionnellement
@@ -732,7 +732,7 @@ anticonstitutionnellement
 | 38 stitutio
 | 38 nnellem
 | 16 ent
-# 118556936
+# 951246360
 
 = titre 60 0
 demi-tour, arc-en-ciel et grand-mère
@@ -740,13 +740,13 @@ demi-tour, arc-en-ciel et grand-mère
 | 58 arc-en-ciel
 | 49 et grand-
 | 24 mère
-# 467993727
+# 2804224337
 
 = titre 0 0
 deux  espaces\net un retour
 | 70 deux espaces
 | 65 et un retour
-# 1139120284
+# 3874320484
 
 = titre 100 0
 
@@ -757,7 +757,7 @@ deux  espaces\net un retour
 😀 hors police ♥
 | 69 😀 hors police
 | 8 ♥
-# 664573573
+# 3061366109
 
 = titre 70 0
 « oui » ; « non » : « peut-être ? »
@@ -765,7 +765,7 @@ deux  espaces\net un retour
 | 41 « non » :
 | 36 « peut-
 | 41 être ? »
-# 237827741
+# 4003160320
 
 = titre 30 0
 tu m'as appelé ? je fais demi-tour !
@@ -776,7 +776,7 @@ tu m'as appelé ? je fais demi-tour !
 | 20 fais
 | 26 demi-
 | 28 tour !
-# 3361801826
+# 1193997679
 
 = titre 12 0
 « étroit » !
@@ -787,4 +787,4 @@ tu m'as appelé ? je fais demi-tour !
 | 4 t
 | 3  
 | 12 » !
-# 2359050356
+# 3072350695

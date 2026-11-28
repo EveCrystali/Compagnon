@@ -95,6 +95,25 @@ public class PolicePixelTest {
         return gauche - droite - 1;
     }
 
+    /**
+     * Aucune lettre ni chiffre (4 de large et plus) n'est un pavé : au plus 82 % de pixels pleins dans sa boîte, aux
+     * quatre polices. Le « m » gras en avait 97 % (« douce-a▮ère ») quand le gras bouchait ses jours d'un pixel.
+     */
+    @Test
+    public void aucuneLettreNEstUnPave() {
+        for (String nom : new String[]{"texte", "titre", "texte2x", "titre2x"}) {
+            PolicePixel p = PolicePixel.ressource(nom);
+            for (int c = 0x21; c < 0x2000; c++) {
+                PolicePixel.Glyphe g = p.glyphe(c);
+                if (!Character.isLetterOrDigit(c) || g == null || g.largeur < 4 || g.rangs.length == 0) continue;
+                int pleins = 0;
+                for (String r : g.rangs) for (int k = 0; k < r.length(); k++) if (r.charAt(k) == '#') pleins++;
+                double part = (double) pleins / (g.rangs.length * g.rangs[0].length());
+                assertTrue(nom + " « " + (char) c + " » : " + Math.round(part * 100) + " %", part <= 0.82);
+            }
+        }
+    }
+
     @Test
     public void typographieFrancaise() {
         assertEquals("bonjour ! c’est « toi »", PolicePixel.preparer("bonjour ! c'est « toi »"));

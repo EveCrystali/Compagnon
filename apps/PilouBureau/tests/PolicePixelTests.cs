@@ -106,6 +106,24 @@ public class PolicePixelTests
         return gauche - droite - 1;
     }
 
+    // Aucune lettre ni chiffre (4 de large et plus) n'est un pavé : au plus 82 % de pixels pleins dans sa boîte, aux
+    // quatre polices. Le « m » gras en avait 97 % (« douce-a▮ère ») quand le gras bouchait ses jours d'un pixel.
+    [Fact]
+    public void Aucune_lettre_n_est_un_pave()
+    {
+        foreach (var nom in new[] { "texte", "titre", "texte2x", "titre2x" })
+        {
+            var p = PolicePixel.Ressource(nom)!;
+            for (int c = 0x21; c < 0x2000; c++)
+            {
+                if (!char.IsLetterOrDigit((char)c) || p.GlypheDe(c) is not { Largeur: >= 4, Rangs.Length: > 0 } g) continue;
+                int pleins = g.Rangs.Sum(r => r.Count(x => x == '#'));
+                double part = (double)pleins / (g.Rangs.Length * g.Rangs[0].Length);
+                Assert.True(part <= 0.82, $"{nom} « {(char)c} » : {part:P0} de pixels pleins");
+            }
+        }
+    }
+
     [Fact]
     public void Typographie_francaise_espaces_fines_et_apostrophe()
     {
