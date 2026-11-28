@@ -26,10 +26,9 @@ Dernière mise à jour : 28 novembre 2026.
   anciens décors 192 × 80 restent en service jusqu'à la bascule. Jamais vus sur un vrai Windows ni un vrai téléphone.
   Seconde passe faite sur les trois grandes campagnes (matière au lieu du damier, douze détails vivants au moins par
   décor, les deux pics de Petit Nuage en fil du voyage) ; le prologue n'a pas eu de seconde passe.
-  Troisième passe « en profondeur » en cours sur La Grande Panne (méthode dans docs/PEINTURE.md, étalon : la mare) :
-  faits, le bureau 13 h 37, le hall des Pas Comptés, le pied de la Tour, les étages de la Tour, le bureau de la
-  Planificatrice, la Caverne des câbles (6 sur 12) ; avant / après en taille réelle
-  dans `docs/maquettes/paysages/grande-panne/profondeur/`.
+  Troisième passe « en profondeur » faite sur les douze décors de La Grande Panne (méthode dans docs/PEINTURE.md,
+  étalon : la mare) : trois passes sur les six premiers, une seule sur les six derniers (cadre v1) ; avant / après en
+  taille réelle dans `docs/maquettes/paysages/grande-panne/profondeur/`. Boucles relues sur images fixes seulement.
   Même passe sur Petit Nuage (session à part, par groupes de trois) : faits, le col blanc (le grand nuage endormi sur le
   col, la mer de brouillard, les six cairns), le Trou-qui-Siffle (galerie en perspective, neuf creux de chaque côté) et
   le sentier des mélèzes (lacets, éboulis) (3 sur 14) ; avant / après dans `docs/maquettes/paysages/petit-nuage/profondeur/` ;
