@@ -46,6 +46,7 @@ public class TextesSystemeTest {
         c.pause().stop().destroy();
 
         CapturesStyleTest.appairer(ctx);
+        Prefs.de(ctx).edit().putBoolean("traitsOuverts", true).putBoolean("accueilPlus", true).commit();
         c = Robolectric.buildActivity(Principale.class).setup().visible();
         Principale a = c.get();
         attendre();

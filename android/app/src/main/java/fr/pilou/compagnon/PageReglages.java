@@ -112,22 +112,21 @@ final class PageReglages extends Page {
         });
         apercu.pixel(2.2f * d * Math.min(Prefs.taille(a), 1.2f));
         c.addView(taille, Ui.large());
-        LinearLayout actions = Ui.rangee(a);
+        // L'un sous l'autre : en grande police, deux boutons côte à côte couperaient leur libellé.
+        LinearLayout actions = Ui.pile(a);
         cacher = Style.bouton(a, "", false, v -> {
             boolean cache = Veille.cache(a);
             Veille.cacher(a, !cache);
             v.postDelayed(this::rafraichir, 300);
         });
-        LinearLayout.LayoutParams lc = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-        lc.rightMargin = Ui.dp(a, 8);
-        actions.addView(cacher, lc);
+        actions.addView(cacher, Ui.large(a, 8));
         // Ramener : Pilou réapparaît, replacé dans l'écran (s'il était perdu hors du bord).
         ramener = Style.bouton(a, "Ramener Pilou", false, v -> {
             Veille.cacher(a, false);
             Style.dire(a, "Pilou revient à l'écran.", false);
             v.postDelayed(this::rafraichir, 300);
         });
-        actions.addView(ramener, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        actions.addView(ramener, Ui.large());
         c.addView(actions, Ui.large());
         corps.addView(c, Ui.large());
 
@@ -313,7 +312,8 @@ final class PageReglages extends Page {
             }
         };
         for (int k = 0; k < noms.length; k++) {
-            TextView x = Style.texte(a, noms[k], Ui.T_ETIQUETTE, p.doux, true);
+            TextView x = new Style.Texte(a, noms[k], Style.pixelOptions(a, noms), p.doux, true, true);
+            x.setSingleLine(true);
             x.setGravity(Gravity.CENTER);
             x.setMinHeight(Ui.dp(a, 40));
             int kk = k;

@@ -174,6 +174,17 @@ final class Style {
         return px;
     }
 
+    /**
+     * Taille de police d'un groupe d'options posé dans une carte (« ● Normalement | Peu | Jamais ») : la plus grande
+     * qui laisse chaque nom, précédé de son rond « ● », sur une seule ligne dans sa case.
+     */
+    static int pixelOptions(Context c, String[] noms) {
+        String[] avec = new String[noms.length];
+        for (int i = 0; i < noms.length; i++) avec[i] = "● " + noms[i];
+        int dedans = c.getResources().getDisplayMetrics().widthPixels - Ui.dp(c, 36 + 24 + 16) - 5 * u(c);
+        return pixelQuiTient(c, avec, PETIT, true, dedans / noms.length - 4 * u(c));
+    }
+
     /** Le premier texte de la liste qui tient dans la largeur (le dernier sinon) : du plus long au plus court. */
     static String choisir(String[] formes, int pixel, boolean gras, float largeurMax) {
         for (String f : formes) if (largeur(f, pixel, gras) <= largeurMax) return f;
@@ -716,7 +727,7 @@ final class Style {
         r.setMinimumHeight(Ui.dp(c, 48));
         LinearLayout t = Ui.pile(c);
         t.addView(new Texte(c, titre, CORPS, p.texte, false));
-        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, PETIT, p.pale, false));
+        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, CORPS, p.pale, false));
         LinearLayout.LayoutParams lt = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         lt.rightMargin = Ui.dp(c, 10);
         r.addView(t, lt);
@@ -741,7 +752,7 @@ final class Style {
         r.setMinimumHeight(Ui.dp(c, 48));
         LinearLayout t = Ui.pile(c);
         t.addView(new Texte(c, titre, CORPS, couleurTitre == 0 ? p.texte : couleurTitre, false));
-        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, PETIT, p.pale, false));
+        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, CORPS, p.pale, false));
         LinearLayout.LayoutParams lt = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         lt.rightMargin = Ui.dp(c, 10);
         r.addView(t, lt);
@@ -799,12 +810,12 @@ final class Style {
         b.setThumb(new Cadre(u, Cadre.FIN, p.carte, p.coche, 0, p.biseauClair, p.biseauSombre) {
             @Override
             public int getIntrinsicWidth() {
-                return 5 * u;
+                return 6 * u;
             }
 
             @Override
             public int getIntrinsicHeight() {
-                return 7 * u;
+                return 8 * u;
             }
         });
         b.setThumbOffset(0);
@@ -941,13 +952,13 @@ final class Style {
         protected void onMeasure(int l, int h) {
             Sprites.Sprite s = sprite(1);
             int w = s == null ? 12 : s.w(), hh = s == null ? 12 : s.h();
-            setMeasuredDimension(w * pixel, hh * pixel);
+            setMeasuredDimension(w * pixel + getPaddingLeft() + getPaddingRight(), hh * pixel + getPaddingTop() + getPaddingBottom());
         }
 
         @Override
         protected void onDraw(Canvas c) {
             boolean fin = pixel % 2 == 0;
-            Style.icone(c, sprite(fin ? 2 : 1), 0, 0, fin ? pixel / 2f : pixel, couleur, pt);
+            Style.icone(c, sprite(fin ? 2 : 1), getPaddingLeft(), getPaddingTop(), fin ? pixel / 2f : pixel, couleur, pt);
         }
     }
 

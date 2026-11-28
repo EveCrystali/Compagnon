@@ -51,6 +51,7 @@ public class CapturesStyleTest {
                 Context ctx = RuntimeEnvironment.getApplication();
                 Prefs.de(ctx).edit().clear().commit();
                 essayer("planche", this::planche);
+                Prefs.de(ctx).edit().clear().commit(); // la planche a ouvert l'app : on repart d'un premier lancement
                 essayer("neuf", this::neuf);
                 appairer();
                 essayer("pages", this::pages);
@@ -245,7 +246,7 @@ public class CapturesStyleTest {
                 + "\"avance\":{\"codeur-confirme\":412,\"gamer\":34,\"visio-man\":30,\"rempart\":70,\"photographe\":20},"
                 + "\"appareils\":[{\"nom\":\"PC-SALON\",\"xp\":3100,\"t\":" + (t - 20_000) + "},{\"nom\":\"PC-BUREAU\",\"xp\":500,\"t\":" + (t - 7_200_000) + "}]}";
         Prefs.de(ctx).edit().putString("code", "ABCDEFGHJKMNPQRS").putString("etat", etat).putLong("recu", t)
-                .putBoolean("bulle", true).putInt("boutiqueVue", 9).putInt("niveauVu", 12).commit();
+                .putBoolean("bulle", true).putInt("boutiqueVue", 9).putInt("niveauVu", 12).putBoolean("traitsOuverts", true).commit();
     }
 
     private static void attendre() {
