@@ -19,6 +19,7 @@ public sealed partial class FenetrePilou
 
     private void DemarrerMises()
     {
+        if (_essai) return;                              // un essai ne se met jamais à jour
         _mise = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
         _mise.Tick += (_, _) =>
         {
@@ -38,6 +39,7 @@ public sealed partial class FenetrePilou
 
     private async Task MettreAJour(bool demande)
     {
+        if (_essai) return;
         if (_miseEnCours) return;
         _miseEnCours = true;
         try

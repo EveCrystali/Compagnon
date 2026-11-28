@@ -91,11 +91,16 @@ public sealed partial class FenetrePilou : Window
     private bool _sombre;
     private double _themeLu = -1e9;
 
-    public FenetrePilou(string dossier, bool devant = false, bool demo = false)
+    // Un Pilou d'essai (--essai=, --instantane=, --film=) : aucun envoi réseau (téléphone, groupe, amis, Discord, alertes,
+    // connecteurs, API locale), aucune mise à jour ; ses données sont dans un dossier jetable (EssaiIsole.cs).
+    private readonly bool _essai;
+
+    public FenetrePilou(string dossier, bool devant = false, bool demo = false, bool essai = false)
     {
         _dossier = dossier;
         _devant = devant;
         _demo = demo;
+        _essai = essai;
         _reglages = Reglages.Lire(dossier);
         Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie, () => _reglages.Musique); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)

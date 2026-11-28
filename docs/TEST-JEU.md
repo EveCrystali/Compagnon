@@ -101,6 +101,16 @@ Sans SDK Android, `CampagnesTest` (Java pur) se lance avec `javac`/`java`, `org.
 chemin de classes, les ressources `assets/campagnes` et un `campagnes/index.txt` ; la CI fait foi.
 Les tests ajoutés prennent environ 5 s côté PC et 3 s côté Java.
 
+## Les essais ne touchent pas aux vraies données
+
+Un lancement d'essai (`--essai=`, `--instantane=`, `--film=`, `--captures=`) sans dossier donné travaille dans un
+dossier jetable et vide, `%TEMP%\pilou-essai-<processus>-<n>`, effacé à la sortie ou au lancement d'essai suivant
+s'il a été arrêté de force (`EssaiIsole.cs`). Donner le vrai dossier (`~/.claude/compagnon`) revient au même. Profil,
+réglages, dossier de partage, coffre des secrets, amis, groupe et téléphone partent de ce dossier ; en plus, un essai
+n'envoie rien sur le réseau (téléphone, groupe, amis, Discord, alertes, connecteurs, API locale) et ne se met jamais à
+jour. Avant le 28 novembre 2026, un essai lisait le vrai profil et pouvait réécrire le profil du dossier de partage.
+Test : `EssaiIsoleTests.cs` (un dossier témoin ne change pas d'un octet).
+
 ## À vérifier à la main
 
 **Windows** — passé le 27 novembre 2026 sur le PC d'Antoine (Windows 11, deux écrans à 100 %, 96 ppp), exe d'essai

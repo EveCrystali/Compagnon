@@ -55,7 +55,7 @@ public static class Program
             : captures_ ? $@"Local\PilouBureau-captures-{Environment.ProcessId}" : @"Local\PilouBureau-essai");
         var issue = principal ? Instance.Decider(lancement, autre) : autre.Prendre() ? Issue.Demarrer : Issue.Rendre;
         if (issue == Issue.Rendre) return 0;
-        Mise.Nettoyer();
+        if (principal) Mise.Nettoyer();                 // un essai ne touche pas au dossier de l'exe installé
 
         // --devant : premier plan, sans rattachement à Claude (essai visuel).
         bool devant = args.Contains("--devant");
@@ -76,8 +76,19 @@ public static class Program
             && !a.StartsWith("--film=") && !a.StartsWith("--duree=") && !a.StartsWith("--ips=")
             && !a.StartsWith("--captures=") && !a.StartsWith("--apres=")).ToArray();
         var dossier = args.Length > 0 ? args[0] : Signal.Defaut();
+        // Un essai ne touche jamais aux vraies données (EssaiIsole.cs) : sans autre dossier donné, un dossier jetable,
+        // effacé à la sortie ; et FenetrePilou coupe en essai tout envoi réseau, la mise à jour et les connecteurs.
+        bool enEssai = lancement.Mode == ModeLancement.Essai;
+        string? jetable = null;
+        if (enEssai)
+        {
+            EssaiIsole.Nettoyer(Path.GetTempPath(), EssaiIsole.PilouVivant);
+            var (d, j) = EssaiIsole.Dossier(args.Length > 0 ? args[0] : null, Signal.Defaut(), Path.GetTempPath());
+            dossier = d;
+            if (j) jetable = d;
+        }
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-        var fenetre = new FenetrePilou(dossier, devant, tournage.Visite);
+        var fenetre = new FenetrePilou(dossier, devant, tournage.Visite, essai: enEssai);
         // Posé en bas de l'écran demandé pour cette session : les réglages durables ne changent pas.
         CadreEcran? ecranFilme = null;
         if (tournage.Placer is { } point)
@@ -176,6 +187,8 @@ public static class Program
             };
             debut.Start();
         }
-        return app.Run();
+        int fin = app.Run();
+        if (jetable is not null) EssaiIsole.Effacer(jetable);
+        return fin;
     }
 }

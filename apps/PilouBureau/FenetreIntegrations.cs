@@ -282,6 +282,7 @@ public sealed partial class FenetrePilou
     // Appelé à chaque lecture des sessions.
     private void Integrer(IReadOnlyList<EtatSession> vivantes, double epoque)
     {
+        if (_essai) return;                              // un essai n'échange rien : ni Discord, alertes, téléphone, groupe, amis
         CrediterSources(vivantes);
         PublierDiscord(vivantes, epoque);
         Prevenir(vivantes, epoque);
