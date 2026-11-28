@@ -406,14 +406,14 @@ internal sealed class FenetreAventure : Window
     private UIElement ConstruireBibliotheque()
     {
         var k = _pilou.CarnetCampagnes;
-        var toutes = Disponibles().Select(Charger).OfType<Campagne>().ToList();
+        var toutes = Disponibles().Select(Charger).OfType<Campagne>().Concat(_pilou.CampagnesEnPlus).ToList();
         var pile = new StackPanel { Margin = new Thickness(0, 0, 8, 8) };
         if (toutes.Count == 0)
         {
             pile.Children.Add(Vide("Aucune aventure dans cet exe.", "Les campagnes vivent dans assets/campagnes : elles arrivent avec la prochaine mise à jour."));
             return pile;
         }
-        var fiches = Aventure.Bibliotheque(k, toutes, _pilou.NiveauAventure, _etat, (long)_pilou.EpoqueAventure);
+        var fiches = Aventure.Bibliotheque(k, toutes, _pilou.NiveauAventure, _etat, (long)_pilou.EpoqueAventure, _pilou.SuccesAventure);
         int i = 0;
         foreach (var f in fiches)
         {
@@ -473,7 +473,7 @@ internal sealed class FenetreAventure : Window
 
         var boutons = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
         if (ferme)
-            boutons.Children.Add(Texte($"▣ niveau {f.Niveau}", 12.5, Bandeau.Argent, true));
+            boutons.Children.Add(Texte($"▣ {f.Verrou}", 12.5, Bandeau.Argent, true));
         else
         {
             string signe = f.Statut switch { Aventure.Statut.EnCours => "◉", Aventure.Statut.Suspendue => "◌", Aventure.Statut.Finie => "↻", _ => "▶" };

@@ -1,0 +1,39 @@
+# trait de personnalité : chineur
+id: trait-chineur
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#768390 b=#1c2128 c=#e8d5b0 d=#f69d50 e=#ffc89a f=#c4a77d
+images:
+................................
+................................
+..........aa....................
+.........aaa....................
+........aaa.....................
+.......aaa......................
+......aaa.......................
+.....aaa........................
+....aaa....bbbbbbbbbbbbbbbbbbbb.
+....aaa...bbbbbbbbbbbbbbbbbbbbbb
+.....aa..bbbccccccccccccccccccbb
+.....aaabbbcccccccccccccccccccbb
+......aabbccccccccccccccccccccbb
+......aaacccccccccccccccccccccbb
+.....bbaaaccccccccccccccccccccbb
+....bbbcaaccccccccccccccccccccbb
+...bbbccaaacccccccccccddccccccbb
+..bbbccccaabbcccccccccddccccccbb
+..bbcccccaaabcccccccddeeddccccbb
+..bbcccccbaabcccccccddeeddccccbb
+..bbbccccbbbbcccccccccddccccccbb
+...bbbccccccccccccccccddccccccbb
+....bbbcccccccccccccccccccccccbb
+.....bbbccccccccccccccccccccccbb
+......bbbcccccccccccccccccccccbb
+.......bbbccccccccccccccccccccbb
+........bbbfffffffffffffffffffbb
+.........bbbffffffffffffffffffbb
+..........bbbbbbbbbbbbbbbbbbbbbb
+...........bbbbbbbbbbbbbbbbbbbb.
+................................
+................................

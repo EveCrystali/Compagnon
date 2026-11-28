@@ -181,6 +181,7 @@ internal sealed class FenetreExpeditions : Window
             pile.Children.Add(Texte(ferme ? $"▣ s'ouvre au niveau {l.Niveau}" : l.Accroche, 11.5, Bandeau.Argent));
             pile.Children.Add(Texte($"⚡ {l.Cout}  ·  {Expeditions.Duree(l.Minutes)}  ·  risque {Expeditions.Risque(l)}  ·  boss : {Expeditions.Bete(l.Boss).Nom}",
                 11.5, ferme ? Bandeau.Argent : Jaune));
+            if (!ferme && Expeditions.AideAuDepart(l, niveau) is { Length: > 0 } aide) pile.Children.Add(Texte("↑ " + aide, 11.5, Bandeau.BleuXp));
             if (!ferme && refus is not null && e.Courante is null) pile.Children.Add(Texte("◌ " + refus, 11.5, Bandeau.Violet));
             Grid.SetColumn(pile, 1);
             g.Children.Add(pile);

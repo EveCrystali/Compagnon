@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : sablier U+231B
+id: signe-sablier
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+..aa......aa..
+..aa......aa..
+...aaa..aaa...
+....aa..aa....
+.....aaaa.....
+.....aaaa.....
+....aa..aa....
+...aaa..aaa...
+..aa..aa..aa..
+..aa..aa..aa..
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa

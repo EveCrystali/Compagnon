@@ -77,7 +77,13 @@ un feu de camp en rend un.
 - **Rappel ↩** (clic sur la pancarte → Rappeler) : il fait demi-tour, les mains vides ; le départ reste compté.
 
 Les chances d'un combat : 80 % − 7 points par force de la bête (+1 pour un boss) − 1,5 point par rang de risque,
-+0,6 point par niveau d'avance (6 au plus) + l'équipement ; d'un piège : 75 % − 2,5 points par rang de risque.
++0,6 point par niveau d'avance (6 au plus) + l'équipement ; d'un piège : 75 % − 2,5 points par rang de risque,
+avec la même avance de niveau.
+
+**L'avance de niveau se voit.** Sur la carte d'un lieu ouvert, au départ : « ↑ ton niveau t'aide : +1,8 % » (rien
+au niveau du lieu ; « (au plus) » à dix niveaux d'avance). Contre le boss, la ligne du récit le dit : « … (+5 po) ·
+mon niveau m'a aidé : +1,8 % », ou « … (♥ −2) · même avec mon niveau (+1,8 %) » (`Expeditions.AideAuDepart`,
+`AideNiveau`). Le téléphone ne calcule pas les expéditions (lecture seule) : la formule n'existe que sur le PC.
 
 ### Équipement léger
 

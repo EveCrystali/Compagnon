@@ -1,0 +1,19 @@
+# icône d'interface (docs/STYLE.md) : cadenas
+id: ui-cadenas
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f69d50
+images:
+............
+....aaaa....
+...aa..aa...
+...aa..aa...
+..aaaaaaaa..
+..aaaaaaaa..
+..aaabbaaa..
+..aaabbaaa..
+..aaaaaaaa..
+..aaaaaaaa..
+............
+............

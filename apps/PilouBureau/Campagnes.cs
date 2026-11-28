@@ -23,7 +23,8 @@ namespace PilouBureau;
 //                    Etat.Lieu, Etat.Decor, Etat.Humeur, Etat.Chapitre…, Etat.Progression, Etat.Issue (fin obtenue),
 //                    Etat.Reprise et Message.Reprise (retour à un check-point : ce que Pilou redit n'est pas nouveau)
 //                    carnet.Fil : les messages (Pilou et joueur), carnet.NonLus, Campagnes.MarquerLu(carnet)
-//   Décisions      Campagnes.Demarrer(carnet, campagne, niveau, maintenant, appareil, Charger) → null ou la raison du refus
+//   Ouverture      Campagnes.Manque(carnet, campagne, niveau, succès, Charger) → "" ou « s'ouvre au niveau 5 et après … »
+//   Décisions      Campagnes.Demarrer(carnet, campagne, niveau, maintenant, appareil, Charger, …, succès) → null ou la raison du refus
 //                  Campagnes.Choisir(carnet, campagne, maintenant, appareil, idOption)   (phase Choix)
 //                  Campagnes.Continuer(…)        « vas-y » : Pilou part (phase Depart)
 //                  Campagnes.Epreuve(…, reussie) résultat d'un mini-jeu (phase Epreuve)
@@ -101,6 +102,8 @@ public static class Campagnes
     {
         public string Id = "", Titre = "", Ton = "", Accroche = "", Duree = "", Depart = "";
         public int Niveau = 1;
+        // Conditions d'ouverture en plus du niveau (facultatives) : hauts faits obtenus (ids de Succes.Tous), campagnes finies.
+        public List<string> Succes = new(), Apres = new();
         public List<Chapitre> Chapitres = new();
         public SortedDictionary<string, int> Variables = new(StringComparer.Ordinal);
         public List<Nomme> Objets = new(), Souvenirs = new(), Decors = new();
@@ -241,6 +244,15 @@ public static class Campagnes
         return l;
     }
 
+    // Une liste d'identifiants (au plus 8, sans doublon, dans l'ordre de la fiche).
+    private static List<string> LireIds(JsonElement o, string cle)
+    {
+        var l = new List<string>();
+        foreach (var x in L(o, cle))
+            if (x.ValueKind == JsonValueKind.String && IdValide(x.GetString() ?? "") && !l.Contains(x.GetString()!) && l.Count < 8) l.Add(x.GetString()!);
+        return l;
+    }
+
     private static Prime LirePrime(JsonElement o, string cle)
     {
         if (o.ValueKind != JsonValueKind.Object || !o.TryGetProperty(cle, out var r) || r.ValueKind != JsonValueKind.Object) return new Prime(0, 0);
@@ -297,6 +309,7 @@ public static class Campagnes
                 Id = S(r, "id"), Titre = S(r, "titre"), Ton = S(r, "ton"), Accroche = S(r, "accroche"), Duree = S(r, "duree"),
                 Depart = S(r, "depart"), Niveau = Math.Max(1, N(r, "niveau", 1)),
                 Objets = LireNommes(r, "objets"), Souvenirs = LireNommes(r, "souvenirs"), Decors = LireNommes(r, "decors"),
+                Succes = LireIds(r, "succes"), Apres = LireIds(r, "campagnes"),
             };
             if (r.TryGetProperty("variables", out var vars) && vars.ValueKind == JsonValueKind.Object)
                 foreach (var x in vars.EnumerateObject())
@@ -1247,6 +1260,23 @@ public static class Campagnes
 
     public static bool Finie(Carnet k, string campagne) => k.Historique.TryGetValue(campagne, out var b) && b.Fins.Count > 0;
 
+    // « a », « a et b », « a, b et c ».
+    private static string Et(IReadOnlyList<string> l) => l.Count <= 1 ? string.Concat(l) : string.Join(", ", l.Take(l.Count - 1)) + " et " + l[^1];
+
+    // Ce qu'il manque pour ouvrir la campagne, en une ligne sans rien dévoiler de l'histoire ("" : ouverte) : le niveau,
+    // les hauts faits (par leur nom), les campagnes à finir (par leur titre). Le téléphone fait le même texte.
+    public static string Manque(Carnet k, Campagne c, int niveau, IReadOnlyCollection<string> succes, Func<string, Campagne?> biblio)
+    {
+        var l = new List<string>();
+        if (niveau < c.Niveau) l.Add($"au niveau {c.Niveau}");
+        var hf = c.Succes.Where(id => !succes.Contains(id))
+            .Select(id => "« " + (PilouBureau.Succes.Tous.FirstOrDefault(d => d.Id == id)?.Nom ?? id) + " »").ToList();
+        if (hf.Count > 0) l.Add((hf.Count == 1 ? "avec le haut fait " : "avec les hauts faits ") + Et(hf));
+        var ca = c.Apres.Where(id => !Finie(k, id)).Select(id => "« " + (biblio(id)?.Titre is { Length: > 0 } t ? t : id) + " »").ToList();
+        if (ca.Count > 0) l.Add("après " + Et(ca));
+        return l.Count == 0 ? "" : "s'ouvre " + Et(l);
+    }
+
     // Une partie est-elle en cours (ni finie, ni abandonnée) ?
     public static bool EnCours(Carnet k, Func<string, Campagne?> biblio, long maintenant)
     {
@@ -1262,9 +1292,11 @@ public static class Campagnes
     // Démarre la campagne, ou la reprend à son dernier check-point si elle avait été abandonnée (neuf : repartir du
     // début quand même). Une seule campagne à la fois : il faut finir ou abandonner celle en cours.
     public static string? Demarrer(Carnet k, Campagne c, int niveau, long maintenant, string appareil, Func<string, Campagne?> biblio,
-        string? graine = null, bool neuf = false)
+        string? graine = null, bool neuf = false, IReadOnlyCollection<string>? succes = null)
     {
         if (niveau < c.Niveau) return $"niveau {c.Niveau} requis";
+        // succes null : l'appelant ne vérifie pas les hauts faits ni les campagnes à finir (essai, vitrine).
+        if (succes is not null && Manque(k, c, niveau, succes, biblio) is { Length: > 0 } manque) return manque;
         if (c.Noeud(c.Depart) is null) return "campagne illisible";
         Actualiser(k, biblio, maintenant);
         if (EnCours(k, biblio, maintenant)) return "une campagne est déjà en cours";

@@ -153,7 +153,8 @@ final class PageAventure extends Page {
         etat = CampagnesTel.etat(app);
         Campagnes.Carnet k = CampagnesTel.carnet(app);
         int niveau = Gains.niveau(app, Prefs.etat(app));
-        StringBuilder e = new StringBuilder().append(carnet).append('|').append(niveau).append('|').append(Campagnes.signature(k)).append('|')
+        StringBuilder e = new StringBuilder().append(carnet).append('|').append(niveau).append('|').append(Prefs.etat(app).succes).append('|')
+                .append(Campagnes.signature(k)).append('|')
                 .append(k.nonLus()).append('|').append(etat == null ? "-" : etat.phase + etat.noeud).append('|').append(CampagnesTel.refus(app));
         int[] attente = CampagnesTel.enAttente(app);
         e.append('|').append(attente[0]).append(',').append(attente[1]);
@@ -346,7 +347,11 @@ final class PageAventure extends Page {
 
     private View carteCampagne(Campagnes.Campagne c, Campagnes.Carnet k, int niveau, String autreEnCours) {
         Ui.Palette p = Ui.p(app);
-        boolean ouverte = niveau >= c.niveau;
+        // Fermée : il manque le niveau, un haut fait (reçu du PC) ou une campagne à finir ; la ligne dit quoi, sans rien dévoiler.
+        String manque = Campagnes.manque(k, c, niveau, Prefs.etat(app).succes, Campagnes::charger);
+        boolean ouverte = manque.isEmpty(), parNiveau = niveau < c.niveau;
+        boolean niveauSeul = parNiveau && manque.equals("s'ouvre au niveau " + c.niveau);
+        String verrou = parNiveau ? "Niveau " + c.niveau : !c.succes.isEmpty() && !Prefs.etat(app).succes.containsAll(c.succes) ? "Haut fait" : "À suivre";
         Campagnes.Partie suspendue = k.suspendues.get(c.id);
         Campagnes.Etat ee = null;
         // Mise de côté à l'instant : elle est encore « la partie courante », abandonnée.
@@ -368,7 +373,7 @@ final class PageAventure extends Page {
         chips.addView(Ui.puceScene(app, Aventure.signeTon(c.ton) + "  " + Aventure.nomTon(c.ton)));
         View vide = new View(app);
         chips.addView(vide, new LinearLayout.LayoutParams(0, 1, 1));
-        String statut = !ouverte ? "◇  Niveau " + c.niveau : suspendue != null ? "◐  Mise de côté" : finie ? "✓  Finie" : c.id.equals("prologue") ? "✦  Pour commencer" : "";
+        String statut = !ouverte ? "◇  " + verrou : suspendue != null ? "◐  Mise de côté" : finie ? "✓  Finie" : c.id.equals("prologue") ? "✦  Pour commencer" : "";
         if (!statut.isEmpty()) chips.addView(Ui.puceScene(app, statut));
         s.addView(chips, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP));
         carte.addView(s, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, hauteurScene()));
@@ -411,13 +416,15 @@ final class PageAventure extends Page {
         actions.setPadding(0, Ui.dp(app, 14), 0, 0);
         String refus = autreEnCours != null ? "Une aventure à la fois : « " + titre(autreEnCours) + " » est en cours." : null;
         if (!ouverte) {
-            int manque = c.niveau - niveau;
-            Button v = Ui.bouton(app, "◇  Niveau " + c.niveau + " requis", false, x -> {
+            int ecart = c.niveau - niveau;
+            Button v = Ui.bouton(app, niveauSeul ? "◇  Niveau " + c.niveau + " requis" : "◇  " + verrou, false, x -> {
             });
             v.setEnabled(false);
             v.setAlpha(0.7f);
             actions.addView(v, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-            TextView t = Ui.texte(app, "Encore " + manque + " niveau" + (manque > 1 ? "x" : "") + " : Pilou grandit en jouant et pendant que tu travailles.", Ui.T_DETAIL, p.doux, false);
+            String ligne = niveauSeul ? "Encore " + ecart + " niveau" + (ecart > 1 ? "x" : "") + " : Pilou grandit en jouant et pendant que tu travailles."
+                    : Character.toUpperCase(manque.charAt(0)) + manque.substring(1) + ".";
+            TextView t = Ui.texte(app, ligne, Ui.T_DETAIL, p.doux, false);
             t.setPadding(0, Ui.dp(app, 8), 0, 0);
             b.addView(actions, Ui.large());
             b.addView(t, Ui.large());

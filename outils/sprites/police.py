@@ -515,11 +515,14 @@ def empreinte(lignes, police):
 # Tailles dérivées.
 
 def gras(rangs):
+    """Chaque trait épaissi d'un pixel vers la droite, sauf s'il boucherait un jour d'un pixel (m, w, M, W, « ») :
+    le trait d'avant reste fin, la lettre reste lisible (sinon « m » devient un pavé plein)."""
     w = len(rangs[0]) + 1
     out = []
     for r in rangs:
-        l = r + "."
-        out.append("".join("#" if l[k] == "#" or (k > 0 and l[k - 1] == "#") else "." for k in range(w)))
+        l = r + ".."
+        out.append("".join("#" if l[k] == "#" or (k > 0 and l[k - 1] == "#" and l[k + 1] != "#") else "."
+                           for k in range(w)))
     return out
 
 
@@ -537,10 +540,19 @@ def police_texte():
             "chasse": CHASSE, "ligne": LIGNE}
 
 
+# Capitales trop serrées pour l'épaississement automatique (M et W se liraient N) : dessinées grasses à la main.
+GRAS = {
+    "M": "##...## ###.### ##.#.## ##.#.## ##...## ##...## ##...##",
+    "W": "##...## ##...## ##...## ##.#.## ##.#.## ###.### ##...##",
+}
+
+
 def police_titre():
     gl = {}
     for c, (haut, rangs) in G.items():
         gl[c] = (haut, gras(rangs)) if rangs and c not in LARGEURS_VIDES else (haut, rangs)
+    for c, motif in GRAS.items():
+        gl[c] = (G[c][0], motif.split())
     vides = {c: (w + 1 if w else 1) for c, w in LARGEURS_VIDES.items()}
     return {"nom": "titre", "glyphes": gl, "vides": vides, "crenage": dict(CRENAGE), "chasse": CHASSE,
             "ligne": LIGNE + 1}

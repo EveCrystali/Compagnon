@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : epees U+2694
+id: signe-epees
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+aa..........aa
+aaa........aaa
+.aaa......aaa.
+..aaa....aaa..
+...aaa..aaa...
+....aaaaaa....
+.....aaaa.....
+.....aaaa.....
+aa..aaaaaa..aa
+aaaaaa..aaaaaa
+.aaaa....aaaa.
+.aaa......aaa.
+aaa........aaa
+aa..........aa

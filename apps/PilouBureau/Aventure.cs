@@ -205,17 +205,23 @@ public static class Aventure
 
     public enum Statut { Verrouillee, Nouvelle, EnCours, Suspendue, Finie }
 
+    // Verrou : ce que dit le bouton d'une campagne fermée (« niveau 5 », « haut fait », « à suivre »).
     public sealed record Fiche(string Id, string Titre, string Ton, string Accroche, string Duree, int Niveau, Statut Statut,
-        double Progression, int Fins, int FinsTotal, string Action, string Detail, bool Bloquee);
+        double Progression, int Fins, int FinsTotal, string Action, string Detail, bool Bloquee, string Verrou = "");
 
     public static int TotalFins(Campagne c) => c.Noeuds.Values.Count(n => n.Type == "fin");
 
-    public static List<Fiche> Bibliotheque(Carnet k, IEnumerable<Campagne> campagnes, int niveau, Etat? e, long maintenant)
+    // succes : les hauts faits obtenus (Profil.Succes) ; null : aucun.
+    public static List<Fiche> Bibliotheque(Carnet k, IEnumerable<Campagne> campagnes, int niveau, Etat? e, long maintenant,
+        IReadOnlyCollection<string>? succes = null)
     {
         var l = new List<Fiche>();
+        var toutes = campagnes.ToList();
+        Campagne? Biblio(string id) => toutes.FirstOrDefault(x => x.Id == id) ?? Charger(id);
         string courante = e is { EnCours: true } && k.Courante is { } p ? p.Campagne : "";
-        foreach (var c in campagnes.OrderBy(c => c.Id == "prologue" ? 0 : 1).ThenBy(c => c.Niveau).ThenBy(c => c.Titre, StringComparer.CurrentCulture))
+        foreach (var c in toutes.OrderBy(c => c.Id == "prologue" ? 0 : 1).ThenBy(c => c.Niveau).ThenBy(c => c.Titre, StringComparer.CurrentCulture))
         {
+            string manque = Manque(k, c, niveau, succes ?? Array.Empty<string>(), Biblio), verrou = "";
             int fins = Fins(k, c).Count, total = TotalFins(c);
             Statut s;
             double prog = 0;
@@ -227,11 +233,12 @@ public static class Aventure
                 action = "Reprendre";
                 detail = EtatCourt(k, e, maintenant) is { Length: > 0 } ec ? ec : $"chapitre {e.ChapitreNumero}/{e.ChapitreTotal}";
             }
-            else if (niveau < c.Niveau)
+            else if (manque != "")
             {
                 s = Statut.Verrouillee;
                 action = "";
-                detail = $"s'ouvre au niveau {c.Niveau}";
+                detail = manque;
+                verrou = niveau < c.Niveau ? $"niveau {c.Niveau}" : c.Succes.Any(x => !(succes ?? Array.Empty<string>()).Contains(x)) ? "haut fait" : "à suivre";
             }
             else if (k.Suspendues.TryGetValue(c.Id, out var sp) || (k.Courante is { } q && q.Campagne == c.Id && Reprenable(k, c, maintenant)))
             {
@@ -255,7 +262,7 @@ public static class Aventure
                 detail = "pas encore commencée";
             }
             bool bloquee = courante != "" && c.Id != courante && s != Statut.Verrouillee;
-            l.Add(new Fiche(c.Id, c.Titre, c.Ton, c.Accroche, c.Duree, c.Niveau, s, prog, fins, total, action, detail, bloquee));
+            l.Add(new Fiche(c.Id, c.Titre, c.Ton, c.Accroche, c.Duree, c.Niveau, s, prog, fins, total, action, detail, bloquee, verrou));
         }
         return l;
     }

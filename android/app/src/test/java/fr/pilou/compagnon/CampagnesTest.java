@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,17 @@ public class CampagnesTest {
         return essai;
     }
 
+    private static Campagnes.Campagne hautFait;
+
+    /** La campagne d'essai fermée par un haut fait (« Plume ») et par le prologue (campagnes-essai/haut-fait). */
+    static Campagnes.Campagne hautFait() {
+        if (hautFait == null)
+            hautFait = Campagnes.lire(ressource("campagnes-essai/haut-fait/campagne.json"), f -> ressource("campagnes-essai/haut-fait/" + f));
+        return hautFait;
+    }
+
     static Campagnes.Campagne biblio(String id) {
+        if (id.equals("essai-haut-fait")) return hautFait();
         return id.equals("essai") ? essai() : Campagnes.charger(id);
     }
 
@@ -186,6 +197,11 @@ public class CampagnesTest {
                     for (Campagnes.FinObtenue f : Campagnes.fins(k, x)) fins.add(f.noeud);
                     return "acquis " + m[1] + " " + a[0] + " " + a[1] + " " + String.join(",", fins);
                 }
+                case "ouverture": {
+                    List<String> succes = m[3].equals("-") ? new ArrayList<>() : Arrays.asList(m[3].split(","));
+                    String manque = Campagnes.manque(k, biblio(m[1]), Integer.parseInt(m[2]), succes, CampagnesTest::biblio);
+                    return "ouverture " + m[1] + " " + m[2] + " " + m[3] + " " + (manque.isEmpty() ? "ouverte" : manque);
+                }
                 case "attente": {
                     int[] a = Campagnes.enAttente(k, CampagnesTest::biblio);
                     return "attente " + a[0] + " " + a[1];
@@ -248,6 +264,27 @@ public class CampagnesTest {
         assertEquals(6, p.decors.size());
         assertNull(Campagnes.charger("inconnue"));
         assertNull(Campagnes.charger("../secret"));
+    }
+
+    /** Une campagne fermée par un haut fait et par le prologue : même texte que le PC, démarrage refusé puis accepté. */
+    @Test
+    public void uneCampagneSOuvreParUnHautFaitEtUneCampagneFinie() {
+        Campagnes.Campagne hf = hautFait();
+        assertEquals(Arrays.asList("plume"), hf.succes);
+        assertEquals(Arrays.asList("prologue"), hf.apres);
+        Campagnes.Carnet k = new Campagnes.Carnet();
+        String manque = "s'ouvre avec le haut fait « Plume » et après « La colline d'en face »";
+        assertEquals(manque, Campagnes.manque(k, hf, 2, Arrays.asList("marathon"), CampagnesTest::biblio));
+        assertEquals(manque, Campagnes.demarrer(k, hf, 2, T0, "tel", CampagnesTest::biblio, "g", false, Arrays.asList("marathon")));
+        Campagnes.Carnet k2 = new Campagnes.Carnet();
+        assertTrue(Campagnes.recevoir(k2, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"h\":{\"prologue\":[1,1,{\"" + Campagnes.code("fin-x")
+                + "\":1790000000},\"\"]}}", "tel", CampagnesTest::biblio, T0));
+        assertEquals("", Campagnes.manque(k2, hf, 2, Arrays.asList("plume"), CampagnesTest::biblio));
+        assertNull(Campagnes.demarrer(k2, hf, 2, T0, "tel", CampagnesTest::biblio, "g", false, Arrays.asList("plume")));
+        for (String id : Campagnes.disponibles()) {
+            Campagnes.Campagne c = Campagnes.charger(id);
+            assertTrue(id, c.succes.isEmpty() && c.apres.isEmpty());
+        }
     }
 
     @Test

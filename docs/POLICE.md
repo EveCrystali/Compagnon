@@ -41,7 +41,9 @@ rangée  0-1   accents des capitales      É Ê À Ç…
 - **Formes choisies pour la lecture** : **A** pointu (rond, il se lisait H à la taille texte), **x** en croix de 5
   (en 4 de large, il ressemblait à un н).
 - **Interligne** : 12 pixels (texte), 13 (titre).
-- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes.
+- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes. L'épaississement ne bouche
+  jamais un jour d'un pixel (sinon le « m » devient un pavé) ; M et W ont un gras dessiné à la main (7 de large).
+  Un test (PC et Android) refuse toute lettre ou chiffre de plus de 82 % de pixels pleins dans sa boîte.
 - **Accents** : composés (lettre nue + signe centré), pour que toutes les lettres accentuées aient le même accent.
 - **Signes** : ♥ ♡ ✓ ✗ ✧ ✦ ★ → ← ↑ ↓ ♪ ♫ ☁ ☀ ☾ ☂ ❄ ⚡ ☺ ▼ ▲ ▶ ◀ ● ○ ■ □ ◆, et `¤` dessiné comme une pièce
   (« po »).
@@ -73,4 +75,6 @@ arrondis, même place. Sur le PC, seulement si le « Dessin fin » est actif.
 | Phrase de Pilou en tête de bulle (petits mots, réactions, « toc toc ! ») | ✓ `BullePixel.cs` | — |
 | Mot du jour : bulle flottante, Accueil, widget | — | ✓ `Bulle.java`, `PresenceVue.motTete`, `Widget.java` |
 
-À convertir ensuite (chantier suivant) : voir la liste du compte rendu du chantier (PR « police pixel »).
+| En-tête, barre du bas, Accueil, Jouer, Boutique, Collection | — | ✓ `Style.Texte` (docs/STYLE.md) |
+
+Les tailles et les cas où la police système reste permise sont fixés dans [STYLE.md](STYLE.md).

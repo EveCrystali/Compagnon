@@ -1,0 +1,39 @@
+# trait de personnalité : grand-lecteur
+id: trait-grand-lecteur
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f69d50 c=#f6f8fa d=#c9d1d9 e=#768390 f=#6a5acd
+images:
+................................
+................................
+................................
+................................
+.....................aaaaaa.....
+....................aaaaaaaa....
+.aaaa...............aabbbbaaaaa.
+aaaaaaaaaa..........aabbbbaaaaaa
+aaccaaaaaaaaaaaaaaaaaabbbbacccaa
+aacccccccaaaaaaaaaaaaabbbbccccaa
+aaccccccccccccaaddccccbbbbccccaa
+aaccccccccccccccddccccbbbbccccaa
+aaccccccccccccccddccccbbbbccccaa
+aaccccccccccccccddccccbbbbccccaa
+aacccceeecccccccddccccccceeeccaa
+aacccceeeeeeccccddcccceeeeeeccaa
+aacccccceeeeeeccddcceeeeeeccccaa
+aaccccccccceeeccddcceeecccccccaa
+aacccceeecccccccddccccccceeeccaa
+aacccceeeeeeccccddcccceeeeeeccaa
+aacccccceeeeeeccddcceeeeeeccccaa
+aaccccccccceeeccddcceeecccccccaa
+aaccccccccccccccddccccccccccccaa
+aaccccccccccccccddccccccccccccaa
+aaffccccccccccccddcccccccccfffaa
+aafffffffcccccccddccccffffffffaa
+aaffffffffffffccddffffffffffffaa
+aaaaafffffffffffddfffffffffaaaaa
+.aaaaaaaaaffffffffffffaaaaaaaaa.
+....aaaaaaaaaaaffaaaaaaaaaaa....
+.........aaaaaaaaaaaaaa.........
+..............aaaa..............

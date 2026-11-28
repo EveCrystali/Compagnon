@@ -1,0 +1,19 @@
+# icône d'interface (docs/STYLE.md) : accueil
+id: ui-accueil
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+.....aa.....
+....aaaa....
+...aaaaaa...
+..aaaaaaaa..
+.aaaaaaaaaa.
+aaaaaaaaaaaa
+..aaaaaaaa..
+..aa...aaa..
+..aa...aaa..
+..aa...aaa..
+..aaaaaaaa..
+............
