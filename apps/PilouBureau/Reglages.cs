@@ -62,7 +62,8 @@ public sealed class Reglages
     public string AnnonceAventure { get; set; } = "bulle";
     public string CampagneAnnoncee { get; set; } = "";
     // Animations des campagnes (fenêtre Aventure) : « completes », « reduites » ou « aucune » ; texte écrit d'un coup.
-    public string AnimationsCampagnes { get; set; } = "completes";
+    // Vide : pas encore choisi (le réglage « Afficher les animations » de Windows donne la valeur de départ).
+    public string AnimationsCampagnes { get; set; } = "";
     public bool TexteInstantane { get; set; }
     // Sons (docs/SONS.md) : « aucun » (par défaut, en attendant qu'Antoine tranche), « discrets » ou « normaux ».
     public string Sons { get; set; } = "normaux";

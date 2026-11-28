@@ -255,7 +255,7 @@ final class PageAventure extends Page {
         chips.setPadding(Ui.dp(app, 12), Ui.dp(app, 12), Ui.dp(app, 12), 0);
         chips.addView(Ui.puceScene(app, Aventure.signeTon(c.ton) + "  Chapitre " + etat.chapitreNumero + " / " + etat.chapitreTotal));
         s.addView(chips, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP));
-        carte.addView(s, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(app, 150)));
+        carte.addView(s, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, hauteurScene()));
         LinearLayout corpsCarte = Ui.pile(app);
         corpsCarte.setPadding(Ui.dp(app, 16), Ui.dp(app, 14), Ui.dp(app, 16), Ui.dp(app, 16));
         corpsCarte.addView(Ui.texte(app, c.titre, Ui.T_CARTE, p.texte, true));
@@ -300,6 +300,16 @@ final class PageAventure extends Page {
         return carte;
     }
 
+    /** L'unité de pixel des scènes de cette page : celle du décor fin, comme dans la lecture (Aventure.unite). */
+    private int uniteScene() {
+        return Aventure.unite(app.getResources().getDisplayMetrics().widthPixels - 2 * Ui.dp(app, 16));
+    }
+
+    /** Une scène miniature montre le décor entier : 80 pixels fins de haut. */
+    private int hauteurScene() {
+        return Theatre.H * uniteScene();
+    }
+
     /** Une scène miniature (décor de la campagne), avec Pilou s'il est demandé. */
     private FrameLayout scene(Campagnes.Campagne c, String decor, int hauteur, boolean avecPilou) {
         FrameLayout s = new FrameLayout(app);
@@ -312,7 +322,7 @@ final class PageAventure extends Page {
         sc.regler(c.id, c.ton, decor);
         s.addView(sc, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         if (avecPilou && etat != null) {
-            PilouVue pv = new PilouVue(app, Aventure.pixelPour(app, Math.min(104, hauteur - 40)), true);
+            PilouVue pv = new PilouVue(app, Aventure.pixelUnite(uniteScene()), true);
             Etat pc = Prefs.etat(app);
             pv.equipe(Gains.porte(app, pc));
             pv.accessoire(pc.accessoire);
@@ -361,7 +371,7 @@ final class PageAventure extends Page {
         String statut = !ouverte ? "◇  Niveau " + c.niveau : suspendue != null ? "◐  Mise de côté" : finie ? "✓  Finie" : c.id.equals("prologue") ? "✦  Pour commencer" : "";
         if (!statut.isEmpty()) chips.addView(Ui.puceScene(app, statut));
         s.addView(chips, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP));
-        carte.addView(s, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(app, 96)));
+        carte.addView(s, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, hauteurScene()));
 
         LinearLayout b = Ui.pile(app);
         b.setPadding(Ui.dp(app, 16), Ui.dp(app, 14), Ui.dp(app, 16), Ui.dp(app, 16));
@@ -565,7 +575,7 @@ final class PageAventure extends Page {
         if (rien) {
             LinearLayout c = Ui.carte(app);
             c.setGravity(Gravity.CENTER_HORIZONTAL);
-            PilouVue pv = new PilouVue(app, Aventure.pixelPour(app, 110), true);
+            PilouVue pv = new PilouVue(app, Aventure.pixelUnite(uniteScene()), true);
             pv.montrer("tendre", Prefs.etat(app).couleur);
             pv.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             c.addView(pv);

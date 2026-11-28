@@ -126,6 +126,20 @@ final class Aventure {
         return hDp / ((Dessin.H + 2) * Dessin.ECHELLE) * c.getResources().getDisplayMetrics().density;
     }
 
+    /**
+     * L'unité de pixel de tout l'écran Aventure : celle du décor fin (192 pixels de large), le plus grand entier qui
+     * tient dans la largeur (au moins 1). Décor, ciel de repli, portrait et Pilou la partagent : on ajuste la taille
+     * des vues, jamais l'échelle d'une couche.
+     */
+    static int unite(int largeurPx) {
+        return Math.max(1, largeurPx / Theatre.W);
+    }
+
+    /** Pixel de grille de PilouVue pour que le pixel fin de Pilou fasse k pixels d'écran (2k par pixel 1×). */
+    static float pixelUnite(int k) {
+        return 2f * k / Dessin.ECHELLE;
+    }
+
     /** Pilou marche-t-il sur place dans cette tenue (le décor défile alors) ? */
     static float vitesse(String tenue) {
         switch (tenue) {
@@ -217,7 +231,7 @@ final class Aventure {
             image = dessin == null ? (decor.isEmpty() ? null : Vitrine.sprite("decor-" + campagne + "-" + decor, 1, 0, false)) : null;
             ciel = loin = pres = null;
             if (image != null || dessin != null) return;
-            bloc = Math.max(2, Math.round(3 * getResources().getDisplayMetrics().density));
+            bloc = unite(w);
             int cols = w / bloc + 2, rangs = h / bloc + 1;
             int[] t = cielTon(ton);
             int haut = nuit ? melanger(t[0], 0xff05070f, 0.5f) : t[0], bas = nuit ? melanger(t[1], t[0], 0.55f) : t[1];
@@ -282,7 +296,7 @@ final class Aventure {
                 // Décor animé (dessin fin) : agrandi d'un nombre entier de pixels, posé au sol ; il défile quand Pilou marche.
                 long ms = SystemClock.uptimeMillis() - t0;
                 Sprites.Sprite sp = vivant.sprite();
-                int k = Math.max(1, (int) Math.ceil(h / (float) sp.h()));
+                int k = Math.max(1, unite(w) * Theatre.W / Math.max(1, sp.w()));   // une seule unité de pixel : celle du décor fin
                 float iw = sp.w() * k, ih = sp.h() * k;
                 float x0 = bouge ? -((t * vitesse * k / 2) % iw) : (w - iw) / 2;
                 if (!bouge && iw < w) x0 = 0;
@@ -298,7 +312,7 @@ final class Aventure {
                 if (isShown() && !bouge && pas > 0) postInvalidateDelayed(pas);
             } else if (image != null) {
                 // Décor illustré : agrandi d'un nombre entier de pixels pour couvrir la hauteur, posé au sol.
-                int k = Math.max(1, (int) Math.ceil(h / (float) image.getHeight()));
+                int k = Math.max(1, unite(w) * Theatre.W / Math.max(1, image.getWidth()));
                 float iw = image.getWidth() * k, ih = image.getHeight() * k;
                 float x0 = bouge ? -((t * vitesse * k) % iw) : (w - iw) / 2;
                 if (!bouge && iw < w) x0 = 0;

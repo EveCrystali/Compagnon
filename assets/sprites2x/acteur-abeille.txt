@@ -1,0 +1,17 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-abeille
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 60
+palette: a=#ffffffb4 b=#2a2238 c=#f2bd3c
+images:
+.aa...
+bcbc..
+bcbcb.
+......
+---
+..a...
+bcbca.
+bcbcb.
+......

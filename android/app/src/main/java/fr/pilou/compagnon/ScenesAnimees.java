@@ -33,7 +33,7 @@ final class ScenesAnimees {
     // ---- Réglages (préférences de l'app ; l'échelle des animations du système passe avant)
 
     static String reglage(Context c) {
-        return Prefs.de(c).getString("animationsCampagnes", Animations.COMPLETES);
+        return Prefs.de(c).getString("animationsCampagnes", "");          // vide : le système donne la valeur de départ
     }
 
     static void regler(Context c, String niveau) {
@@ -198,6 +198,12 @@ final class ScenesAnimees {
                 animate().alpha(1).translationX(0).setDuration(340).start();
             }
             invalidate();
+        }
+
+        /** Pour les tests : pixels d'écran par pixel fin du portrait (0 : personne). */
+        int echelle() {
+            if (sprite == null || sprite.images.isEmpty()) return 0;
+            return Math.max(1, Math.min(getWidth() / sprite.w(), getHeight() / sprite.h()));
         }
 
         void parle(boolean p) {

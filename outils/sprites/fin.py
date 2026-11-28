@@ -119,8 +119,10 @@ def ids_campagnes():
     """Décors, objets exclusifs, souvenirs, vignettes et emblèmes des campagnes : tous dessinés nativement en fin."""
     import campagnes_sprites
     import decors_campagnes
+    import scene_pilou
+    import acteurs_scenes
     decors_campagnes.charger()
-    return sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS)
+    return sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS) + scene_pilou.IDS + acteurs_scenes.IDS
 
 
 RETOUCHES = {}

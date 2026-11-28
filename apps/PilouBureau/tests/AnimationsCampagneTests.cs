@@ -134,7 +134,10 @@ public class AnimationsCampagneTests
         Assert.Equal(0, AnimationsCampagne.Lettres(t, 0));
         Assert.True(AnimationsCampagne.Lettres(t, 100) is > 0 and < 15);
         Assert.Equal(t.Length, AnimationsCampagne.Lettres(t, AnimationsCampagne.DureeEcriture(t)));
-        Assert.Equal("aucune", AnimationsCampagne.Niveau("completes", false));
+        // Le réglage du joueur décide ; vide (rien choisi), le système donne la valeur de départ.
+        Assert.Equal("completes", AnimationsCampagne.Niveau("completes", false));
+        Assert.Equal("aucune", AnimationsCampagne.Niveau("", false));
+        Assert.Equal("completes", AnimationsCampagne.Niveau("", true));
         Assert.Equal("completes", AnimationsCampagne.Niveau("n'importe quoi", true));
     }
 }

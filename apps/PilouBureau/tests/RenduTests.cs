@@ -141,6 +141,12 @@ public class RenduTests
         Assert.Equal(b.Fins.Keys.OrderBy(k => k, StringComparer.Ordinal), index.OrderBy(k => k, StringComparer.Ordinal));
         foreach (var (id, f) in b.Fins)
         {
+            // Les sprites du théâtre (docs/SCENES.md) n'existent qu'en dessin fin : la scène est toujours fine.
+            if (id.StartsWith("scene-", StringComparison.Ordinal) || id.StartsWith("acteur-", StringComparison.Ordinal))
+            {
+                Assert.True(f.Natif && b[id] is null, id);
+                continue;
+            }
             var s = b[id];
             Assert.True(s is not null, id + " : pas de sprite 1×");
             Assert.True(f.Natif, id);

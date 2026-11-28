@@ -17,11 +17,12 @@ public static class AnimationsCampagne
     public const int ParLettre = 22, PausePoint = 230, PauseVirgule = 90, DureeMax = 5200;
     public const int Transition = 360, VoletBloc = 8;
 
-    // Le niveau effectif : celui du réglage, ou « aucune » si le système demande moins d'animations.
+    // Le niveau effectif : le réglage du joueur (bouton « ✧ ») décide ; tant qu'il n'a rien choisi (réglage vide), le
+    // système donne la valeur de départ (« aucune » si Windows demande moins d'animations, sinon « completes »).
     public static string Niveau(string? reglage, bool systeme)
     {
-        var r = reglage is not null && Array.IndexOf(Niveaux, reglage) >= 0 ? reglage : Completes;
-        return systeme ? r : Aucune;
+        if (reglage is not null && Array.IndexOf(Niveaux, reglage) >= 0) return reglage;
+        return systeme ? Completes : Aucune;
     }
 
     public static long ImageDecor(int n, int duree, long t, string niveau) =>

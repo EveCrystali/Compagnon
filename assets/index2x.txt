@@ -9,6 +9,18 @@ acc-lunettes
 acc-noeud
 acc-tablier
 acc-toque
+acteur-abeille
+acteur-bulle
+acteur-eclats
+acteur-feuille
+acteur-graine
+acteur-libellule
+acteur-note
+acteur-oiseau
+acteur-papillon
+acteur-plouf
+acteur-poisson
+acteur-rond
 ailes-libellule
 ailes-nuage
 ailes-papillon
@@ -488,6 +500,7 @@ sabots
 sabre-cuillere
 sac-a-dos
 sac-explorateur
+scene-pilou
 sifflet-lison
 slime-apprivoise
 soin-faim

@@ -4,9 +4,11 @@ campagnes »).
 Tout ce que les deux appareils doivent calculer de la même façon est ici, en arithmétique simple (pas de sinus : les
 bibliothèques ne tombent pas toujours sur le même dernier chiffre) :
 
-  niveau(reglage, systeme)                le niveau effectif : « completes », « reduites » ou « aucune » ; si le système
-                                          demande moins d'animations (Windows : animations coupées ; Android : échelle
-                                          des animations à 0), c'est « aucune »
+  niveau(reglage, systeme)                le niveau effectif : « completes », « reduites » ou « aucune ». Le réglage du
+                                          joueur (bouton « ✧ ») décide ; tant qu'il n'a rien choisi (réglage vide), le
+                                          système donne la valeur de départ : « aucune » s'il demande moins d'animations
+                                          (Windows : animations coupées ; Android : échelle des animations à 0), sinon
+                                          « completes » (décidé avec Antoine le 28 novembre 2026)
   image_decor(n, duree, t, niveau)        l'image d'un décor animé à l'instant t (ms) ; image 0 si réduites ou aucune
   image_portrait(n, duree, t, parle, niveau)
                                           l'image d'un portrait de personnage (disposition fixe : 0 et 1 repos, la
@@ -46,8 +48,9 @@ VOLET_BLOC = 8            # un bloc du volet : 8 pixels de la grille 1× du déc
 
 
 def niveau(reglage, systeme):
-    r = reglage if reglage in NIVEAUX else COMPLETES
-    return r if systeme else AUCUNE
+    if reglage in NIVEAUX:
+        return reglage
+    return COMPLETES if systeme else AUCUNE
 
 
 def image_decor(n, duree, t, niv):

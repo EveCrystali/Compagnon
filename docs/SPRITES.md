@@ -188,8 +188,13 @@ sont celles de Pilou (`joie`, `peur`, `triste`, `surpris`, `colere`, `tendre`, `
 retombe sur le visage neutre (`AnimationsCampagne.Portrait`, `Animations.portrait`). 29 personnages, 69 portraits.
 
 **Niveaux.** Réglage « animations des campagnes » : `completes` (tout), `reduites` (décors fixes, clignement seul,
-fondu au lieu du volet, pas de particules), `aucune` (rien ne bouge, texte écrit d'un coup). Si le système demande moins
-d'animations (Windows : « Afficher les animations » coupé ; Android : échelle des animations à 0), c'est `aucune`.
+fondu au lieu du volet, pas de particules), `aucune` (rien ne bouge, texte écrit d'un coup). Le réglage du joueur décide ;
+tant qu'il n'a rien choisi (réglage vide), le système donne la valeur de départ : `aucune` s'il demande moins
+d'animations (Windows : « Afficher les animations » coupé ; Android : échelle des animations à 0), sinon `completes`.
+
+**Le théâtre** (scène vivante de la fenêtre Aventure : mini-Pilou en pied, acteurs d'ambiance, réactions aux clics,
+travelling entre deux lieux) a sa page : [SCENES.md](SCENES.md). Ses sprites (`scene-pilou`, `acteur-*`) n'existent qu'en
+dessin fin.
 
 **Mémoire et charge.** Chaque image n'est rendue qu'une fois, puis gardée dans un cache borné (28 sprites sur le PC,
 24 sur le téléphone : au plus ~10 Mo) ; une image ne change à l'écran que lorsque son numéro change (4 à 7 fois par

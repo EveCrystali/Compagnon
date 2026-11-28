@@ -195,7 +195,12 @@ def main():
     # Vie du personnage : les règles communes (vie.py) ; relues par le PC et le téléphone.
     import vie
     vie.ecrire_reference()
-    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; vie-reference.txt ; police-reference.txt")
+    # Le théâtre (docs/SCENES.md) : animations nommées des sprites de scène, et la référence des scènes.
+    import theatre
+    theatre.ecrire_animations()
+    theatre.ecrire_reference()
+    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; vie-reference.txt ; "
+          "police-reference.txt ; theatre-reference.txt")
 
 
 if __name__ == "__main__":

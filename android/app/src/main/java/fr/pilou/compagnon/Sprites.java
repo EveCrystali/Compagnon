@@ -332,7 +332,7 @@ public final class Sprites {
         return b;
     }
 
-    private static String ressource(String chemin) {
+    static String ressource(String chemin) {
         try (InputStream in = Sprites.class.getResourceAsStream(chemin)) {
             if (in == null) return "";
             ByteArrayOutputStream out = new ByteArrayOutputStream();

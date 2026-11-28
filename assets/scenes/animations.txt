@@ -1,0 +1,24 @@
+# Animations nommées des sprites de scène : sprite nom première nombre pas(ms) mode (boucle | tient).
+# Écrit par outils/sprites/theatre.py d'après scene_pilou.py ; lu par Theatre.cs et Theatre.java.
+scene-pilou repos 0 4 220 boucle
+scene-pilou repos-joie 4 4 220 boucle
+scene-pilou repos-peur 8 4 90 boucle
+scene-pilou repos-triste 12 4 220 boucle
+scene-pilou repos-surpris 16 4 220 boucle
+scene-pilou repos-determine 20 4 220 boucle
+scene-pilou repos-fatigue 24 4 220 boucle
+scene-pilou repos-tendre 28 4 220 boucle
+scene-pilou repos-colere 32 4 220 boucle
+scene-pilou repos-malice 36 4 220 boucle
+scene-pilou cligne 40 1 150 tient
+scene-pilou marche 41 8 83 boucle
+scene-pilou joie 49 10 83 tient
+scene-pilou peur 59 4 70 boucle
+scene-pilou regard-g 63 1 83 tient
+scene-pilou regard-d 64 1 83 tient
+scene-pilou regard-h 65 1 83 tient
+scene-pilou bond 66 8 83 tient
+scene-pilou coucou 74 8 100 tient
+scene-pilou parle 82 4 110 boucle
+scene-pilou pense 86 4 200 boucle
+scene-pilou surpris 90 3 110 tient
