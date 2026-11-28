@@ -64,6 +64,9 @@ Dernière mise à jour : 28 novembre 2026.
   posé sur boutique, journal, prénom, « Pilou et moi », expéditions ; essayé pour de vrai sur le PC (ouverture, déplacement,
   redimensionnement, taille minimale, réduire, ✕, Alt+F4, Échap). Pas encore sur l'Aventure, la scène d'évolution, amis,
   connecteurs.
+  Titres-logos et en-tête commun du PC au pixel fin (`LogoPixel`, `Bandeau`) : le pixel des titres passe de 4 ou 5 px
+  à 2 px, celui de la scène en haute définition ; l'en-tête (niveau, XP, pièces) quitte la police système. Vu dans l'exe
+  d'essai à 100 % (boutique, journal, « Pilou et moi », expéditions, Aventure, menu). Reste : le téléphone.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
