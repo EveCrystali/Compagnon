@@ -1,7 +1,7 @@
 # Personnage en pied, haute définition : Quatre-Cent-Quatre (triste) — fantôme d'une page effacée : feuille pâle lavande au coin corné, au bas ondulé
 id: pied-grande-panne-spectre-404-triste
-taille: 36 71
-ancre: 17 70
+taille: 36 69
+ancre: 17 68
 duree: 150
 palette: a=#4a4380 b=#6b6877 c=#d8d2f0 d=#efecfb e=#8a7fc0 f=#b8b0dc g=#6a60a8 h=#2e2450 i=#ffffff j=#1a1438 k=#8fc8f0 l=#d6efff m=#c76f9a
 images: 5
@@ -68,8 +68,6 @@ a12c3fcfcfc3f11da
 ,f,f,c,c3,f,c,c,c,c,c,c,c,f,c,c,c2,
 4,f3,f3,f3,c3,c3,c3,c3,c3,
 3,e,f5,f,f,c3,f,c,c,c,f,c,c,c2,
-36,
-21,f14,
 36,
 36,
 36,
@@ -139,8 +137,6 @@ a7e11.d.dcd12.
 .,.,f,.,c2.,f,.,c,.,f,.,c,.,c,.,c,2.
 3.f,f.c,3.,f.f,2.f,f.c,c.f,c.c,c2.
 3.,.,5.,.,.,3.,.,.,.,.,.,.,.,2.
-5.f23.f3.c2.
-21.,14.
 36.
 36.
 36.
@@ -210,8 +206,6 @@ a13.2f6.2f4.3d4.a
 .f.f,c.c,2.f,c.c,c.c,c.c,c.f,c.c,c2.
 3.,f,.,f3.f,.,c2.,c,.,c,.,c,.,c,2.
 3.e.f5.f.f.c3.f.c.c.c.f.c.c.c2.
-5.,23.,3.,2.
-21.f14.
 36.
 36.
 36.
@@ -313,8 +307,6 @@ a13.2f6.2f4.3d4.a
 36.
 36.
 36.
-36.
-36.
 26.d9.
 36.
 26.k9.
@@ -352,8 +344,6 @@ a13.2f6.2f4.3d4.a
 19.f7.c5.d2.
 8.c11.f15.
 3.f3.c3.,3.f5.f14.
-36.
-5.f15.,7.f3.c2.
 36.
 36.
 36.

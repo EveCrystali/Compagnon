@@ -148,7 +148,12 @@ def anselme(f, e):
     cou(f, a, g, ep, VIEUX)
     # Les bras ; à la main gauche, la lanterne de ronde, éteinte (elle se rallume quand il sourit).
     bd, md = bras_bas(a, g, ep, ca, 1)
-    bg, mg = bras_bas(a, g, ep, ca, -1, long=25)
+    if h == "triste":                     # la lanterne retombe
+        bg, mg = bras_bas(a, g, ep, ca, -1, long=25)
+    else:                                 # son attitude : il la lève devant lui pour mieux voir (plus haut quand il sourit)
+        haut = 6.0 if h == "joie" else 0.0
+        bg = [(a - ca + 0.6, g - ep + 2.6, 3.6), (a - ca - 3.2, g - ep + 13, 3.3), (a - ca - 6.6, g - ep + 9.5 - haut, 3.0)]
+        mg = (a - ca - 7.6, g - ep + 6 - haut)
     poser_bras(f, bd, md, 1, MARINE, VIEUX, sombre=True)
     lx, ly = mg[0] - 0.5, mg[1] + 4
     allumee = h == "joie"
@@ -165,7 +170,7 @@ def anselme(f, e):
     f.rect(lx - 4.5, ly + 11, 9, 2, LAITON, ton=1); f.trait(lx - 4, ly + 11, lx + 2, ly + 11, LAITON[3])
     poser_bras(f, bg, mg, -1, MARINE, VIEUX)
     # La tête : la casquette, la barbe blanche, de gros sourcils blancs.
-    tx, ty = a - 0.5, g - 99.0
+    tx, ty = a - 1.5 - (1.0 if h == "triste" else 0.0), g - 98.0 + (2.0 if h == "triste" else 0.0)   # la tête en avant
     for cote in (-1, 1):
         f.boule(tx + cote * 8.6, ty - 1.5, 2.6, 4.2, BARBE, biais=0.35)                      # les tempes blanches
     t = tete(f, tx, ty, peau=VIEUX)
@@ -195,7 +200,7 @@ def anselme(f, e):
     f.trait(tx - 11, ty - 6.4, tx + 3, ty - 6.4, CUIR[2])
     for (dx, dy, c) in ((-2, -7, LAITON[2]), (-1, -8, LAITON[3]), (-1, -7, LAITON[2]), (0, -7, LAITON[1]), (-1, -6, LAITON[0])):
         f.px(tx + dx, ty + dy - 1.2, c)                                                      # l'insigne
-    f.oy = 0
+    f.ox = f.oy = 0
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -219,24 +224,27 @@ def tudal(f, e):
     for x in range(int(a - 6), int(a + 6), 2):
         f.trait(x, g - ep - 1, x, g - ep + 2, MARINE[1], dans=col)
     # Les bras : pendants, poings fermés ; croisés quand il se fâche.
-    if h == "colere":
+    if h != "colere":                     # son attitude : les bras croisés, boudeur
         bd = [(a + ca - 0.6, g - ep + 2.6, 4.0), (a + ca + 2.4, g - ep + 13, 3.8), (a - 3, g - ep + 16.5, 3.4)]
         bg = [(a - ca + 0.6, g - ep + 2.6, 4.0), (a - ca - 2.4, g - ep + 14, 3.8), (a + 4, g - ep + 19.5, 3.4)]
         s = poser_bras(f, bd, (a - 6.4, g - ep + 16.2), 1, MARINE, HALE, sombre=True, pouce=False)
         s = poser_bras(f, bg, (a + 7.4, g - ep + 19.6), -1, MARINE, HALE, pouce=False)
-    else:
-        bd, md = bras_bas(a, g, ep, ca, 1, long=28, r=4.0)
-        bg, mg = bras_bas(a, g, ep, ca, -1, long=28, r=4.0)
+    else:                                 # en colère : penché en avant, un poing levé, l'autre sur la hanche
+        f.ox = -1
+        bd = [(a + ca - 0.6, g - ep + 2.6, 4.0), (a + ca + 5.4, g - ep + 9, 3.8), (a + ca + 7.4, g - ep - 1.5, 3.4)]
+        md = (a + ca + 7.8, g - ep - 6.4 - (e.t % 2))
+        bg = [(a - ca + 0.6, g - ep + 2.6, 4.0), (a - ca - 5.4, g - ep + 13, 3.8), (a - ca + 0.6, g - ep + 22.5, 3.4)]
+        mg = (a - ca + 3.0, g - ep + 25)
         for bras, main, cote in ((bd, md, 1), (bg, mg, -1)):
             s = poser_bras(f, bras, main, cote, MARINE, HALE, sombre=cote > 0, r_main=3.1)
             f.trait(main[0] - 2, main[1] - 4.4, main[0] + 2, main[1] - 4.4, MARINE[3] if cote < 0 else MARINE[2], dans=s)
     # La tête : hâlée, le nez fort, la barbe de trois jours en trame.
-    tx, ty = a - 0.5, g - 101.0
+    tx, ty = a - 0.5 - (1.5 if h == "colere" else 0.0), g - 101.0 + (1.0 if h == "colere" else 0.0)
     t = tete(f, tx, ty, rx=9.8, ry=10.4, peau=HALE, machoire=0.14)
     f.disque(tx, ty + 5.4, 8.6, 6.0, "#a07656", dans=t, densite=0.5,
              cond=lambda x, y, u, v: y > ty + 3.2 and not (abs(x - tx + 0.5) < 2.6 and y < ty + 8.6))
     yo = visage(f, e, tx, ty, peau=HALE, iris="#3a2a20", cil="#2a1a14", brun="#3a2416", ep=2, l=5.0, levres="#5a2a2a",
-                nez=False, bouche_y=7.0, bouche_l=5.6, dans=t)
+                nez=False, bouche_y=7.0, bouche_l=5.6, dans=t, neutre="colere")
     f.boule(tx - 0.9, yo + 3.2, 2.0, 2.3, HALE, biais=0.5)
     f.px(tx - 2.4, yo + 4.6, HALE[0]); f.px(tx + 0.6, yo + 4.6, HALE[0])
     # Le bonnet : laine tricotée, revers côtelé, pompon.
@@ -248,7 +256,7 @@ def tudal(f, e):
     for x in range(int(tx - 10), int(tx + 11), 2):
         f.trait(x, ty - 9.6, x, ty - 5.2, ORANGE[1] if x > tx + 3 else ORANGE[3], dans=rev)
     f.ourler(rev, ORANGE[0], cotes=((0, 1),), dehors=False)
-    f.oy = 0
+    f.ox = f.oy = 0
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -298,7 +306,7 @@ def perrine(f, e):
         f.trait(bras[1][0] - 3, bras[1][1], bras[1][0] + 3, bras[1][1], VIO[4] if cote < 0 else VIO[3])
         _main(f, main[0], main[1], cote, r=2.8, ouverte=(h == "joie"))
     # La tête : ronde, les joues pleines, un chignon haut.
-    tx, ty = a - 0.5, g - 93.0
+    tx, ty = a - 0.5, g - 93.0 - (1.0 if h == "joie" else 0.0)
     f.boule(tx + 0.5, ty - 13.2, 5.4, 4.8, CHATAIN, biais=0.42)
     f.courbe([(tx - 3, ty - 14), (tx + 0.5, ty - 16), (tx + 4, ty - 14.5)], CHATAIN[3])
     f.boule(tx, ty - 1.2, 10.6, 10.6, CHATAIN, biais=0.28)
@@ -310,7 +318,7 @@ def perrine(f, e):
     f.trait(raie, ty - 11, raie, ty - 7.4, CHATAIN[0], dans=chev)
     f.courbe([(raie - 2, ty - 10), (tx - 6, ty - 8), (tx - 9, ty - 4)], CHATAIN[3], dans=chev)
     visage(f, e, tx, ty, iris="#5a3a22", brun="#4a2e1a", bouche_y=6.4, bouche_l=5.4, neutre="tendre", dans=t, joues=True)
-    f.oy = 0
+    f.ox = f.oy = 0
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -350,7 +358,7 @@ def odile(f, e):
     bd = [(a + ca - 0.6, g - ep + 2.6, 3.4), (a + ca + 4.6, g - ep + 13, 3.2), (a + ca + 2.5, g - ep + 22, 2.9)]
     poser_bras(f, bd, (a + ca + 0.4, g - ep + 24.6), 1, GRIS, sombre=True)
     # La tête : le carré gris, la frange droite, les lunettes rondes.
-    tx, ty = a - 0.5, g - 95.0
+    tx, ty = a - 0.5 - (1.0 if h == "triste" else 0.0), g - 95.0 + (2.0 if h == "triste" else 0.0)
     f.boule(tx, ty - 0.6, 10.6, 11.0, ARGENT, biais=0.3, cond=lambda x, y, u, v: y < ty + 7.4)
     t = tete(f, tx, ty, oreilles=False)
     chev = f.boule(tx, ty - 1.4, 10.4, 10.6, ARGENT, biais=0.46,
@@ -365,7 +373,7 @@ def odile(f, e):
     f.trait(tx - 0.6, yo, tx + 0.2, yo, GRIS[0])
     if h == "triste":
         goutte(f, tx - 7.4, yo + 5.4, 1.1)
-    f.oy = 0
+    f.ox = f.oy = 0
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -392,7 +400,7 @@ def basile(f, e):
     f.px(a + 8, g - 49, LAITON[3]); f.px(a + 9, g - 49, LAITON[2]); f.px(a + 8, g - 48, LAITON[2]); f.px(a + 9, g - 48, LAITON[0])
     f.oy = up
     f.poly([(a - 3.5, g - ep + 1), (a + 3.5, g - ep + 1), (a, g - ep + 6)], ORANGE, ton=1)      # un petit nœud
-    cou(f, a, g, ep, r=3.2)
+    cou(f, a - 1.5, g, ep, r=3.2)
     # Les bras : manches de chemise retenues par des élastiques ; les mains levées quand il a peur.
     if h == "peur":
         bd = [(a + ca - 0.6, g - ep + 2.6, 3.5), (a + ca + 5, g - ep + 8, 3.2), (a + ca + 6.5, g - ep - 1, 2.9)]
@@ -401,11 +409,14 @@ def basile(f, e):
     else:
         bd, md = bras_bas(a, g, ep, ca, 1, long=24, r=3.5)
         bg, mg = bras_bas(a, g, ep, ca, -1, long=24, r=3.5)
+        if h == "neutre":                 # son attitude : une main qui règle la loupe
+            bd = [(a + ca - 0.6, g - ep + 2.6, 3.5), (a + ca + 4.6, g - ep + 7, 3.2), (a + ca + 1.6, g - ep - 3.5, 2.9)]
+            md = (a + ca - 0.2, g - ep - 7.4)
     for bras, main, cote in ((bd, md, 1), (bg, mg, -1)):
         s = poser_bras(f, bras, main, cote, CHEMISE, sombre=cote > 0, ouverte=(h == "peur"))
         f.trait(bras[1][0] - 3, bras[1][1] - 1, bras[1][0] + 3, bras[1][1] - 1, GRIS[1], dans=s)   # l'élastique
     # La tête : le crâne qui brille, la couronne de cheveux, la moustache, la loupe de laiton sur l'œil.
-    tx, ty = a - 0.5, g - 87.0
+    tx, ty = a - 2.5, g - 85.5 + (2.0 if h == "triste" else 0.0)   # voûté : la tête en avant, rentrée dans les épaules
     for cote in (-1, 1):
         f.boule(tx + cote * 9.2, ty + 0.4, 3.2, 4.6, ARGENT, biais=0.4 if cote < 0 else 0.3)
     t = tete(f, tx, ty, rx=9.6, ry=10.4, machoire=0.12)
@@ -425,7 +436,7 @@ def basile(f, e):
         goutte(f, tx - 8.5, ty - 6.5, 1.3)
     if h == "triste":
         goutte(f, tx - 7.6, yo + 4.4, 1.1)
-    f.oy = 0
+    f.ox = f.oy = 0
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -480,4 +491,4 @@ def vernier(f, e):
     f.ourler(bord, BOTTE[0], cotes=((0, 1),))
     f.trait(tx - 8, ty - 7.6, tx + 8, ty - 7.6, BOTTE[0], dans=cal)
     f.courbe([(tx - 5.5, ty - 11), (tx - 3.5, ty - 14), (tx, ty - 15.4)], BOTTE[4], dans=cal)
-    f.oy = 0
+    f.ox = f.oy = 0

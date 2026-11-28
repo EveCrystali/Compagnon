@@ -3,11 +3,11 @@ id: acteur-poussiere
 taille: 5 5
 ancre: 2 4
 duree: 160
-palette: a=#ffd98a b=#fff6d6
+palette: a=#ffd98a b=#fff6d6 c=#c8963c
 images: 4
 ,a3,
 aba2,
-,a3,
+,ac2,
 5,
 5,
 .,3.
@@ -17,9 +17,9 @@ aba2,
 5.
 5.
 .,3.
-5.
+2.,2.
 3.a.
-5.
+4.c
 5.
 5.
 3.a.

@@ -348,6 +348,21 @@ class Feuille:
             self.c[Y][X] = k
             self.k[Y][X] = k
 
+    def sans_orphelins(self):
+        """Retire les pixels sans aucun voisin (diagonales comprises) : un point de trame perdu au bord d'un halo."""
+        seuls = []
+        for Y in range(self.h):
+            for X in range(self.w):
+                if self.c[Y][X] is None:
+                    continue
+                if not any(0 <= X + a < self.w and 0 <= Y + b < self.h and self.c[Y + b][X + a] is not None
+                           for b in (-1, 0, 1) for a in (-1, 0, 1) if a or b):
+                    seuls.append((X, Y))
+        for (X, Y) in seuls:
+            self.c[Y][X] = None
+            self.k[Y][X] = None
+        return len(seuls)
+
     def couleurs(self):
         vues = []
         for r in self.c:

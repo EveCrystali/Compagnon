@@ -251,6 +251,38 @@ def acteurs(z=4):
     return im
 
 
+def petits_acteurs():
+    """Les acteurs de moins de 16 unités sur le décor HD le plus clair et le plus sombre (ciel, milieu, sol)."""
+    import acteurs_hd as A
+    import personnages_hd_export as X
+    dossier = os.path.normpath(os.path.join(ICI, "..", "..", "assets", "decors"))
+    decors = []
+    for nom in sorted(os.listdir(dossier)):
+        with open(os.path.join(dossier, nom), encoding="utf-8") as fh:
+            d = X.decoder(fh.read())
+        pal = {k: (int(v[1:3], 16), int(v[3:5], 16), int(v[5:7], 16)) for k, v in d["palette"].items()}
+        im = Image.new("RGB", (d["w"], d["h"]))
+        px = im.load()
+        total = 0
+        for y, rang in enumerate(d["images"][0]):
+            for x, ch in enumerate(rang):
+                px[x, y] = pal[ch]
+                total += pal[ch][0] * 3 + pal[ch][1] * 6 + pal[ch][2]
+        decors.append((total, im))
+    decors.sort(key=lambda t: t[0])
+    petits = [n for n in A.ORDRE if max(A.ACTEURS[n]["w"], A.ACTEURS[n]["h"]) <= 16]
+    planche = Image.new("RGB", (960, 968), FOND)
+    for j, (_, decor) in enumerate((decors[-1], decors[0])):
+        sc = decor.convert("RGBA")
+        for rang, y in enumerate((40, 120, 200)):
+            x = 16 + rang * 9
+            for n in petits:
+                sc.alpha_composite(en_image(A.image(n, 0)), (x, y - A.ACTEURS[n]["h"]))
+                x += A.ACTEURS[n]["w"] + 12
+        planche.paste(sc.resize((960, 480), Image.NEAREST).convert("RGB"), (0, j * 488))
+    return planche
+
+
 def main():
     os.makedirs(SORTIE, exist_ok=True)
     quoi = sys.argv[1] if len(sys.argv) > 1 else "tout"
@@ -258,6 +290,7 @@ def main():
         return apercu(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 6)
     if quoi in ("tout", "acteurs"):
         acteurs().save(os.path.join(SORTIE, "acteurs.png"))
+        petits_acteurs().save(os.path.join(SORTIE, "petits-acteurs.png"))
     if quoi == "acteurs":
         return
     if quoi in ("tout", "essai"):
