@@ -61,7 +61,34 @@ public class EvolutionsTests
             Assert.NotEqual(Evolutions.Deroule(sc, "calin", null)[2].Texte, Evolutions.Deroule(sc, "espiegle", null)[2].Texte);
         }
         Assert.Equal("calin", Evolutions.Variante(null));
+        Assert.Empty(Evolutions.Deroule(new Evolutions.Scene { Stade = 9 }, "calin", "x"));
         Assert.Equal("", Evolutions.Garde(scenes[2], "inconnu"));
         Assert.Equal("Le petit « ploc » quand il saute", Evolutions.Garde(scenes[2], "ploc"));
+    }
+
+    [Fact]
+    public void Le_choix_garde_voyage_et_ne_change_plus()
+    {
+        // Entre appareils : le premier choix l'emporte ; deux choix au même stade se départagent pareil partout.
+        var a = new Dictionary<int, string> { [2] = "tache", [3] = "pieds" };
+        var b = new Dictionary<int, string> { [2] = "ploc", [4] = "pot", [7] = "x", [3] = "Pieds!" };
+        var f = Groupe.FusionGardes(new IReadOnlyDictionary<int, string>[] { a, b });
+        Assert.Equal(new Dictionary<int, string> { [2] = "ploc", [3] = "pieds", [4] = "pot" }, f);
+        Assert.Equal(f, Groupe.FusionGardes(new IReadOnlyDictionary<int, string>[] { b, a }));
+
+        // Le compteur du groupe le transporte (aller-retour JSON).
+        var p = new Profil();
+        p.Evolution.Gardes[2] = "rouler";
+        var c = Groupe.Lire(Groupe.Json(Groupe.Moi(p, "pc-1", "Pilou")));
+        Assert.NotNull(c);
+        Assert.Equal("rouler", c!.Gardes[2]);
+
+        // Le téléphone l'envoie dans un gain : le PC le garde s'il n'en a pas, sans jamais l'écraser.
+        var g = Telephone.LireGain("{\"id\":\"g1\",\"xp\":0,\"gardes\":{\"2\":\"ploc\",\"3\":\"etincelle\",\"5\":\"x\"}}");
+        Assert.NotNull(g);
+        Telephone.Recevoir(p, g!, new Telephone.Contexte(DateTime.Now, "", 1, 0));
+        Assert.Equal("rouler", p.Evolution.Gardes[2]);
+        Assert.Equal("etincelle", p.Evolution.Gardes[3]);
+        Assert.False(p.Evolution.Gardes.ContainsKey(5));
     }
 }

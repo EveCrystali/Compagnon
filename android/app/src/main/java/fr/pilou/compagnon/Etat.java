@@ -82,6 +82,8 @@ public final class Etat {
      *  variantes d'évolution par stade (« calin », « espiegle »). */
     public Soins.EtatSoins soins;
     public final java.util.Map<Integer, String> formes = new java.util.TreeMap<>();
+    /** Ce que Pilou a gardé à chaque évolution (scènes d'évolution), connu du PC : il ne change plus. */
+    public final java.util.Map<Integer, String> gardes = new java.util.TreeMap<>();
     /** Métiers et succès (Metiers.java) : niveau par métier (tout PC récent), heures en dixièmes et avancement des
      *  succès en dixièmes (PC à jour : heuresConnues), succès obtenus. Totaux de tout le groupe d'appareils. */
     public final java.util.Map<String, Integer> metiers = new java.util.TreeMap<>(), heures = new java.util.TreeMap<>(),
@@ -319,6 +321,18 @@ public final class Etat {
                     // stade illisible : ignoré
                 }
             }
+        JSONObject ga = r.optJSONObject("gardes");
+        if (ga != null)
+            for (java.util.Iterator<String> k = ga.keys(); k.hasNext(); ) {
+                String st = k.next();
+                String v = ga.optString(st, "");
+                try {
+                    int n = Integer.parseInt(st);
+                    if (gardeValide(n, v)) e.gardes.put(n, v);
+                } catch (NumberFormatException ignore) {
+                    // stade illisible : ignoré
+                }
+            }
         entiers(r.optJSONObject("metiers"), e.metiers, 6);
         entiers(r.optJSONObject("heures"), e.heures, Integer.MAX_VALUE);
         entiers(r.optJSONObject("avance"), e.avance, Integer.MAX_VALUE);
@@ -464,5 +478,15 @@ public final class Etat {
         if (attend()) return "inquiet";
         for (Session s : sessions) if (s.etat.equals("travail")) return "concentre";
         return humeur.isEmpty() ? "repos" : humeur;
+    }
+
+    /** Un choix gardé lisible : stade 2 à 4, id de 1 à 24 lettres minuscules ou tirets (comme Groupe.GardeValide). */
+    static boolean gardeValide(int stade, String id) {
+        if (stade < 2 || stade > 4 || id == null || id.isEmpty() || id.length() > 24) return false;
+        for (int i = 0; i < id.length(); i++) {
+            char ch = id.charAt(i);
+            if (!(ch >= 'a' && ch <= 'z') && ch != '-') return false;
+        }
+        return true;
     }
 }

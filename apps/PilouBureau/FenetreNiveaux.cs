@@ -119,6 +119,8 @@ public sealed partial class FenetrePilou
         if (_sceneAAnnoncer == 0 || t < _sceneDes || EnSaisie) return;
         int stade = _sceneAAnnoncer;
         _sceneAAnnoncer = 0;
+        // Déjà vue ailleurs (un autre PC, le téléphone) : son choix est connu, on ne la réannonce pas (elle reste au Carnet).
+        if (_profil.Evolution.Gardes.ContainsKey(stade)) return;
         Dire($"✦ il m'arrive quelque chose… je suis {Acces.NomStade(stade)} ! tu veux voir ?", 12000);
         _messageTag = "evolution:" + stade.ToString(System.Globalization.CultureInfo.InvariantCulture);
         Bulle(_vivantes, Epoque);

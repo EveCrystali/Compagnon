@@ -176,13 +176,15 @@ Passer de Gouttelette à Pilou (niveau 10), à Pilou Nimbus (25), à Pilou Astra
   voir ? », posée quand le clavier se tait (PC) ; la scène ne s'ouvre que si on clique ou touche. La pierre de calme
   retient l'évolution : rien ne se joue. Les anciennes bulles « Pilou est devenu… » et « un Pilou câlin ! » sont
   remplacées par cette annonce et par la scène.
-- **Le choix** est gardé la première fois (`Evolution.Gardes` sur PC, `evolution.garde.<stade>` dans les préférences du
-  téléphone) ; le Carnet (« Ses évolutions ») le rappelle et laisse revoir la scène sans le changer.
+- **Le choix** est gardé la première fois et ne change plus, sur tous les appareils : `Evolution.Gardes` sur PC, partagé
+  entre PC par le compteur du groupe (`gardes`), envoyé au téléphone dans son état et reçu du téléphone dans ses gains.
+  Deux choix faits hors ligne au même stade se départagent par l'ordre alphabétique, partout pareil. Une scène dont le
+  choix est connu ne s'annonce plus (« déjà vue ») ; le Carnet (« Ses évolutions ») le rappelle et laisse la revoir.
 - **PC** : `FenetreScene.cs` (scène ×4, boîte de dialogue, choix au clic ou aux touches 1 à 3, musique du ton
   « émotion ») ; essai `--essai=scene-evolution:2|3|4` (démonstration : rien n'est gardé). **Android** :
   `SceneEvolution.java`, plein écran par-dessus l'app, boîte et choix en bas comme la lecture des campagnes.
-- **Limites** : le mini-Pilou de scène n'a qu'une forme (la transformation se dit par le texte) ; le choix n'est pas
-  partagé entre le PC et le téléphone.
+- **Limite** : le mini-Pilou de scène n'a qu'une forme ; la métamorphose à l'écran viendra avec le Théâtre HD, où le
+  Pilou de scène est le Pilou fin du bureau ([SCENES-HD.md](SCENES-HD.md)).
 
 ## Ce qui reste (prochaines étapes)
 
