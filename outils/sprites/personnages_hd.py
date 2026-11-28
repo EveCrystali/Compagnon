@@ -76,7 +76,7 @@ def oeil(f, x, y, e, cote, rx=2.5, ry=3.0, iris="#3a2a20", pupille=ENCRE, blanc=
     grand = h in ("surpris", "peur")
     if grand:
         rx, ry = rx * 1.18, ry * 1.2
-    haut = {"colere": 0.34, "triste": 0.30, "tendre": 0.44, "malice": 0.26}.get(h, 0.0)
+    haut = {"colere": 0.34, "triste": 0.30, "tendre": 0.30, "malice": 0.26}.get(h, 0.0)
     pente = {"colere": 0.55, "triste": -0.42}.get(h, 0.0)
     if e.paup == 1:
         haut = max(haut, 0.52)
@@ -135,7 +135,7 @@ def bouche(f, x, y, e, l=5.0, ligne=BOUCHE, fond=BOUCHE, langue=LANGUE, dents=BL
     if h == "joie":
         return f.courbe([(x - l / 2, y - 1.2), (x - l / 4, y + 0.6), (x + l / 4, y + 0.6), (x + l / 2, y - 1.2)], ligne)
     if h == "tendre":
-        return f.courbe([(x - l / 2 + 1, y - 0.4), (x, y + 0.8), (x + l / 2 - 1, y - 0.4)], ligne)
+        return f.courbe([(x - l / 2 + 0.6, y - 0.3), (x - l / 6, y + 0.7), (x + l / 6, y + 0.7), (x + l / 2 - 0.6, y - 0.3)], ligne)
     if h == "malice":
         return f.courbe([(x - l / 2, y + 0.4), (x, y + 0.9), (x + l / 2, y - 1.3)], ligne)
     if h == "triste":
@@ -492,3 +492,7 @@ def petit_nuage(f, e):
 def etats_planche():
     """Les images de contrôle d'une humeur : repos, inspiré, mi-clos, fermé, parole 1 à 3."""
     return [(0, 0, 0, 0), (0, 0, 1, 1), (1, 0, 0, 2), (2, 0, 0, 2), (0, 1, 0, 0), (0, 2, 1, 1), (0, 3, 0, 2)]
+
+
+# Les autres personnages, campagne par campagne (ils s'inscrivent dans PERSOS à l'import).
+import personnages_hd_panne  # noqa: E402,F401

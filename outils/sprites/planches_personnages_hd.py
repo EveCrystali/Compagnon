@@ -169,6 +169,52 @@ def apercu(chemin, z=6, humeurs=None):
     o.convert("RGB").save(chemin)
 
 
+def _boite(cle):
+    im = img(cle)
+    return im, im.getbbox()
+
+
+def groupe(campagne, z=2):
+    """La planche de groupe : toute la campagne à l'échelle, rangée par taille, Pilou fin pour repère, une toise
+    tous les 20 unités ; trois fonds (sombre, clair, décor d'étude) pour vérifier que chacun s'y détache."""
+    cles = [c for c in P.ORDRE if c[0] == campagne]
+    cles.sort(key=lambda c: -(_boite(c)[1][3] - _boite(c)[1][1] + P.PERSOS[c]["vol"]))
+    pilou = _pilou()
+    sprites = [(pilou, 0)] + [(_boite(c)[0].crop(_boite(c)[1]), P.PERSOS[c]["vol"]) for c in cles]
+    esp, marge, haut = 8, 30, 132
+    W = marge + sum(s.width + esp for s, _ in sprites) + 8
+    fonds = [(28, 30, 46), (232, 226, 208)]
+    decor = Image.open(os.path.join(DOCS, "paysages", "C-decor-1x.png")).convert("RGBA")
+    bandes = []
+    for k in range(3):
+        if k < 2:
+            b = Image.new("RGBA", (W, haut), fonds[k] + (255,))
+            sol = haut - 10
+            ImageDraw.Draw(b).rectangle([0, sol, W, haut], fill=tuple(int(v * 0.8) for v in fonds[k]) + (255,))
+        else:
+            b = Image.new("RGBA", (W, 240), (0, 0, 0, 255))
+            for x in range(0, W, decor.width):
+                b.alpha_composite(decor, (x, 0))
+            sol = 237
+        d = ImageDraw.Draw(b)
+        if k < 2:
+            for u in range(0, 121, 20):                       # la toise
+                c = (120, 130, 160, 255) if k == 0 else (150, 140, 120, 255)
+                d.line([(0, sol - u), (W, sol - u)], fill=c[:3] + (70,))
+                d.line([(0, sol - u), (6, sol - u)], fill=c)
+        x = marge
+        for s, vol in sprites:
+            b.alpha_composite(s, (x, sol - vol - s.height))
+            x += s.width + esp
+        bandes.append(b.resize((b.width * z, b.height * z), Image.NEAREST))
+    im = Image.new("RGB", (W * z, sum(b.height for b in bandes) + 16), FOND)
+    y = 0
+    for b in bandes:
+        im.paste(b.convert("RGB"), (0, y))
+        y += b.height + 8
+    return im, [(c[1], _boite(c)[1][3] - _boite(c)[1][1], P.PERSOS[c]["vol"]) for c in cles]
+
+
 def main():
     os.makedirs(SORTIE, exist_ok=True)
     quoi = sys.argv[1] if len(sys.argv) > 1 else "tout"
@@ -178,6 +224,11 @@ def main():
         essai().save(os.path.join(SORTIE, "essai.png"))
     if quoi == "essai":
         return
+    for campagne in ("grande-panne", "phare-eteint", "petit-nuage"):
+        if quoi in ("tout", campagne) and sum(1 for c in P.ORDRE if c[0] == campagne) > 3:
+            im, toise = groupe(campagne)
+            im.save(os.path.join(SORTIE, "groupe-%s.png" % campagne))
+            print("toise", campagne, toise)
     for cle in P.ORDRE:
         if quoi not in ("tout", cle[1], cle[0]):
             continue
