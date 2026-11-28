@@ -21,6 +21,9 @@ public final class TextePixelVue extends View {
     private int couleur;
     private final int pixel;          // pixels de l'écran par pixel de police (1×)
     private int maxLignes, maxLargeur;
+    private String police = "texte";      // « texte » ou « titre » (gras, interligne 13)
+    private boolean centre;
+    private float revele = 1f;            // part des caractères montrés (Pilou écrit lettre à lettre)
     private List<String> lignes = Collections.emptyList();
     private final Paint encre = new Paint();
     private final Paint systeme = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -38,6 +41,30 @@ public final class TextePixelVue extends View {
     /** Pixels de l'écran par pixel de police : au moins 1, le plus proche de la taille voulue. */
     public static int pixels(float tailleDp, float densite) {
         return Math.max(1, Math.round(tailleDp * densite));
+    }
+
+    /** Police « titre » (gras) au lieu de la police du texte. */
+    public void titre(boolean oui) {
+        police = oui ? "titre" : "texte";
+        requestLayout();
+        invalidate();
+    }
+
+    /** Le bloc de texte centré dans la largeur de la vue. */
+    public void centre(boolean oui) {
+        centre = oui;
+        invalidate();
+    }
+
+    /** Montre seulement la première part (0 à 1) des caractères ; la vue garde sa taille entière. */
+    public void revele(float part) {
+        revele = Math.max(0f, Math.min(1f, part));
+        invalidate();
+    }
+
+    /** Pixels de l'écran par pixel de police. */
+    public int pixel() {
+        return pixel;
     }
 
     public void texte(String s) {
@@ -73,7 +100,7 @@ public final class TextePixelVue extends View {
 
     @Override
     protected void onMeasure(int mw, int mh) {
-        PolicePixel p = PolicePixel.texte();
+        PolicePixel p = PolicePixel.ressource(police);
         if (p == null) {
             setMeasuredDimension(0, 0);
             return;
@@ -92,17 +119,28 @@ public final class TextePixelVue extends View {
 
     @Override
     protected void onDraw(Canvas c) {
-        dessiner(c, lignes, pixel, getPaddingLeft(), getPaddingTop(), encre, systeme);
+        float x0 = getPaddingLeft();
+        PolicePixel p = PolicePixel.ressource(police);
+        if (centre && p != null) x0 += Math.max(0, (getWidth() - getPaddingLeft() - getPaddingRight() - p.boite(lignes)[0] * pixel) / 2f);
+        int total = revele >= 1f || p == null ? Integer.MAX_VALUE : (int) Math.ceil(revele * p.poser(lignes).size());
+        dessiner(c, lignes, pixel, x0, getPaddingTop(), encre, systeme, police, total);
     }
 
     /** Écrit des lignes déjà coupées, à (x, y), un pixel de police = pixel pixels de l'écran. */
     static void dessiner(Canvas c, List<String> lignes, int pixel, float x0, float y0, Paint encre, Paint systeme) {
-        PolicePixel p = PolicePixel.texte();
+        dessiner(c, lignes, pixel, x0, y0, encre, systeme, "texte", Integer.MAX_VALUE);
+    }
+
+    /** Idem, dans la police « texte » ou « titre », et seulement les limite premiers caractères. */
+    static void dessiner(Canvas c, List<String> lignes, int pixel, float x0, float y0, Paint encre, Paint systeme, String police, int limite) {
+        PolicePixel p = PolicePixel.ressource(police);
         if (p == null) return;
-        PolicePixel d = pixel % 2 == 0 ? PolicePixel.ressource("texte2x") : null;
+        PolicePixel d = pixel % 2 == 0 ? PolicePixel.ressource(police + "2x") : null;
         if (d == null) d = p;
         float pas = (float) pixel / d.echelle;
+        int rang = 0;
         for (PolicePixel.Pose pose : d.poser(lignes)) {
+            if (rang++ >= limite) break;
             if (pose.dessin == null) {
                 if (pose.code != ' ' && pose.code != 0xA0 && pose.code != 0x202F && pose.code != 0x2009) {
                     systeme.setTextSize(9f * pixel);

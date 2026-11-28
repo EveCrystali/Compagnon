@@ -53,6 +53,9 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
   compris sur le bureau. Un pixel fin tombe sur un nombre entier de pixels d'écran ; un réglage revient
   au dessin d'origine.
 - Les sprites de la Chasse aux bugs d'origine sont ceux qu'Antoine préfère : ne pas les « moderniser ».
+- **Sous la scène de l'Aventure, tout a la main de Pilou** (28 novembre 2026) : cadres en pixels (bord d'un pixel de
+  scène, coins en escalier, biseau, ombre portée, comme le menu « Sept portes ») et police pixel (docs/POLICE.md)
+  pour le récit, les choix, le bandeau et le lieu ; une seule écriture, jamais la police système (docs/SCENES.md).
 
 ## Campagnes
 
