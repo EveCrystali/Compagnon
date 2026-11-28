@@ -94,7 +94,7 @@ final class SceneEvolution extends FrameLayout {
         barre.addView(titre, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         colonne.addView(barre, Ui.large());
 
-        // La scène : exactement 192 × 80 pixels de décor, comme dans la lecture.
+        // La scène : 192 × 80 unités de décor à l'ancienne définition, 480 × 240 en HD, comme dans la lecture.
         theatre = new TheatreVue(a);
         theatre.setContentDescription("Scène : Pilou au fond du jardin");
         int k = Aventure.unite(a.getResources().getDisplayMetrics().widthPixels);
@@ -104,10 +104,18 @@ final class SceneEvolution extends FrameLayout {
         String achetee = Gains.porte(a, pc).get(Boutique.COULEUR);
         theatre.couleur(achetee != null && !achetee.isEmpty() ? Vitrine.teinte(achetee) : pc.couleur);
         try {
-            theatre.lieu("evolution", sc.decor, false);
+            theatre.lieu("evolution", sc.decor, false, 150);   // en HD, Pilou entre de près : à sa place (250) avant la métamorphose
         } catch (RuntimeException x) {
             Journal.noter("évolution : théâtre", x);
         }
+        // La métamorphose, en HD comme sur PC (docs/SCENES-HD.md) : l'ancienne forme entre, le bureau la fond dans la
+        // nouvelle, puis Pilou parle. À l'ancienne définition, Pilou est d'emblée à son nouveau stade.
+        final boolean metamorphose = theatre.hd();
+        if (metamorphose)
+            theatre.metamorphose(stade - 1, formeDe(pc, stade - 1), stade, formeDe(pc, stade), TheatreVue.maintenant() + DEBUT_METAMORPHOSE);
+        else theatre.pilou(stade, formeDe(pc, stade));
+        // Le fond du jardin en HD (docs/SCENES-HD.md) : 240 unités de haut à 2 pixels d'écran au moins.
+        if (theatre.hd()) lt.height = TheatreVue.echelleHd(a.getResources().getDisplayMetrics().widthPixels) * TheatreVue.HD_H;
 
         // Comme la lecture des campagnes : la boîte et les choix se posent en bas, à portée du pouce ; la place qui reste
         // est entre la scène et la boîte.
@@ -149,7 +157,21 @@ final class SceneEvolution extends FrameLayout {
         });
 
         repliques = Evolutions.deroule(sc, variante, null);
-        suivante();
+        // Pilou parle après la métamorphose ; toucher la boîte avant le fait parler tout de suite.
+        if (metamorphose)
+            postDelayed(() -> {
+                if (rang < 0) suivante();
+            }, DEBUT_METAMORPHOSE + TheatreVue.DUREE_METAMORPHOSE + 500);
+        else suivante();
+    }
+
+    /** Quand la métamorphose commence, après l'ouverture (ms) : le temps que Pilou entre et s'arrête à sa place. */
+    static final long DEBUT_METAMORPHOSE = 2200;
+
+    /** La forme choisie pour ce stade (calin | espiegle), "" si aucune : le Pilou fin sans variante. */
+    private static String formeDe(Etat e, int stade) {
+        String v = e.formes.get(stade);
+        return v == null ? "" : v;
     }
 
     // ---- Pour les tests

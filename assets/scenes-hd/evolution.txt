@@ -1,0 +1,30 @@
+# Scènes HD de « evolution » (docs/SCENES-HD.md) : écrites par outils/sprites/theatre_hd.py depuis
+# assets/scenes/evolution.txt, dans le repère des paysages (x × 2,5 ; y × 2,5 + 40). Ne pas modifier à la main :
+# corriger la scène d'origine, ou le tableau.
+
+scene fond-du-jardin-matin
+sol 10 230 470 230
+place 250
+interlocuteur 400
+cle 38 100 112 215
+acteur papillon vol 275 140 425 190 19
+acteur papillon vol 300 150 450 200 23
+acteur oiseau traverse 55 75 15000 2000 55
+
+scene fond-du-jardin-soir
+sol 10 230 470 230
+place 250
+interlocuteur 400
+cle 38 100 112 215
+acteur poussiere vol 275 115 425 165 29
+acteur poussiere vol 300 125 440 175 31
+acteur poussiere vol 250 110 400 155 37
+
+scene fond-du-jardin-nuit
+sol 10 230 470 230
+place 250
+interlocuteur 400
+cle 38 100 112 215
+acteur poussiere vol 225 165 450 215 41
+acteur poussiere vol 25 175 125 220 43
+acteur poussiere vol 325 150 465 195 47

@@ -648,7 +648,8 @@ public class CapturesCampagnesTest {
         return l;
     }
 
-    /** Ouvre la scène d'évolution de ce stade, touche la boîte de Pilou jusqu'à la question, et capture « evolution-<stade> ». */
+    /** Ouvre la scène d'évolution de ce stade, capture le fondu de la métamorphose (« evolution-<stade>-metamorphose »),
+     *  touche la boîte de Pilou jusqu'à la question, et capture « evolution-<stade> ». */
     private void evolutionJusquaLaQuestion(int stade) {
         Context ctx = RuntimeEnvironment.getApplication();
         Prefs.de(ctx).edit().clear().commit();
@@ -660,7 +661,11 @@ public class CapturesCampagnesTest {
         attendre();
         SceneEvolution ev = a.evolution();
         org.junit.Assert.assertNotNull(ev);
-        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(4000));   // Pilou est entré dans la scène
+        // La métamorphose (HD) : Pilou entre, s'arrête, le bureau fond l'ancienne forme dans la nouvelle, puis il parle.
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(SceneEvolution.DEBUT_METAMORPHOSE + 2000));
+        attendre();
+        ecran(a, "evolution-" + stade + "-metamorphose");
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(TheatreVue.DUREE_METAMORPHOSE - 2000 + 600));
         attendre();
         for (int i = 0; i < 40 && !ev.questionPosee(); i++) {
             for (View w : toutes(ev)) {

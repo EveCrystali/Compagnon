@@ -138,7 +138,8 @@ Dernière mise à jour : 28 novembre 2026.
 - **Théâtre HD** (branche `claude/theatre-hd`, docs/SCENES-HD.md) : la scène passe à 480 × 240 unités (×2) avec le
   Pilou fin du bureau, les décors peints à plans et les personnages et acteurs HD, pour le prologue, La Grande Panne et
   Le phare éteint ; moteur commun (référence Python, C#, Java) ; fenêtre Aventure qui tient dans l'écran ; pas plus de
-  processeur qu'avant. Petit Nuage et les scènes d'évolution attendent leurs décors HD. Jamais vu sur un vrai téléphone.
+  processeur qu'avant. Petit Nuage et les scènes d'évolution aussi (métamorphose jouée par le Pilou fin, PC et
+  téléphone, capturée). Jamais vu sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
