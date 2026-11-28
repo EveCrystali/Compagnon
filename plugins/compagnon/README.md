@@ -43,11 +43,10 @@ permanente** : une ligne par session Claude ouverte.
 Une session qui vient de finir fait saluer Pilou (« vient de finir » en bleu pendant 1 min) ; une
 session qui se met à attendre le fait sursauter et la bordure de la bulle clignote en orange.
 
-**Options (clic droit, gardées dans `~/.claude/compagnon/reglages.json`)** : taille (petit / normal /
-grand) · bulle détaillée, compacte (urgences + résumé « ◐ 2 en cours · ✓ 3 finies », détail au
-survol) ou seulement quand Claude attend · thème de la bulle (Windows / clair / sombre) · accessoire
-(saison, aucun, bonnet de laine, casque audio, nœud papillon, feuille d'automne ; saison : feuille
-en oct.–nov., bonnet en décembre, casque en janv.–févr.) · se promène · suit la souris du regard.
+**Options** : clic droit sur Pilou, sept portes rangées par intention (gardées dans
+`~/.claude/compagnon/reglages.json`) ; le détail est dans le [mode d'emploi](../../docs/MODE-EMPLOI.md). Pour la
+bulle : détaillée, compacte (urgences + résumé « ◐ 2 en cours · ✓ 3 finies », détail au survol) ou seulement quand
+Claude attend (*Il se montre ▸ Bulle*) ; thème Windows, clair ou sombre (*Réglages ▸ Thème de la bulle*).
 Clic sur la bulle : met Claude au premier plan et range la bulle (« lu ») ; clic sur Pilou : caresse et « lu ». La bulle revient au prochain changement ; le survol remontre tout.
 
 **Activités** (`Activites.cs`, `Sondes.cs`, `Metiers.cs`, règles `activites.json`) : toutes les 2 s,
@@ -59,8 +58,9 @@ la caméra et le micro (registre `CapabilityAccessManager`), la charge du proces
   (`Pose.Reaction`) : il danse sur la musique, transpire quand le processeur est à fond pendant le code,
   a sommeil la nuit ; une phrase à l'arrivée dans une activité (au plus toutes les 30 min).
 - Discrétion : caché en plein écran, en présentation (même si une IA attend) et en visio ; réglable.
-- Métiers (10, paliers 1 / 5 / 15 / 40 / 100 / 250 h) et 17 succès, XP à la clé ; compteurs dans
-  `profil-<PC>.json` (locaux à chaque PC), envoyés au téléphone (`metiers`, `succes`).
+- Métiers (10, paliers 1 / 5 / 15 / 40 / 100 / 250 h, ou 6 / 30 / 90 / 240 / 600 / 1 500 h pour le travail) et
+  22 succès, XP à la clé ; compteurs dans `profil-<PC>.json`, cumulés dans le groupe d'appareils et envoyés au
+  téléphone (`metiers`, `succes`). Voir *Progrès ▸ Métiers* et *Progrès ▸ Succès*.
 - Les titres de fenêtres ne sont ni écrits ni envoyés. Interrupteur général et une case par activité.
 
 **Jeux et vie** :
@@ -68,12 +68,12 @@ la caméra et le micro (registre `CapabilityAccessManager`), la charge du proces
 - Claude t'attend et tu ne bouges plus depuis 45 s : il se colle à l'écran et toque (« TOC ») ;
 - souris secouée près de lui : tête qui tourne (yeux en spirale, étoiles) ; souris posée sur lui : il ronronne ;
 - ennui : il joue au ballon ; phrases du jour (bonjour, bon appétit, il se fait tard, bon week-end) ;
-- **petites activités** (toutes les 8–16 min si tu es là, ou « Jouer maintenant ») : étoile filante à attraper (+10 xp), 3 bulles à éclater (+5 chacune, +5 de bonus), « tape m'en cinq » (+10) ; chaque gain s'affiche en « +N xp » ;
-- **pêche** (clic droit « Pêcher », une fois sur trois parmi les activités, ou seul quand tu t'éloignes) : Pilou lance sa ligne au bord d'une petite eau ; après 3 à 15 s le bouchon plonge, éclabousse et un « ! » apparaît. Clic sur le bouchon dans la seconde : prise assurée. Trop tôt : le poisson file. Personne : Pilou ferre seul, une fois sur trois environ, jamais mieux que « rare ». 23 prises (poissons, crabes, botte, bouteille à message, coffret englouti, perle de lune…) en cinq raretés, chacune avec son signe et son cadre : `·` commun sans cadre, `◇` peu commun (coins), `◆` rare (trait bleu), `✦` épique (double, orange), `★` légendaire (argent et orange). Première prise d'une espèce : XP doublée. **Carnet de pêche** au clic droit (« ??? » pour ce qui reste à trouver) ;
-- **cuisine** (clic droit « Cuisiner », ou seul) : avec les prises comestibles en réserve, marmite sur le feu, flammes et vapeur, puis un plat au-dessus de sa tête. 30 recettes du livre débloquées par niveau (Pilou tente d'abord celles jamais faites) et des plats inventés (préparation × ingrédient × touche : « Velouté d'anguille d'encre au clair de lune ») ; chaque plat nouveau rapporte un bonus. Un clic sur la marmite : il remue et rien ne brûle ; sinon, rarement, fumée noire. **Livre de recettes** au clic droit ;
-- **niveaux** (jusqu'à 50) : l'XP (jeux, pêche, cuisine, tours finis, commits, tests, caresses) fait monter de niveau, avec fête et récompense : nœud papillon 2, casque 3, bonnet 4, lunettes de soleil 5, couronne 7, chapeau de pêcheur 14, toque de chef 18, tablier 22, étoile de mer 27 ; couleurs lagon 20, braise 26, nacre 32, abysse 40, comète 50 ; canne dorée 30 (plus de légendaires), marmite en cuivre 35 (moins de ratés) ; un titre tous les quelques niveaux, jusqu'à « Pilou éternel ».
+- **petites activités** (toutes les 14 à 28 min environ si tu es là, ou *Jouer ▸ Petit jeu au hasard*) : étoile filante à attraper (+10 xp), 3 bulles à éclater (+5 chacune, +5 de bonus), « tape m'en cinq » (+10) ; chaque gain s'affiche en « +N xp » ;
+- **pêche** (dès le niveau 2 : *Jouer ▸ Pêcher*, ou parmi les petites activités, ou seul quand tu t'éloignes) : Pilou lance sa ligne au bord d'une petite eau ; après 3 à 15 s le bouchon plonge, éclabousse et un « ! » apparaît. Clic sur le bouchon dans la seconde : prise assurée. Trop tôt : le poisson file. Personne : Pilou ferre seul, une fois sur trois environ, jamais mieux que « rare ». 23 prises (poissons, crabes, botte, bouteille à message, coffret englouti, perle de lune…) en cinq raretés, chacune avec son signe et son cadre : `·` commun sans cadre, `◇` peu commun (coins), `◆` rare (trait bleu), `✦` épique (double, orange), `★` légendaire (argent et orange). Première prise d'une espèce : XP doublée. **Carnet de pêche** dans *Jouer* (« ??? » pour ce qui reste à trouver) ;
+- **cuisine** (dès le niveau 4 : *Jouer ▸ Cuisiner*, ou seul) : avec les prises comestibles en réserve, marmite sur le feu, flammes et vapeur, puis un plat au-dessus de sa tête. 30 recettes du livre débloquées par niveau (Pilou tente d'abord celles jamais faites) et des plats inventés (préparation × ingrédient × touche : « Velouté d'anguille d'encre au clair de lune ») ; chaque plat nouveau rapporte un bonus. Un clic sur la marmite : il remue et rien ne brûle ; sinon, rarement, fumée noire. **Livre de recettes** dans *Jouer* ;
+- **niveaux** (jusqu'à 50) : l'XP (jeux, pêche, cuisine, tours finis, commits, tests, caresses) fait monter de niveau, avec fête. Le niveau **ouvre l'accès** (jeux, rangées de la boutique, stades d'évolution) et rapporte des pièces d'or ; les accessoires et couleurs s'achètent à la **boutique** (clic sur le bandeau en haut du menu). Un titre tous les quelques niveaux. Détail : [README](../../README.md#clic-droit-sur-pilou).
 
-Tout est dessiné en pixels (grille 26 × 30, pixel de 4), objets des jeux et chiffres compris.
+Tout est dessiné en pixels, objets des jeux et chiffres compris (dessin fin 2× au choix : *Apparence ▸ Dessin fin*).
 
 Au repos, Pilou se promène, s'assoit, bâille quand tout est calme depuis 3 min, saute, cligne de
 l'œil, et suit la souris du regard quand elle passe près de lui.
@@ -81,7 +81,7 @@ l'œil, et suit la souris du regard quand elle passe près de lui.
 Une session qui t'attend (autorisation, question) rend Pilou orange et inquiet, et il **court se
 placer sous la souris** (sur l'horizontale) et la suit, en sautillant une fois arrivé, jusqu'à la
 réponse ou au clic « lu ». Clic : caresse ; glisser : il change
-d'écran et retombe ; clic droit : caresser, se cacher 10 min, quitter. Libellé d'une session : le
+d'écran et retombe ; clic droit : le menu (voir le [mode d'emploi](../../docs/MODE-EMPLOI.md)). Libellé d'une session : le
 début de son premier message (le titre de l'app n'est pas lisible par un mod), sinon son dossier.
 
 - Chaque session publie son état dans `~/.claude/compagnon/etat-<session>.json` ; l'overlay suit

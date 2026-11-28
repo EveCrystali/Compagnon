@@ -35,6 +35,10 @@ Dernière mise à jour : 28 novembre 2026.
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
   téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
+- **Première minute et mode d'emploi** : au tout premier lancement, trois bulles de Pilou qui passent seules (il
+  s'installe ; clic gauche, clic droit ; l'Aventure), jamais pendant la saisie, une seule fois ; sur Android, une ligne
+  discrète sur l'Accueil, qui part à la première caresse. Page joueur [MODE-EMPLOI.md](MODE-EMPLOI.md), rangée comme
+  le menu, liée du README et de *Réglages ▸ Mode d'emploi…*. Film : `docs/maquettes/premiere-minute/`.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
