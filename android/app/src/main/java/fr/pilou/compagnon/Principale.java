@@ -56,6 +56,7 @@ public final class Principale extends Activity {
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC); // les touches de volume règlent le multimédia, pas la sonnerie (docs/SONS.md)
         Journal.installer(this);
         Ui.Palette p = Ui.p(this);
         Window w = getWindow();

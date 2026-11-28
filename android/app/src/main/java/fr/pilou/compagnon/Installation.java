@@ -30,6 +30,7 @@ public final class Installation extends Activity {
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC); // les touches de volume règlent le multimédia, pas la sonnerie (docs/SONS.md)
         float d = getResources().getDisplayMetrics().density;
         LinearLayout pile = new LinearLayout(this);
         pile.setOrientation(LinearLayout.VERTICAL);

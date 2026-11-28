@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -86,5 +87,10 @@ public class SonsTelephoneTest {
         Prefs.de(ctx).edit().putString("sons", "aucun").commit();
         assertEquals("réglage « Aucun »", Sons.jouer(ctx, Sons.CHOIX, false));
         assertEquals("le réglage Aucun n'est pas une panne", 1, Journal.sons(ctx).split("\n").length);
+    }
+
+    @Test
+    public void lesTouchesDeVolumeReglentLeMultimedia() {
+        assertEquals(AudioManager.STREAM_MUSIC, Robolectric.buildActivity(Principale.class).setup().get().getVolumeControlStream());
     }
 }

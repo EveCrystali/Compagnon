@@ -22,6 +22,7 @@ public final class ActiviteChasse extends Activity implements ChasseVue.Ecoute {
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC); // les touches de volume règlent le multimédia, pas la sonnerie (docs/SONS.md)
         Journal.installer(this);
         meilleur = Prefs.meilleurChasse(this);
         vibrer = Prefs.vibrations(this);

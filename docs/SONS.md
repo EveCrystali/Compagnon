@@ -42,7 +42,12 @@ Réglages ont un bouton **« Essayer »** sous Sons et Musique : il joue un son 
 sans la garde d'espacement) ou dit en clair pourquoi rien ne peut sortir (« volume multimédia à zéro », « téléphone en
 appel ou en visio »).
 
-Le piège corrigé en v1 : le téléphone taisait tout dès qu'il était en vibreur ou en silencieux, volume multimédia
+Dans chaque écran de l'app (`setVolumeControlStream(STREAM_MUSIC)`), les touches de volume règlent le volume
+multimédia, celui des sons de Pilou, et non la sonnerie. Le flux est déjà le bon : `USAGE_GAME` part sur le multimédia
+(vérifié sur le téléphone d'Antoine), on n'y touche pas.
+
+Le piège corrigé en v1 (confirmé par Antoine sur son téléphone : en sonnerie normale, le son marche et suit le volume
+multimédia) : le téléphone taisait tout dès qu'il était en vibreur ou en silencieux, volume multimédia
 monté ou pas, sans rien dire ; beaucoup de gens laissent leur téléphone en vibreur. Le PC avait le même genre de
 piège, plus discret : un geste dans la fenêtre Aventure se taisait si Pilou était caché à la main ou si Windows
 signalait un plein écran.
