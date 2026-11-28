@@ -19,6 +19,10 @@ Dernière mise à jour : 28 novembre 2026.
 - **Illustrations** : 46 décors animés en boucle, 69 portraits animés de 29 personnages (champs `personnage` et
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
+- **Paysages haute définition** (docs/PEINTURE.md) : moteur de peinture `outils/sprites/paysage.py`, format « décor compact »
+  (`assets/decors/`, docs/SPRITES.md) ; premier décor de production 384 × 160 : « La mare » du prologue. Pas encore
+  affichés dans l'app (le Théâtre 384 × 160 est un autre chantier) ; restent cinq lieux du prologue, puis les trois
+  grandes campagnes.
 - **Dessin fin 2×** : 664 sprites redessinés sur 693, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
   automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
