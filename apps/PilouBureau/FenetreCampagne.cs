@@ -53,6 +53,9 @@ public sealed partial class FenetrePilou
         {
             // Démonstration (--essai=campagne:lecture…) : le carnet en mémoire, à l'heure réelle ; rien n'est versé ni publié.
             _campEtat = Prudemment(() => Campagnes.Actualiser(essai, Campagnes.Charger, (long)epoque), _campEtat);
+            if (_essaiOptions is not null && _campEtat is not null) _campEtat.Options = _essaiOptions;
+            foreach (var m in _essaiMessages)
+                if (!essai.Fil.Contains(m)) essai.Fil.Add(m);
             SuivrePresence();
             return;
         }
@@ -231,7 +234,9 @@ public sealed partial class FenetrePilou
     // mémoire (choix, attentes passées), puis la fenêtre Aventure ou l'overlay à l'heure réelle ; les décisions qu'on y
     // prend restent en mémoire. Le profil n'est pas touché, rien n'est publié.
     // « personnage » : La Grande Panne jouée jusqu'au premier choix où un personnage parle (portrait animé, décor animé).
-    public static readonly string[] EssaisAventure = { "lecture", "attente", "retour", "epreuve", "fin", "personnage" };
+    // « longue » : la lecture, puis le message le plus long des campagnes et le choix à quatre options du phare
+    // (ch8-reunion-a), pour vérifier la mise en page au pire (TEST-JEU.md) ; affichage seulement, ce choix ne se joue pas.
+    public static readonly string[] EssaisAventure = { "lecture", "attente", "retour", "epreuve", "fin", "personnage", "longue" };
 
     private void EssaiAventure(string quoi) => Prudemment(() =>
     {
@@ -255,7 +260,7 @@ public sealed partial class FenetrePilou
             bool arrete = quoi switch
             {
                 "attente" => e.Phase == Campagnes.Phase.Attente,
-                "retour" or "lecture" => e.Phase == Campagnes.Phase.Choix && k.Fil.Any(m => m.Qui == "joueur"),
+                "retour" or "lecture" or "longue" => e.Phase == Campagnes.Phase.Choix && k.Fil.Any(m => m.Qui == "joueur"),
                 "epreuve" => e.Phase == Campagnes.Phase.Epreuve,
                 "personnage" => e.Phase == Campagnes.Phase.Choix && k.Fil.LastOrDefault(m => m.Qui == "pilou") is { } dm
                                 && c.Noeud(dm.Noeud) is { Personnage.Length: > 0 } && k.Fil.Count(m => m.Qui == "joueur") >= 2,
@@ -283,7 +288,8 @@ public sealed partial class FenetrePilou
         var etat = Campagnes.Actualiser(k, Campagnes.Charger, Math.Max(t, maintenant))!;
         // Lu jusqu'à l'avant-dernier passage : ce que Pilou vient d'écrire s'écrit lettre à lettre (ou s'annonce, au retour).
         var pilou = k.Fil.Where(m => m.Qui == "pilou").ToList();
-        int garder = quoi switch { "retour" => 3, "lecture" or "fin" or "personnage" => 2, _ => 0 };
+        if (quoi == "longue") PireMiseEnPage(k, etat, t);
+        int garder = quoi switch { "retour" => 3, "lecture" or "fin" or "personnage" or "longue" => 2, _ => 0 };
         var lu = pilou.Count > garder ? pilou[^(garder + 1)] : null;
         k.Lu = lu is null ? "" : string.Create(System.Globalization.CultureInfo.InvariantCulture, $"{lu.P}.{lu.E}.{lu.I}");
         if (garder == 0) Campagnes.MarquerLu(k);
@@ -294,6 +300,28 @@ public sealed partial class FenetrePilou
         _campVu = -1e12;
         if (quoi != "retour") OuvrirAventure();
     });
+
+    // Essai « longue » : ajoute au fil le plus long message de toutes les campagnes et montre les quatre options de
+    // ch8-reunion-a (phare). Le carnet reste en mémoire ; seul l'affichage compte. Le moteur réécrit la fin du fil à
+    // chaque lecture : ces messages et ces options y sont remis à chaque fois (SuivreCampagne).
+    private List<Campagnes.OptionVue>? _essaiOptions;
+    private readonly List<Campagnes.Message> _essaiMessages = new();
+
+    private void PireMiseEnPage(Campagnes.Carnet k, Campagnes.Etat etat, long t)
+    {
+        var tous = Campagnes.Disponibles().Select(Campagnes.Charger).OfType<Campagnes.Campagne>().ToList();
+        var plusLong = tous.SelectMany(c => c.Noeuds.Values.SelectMany(n => n.Texte.Select(x => (Noeud: n, Texte: x))))
+            .MaxBy(x => x.Texte.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length);
+        if (plusLong.Noeud is null || k.Fil.Count == 0) return;
+        var dernier = k.Fil[^1];
+        _essaiMessages.Add(dernier with { I = dernier.I + 100, Qui = "pilou", Texte = plusLong.Texte, T = t });
+        if (tous.FirstOrDefault(c => c.Id == "phare-eteint")?.Noeud("ch8-reunion-a") is { } quatre)
+        {
+            _essaiMessages.Add(dernier with { I = dernier.I + 101, Qui = "pilou", Texte = string.Join(" ", quatre.Texte), T = t });
+            etat.Options = _essaiOptions = quatre.Options.Select((o, i) => new Campagnes.OptionVue(i, o.Id, o.Libelle)).ToList();
+        }
+        k.Fil.AddRange(_essaiMessages);
+    }
 
     private void EssaiCampagne(string id)
     {

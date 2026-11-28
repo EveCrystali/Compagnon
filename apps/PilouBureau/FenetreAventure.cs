@@ -132,43 +132,14 @@ internal sealed class FenetreAventure : Window
     private static ControlTemplate? _gabaritBouton;
     private static Style? _styleBarre;
 
-    private static ControlTemplate? GabaritBouton()
+    // Partagé avec le journal : le gabarit Windows par défaut grise le fond des boutons désactivés et l'éclaircit
+    // au survol, ce qui rend illisible le texte argent sur ces fenêtres sombres.
+    internal static ControlTemplate? GabaritBouton()
     {
         if (_gabaritBouton is not null) return _gabaritBouton;
         try
         {
-            _gabaritBouton = (ControlTemplate)XamlReader.Parse("""
-                <ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" TargetType="Button">
-                  <Grid SnapsToDevicePixels="True">
-                    <Border x:Name="ombre" Background="#0a0d1a" Margin="3,3,-3,-3"/>
-                    <Border x:Name="fond" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                      <Border.RenderTransform><TranslateTransform x:Name="decale"/></Border.RenderTransform>
-                      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"
-                                        RecognizesAccessKey="False"/>
-                    </Border>
-                  </Grid>
-                  <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                      <Setter TargetName="fond" Property="BorderBrush" Value="#f69d50"/>
-                      <Setter TargetName="decale" Property="X" Value="-1"/>
-                      <Setter TargetName="decale" Property="Y" Value="-1"/>
-                    </Trigger>
-                    <Trigger Property="IsKeyboardFocused" Value="True">
-                      <Setter TargetName="fond" Property="BorderBrush" Value="#b4dbff"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed" Value="True">
-                      <Setter TargetName="decale" Property="X" Value="2"/>
-                      <Setter TargetName="decale" Property="Y" Value="2"/>
-                      <Setter TargetName="ombre" Property="Visibility" Value="Hidden"/>
-                    </Trigger>
-                    <Trigger Property="IsEnabled" Value="False">
-                      <Setter Property="Opacity" Value="0.45"/>
-                    </Trigger>
-                  </ControlTemplate.Triggers>
-                </ControlTemplate>
-                """);
+            _gabaritBouton = (ControlTemplate)XamlReader.Parse(HabitBouton.Xaml);
         }
         catch (Exception e) when (e is XamlParseException or InvalidOperationException or InvalidCastException)
         {
@@ -1390,6 +1361,7 @@ internal sealed class FenetreAventure : Window
     private void Choisir(string option)
     {
         _message = _pilou.CampagneChoisir(option) ?? "";
+        if (_message == "") Sons.Jouer(Son.Choix);
         _cleAction = "";
         _theatre.Regarde(0);
         Rafraichir();
@@ -1679,3 +1651,4 @@ internal sealed class FenetreAventure : Window
         }
     }
 }
+

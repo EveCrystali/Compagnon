@@ -222,7 +222,9 @@ public sealed class FenetreDefense : Window
     private void Veiller()
     {
         _vue.IaAttend = _l.IaAttend();
-        var ecran = Sondes.Ecran();
+        // En démo (essai, visite guidée filmée), pas de cachette : le décor du tournage couvre tout l'écran, et Windows
+        // le prend pour une appli en plein écran ; la bande disparaissait au bout d'une seconde, Pilou avec elle.
+        var ecran = _l.Demo ? Activites.Ecran.Normal : Sondes.Ecran();
         bool plein = ecran is Activites.Ecran.PleinEcran or Activites.Ecran.Jeu3D or Activites.Ecran.Presentation;
         if (plein && !_cachePlein)
         {

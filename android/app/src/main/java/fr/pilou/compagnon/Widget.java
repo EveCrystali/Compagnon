@@ -47,10 +47,29 @@ public final class Widget extends AppWidgetProvider {
         } catch (RuntimeException ignore) {
             // le mot est un plus
         }
-        v.setTextViewText(R.id.mot, mot.isEmpty() ? "" : "« " + mot + " »");
-        v.setViewVisibility(R.id.mot, mot.isEmpty() ? android.view.View.GONE : android.view.View.VISIBLE);
+        // Écrit dans la police pixel de Pilou, à la largeur du plus étroit des widgets posés (Pilou et marges ôtés).
+        android.graphics.Bitmap image = mot.isEmpty() ? null
+                : TextePixelVue.image(c, "« " + mot + " »", 1.2f, 0xFFCDD9E5, largeurTexte(c, m, ids), 2);
+        if (image != null) {
+            v.setImageViewBitmap(R.id.mot, image);
+            v.setContentDescription(R.id.mot, "Pilou dit : " + mot);
+        }
+        v.setViewVisibility(R.id.mot, image == null ? android.view.View.GONE : android.view.View.VISIBLE);
         v.setOnClickPendingIntent(R.id.racine, PendingIntent.getActivity(c, 1,
                 new Intent(c, Principale.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_IMMUTABLE));
         m.updateAppWidget(ids, v);
+    }
+
+    /** Largeur (pixels de l'écran) laissée au texte dans le plus étroit des widgets ; 200 dp si Android ne la dit pas. */
+    static int largeurTexte(Context c, AppWidgetManager m, int[] ids) {
+        float d = c.getResources().getDisplayMetrics().density;
+        int min = 0;
+        for (int id : ids) {
+            int w = m.getAppWidgetOptions(id).getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0);
+            if (w > 0 && (min == 0 || w < min)) min = w;
+        }
+        // Pilou (56 dp), sa marge (8 dp) et le bord du widget (2 × 8 dp).
+        int dp = min > 0 ? Math.max(80, min - 56 - 8 - 16) : 200;
+        return (int) (dp * d);
     }
 }

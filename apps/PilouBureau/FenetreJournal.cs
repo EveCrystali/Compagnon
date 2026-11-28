@@ -38,12 +38,19 @@ internal sealed class FenetreJournal : Window
         FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
     };
 
-    private static Button Bouton(string texte) => new()
+    // Habit rétro de l'Aventure : sans lui, Windows peint le bouton désactivé en gris clair et le texte argent disparaît.
+    private static Button Bouton(string texte)
     {
-        Content = texte, Margin = new Thickness(0, 0, 8, 0), Padding = new Thickness(12, 5, 12, 5), MinWidth = 90,
-        Background = Gel("#2a3156"), Foreground = Bandeau.ArgentClair, BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2),
-        FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
-    };
+        var b = new Button
+        {
+            Content = texte, Margin = new Thickness(0, 0, 8, 0), Padding = new Thickness(12, 5, 12, 5), MinWidth = 90,
+            Background = Gel("#2a3156"), Foreground = Bandeau.ArgentClair, BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2),
+            FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+        };
+        if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
+        return b;
+    }
 
     public FenetreJournal(FenetrePilou pilou, string? jour)
     {
@@ -236,12 +243,18 @@ internal sealed class FenetrePrenom : Window
         };
         p.Children.Add(_champ);
         var boutons = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 14, 0, 0) };
-        Button B(string t) => new()
+        Button B(string t)
         {
-            Content = t, Padding = new Thickness(14, 6, 14, 6), Margin = new Thickness(0, 0, 10, 0), MinWidth = 150,
-            Background = new SolidColorBrush(Color.FromRgb(0x2a, 0x31, 0x56)), Foreground = Bandeau.ArgentClair, BorderBrush = Bandeau.Bord,
-            BorderThickness = new Thickness(2), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
-        };
+            var b = new Button
+            {
+                Content = t, Padding = new Thickness(14, 6, 14, 6), Margin = new Thickness(0, 0, 10, 0), MinWidth = 150,
+                Background = new SolidColorBrush(Color.FromRgb(0x2a, 0x31, 0x56)), Foreground = Bandeau.ArgentClair, BorderBrush = Bandeau.Bord,
+                BorderThickness = new Thickness(2), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+            };
+            if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
+            return b;
+        }
         var oui = B("C'est ça");
         oui.IsDefault = true;
         var non = B("Je préfère ne pas dire");

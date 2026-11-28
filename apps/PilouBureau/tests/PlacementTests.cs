@@ -48,6 +48,10 @@ public class PlacementTests
         foreach (double dpi in Echelles)
         foreach (double taille in TaillesMenu)
         {
+            // Dessin d'origine : la Taille telle quelle, 104 unités de large.
+            Assert.Equal(taille, Placement.Echelle(taille, dpi, false));
+            Assert.Equal(104 * taille * dpi, Placement.LargeurPhysique(taille, dpi, false), 9);
+            if (!Placement.FinPossible(taille, dpi)) continue; // « Petit » repasse au dessin d'origine (test suivant)
             int n = Placement.PixelsParPixelFin(taille, dpi);
             Assert.True(n >= 1);
             double k = Placement.Echelle(taille, dpi, true);
@@ -55,9 +59,6 @@ public class PlacementTests
             Assert.Equal(n, Placement.PX / 2 * k * dpi, 9);
             Assert.Equal(96 * n, Placement.LargeurPhysique(taille, dpi, true), 9);
             Assert.Equal(96.0 * n, RenduPilou.W * Placement.PX * k * dpi, 9);
-            // Dessin d'origine : la Taille telle quelle, 104 unités de large.
-            Assert.Equal(taille, Placement.Echelle(taille, dpi, false));
-            Assert.Equal(104 * taille * dpi, Placement.LargeurPhysique(taille, dpi, false), 9);
         }
         // À 100 % et Taille 1 : un pixel physique par pixel fin (Pilou sur 96 pixels au lieu de 104).
         Assert.Equal(1, Placement.PixelsParPixelFin(1, 1));
@@ -80,11 +81,30 @@ public class PlacementTests
     }
 
     [Fact]
+    public void Petit_est_toujours_plus_petit_que_normal()
+    {
+        foreach (double dpi in Echelles)
+        {
+            double petit = Placement.LargeurPhysique(0.75, dpi, true), normal = Placement.LargeurPhysique(1, dpi, true);
+            double grand = Placement.LargeurPhysique(1.3, dpi, true);
+            Assert.True(petit < normal && normal < grand, $"{dpi} : {petit} {normal} {grand}");
+            // Largeur physique cohérente avec l'échelle donnée à la fenêtre (104 unités de grille).
+            Assert.Equal(petit, 104 * Placement.Echelle(0.75, dpi, true) * dpi, 9);
+        }
+        // À 100 % : « Petit » et « Normal » tombaient tous deux sur 96 pixels ; « Petit » passe au dessin d'origine, 72 pixels.
+        Assert.False(Placement.FinPossible(0.75, 1));
+        Assert.Equal(72, Placement.LargeurPhysique(0.75, 1, true), 9);
+        Assert.True(Placement.FinPossible(0.75, 1.5));
+        Assert.True(Placement.FinPossible(1, 1));
+    }
+
+    [Fact]
     public void Dessin_fin_tailles_nettes_et_positions_alignees()
     {
         foreach (double dpi in Echelles)
         foreach (double taille in TaillesMenu)
         {
+            if (!Placement.FinPossible(taille, dpi)) continue; // dessin d'origine : Finesse inactive, rien à aligner
             double physique = Placement.Echelle(taille, dpi, true) * dpi;
             foreach (double t in new[] { 1.5, 1.6, 2, 2.2, Placement.TailleCanne, Placement.PX, 3, 3.4 })
             {

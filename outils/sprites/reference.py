@@ -108,6 +108,24 @@ POSES = [
     "expr=joie t=500 stade=3 objets=bonnet-de-givre,echarpe-de-veille,caillou-du-col,baluchon-cabosse",
     "expr=malice t=800 stade=4 objets=eteignoir,sablier-de-poche,galet-machoire",
     "expr=tendre t=200 stade=1 objets=casserole-chapeau,plume-de-girouette",
+    # Vie du personnage (vie.py) : étirement, antenne en retard, ombre tramée, poussière, lumière du moment.
+    "expr=repos t=0 saut=1.2 etire=0.45 antenne=-0.36 vie=1",
+    "expr=repos t=0 saut=3 vie=1",
+    "expr=repos t=0 etire=-1 antenne=0.72 atterri=40 vie=1",
+    "expr=repos t=0 etire=0.38 antenne=-0.3 atterri=130 vie=1 stade=1",
+    "expr=joie t=0 etire=-0.6 atterri=200 vie=1 stade=3",
+    "expr=fete t=250 saut=2.1 etire=0.3 antenne=0.2 vie=1 stade=4",
+    "expr=repos t=170 marche=1 regard=1 vie=1",
+    "expr=repos t=250 marche=1 regard=1 vie=1",
+    "expr=repos t=500 marche=1 regard=-1 vie=1",
+    "expr=repos t=170 marche=1 regard=1 vie=1 stade=1",
+    "expr=repos t=90 marche=1 course=1 regard=-1 vie=1",
+    "expr=repos t=170 marche=1 regard=1 assis=1 vie=1",
+    "expr=repos t=0 lumiere=matin",
+    "expr=repos t=0 lumiere=soir couleur=lavande",
+    "expr=dort t=2100 lumiere=nuit stade=3",
+    "expr=inquiet t=320 lumiere=soir",
+    "expr=repos t=0 lumiere=nuit couleur=sable objets=chapeau-explorateur",
 ]
 
 
@@ -115,11 +133,11 @@ def pose(ligne):
     kw = {}
     for paire in ligne.split():
         k, _, v = paire.partition("=")
-        if k in ("expr", "couleur", "accessoire", "tenue", "reaction"):
+        if k in ("expr", "couleur", "accessoire", "tenue", "reaction", "lumiere"):
             kw[k] = v
         elif k == "objets":
             kw[k] = v.split(",")
-        elif k in ("cligne", "clin", "marche", "course", "baille", "etourdi", "fatigue", "salue", "boude", "dos"):
+        elif k in ("cligne", "clin", "marche", "course", "baille", "etourdi", "fatigue", "salue", "boude", "dos", "vie"):
             kw[k] = v == "1"
         elif k in ("regard", "regard_y", "stade"):
             kw[k] = int(v)
@@ -171,11 +189,18 @@ def main():
     # Animations des campagnes : les règles communes (animations.py) ; relues par le PC et le téléphone.
     import animations
     animations.ecrire_reference()
+    # La police pixel : mise en page et pixels de vrais textes (police-reference.txt).
+    import police
+    police.reference()
+    # Vie du personnage : les règles communes (vie.py) ; relues par le PC et le téléphone.
+    import vie
+    vie.ecrire_reference()
     # Le théâtre (docs/SCENES.md) : animations nommées des sprites de scène, et la référence des scènes.
     import theatre
     theatre.ecrire_animations()
     theatre.ecrire_reference()
-    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; theatre-reference.txt")
+    print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; vie-reference.txt ; "
+          "police-reference.txt ; theatre-reference.txt")
 
 
 if __name__ == "__main__":

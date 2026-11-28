@@ -153,6 +153,22 @@ public final class PilouVue extends View {
         debutSaut = SystemClock.uptimeMillis();
     }
 
+    /** Durée du vol d'un saut (ms) ; ressorts et réception en plus au niveau « complètes ». */
+    static final int VOL = 520;
+    private String niveau = Animations.COMPLETES;
+    private int heure = 12;
+    private long niveauLu = -10_000;
+
+    /** Niveau d'animation (réglage ✧ et échelle du système) et heure, relus au plus une fois par seconde. */
+    private String niveauVie(long t) {
+        if (t - niveauLu >= 1000) {
+            niveauLu = t;
+            niveau = ScenesAnimees.niveau(getContext());
+            heure = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
+        }
+        return niveau;
+    }
+
     private boolean marque;
     private final android.graphics.Paint pinceauMarque = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
 
@@ -185,9 +201,26 @@ public final class PilouVue extends View {
             prochainClin = t + 2500 + (long) (Math.random() * 3500);
         }
         long ds = t - debutSaut;
-        float saut = ds < 600 ? (float) (Math.sin(Math.PI * ds / 600.0) * 3) : 0;
+        // Vie du personnage (Vie.java) : selon le réglage ✧, le saut d'avant (aucune), l'arc seul (réduites) ou l'arc
+        // avec ses ressorts, l'antenne en retard et la poussière à l'atterrissage (complètes).
+        String niveau = niveauVie(t);
+        float saut;
+        int[] bond = null;
+        if (Animations.AUCUNE.equals(niveau)) saut = ds < 600 ? (float) (Math.sin(Math.PI * ds / 600.0) * 3) : 0;
+        else {
+            bond = ds < Vie.dureeBond(VOL, niveau) ? Vie.bond(ds, VOL, 3000, niveau) : new int[]{0, 0, 0};
+            saut = bond[0] / 1000f;
+        }
         String e = t < finPassager ? passager : expr;
         RenduPilou.Allure a = Dessin.allure(e, t, couleur, accessoire, t < finClin, saut);
+        if (bond != null) {
+            a.etire = bond[1] / 1000.0;
+            a.antenne = bond[2] / 1000.0;
+            long atterri = ds - Vie.PREP - VOL;
+            a.atterri = Animations.COMPLETES.equals(niveau) && atterri >= 0 && atterri < 3 * Vie.BOUFFEE_IMAGE ? atterri : -1;
+        }
+        a.vie = Animations.COMPLETES.equals(niveau);
+        a.lumiere = Vie.lumiere(heure, meteo, niveau);
         a.stade = stade;
         a.tenue = tenue;
         // Objets de la boutique portés (un par emplacement) ; la couleur achetée remplace celle du niveau.
@@ -229,7 +262,9 @@ public final class PilouVue extends View {
             pinceauMarque.setFakeBoldText(true);
             cv.drawText("!", cx, cy + r * 0.52f, pinceauMarque);
         }
-        if (anime) postInvalidateDelayed(expr.equals("dort") ? 200 : 80);
+        // Pendant un bond complet, une image toutes les 40 ms (les ressorts durent moins de 100 ms) ; sinon comme avant.
+        boolean bondit = bond != null && Animations.COMPLETES.equals(niveau) && ds < Vie.dureeBond(VOL, niveau);
+        if (anime) postInvalidateDelayed(bondit ? 40 : expr.equals("dort") ? 200 : 80);
 
     }
 

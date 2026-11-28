@@ -23,8 +23,18 @@ Dernière mise à jour : 28 novembre 2026.
   « Encore agrandis automatiquement : 0 »).
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
+- **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
+  titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
+  (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Le reste des fenêtres reste en police
+  système (chantier suivant).
+- **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
+  poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
+  d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
+  comme après) ; jamais vu sur un vrai téléphone.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
+- **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
 
 ## En cours
 
@@ -43,7 +53,10 @@ Dernière mise à jour : 28 novembre 2026.
 0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs des trois grandes campagnes, les 29
    personnages en pied, les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
-   fictif), puis monter (cartons, caméra qui suit les rectangles de `chronologie.json`).
+   fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir
+   [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage (Pilou 0.9.45, sans pêche, cuisine,
+   Aventure, mot ni complicité) : après le nouveau tournage, regarder la planche et ajuster sous-plages, durées et
+   cadrages des scènes récentes, puis remplacer `docs/promo/`.
 2. **Liste de contrôle manuelle de `TEST-JEU.md`** sur un vrai Windows et un vrai téléphone (fenêtre Aventure à 100, 125
    et 150 %, notification de retour en veille, jeu PC éteint puis allumé, décision au même choix sur deux appareils).
 3. **Ajuster les seuils de complicité** après une semaine d'usage réel (PC et téléphone) : les paliers arrivent-ils trop
@@ -51,12 +64,16 @@ Dernière mise à jour : 28 novembre 2026.
 
 ## Jamais vérifié sur un vrai appareil
 
-- Sous Windows : le dessin fin sur le bureau (charge, netteté à 125 % et 150 %), les extensions d'éditeur, la fenêtre des
-  expéditions, la fenêtre Aventure et ses animations.
+- Sous Windows (liste passée le 27 novembre 2026, détail dans `TEST-JEU.md`) : vus et corrigés sur le PC d'Antoine, la
+  fenêtre Aventure (taille minimale), la fenêtre des expéditions, le journal, la charge du dessin fin (≈ 5 % d'un cœur),
+  la relance en pleine campagne, une fin versée une fois. Restent : un vrai écran à 125 % et 150 % (dont la police pixel de la bulle, vue à 100 % seulement), les épreuves jouées
+  au clavier et à la souris, les extensions d'éditeur, les animations à l'œil.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin, l'onglet Aventure et la notification de retour.
-- La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal, le mot du soir (notification, Doze), le
+- La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal sur de vraies pages, le mot du soir (notification, Doze), le
   widget et la bulle avec le mot, la synchronisation entre deux appareils réels.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
+- Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
+  sortie audio) ; sur téléphone, aucune lecture réelle.
 
 ## Points connus
 
@@ -68,12 +85,23 @@ Dernière mise à jour : 28 novembre 2026.
 - L'exe pèse 128 Mo (.NET embarqué) ; la compression le ramènerait vers 60–70 Mo, non faite.
 - Lancer une expédition depuis le téléphone n'est pas possible (lecture seule, voir `EXPEDITIONS.md`) ; seule la
   campagne se lance des deux côtés.
-- **Divergence de campagne entre appareils partiellement détectée** : quand deux appareils décident chacun de leur côté au
-  même choix, la base la plus avancée l'emporte, mais `Campagnes.Diverge` ne compare que si le rejeu de l'appareil perdant
-  passe par la même étape ; s'il est encore en retard, il n'y a rien à comparer et le fil de ses messages n'est pas
-  remis à zéro par cette comparaison (la base, elle, converge). Non couvert par les vecteurs.
 - **Charge des animations non mesurée sur appareil** : décors à 4–5,5 images par seconde, portraits, écriture
   lettre à lettre et fond respirant tournent sous Robolectric et en tests, jamais sur un vrai téléphone ni un PC modeste
   (batterie, processeur). Le réglage « ✧ » (complètes, réduites, aucune) existe pour couper.
-- **Captures Android des écrans animés non regardées** : `CapturesCampagnesTest` produit les images `jeu-*` et
-  `aventure-personnage*` dans l'artefact `captures-ui` de la CI, mais personne ne les a encore relues à l'œil.
+- **Captures Android des écrans animés relues le 27 novembre 2026** (artefact `captures-ui`, CI `main` 46076343814) :
+  les 102 images `jeu-*` (4 campagnes × clair, sombre, grande police) et les 8 `aventure-personnage*`, une par une.
+  Robolectric n'est pas un vrai téléphone : polices, densité et animations réelles restent à voir sur appareil. Les
+  ~350 autres captures (accueil, boutique, collection…) n'ont pas été relues une par une. Rien de rouge / vert, aucun
+  état porté par la seule couleur (fins : ★ ◐ ✧, jauges en carrés), sprites nets, aucune donnée personnelle.
+
+  | Capture | Défaut | Gravité | Suite |
+  |---|---|---|---|
+  | Petit écran, scène avec portrait (`*-grande-panne-choix`, `*-phare-eteint-*`, `aventure-personnage*`) | Le portrait (96 dp) remonte jusqu'à la barre du haut et passe **devant** le bouton « ⋯ » et la fin du titre | Moyenne | Corrigé : la barre passe devant (`Lecture.java`) |
+  | Même cas, titre long (« La nuit des six bateaux ») | Était coupé par le portrait ; il passe maintenant en entier devant lui (vérifié sur les captures de la PR) | Faible | Si le chevauchement gêne sur téléphone : portrait plus petit à 156 dp (choix de design) |
+  | `*-grande-panne-*` chapitre 1 (« 13 h 37 ») | Le titre blanc se pose sur l'afficheur pixel « 1337 » du décor : deux textes superposés | Faible | Décor (`assets/`) ou titre décalé : à trancher |
+  | Titres de chapitre sur décor clair (prologue, `petit-nuage` « Lâcher ») | Blanc + ombre sur ciel crème ou rose : lisible mais contraste faible | Faible | Proposé : voile sombre derrière le titre |
+  | `jeu-petit-grandepolice-*` barre du bas | « Boutique » et « Collection » se touchent, sans espace | Moyenne | Proposé : libellés réduits ou sur deux lignes en grande police (`Principale`) |
+  | `jeu-petit-grandepolice-*` puce de lieu | Nom tronqué (« Au-dessus de l'Abr… », « Le Bigorneau Qui T… ») | Faible | Accepté (points de suspension), ou `maxWidth` plus large |
+  | Toutes, en-tête | « Prochaine rangée : … (enc… » tronqué | Faible | Hors campagnes, à reformuler plus court |
+  | `*-epreuve-jeu` | « ÉPREUVE » en police pixel : très petit, accent non visible | Faible | Proposé : police pixel ×2 pour ce titre |
+  | `*-choix` | Dernière option coupée en bas, en fondu | — | Voulu (dock défilant), rien à faire |

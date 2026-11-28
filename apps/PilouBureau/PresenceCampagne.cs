@@ -127,6 +127,7 @@ public sealed partial class FenetrePilou
     // UNE annonce : un petit saut, l'antenne qui s'agite, une bulle qui dit qu'il est là et où (sans rien dévoiler).
     private void AnnoncerRetour(Aventure.Retour r)
     {
+        Sons.Jouer(Son.Campagne);
         _tSaut = Maintenant;
         _salueJusque = Maintenant + 2200;
         Dire(r.Lieu == "" ? $"✉ {r.Texte}" : $"✉ {r.Texte} · ▸ {r.Lieu}", 9000);
@@ -282,6 +283,7 @@ public sealed partial class FenetrePilou
             _fenetreAventure = w;
             if (_demo) PoserPresDePilou(w);
             w.Show();
+            Sons.Jouer(Son.Aventure);
         }
         catch (InvalidOperationException)
         {

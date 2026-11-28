@@ -51,6 +51,11 @@ public class RenduTests
                 case "suspendu": a.Suspendu = D(); break;
                 case "tremble": a.Tremble = D(); break;
                 case "evolution": a.Evolution = D(); break;
+                case "etire": a.Etire = D(); break;
+                case "antenne": a.Antenne = D(); break;
+                case "atterri": a.Atterri = D(); break;
+                case "lumiere": a.Lumiere = v; break;
+                case "vie": a.Vie = v == "1"; break;
                 default: throw new ArgumentException(k);
             }
         }

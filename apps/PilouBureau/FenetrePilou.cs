@@ -97,6 +97,7 @@ public sealed partial class FenetrePilou : Window
         _devant = devant;
         _demo = demo;
         _reglages = Reglages.Lire(dossier);
+        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         CalculerEchelle();
         WindowStyle = WindowStyle.None;
@@ -278,6 +279,7 @@ public sealed partial class FenetrePilou : Window
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
+        menu.Items.Add(Choix("Sons", new[] { ("Aucun", "aucun"), ("Discrets", "discrets"), ("Normaux", "normaux") }, _reglages.Sons, v => { _reglages.Sons = v; Sons.Jouer(Son.Caresse); }));
         var accessoires = new MenuItem { Header = "Accessoire" };
         foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
                      Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
@@ -433,7 +435,7 @@ public sealed partial class FenetrePilou : Window
     {
         double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
         if (!(dpi > 0)) dpi = 1;
-        Finesse.Active = _reglages.DessinFin;
+        Finesse.Active = _reglages.DessinFin && Placement.FinPossible(_reglages.Taille, dpi);
         Finesse.Dpi = dpi;
         _k = Placement.Echelle(_reglages.Taille, dpi, _reglages.DessinFin);
         Finesse.PhysiqueParUnite = _k * dpi;
@@ -562,16 +564,7 @@ public sealed partial class FenetrePilou : Window
 
         _lignes.Children.Clear();
         if (Maintenant < _messageJusque)
-            _lignes.Children.Add(new TextBlock
-            {
-                Tag = _messageTag == "" ? null : _messageTag,
-                Text = _message,
-                FontFamily = new FontFamily("Segoe UI"),
-                FontSize = 12.5,
-                FontStyle = FontStyles.Italic,
-                Foreground = Couleurs.Texte,
-                Margin = new Thickness(0, 1, 0, 1),
-            });
+            _lignes.Children.Add(Phrase(_message, _messageTag == "" ? null : _messageTag)); // police pixel : BullePixel.cs
         if (BlocDiagnostics() is { } diag) _lignes.Children.Add(diag);
         foreach (var l in lignes) _lignes.Children.Add(Ligne(l));
         if (detail && autres > 0)
@@ -643,6 +636,7 @@ public sealed partial class FenetrePilou : Window
         FontFamily = new FontFamily("Segoe UI"),
         FontSize = 11.5,
         Foreground = Couleurs.Pale,
+        TextTrimming = TextTrimming.CharacterEllipsis,
         Margin = new Thickness(0, 1, 0, 1),
     };
 
@@ -739,9 +733,11 @@ public sealed partial class FenetrePilou : Window
         if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
         bool fatigue = (_suivi.Courant?.Fatigue ?? false) || TenueAffichee == "nuit";
         _inactif = Natif.InactifMs();
+        if (_essaiVie) _inactif = 0; // essai « vie » : il reste éveillé, même devant un écran délaissé
         Observer(t);
         expr = Sommeil(expr, t);
         expr = NuitTardive(expr, t);
+        if (_essaiVie && expr == Expr.Dort) expr = Expr.Repos; // essai « vie » : sans session, il ne dort pas
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
@@ -828,11 +824,11 @@ public sealed partial class FenetrePilou : Window
         var montre = _attrape ? Expr.Inquiet : _geste == Geste.SauteSouris ? Expr.Fete : ronron ? Expr.Caresse : ExprJeu(expr, t);
 
         double depuis = _suivi.DepuisHumeur(epoque);
-        double saut = 0;
-        if (expr == Expr.Fete) saut = Math.Abs(Math.Sin(Math.PI * depuis / 450)) * 3;
-        else if (expr == Expr.Caresse && t - _tCaresse < 400) saut = Math.Sin(Math.PI * (t - _tCaresse) / 400) * 1.5;
-        else if (t - _tSaut < 600) saut = Math.Sin(Math.PI * (t - _tSaut) / 600) * 2;
-        if (_attrape) saut = 0;
+        // Sauts, ressorts et réception d'une chute (VieFenetre.cs) : forme selon le réglage ✧.
+        string niveauVie = NiveauVie;
+        var mouvement = Bondir(expr, t, depuis, niveauVie);
+        if (_attrape) mouvement = mouvement with { Saut = 0, Etire = 0, Antenne = 0 };
+        double saut = mouvement.Saut;
 
         // Météo vécue : gouttes, flocons, soleil ; mouillé ou gelé sans l'équipement, il frissonne et grimace.
         var meteo = EffetMeteoCourant(t);
@@ -857,7 +853,7 @@ public sealed partial class FenetrePilou : Window
                 : etourdi ? Math.Sin(t / 120.0) * 0.4
                 : expr == Expr.Grimace && depuis < 900 ? ((int)(t / 70) % 2 == 0 ? 0.6 : -0.6)
                 : Balancement(t) + meteo.Tremble,
-            Chute = Math.Max(0, 1 - (t - _atterri) / 220),
+            Chute = mouvement.Chute,
             Assis = _assis,
             Baille = _geste == Geste.Baille && expr == Expr.Repos,
             Salue = t < _salueJusque,
@@ -886,6 +882,7 @@ public sealed partial class FenetrePilou : Window
         HabillerExpedition(_scene.Pose, t);
         HabillerGestes(_scene.Pose, t);
         HabillerCampagne(_scene.Pose);
+        HabillerVie(_scene.Pose, mouvement, niveauVie);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
@@ -893,6 +890,7 @@ public sealed partial class FenetrePilou : Window
         AnimerBoutique(t);
         AnimerExpedition(t);
         AnimerRetour(t);
+        AnimerEssaiVie(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = Placement.AGauche(_x, _zone.Left, _zone.Right);
@@ -1173,6 +1171,7 @@ public sealed partial class FenetrePilou : Window
     private void Caresser()
     {
         Signaler("caresse", 1);
+        Sons.Jouer(Son.Caresse);
         SoinCaresse();
         Vecu(f => f.Ca++, "caresses");
         _tCaresse = Maintenant;

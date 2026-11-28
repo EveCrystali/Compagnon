@@ -206,6 +206,29 @@ dans `assets/sprites2x` (6 images par décor), compressés dans l'APK.
 images côte à côte, la première répétée à droite pour juger la boucle), `decors-<campagne>.gif` (mosaïque à la vitesse
 réelle), `portraits-<campagne>.png` et `.gif` (repos puis parole, avec le choix d'image commun).
 
+## Vie du personnage
+
+Pilou ne bouge pas plus souvent : les mouvements déjà là changent de forme. Règles communes dans
+`outils/sprites/vie.py` (arithmétique entière), `Vie.cs` et `Vie.java`, vérifiées par `vie-reference.txt` ; le dessin
+est dans `rendu.py` et les deux `RenduPilou`, vérifié par les poses `vie=1`, `etire=`, `antenne=`, `atterri=`,
+`lumiere=` de `rendus-reference*.txt`.
+
+| Quoi | Complètes | Réduites | Aucune |
+|---|---|---|---|
+| Saut (petit saut, caresse, fête) | il se ramasse, décolle étiré, arc en parabole, s'écrase et rebondit (ressort amorti), l'antenne suit 60 ms en retard | arc en parabole seul | saut d'avant (sinus) |
+| Lâché, il retombe | ressort amorti, deux bouffées de poussière | écrasement d'avant | écrasement d'avant |
+| Ombre en l'air | s'éclaircit en trame (un pixel sur deux) | ombre pleine | ombre pleine |
+| Marche | une bouffée de poussière du pied arrière tous les deux pas | — | — |
+| Lumière du moment | matin crème, soir violet, nuit bleu nuit (10 à 18 %) ; ni aube ni couchant par temps couvert ; l'alerte (inquiet) ne change pas | pareil | — |
+
+Le niveau est celui du réglage « ✧ » des campagnes (et « aucune » si le système coupe les animations). Déjà là avant,
+et gardés : respiration, clignement, balancement de l'antenne, regard qui suit la souris de près (PC, réglage
+« suit la souris »), confettis et cœurs de la scène, poussière de course.
+
+Essai sur le PC : `--essai=vie[:completes|reduites|aucune][:heure]` (saut, marche aller-retour, chute, en boucle de
+9 s). Planches : `python3 outils/sprites/planches_vie.py` → `sauts.png`, `receptions.png`, `lumieres.png`,
+`avant-apres.gif` dans `outils/sprites/planches/vie`.
+
 ## Format d'un sprite
 
 ```

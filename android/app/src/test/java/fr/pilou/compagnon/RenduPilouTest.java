@@ -56,6 +56,11 @@ public class RenduPilouTest {
                 case "suspendu": a.suspendu = Double.parseDouble(v); break;
                 case "tremble": a.tremble = Double.parseDouble(v); break;
                 case "evolution": a.evolution = Double.parseDouble(v); break;
+                case "etire": a.etire = Double.parseDouble(v); break;
+                case "antenne": a.antenne = Double.parseDouble(v); break;
+                case "atterri": a.atterri = Double.parseDouble(v); break;
+                case "lumiere": a.lumiere = v; break;
+                case "vie": a.vie = v.equals("1"); break;
                 default: throw new IllegalArgumentException(k);
             }
         }

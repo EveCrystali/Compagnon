@@ -228,6 +228,20 @@ public final class Campagnes {
 
     private static final String ALPHABET64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
+    /** La lettre d'une décision dans la route : ABANDON (-4) → A, RATE → B, REUSSITE → C, SUITE → D, option 0 → E… */
+    private static char pas64(int valeur) {
+        return ALPHABET64.charAt(valeur - ABANDON);
+    }
+
+    private static boolean cheminValide(String chemin, int e) {
+        if (chemin.length() != e) return false;
+        for (int i = 0; i < chemin.length(); i++) {
+            int k = ALPHABET64.indexOf(chemin.charAt(i));
+            if (k < 0 || k > 16 - ABANDON) return false;
+        }
+        return true;
+    }
+
     /** Tirage déterministe, identique à Hasard (Boutique.cs) : FNV-1a 64 bits puis xorshift64*. */
     public static final class Hasard {
         private long s;
@@ -595,6 +609,11 @@ public final class Campagnes {
         public Instantane ici = new Instantane();
         /** Dernier check-point (null : c'est « ici », pas encore entré). */
         public Instantane cp;
+        /**
+         * Route : une lettre par décision consommée depuis le départ (pas64 de sa valeur), donc e lettres ; vide ou d'une autre
+         * longueur : inconnue (message d'un appareil plus ancien). Deux routes dont aucune ne prolonge l'autre racontent deux histoires.
+         */
+        public String chemin = "";
         public List<Entree> journal = new ArrayList<>();
 
         public Partie copie() {
@@ -616,6 +635,7 @@ public final class Campagnes {
             q.reprise = reprise;
             q.ici = ici.copie();
             q.cp = cp == null ? null : cp.copie();
+            q.chemin = chemin;
             q.journal = new ArrayList<>(journal);
             return q;
         }
@@ -695,6 +715,8 @@ public final class Campagnes {
         /** On vient de revenir à un check-point (échec, reprise d'une partie abandonnée) et rien n'a encore été décidé. */
         public boolean reprise;
         List<Point> points = new ArrayList<>();
+        /** Route jusqu'ici (voir Partie.chemin) ; inconnue si sa longueur n'est pas e. */
+        public String chemin = "";
 
         public boolean enAttente() {
             return phase == Phase.Attente || phase == Phase.Repos;
@@ -735,7 +757,7 @@ public final class Campagnes {
     // ---- Rejeu
 
     private static final class Cours {
-        String noeud = "", decor = "", lieuDe = "";
+        String noeud = "", decor = "", lieuDe = "", chemin = "";
         TreeMap<String, Integer> vars = new TreeMap<>();
         TreeSet<String> objets = new TreeSet<>(), drapeaux = new TreeSet<>();
         boolean avecCp;
@@ -753,6 +775,7 @@ public final class Campagnes {
         Cours copie() {
             Cours x = new Cours();
             x.noeud = noeud;
+            x.chemin = chemin;
             x.decor = decor;
             x.lieuDe = lieuDe;
             x.vars = new TreeMap<>(vars);
@@ -872,6 +895,7 @@ public final class Campagnes {
             q.reprise = s.reprise && !abandonnee;
             q.ici = ici;
             q.cp = cp;
+            q.chemin = s.chemin;
             return q;
         }
 
@@ -1068,6 +1092,7 @@ public final class Campagnes {
             Phase phase = s.phase;
             s.t = Math.max(s.t, x.t);
             s.mur = x.t;
+            if (s.chemin.length() == s.e) s.chemin += pas64(x.v);
             s.e++;
             s.i = 0;
             s.fin = 0;
@@ -1115,6 +1140,7 @@ public final class Campagnes {
             s.t = p.t;
             s.geste = p.geste;
             s.reprise = p.reprise;
+            s.chemin = p.chemin;
             charger(p.ici, s, false);
             if (p.cp != null) charger(p.cp, s, true);
             if (p.abandonnee) {
@@ -1185,6 +1211,7 @@ public final class Campagnes {
             e.points = s.points;
             e.rejeu = p.rejeu;
             e.reprise = s.reprise;
+            e.chemin = s.chemin;
             e.chapitreTotal = c.chapitres.size();
             e.variables.putAll(s.vars);
             e.objets = new ArrayList<>(s.objets);
@@ -1735,7 +1762,7 @@ public final class Campagnes {
     /**
      * Une partie en JSON compact. Heures en secondes ; celles des décisions, relatives à la base.
      * {"c":campagne,"p":n°,"d":départ,"o":origine,"g":graine,"x":drapeaux (1 rejeu, 2 geste, 4 entré, 8 abandonnée, 16 reprise),
-     * "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
+     * "e":étape,"r":rang,"i":messages,"n":tirages,"t":curseur,"ici":[…],"cp":[…]?,"u":route?,"l":[appareils],"j":[[e,dt,a,nœud,v]…]}
      */
     public static String jsonPartie(Partie p, boolean journal) {
         StringBuilder b = new StringBuilder();
@@ -1753,6 +1780,10 @@ public final class Campagnes {
         if (p.cp != null) {
             b.append(",\"cp\":");
             jsonInstantane(b, p.cp);
+        }
+        if (!p.chemin.isEmpty()) {
+            b.append(",\"u\":");
+            chaine(b, p.chemin);
         }
         if (journal && !p.journal.isEmpty()) {
             List<Entree> l = ordonner(p.journal);
@@ -1931,6 +1962,8 @@ public final class Campagnes {
         if (ici == null) return null;
         p.ici = ici;
         p.cp = lireInstantane(o, "cp");
+        String chemin = s(o, "u");
+        p.chemin = cheminValide(chemin, p.e) ? chemin : "";
         List<String> appareils = new ArrayList<>();
         for (Object a : liste(o, "l")) appareils.add(a instanceof String ? (String) a : "");
         for (Object brut : liste(o, "j")) {
@@ -1978,15 +2011,20 @@ public final class Campagnes {
 
     /** Ce qu'un message apporte au carnet (sans regarder qui l'envoie). */
     /**
-     * La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Si mon rejeu passe par la même étape, il doit y
-     * être au même point (même rang, même nœud, même état) ; s'il n'y est pas encore, rien à comparer.
+     * La base reçue (plus avancée que la mienne) contredit-elle mon histoire ? Les deux routes connues : l'une doit prolonger
+     * l'autre (mon rejeu peut être en retard ou en avance sur la base reçue). Une route inconnue (appareil plus ancien) : si mon
+     * rejeu passe par la même étape, il doit y être au même point (même rang, même nœud, même état) ; s'il n'y est pas encore,
+     * rien à comparer.
      */
     private static boolean diverge(Campagne c, Partie mienne, Partie recue, long maintenant) {
+        Etat e = rejouer(c, mienne, maintenant);
+        if (cheminValide(e.chemin, e.e) && cheminValide(recue.chemin, recue.e))
+            return !recue.chemin.startsWith(e.chemin) && !e.chemin.startsWith(recue.chemin);
         StringBuilder b = new StringBuilder();
         jsonInstantane(b, recue.ici);
         String attendu = recue.r + b.toString();
         boolean vu = false;
-        for (Point pt : rejouer(c, mienne, maintenant).points) {
+        for (Point pt : e.points) {
             if (pt.base.e != recue.e || pt.base.abandonnee) continue;
             vu = true;
             StringBuilder x = new StringBuilder();

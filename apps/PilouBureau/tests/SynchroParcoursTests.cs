@@ -238,6 +238,45 @@ public class SynchroParcoursTests(ITestOutputHelper sortie)
                          + $"fils de {pc.Fil.Count} et {tel.Fil.Count} messages ; carnets identiques");
     }
 
+    // Divergence quand le perdant est en retard : au même choix, chacun prend sa route ; le PC avance de huit pas, le
+    // téléphone d'aucun. Le rejeu du téléphone n'atteint pas l'étape de la base reçue (rien à comparer au même point) :
+    // c'est la route des décisions, portée par la base, qui dit que les histoires se sont séparées. Le fil du téléphone
+    // ne garde pas son choix perdant, et les deux carnets se retrouvent identiques.
+    [Theory]
+    [InlineData("phare-eteint")]
+    [InlineData("grande-panne")]
+    [InlineData("petit-nuage")]
+    public void Divergence_quand_le_perdant_est_en_retard(string id)
+    {
+        var c = Charger(id)!;
+        var pc = new Carnet();
+        var tel = new Carnet();
+        var h = new Hasard(Hasard.Graine("retard|" + id));
+        long t = T0;
+        Assert.Null(Demarrer(pc, c, 99, t, "pc-a", B, "g"));
+        Campagnes.Etat e = Actualiser(pc, B, t)!;
+        for (int i = 0; i < 500 && !(e.Phase == Phase.Choix && e.Options.Count >= 2 && e.ChapitreNumero >= 2); i++) e = Pas(pc, c, ref t, "pc-a", h)!;
+        Echanger(pc, "pc-a", "pc", tel, "tel-b", "tel", t);
+        Assert.Null(Choisir(pc, c, t + 10_000, "pc-a", e.Options[0].Id));
+        Assert.Null(Choisir(tel, c, t + 70_000, "tel-b", e.Options[1].Id));
+        long tp = t + 10_000;
+        for (int i = 0; i < 8; i++) Pas(pc, c, ref tp, "pc-a", h);
+        long tm = Math.Max(tp, t + 70_000) + 3_600_000;
+        Actualiser(pc, B, tm);
+        Actualiser(tel, B, tm);
+        // Le cas visé : le rejeu du téléphone est en retard sur la base du PC.
+        Assert.True(Rejouer(c, tel.Courante!, tm).E < pc.Courante!.E, $"rejeu {Rejouer(c, tel.Courante!, tm).E}, base reçue {pc.Courante!.E}");
+        foreach (var m in Messages(pc, "pc-a", "pc")) Recevoir(tel, m, "tel-b", B, tm);
+        Actualiser(tel, B, tm);
+        var perdu = tel.Fil.Where(m => m.Qui == "joueur" && m.Noeud == e.Noeud && m.Texte == e.Options[1].Libelle).ToList();
+        Assert.True(perdu.Count == 0, $"le fil du téléphone garde le choix perdant « {e.Options[1].Libelle} »");
+        Echanger(tel, "tel-b", "tel", pc, "pc-a", "pc", tm + 1000);
+        Assert.Equal(Signature(pc), Signature(tel));
+        var cles = tel.Fil.Select(m => (m.P, m.E, m.I)).ToList();
+        Assert.Equal(cles.Count, cles.Distinct().Count());
+        sortie.WriteLine($"{id} : base reçue à l'étape {pc.Courante!.E}, fil du téléphone de {tel.Fil.Count} messages, sans le choix perdant");
+    }
+
     // Taille des messages au pire, sur les vraies campagnes : un carnet qui a obtenu les 20 fins des quatre campagnes,
     // trois campagnes mises de côté, et la plus longue marche de chaque campagne jouée jusqu'au bout.
     [Fact]

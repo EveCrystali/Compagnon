@@ -1,14 +1,30 @@
 package fr.pilou.compagnon;
 
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Petits sons rétro synthétisés en code (ondes carrées et bruit) : aucun fichier, aucun droit d'auteur.
+ * Petits sons rétro synthétisés en code : aucun fichier, aucun droit d'auteur. Deux familles :
+ * les sons de Chasse aux bugs (instance, réglage « son ») et les sons de Pilou (docs/SONS.md), décrits dans
+ * /sons.txt (assets/ du dépôt) et synthétisés en entiers exactement comme Sons.cs sur le PC et outils/sons/sons.py
+ * (empreintes : outils/sons/sons-reference.txt), réglage « sons » : aucun (par défaut), discrets, normaux.
  * Un AudioTrack statique par son ; rejouer = rembobiner.
  */
 final class Sons {
@@ -101,5 +117,208 @@ final class Sons {
             System.arraycopy(u, 0, s, k * n, n);
         }
         return s;
+    }
+
+    // ---- Sons de Pilou (docs/SONS.md) ----
+
+    static final String CARESSE = "caresse", MOT = "mot", AVENTURE = "aventure", CHOIX = "choix", ACHAT = "achat",
+            PECHE = "peche", EXPEDITION = "expedition", CAMPAGNE = "campagne", PALIER = "palier", SUCCES = "succes";
+    static final String[] NIVEAUX = {"aucun", "discrets", "normaux"};
+    private static final int ATTAQUE_MS = 4, RELACHE_MS = 60, QUEUE_MS = 20, FONDU_MS = 8, FILTRE = 120, DISCRET = 3;
+
+    static final class Note {
+        final int debut, duree, f0, f1, volume;
+        final String onde;
+
+        Note(int debut, int duree, int f0, int f1, String onde, int volume) {
+            this.debut = debut;
+            this.duree = duree;
+            this.f0 = f0;
+            this.f1 = f1;
+            this.onde = onde;
+            this.volume = volume;
+        }
+    }
+
+    static Map<String, List<Note>> lire(String texte) {
+        Map<String, List<Note>> sons = new LinkedHashMap<>();
+        for (String brute : texte.split("\n")) {
+            String l = brute.trim();
+            if (l.isEmpty() || l.startsWith("#")) continue;
+            String[] p = l.split("\\|");
+            if (p.length != 6) continue;
+            for (int k = 0; k < p.length; k++) p[k] = p[k].trim();
+            String[] f = p[3].split(">");
+            Note n = new Note(Integer.parseInt(p[1]), Integer.parseInt(p[2]), Integer.parseInt(f[0]),
+                    Integer.parseInt(f[f.length - 1]), p[4], Integer.parseInt(p[5]));
+            List<Note> liste = sons.get(p[0]);
+            if (liste == null) sons.put(p[0], liste = new ArrayList<>());
+            liste.add(n);
+        }
+        return sons;
+    }
+
+    /** Échantillons 16 bits au réglage « normaux ». Tout en entiers, comme Sons.cs et sons.py (même ordre, mêmes décalages). */
+    static short[] synthetiser(List<Note> notes) {
+        int fin = 0;
+        for (Note n : notes) fin = Math.max(fin, TAUX * n.debut / 1000 + TAUX * n.duree / 1000);
+        fin += TAUX * QUEUE_MS / 1000;
+        long[] acc = new long[fin];
+        int a = TAUX * ATTAQUE_MS / 1000;
+        for (Note note : notes) {
+            int s0 = TAUX * note.debut / 1000, n = TAUX * note.duree / 1000;
+            int r = Math.min(n / 2, TAUX * RELACHE_MS / 1000);
+            long phase = 0;
+            int lfsr = 1;
+            for (int i = 0; i < n; i++) {
+                long fm = ((long) note.f0 * 1000 * (n - i) + (long) note.f1 * 1000 * i) / n;
+                long inc = fm * 4294967296L / (TAUX * 1000L);
+                long avant = phase;
+                phase = (phase + inc) & 0xFFFFFFFFL;
+                int p = (int) (phase >> 16);
+                long v;
+                if (note.onde.equals("tri")) {
+                    int t = p < 32768 ? p : 65535 - p;
+                    v = ((t >> 11) * 2 - 15) * 2184L;
+                } else if (note.onde.equals("puls")) {
+                    v = p < 16384 ? 24000 : -8000;
+                } else {
+                    if (phase < avant) {
+                        int b = (lfsr ^ (lfsr >> 1)) & 1;
+                        lfsr = (lfsr >> 1) | (b << 14);
+                    }
+                    v = (lfsr & 1) != 0 ? 20000 : -20000;
+                }
+                long e = 4096;
+                if (i < a) e = 4096L * i / a;
+                if (i >= n - r) {
+                    long k = n - i;
+                    e = Math.min(e, 4096L * k * k / ((long) r * r));
+                }
+                e = e * (4096 - 1024L * i / n) / 4096;
+                acc[s0 + i] += (v * e * note.volume * 10) >> 22;
+            }
+        }
+        short[] sortie = new short[fin];
+        long y1 = 0, y2 = 0;
+        for (int i = 0; i < fin; i++) {
+            long x = acc[i] << 8;
+            y1 += ((x - y1) * FILTRE) >> 8;
+            y2 += ((y1 - y2) * FILTRE) >> 8;
+            sortie[i] = (short) Math.max(-32767, Math.min(32767, y2 >> 8));
+        }
+        int f = TAUX * FONDU_MS / 1000;
+        for (int i = fin - f; i < fin; i++) {
+            long g = ((long) (fin - 1 - i) << 16) / f;
+            sortie[i] = (short) ((sortie[i] * g) >> 16);
+        }
+        return sortie;
+    }
+
+    /** « Discrets » : environ -14 dB, vraiment bas. */
+    static short[] adoucir(short[] s) {
+        short[] d = new short[s.length];
+        for (int i = 0; i < s.length; i++) d[i] = (short) ((s[i] * DISCRET) >> 4);
+        return d;
+    }
+
+    static String empreinte(short[] s) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] o = new byte[s.length * 2];
+            for (int i = 0; i < s.length; i++) {
+                o[i * 2] = (byte) s[i];
+                o[i * 2 + 1] = (byte) (s[i] >> 8);
+            }
+            StringBuilder b = new StringBuilder();
+            for (byte x : md.digest(o)) b.append(String.format("%02x", x));
+            return b.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /** Quand un son a le droit de partir : même règle que GardeSons sur le PC. */
+    static final class Garde {
+        static final long ESPACEMENT = 1200, MEME_SON = 4000;
+        static final int SPONTANES_PAR_HEURE = 6;
+        private long dernier = Long.MIN_VALUE / 2;
+        private final Map<String, Long> parSon = new HashMap<>();
+        private final ArrayDeque<Long> spontanes = new ArrayDeque<>();
+
+        static boolean spontane(String id) {
+            return id.equals(MOT) || id.equals(EXPEDITION) || id.equals(CAMPAGNE) || id.equals(PALIER) || id.equals(SUCCES);
+        }
+
+        synchronized boolean peut(String id, long t, String niveau, boolean cache, boolean saisie) {
+            if (!(niveau.equals("discrets") || niveau.equals("normaux")) || cache) return false;
+            boolean sp = spontane(id);
+            if (sp && saisie) return false;
+            if (t - dernier < ESPACEMENT) return false;
+            Long d = parSon.get(id);
+            if (d != null && t - d < MEME_SON) return false;
+            while (!spontanes.isEmpty() && t - spontanes.peekFirst() >= 3_600_000) spontanes.pollFirst();
+            if (sp && spontanes.size() >= SPONTANES_PAR_HEURE) return false;
+            dernier = t;
+            parSon.put(id, t);
+            if (sp) spontanes.addLast(t);
+            return true;
+        }
+    }
+
+    private static final Garde GARDE = new Garde();
+    private static final Map<String, AudioTrack> PILOU = new HashMap<>();
+    private static Map<String, List<Note>> catalogue;
+
+    static final String DEFAUT = "normaux";
+
+    static String niveau(Context c) {
+        return Prefs.de(c).getString("sons", DEFAUT);
+    }
+
+    /**
+     * Joue un son de Pilou si le réglage le permet. Silence pendant un appel ou une visio (mode audio de communication)
+     * et quand le téléphone est en silencieux ou en vibreur.
+     */
+    static void jouer(Context c, String id) {
+        try {
+            String niveau = niveau(c);
+            AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+            boolean cache = am != null && (am.getMode() != AudioManager.MODE_NORMAL
+                    || am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL);
+            if (!GARDE.peut(id, android.os.SystemClock.uptimeMillis(), niveau, cache, false)) return;
+            AudioTrack t = pret(id, niveau.equals("discrets"));
+            if (t == null) return;
+            if (t.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) t.stop();
+            t.reloadStaticData();
+            t.play();
+        } catch (RuntimeException e) {
+            // pas de sortie audio : silence
+        }
+    }
+
+    private static synchronized AudioTrack pret(String id, boolean discret) {
+        String cle = id + (discret ? "-discret" : "");
+        AudioTrack t = PILOU.get(cle);
+        if (t != null) return t;
+        if (catalogue == null) catalogue = lire(ressource("/sons.txt"));
+        List<Note> notes = catalogue.get(id);
+        if (notes == null) return null;
+        short[] s = synthetiser(notes);
+        t = piste(discret ? adoucir(s) : s);
+        PILOU.put(cle, t);
+        return t;
+    }
+
+    static String ressource(String nom) {
+        try (InputStream in = Sons.class.getResourceAsStream(nom)) {
+            if (in == null) return "";
+            ByteArrayOutputStream o = new ByteArrayOutputStream();
+            byte[] b = new byte[4096];
+            for (int k; (k = in.read(b)) > 0; ) o.write(b, 0, k);
+            return new String(o.toByteArray(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "";
+        }
     }
 }

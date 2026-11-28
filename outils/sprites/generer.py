@@ -1891,4 +1891,7 @@ if __name__ == "__main__":
     # Dessin fin (2×) : les mêmes fonctions, rejouées sur une toile deux fois plus fine, pour la série de fin.py.
     import fin
     fin.generer(dessiner)
+    # La police pixel de Pilou (assets/police, docs/POLICE.md).
+    import police
+    police.fichiers()
     print(len(TOUS), "sprites dans", SORTIE, "dont", len(toile.TOUS2), "redessinés en fin dans", toile.SORTIE2)

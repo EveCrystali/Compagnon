@@ -179,7 +179,9 @@ final class PageReglages extends Page {
         // ---- Jeux
         corps.addView(Ui.titreSection(a, "Jeux"));
         c = Ui.carte(a);
-        Ui.interrupteur(a, c, "Sons", "Petits bruits rétro dans Chasse aux bugs", Prefs.son(a),
+        c.addView(choixSons(a));
+        c.addView(Ui.separateur(a));
+        Ui.interrupteur(a, c, "Sons de Chasse aux bugs", "Petits bruits rétro pendant la partie", Prefs.son(a),
                 oui -> Prefs.de(a).edit().putBoolean("son", oui).apply());
         c.addView(Ui.separateur(a));
         Ui.interrupteur(a, c, "Vibrations", "Quand Pilou est touché, quand un boss tombe", Prefs.vibrations(a),
@@ -294,5 +296,46 @@ final class PageReglages extends Page {
         String pl = Journal.dernier(app);
         blocPlantage.setVisibility(pl.isEmpty() ? View.GONE : View.VISIBLE);
         plantage.setText(pl.length() > 1200 ? pl.substring(0, 1200) + "…" : pl);
+    }
+
+    // Sons de Pilou (docs/SONS.md) : aucun, discrets, normaux (par défaut) ; le choix fait entendre le « pouic ».
+    private static LinearLayout choixSons(Principale a) {
+        Ui.Palette p = Ui.p(a);
+        String[] noms = {"Aucun", "Discrets", "Normaux"};
+        LinearLayout bloc = Ui.pile(a);
+        bloc.setPadding(Ui.dp(a, 4), Ui.dp(a, 8), 0, Ui.dp(a, 8));
+        bloc.addView(Ui.texte(a, "Sons de Pilou", Ui.T_CORPS, p.texte, false));
+        bloc.addView(Ui.texte(a, "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux", Ui.T_DETAIL, p.doux, false));
+        LinearLayout r = Ui.rangee(a);
+        r.setBackground(Ui.arrondi(a, p.surface2, 14, 0));
+        r.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
+        TextView[] t = new TextView[noms.length];
+        Runnable peindre = () -> {
+            String actuel = Sons.niveau(a);
+            for (int j = 0; j < t.length; j++) {
+                boolean choisi = Sons.NIVEAUX[j].equals(actuel);
+                t[j].setTextColor(choisi ? p.bleu : p.doux);
+                t[j].setBackground(choisi ? Ui.arrondi(a, p.surface, 11, 0) : null);
+                t[j].setText((choisi ? "● " : "") + noms[j]);
+            }
+        };
+        for (int k = 0; k < noms.length; k++) {
+            TextView x = Ui.texte(a, noms[k], Ui.T_ETIQUETTE, p.doux, true);
+            x.setGravity(Gravity.CENTER);
+            x.setMinHeight(Ui.dp(a, 40));
+            int kk = k;
+            x.setOnClickListener(v -> {
+                Prefs.de(a).edit().putString("sons", Sons.NIVEAUX[kk]).apply();
+                peindre.run();
+                Sons.jouer(a, Sons.CARESSE);
+            });
+            t[k] = x;
+            r.addView(x, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        }
+        peindre.run();
+        LinearLayout.LayoutParams lr = Ui.large();
+        lr.topMargin = Ui.dp(a, 8);
+        bloc.addView(r, lr);
+        return bloc;
     }
 }

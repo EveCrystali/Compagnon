@@ -19,7 +19,8 @@ import java.util.List;
  */
 final class PageAccueil extends Page {
 
-    private final TextView salut, nom, niveau, xp, etatPc, titreSessions, motDuJour;
+    private final TextView salut, nom, niveau, xp, etatPc, titreSessions;
+    private final TextePixelVue motDuJour;
     private final PresenceVue presence;
     private final Ui.Barre barre;
     private final PilouVue pilou;
@@ -391,6 +392,7 @@ final class PageAccueil extends Page {
 
     private void caresser() {
         pilou.jouer("caresse", 2400);
+        Sons.jouer(app, Sons.CARESSE);
         coeur.setAlpha(1);
         coeur.setTranslationY(0);
         coeur.animate().alpha(0).translationY(-Ui.dp(app, 36)).setDuration(900).start();
@@ -529,7 +531,7 @@ final class PageAccueil extends Page {
         try {
             String m = PresenceTel.motDuJour(app);
             motDuJour.setVisibility(m.isEmpty() ? View.GONE : View.VISIBLE);
-            motDuJour.setText(m.isEmpty() ? "" : "« " + m + " »");
+            motDuJour.texte(m.isEmpty() ? "" : "« " + m + " »");
             motDuJour.setContentDescription(m.isEmpty() ? null : "Pilou dit : " + m);
             presence.rafraichir();
             Presence.Etat e = PresenceTel.etat(app);

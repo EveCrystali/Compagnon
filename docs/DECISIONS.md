@@ -32,6 +32,7 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
 - **Météo discrète** : peu de particules, translucides ; le parapluie s'achète, il ne s'impose pas.
 - **Notifications Windows** : désactivées tant que Pilou n'est pas un paquet signé.
 - **Discord** : un bot, jamais l'automatisation d'un compte personnel.
+- **Sons** : « normaux » par défaut, PC et téléphone ; un réglage déjà enregistré garde son choix (Antoine, 28 novembre 2026).
 
 ## Progression et économie
 
