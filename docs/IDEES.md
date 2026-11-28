@@ -29,6 +29,16 @@ existant), et aucune couleur ne s'oppose en rouge contre vert : chaque état a a
   suivante, des personnages reviennent, un fil d'ensemble), ouvertes par le niveau ou par un haut fait. À cadrer
   avec Antoine avant d'écrire : c'est du contenu neuf.
 
+## Théâtre des campagnes, après la version 1
+
+- **Liens avec le Pilou du bureau** (choix d'Antoine du 27 novembre, non faits) : échos d'une campagne sur le bureau,
+  bout de décor, départ et retour, objets du sac.
+- **Chorégraphies des choix** : Pilou joue le choix dans la scène (voir `SCENES.md`, « Ce qui reste »).
+- **Rafales en fuite au Trou-qui-Siffle** : un nouveau mouvement d'acteur, « fuite », fait partir une rafale du point
+  de fuite de la galerie et la fait grossir en venant vers le joueur. Moteur commun (Python, C#, Java) avec référence
+  et test des deux côtés ; resservirait à la caverne des câbles et à la lanterne du phare.
+- **Parallaxe** : le format des décors porte déjà jusqu'à cinq plans ; le glissement reste à écrire.
+
 ## Notifications et téléphone
 
 - **Lire les notifications Windows** : il faut donner à Pilou une identité de paquet signé (sparse

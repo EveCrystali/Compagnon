@@ -116,42 +116,67 @@ Trois lignes de résumé, puis :
 
 ## Chantiers
 
-Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, matin.
+Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, après-midi.
 
-| Chantier | Branche / PR | Périmètre | État |
-|---|---|---|---|
-| Style pixel de l'Aventure (bulles de récit, choix, bandeau, puce de lieu), puis théâtre de « La Grande Panne » | `claude/aventure-style-pixel`, puis `claude/theatre-grande-panne` | lecture de l'Aventure PC et Android (`Lecture.java`, `PageAventure.java`, `FenetreAventure.cs`, `Theatre*`), `assets/scenes/` | En cours (prioritaire : vu par Antoine sur son téléphone) |
-| Guide de style et écrans Android hors Aventure | `claude/guide-style` | `docs/STYLE.md`, icônes pixel, en-tête, barre du bas, Accueil, Jouer, Boutique, Collection (Android) | En cours |
-| Menu : finition, puis première minute et mode d'emploi | `claude/menu-finition` (#98), puis `claude/premiere-minute` | `MenuPortes.cs`, `MenuRetro.*`, bienvenue de `FenetrePilou.cs`, `docs/MODE-EMPLOI.md`, premier lancement Android | En cours |
-| Saynètes de repos et réactions au monde | `claude/saynetes-repos` | `RenduPilou.*`, gestes de `FenetrePilou.cs`, `animations.py`, `Animations.java`, `PilouVue.java` | En cours |
-| Musiques et ambiances synthétisées | `claude/musiques` | `outils/sons/`, `assets/sons.txt`, `Sons.cs`, `Sons.java` | En cours |
-| Traits de personnalité | `claude/traits` | nouveaux `Traits.cs` / `Traits.java` et leur référence, « Pilou et moi » (`FenetrePresence.cs`), `assets/presence/` | En cours |
-| Progression : campagnes ouvertes par un haut fait, avantage du niveau visible en expédition | `claude/progression-campagnes` | `Campagnes.cs` et son pendant Android, `valider.py`, `CAMPAGNES.md`, affichage du départ d'expédition | En cours |
-| Pilotage (ce fichier) | `claude/pilotage` | `docs/PILOTAGE.md`, `CLAUDE.md` | En cours |
+**Gel pour la version 1 (Antoine, 28 novembre 2026)** : « termine ce qui était prévu et en cours, puis on stoppe
+sur cela comme une v1 ». Aucun nouveau chantier, aucune nouvelle fonction. Seuls passent encore les défauts.
 
-Fusionnés :
-- 27 novembre : tournage de la promo (#80), montage de la promo (#78), boutons du journal et taille « Petit » (#79),
-  pilotage (#81).
-- 28 novembre, nuit : divergence de campagne détectée même en retard (#82) ; relecture de 110 captures Android et
-  portrait qui ne cache plus « ⋯ » (#83) ; audit du menu et menu retenu par Antoine, « Sept portes » + « En ce moment »
-  (#84, #85) ; liste de contrôle Windows, quatre défauts corrigés (#86) ; dix sons 8 bits (#87) ; police pixel
-  maison de la bulle (#88) ; vie du personnage, ressorts, ombre, poussière, lumière de l'heure (#90) ; gains qui ne
-  passent plus sur la bulle (#91).
-- 28 novembre, matin : sons « normaux » par défaut (#93) ; théâtre des campagnes, prologue mis en scène, une seule
-  unité de pixel sur téléphone, bandeau au-dessus de la scène (#95) ; audit large avant la v1 (#96) ; menu « Sept portes » (#97).
+| Chantier | PR | État |
+|---|---|---|
+| Sons sur téléphone : un geste sonne au volume multimédia même en vibreur ; bouton « Essayer » | #171 | En CI. Défaut vu par Antoine sur son téléphone |
+| Pilotage (ce fichier) | `claude/pilotage` | Tenu à jour |
 
-Leçon : la relecture des captures Robolectric (#83) n'a pas vu le décor trop agrandi qu'Antoine a vu sur son
-téléphone. Les captures de contrôle doivent être prises au format d'un vrai téléphone en portrait (1080 × 2400,
-densité 2,75), pas seulement au format par défaut.
+Tout le reste est fusionné. Journée du 28 novembre :
+- **Menu et première minute** : « Sept portes » (#97, #98), thème sombre par défaut sur PC (#102), trois bulles de
+  bienvenue et mode d'emploi (#100), entrée « Musique » (#118).
+- **Une seule écriture** : police pixel (#88, #107, #109), style pixel de l'Aventure (#103, #108), guide de style et
+  Android (#110, #111, #154), fenêtres du PC et plancher de lisibilité (#114, #115, #116, #119, #152), habillage
+  commun des fenêtres et titres au pixel fin (#135, #150, #159).
+- **Vie et personnalité** : 30 saynètes de repos, réactions au monde, Pilou éveillé sans IA (#105, #113) ; vingt
+  traits de personnalité (#106) ; campagnes ouvertes par un haut fait, aide du niveau visible (#101).
+- **Sons et musiques** : dix sons, « normaux » par défaut (#87, #93) ; 8 boucles et ambiances (#104) ; thème de Pilou
+  et second lot (#128).
+- **Théâtre des campagnes** : prologue (#95), La Grande Panne (#112), Le phare éteint (#117), Petit Nuage (#120),
+  scènes d'évolution et leur choix partagé (#129, #131, #133).
+- **Haute définition (règle 9)** : étude (#121, #122), format (#130), moteur 480 × 240 avec le Pilou fin du bureau
+  (#146, #149), métamorphose (#151) ; 29 personnages et 32 acteurs (#126, #132, #134, #136, #138, #139, #140) ;
+  46 décors puis une passe en profondeur par campagne (#127, #137, #141 à #145, #147, #148, #153, #155 à #158,
+  #160, #161, #164 à #170).
+- **Sûreté** : un lancement d'essai n'écrit plus dans le vrai profil et n'envoie rien sur le réseau (#162) ; outil de
+  planche d'une image par scène (#163).
+
+Leçons de la journée :
+- Les captures de contrôle se prennent au format d'un vrai téléphone en portrait (1078 × 2400).
+- Quarante dessins en une passe donnent de la largeur, pas de la profondeur : un dessin à la fois, comparé en taille
+  réelle au meilleur, cinq faiblesses écrites, trois tours.
+- Un réglage coché qui ne produit rien sans explication est un défaut (sons muets en vibreur).
+- Tout outil d'essai travaille sur des données jetables : le vérifier dans le code, pas le supposer.
+
+### Clôture de la version 1
+
+Ce qui reste avant de dire « v1 », dans l'ordre :
+
+1. Fusion de #171, puis essai du son par Antoine (trois gestes donnés dans la PR).
+2. **Essai sur le vrai téléphone d'Antoine** — rien de ceci n'a tourné sur un appareil réel : lecture d'une scène en
+   haute définition (Pilou entre, parle, toucher la grenouille de la mare) ; les quatre campagnes sans rien de coupé ;
+   une scène d'évolution et sa métamorphose ; le choix d'évolution qui passe d'un appareil à l'autre ; le Carnet
+   « Ses évolutions » ; dix minutes de lecture (fluidité, chauffe, batterie, réglage ✧) ; plusieurs lieux à la suite
+   sans plantage ; la grande police du système.
+3. **Essai sur le PC à 125 % et 150 %**, deux écrans ; l'annonce d'une évolution par la bulle.
+4. Écoute des 22 musiques et motifs (`py outils/sons/sons.py`, puis `outils/sons/ecoute/ecoute.html`).
+5. Synthèse de `ETAT.md` par le pilote.
+6. Tournage et montage de la vidéo de promo sur le PC (l'ancienne montre un Pilou qui n'existe plus).
 
 ### Questions ouvertes pour Antoine
 
-- Reste de [AUDIT-V1.md](AUDIT-V1.md) : Pilou peut-il poser de rares questions à deux réponses ? Public de la v1
-  (toi et tes amis, ou diffusion publique) ?
+- La clôture inclut-elle les points 2 à 6, ou seulement la fin des chantiers ?
+- Public de la v1 : toi et tes amis, ou diffusion publique (signature, page de présentation, anglais) ?
 - Menu : « Caresser » est sorti du menu (c'est le clic gauche). D'accord ?
-- Windows à 125 / 150 %, épreuves au clavier et à la souris, extensions d'éditeur : à vérifier à la main (#86).
+- Le profil réel a probablement été réécrit par des essais le 28 novembre avant #162 (expérience peut-être créditée
+  deux fois, de quelques points) : veux-tu qu'on le vérifie ?
 
-### File d'attente (lancés par le pilote, dans cet ordre)
+### Après la version 1
 
-1. **Fenêtres PC hors Aventure et menu** (boutique, soins, réglages, journal) au guide de style, après `docs/STYLE.md`.
-2. **Tournage et montage réels de la promo** sur le PC, une fois le rendu de la nuit fusionné.
+Voir `IDEES.md`. Reportés par le gel : campagnes liées et deuxième personnage ; rares questions de Pilou ; liens
+entre les campagnes et le Pilou du bureau, chorégraphies des choix ; parallaxe des décors ; rafales en fuite ;
+navigation du menu au clavier ; signature et diffusion publique ; petits jeux.
