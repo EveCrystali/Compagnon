@@ -5,6 +5,7 @@
 #   scene <stade>
 #   titre <texte>
 #   decor <scène de assets/scenes/evolution.txt>
+#   musique <morceau de assets/musiques.txt>   facultatif (docs/SONS.md : le thème de Pilou, une version par stade)
 #   pilou <humeur> <texte>              une réplique, toujours dite
 #   calin <humeur> <texte>              dite seulement si la variante du stade est câline
 #   espiegle <humeur> <texte>           dite seulement si elle est espiègle
@@ -16,6 +17,7 @@
 scene 2
 titre Trop grand pour mon pot
 decor fond-du-jardin-matin
+musique pilou-10
 pilou surpris Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
 pilou joie J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
 calin tendre Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
@@ -33,6 +35,7 @@ pilou joie Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retou
 scene 3
 titre Un nuage dans la tête
 decor fond-du-jardin-soir
+musique pilou-25
 pilou surpris Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
 pilou peur J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
 calin tendre Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
@@ -50,6 +53,7 @@ pilou joie Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de
 scene 4
 titre Des étoiles plein les poches
 decor fond-du-jardin-nuit
+musique pilou-40
 pilou surpris Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
 pilou joie J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
 calin tendre J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.

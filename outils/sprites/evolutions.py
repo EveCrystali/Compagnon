@@ -22,6 +22,7 @@ class Scene:
         self.stade = stade
         self.titre = ""
         self.decor = ""
+        self.musique = ""           # morceau de assets/musiques.txt (vide : la boucle du ton « émotion »)
         self.question = ""
         self.options = []            # [(id, libellé)]
         self.elements = []           # [(sorte, cle, humeur, texte)] : sorte pilou | calin | espiegle | choix | apres
@@ -45,6 +46,8 @@ def lire(texte):
             sc.titre = reste
         elif mot == "decor":
             sc.decor = reste
+        elif mot == "musique":
+            sc.musique = reste
         elif mot in ("pilou", "calin", "espiegle"):
             humeur, _, t = reste.partition(" ")
             sc.elements.append((mot, "", humeur, t))
@@ -99,7 +102,7 @@ def ecrire_reference():
               "# EvolutionsTest.java. Ne pas modifier à la main."]
     for stade in sorted(scenes):
         sc = scenes[stade]
-        lignes.append("scene %d %s | %s | %s" % (stade, sc.decor, sc.titre, sc.question))
+        lignes.append("scene %d %s | %s | %s | %s" % (stade, sc.decor, sc.titre, sc.question, sc.musique or "-"))
         for (oid, lib) in sc.options:
             lignes.append("option %s %s" % (oid, lib))
         for var in VARIANTES + ("autre",):
