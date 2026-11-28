@@ -698,347 +698,416 @@ def pre_aux_draps(P, tab):
 
 
 # =====================================================================================================================
-# L'Étang-qui-fume : un petit étang rond bordé de roseaux et d'un saule (la clé, à droite), nénuphars, brume épaisse
-# posée sur l'eau, grandes toiles d'araignée chargées de rosée sur la rive d'en face, lumière gris-bleu de l'aube.
+# L'Étang-qui-fume (chapitres 2 et 3) : « C'est un étang tout rond, avec des roseaux et un vieux saule. […] l'eau fume.
+# Une brume blanche monte de partout. » L'aube rose : le soleil se lève derrière les montagnes à gauche ; l'étang rond
+# fait miroir, la brume s'en lève en volutes ; le vieux saule pleure sur la rive droite, et dans ses branches la grande
+# toile de Dentelle, ses gouttes rangées par taille, la perle au centre ; les rainettes du chœur sur les nénuphars.
 # =====================================================================================================================
-@decor("petit-nuage", "etang-qui-fume", soleil=(56.0, 30.0), tons=ROSE, nom="L'Étang-qui-fume", matiere=True)
+def saule(P, x, y, h, graine):
+    """Un vieux saule pleureur : un tronc tordu, des branches en arc, et le rideau de rameaux qui tombe jusqu'à l'eau,
+    éclairé du côté du soleil ; les rameaux bougent un peu."""
+    T = pg.T
+    P.courbe([(x, y), (x + 1.5, y - h * 0.3), (x - 1.0, y - h * 0.55), (x + 0.5, y - h * 0.7)], BO1, P.ep(2.0), P.ep(1.0))
+    P.courbe([(x + 0.4, y), (x + 1.8, y - h * 0.3), (x - 0.6, y - h * 0.55)], BO2, 1)
+    tetes = []
+    for i in range(7):
+        a = -2.6 + 0.85 * i / 6 * 2.6
+        bx, by = x + 0.5 + h * 0.36 * math.cos(a) * 1.2, y - h * 0.7 + h * 0.2 * math.sin(a) - h * 0.12
+        P.courbe([(x + 0.5, y - h * 0.68), ((x + bx) / 2, by - h * 0.12), (bx, by)], BO1, P.ep(0.5), 1)
+        tetes.append((bx, by))
+    bo = [(bx + 3.0 * (hz(j, 1, graine + 5) - 0.5), by + 2.0 * (hz(j, 2, graine + 5) - 0.5), 2.0 + 2.6 * hz(j, 3, graine + 5))
+          for j, (bx, by) in enumerate(tetes * 3)]
+    P.volumes(bo, [T.S0, T.S1, T.S2, PJ1, T.S3, PJ2], (-0.6, -0.55, 0.4), grain=0.9, graine=graine + 6, gain=0.6, base=0.45, trame=0.5)
+    for i in range(240):                                              # les rameaux
+        k = i % len(tetes)
+        bx, by = tetes[k]
+        x0 = bx + (hz(i, 1, graine) - 0.5) * h * 0.4
+        y0 = by + (hz(i, 2, graine) - 0.2) * h * 0.12
+        l = h * (0.15 + 0.7 * hz(i, 3, graine) ** 1.5)
+        b = 0.5 * onde(P.p, x0 / 9.0 + 0.1 * k)
+        lumi = x0 < x
+        coul = (T.S3 if hz(i, 4, graine) < 0.5 else PJ2) if lumi else (T.S1 if hz(i, 4, graine) < 0.6 else T.S0)
+        P.courbe([(x0, y0), (x0 + b * 0.4 + 0.6 * (hz(i, 6, graine) - 0.5), y0 + l * 0.5), (x0 + b + 1.2 * (hz(i, 7, graine) - 0.5), y0 + l)], coul, 1)
+        if hz(i, 5, graine) < 0.35:
+            P.point(x0 + b * 0.6, y0 + l * 0.6, T.S4 if lumi else T.S2)
+
+
+@decor("petit-nuage", "etang-qui-fume", soleil=(52.0, 30.0), tons=ROSE, nom="L'Étang-qui-fume", matiere=True)
 def etang_qui_fume(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
+    # ---- Le ciel de l'aube : rose au ras des montagnes, bleu pâle en haut ; des barres de nuages éclairées par-dessous.
     tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=44.0, haut=0.0, halo=0.24, disque=4.0)
+    pg.ciel(P, horizon=42.0, haut=0.0, halo=0.4, disque=3.6)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=-4.0, epais=10.0, seuil=0.56, graine=820)
-    pg.barres(P, [(60, 34.0, 20, 1.2), (120, 28.0, 16, 1.0)])
+    pg.voiles(P, y=-2.0, epais=8.0, seuil=0.58, graine=820)
+    pg.barres(P, [(70, 30.0, 22, 1.3), (128, 24.0, 18, 1.0), (24, 20.0, 14, 0.9)])
+    pg.cumulus(P, [(160, 6, 30, 5.0, 1260, 7, 0.3)], dessous=0.6)
     tab.plan("lointains", 0.2)
-    sommets(P, lambda x: dents(x, cx=66.0, k=0.98, base=46.0, serre=0.5), [T.L1, T.L2, T.L3, T.L4], neige=6.0, graine=4)   # vus de biais : l'un cache l'autre
-    pg.crete(P, lambda x: pg.profil(x, 45.0, 6.0, 20.0, 821), [T.L0, T.L1, T.L2, T.L3], 0.5)
-    pg.sapins(P, lambda x: pg.profil(x, 45.0, 6.0, 20.0, 821), densite=0.7, graine=822, coul=T.S0)
+    # ---- Les montagnes, plus grandes qu'au Pré aux Draps, le versant gauche rosi par l'aube ; une forêt noire en dessous.
+    massif(P, lambda x: dents(x, cx=92.0, k=0.78, base=42.0), [(72.0, 17.0), (112.0, 13.5)],
+           [T.L0, T.L1, T.L2, T.L3], [T.L4, T.CIEL[7], NE3, NE4], [T.L2, T.L3, T.CIEL[5]], T.CIEL[9], 1261,
+           brume=(T.CIEL[8], 28.0, 12.0))
+    foret = lambda x: pg.profil(x, 44.0, 4.0, 14.0, 821)
+    pg.crete(P, foret, [T.L0, T.L1, T.L2, T.CIEL[6]], 0.5)
+    pg.sapins(P, foret, densite=0.8, graine=822, coul=T.L0)
+    brume_claire(P, 42.0, 2.6, 60, T.CIEL[9], 0.6)
     tab.plan("moyen", 0.5)
-    # ---- La rive d'en face : herbe sombre, piquets ; entre eux, les grandes toiles d'araignée lourdes de rosée.
-    f_rive = lambda x: 47.0 + 0.7 * np.sin(_a(x) / 8.0)
-    pg.rive(P, f_rive, epais=2.0, joncs=150, graine=823)
-    for i, (x, r) in enumerate(((30.0, 6.0), (58.0, 5.0), (86.0, 7.0), (108.0, 4.6))):
-        y = 40.0 - (i % 2) * 2
-        for dx in (-r - 1, r + 1):
-            P.trait(x + dx, 47.6, x + dx * 0.96, y - r - 2, T.S0)
-        for a in range(0, 180, 20):
-            ra = math.radians(a)
-            P.trait(x - r * math.cos(ra), y - r * math.sin(ra) * 0.9, x + r * math.cos(ra), y + r * math.sin(ra) * 0.9, T.CIEL[8])
-        for rr in (0.3, 0.55, 0.8, 1.0):
-            d = np.hypot(X - x, (Y - y) / 0.9)
-            P.remplir((np.abs(d - r * rr) < 0.22), T.CIEL[9])
-        for q in range(14):                                     # les perles de rosée : elles s'allument l'une après l'autre
-            a, rr = 6.283 * hz(i, q, 824), r * (0.3 + 0.7 * hz(i, q + 20, 824))
-            if (p + hz(i, q + 40, 824)) % 1.0 < 0.5:
-                P.point(x + rr * math.cos(a), y + rr * 0.9 * math.sin(a), BLANC)
-    # ---- L'étang, miroir ; la brume épaisse posée dessus, qui monte en fumées lentes.
-    f_berge = lambda x: 72.6 + 1.0 * np.sin(_a(x) / 19.0) - 4.0 * np.exp(-((_a(x) - 190) / 24.0) ** 2) - 3.0 * np.exp(-((_a(x) - 2) / 20.0) ** 2)
-    pg.miroir(P, tab.derriere(), 48.4, ronds=((84.0, 64.0, 0.2), (40.0, 58.0, 0.7)), fonce=(58.0, 16.0), eclats=0.5, rides=0.03, graine=825)
-    for i, (x, y, r, fl) in enumerate(((60, 60, 4.0, CREME), (72, 64, 2.6, None), (100, 58, 3.0, None), (50, 67, 3.2, T.VIOLET), (112, 66, 4.4, CREME),
-                                       (88, 54, 1.8, None), (34, 62, 2.4, None))):
-        pg.nenuphar(P, x, y + 0.12 * onde(p, 0.13 * i), r, 826 + i, fl)
-    for g, (y, ep, f) in enumerate(((51.0, 2.6, 0.7), (56.0, 2.4, 0.6), (62.0, 2.2, 0.5), (68.0, 1.8, 0.35))):
-        brume_claire(P, y, ep, 10 + g, T.CIEL[10], f)
-    for i in range(9):                                          # les fumées de l'étang
+    # ---- La rive d'en face, ronde, ses joncs ; un héron immobile dans les hauts-fonds ; le vieux saule à droite.
+    f_rive = lambda x: 46.8 + 0.6 * np.sin(_a(x) / 8.0) - 1.6 * np.exp(-((_a(x) - 160) / 20.0) ** 2)
+    pg.rive(P, f_rive, epais=2.2, joncs=170, graine=823, sauf=(132, 192))
+    hx, hy = 58.0, 47.6                                               # le héron
+    P.trait(hx, hy, hx, hy - 3.4, T.L0)
+    P.trait(hx + 0.6, hy, hx + 0.6, hy - 3.4, T.L0)
+    P.ell(hx + 0.3, hy - 4.6, 1.4, 1.6, T.L1)
+    P.courbe([(hx + 0.8, hy - 5.8), (hx + 1.4, hy - 7.6), (hx + 0.6, hy - 9.0)], T.L1, 1)
+    P.trait(hx + 0.6, hy - 9.0, hx + 2.6, hy - 8.6, T.CIEL[8])
+    sxl, syl = 160.0, 47.0                                            # le saule
+    saule(P, sxl, syl, 40.0, 1262)
+    # La grande toile de Dentelle, dans le saule (la clé de la scène) : les fils, les gouttes rangées par taille, la
+    # perle au centre ; elles s'allument l'une après l'autre ; l'araignée qui tisse.
+    cx, cy, R = 146.0, 22.0, 13.0
+    for a in range(12):
+        ang = a * math.pi / 6
+        P.trait(cx, cy, cx + R * math.cos(ang), cy + R * 0.9 * math.sin(ang), NE2)
+    for k_ in range(5):
+        r = R * (k_ + 1) / 5.4
+        P.courbe([(cx + r * math.cos(a * math.pi / 6), cy + r * 0.9 * math.sin(a * math.pi / 6)) for a in range(13)], NE2, 1)
+        for a in range(0, 12, 2):
+            ang = (a + 0.5) * math.pi / 6
+            gx, gy = cx + r * math.cos(ang), cy + r * 0.9 * math.sin(ang)
+            vive = ((p * 12 + a + k_ * 3) % 12) < 3
+            P.point(gx, gy, BLANC if vive else NE3, 1 + (k_ < 2))
+    P.trait(cx - R, cy - R * 0.9, cx, cy, NE3)
+    P.trait(cx + R, cy - R * 0.9, cx, cy, NE3)
+    P.trait(cx, cy - R * 1.2, cx, cy, NE3)
+    halo(P, cx, cy, 3.4, CREME, 0.5 + 0.15 * onde(p))
+    P.ell(cx, cy, 1.3, 1.3, NE4)                                       # la perle de rosée qui ne sèche pas
+    P.point(cx - 0.4, cy - 0.4, BLANC)
+    pg.araignee(P, cx + 6.0, cy - 6.0, 4.0, d=0.2)
+    # ---- L'étang : le miroir de tout ce qui précède ; des nénuphars, les rainettes du chœur ; la brume qui monte.
+    pg.miroir(P, tab.derriere(), 46.6, ronds=((70.0, 60.0, 0.0), (112.0, 54.0, 0.4), (96.0, 68.0, 0.7)))
+    petits = [(30, 55.0, 2.0, T.VIOLET), (40, 60.0, 1.6, None), (66, 52.0, 1.4, None), (84, 58.5, 2.2, CREME),
+              (104, 62.0, 1.8, None), (124, 56.0, 2.4, T.VIOLET), (140, 64.0, 2.0, None), (52, 66.0, 2.6, None),
+              (118, 70.0, 2.2, CREME), (152, 58.0, 1.6, None)]
+    for i, (x, y, r, fl) in enumerate(petits):
+        pg.nenuphar(P, x, y + 0.12 * onde(p, 0.13 * i), r, 1263 + i, fl)
+    for i, (x, y) in enumerate(((40.0, 59.2), (84.0, 57.6), (124.0, 55.0), (52.0, 65.0), (104.0, 61.2))):
+        chante = int(p * 8 + i * 3) % 8 < 2                            # une rainette ; la gorge qui se gonfle
+        P.ell(x, y - 0.6, 1.0, 0.7, T.S3)
+        P.point(x - 0.5, y - 1.2, ENCRE)
+        P.point(x + 0.5, y - 1.2, ENCRE)
+        if chante:
+            P.ell(x, y - 0.1, 0.7, 0.5, CREME)
+    pg.barque(P, 18.0, 52.0, p)
+    for g in range(6):                                                # la brume qui fume : des volutes qui montent
+        y = 50.0 + g * 3.4
+        dens = pg.fbm((X + 5.0 * g + 4.0 * onde(p, 0.1 * g)) / 10.0, (Y + 6.0 * p) / 2.0, 3, 1270 + g)
+        voile(P, (np.abs(Y - y - 1.2 * np.sin(X / 9.0 + g)) < 0.6 + 2.6 * dens) & (Y > 46.0) & (dens > 0.45), NE4, 0.32 + 0.04 * g)
+    for i in range(9):
         t = (p + i / 9.0) % 1.0
-        x = 20 + 16 * i + 4 * math.sin(t * 6.283 + i)
-        voile(P, np.hypot((X - x) / 1.2, Y - (56 - 16 * t)) < 2.0 + 4.0 * t, T.CIEL[10], 0.5 - 0.48 * t)
-    # Le saule : son tronc penché sur l'eau, ses longues branches qui pendent et se balancent, jusqu'à la toucher.
-    sx, sy = 150.0, 70.0
-    P.courbe([(sx + 8, sy + 6), (sx + 4, sy - 14), (sx - 2, sy - 34), (sx - 6, sy - 52)], BO1, P.ep(5.0), P.ep(2.0))
-    P.courbe([(sx + 9.6, sy + 4), (sx + 5.6, sy - 14), (sx - 0.4, sy - 34)], BO2, 1)
-    for (bx_, by_) in ((sx - 22, sy - 62), (sx + 10, sy - 66), (sx - 8, sy - 72), (sx + 24, sy - 56)):
-        P.courbe([(sx - 4, sy - 44), ((sx + bx_) / 2, (sy - 44 + by_) / 2 - 4), (bx_, by_)], BO1, P.ep(1.6), 1)
-    touffes_saule = [(sx - 36 + 72 * float(hz(i, 1, 833)), sy - 54 - 22 * float(hz(i, 2, 833)) * (1 - abs(float(hz(i, 1, 833)) - 0.5) * 1.2),
-                      2.6 + 3.0 * float(hz(i, 3, 833))) for i in range(34)]
-    P.volumes(touffes_saule, [T.S0, T.S1, T.S2, T.S3], (-0.7, -0.4, 0.3), grain=1.6, graine=833, gain=0.5, base=0.42, trame=1.0)
-    for i in range(64):
-        x0 = sx - 40 + 1.25 * i + hz(i, 1, 834)
-        l = 22 + 26 * hz(i, 2, 834) * (1 - abs(x0 - sx) / 60.0)
-        y0 = sy - 58 + 8 * abs(x0 - sx) / 40.0 + 4 * hz(i, 3, 834)
-        bal = 1.6 * onde(p, x0 / 50.0) * l / 30.0
-        P.courbe([(x0, y0), (x0 + bal * 0.4, y0 + l * 0.5), (x0 + bal, y0 + l)], (T.S1, T.S2, T.S3, PJ2)[i % 4], 1)
+        x = 20 + 18 * i + 2 * math.sin(t * 6 + i)
+        voile(P, (np.hypot((X - x - 1.5 * t) / (1.0 + 2.0 * t), Y - 62.0 + 14.0 * t) < 1.6 + 2.0 * t), NE4, 0.5 * (1 - t))
     tab.plan("premier", 1.0)
-    pg.sol(P, f_berge, graine=835)
-    pg.cailloux(P, f_berge, graine=836)
-    pg.touffes(P, f_berge, graine=837)
-    pg.roseaux(P, -6.0, 16.0, n=12, haut=(14.0, 36.0), penche=1.0, graine=838)
-    pg.roseaux(P, 100.0, 124.0, n=6, haut=(8.0, 16.0), penche=-1.0, graine=839)
-    # (une grenouille peut se tenir sur la berge, vers (78, 75) : c'est un acteur de la scène, pas du décor)
-    pg.libellule(P, 96.0, 60.0)
-    pg.lucioles(P, [(10.0, 60.0), (24.0, 70.0), (176.0, 74.0), (120.0, 76.0)], graine=840)
-    # ---- Seconde passe : la vie de l'étang.
-    hx_, hy_ = 126.0, 70.0                                       # un héron cendré dans les roseaux
-    P.trait(hx_, hy_, hx_, hy_ - 7.0, ME1)
-    P.ell(hx_ + 0.4, hy_ - 9.0, 3.0, 2.2, R3)
-    P.courbe([(hx_ + 2.4, hy_ - 10.0), (hx_ + 4.0, hy_ - 13.0), (hx_ + 2.6, hy_ - 16.0)], R4, P.ep(0.6))
-    P.ell(hx_ + 2.8, hy_ - 16.6, 1.1, 0.9, R4)
-    P.trait(hx_ + 3.6, hy_ - 16.4, hx_ + 6.6, hy_ - 15.8, ME2)
-    P.point(hx_ + 3.0, hy_ - 16.8, ENCRE if int(p * 8) % 8 else R4)
-    # Un poisson saute : l'éclair, le plouf.
-    t = (p + 0.6) % 1.0
-    if t < 0.3:
-        P.courbe([(70.0, 62.0 - 14 * math.sin(t / 0.3 * math.pi)), (72.0, 61.0 - 14 * math.sin(t / 0.3 * math.pi)), (74.0, 62.4 - 14 * math.sin(t / 0.3 * math.pi))], NE3, P.ep(0.7))
-    pg.goutte(P, 72.0, 62.0, 62.0, coul=NE4, d=0.1, flaque=NE4)
-    for i in range(4):                                          # des demoiselles bleues au ras de l'eau
-        x, y = 40 + 24 * i + 2 * onde(p, 0.2 * i), 58 + (i % 2) * 5 + onde(p, 0.3 + 0.2 * i)
-        P.trait(x - 1.0, y, x + 1.0, y, T.BLEU)
-        P.point(x, y - 0.6 if int(p * 8 + i) % 2 else y + 0.4, NE4)
-    P.poly([(18.0, 68.0), (34.0, 68.0), (32.0, 70.6), (20.0, 70.6)], BO2)                         # une barque à fond plat, amarrée
-    P.trait(18.0, 68.0, 34.0, 68.0, BO3)
-    P.courbe([(34.0, 68.6), (38.0, 70.0 + 0.3 * onde(p)), (42.0, 69.0)], TE3, 1)
-    pg.araignee(P, 86.0, 33.0, 5.0, d=0.2)                        # la tisseuse, au milieu de sa toile
-    pg.yeux(P, 4.0, 66.0, coul=LA3, d=0.5)
-    for i in range(6):                                          # la rosée tombe des branches du saule
-        pg.goutte(P, 128.0 + i * 7.0, 40.0 + (i % 3) * 6, 66.0, coul=T.EAU[8], d=i / 6.0)
+    # ---- Premier plan : la rive où l'on dort, herbe mouillée de rosée ; des massettes et des roseaux à gauche et à
+    # droite ; une libellule ; des gouttes de rosée qui s'allument.
+    f_berge = lambda x: (74.6 + 0.9 * np.sin(_a(x) / 17.0) + 0.4 * np.sin(_a(x) / 6.0)
+                         - 5.0 * np.exp(-((_a(x) - 2) / 18.0) ** 2) - 5.0 * np.exp(-((_a(x) - 192) / 16.0) ** 2))
+    pg.sol(P, f_berge)
+    pg.cailloux(P, f_berge)
+    pg.touffes(P, f_berge)
+    pg.fleurs(P, f_berge)
+    pg.roseaux(P, 0.0, 14.0, n=6, haut=(12.0, 24.0), penche=1.0, graine=1271)
+    pg.roseaux(P, 176.0, 196.0, sauf=(186.0, 1.2), graine=1272)
+    pg.libellule(P, 96.0 + 4 * onde(p), 66.0)
+    for i in range(30):
+        x, y = -4 + 200 * hz(i, 1, 1273), 75.5 + 4 * hz(i, 2, 1273)
+        if (p + hz(i, 3, 1273)) % 1.0 < 0.25:
+            P.point(x, y, BLANC)
 
 
 # =====================================================================================================================
-# Le Plateau Râpé : un plateau immense, plat et jaune, herbe rase et cailloux, un seul arbre mort au milieu (la clé),
-# pas une ombre ; au loin de hauts nuages d'orage noirs en forme d'enclume ; l'air tremble.
+# Le Plateau Râpé (chapitre 4) : « Devant nous, c'est plat, jaune, et ça ne s'arrête pas. […] Un seul arbre, mort, très
+# loin, au milieu. […] Et à droite, loin, au ras du plateau, il y a autre chose. Des nuages. Énormes, noirs, plats du
+# dessus comme des enclumes. » Midi : le soleil haut, l'air qui tremble au ras du sol ; le plateau jaune en perspective,
+# l'arbre mort au milieu (la clé), les Dents-de-Lait alignées au bout, blanches ; les Enclumes qui montent à droite,
+# leur pluie en rideaux, un éclair ; la pancarte, le seul caillou qui fasse de l'ombre, un tourbillon de poussière.
 # =====================================================================================================================
-@decor("petit-nuage", "plateau-rape", soleil=(96.0, -40.0), tons=LAVE, nom="Le Plateau Râpé", matiere=True)
+def enclume(P, x, y_base, l, h, graine, eclair=False):
+    """Un cumulonimbus : une tour de bouffées sombres, le dessus étalé en enclume plate, éclairé ; la pluie dessous en
+    rideaux tramés ; un éclair qui part parfois."""
+    T = pg.T
+    X, Y = P.X, P.Y
+    tour = []
+    for i in range(40):
+        u = hz(i, 1, graine) ** 0.8
+        yy = y_base - h * 0.72 * u
+        tour.append((x + l * 0.42 * (hz(i, 2, graine) - 0.5) * (1.3 - 0.5 * u), yy, l * (0.16 + 0.12 * hz(i, 3, graine)) * (1.15 - 0.45 * u), 4.0 * (1 - u)))
+    m_ = bouffees(P, tour, [ENCRE, NU1, NU2, R1, R2, R3, NE2], lum=(0.35, -0.6, 0.3), plancher=y_base + 1.0, graine=graine)
+    voile(P, m_ & (Y > y_base - h * 0.35), NU1, 0.5)                   # le ventre noir
+    yt = y_base - h * 0.78
+    dx_ = (X - x - l * 0.2) / (l * 0.95)
+    dessus = (np.abs(Y - yt + 1.0 * (1 - dx_ ** 2)) < (1.0 + 3.4 * (1 - np.abs(dx_))) * (1 + 0.3 * (pg.fbm(X / 2.0, Y, 2, graine) - 0.5))) & (np.abs(dx_) < 1)
+    P.rampe(dessus, 0.6 - 0.18 * (Y - yt) + 0.2 * (pg.fbm(X / 2.0, Y, 2, graine + 1) - 0.5), [NU2, R1, R2, R3, R4, NE2, CREME], 0.5)
+    P.remplir(P.crete(dessus), CREME)
+    for j in range(4):                                                # les rideaux de pluie
+        xr = x - l * 0.25 + j * l * 0.16
+        voile(P, (np.abs(X - xr - 0.15 * (Y - y_base)) < l * 0.05) & (Y > y_base) & (Y < y_base + 6.0) & (P.T < 0.5), R2, 0.6)
+    if eclair and (P.p * 8) % 8 < 1:
+        pts = [(x + 2.0, y_base)]
+        for k in range(5):
+            pts.append((pts[-1][0] + 2.0 * (hz(k, 1, graine + 3) - 0.5) * 2, pts[-1][1] + 1.6))
+        for a, b in zip(pts[:-1], pts[1:]):
+            P.trait(a[0], a[1], b[0], b[1], LA3)
+        voile(P, np.hypot(X - x, Y - y_base + h * 0.3) < h * 0.5, CREME, 0.3, lumiere=True)
+
+
+@decor("petit-nuage", "plateau-rape", soleil=(70.0, -30.0), tons=LAVE, nom="Le Plateau Râpé", matiere=True)
 def plateau_rape(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
     tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=52.0, haut=0.0, halo=0.0, disque=0)
-    voile(P, Y > 30, PJ4, np.clip((Y - 30) / 40.0, 0, 0.5))       # la poussière jaune qui monte à l'horizon
-    tab.plan("nuages", 0.08)
-    # ---- Les enclumes : trois nuages d'orage, noirs en bas, étalés tout en haut ; un éclair, loin, de temps en temps.
-    orage = [ENCRE, ENCRE, R1, R1, R2, R3, R4]
-    for i, (x, base, l, h) in enumerate(((30.0, 44.0, 46.0, 22.0), (150.0, 46.0, 60.0, 30.0), (96.0, 47.0, 30.0, 12.0))):
-        x = x + 0.5 * onde(p, 0.3 * i)
-        b = pg.amas(x, base, l, h * 0.7, 850 + i, 9) + [(x + (j - 2) * l * 0.2, base - h * 1.25, h * 0.36) for j in range(5)] + \
-            [(x, base - h * 0.8, h * 0.4), (x - l * 0.1, base - h * 0.5, h * 0.4)]
-        P.volumes(b, orage, (0.0, -0.8, 0.3), plancher=base, grain=0.3, graine=853 + i, gain=0.7, base=0.36, trame=0.8)
-        voile(P, (np.abs(X - x) < l * 0.5) & (Y > base) & (Y < base + 8) & ((P.XI + P.YI * 2) % 5 == 0), R2, 0.6)   # la pluie, là-bas
-    if int(p * 8) == 5:
-        P.courbe([(152.0, 34.0), (149.0, 40.0), (153.0, 43.0), (150.0, 49.0)], BLANC, 1)
-        halo(P, 151.0, 38.0, 14.0, NE3, 0.4)
+    pg.ciel(P, horizon=44.0, haut=0.0, halo=0.3, disque=0)
+    pg.voiles(P, y=-6.0, epais=8.0, seuil=0.6, graine=1280)
+    pg.cumulus(P, [(40, 4, 26, 4.0, 1281, 6, 0.2), (96, -6, 18, 3.0, 1282, 5, 0.6)], dessous=-0.6)
     tab.plan("lointains", 0.2)
-    sommets(P, lambda x: dents(x, cx=166.0, k=0.5, base=52.6), [R1, R2, R3, R4], neige=1.6, graine=10)   # sous l'orage, à droite
-    pg.crete(P, lambda x: pg.profil(x, 52.0, 3.0, 40.0, 856), [PJ1, PJ2, T.L3, T.L4], 0.4)
+    # ---- Les Dents-de-Lait, alignées au bout du plateau, blanches ; les Enclumes qui montent à droite, au ras du plateau.
+    massif(P, lambda x: dents(x, cx=72.0, k=0.62, base=44.0, serre=1.0) + 0.0, [(56.5, 24.0), (87.5, 21.6)],
+           [T.L1, T.L2, T.L3, T.L4], [T.L5, NE2, NE3, NE4], [T.L3, T.L4, NE2], NE4, 1283, brume=(T.CIEL[9], 34.0, 10.0))
+    enclume(P, 150.0, 43.0, 50.0, 52.0, 1284, eclair=True)
+    enclume(P, 186.0, 43.0, 30.0, 34.0, 1285)
+    enclume(P, 118.0, 43.5, 20.0, 18.0, 1286)
+    pg.crete(P, lambda x: 44.0 + 0.3 * np.sin(_a(x) / 7.0), [T.L2, T.L3, T.L4, T.CIEL[9]], 0.5)
     tab.plan("moyen", 0.5)
-    # ---- Le plateau : plat, jaune, râpé ; l'air qui tremble au ras du sol ; pas une ombre.
-    sol = Y > 52.0
-    P.rampe(sol, 0.62 + 0.3 * (pg.fbm(X / (4.0 + (Y - 52) * 0.5), (Y - 52) / 1.2, 3, 857) - 0.5) + 0.004 * (Y - 52), [PJ1, PJ2, PJ3, PJ4], 0.8)
-    tremble = sol & (Y < 58) & (np.sin(X * 0.9 + Y * 3.0 + p * 6.283 * 2) > 0.5)
-    P.remplir(tremble & (P.T < 0.5), PJ4)
-    voile(P, (Y > 49) & (Y < 53) & (np.sin(X * 0.7 + p * 6.283) > 0.2), PJ4, 0.4)
-    for i in range(90):                                         # les cailloux et les touffes rases, de plus en plus gros vers nous
-        y = 53 + 26 * hz(i, 1, 858) ** 1.4
-        x = -6 + 204 * hz(i, 2, 858)
-        k = 0.3 + (y - 52) / 22.0
-        if i % 3 == 0:
-            P.ell(x, y, 1.6 * k, 0.8 * k, R3)
-            P.ell(x - 0.3 * k, y - 0.3 * k, 0.9 * k, 0.4 * k, R4)
-        else:
-            for q in range(3):
-                P.trait(x + q * 0.7 * k, y, x + q * 0.9 * k - 0.6 * k, y - 1.6 * k, PJ1)
-    # L'arbre mort, seul au milieu : tronc gris argenté, branches nues, un nid vide ; un corbeau s'y pose.
-    ax, ay = 100.0, 58.0
-    P.courbe([(ax - 1.0, ay + 1.0), (ax, ay - 12.0), (ax - 1.6, ay - 24.0), (ax + 0.6, ay - 34.0)], R2, P.ep(2.4), P.ep(0.8))
-    P.courbe([(ax + 0.2, ay), (ax + 1.0, ay - 12.0), (ax - 0.6, ay - 24.0)], R4, 1)
-    for (pts, ep) in (([(ax - 0.4, ay - 14), (ax - 6, ay - 20), (ax - 8, ay - 28)], 1.0), ([(ax - 0.8, ay - 22), (ax + 6, ay - 27), (ax + 8, ay - 33)], 1.0),
-                      ([(ax - 6, ay - 20), (ax - 11, ay - 21), (ax - 13, ay - 24)], 0.6), ([(ax + 6, ay - 27), (ax + 11, ay - 27), (ax + 13, ay - 30)], 0.6),
-                      ([(ax, ay - 30), (ax - 4, ay - 35), (ax - 3.6, ay - 39)], 0.6), ([(ax + 0.4, ay - 32), (ax + 3, ay - 38)], 0.5)):
-        P.courbe(pts, R2, P.ep(ep), 1)
-    P.ell(ax + 6.6, ay - 28.4, 2.4, 1.2, BO2)                    # le nid
-    cy_ = ay - 39.6
-    P.ell(ax - 3.8, cy_ - 1.2, 2.0, 1.4, ENCRE)                  # le corbeau
-    P.ell(ax - 2.4, cy_ - 2.4, 1.0, 1.0, ENCRE)
-    P.rect(ax - 1.6, cy_ - 2.4 + (0.6 if int(p * 8) % 5 == 0 else 0), 1.4, 0.5, R2)
-    P.poly([(ax - 5.4, cy_ - 1.4), (ax - 8.0, cy_ - 0.2), (ax - 5.4, cy_ - 0.4)], ENCRE)
-    for i in range(5):                                          # des tourbillons de poussière
-        t = (p + i / 5.0) % 1.0
-        voile(P, np.hypot((X - (20 + 36 * i + 14 * t)) / 2.0, Y - (60 - 6 * t)) < 1.0 + 2.6 * t, PJ4, 0.5 - 0.45 * t)
+    # ---- Le plateau : jaune, ras, il ne s'arrête pas ; des touffes en rangs qui fuient, la terre craquelée, des cailloux.
+    sol = Y > 44.4
+    prof_ = 24.0 / np.maximum(Y - 44.0, 0.4)
+    u = (X - 96.0) / np.maximum(Y - 44.0, 0.4)
+    v = 0.6 + 0.3 * (pg.fbm(u * 1.5, prof_ * 1.6, 3, 1287) - 0.5) + 0.25 * (pg.fbm(u * 0.4, prof_ * 0.3, 2, 1288) - 0.5)
+    P.rampe(sol, v, [TE1, OC2, PJ1, PJ2, PJ3, PJ4], 0.45)
+    craque = sol & (Y > 56) & (np.abs(np.sin(u * 9.0 + 2.0 * pg.fbm(u, prof_ * 2, 2, 1289))) < 0.06) & (pg.fbm(u * 0.5, prof_, 2, 1290) > 0.55)
+    P.remplir(craque, OC1)
+    for i in range(500):                                              # touffes d'herbe rase
+        y = 44.6 + 35.4 * hz(i, 2, 1291) ** 1.6
+        x = -6 + 204 * hz(i, 1, 1291)
+        k = (y - 44.0) / 36.0
+        h = 0.3 + 2.2 * k
+        for j in (-1, 0, 1):
+            P.trait(x + j * 0.4 * h, y, x + j * 0.8 * h + 0.3 * onde(p, x / 30.0) * k, y - h, PJ3 if j else PJ1)
+    for i in range(60):                                               # des cailloux, leur ombre courte sous eux
+        y = 45.0 + 35.0 * hz(i, 2, 1292) ** 1.3
+        x = -6 + 204 * hz(i, 1, 1292)
+        r = 0.2 + 1.0 * (y - 44.0) / 36.0 * (0.5 + hz(i, 3, 1292))
+        P.ell(x + r * 0.3, y + r * 0.3, r * 1.2, r * 0.3, OC1)
+        P.ell(x, y, r, r * 0.6, R2 if i % 3 else R3)
+        P.point(x - r * 0.3, y - r * 0.3, R4)
+    # Une clôture qui fuit vers l'horizon, à gauche, son fil affaissé.
+    prec = None
+    for i in range(9):
+        t = i / 8.0
+        x, y = 2.0 + 60.0 * t ** 0.7, 74.0 - 28.0 * t ** 0.7
+        h = 6.0 * (1 - 0.85 * t ** 0.7)
+        P.trait(x, y, x + 0.2, y - h, BO2, max(1, P.ep(0.6 * (1 - t))))
+        if prec:
+            P.courbe([(prec[0], prec[1] - prec[2] * 0.8), ((prec[0] + x) / 2, (prec[1] + y) / 2 - (prec[2] + h) * 0.3), (x, y - h * 0.8)], R3, 1)
+        prec = (x, y, h)
+    # L'air qui tremble au ras de l'horizon.
+    tremble = (np.abs(Y - 44.8 - 0.4 * np.sin(X * 0.9 + p * 6.283)) < 0.5)
+    voile(P, tremble, T.CIEL[10], 0.5)
+    # ---- L'arbre mort, au milieu (la clé de la scène) : un tronc gris argent, fendu, ses branches nues ; un corbeau.
+    ax, ay = 100.0, 57.6
+    voile(P, (((X - ax - 1.0) / 6.0) ** 2 + ((Y - ay - 0.3) / 0.8) ** 2 < 1), OC1, 0.6)
+    P.courbe([(ax, ay), (ax - 0.6, ay - 12.0), (ax + 0.8, ay - 20.0), (ax + 0.2, ay - 30.0)], R2, P.ep(1.6), P.ep(0.5))
+    P.courbe([(ax - 0.4, ay), (ax - 1.0, ay - 12.0), (ax + 0.2, ay - 20.0)], R4, 1)
+    for (a, l, y0) in ((-2.2, 10.0, 16.0), (-0.7, 8.0, 20.0), (-2.6, 7.0, 25.0), (-0.4, 6.0, 26.0), (-1.6, 5.0, 29.0)):
+        bx, by = ax + l * math.cos(a), ay - y0 + l * math.sin(a)
+        P.courbe([(ax, ay - y0 + 1.0), ((ax + bx) / 2, (ay - y0 + by) / 2 - 1.0), (bx, by)], R2, P.ep(0.5), 1)
+        P.trait(bx, by, bx + 1.4 * math.cos(a - 0.6), by + 1.4 * math.sin(a - 0.6), R2)
+    P.ell(ax + 3.6, ay - 28.6, 1.2, 0.8, ENCRE)
+    P.ell(ax + 4.6, ay - 29.4, 0.6, 0.6, ENCRE)
+    P.point(ax + 5.2, ay - 29.4, R3)
+    for i in range(2):                                                # deux milans qui tournent haut
+        t = (p + i / 2.0) % 1.0
+        x, y = 60 + 30 * i + 8 * math.cos(t * 6.283), 4 + 3 * math.sin(t * 6.283)
+        P.trait(x - 2.2, y - 0.4, x, y, NU2)
+        P.trait(x, y, x + 2.2, y - 0.4, NU2)
+    # Un tourbillon de poussière qui traverse, au loin à droite.
+    tx = 128.0 + 6 * onde(p)
+    for k in range(14):
+        t = k / 13.0
+        r = 0.6 + 2.4 * t
+        a = p * 12.566 + k
+        P.point(tx + r * math.cos(a) + 0.8 * t, 51.0 - 9.0 * t, TE3 if k % 2 else PJ4)
+    voile(P, (np.abs(X - tx - 0.6 * (51.0 - Y) / 9.0) < 0.6 + 1.6 * np.clip((51.0 - Y) / 9.0, 0, 1)) & (Y < 51.0) & (Y > 42.0), PJ4, 0.35)
     tab.plan("premier", 1.0)
-    f_sol = lambda x: 76.4 + 0.5 * np.sin(_a(x) / 15.0)
-    m = Y > f_sol(X)
-    P.rampe(m, 0.45 + 0.4 * (pg.fbm(X / 6.0, Y / 2.0, 3, 859) - 0.5), [TE1, PJ1, PJ2, PJ3], 0.8)
-    pg.cailloux(P, f_sol, n=50, y0=76.6, graine=860)
-    for i in range(30):
-        x = -6 + 204 * hz(i, 1, 861)
-        if 20 < x < 60 or 130 < x < 170:
-            continue
-        for q in range(4):
-            P.trait(x + q * 0.8, 77.0, x + q * 1.2 - 1.4 + 0.3 * onde(p, x / 30.0), 77.0 - 3 - 3 * hz(i, q, 862), PJ1 if q % 2 else TE1)
-    P.ell(12.0, 77.0, 6.0, 3.0, R2)                              # un crâne de mouton ? non : une grosse pierre, et un lézard dessus
-    P.ell(10.6, 76.0, 3.6, 1.6, R4)
-    P.courbe([(10.0, 74.6), (13.0, 74.0), (16.0, 74.8 + 0.3 * onde(p))], PJ1, P.ep(0.6))
-    poussiere(P, 0, 40, 192, 76, 30, PJ4, 863)
-    # ---- Seconde passe : le plateau n'est pas vide.
-    # Une vieille clôture qui file vers l'horizon, piquets de travers, un fil cassé qui bat.
-    for i in range(11):
-        u = i / 10.0
-        x, y = 12.0 + 60.0 * u ** 0.7, 76.0 - 22.0 * u ** 0.6
-        k = 1.0 - 0.8 * u
-        P.trait(x, y, x + (hz(i, 1, 864) - 0.5) * 2 * k, y - 8.0 * k, BO2, P.ep(0.7 * k))
-        if i < 10:
-            u2 = (i + 1) / 10.0
-            P.trait(x, y - 6.0 * k, 12.0 + 60.0 * u2 ** 0.7, 76.0 - 22.0 * u2 ** 0.6 - 6.0 * (1.0 - 0.8 * u2), R2)
-    P.courbe([(12.0, 70.0), (18.0, 72.0 + 0.8 * onde(p)), (22.0, 70.0 + 1.2 * onde(p, 0.2))], R2, 1)
-    # Une marmotte dressée sur une pierre : elle siffle (trois petits traits), puis se tait.
-    mx_, my_ = 148.0, 64.0
-    P.ell(mx_ - 1.0, my_ + 1.0, 5.0, 2.0, R2)
-    P.ell(mx_ - 2.0, my_ + 0.4, 3.0, 1.0, R4)
-    P.ell(mx_, my_ - 3.6, 2.2, 3.6, RO2)
-    P.ell(mx_ + 0.3, my_ - 2.6, 1.3, 2.4, TE3)
-    P.ell(mx_ + 0.4, my_ - 7.6, 1.7, 1.5, RO2)
-    P.point(mx_ + 1.2, my_ - 8.0, ENCRE)
-    P.point(mx_ - 0.8, my_ - 8.8, RO1)
-    if (p % 1.0) < 0.35:
-        for q in range(3):
-            P.trait(mx_ + 3.4 + q * 1.6, my_ - 8.4 - q * 0.8, mx_ + 4.4 + q * 1.6, my_ - 8.8 - q * 0.8, ENCRE)
-    # Des vautours tournent sous l'enclume ; un rideau de pluie avance ; un tourbillon de poussière traverse.
-    for i in range(3):
-        a = 2 * math.pi * (p + i / 3.0)
-        x, y = 60.0 + 16 * math.cos(a), 26.0 + 5 * math.sin(a)
-        P.trait(x - 3.0, y - 0.6, x, y, ENCRE)
-        P.trait(x, y, x + 3.0, y - 0.6, ENCRE)
-    t = (p + 0.3) % 1.0
-    for j in range(7):
-        P.ell(90.0 + 50 * t + 1.6 * math.sin(j * 1.3 + p * 12), 62.0 - j * 1.6, 0.8 + j * 0.34, 0.6, PJ3 if j % 2 else PJ4)
-    # Un crâne de bélier blanchi, une gentiane têtue, la terre craquelée du premier plan, un lézard qui fait des pompes.
-    P.ell(176.0, 72.0, 2.6, 1.8, NE3)
-    P.courbe([(174.0, 71.0), (171.6, 69.4), (172.6, 72.0)], NE2, P.ep(0.6))
-    P.courbe([(178.0, 71.0), (180.4, 69.4), (179.4, 72.0)], NE2, P.ep(0.6))
-    P.point(175.2, 71.8, ENCRE)
-    P.point(176.8, 71.8, ENCRE)
-    pg.fleur(P, 120.0, 72.0, 2.4, T.BLEU, CREME)
-    for i in range(14):
-        x, y = 4 + 184 * hz(i, 1, 865), 77.0 + 3 * hz(i, 2, 865)
-        P.trait(x, y, x + 3 + 3 * hz(i, 3, 865), y + (hz(i, 4, 865) - 0.5) * 2, TE1)
-    ly_ = 74.6 - (0.5 if int(p * 8) % 2 else 0)
-    P.courbe([(10.0, ly_), (13.0, ly_ - 0.6), (16.0, 74.8 + 0.3 * onde(p))], PJ1, P.ep(0.6))
+    # ---- Premier plan : la pancarte de bois (un soleil et un trait plat : « rien avant longtemps »), le seul caillou
+    # qui fasse de l'ombre (un lézard dessus), des herbes sèches, des sauterelles.
+    px_, py_ = 14.0, 56.0
+    P.rect(px_ - 0.6, py_, 1.3, 22.0, BO1)
+    P.rect(px_ - 0.6, py_, 0.5, 22.0, BO3)
+    pm = P.poly([(px_ - 9.0, py_ - 6.0), (px_ + 9.0, py_ - 7.0), (px_ + 9.4, py_ + 3.0), (px_ - 8.6, py_ + 3.6)], BO2)
+    P.rampe(pm, 0.6 + 0.3 * (pg.fbm(X / 0.5, Y / 3.0, 2, 1293) - 0.5), [BO1, BO2, BO3, TE2], 0.45)
+    P.remplir(P.crete(pm), TE3)
+    P.ell(px_ - 3.6, py_ - 3.0, 1.8, 1.8, PJ3)
+    for a in range(8):
+        P.trait(px_ - 3.6, py_ - 3.0, px_ - 3.6 + 2.8 * math.cos(a * 0.785), py_ - 3.0 + 2.8 * math.sin(a * 0.785), PJ3)
+    P.trait(px_ + 0.4, py_ + 0.2, px_ + 7.0, py_ + 0.2, TE3, P.ep(0.4))
+    cx_, cy_ = 176.0, 78.0
+    voile(P, (((X - cx_ + 7.0) / 9.0) ** 2 + ((Y - cy_ - 0.2) / 1.6) ** 2 < 1), OC1, 0.7)
+    mm = P.ell(cx_, cy_ - 3.0, 7.0, 4.6, R2, cond=Y < cy_ + 0.4)
+    P.rampe(mm, 0.7 - 0.4 * (X - cx_) / 7.0 - 0.5 * (Y - cy_ + 4.0) / 4.6 + 0.15 * (pg.fbm(X / 0.9, Y / 0.9, 2, 1294) - 0.5), [R1, R2, R3, R4, NE3], 0.45)
+    P.remplir(mm & (pg.fbm(X / 1.2, Y / 1.2, 2, 1295) > 0.67), ME2)
+    lx = cx_ - 2.0 + (0.8 if onde(p) > 0.3 else 0.0)                   # le lézard
+    P.ell(lx, cy_ - 7.4, 1.6, 0.5, OC3)
+    P.trait(lx - 1.4, cy_ - 7.2, lx - 4.0, cy_ - 6.6, OC3)
+    P.point(lx + 1.4, cy_ - 7.6, ENCRE)
+    pg.touffes(P, lambda x: 79.4 + 0.0 * _a(x), n=80, haut=3.0, graine=1296, tons=(OC1, OC2, PJ1, PJ2, PJ3))
+    for i in range(3):                                                # des sauterelles qui sautent
+        t = (p + i / 3.0) % 1.0
+        x, y = 40 + 50 * i + 8 * t, 77.0 - 6.0 * math.sin(t * math.pi)
+        P.trait(x, y, x + 1.2, y - 0.3, PJ1)
+        P.point(x + 1.2, y - 0.3, OC1)
 
 
 # =====================================================================================================================
-# La halte du Bout-des-Prés : une petite halte de pierre au pied des montagnes. Toit d'ardoise, cheminée qui fume ; sur
-# le faîte, une girouette en fer rouillé (un coq) avec une lanterne accrochée au bec (la clé) ; sommets blancs derrière ;
-# la nuit finit.
+# La halte du Bout-des-Prés (chapitre 5) : « C'était une girouette. Un coq en fer, tout rouillé, sur le toit d'une
+# petite halte en pierre, avec une lanterne pendue au bec. » La nuit, au pied des montagnes enfin proches, sous la lune :
+# la halte de pierre, sa fenêtre chaude qui pose un rectangle d'or sur l'herbe, la fumée du poêle ; sur le toit, Tournebise
+# (la clé), qui pointe vers la montagne et ne tourne pas, sa lanterne qui se balance ; les sapins, la clôture, un hibou.
 # =====================================================================================================================
-@decor("petit-nuage", "halte-girouette", soleil=(30.0, 40.0), tons=NUIT, nom="La halte du Bout-des-Prés", matiere=True)
+@decor("petit-nuage", "halte-girouette", soleil=(26.0, -6.0), tons=NUIT, nom="La halte du Bout-des-Prés", matiere=True)
 def halte_girouette(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
     tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=52.0, haut=0.0, halo=0.2, etoiles=0.4, lune=(160.0, -4.0, 3.6), disque=0)
-    tab.plan("nuages", 0.08)
-    pg.voiles(P, y=20.0, epais=8.0, seuil=0.6, graine=870)
+    pg.ciel(P, horizon=46.0, haut=0.0, halo=0.18, etoiles=0.5, lune=(26.0, -6.0, 3.6), disque=0)
+    t = p % 1.0                                                       # une étoile filante
+    if t < 0.25:
+        P.trait(30 + 60 * t, -12 + 12 * t, 30 + 60 * t - 4, -12 + 12 * t - 0.8, NE4)
+    pg.voiles(P, y=10.0, epais=6.0, seuil=0.6, graine=1300)
     tab.plan("lointains", 0.2)
-    sommets(P, lambda x: dents(x, cx=104.0, k=1.5, base=53.0), [T.CIEL[2], T.CIEL[3], T.CIEL[5], T.CIEL[6]], neige=12.0, graine=5, limite=24.0)   # ils remplissent la nuit
-    pg.crete(P, lambda x: pg.profil(x, 50.0, 8.0, 22.0, 871), [T.CIEL[1], T.CIEL[2], T.CIEL[3], T.CIEL[4]], 0.5)
-    pg.sapins(P, lambda x: pg.profil(x, 50.0, 8.0, 22.0, 871), densite=0.8, graine=872, coul=T.CIEL[0])
-    brume_claire(P, 50.0, 4.0, 20, T.CIEL[5], 0.45)
+    # ---- Les montagnes, proches maintenant, sous la lune (à gauche) : neige bleue, versants d'ombre profonds.
+    massif(P, lambda x: dents(x, cx=86.0, k=1.15, base=50.0), [(57.0, 13.2), (115.0, 7.4)],
+           [ENCRE, NU1, NU2, T.CIEL[4]], [T.CIEL[6], T.CIEL[8], T.CIEL[9], T.CIEL[10]], [NU2, T.CIEL[4], T.CIEL[6]],
+           T.CIEL[11], 1301, brume=(T.CIEL[3], 34.0, 12.0))
+    foret = lambda x: pg.profil(x, 47.0, 4.0, 14.0, 1302)
+    pg.crete(P, foret, [ENCRE, NU1, NU2, T.CIEL[3]], 0.5)
+    pg.sapins(P, foret, densite=0.85, graine=1303, coul=ENCRE)
+    brume_claire(P, 45.0, 2.4, 61, T.CIEL[4], 0.5)
     tab.plan("moyen", 0.5)
-    # ---- Le pré, bleu de nuit, givré ; le chemin qui arrive ; la halte de pierre et sa fenêtre allumée.
-    f_pre = lambda x: 54.0 + 1.4 * np.sin(_a(x) / 17.0)
+    # ---- Le pré de nuit, bleu, la rosée qui brille sous la lune ; le chemin qui arrive du plateau.
+    f_pre = lambda x: 50.0 + 0.8 * np.sin(_a(x) / 13.0)
     pre = Y > f_pre(X)
-    P.rampe(pre, 0.5 + 0.3 * (pg.fbm(X / 9.0, Y / 2.0, 3, 873) - 0.5) - 0.006 * (Y - 54), [NU1, NU2, T.S1, T.S2], 0.8)
-    for j in range(40):
-        u = j / 39.0
-        P.ell(96 - 60 * u + 8 * math.sin(u * 5), 60 + 20 * u, 2.0 + 5 * u, 0.7 + 0.5 * u, T.CIEL[5] if j % 2 else T.CIEL[4])
-    hx, hy, hw, hh = 96.0, 62.0, 44.0, 24.0
-    mur = (np.abs(X - hx) < hw / 2) & (Y > hy - hh) & (Y < hy)
-    P.rampe(mur, 0.5 - 0.012 * (X - hx) + 0.4 * (pg.fbm(X / 3.0, Y / 2.4, 3, 874) - 0.5), [R1, R2, R3, R4], 0.7)
-    P.remplir(mur & (((Y - hy) % 3.2) < 0.4), R1)
-    P.remplir(mur & ((((X - hx) / 6.0 + np.floor((Y - hy) / 3.2) * 0.5) % 1.0) < 0.07), R1)
-    toit = P.poly([(hx - hw / 2 - 4, hy - hh), (hx + hw / 2 + 4, hy - hh), (hx + 4, hy - hh - 20), (hx - 4, hy - hh - 20)], T.CIEL[1])
-    P.rampe(toit, 0.5 - 0.02 * (X - hx) + 0.3 * (((Y - hy) % 2.6) / 2.6), [ENCRE, T.CIEL[1], T.CIEL[2], T.CIEL[3]], 0.5)
-    P.remplir(toit & (((Y - hy) % 2.6) < 0.4), ENCRE)
+    k = np.clip((Y - 50.0) / 30.0, 0, 1)
+    P.rampe(pre, 0.4 + 0.35 * (pg.fbm((X + Y) / (2 + 4 * k), Y / (0.7 + 1.6 * k), 3, 1304) - 0.5) + 0.1 * (X - 96) / 96, [ENCRE, NU1, T.S0, NU2, T.S1], 0.45)
+    chemin = pre & (np.abs(X - 96.0 - 30.0 * (Y - 50.0) / 30.0 * np.sin(Y / 9.0) - 0.8 * (Y - 50)) < 1.0 + 0.5 * (Y - 50.0))
+    P.rampe(chemin, 0.45 + 0.3 * (pg.fbm(X / 1.0, Y / 0.6, 2, 1305) - 0.5), [ENCRE, NU1, NU2, R1], 0.45)
+    for i in range(700):                                              # les herbes, leur pointe sous la lune
+        y = 50.5 + 29.5 * hz(i, 2, 1311) ** 0.8
+        x = -6 + 204 * hz(i, 1, 1311)
+        l = 0.4 + 2.0 * (y - 50.0) / 30.0
+        P.trait(x, y, x - l * 0.3, y - l, (NU2, T.S0, T.S1, T.CIEL[3])[i % 4])
+    for i in range(80):
+        x, y = -4 + 200 * hz(i, 1, 1306), 51 + 29 * hz(i, 2, 1306)
+        if (p + hz(i, 3, 1306)) % 1.0 < 0.2:
+            P.point(x, y, T.CIEL[9])
+    # ---- Les sapins de part et d'autre, la lune sur leur côté gauche.
+    for (x, y, h) in ((30.0, 54.0, 18.0), (40.0, 52.0, 13.0), (150.0, 53.0, 16.0), (162.0, 54.0, 21.0), (176.0, 52.0, 12.0)):
+        for j in range(int(h / 1.6)):
+            u = j / (h / 1.6)
+            w = h * 0.34 * (1 - u) + 0.6
+            yy = y - h * u
+            m_ = P.masque_poly([(x - w, yy), (x + w, yy), (x, yy - 2.6)])
+            P.remplir(m_, ENCRE)
+            P.remplir(m_ & (X < x - 0.2), T.S0)
+            P.remplir(m_ & (X < x - w * 0.5) & (P.T < 0.5), T.CIEL[4])
+    # ---- La halte de pierre : moellons, toit d'ardoise, la fenêtre et la porte en or chaud, la cheminée qui fume.
+    hx0, hx1, hy = 74.0, 116.0, 60.0
+    mur = (X > hx0) & (X < hx1) & (Y > 36.0) & (Y < hy)
+    rang_ = np.floor((Y - 36.0) / 2.2)
+    joint = (np.abs(((X - hx0 + 2.6 * (rang_ % 2)) % 5.2) - 0.1) < 0.25) | (np.abs(((Y - 36.0) % 2.2)) < 0.25)
+    P.rampe(mur, 0.65 - 0.25 * (X - hx0) / (hx1 - hx0) + 0.2 * (pg.fbm(X / 2.0, Y / 1.2, 2, 1307) - 0.5), [NU1, NU2, R1, R2, R3], 0.45)
+    P.remplir(mur & joint, NU1)
+    toit = P.masque_poly([(hx0 - 4.0, 37.0), (hx1 + 4.0, 37.0), (hx1 - 4.0, 24.0), (hx0 + 4.0, 24.0)])
+    P.rampe(toit, 0.65 - 0.3 * (X - hx0) / (hx1 - hx0) + 0.25 * (np.sin((Y - 24) * 2.6) > 0.6), [ENCRE, NU1, NU2, T.CIEL[3]], 0.45)
     P.remplir(P.crete(toit), T.CIEL[6])
-    voile(P, toit & (Y < hy - hh - 12), NE3, 0.4)                # un reste de givre sur le faîte
-    P.rect(hx + 10, hy - hh - 22, 5.0, 12.0, R2)                  # la cheminée
-    P.rect(hx + 10, hy - hh - 22, 1.4, 12.0, R3)
-    P.rect(hx + 9, hy - hh - 23.4, 7.0, 1.6, R3)
-    pg.fumee(P, hx + 12.5, hy - hh - 24.0, p)
-    P.ell(hx - 9, hy - 9.0, 5.0, 5.4, BO1, cond=Y < hy - 8.6)     # la porte
-    P.rect(hx - 14, hy - 9.0, 10.0, 9.0, BO1)
-    P.ell(hx - 9, hy - 8.6, 4.0, 4.4, BO2, cond=Y < hy - 8.2)
-    P.rect(hx - 13, hy - 8.6, 8.0, 8.6, BO2)
-    P.point(hx - 6.4, hy - 4.6, LA2)
-    P.rect(hx + 5, hy - 15.0, 10.0, 9.0, BO1)                     # la fenêtre allumée
-    P.rect(hx + 6, hy - 14.0, 8.0, 7.0, LA2 if int(p * 8) % 6 else LA3)
-    P.rect(hx + 9.6, hy - 14.0, 0.8, 7.0, BO1)
-    P.rect(hx + 6, hy - 10.8, 8.0, 0.8, BO1)
-    halo(P, hx + 10, hy - 10.5, 16.0, LA1, 0.45)
-    voile(P, (Y > hy) & (Y < hy + 9) & (np.abs(X - hx - 10 - (Y - hy) * 0.4) < 5 + (Y - hy) * 0.7), LA2, 0.3)
-    P.rect(hx - 20, hy - 6.0, 4.0, 6.0, BO2)                      # le banc de pierre, un bâton de marche, des sabots
-    P.rect(hx + 18, hy - 3.0, 9.0, 1.2, R4)
-    P.rect(hx + 19, hy - 1.8, 1.2, 1.8, R2)
-    P.rect(hx + 25, hy - 1.8, 1.2, 1.8, R2)
-    # La girouette : un coq de fer rouillé, sur sa tige ; il tourne un peu ; la lanterne pend à son bec et se balance.
-    gx, gy = hx, hy - hh - 20.0
-    P.rect(gx - 0.4, gy - 12.0, 0.9, 12.0, ENCRE)
-    P.trait(gx - 5.0, gy - 5.0, gx + 5.0, gy - 5.0, ENCRE)
-    P.trait(gx, gy - 9.0, gx, gy - 1.0, ENCRE)
-    for (dx, dy) in ((-5.6, -5.0), (5.6, -5.0)):
-        P.point(gx + dx, gy + dy, RO1, 2)
-    s = 1.0 if onde(p) > -0.3 else 0.8                           # il pivote à peine : sa silhouette se resserre
-    coq = [(gx - 6 * s, gy - 14.0), (gx - 2 * s, gy - 17.0), (gx + 3 * s, gy - 16.6), (gx + 5 * s, gy - 20.0), (gx + 7.4 * s, gy - 19.0),
-           (gx + 6 * s, gy - 15.0), (gx + 3 * s, gy - 12.0), (gx - 3 * s, gy - 12.0)]
-    P.poly(coq, RO1)
-    P.poly([(gx - 6 * s, gy - 14.0), (gx - 10 * s, gy - 19.0), (gx - 8.6 * s, gy - 13.6), (gx - 10.6 * s, gy - 11.0), (gx - 5 * s, gy - 12.4)], RO1)   # la queue
-    P.poly([(gx + 4.4 * s, gy - 20.0), (gx + 5.4 * s, gy - 22.6), (gx + 6.6 * s, gy - 20.4)], RO2)                                           # la crête
-    P.trait(gx - 4 * s, gy - 15.6, gx + 4 * s, gy - 16.0, RO2)
-    P.point(gx + 5.6 * s, gy - 18.8, ENCRE)
-    bec = (gx + 8.4 * s, gy - 18.4)
-    P.trait(gx + 7.2 * s, gy - 18.6, bec[0], bec[1], RO2)
-    bal = 0.7 * onde(p, 0.2)
-    P.trait(bec[0], bec[1], bec[0] + bal, bec[1] + 4.0, ENCRE)
-    halo(P, bec[0] + bal, bec[1] + 6.4, 14.0, LA1, 0.5)
-    P.rect(bec[0] + bal - 1.4, bec[1] + 4.0, 2.8, 0.7, ENCRE)
-    P.rect(bec[0] + bal - 1.1, bec[1] + 4.7, 2.2, 3.0, LA2 if int(p * 8) % 5 else LA3)
-    P.rect(bec[0] + bal - 0.4, bec[1] + 5.2, 0.8, 1.8, LA3)
-    P.rect(bec[0] + bal - 1.4, bec[1] + 7.7, 2.8, 0.7, ENCRE)
-    for (x, h, g) in ((34.0, 22.0, 875), (44.0, 16.0, 876), (150.0, 26.0, 877), (164.0, 18.0, 878), (176.0, 22.0, 879)):
-        meleze(P, x, float(f_pre(x)) + 3.0, h, g, dore=False)
+    P.rect(hx1 - 10.0, 18.0, 4.0, 8.0, R1)                            # la cheminée
+    P.rect(hx1 - 7.0, 18.0, 1.0, 8.0, R3)
+    pg.fumee(P, hx1 - 8.0, 17.6, p)
+    fx_, fy_ = 104.0, 44.0                                            # la fenêtre
+    halo(P, fx_ + 3.0, fy_ + 3.0, 14.0, LA1, 0.4)
+    P.rect(fx_, fy_, 7.0, 7.0, LA2)
+    P.rect(fx_ + 0.6, fy_ + 0.6, 5.8, 5.8, LA3)
+    P.rect(fx_ + 3.2, fy_, 0.6, 7.0, BO1)
+    P.rect(fx_, fy_ + 3.2, 7.0, 0.6, BO1)
+    P.ell(fx_ + 1.8, fy_ + 2.0, 1.0, 1.0, BLANC)                       # Brouillon qui boit la vapeur de la marmite ?
+    sol_or = P.masque_poly([(fx_ - 1.0, hy + 0.4), (fx_ + 8.0, hy + 0.4), (fx_ + 14.0, hy + 9.0), (fx_ + 2.0, hy + 9.0)])
+    P.rampe(sol_or & pre, 0.5 + 0.3 * (pg.fbm(X / 1.0, Y / 0.7, 2, 1310) - 0.5) - 0.04 * (Y - hy), [TE1, BO3, ME1, LA1], 0.45)                    # la fenêtre posée sur l'herbe
+    dx_ = 82.0                                                        # la porte, entrouverte
+    P.ell(dx_ + 3.4, hy - 9.0, 3.4, 3.0, BO1, cond=Y < hy - 9.0)
+    P.rect(dx_, hy - 9.0, 6.8, 9.0, BO1)
+    P.rect(dx_ + 4.6, hy - 9.0, 2.2, 9.0, LA2)
+    P.rect(dx_ + 5.4, hy - 8.0, 1.0, 8.0, LA3)
+    P.rampe(P.masque_poly([(dx_ + 4.6, hy), (dx_ + 6.8, hy), (dx_ + 10.0, hy + 8.0), (dx_ + 5.0, hy + 8.0)]) & pre, 0.55 - 0.04 * (Y - hy), [TE1, BO3, ME1, LA1], 0.45)
+    P.rect(fx_ - 0.6, fy_ - 8.0, 8.0, 2.4, NE2)                        # l'écriteau (un coq dessiné)
+    P.trait(fx_ + 2.0, fy_ - 7.2, fx_ + 5.0, fy_ - 6.6, NU2)
+    # Le banc contre le mur, le tas de bûches, la marmite dehors, les outils.
+    P.rect(118.0, 56.0, 8.0, 1.0, BO3)
+    P.rect(118.6, 57.0, 0.6, 3.0, BO1)
+    P.rect(124.6, 57.0, 0.6, 3.0, BO1)
+    for i in range(8):
+        x, y = 64.0 + (i % 4) * 2.4 + (i // 4) * 1.2, 59.0 - (i // 4) * 2.0
+        P.ell(x, y, 1.2, 1.0, BO2)
+        P.ell(x - 0.2, y, 0.8, 0.7, TE2)
+    # ---- Tournebise, le coq de fer rouillé, sur le faîte (la clé) : il pointe vers la montagne (à gauche), sa lanterne
+    # pendue au bec se balance ; elle éclaire le toit.
+    gx, gy = 96.0, 24.0
+    P.trait(gx, gy, gx, gy - 12.0, R2)
+    P.trait(gx - 3.0, gy - 6.0, gx + 3.0, gy - 6.0, R2)
+    P.point(gx - 3.0, gy - 6.0, R4)
+    coq = P.masque_poly([(gx - 6.0, gy - 15.0), (gx - 4.0, gy - 18.0), (gx - 2.4, gy - 16.4), (gx + 1.0, gy - 16.0),
+                         (gx + 4.0, gy - 20.0), (gx + 6.0, gy - 19.0), (gx + 5.4, gy - 15.0), (gx + 3.0, gy - 12.4),
+                         (gx - 3.0, gy - 12.4)])
+    P.rampe(coq, 0.5 + 0.3 * (X - gx) / 6.0 + 0.25 * (pg.fbm(X / 0.7, Y / 0.7, 2, 1308) - 0.5), [RO1, ME1, RO2, LA1], 0.45)
+    P.remplir(P.crete(coq), LA2)
+    P.point(gx - 3.6, gy - 16.6, LA3)                                  # son œil
+    P.poly([(gx - 6.0, gy - 15.0), (gx - 7.6, gy - 15.4), (gx - 6.0, gy - 16.0)], ME1)
+    bal = 1.2 * onde(p)
+    lx, ly = gx - 7.0 + bal, gy - 10.4
+    P.trait(gx - 7.0, gy - 15.2, lx, ly - 1.4, R3)
+    halo(P, lx, ly, 9.0, LA2, 0.55)
+    P.rect(lx - 1.0, ly - 1.4, 2.0, 2.6, BO1)
+    P.rect(lx - 0.6, ly - 1.0, 1.2, 1.8, LA3)
+    for i in range(3):                                                # des papillons de nuit autour de la lanterne
+        t = (p + i / 3.0) % 1.0
+        P.point(lx + 4.0 * math.cos(t * 6.283 + i), ly + 2.4 * math.sin(t * 6.283 * 2 + i), NE3)
     tab.plan("premier", 1.0)
-    f_sol = lambda x: 72.0 + 0.8 * np.sin(_a(x) / 15.0)
-    pg.sol(P, f_sol, [T.N0, T.N1, T.N2, T.S1, T.S2], chemin=76.0, graine=880, lisere=2.0)
-    pg.touffes(P, f_sol, n=200, haut=3.0, graine=881)
-    voile(P, (Y > f_sol(X)) & (pg.fbm(X / 2.0, Y / 1.4, 2, 882) > 0.68), NE2, 0.5)          # le givre
-    for x in np.arange(-4.0, 198.0, 16.0):                       # la clôture du pré
-        if 16 < x < 48 or 144 < x < 178:
+    # ---- Premier plan : la clôture de piquets, un hibou sur le piquet de droite (il cligne), des herbes, des pierres.
+    for i in range(14):
+        x = -4.0 + i * 15.0
+        if 16 < x < 44 or 146 < x < 174:
             continue
-        P.rect(x, 62.0, 1.4, 12.0, ENCRE)
-        P.trait(x, 65.0, x + 16.0, 65.6, ENCRE)
-    pg.lucioles(P, [(20.0, 66.0), (60.0, 70.0), (140.0, 68.0), (182.0, 64.0)], graine=883)
-    # ---- Seconde passe : la vie de la halte.
-    pg.papillon_de_nuit(P, 104.0, 20.0, 5.0, coul=NE3)            # autour de la lanterne du coq
-    pg.papillon_de_nuit(P, 106.0, 52.0, 4.0, coul=NE3, d=0.4)
-    # Une chouette sur un mélèze ; elle tourne la tête.
-    cx_, cy_ = 150.0, 30.0
-    P.ell(cx_, cy_, 2.0, 2.6, R2)
-    P.ell(cx_, cy_ - 2.0, 1.8, 1.6, R2)
-    dx = 0.5 if int(p * 8) % 8 < 4 else -0.5
-    P.point(cx_ - 0.7 + dx, cy_ - 2.2, LA3)
-    P.point(cx_ + 0.7 + dx, cy_ - 2.2, LA3)
-    P.rect(72.0, 56.0, 3.0, 6.0, BO2)                             # un tas de bûches sous l'auvent, une hache
-    for i in range(6):
-        P.ell(64.0 + (i % 3) * 2.4, 61.0 - (i // 3) * 2.0, 1.2, 1.0, TE3 if i % 2 else TE2)
-    P.trait(70.0, 62.0, 73.0, 54.0, BO3)
-    pg.vapeur(P, 122.0, 58.0, coul=NE2, h=8.0)                    # une soupe qui refroidit sur le banc de pierre
-    P.rect(120.6, 57.4, 3.0, 1.6, R4)
-    # Un renard passe, s'arrête, repart.
-    rx_ = 30.0 + 20.0 * ((p * 1.0) % 1.0)
-    P.ell(rx_, 66.6, 2.6, 1.3, LA1)
-    P.ell(rx_ + 2.6, 65.6, 1.2, 1.0, LA1)
-    P.poly([(rx_ + 2.2, 64.8), (rx_ + 2.6, 63.6), (rx_ + 3.2, 64.8)], LA1)
-    P.courbe([(rx_ - 2.4, 66.6), (rx_ - 4.6, 66.0), (rx_ - 5.6, 67.0)], LA1, P.ep(0.8))
-    P.point(rx_ - 5.6, 67.0, CREME)
-    for i in range(18):                                         # la première neige, fine
-        t = (p + hz(i, 1, 884)) % 1.0
-        P.point(-6 + 204 * hz(i, 2, 884) + 2 * math.sin(t * 6.283 + i), -16 + 96 * ((hz(i, 3, 884) + t * 0.25) % 1.0), NE2)
-    P.rect(86.0, 44.0, 6.0, 4.0, CREME)                           # l'écriteau de la halte : un lit et un bol, dessinés
-    P.rect(87.0, 46.2, 3.0, 0.8, T.CIEL[3])
-    P.ell(90.6, 45.4, 0.8, 0.6, T.CIEL[3])
+        P.rect(x, 66.0, 1.2, 12.0, ENCRE)
+        P.rect(x + 0.8, 66.0, 0.4, 12.0, NU2)
+        P.point(x + 0.6, 66.0, T.CIEL[6])
+    for yb in (69.0, 73.0):
+        for (a, b) in ((-6.0, 16.0), (44.0, 146.0), (174.0, 198.0)):
+            P.trait(a, yb, b, yb + 0.4, NU2)
+    ox, oy = 176.0, 64.0                                              # le hibou
+    P.ell(ox + 1.0, oy, 2.2, 2.8, TE1)
+    P.ell(ox + 1.0, oy + 0.6, 1.4, 1.8, TE2)
+    ferme = int(p * 8) % 8 == 3
+    for dx in (0.2, 1.8):
+        if ferme:
+            P.trait(ox + dx - 0.4, oy - 1.0, ox + dx + 0.4, oy - 1.0, ENCRE)
+        else:
+            P.point(ox + dx, oy - 1.0, LA2, 2)
+    P.poly([(ox - 0.6, oy - 2.6), (ox, oy - 3.6), (ox + 0.4, oy - 2.4)], TE1)
+    P.poly([(ox + 2.6, oy - 2.6), (ox + 2.0, oy - 3.6), (ox + 1.6, oy - 2.4)], TE1)
+    pg.touffes(P, lambda x: 79.2 + 0.0 * _a(x), n=90, haut=3.0, graine=1309, tons=(ENCRE, NU1, T.S0, NU2, T.S1))
 
 
 # =====================================================================================================================
