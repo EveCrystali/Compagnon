@@ -52,6 +52,10 @@ Dernière mise à jour : 28 novembre 2026.
   commun (`Bandeau.cs`). Plancher de lisibilité (docs/STYLE.md) : plus aucun texte en minuscules dans la plus petite taille
   de la police pixel, sur le PC (hauteur d'x de 10 px à 100 %, 7 pour le menu) comme sur le téléphone ; « petit » ne
   sert plus qu'aux capitales et aux nombres. La bulle du bureau reste sous ce plancher (5 px) : à trancher.
+  Habillage commun des fenêtres du PC (`HabillageFenetre`) : barre de titre en pixels, icône de Pilou, boutons maison,
+  posé sur boutique, journal, prénom, « Pilou et moi », expéditions ; essayé pour de vrai sur le PC (ouverture, déplacement,
+  redimensionnement, taille minimale, réduire, ✕, Alt+F4, Échap). Pas encore sur l'Aventure, la scène d'évolution, amis,
+  connecteurs.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
