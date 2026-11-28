@@ -76,6 +76,42 @@ public class CapturesCampagnesTest {
         }
     }
 
+    /**
+     * La bibliothèque d'un joueur de niveau 12 sans haut fait, avec la campagne d'essai fermée par « Plume » et par le
+     * prologue : la carte dit ce qu'il manque (préfixe « bibliotheque-haut-fait »), clair et sombre.
+     */
+    @Test
+    public void bibliothequeAvecUneCampagneFermeeParUnHautFait() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        try {
+            dossier = new File("build/captures");
+            dossier.mkdirs();
+            CampagnesTel.EN_PLUS.add(CampagnesTest.hautFait());
+            for (String[] f : new String[][]{FORMATS[0], FORMATS[1]}) {
+                format = f[0];
+                RuntimeEnvironment.setQualifiers(f[1]);
+                essayer("bibliotheque-haut-fait", () -> {
+                    Prefs.de(ctx).edit().clear().commit();
+                    appairer(ctx);
+                    CampagnesTel.prechargerMaintenant();
+                    ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+                    Principale a = ac.get();
+                    a.aller(Principale.AVENTURE, false);
+                    attendre();
+                    PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+                    pa.rafraichir();
+                    attendre();
+                    vue(pa.corps, "bibliotheque-haut-fait");
+                    ac.pause().stop().destroy();
+                });
+            }
+        } catch (Throwable t) {
+            System.out.println("CAPTURES-SAUTEES " + t);
+        } finally {
+            CampagnesTel.EN_PLUS.clear();
+        }
+    }
+
     private void essayer(String nom, Runnable r) {
         try {
             r.run();
@@ -347,6 +383,37 @@ public class CapturesCampagnesTest {
         return l;
     }
 
+    /** Position (x, y) d'une vue dans la racine donnée (somme des positions des parents, moins leur défilement). */
+    private static int[] position(View v, View racine) {
+        int x = 0, y = 0;
+        for (View c = v; c != racine && c != null; c = c.getParent() instanceof View ? (View) c.getParent() : null) {
+            x += c.getLeft() - (c == v ? 0 : c.getScrollX());
+            y += c.getTop() - (c == v ? 0 : c.getScrollY());
+        }
+        return new int[]{x, y};
+    }
+
+    private static List<View> toutes(View v) {
+        List<View> l = new ArrayList<>();
+        l.add(v);
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) l.addAll(toutes(((android.view.ViewGroup) v).getChildAt(i)));
+        return l;
+    }
+
+    /** Rien sous le bandeau n'est écrit par la police système : tout TextView visible est un défaut ; tout signe de la police pixel est dessiné. */
+    private static void sansTexteSysteme(Lecture l) {
+        List<String> sys = new ArrayList<>();
+        systemes(l, sys);
+        org.junit.Assert.assertTrue("texte système dans la lecture : " + sys, sys.isEmpty());
+        List<TextePixelVue> pv = new ArrayList<>();
+        pixels(l, pv);
+        PolicePixel pol = PolicePixel.texte();
+        for (TextePixelVue t : pv)
+            for (char ch : PolicePixel.preparer(t.texte()).toCharArray())
+                if (!Character.isWhitespace(ch) && ch != 0x202F) org.junit.Assert.assertTrue("glyphe absent de la police : U+" + Integer.toHexString(ch) + " dans « " + t.texte() + " »", pol.connu(ch));
+    }
+
     private static void pixels(View v, List<TextePixelVue> l) {
         if (v.getVisibility() != View.VISIBLE) return;
         if (v instanceof TextePixelVue) l.add((TextePixelVue) v);
@@ -406,19 +473,80 @@ public class CapturesCampagnesTest {
                 List<String> sys = new ArrayList<>();
                 systemes(l, sys);
                 for (String s : sys) org.junit.Assert.assertFalse("texte système sous la scène : " + s, s.contains("CHAPITRE") || s.contains("Devant"));
-                // Le fil est calé sur une bulle entière : son haut tombe sur le haut d'une bulle (moins 2 u) ou sur 0.
+                // Le fil est ancré en bas : la dernière bulle finit 2 u au-dessus du bas de la zone du fil (les choix), et le
+                // défilement tombe sur 0 (tout tient) ou sur le haut d'une bulle (moins 2 u) ou sur le bas du contenu.
                 android.widget.ScrollView defil = (android.widget.ScrollView) l.filVue().getParent();
+                android.view.ViewGroup fil = (android.view.ViewGroup) l.filVue();
                 int y = defil.getScrollY();
-                boolean cale = y == 0;
-                for (int i = 0; i < ((android.view.ViewGroup) l.filVue()).getChildCount(); i++)
-                    if (((android.view.ViewGroup) l.filVue()).getChildAt(i).getTop() - 2 * l.unite() == y) cale = true;
-                org.junit.Assert.assertTrue("fil calé sur une bulle : scrollY=" + y, cale);
+                View derniere = fil.getChildAt(fil.getChildCount() - 1);
+                org.junit.Assert.assertEquals("2 u entre la dernière bulle et les choix", 2 * l.unite(), defil.getHeight() - (derniere.getBottom() - y));
+                boolean cale = y == 0 || y == fil.getHeight() - defil.getHeight();
+                for (int i = 0; i < fil.getChildCount(); i++) if (fil.getChildAt(i).getTop() - 2 * l.unite() == y) cale = true;
+                org.junit.Assert.assertTrue("fil calé : scrollY=" + y, cale);
+                // Pas de séparateur de chapitre en tête du fil visible : le bandeau dit déjà « CHAPITRE 1 / 2 ».
+                for (String s : AventureTest.textes(fil)) org.junit.Assert.assertFalse("séparateur en double : " + s, s.contains("CHAPITRE 1 - ") || s.contains("Chapitre 1 ·"));
+                // La puce de lieu tient dans la scène (192 u de large, centrée), à au moins 1 u de son bord droit et de son bord bas.
+                int k = l.unite(), W = m.widthPixels, scGauche = (W - 192 * k) / 2, scDroite = scGauche + 192 * k;
+                View puce = l.puceLieu();
+                int[] pp = position(puce, l);
+                int[] pt = position(l.tete(), l);
+                org.junit.Assert.assertEquals(scDroite - k, pp[0] + puce.getWidth());
+                org.junit.Assert.assertTrue(pp[0] >= scGauche + k);
+                org.junit.Assert.assertEquals(pt[1] + 80 * k - k, pp[1] + puce.getHeight());
+                org.junit.Assert.assertTrue(pp[1] >= pt[1]);
+                // La jauge : sous la scène, sur sa largeur exacte.
+                int[] pj = position(l.jaugeVue(), l);
+                org.junit.Assert.assertEquals(scGauche, pj[0]);
+                org.junit.Assert.assertEquals(192 * k, l.jaugeVue().getWidth());
+                org.junit.Assert.assertTrue(pj[1] >= pt[1] + 80 * k);
+                // Les bulles de Pilou ont la largeur des choix.
+                View bulle = null, choisir = null;
+                for (View v : toutes(l)) {
+                    String d = v.getContentDescription() == null ? "" : v.getContentDescription().toString();
+                    if (bulle == null && d.startsWith("Pilou : ") && v instanceof CadrePixel.Pave) bulle = v;
+                    if (choisir == null && d.startsWith("Choisir : ")) choisir = v;
+                }
+                org.junit.Assert.assertNotNull(bulle);
+                org.junit.Assert.assertNotNull(choisir);
+                org.junit.Assert.assertEquals(choisir.getWidth(), bulle.getWidth());
+                org.junit.Assert.assertEquals(position(choisir, l)[0], position(bulle, l)[0]);
                 ac[0].pause().stop().destroy();
             }
-            // La Grande Panne avec personnage, en sombre.
+            // Les cartes du pied et la fin, en sombre : attente (compte à rebours à un tiers), fin, feuille « ⋯ ». Tout en police pixel.
             format = "jeu-telephone-portrait-sombre";
             RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
             RuntimeEnvironment.setFontScale(1f);
+            Map<String, String[]> pires = piresCas(pro);
+            ActivityController<Principale>[] ap = new ActivityController[1];
+            Lecture la = ouvrirLecture(pro, pires.get("attente")[0], ap);
+            org.junit.Assert.assertEquals(Campagnes.Phase.Attente, CampagnesTel.etat(RuntimeEnvironment.getApplication()).phase);
+            horloge[0] += (CampagnesTel.etat(RuntimeEnvironment.getApplication()).fin - horloge[0]) / 3;
+            la.rafraichir();
+            attendre();
+            ecran(ap[0].get(), "attente");
+            sansTexteSysteme(la);
+            ap[0].pause().stop().destroy();
+
+            ap = new ActivityController[1];
+            Lecture lf = ouvrirLecture(pro, pires.get("fin")[0], ap);
+            org.junit.Assert.assertEquals(Campagnes.Phase.Fin, CampagnesTel.etat(RuntimeEnvironment.getApplication()).phase);
+            ecran(ap[0].get(), "fin");
+            vue(lf.filVue(), "fin-fil");
+            sansTexteSysteme(lf);
+            ap[0].pause().stop().destroy();
+
+            ap = new ActivityController[1];
+            Lecture lm = ouvrirLecture(pro, "p1-sac", ap);
+            View plus = AventureTest.trouver(lm, "Plus : carnet, mettre de côté");
+            org.junit.Assert.assertNotNull(plus);
+            plus.performClick();
+            attendre();
+            org.junit.Assert.assertTrue(lm.coucheOuverte());
+            ecran(ap[0].get(), "menu");
+            sansTexteSysteme(lm);
+            ap[0].pause().stop().destroy();
+
+            // La Grande Panne avec personnage, en sombre.
             Campagnes.Campagne gp = Campagnes.charger("grande-panne");
             ActivityController<Principale>[] ac = new ActivityController[1];
             ouvrirLecture(gp, noeudAvecPersonnage(gp), ac);

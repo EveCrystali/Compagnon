@@ -82,12 +82,16 @@ public final class CampagnesTel {
     static volatile String graineEssai;
 
     /** Les campagnes à proposer, dans l'ordre du joueur : le prologue d'abord, puis par niveau requis. */
+    /** Campagnes ajoutées au catalogue par un test (la campagne d'essai fermée par un haut fait) ; vide dans l'app. */
+    static final List<Campagnes.Campagne> EN_PLUS = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     public static List<Campagnes.Campagne> catalogue() {
         List<Campagnes.Campagne> l = new java.util.ArrayList<>();
         for (String id : Campagnes.disponibles()) {
             Campagnes.Campagne x = Campagnes.charger(id);
             if (x != null) l.add(x);
         }
+        l.addAll(EN_PLUS);
         java.util.Collections.sort(l, (a, b) -> a.id.equals("prologue") ? -1 : b.id.equals("prologue") ? 1
                 : a.niveau != b.niveau ? Integer.compare(a.niveau, b.niveau) : a.titre.compareTo(b.titre));
         return l;
@@ -336,7 +340,8 @@ public final class CampagnesTel {
     /** Démarre la campagne, ou la reprend à son dernier check-point (neuf : depuis le début quand même). */
     public static String demarrer(Context c, String id, boolean neuf) {
         int niveau = Gains.niveau(c, Prefs.etat(c));
-        return decider(c, id, false, (k, campagne, t, a) -> Campagnes.demarrer(k, campagne, niveau, t, a, Campagnes::charger, graineEssai, neuf));
+        java.util.Set<String> succes = Prefs.etat(c).succes;
+        return decider(c, id, false, (k, campagne, t, a) -> Campagnes.demarrer(k, campagne, niveau, t, a, Campagnes::charger, graineEssai, neuf, succes));
 
     }
 

@@ -1,14 +1,11 @@
 package fr.pilou.compagnon;
 
-import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,7 +34,10 @@ final class Lecture extends FrameLayout {
     /** Pilou est parti en route (attente, repos) : la scène montre le lieu sans lui jusqu'à son retour. */
     private boolean enRoute;
     private final TextePixelVue numero, chapitre, lieu;
-    private final View jauge, jaugeVide;
+    private final CadrePixel.Cases jauge;
+    private final LinearLayout.LayoutParams jaugeLp;
+    private final FrameLayout.LayoutParams lieuLp;
+    private int reglageK, reglageW;
     private final Defil defil;
     private final Fil fil;
     private final LinearLayout dock;
@@ -59,10 +59,13 @@ final class Lecture extends FrameLayout {
     private String dockCle = "", chapitreVu = "", lieuVu = "", humeur = "repos";
     private long dernierT;
     private boolean repriseVue;
-    private TextView compte, retourVers, refus;
-    private Ui.Barre barreAttente;
+    private TextePixelVue compte, retourVers, refus;
+    private CadrePixel.Cases barreAttente;
     private boolean finMontree;
+    /** Largeur (pixels d'écran) d'une bulle et d'un choix : l'écran moins la gouttière de chaque côté. */
     private final int largeurBulle;
+    /** Marge de chaque côté du fil et des choix, en u : 3 (rembourrage) + 2 (cadre du pied) pour le pied, la même pour le fil. */
+    static final int GOUTTIERE = 5;
     // Animations (ScenesAnimees.java) : le personnage du message, l'écriture en cours, le fond qui respire.
     private final ScenesAnimees.Portrait perso;
     private final ScenesAnimees.Fond fond;
@@ -74,8 +77,8 @@ final class Lecture extends FrameLayout {
         this.page = page;
         p = Ui.p(a);
         d = a.getResources().getDisplayMetrics().density;
-        largeurBulle = Math.round(a.getResources().getDisplayMetrics().widthPixels * 0.82f);
         u = uniteEcran(a);
+        largeurBulle = a.getResources().getDisplayMetrics().widthPixels - 2 * GOUTTIERE * u;
         cp =CadrePixel.de(a);
         pixelRecit = CadrePixel.policeDp(a);
         setBackgroundColor(p.fond);
@@ -146,35 +149,33 @@ final class Lecture extends FrameLayout {
         // Sur un petit écran, la scène rapetisse et le portrait remonte jusqu'à la barre : boutons et titre restent devant.
         barreHaut.bringToFront();
 
-        // Le lieu : un petit cadre pixel sans ombre, texte en police pixel (4 pixels d'écran par pixel de police).
+        // Le lieu : un petit cadre pixel sans ombre portée, texte en police pixel (4 pixels d'écran par pixel de police) sur
+        // une ligne. Il tient entièrement dans la scène (192 u de large, centrée), à 1 u de son bord droit et de son bord bas.
         CadrePixel.Pave puceLieu = new CadrePixel.Pave(a, cp, u, false);
         puceLieu.air(u, u);
         lieu = pixelFixe("", 4, false);
         lieu.maxLignes(1);
-        lieu.maxLargeur(Ui.dp(a, 190) - 4 * u - 2 * u);
         puceLieu.encre(lieu, cp.texte);
         puceLieu.addView(lieu);
-        LayoutParams ll = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
-        ll.rightMargin = 3 * u;
-        ll.bottomMargin = 3 * u;
-        tete.addView(puceLieu, ll);
-
-        // Avancement dans la campagne (chapitres) : un trait fin au pied de la scène.
-        LinearLayout avance = Ui.rangee(a);
-        jauge = new View(a);
-        jaugeVide = new View(a);
-        jaugeVide.setBackgroundColor(0x55000000);
-        avance.addView(jauge, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0));
-        avance.addView(jaugeVide, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1));
-        tete.addView(avance, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 4), Gravity.BOTTOM));
+        lieuLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
+        tete.addView(puceLieu, lieuLp);
         colonne.addView(tete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 184)));
+
+        // Avancement dans la campagne : une jauge de carrés pixel sous la scène, sur sa largeur exacte (192 u), au lieu du trait.
+        jauge = new CadrePixel.Cases(a, cp.bord, cp.pale, u, 1);
+        jaugeLp = new LinearLayout.LayoutParams(Theatre.W * u, u);
+        jaugeLp.gravity = Gravity.CENTER_HORIZONTAL;
+        jaugeLp.topMargin = 2 * u;
+        jauge.setContentDescription("Avancement de l'aventure");
+        colonne.addView(jauge, jaugeLp);
+        reglerLieu(a.getResources().getDisplayMetrics().widthPixels, u);
 
         // ---- Le fil.
         // Pas de fondu : le défilement se cale sur une bulle entière (Defil), donc aucune ligne n'est tranchée au repos
         // par le bord de la scène.
         fil = new Fil(a);
         fil.setOrientation(LinearLayout.VERTICAL);
-        fil.setPadding(3 * u, 2 * u, 3 * u, 4 * u);
+        fil.setPadding(GOUTTIERE * u, 2 * u, GOUTTIERE * u, 0);
         defil = new Defil(a, fil);
         defil.setVerticalScrollBarEnabled(false);
         defil.setClipToPadding(false);
@@ -238,6 +239,19 @@ final class Lecture extends FrameLayout {
         return unite;
     }
 
+    /** Pour les tests : la puce de lieu (le cadre pixel) et la jauge d'avancement. */
+    View puceLieu() {
+        return (View) lieu.getParent();
+    }
+
+    View jaugeVue() {
+        return jauge;
+    }
+
+    View tete() {
+        return tete;
+    }
+
     ScenesAnimees.Portrait portrait() {
         return perso;
     }
@@ -265,8 +279,39 @@ final class Lecture extends FrameLayout {
                 perso.setLayoutParams(lq);
                 pilou.pixel(Aventure.pixelUnite(k));
             }
+            if (k > 0) {
+                reglerLieu(MeasureSpec.getSize(largeur), k);
+            }
         }
         super.onMeasure(largeur, hauteur);
+    }
+
+    /** Marge droite de la puce de lieu (pixels d'écran) : le vide à droite de la scène centrée (largeur px, unité k), plus 1 u. */
+    static int margeLieuDroite(int largeur, int k) {
+        return Math.max(0, (largeur - Theatre.W * k) / 2) + k;
+    }
+
+    /** Largeur maximale de la puce de lieu entière : la scène moins 1 u de marge de chaque côté. */
+    static int largeurPuceMax(int k) {
+        return Theatre.W * k - 2 * k;
+    }
+
+    /** Largeur maximale du texte du lieu : la puce moins son cadre (2 × 2 u : bord et biseau) et son air (2 × 1 u), sans ombre. */
+    static int largeurTexteLieu(int k) {
+        return largeurPuceMax(k) - 6 * k;
+    }
+
+    /** Place la puce de lieu et la jauge sur la scène (largeur de l'écran et unité) ; ne fait rien si rien n'a changé. */
+    private void reglerLieu(int largeur, int k) {
+        if (largeur == reglageW && k == reglageK) return;
+        reglageW = largeur;
+        reglageK = k;
+        lieuLp.rightMargin = margeLieuDroite(largeur, k);
+        lieuLp.bottomMargin = k;
+        lieu.maxLargeur(largeurTexteLieu(k));
+        jaugeLp.width = Theatre.W * k;
+        jaugeLp.height = k;
+        jaugeLp.topMargin = 2 * k;
     }
 
     /** Le pixel de la scène pour cet écran : comme onMeasure (le plus grand entier qui tient dans la largeur, borné par la hauteur). */
@@ -315,15 +360,18 @@ final class Lecture extends FrameLayout {
     }
 
     /**
-     * Le fil des messages. Il se mesure à la hauteur visible du défilement et prolonge son contenu d'un vide en bas quand
-     * il le faut, pour que le calage en bas (le haut de la plus ancienne bulle telle que toutes les suivantes tiennent)
-     * soit toujours possible.
+     * Le fil des messages, ancré en bas : la dernière bulle est juste au-dessus des choix, les précédentes entières au-dessus
+     * tant qu'elles tiennent ; s'il reste de la place, elle est en haut. Il se mesure au moins à la hauteur visible du
+     * défilement (ses enfants se collent au bas), et son défilement au repos se cale sur le bas.
      */
     static final class Fil extends LinearLayout {
         private int visible, marge, cible;
+        /** Le séparateur du chapitre courant (le bandeau le dit déjà : il n'est jamais montré en tête de l'écran). */
+        View sepCourant;
 
         Fil(android.content.Context c) {
             super(c);
+            setGravity(android.view.Gravity.BOTTOM);
         }
 
         void regler(int visible, int marge) {
@@ -331,7 +379,7 @@ final class Lecture extends FrameLayout {
             this.marge = marge;
         }
 
-        /** Le haut du fil, en pixels, tel que le calage en bas le place. */
+        /** Le haut du fil, en pixels, tel que l'ancrage en bas le place. */
         int cible() {
             return cible;
         }
@@ -341,6 +389,19 @@ final class Lecture extends FrameLayout {
             int[] h = new int[getChildCount()];
             for (int i = 0; i < h.length; i++) h[i] = Math.max(0, getChildAt(i).getTop() - marge);
             return h;
+        }
+
+        /**
+         * Le haut (dans le fil) à partir duquel tout est entier quand le défilement est à y : le haut du premier enfant
+         * qui commence à y ou plus bas, en sautant le séparateur du chapitre courant s'il est en tête.
+         */
+        int hautEntier(int y) {
+            int n = getChildCount();
+            int[] tops = new int[n];
+            for (int i = 0; i < n; i++) tops[i] = getChildAt(i).getTop();
+            int i = premierEntier(tops, y);
+            if (i < n && getChildAt(i) == sepCourant && i + 1 < n) i++;
+            return i < n ? tops[i] : getHeight();
         }
 
         @Override
@@ -357,21 +418,26 @@ final class Lecture extends FrameLayout {
                 tops[i] = y + lp.topMargin;
                 y = tops[i] + v.getMeasuredHeight() + lp.bottomMargin;
             }
-            cible = cibleBas(tops, y + getPaddingBottom(), visible, marge);
-            if (cible + visible > getMeasuredHeight()) setMeasuredDimension(getMeasuredWidth(), cible + visible);
+            int fin = y + getPaddingBottom();
+            cible = cibleBas(tops, fin, visible, marge);
+            if (visible > getMeasuredHeight()) setMeasuredDimension(getMeasuredWidth(), visible);
         }
 
         /**
-         * Le haut à viser quand le fil est calé en bas : celui de la plus ancienne bulle (moins marge) telle que tout ce qui
-         * la suit tient dans la hauteur visible ; à défaut (la dernière bulle est plus haute que l'écran), le haut de la dernière.
+         * Le haut à viser quand le fil est ancré en bas : celui qui met le bas du contenu (fin) au bas de la zone visible ;
+         * 0 si tout tient ; si la dernière bulle seule dépasse la hauteur visible, le début de cette bulle (moins marge).
          */
         static int cibleBas(int[] tops, int fin, int visible, int marge) {
-            if (tops.length == 0) return 0;
-            for (int top : tops) {
-                int t = Math.max(0, top - marge);
-                if (fin - t <= visible) return t;
-            }
-            return Math.max(0, tops[tops.length - 1] - marge);
+            if (tops.length == 0 || fin <= visible) return 0;
+            int bas = fin - visible;
+            int derniere = Math.max(0, tops[tops.length - 1] - marge);
+            return derniere < bas ? derniere : bas;
+        }
+
+        /** L'indice du premier haut d'enfant qui est à y ou plus bas (la longueur du tableau s'il n'y en a pas). */
+        static int premierEntier(int[] tops, int y) {
+            for (int i = 0; i < tops.length; i++) if (tops[i] >= y) return i;
+            return tops.length;
         }
     }
 
@@ -414,6 +480,28 @@ final class Lecture extends FrameLayout {
                 if (y != dernier) smoothScrollTo(0, y);   // une seule fois : les passages de mise en page suivants ne la relancent pas
             } else scrollTo(0, y);
             dernier = y;
+        }
+
+        /** Au repos, ancré en bas : le haut (dans le fil) sous lequel tout est entier ; au-dessus, rien n'est dessiné. -1 : pas de coupe. */
+        int coupe() {
+            if (doigt) return -1;
+            int y = getScrollY(), max = Math.max(0, contenu.getHeight() - getHeight());
+            if (y != Math.min(contenu.cible(), max)) return -1;
+            return contenu.hautEntier(y);
+        }
+
+        @Override
+        protected void dispatchDraw(android.graphics.Canvas c) {
+            int coupe = coupe();
+            if (coupe < 0) {
+                super.dispatchDraw(c);
+                return;
+            }
+            // Aucune ligne tranchée par le bord de la scène : la bulle entamée en haut est masquée, la place reste vide.
+            int s = c.save();
+            c.clipRect(0, coupe, getWidth(), getScrollY() + getHeight());
+            super.dispatchDraw(c);
+            c.restoreToCount(s);
         }
 
         @Override
@@ -548,11 +636,8 @@ final class Lecture extends FrameLayout {
         lieu.setContentDescription("Lieu : " + l);
         scene.regler(campagne.id, campagne.ton, etat.decor);
         fond.ton(campagne.ton);
-        jauge.setBackgroundColor(Aventure.cielTon(campagne.ton)[4]);
         float part = (float) Math.max(0.02, Math.min(1, etat.progression + (etat.phase == Campagnes.Phase.Fin ? 0 : 0.5 / Math.max(1, etat.chapitreTotal))));
-        ((LinearLayout.LayoutParams) jauge.getLayoutParams()).weight = part;
-        ((LinearLayout.LayoutParams) jaugeVide.getLayoutParams()).weight = 1 - part;
-        jauge.requestLayout();
+        jauge.part(part);
         Etat pc = Prefs.etat(app);
         java.util.Map<String, String> porte = Gains.porte(app, pc);
         pilou.equipe(porte);
@@ -654,7 +739,7 @@ final class Lecture extends FrameLayout {
         b.air(2 * u, 2 * u);
         b.addView(new Aventure.Points(app, cp.pale));
         r.addView(b);
-        fil.addView(r, bas(3 * u));
+        fil.addView(r, bas(2 * u));
         points = r;
         apparaitre(r, false);
         defiler();
@@ -748,7 +833,8 @@ final class Lecture extends FrameLayout {
         if (!ch.isEmpty() && !ch.equals(chapitreVu)) {
             int rang = CampagnesTel.rangChapitre(campagne, ch);
             String titre = rang >= 0 ? campagne.chapitres.get(rang).titre : "";
-            if (!chapitreVu.isEmpty() || montres.size() <= 2)
+            // Le chapitre courant n'a pas de séparateur en tête du fil (le bandeau le dit) : seulement le passage d'un chapitre à l'autre.
+            if (!chapitreVu.isEmpty())
                 separateur(("Chapitre " + (rang + 1) + (titre.isEmpty() ? "" : " · " + titre)).toUpperCase(java.util.Locale.FRENCH), true);
             chapitreVu = ch;
         }
@@ -759,7 +845,7 @@ final class Lecture extends FrameLayout {
             LinearLayout r = Ui.rangee(app);
             r.setGravity(Gravity.CENTER);
             r.addView(t);
-            fil.addView(r, bas(3 * u));
+            fil.addView(r, bas(2 * u));
             repriseVue = true;
         } else if (!m.reprise) repriseVue = false;
         if (dernierT > 0 && m.t - dernierT > 10 * 60_000L) separateur(quand(m.t), false);
@@ -792,9 +878,10 @@ final class Lecture extends FrameLayout {
         r.addView(g, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         r.addView(t);
         r.addView(dr, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        LinearLayout.LayoutParams lp = bas((fort ? 3 : 2) * u);
+        LinearLayout.LayoutParams lp = bas(2 * u);
         lp.topMargin = (fort ? 3 : 1) * u;
         fil.addView(r, lp);
+        if (fort) fil.sepCourant = r;
     }
 
     private LinearLayout.LayoutParams bas(int px) {
@@ -820,8 +907,9 @@ final class Lecture extends FrameLayout {
         bulle.addView(t);
         bulle.setContentDescription((joueur ? "Toi : " : "Pilou : ") + m.texte);
         if (m.reprise) bulle.setAlpha(0.62f);
-        r.addView(bulle);
-        LinearLayout.LayoutParams lp = bas(3 * u);
+        // Un seul narrateur : la bulle de Pilou prend toute la largeur des choix ; celle du joueur, à droite, au plus la même.
+        r.addView(bulle, new LinearLayout.LayoutParams(joueur ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams lp = bas(2 * u);
         if (joueur) lp.topMargin = u;
         fil.addView(r, lp);
         if (!joueur) {
@@ -854,6 +942,72 @@ final class Lecture extends FrameLayout {
         return h == null || h.isEmpty() || h.equals("neutre") ? "repos" : h;
     }
 
+    // ---- Éléments communs en pixels (cartes du pied, fin, feuille)
+
+    /** Un texte pixel en police titre (gras). */
+    private TextePixelVue titrePixel(String texte, int couleur) {
+        TextePixelVue t = pixelRecit(texte, couleur);
+        t.titre(true);
+        return t;
+    }
+
+    /** Un texte pixel de détail (couleur pâle), qui passe à la ligne dans la largeur du pied. */
+    private TextePixelVue detailPixel(String texte) {
+        return pixelRecit(texte, cp.pale);
+    }
+
+    /** Une taille de police pixel multiple de celle du récit (compte à rebours, signe de fin). */
+    private TextePixelVue grandPixel(String texte, int couleur, int facteur) {
+        TextePixelVue t = new TextePixelVue(app, pixelRecit * facteur, couleur);
+        t.texte(texte);
+        return t;
+    }
+
+    /**
+     * Un bouton pixel : cadre avec ombre, libellé en police pixel, cible d'au moins 48 dp de haut. Le bouton principal prend le
+     * fond « appuyé » (orange en sombre, bleu en clair) comme mise en avant, et un signe « ▶ » (la forme le porte aussi).
+     */
+    private CadrePixel.Pave action(String libelle, boolean principal, String description, View.OnClickListener ecoute) {
+        CadrePixel.Pave b = new CadrePixel.Pave(app, cp, u, true);
+        b.setOrientation(LinearLayout.HORIZONTAL);
+        b.setGravity(Gravity.CENTER);
+        b.air(2 * u, 2 * u);
+        b.setMinimumHeight(Ui.dp(app, 48) + u);
+        int couleur = principal ? cp.appuyeTexte : cp.texte;
+        if (principal) {
+            TextePixelVue s = pixelRecit("▶", couleur);
+            s.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            b.encre(s, couleur);
+            b.addView(s);
+        }
+        TextePixelVue t = pixelRecit(libelle, couleur);
+        if (principal) t.setPadding(2 * u, 0, 0, 0);
+        t.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        b.encre(t, couleur);
+        b.addView(t);
+        b.setContentDescription(description != null ? description : libelle);
+        b.setClickable(true);
+        b.setOnClickListener(ecoute);
+        if (principal) b.forcer(true);
+        return b;
+    }
+
+    private LinearLayout.LayoutParams haut(int px) {
+        LinearLayout.LayoutParams l = Ui.large();
+        l.topMargin = px;
+        return l;
+    }
+
+    /** Le signe de l'issue, dessiné par la police pixel (« ◐ » et « ▽ » n'y sont pas). */
+    static String signeIssue(String issue) {
+        switch (issue) {
+            case "douce-amere": return "☾";
+            case "mauvaise": return "▼";
+            case "secrete": return "✧";
+            default: return "★";
+        }
+    }
+
     // ---- Le pied : ce que le joueur peut faire
 
     private void majDock() {
@@ -868,9 +1022,9 @@ final class Lecture extends FrameLayout {
         barreAttente = null;
         dock.setVisibility(View.VISIBLE);
         if (refusPc != null && etat.phase != Campagnes.Phase.Attente && etat.phase != Campagnes.Phase.Repos && etat.phase != Campagnes.Phase.Fin) {
-            refus = Ui.texte(app, "⚠  " + refusPc + ".", Ui.T_DETAIL, p.orange, true);
-            refus.setPadding(0, 0, 0, Ui.dp(app, 10));
-            dock.addView(refus, Ui.large());
+            refus = pixelRecit("▲  " + refusPc + ".", p.orange);
+            dock.addView(refus, Ui.large(app, 0));
+            ((LinearLayout.LayoutParams) refus.getLayoutParams()).bottomMargin = 2 * u;
         }
         boolean bloque = refusPc != null;
         switch (etat.phase) {
@@ -884,12 +1038,9 @@ final class Lecture extends FrameLayout {
                 fin();
                 break;
             default:
-                dock.addView(Ui.texte(app, "Cette histoire a un souci dans ses fichiers : Pilou ne sait plus où il en est. "
-                        + "Mets-la de côté ; elle reprendra au dernier check-point.", Ui.T_CORPS, p.texte, false));
-                Button b = Ui.bouton(app, "Mettre de côté", false, v -> confirmerSuspension());
-                LinearLayout.LayoutParams l = Ui.large();
-                l.topMargin = Ui.dp(app, 10);
-                dock.addView(b, l);
+                dock.addView(pixelRecit("Cette histoire a un souci dans ses fichiers : Pilou ne sait plus où il en est. "
+                        + "Mets-la de côté ; elle reprendra au dernier check-point.", cp.texte), Ui.large());
+                dock.addView(action("Mettre de côté", false, null, v -> confirmerSuspension()), haut(3 * u));
         }
         // Le pied grandit doucement : le fil remonte au lieu de sauter.
         if (Vitrine.anime(app) && dock.getVisibility() == View.VISIBLE) {
@@ -959,20 +1110,12 @@ final class Lecture extends FrameLayout {
             int a = Math.max(1, n.dureeMin), b = Math.max(a, n.dureeMax);
             duree = a == b ? duree(a) : "entre " + duree(a) + " et " + duree(b);
         }
-        TextView t = Ui.texte(app, etat.pendant.isEmpty() ? "Pilou est prêt à repartir." : etat.pendant + ".", Ui.T_CORPS, p.texte, true);
-        dock.addView(t, Ui.large());
-        if (!duree.isEmpty()) {
-            TextView s = Ui.texte(app, "◷  Ça prendra " + duree + ". Il n'attend que ton signal.", Ui.T_DETAIL, p.doux, false);
-            s.setPadding(0, Ui.dp(app, 4), 0, 0);
-            dock.addView(s, Ui.large());
-        }
-        Button b = Ui.bouton(app, "Vas-y, Pilou !", true, v -> decider(() -> CampagnesTel.continuer(app)));
+        dock.addView(titrePixel(etat.pendant.isEmpty() ? "Pilou est prêt à repartir." : etat.pendant + ".", cp.texte), Ui.large());
+        if (!duree.isEmpty()) dock.addView(detailPixel("Ça prendra " + duree + ". Il n'attend que ton signal."), haut(u));
+        CadrePixel.Pave b = action("Vas-y, Pilou !", true, null, v -> decider(() -> CampagnesTel.continuer(app)));
         b.setEnabled(!bloque);
         b.setAlpha(bloque ? 0.5f : 1);
-        Ui.enfoncer(b);
-        LinearLayout.LayoutParams l = Ui.large();
-        l.topMargin = Ui.dp(app, 12);
-        dock.addView(b, l);
+        dock.addView(b, haut(3 * u));
     }
 
     static String duree(int minutes) {
@@ -981,34 +1124,38 @@ final class Lecture extends FrameLayout {
         return h + " h" + (m == 0 ? "" : " " + String.format(java.util.Locale.ROOT, "%02d", m));
     }
 
+    /** La difficulté en signes de forme pixel : « ◆ » plein, « ○ » vide (« ◇ » n'est pas dans la police). */
+    private static String difficultePixel(int d) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 1; i <= 3; i++) b.append(i <= d ? "◆" : "○");
+        return b.toString();
+    }
+
     private void epreuve(boolean bloque) {
         LinearLayout tete = Ui.rangee(app);
-        tete.addView(Ui.puceTexte(app, "▲  ÉPREUVE", Aventure.accentTon(app, campagne.ton)));
+        tete.setGravity(Gravity.CENTER_VERTICAL);
+        tete.addView(titrePixel("▲  ÉPREUVE", Aventure.accentTon(app, campagne.ton)));
         View vide = new View(app);
         tete.addView(vide, new LinearLayout.LayoutParams(0, 1, 1));
-        TextView diff = Ui.texte(app, Aventure.difficulte(etat.difficulte), 14, p.doux, true);
+        TextePixelVue diff = titrePixel(difficultePixel(etat.difficulte), cp.pale);
         diff.setContentDescription("Difficulté " + etat.difficulte + " sur 3");
         tete.addView(diff);
         dock.addView(tete, Ui.large());
-        TextView nom = Ui.texte(app, Aventure.nomJeu(etat.jeu), Ui.T_CARTE, p.texte, true);
-        nom.setPadding(0, Ui.dp(app, 8), 0, Ui.dp(app, 2));
-        dock.addView(nom, Ui.large());
-        dock.addView(Ui.texte(app, Aventure.consigneJeu(etat.jeu), Ui.T_DETAIL, p.doux, false), Ui.large());
+        dock.addView(titrePixel(Aventure.nomJeu(etat.jeu), cp.texte), haut(2 * u));
+        dock.addView(detailPixel(Aventure.consigneJeu(etat.jeu)), haut(u));
         LinearLayout r = Ui.rangee(app);
-        r.setPadding(0, Ui.dp(app, 12), 0, 0);
-        Button jouer = Ui.bouton(app, "Jouer", true, v -> lancerEpreuve(false));
-        Button des = Ui.bouton(app, "Les dés · " + etat.chance + "\u00a0%", false, v -> lancerEpreuve(true));
-        des.setContentDescription("Laisser faire les dés : " + etat.chance + " pour cent de chance");
-        for (Button b : new Button[]{jouer, des}) {
+        CadrePixel.Pave jouer = action("Jouer", true, null, v -> lancerEpreuve(false));
+        CadrePixel.Pave des = action("Les dés · " + etat.chance + " %", false,
+                "Laisser faire les dés : " + etat.chance + " pour cent de chance", v -> lancerEpreuve(true));
+        for (View b : new View[]{jouer, des}) {
             b.setEnabled(!bloque);
             b.setAlpha(bloque ? 0.5f : 1);
-            Ui.enfoncer(b);
         }
         LinearLayout.LayoutParams lj = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-        lj.rightMargin = Ui.dp(app, 8);
+        lj.rightMargin = 2 * u;
         r.addView(jouer, lj);
         r.addView(des, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        dock.addView(r, Ui.large());
+        dock.addView(r, haut(3 * u));
     }
 
     private void lancerEpreuve(boolean auxDes) {
@@ -1023,30 +1170,28 @@ final class Lecture extends FrameLayout {
 
     private void attente(boolean repos) {
         long maintenant = CampagnesTel.maintenant();
-        LinearLayout tete = Ui.rangee(app);
-        TextView quoi = Ui.texte(app, repos ? "Pilou se repose" : etat.pendant.isEmpty() ? "Pilou est en route" : etat.pendant, Ui.T_CORPS, p.texte, true);
-        quoi.setMaxLines(2);
-        tete.addView(quoi, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        dock.addView(tete, Ui.large());
+        TextePixelVue quoi = titrePixel(repos ? "Pilou se repose" : etat.pendant.isEmpty() ? "Pilou est en route" : etat.pendant, cp.texte);
+        quoi.maxLignes(2);
+        dock.addView(quoi, Ui.large());
         LinearLayout r = Ui.rangee(app);
-        r.setPadding(0, Ui.dp(app, 10), 0, Ui.dp(app, 4));
-        compte = Ui.texte(app, Aventure.compte(etat.fin - maintenant), 30, Aventure.accentTon(app, campagne.ton), true);
-        compte.setTypeface(Typeface.create("monospace", Typeface.BOLD));
+        r.setGravity(Gravity.CENTER_VERTICAL);
+        // Le compte à rebours : police titre, deux fois la taille du récit.
+        compte = grandPixel(Aventure.compte(etat.fin - maintenant), Aventure.accentTon(app, campagne.ton), 2);
+        compte.titre(true);
         r.addView(compte);
-        retourVers = Ui.texte(app, (repos ? "reprise vers " : "retour vers ") + CampagnesTel.heure(etat.fin), Ui.T_DETAIL, p.doux, false);
-        retourVers.setPadding(Ui.dp(app, 12), 0, 0, 0);
+        retourVers = detailPixel((repos ? "reprise vers " : "retour vers ") + CampagnesTel.heure(etat.fin));
+        retourVers.setPadding(3 * u, 0, 0, 0);
         r.addView(retourVers, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        dock.addView(r, Ui.large());
-        barreAttente = new Ui.Barre(app);
-        dock.addView(barreAttente, Ui.large());
+        dock.addView(r, haut(3 * u));
+        // L'avancement de l'attente : des carrés de 2 u séparés d'1 u, sur toute la largeur du pied.
+        barreAttente = new CadrePixel.Cases(app, cp.bord, cp.pale, u, 2);
+        dock.addView(barreAttente, haut(3 * u));
         String note;
         if (repos) {
             String l = CampagnesTel.lieuReprise(campagne, CampagnesTel.courante(app), etat);
             note = "Il est un peu cabossé. Reprise au dernier check-point" + (l.isEmpty() ? "." : " : " + l + ".");
         } else note = Prefs.alerteAventure(app) ? "Tu peux poser ton téléphone : je te préviens." : "Les notifications de retour sont coupées : reviens voir de temps en temps.";
-        TextView n = Ui.texte(app, note, Ui.T_DETAIL, p.doux, false);
-        n.setPadding(0, Ui.dp(app, 8), 0, 0);
-        dock.addView(n, Ui.large());
+        dock.addView(detailPixel(note), haut(3 * u));
         tic();
     }
 
@@ -1054,7 +1199,7 @@ final class Lecture extends FrameLayout {
     private void tic() {
         if (compte == null || etat == null || !etat.enAttente()) return;
         long maintenant = CampagnesTel.maintenant(), reste = etat.fin - maintenant;
-        compte.setText(Aventure.compte(reste));
+        compte.texte(Aventure.compte(reste));
         compte.setContentDescription("Encore " + CampagnesTel.reste(reste));
         if (barreAttente != null) {
             long total = Math.max(1, etat.fin - etat.t);
@@ -1064,35 +1209,45 @@ final class Lecture extends FrameLayout {
 
     // ---- La fin
 
+    /** Largeur du texte dans la carte de fin : celle d'un choix moins le cadre (2 × 2 u), l'air (2 × 3 u) et l'ombre (1 u). */
+    private int largeurCarte() {
+        return largeurBulle - 11 * u;
+    }
+
+    private TextePixelVue pixelCarte(String texte, int couleur, boolean titre, boolean centre) {
+        TextePixelVue t = pixelRecit(texte, couleur);
+        t.titre(titre);
+        t.centre(centre);
+        t.maxLargeur(largeurCarte());
+        return t;
+    }
+
     private void fin() {
         if (finMontree) return;
         finMontree = true;
         CampagnesTel.lu(app);
         FrameLayout cadre = new FrameLayout(app);
-        LinearLayout c = Ui.carte(app);
+        // La carte de fin : un grand cadre pixel avec son ombre, comme les bulles et les choix.
+        CadrePixel.Pave c = new CadrePixel.Pave(app, cp, u, true);
+        c.setOrientation(LinearLayout.VERTICAL);
         c.setGravity(Gravity.CENTER_HORIZONTAL);
+        c.air(3 * u, 3 * u);
         int couleur = Aventure.couleurIssue(app, etat.issue);
-        c.setBackground(Ui.arrondi(app, p.surface, 20, couleur));
-        TextView etiquette = Ui.texte(app, "FIN DE L'AVENTURE", Ui.T_ETIQUETTE, p.doux, true);
-        etiquette.setLetterSpacing(0.14f);
-        c.addView(etiquette);
-        TextView signe = Ui.texte(app, Aventure.signeIssue(etat.issue), 44, couleur, true);
-        signe.setPadding(0, Ui.dp(app, 6), 0, 0);
+        c.addView(pixelCarte("FIN DE L'AVENTURE", cp.pale, true, true), Ui.large());
+        TextePixelVue signe = grandPixel(signeIssue(etat.issue), couleur, 3);
         signe.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        c.addView(signe);
-        TextView issue = Ui.texte(app, Aventure.nomIssue(etat.issue), Ui.T_DETAIL, couleur, true);
-        c.addView(issue);
-        TextView titre = Ui.texte(app, etat.titreFin.isEmpty() ? campagne.titre : etat.titreFin, 22, p.texte, true);
-        titre.setGravity(Gravity.CENTER);
-        titre.setPadding(0, Ui.dp(app, 6), 0, Ui.dp(app, 12));
-        c.addView(titre, Ui.large());
+        LinearLayout.LayoutParams ls = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ls.topMargin = 2 * u;
+        c.addView(signe, ls);
+        c.addView(pixelCarte(Aventure.nomIssue(etat.issue), couleur, true, true), Ui.large());
+        c.addView(pixelCarte(etat.titreFin.isEmpty() ? campagne.titre : etat.titreFin, cp.texte, true, true), haut(2 * u));
 
         Campagnes.Prime r = etat.recompenses;
         LinearLayout gains = Ui.rangee(app);
         gains.setGravity(Gravity.CENTER);
-        if (!etat.rejeu && r.po > 0) gains.addView(puce("◉  +" + r.po + " po", p.orange));
+        if (!etat.rejeu && r.po > 0) gains.addView(puce("¤  +" + r.po + " po", p.orange));
         if (!etat.rejeu && r.xp > 0) gains.addView(puce("✦  +" + r.xp + " xp", p.bleu));
-        if (gains.getChildCount() > 0) c.addView(gains);
+        if (gains.getChildCount() > 0) c.addView(gains, haut(3 * u));
         for (int i = 0; i < gains.getChildCount(); i++) ScenesAnimees.tomber(gains.getChildAt(i), Animations.delaiRecompense(i));
         // Le souvenir se pose avec un petit éclat, puis l'emblème du ton.
         LinearLayout vitrine = Ui.rangee(app);
@@ -1101,20 +1256,11 @@ final class Lecture extends FrameLayout {
         if (vs != null) vitrine.addView(ScenesAnimees.eclat(app, vs, couleur, Animations.delaiRecompense(gains.getChildCount())));
         View tv = ScenesAnimees.vignette(app, Sprites.ton(Sprites.banque(), campagne.ton, 2), 36);
         if (tv != null) vitrine.addView(ScenesAnimees.eclat(app, tv, Aventure.accentTon(app, campagne.ton), Animations.delaiRecompense(gains.getChildCount() + 1)));
-        if (vitrine.getChildCount() > 0) {
-            LinearLayout.LayoutParams lv = Ui.large();
-            lv.topMargin = Ui.dp(app, 8);
-            c.addView(vitrine, lv);
-        }
+        if (vitrine.getChildCount() > 0) c.addView(vitrine, haut(2 * u));
         int[] attente = CampagnesTel.enAttente(app);
         String note = etat.rejeu ? "Rejouer ne redonne ni pièces ni xp : seulement ce que tu n'avais pas encore."
                 : attente[0] + attente[1] > 0 ? "Ces gains attendent ton PC : il les versera dès qu'il sera allumé." : "";
-        if (!note.isEmpty()) {
-            TextView t = Ui.texte(app, note, Ui.T_DETAIL, p.doux, false);
-            t.setGravity(Gravity.CENTER);
-            t.setPadding(0, Ui.dp(app, 8), 0, 0);
-            c.addView(t, Ui.large());
-        }
+        if (!note.isEmpty()) c.addView(pixelCarte(note, cp.pale, false, true), haut(2 * u));
         if (!r.titre.isEmpty()) ligneFin(c, "Titre gagné", "« " + r.titre + " »", null);
         if (!r.objet.isEmpty()) {
             String nom = r.objet;
@@ -1124,65 +1270,129 @@ final class Lecture extends FrameLayout {
         if (!r.souvenir.isEmpty()) {
             Campagnes.Nomme s = campagne.souvenir(r.souvenir);
             if (s != null) {
-                LinearLayout sv = Ui.pile(app);
-                sv.setBackground(Ui.arrondi(app, p.surface2, 14, 0));
-                sv.setPadding(Ui.dp(app, 14), Ui.dp(app, 12), Ui.dp(app, 14), Ui.dp(app, 12));
-                sv.addView(Ui.texte(app, "◈  SOUVENIR", Ui.T_ETIQUETTE, p.doux, true));
-                sv.addView(Ui.texte(app, s.nom, Ui.T_CORPS, p.texte, true));
-                if (!s.texte.isEmpty()) sv.addView(Ui.texte(app, s.texte, Ui.T_DETAIL, p.doux, false));
-                LinearLayout.LayoutParams l = Ui.large();
-                l.topMargin = Ui.dp(app, 12);
-                c.addView(sv, l);
+                CadrePixel.Pave sv = new CadrePixel.Pave(app, cp, u, false);
+                sv.setOrientation(LinearLayout.VERTICAL);
+                sv.air(2 * u, 2 * u);
+                int interieur = largeurCarte() - 8 * u;   // le sous-cadre prend encore 2 × (2 u de cadre + 2 u d'air)
+                TextePixelVue e = pixelRecit("◆  SOUVENIR", cp.pale);
+                e.maxLargeur(interieur);
+                sv.addView(e);
+                TextePixelVue nomS = titrePixel(s.nom, cp.texte);
+                nomS.maxLargeur(interieur);
+                sv.addView(nomS);
+                if (!s.texte.isEmpty()) {
+                    TextePixelVue tt = detailPixel(s.texte);
+                    tt.maxLargeur(interieur);
+                    sv.addView(tt);
+                }
+                c.addView(sv, haut(3 * u));
             }
         }
         // Les fins : celles qu'on a, les autres en « ? ? ? ».
         List<Campagnes.FinObtenue> obtenues = Campagnes.fins(CampagnesTel.carnet(app), campagne);
         List<Campagnes.Noeud> toutes = CampagnesTel.finsDe(campagne);
-        TextView tf = Ui.texte(app, ("Fins découvertes · " + obtenues.size() + " / " + toutes.size()).toUpperCase(java.util.Locale.FRENCH), Ui.T_ETIQUETTE, p.doux, true);
-        tf.setLetterSpacing(0.08f);
-        tf.setPadding(0, Ui.dp(app, 16), 0, Ui.dp(app, 6));
-        c.addView(tf, Ui.large());
-        c.addView(PageAventure.grilleFins(app, campagne, obtenues, toutes, etat.noeud), Ui.large());
+        c.addView(pixelCarte(("Fins découvertes · " + obtenues.size() + " / " + toutes.size()).toUpperCase(java.util.Locale.FRENCH), cp.pale, false, false), haut(4 * u));
+        c.addView(grilleFinsPixel(obtenues, toutes, etat.noeud), haut(2 * u));
 
-        LinearLayout.LayoutParams lb = Ui.large();
-        lb.topMargin = Ui.dp(app, 16);
-        c.addView(Ui.bouton(app, "Retour aux aventures", true, v -> page.fermerLecture()), lb);
-        LinearLayout.LayoutParams lr = Ui.large();
-        lr.topMargin = Ui.dp(app, 8);
-        c.addView(Ui.bouton(app, "Rejouer depuis le début", false, v -> page.rejouer(campagne)), lr);
+        c.addView(action("Retour aux aventures", true, null, v -> page.fermerLecture()), haut(4 * u));
+        c.addView(action("Rejouer depuis le début", false, null, v -> page.rejouer(campagne)), haut(3 * u));
         cadre.addView(c, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (etat.issue.equals("bonne") || etat.issue.equals("secrete"))
             cadre.addView(new Aventure.Etincelles(app, new int[]{Vitrine.ORANGE, Vitrine.BLEU_CLAIR, Aventure.CREME, Vitrine.VIOLET}),
                     new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        LinearLayout.LayoutParams lc = Ui.large();
-        lc.topMargin = Ui.dp(app, 12);
-        fil.addView(cadre, lc);
+        fil.addView(cadre, haut(3 * u));
         apparaitre(cadre, false);
         pilou.montrer(etat.issue.equals("mauvaise") ? "triste" : etat.issue.equals("douce-amere") ? "tendre" : "joie", Prefs.etat(app).couleur);
         pilou.sauter();
         defiler();
     }
 
-    private TextView puce(String texte, int couleur) {
-        TextView t = Ui.puceTexte(app, texte, couleur);
-        t.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 14);
+    /** Une récompense : un petit cadre pixel sans ombre, texte en couleur d'accent (le signe en tête porte aussi le sens). */
+    private View puce(String texte, int couleur) {
+        CadrePixel.Pave b = new CadrePixel.Pave(app, cp, u, false);
+        b.air(2 * u, u);
+        b.addView(pixelRecit(texte, couleur));
         LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        l.setMargins(Ui.dp(app, 4), 0, Ui.dp(app, 4), 0);
-        t.setLayoutParams(l);
-        return t;
+        l.setMargins(u, 0, u, 0);
+        b.setLayoutParams(l);
+        return b;
     }
 
     private void ligneFin(LinearLayout c, String etiquette, String valeur, String objet) {
         LinearLayout r = Ui.rangee(app);
-        r.setPadding(0, Ui.dp(app, 12), 0, 0);
+        r.setGravity(Gravity.CENTER_VERTICAL);
         if (objet != null) r.addView(PageAventure.imageObjet(app, objet, 1.0f));
         LinearLayout t = Ui.pile(app);
-        t.setPadding(objet != null ? Ui.dp(app, 12) : 0, 0, 0, 0);
-        t.addView(Ui.texte(app, etiquette.toUpperCase(java.util.Locale.FRENCH), Ui.T_ETIQUETTE, p.doux, true));
-        t.addView(Ui.texte(app, valeur, Ui.T_CORPS, p.texte, true));
-        if (objet != null) t.addView(Ui.texte(app, "Rejoint ta collection : il se porte comme les objets de la boutique.", Ui.T_DETAIL, p.doux, false));
+        t.setPadding(objet != null ? 3 * u : 0, 0, 0, 0);
+        int largeur = largeurCarte() - (objet != null ? 3 * u + Ui.dp(app, 48) : 0);
+        TextePixelVue e = pixelRecit(etiquette.toUpperCase(java.util.Locale.FRENCH), cp.pale);
+        e.maxLargeur(largeur);
+        t.addView(e);
+        TextePixelVue v = titrePixel(valeur, cp.texte);
+        v.maxLargeur(largeur);
+        t.addView(v);
+        if (objet != null) {
+            TextePixelVue d = detailPixel("Rejoint ta collection : il se porte comme les objets de la boutique.");
+            d.maxLargeur(largeur);
+            t.addView(d);
+        }
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        c.addView(r, Ui.large());
+        c.addView(r, haut(3 * u));
+    }
+
+    /**
+     * Les fins de la campagne, deux par rangée : un petit cadre pixel chacune. Découverte : signe, nom, titre (le signe de forme
+     * dit l'issue en plus de la couleur) ; sinon « ? À découvrir ». La fin qu'on vient de faire prend le fond « appuyé ».
+     */
+    private View grilleFinsPixel(List<Campagnes.FinObtenue> obtenues, List<Campagnes.Noeud> toutes, String nouvelle) {
+        LinearLayout g = Ui.pile(app);
+        LinearLayout rang = null;
+        // Une cellule : (largeur de la carte − 2 u d'écart) / 2, moins son cadre (2 × 2 u) et son air (2 × 2 u).
+        int largeurCellule = (largeurCarte() - 2 * u) / 2 - 8 * u;
+        for (int i = 0; i < toutes.size(); i++) {
+            if (i % 2 == 0) {
+                rang = Ui.rangee(app);
+                rang.setGravity(Gravity.TOP);
+                g.addView(rang, haut(i == 0 ? 0 : 2 * u));
+            }
+            Campagnes.Noeud n = toutes.get(i);
+            Campagnes.FinObtenue f = null;
+            for (Campagnes.FinObtenue x : obtenues) if (x.noeud.equals(n.id)) f = x;
+            boolean neuve = f != null && n.id.equals(nouvelle);
+            CadrePixel.Pave cell = new CadrePixel.Pave(app, cp, u, false);
+            cell.setOrientation(LinearLayout.VERTICAL);
+            cell.air(2 * u, 2 * u);
+            cell.setMinimumHeight(Ui.dp(app, 48));
+            TextePixelVue a, b;
+            if (f != null) {
+                int couleur = Aventure.couleurIssue(app, f.issue);
+                a = pixelRecit(signeIssue(f.issue) + "  " + Aventure.nomIssue(f.issue).replace("Fin ", "").replace(" fin", ""), couleur);
+                b = titrePixel(f.titre, cp.texte);
+                b.maxLignes(2);
+                cell.setContentDescription(Aventure.nomIssue(f.issue) + " : " + f.titre);
+                cell.encre(a, couleur);
+                cell.encre(b, cp.texte);
+            } else {
+                a = pixelRecit("?  À découvrir", cp.pale);
+                b = titrePixel("? ? ?", cp.pale);
+                cell.setContentDescription("Fin pas encore découverte");
+                cell.encre(a, cp.pale);
+                cell.encre(b, cp.pale);
+            }
+            a.maxLignes(1);
+            a.maxLargeur(largeurCellule);
+            b.maxLargeur(largeurCellule);
+            a.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            b.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            cell.addView(a);
+            cell.addView(b);
+            if (neuve) cell.forcer(true);
+            LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            if (i % 2 == 0) l.rightMargin = 2 * u;
+            rang.addView(cell, l);
+        }
+        if (toutes.size() % 2 == 1 && rang != null) rang.addView(new View(app), new LinearLayout.LayoutParams(0, 1, 1));
+        return g;
     }
 
     // ---- Décider
@@ -1238,7 +1448,38 @@ final class Lecture extends FrameLayout {
 
     /** Feuille du bas : un titre, un texte, des actions. */
     private View feuille(String titre, String texte, Object... actions) {
-        return Aventure.feuille(app, titre, texte, this::fermerCouche, actions);
+        // Un grand cadre pixel sans ombre collé au bas de l'écran ; titre en police titre, boutons pixel (le dernier, à
+        // « true », est la mise en avant). Tout le reste de l'écran est un voile : un toucher dessus ferme la feuille.
+        android.widget.FrameLayout voile = new android.widget.FrameLayout(app);
+        voile.setBackgroundColor(0x990d1117);
+        voile.setClickable(true);
+        voile.setOnClickListener(v -> fermerCouche());
+        LinearLayout f = Ui.pile(app);
+        f.setBackground(new CadrePixel(cp, u, false));
+        f.setPadding(5 * u, 5 * u, 5 * u, 5 * u);
+        f.setClickable(true);
+        int largeur = Math.max(1, app.getResources().getDisplayMetrics().widthPixels - 10 * u);
+        if (titre != null) {
+            TextePixelVue t = titrePixel(titre, cp.titre);
+            t.maxLargeur(largeur);
+            f.addView(t, Ui.large());
+        }
+        if (texte != null) {
+            TextePixelVue t = detailPixel(texte);
+            t.maxLargeur(largeur);
+            f.addView(t, haut(2 * u));
+        }
+        for (int i = 0; i + 2 < actions.length; i += 3) {
+            View.OnClickListener a = (View.OnClickListener) actions[i + 2];
+            f.addView(action((String) actions[i], (Boolean) actions[i + 1], null, a), haut(i == 0 && titre == null && texte == null ? 0 : 2 * u + (i == 0 ? u : 0)));
+        }
+        voile.addView(f, new android.widget.FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM));
+        if (Vitrine.anime(app)) {
+            f.setTranslationY(Ui.dp(app, 60));
+            f.animate().translationY(0).setDuration(220).setInterpolator(new android.view.animation.DecelerateInterpolator(1.8f)).start();
+        }
+        return voile;
     }
 
     private void menu() {
@@ -1248,7 +1489,7 @@ final class Lecture extends FrameLayout {
                     page.ouvrirCarnet();
                 },
                 "Mettre l'aventure de côté…", false, (View.OnClickListener) v -> confirmerSuspension(),
-                "Animations : " + ScenesAnimees.nomNiveau(ScenesAnimees.reglage(app)) + "  ›", false, (View.OnClickListener) v -> {
+                "Animations : " + ScenesAnimees.nomNiveau(ScenesAnimees.reglage(app)) + "  →", false, (View.OnClickListener) v -> {
                     String n = ScenesAnimees.reglage(app);
                     ScenesAnimees.regler(app, Animations.COMPLETES.equals(n) ? Animations.REDUITES : Animations.REDUITES.equals(n) ? Animations.AUCUNE : Animations.COMPLETES);
                     fermerCouche();

@@ -1,0 +1,66 @@
+{
+  "chapitre": "b",
+  "noeuds": {
+    "b-entree": {
+      "type": "choix",
+      "checkpoint": true,
+      "lieu": "Le seuil",
+      "decor": "d-deux",
+      "texte": [ "La maison. Par où entrer ?" ],
+      "options": [
+        { "id": "porte", "libelle": "La porte", "vers": "b-fin-bonne", "si": { "objet": "cle" } },
+        { "id": "fenetre", "libelle": "La fenêtre", "vers": "b-attente" },
+        { "id": "cave", "libelle": "La cave", "vers": "b-cave", "si": { "drapeau": "parti" } },
+        { "id": "trou", "libelle": "Le trou", "vers": "b-piege" }
+      ]
+    },
+    "b-attente": {
+      "type": "attente",
+      "texte": [ "Je guette la fenêtre." ],
+      "duree_min": 60,
+      "pendant": "Pilou guette",
+      "tenue": "cache",
+      "suite": "b-suite"
+    },
+    "b-suite": {
+      "type": "hasard",
+      "issues": [
+        { "poids": 2, "vers": "b-fin-mauvaise" },
+        { "poids": 1, "vers": "b-fin-secrete", "si": { "var": "ruse", "min": 2 } },
+        { "poids": 1, "vers": "b-piege" }
+      ]
+    },
+    "b-piege": {
+      "type": "echec",
+      "texte": [ "Un piège. Aïe." ],
+      "repos_min": 10
+    },
+    "b-cave": {
+      "type": "recit",
+      "texte": [ "La cave mène plus loin." ],
+      "suite": "b-fin-secrete"
+    },
+    "b-fin-bonne": {
+      "type": "fin",
+      "issue": "bonne",
+      "titre": "Par la grande porte",
+      "humeur": "joie",
+      "texte": [ "La clé tourne. C'est gagné." ],
+      "recompenses": { "po": 50, "xp": 20, "souvenir": "s-bon", "titre": "Testeur de portes", "objet": "cape-d-essai" }
+    },
+    "b-fin-mauvaise": {
+      "type": "fin",
+      "issue": "mauvaise",
+      "titre": "Dehors",
+      "texte": [ "La fenêtre est restée fermée." ],
+      "recompenses": { "po": 0, "xp": 1 }
+    },
+    "b-fin-secrete": {
+      "type": "fin",
+      "issue": "secrete",
+      "titre": "Le passage",
+      "texte": [ "Un passage derrière le lierre." ],
+      "recompenses": { "po": 5, "xp": 5, "souvenir": "s-secret", "titre": "Passe-muraille", "objet": "caillou-d-essai" }
+    }
+  }
+}

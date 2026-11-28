@@ -267,4 +267,54 @@ public final class CadrePixel extends Drawable {
             for (int i = 0; i < 3; i++) c.drawRect(2 * i * u, 0, (2 * i + 1) * u, u, encre);
         }
     }
+
+    /**
+     * Une jauge en carrés pixel (comme « Cases » de FenetreAventure.cs) : des carrés de taille × u séparés d'1 u, sur toute
+     * la largeur de la vue ; le dernier carré s'allonge pour finir exactement au bord. Pleins : couleur « plein », les
+     * autres : couleur « vide ».
+     */
+    public static final class Cases extends View {
+        private final int u, taille, plein, vide;
+        private float part;
+        private final Paint encre = new Paint();
+
+        public Cases(Context c, int plein, int vide, int u, int taille) {
+            super(c);
+            this.u = Math.max(1, u);
+            this.taille = Math.max(1, taille);
+            this.plein = plein;
+            this.vide = vide;
+        }
+
+        public void part(float v) {
+            part = Math.max(0, Math.min(1, v));
+            invalidate();
+        }
+
+        /** Nombre de carrés qui tiennent dans la largeur (carrés de taille u, espacés d'1 u). */
+        public static int nombre(int largeur, int u, int taille) {
+            return Math.max(1, (largeur + u) / ((taille + 1) * u));
+        }
+
+        /** Nombre de carrés pleins pour une part de 0 à 1, au moins un dès que la part n'est pas nulle. */
+        public static int pleines(float part, int n) {
+            int p = Math.round(Math.max(0, Math.min(1, part)) * n);
+            return part > 0 ? Math.max(1, p) : 0;
+        }
+
+        @Override
+        protected void onMeasure(int mw, int mh) {
+            setMeasuredDimension(resolveSize(0, mw), taille * u);
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            int w = getWidth(), n = nombre(w, u, taille), pas = (taille + 1) * u, p = pleines(part, n);
+            for (int i = 0; i < n; i++) {
+                encre.setColor(i < p ? plein : vide);
+                int x = i * pas;
+                c.drawRect(x, 0, i == n - 1 ? w : x + taille * u, taille * u, encre);
+            }
+        }
+    }
 }
