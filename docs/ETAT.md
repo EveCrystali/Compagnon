@@ -38,9 +38,11 @@ Dernière mise à jour : 28 novembre 2026.
   clavier. Appliqué au téléphone hors Aventure : en-tête (« Prochaine rangée… » reformulée, plus jamais tronquée),
   barre du bas (libellés qui ne se touchent plus en grande police), Accueil, Jouer, Boutique, Collection, « Rangées
   débloquées » (`Style.java`). Captures Robolectric 1078 × 2400 à 440 dpi en clair, sombre et grande police, relues
-  une par une (`CapturesStyleTest`, docs/captures/style/). **Jamais vu sur un vrai téléphone.** Restent en style
-  système : Réglages, liste des aventures, épreuves, atelier, installation ; et toutes les fenêtres du PC hors menu,
-  bulle et Aventure.
+  une par une (`CapturesStyleTest`, docs/captures/style/). Finition du même jour : Réglages (cases à cocher du
+  menu, options, curseur, champs), carte « Pilou et moi » et ses traits, ligne de premier lancement, icône du besoin
+  de soin, messages brefs ; `TextesSystemeTest` échoue dès qu'un texte de ces écrans est écrit en police système.
+  **Jamais vu sur un vrai téléphone.** Restent en style système : liste des aventures, épreuves, atelier, chasse aux
+  bugs, installation, bulle flottante ; et toutes les fenêtres du PC hors menu, bulle et Aventure.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant

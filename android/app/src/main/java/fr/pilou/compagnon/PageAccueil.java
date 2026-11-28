@@ -37,7 +37,7 @@ final class PageAccueil extends Page {
     private long derniereCaresse;
     // Soins : une petite icône près de Pilou seulement quand un besoin baisse (un toucher la comble), et
     // « Prendre soin de Pilou » qui comble tout.
-    private final TextView besoin;
+    private final Style.Icone besoin;
     private String besoinMontre = "";
     private long mousseJusque;
     private final LinearLayout carteMeteo, carteNouvelles, nouvelles;
@@ -79,7 +79,7 @@ final class PageAccueil extends Page {
         corps.addView(motDuJour, Ui.large(a, 14));
         if (!Prefs.bienvenueVue(a)) {
             Prefs.marquerBienvenue(a); // une seule fois : au prochain lancement, elle ne revient pas
-            bienvenue = Ui.texte(a, BIENVENUE, Ui.T_DETAIL, p.doux, false);
+            bienvenue = Style.texte(a, BIENVENUE, Ui.T_DETAIL, p.doux, false);
             bienvenue.setPadding(Ui.dp(a, 2), 0, 0, 0);
             corps.addView(bienvenue, Ui.large(a, 14));
         }
@@ -104,7 +104,7 @@ final class PageAccueil extends Page {
         coeur = Style.texte(a, "♥", 22, p.orange, true);
         coeur.setAlpha(0);
         scene.addView(coeur, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
-        besoin = Style.texte(a, "", 24, p.orange, true);
+        besoin = new Style.Icone(a, "soin-faim", p.orange, 2);
         besoin.setPadding(Ui.dp(a, 10), Ui.dp(a, 6), Ui.dp(a, 10), Ui.dp(a, 6));
         besoin.setVisibility(View.GONE);
         besoin.setOnClickListener(v -> combler(besoinMontre));
@@ -464,7 +464,7 @@ final class PageAccueil extends Page {
         if (b.equals(besoinMontre)) return s;
         besoinMontre = b;
         besoin.setVisibility(b.isEmpty() ? View.GONE : View.VISIBLE);
-        besoin.setText(b.isEmpty() ? "" : Soins.signe(b));
+        if (!b.isEmpty()) besoin.icone("soin-" + b);
         besoin.setContentDescription(b.equals(Soins.FAIM) ? "Pilou a un petit creux : toucher pour le nourrir"
                 : b.equals(Soins.PROPRETE) ? "Pilou aimerait une toilette : toucher pour le laver"
                 : "Pilou a besoin d'un câlin : toucher pour un câlin");

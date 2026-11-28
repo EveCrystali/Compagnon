@@ -13,6 +13,7 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | Le jeu d'icônes (1×, à l'écran, dessin fin) | [captures/style/icones.png](captures/style/icones.png) |
 | Android avant / après : Accueil, Jouer, Boutique, Collection | [clair](captures/style/avant-apres-clair.png), [sombre](captures/style/avant-apres-sombre.png), [grande police](captures/style/avant-apres-grande-police.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
+| Réglages (clair, sombre, grande police) et premier lancement | [captures/style/reglages-et-premier-lancement.png](captures/style/reglages-et-premier-lancement.png) |
 
 ![La planche du guide, en clair](captures/style/planche-clair.png)
 
@@ -120,10 +121,13 @@ choisi quand un pixel de police tombe sur un nombre pair de pixels de l'écran.
 | Cas | Pourquoi |
 |---|---|
 | Un caractère que la police de Pilou n'a pas (emoji, alphabet non latin) | il est écrit par le système dans sa case de 6 pixels ; le reste de la phrase reste en pixels |
-| Les textes venus de l'extérieur et affichés bruts dans une liste longue (Réglages, journal de diagnostic, adresses, codes d'appairage à recopier) | la lecture exacte prime |
-| Les champs de saisie et le clavier | ce sont ceux du système |
+| Les champs de saisie (code d'appairage, adresse du relais, prénom) et le clavier | ce sont ceux du système ; le champ garde un cadre plat en pixels, dans le creux |
 | Les notifications, le titre de la fenêtre, l'écran de la barre des tâches | le système les dessine |
 | Les fenêtres pas encore converties | état provisoire : voir « Où en est-on » |
+
+`TextesSystemeTest` parcourt chaque écran du téléphone passé au guide et échoue, liste à l'appui, dès qu'un texte y
+est écrit en police système hors de ces exceptions. Un texte dessiné à la main sur une toile (`Canvas.drawText`) lui
+échappe : il se cherche à la relecture.
 
 Le récit de l'Aventure, lui, est **en police pixel** (décision du 28 novembre 2026, `DECISIONS.md`) : à 4 px par
 pixel de police sur un téléphone, il reste lisible. Ce guide n'ouvre donc pas d'exception « long texte ».
@@ -162,6 +166,20 @@ Les états d'une chose (quête, session, objet) se disent par une **case** : un 
   texte « titre » petit, toujours avec un signe devant.
 - **Barre de progression** : cases de 3 U séparées de 1 U, hautes de 4 U (3 U dans l'en-tête) ; pleines en bleu, la
   dernière pleine en orange, les vides en `creux`. Jamais de barre lisse.
+
+## Réglages : lignes, cases, options, curseur
+
+| Pièce | Règle | Code |
+|---|---|---|
+| **Ligne qu'on touche** | titre en corps, explication en corps pâle, chevron `ui-suite` à droite ; 48 dp de haut au moins ; sous le doigt, cadre plat d'accent | `Style.ligne` |
+| **Case à cocher** | celle du menu : carré vide au bord de 2 pixels ; cochée, le carré laisse la place à la coche ✓ à la couleur `coche`. Toute la ligne se touche | `Style.interrupteur`, `Style.Coche` |
+| **Options exclusives** | un groupe dans le creux ; l'option choisie prend un cadre plat `coche` et un rond « ● » devant son nom ; les noms tiennent sur une ligne (`Style.pixelOptions`) | `PageReglages.choixSons`, `PresenceVue` |
+| **Curseur** | barre en cases (pleines jusqu'à la valeur), poussoir carré au cadre fin | `Style.curseur` |
+| **Champ de saisie** | cadre plat dans le creux ; texte en police système (exception) | `Style.champ` |
+| **Message bref** | cadre plein de nuit, police pixel, en bas de l'écran ; jamais le toast gris du système | `Style.dire` |
+
+Jamais d'interrupteur à glissière du système : il dit son état par la couleur et par la position d'un rond lissé.
+Deux boutons dont les libellés ne tiennent pas côte à côte en grande police se posent l'un sous l'autre.
 
 ## Icônes
 
@@ -204,7 +222,7 @@ python3 outils/sprites/icones.py      # planche de contrôle : outils/sprites/pl
 | Cadre | `CadrePixel.cs`, `MenuRetro.xaml` | `Style.Cadre` (`plein`, `fin`, `plat`, `pointille`), `CadrePixel.java` sous la scène |
 | Texte | `TextePixel.cs` | `Style.Texte` (un `TextView` dessiné en police pixel), `TextePixelVue` |
 | Palette | `MenuRetro.cs` (clés « Menu… »), `CadrePixel.cs` | `Style.CLAIRE`, `Style.SOMBRE`, `Style.NUIT` |
-| Pièces | — | `Style.carte`, `bouton`, `puce`, `caseSigne`, `titreSection`, `separateur`, `Barre`, `Icone`, `chevron` |
+| Pièces | — | `Style.carte`, `bouton`, `puce`, `caseSigne`, `titreSection`, `separateur`, `Barre`, `Icone`, `chevron`, `ligne`, `interrupteur`, `curseur`, `champ`, `dire` |
 | Planche de contrôle | `--essai=menu` | `CapturesStyleTest` : `app/build/captures/style/` (1078 × 2400 à 440 dpi ; clair, sombre, grande police) |
 
 Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.arrondi`), plus d'ombre du système
@@ -216,9 +234,9 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 |---|---|
 | PC : menu « Sept portes », bulle, fenêtre Aventure | au guide |
 | PC : boutique, soins, réglages, journal, les autres fenêtres | à faire (chantier suivant) |
-| Téléphone : en-tête, barre du bas, Accueil, Jouer, Boutique, Collection, « Rangées débloquées » | au guide (28 novembre 2026) |
+| Téléphone : en-tête, barre du bas, Accueil (dont « Pilou et moi », ses traits, la ligne de premier lancement), Jouer, Boutique, Collection, Réglages, « Rangées débloquées », messages brefs | au guide (28 novembre 2026), gardé par `TextesSystemeTest` |
 | Téléphone : lecture de l'Aventure | au guide (chantier « style pixel de l'Aventure ») |
-| Téléphone : liste des aventures, Réglages, épreuves, atelier, installation, bulle flottante, widget | couleurs du guide ; cadres et police encore ceux du système |
+| Téléphone : liste des aventures, épreuves, atelier, chasse aux bugs, installation, bulle flottante, widget | couleurs du guide ; cadres et police encore ceux du système |
 
 Restes connus, à trancher :
 

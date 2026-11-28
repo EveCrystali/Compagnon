@@ -22,7 +22,6 @@ import android.view.WindowInsetsController;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * L'app Pilou : une seule activité, cinq onglets (Accueil, Aventure, Jouer, Boutique, Collection), une barre de
@@ -457,7 +456,7 @@ public final class Principale extends Activity {
         String c = u.getQueryParameter("c");
         String s = u.getQueryParameter("s");
         if (c != null && appairer(c, s == null ? Prefs.RELAIS_DEFAUT : s)) {
-            Toast.makeText(this, "Appairé avec ton PC ✓", Toast.LENGTH_LONG).show();
+            Style.dire(this, "Appairé avec ton PC ✓", true);
             aller(ACCUEIL, true);
         }
     }
