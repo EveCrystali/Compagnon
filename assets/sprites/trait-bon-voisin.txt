@@ -1,0 +1,23 @@
+# trait de personnalité : bon-voisin
+id: trait-bon-voisin
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f69d50 c=#7a4b26 d=#d9803a e=#f6f8fa f=#4a8fdc g=#f5d76e h=#c9d1d9
+images:
+................
+.......aa..aa...
+......abbaacca..
+.....abbbbacca..
+....abbbbbbcca..
+...abbbdbbbba...
+..abbbdddbbbba..
+.abbbdddddbbbba.
+abbbdddddddbbbba
+.aaeeeeeeeeeeaa.
+..aeeeeeeeeeea..
+..aeeeefffeeea..
+..aeeeefffeeea..
+..aeeeeffgeeea..
+..ahhhhfffhhha..
+...aaaaaaaaaa...

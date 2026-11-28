@@ -1,0 +1,39 @@
+# trait de personnalité : bon-joueur
+id: trait-bon-joueur
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f6f8fa c=#c9d1d9 d=#1f4f8a
+images:
+................................
+................................
+.....aaaaaaaaaaaaaaaaaaaaaa.....
+....aaaaaaaaaaaaaaaaaaaaaaaa....
+...aaabbbbbbbbbbbbbbbbbbbbaaa...
+..aaaabbbbbbbbbbbbbbbbbbbbaaaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbbbbbbbddddbbbbbbbbccaa..
+..aabbbbbbbbbbddddbbbbbbbbccaa..
+..aabbbbbbbbbbddddbbbbbbbbccaa..
+..aabbbbbbbbbbddddbbbbbbbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbddddbbbbbbbbddddbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aabbbbbbbbbbbbbbbbbbbbbbccaa..
+..aaaaccccccccccccccccccccaaaa..
+...aaaccccccccccccccccccccaaa...
+....aaaaaaaaaaaaaaaaaaaaaaaa....
+.....aaaaaaaaaaaaaaaaaaaaaa.....
+................................
+................................
