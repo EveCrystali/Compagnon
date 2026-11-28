@@ -152,6 +152,7 @@ class Peintre:
         self.T = BAYER[self.YI % 4, self.XI % 4]     # le seuil de trame de chaque pixel
         self.p = phase
         self.soleil = soleil
+        self.tr = 1.0                                 # largeur des trames de `rampe` (matiere=True : 0,4)
         self.horizon, self.ciel_haut, self.halo = 45.5, 0.2, 0.34
         self.a = None
         self.neuf()
@@ -182,7 +183,7 @@ class Peintre:
         i = np.floor(f)
         fr = f - i
         if trame > 0:
-            fr = np.clip((fr - 0.5) / trame + 0.5, 0, 1)
+            fr = np.clip((fr - 0.5) / (trame * self.tr) + 0.5, 0, 1)
             i = i + (fr > self.T)
         else:
             i = i + (fr > 0.5)
@@ -911,8 +912,50 @@ def lucioles(P, points, graine=160):
 # ---------------------------------------------------------------------------------------------------------------
 # Intérieurs et lumières : ce qui se pose en trame par-dessus, la perspective d'un sol
 # ---------------------------------------------------------------------------------------------------------------
+MATIERE = False     # vrai : les voiles se mélangent en tons pleins au lieu de se poser en damier (decor(..., matiere=True))
+
+
+def _tons_en_cours():
+    out = set()
+    for v in vars(T).values():
+        out |= set(v) if isinstance(v, list) else {v}
+    return out
+
+
+def teinte(P, masque, coul, force, niveaux=5):
+    """Mélange une couleur à ce qui est peint, en tons pleins : chaque couleur déjà posée glisse vers `coul` selon la
+    force (0..1), et prend le ton le plus proche parmi ceux du décor. Pas de damier : une lumière, une ombre ou une
+    brume se lisent comme une matière. Là où le plan est encore vide, la couleur se pose franchement (bord tramé)."""
+    f = np.broadcast_to(np.asarray(force, dtype=float), P.a.shape)
+    plein = masque & (P.a >= 0)
+    if plein.any():
+        src = sorted({int(v) for v in np.unique(P.a[plein])})
+        cand = sorted(set(src) | {int(coul)} | _tons_en_cours())
+        rgb = np.array([rvb(PAL[i]) for i in cand], dtype=float)
+        but = np.array(rvb(PAL[coul]), dtype=float)
+        lut = np.zeros((niveaux + 1, len(PAL)), dtype=np.int16)
+        poids = np.array([1.0, 1.2, 0.8])
+        for n in range(niveaux + 1):
+            for s in src:
+                cible = np.array(rvb(PAL[s]), dtype=float) * (1 - n / niveaux) + but * (n / niveaux)
+                lut[n, s] = cand[int(np.argmin((((rgb - cible) ** 2) * poids).sum(axis=1)))]
+        # la trame ne sert qu'à passer d'un niveau au suivant, sur un tiers du palier
+        g = f * niveaux
+        niv = np.floor(g)
+        niv = niv + (np.clip((g - niv - 0.5) / 0.34 + 0.5, 0, 1) > P.T)
+        niv = np.clip(niv, 0, niveaux).astype(np.int64)
+        P.a[plein] = lut[niv, np.maximum(P.a, 0)][plein]
+    vide = masque & (P.a < 0)
+    if vide.any():
+        P.remplir(vide & (np.clip((f - 0.56) / 0.1 + 0.5, 0, 1) > P.T), coul)
+
+
 def voile(P, masque, coul, force):
-    """Pose une couleur en trame par-dessus ce qui est peint (lumière, ombre, brume) : force 0..1, nombre ou grille."""
+    """Pose une couleur par-dessus ce qui est peint (lumière, ombre, brume) : force 0..1, nombre ou grille. En trame
+    par défaut ; en tons pleins (`teinte`) quand le décor est déclaré matiere=True."""
+    if MATIERE:
+        teinte(P, masque, coul, force)
+        return
     P.remplir(masque & (P.T < force), coul)
 
 
@@ -975,6 +1018,109 @@ def roue(P, x, y, r, dents, coul, clair, sombre, angle=0.0, moyeu=None):
                 max(1, P.ep(r * 0.1)))
     P.remplir(d < r * 0.3, coul)
     P.remplir(d < r * 0.12, moyeu if moyeu is not None else clair)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Petite vie : de quoi peupler un lieu de détails qui bougent (chacun boucle avec P.p)
+# ---------------------------------------------------------------------------------------------------------------
+def papillon_de_nuit(P, x, y, r=4.0, coul=None, d=0.0):
+    """Un papillon de nuit qui tourne autour d'une lumière en (x, y)."""
+    coul = T.CREME if coul is None else coul
+    a = 2 * math.pi * (P.p + d)
+    px_, py_ = x + r * math.cos(a), y + r * 0.6 * math.sin(2 * a)
+    ouvert = int((P.p + d) * IMAGES * 2) % 2 == 0
+    P.point(px_, py_, T.ENCRE)
+    for cote in (-1, 1):
+        P.point(px_ + cote * 0.5, py_ - (0.5 if ouvert else 0.0), coul, 2 if ouvert else 1)
+
+
+def araignee(P, x, y, l=8.0, coul=None, d=0.0):
+    """Une araignée au bout de son fil, pendue en (x, y) : elle descend et remonte."""
+    coul = T.ENCRE if coul is None else coul
+    bas = y + l * (0.6 + 0.4 * onde(P.p, d))
+    P.trait(x, y, x, bas, T.CREME)
+    P.ell(x, bas + 0.6, 0.8, 0.7, coul)
+    for cote in (-1, 1):
+        P.trait(x, bas + 0.4, x + cote * 1.4, bas - 0.2 + 0.3 * onde(P.p * 2, d), coul)
+        P.trait(x, bas + 0.8, x + cote * 1.4, bas + 1.4, coul)
+
+
+def toile_araignee(P, x, y, r, sens=(1, 1), coul=None):
+    """Une toile dans un coin (x, y), ouverte vers sens ; une perle de rosée y scintille."""
+    coul = T.CREME if coul is None else coul
+    for k in range(4):
+        a = k * math.pi / 6
+        P.trait(x, y, x + sens[0] * r * math.cos(a), y + sens[1] * r * math.sin(a), coul)
+    for rr in (0.4, 0.7, 1.0):
+        pts = [(x + sens[0] * r * rr * math.cos(k * math.pi / 6), y + sens[1] * r * rr * math.sin(k * math.pi / 6)) for k in range(4)]
+        for q in range(3):
+            P.trait(pts[q][0], pts[q][1], pts[q + 1][0], pts[q + 1][1], coul)
+    if (P.p * 2) % 1.0 < 0.4:
+        P.point(x + sens[0] * r * 0.6, y + sens[1] * r * 0.4, T.BLANC)
+
+
+def goutte(P, x, y0, y1, coul=None, d=0.0, flaque=None):
+    """Une goutte qui tombe de y0 à y1, et le rond qu'elle fait en arrivant."""
+    coul = T.BLEU if coul is None else coul
+    t = (P.p + d) % 1.0
+    if t < 0.6:
+        P.trait(x, y0 + (y1 - y0) * (t / 0.6) ** 2, x, y0 + (y1 - y0) * (t / 0.6) ** 2 + 0.8, coul)
+    else:
+        u = (t - 0.6) / 0.4
+        dd = np.hypot(P.X - x, (P.Y - y1) * 3.0)
+        P.remplir(np.abs(dd - 0.6 - 3.0 * u) < 0.3, flaque if flaque is not None else coul)
+
+
+def souris(P, x, y, sens=1, coul=None):
+    """Une souris (la bête, pas le curseur) : elle fait sa toilette, remue le nez, sa queue bat."""
+    coul = T.P1 if coul is None else coul
+    P.ell(x, y - 1.2, 2.0, 1.3, coul)
+    P.ell(x + sens * 1.8, y - 1.6 - (0.4 if int(P.p * IMAGES) % 4 == 0 else 0), 1.1, 0.9, coul)
+    P.ell(x + sens * 1.5, y - 2.6, 0.6, 0.6, T.P3)
+    P.point(x + sens * 2.2, y - 1.8, T.ENCRE)
+    P.point(x + sens * 2.9, y - 1.4, T.O3)
+    P.courbe([(x - sens * 1.8, y - 0.8), (x - sens * 3.4, y - 0.4 - 0.8 * onde(P.p)), (x - sens * 4.6, y - 1.4 - 0.6 * onde(P.p, 0.2))], T.P3, 1)
+
+
+def vapeur(P, x, y, coul=None, h=10.0, n=3, d=0.0):
+    """Une vapeur qui monte en volutes de (x, y) : tasse, soupe, bouche d'aération."""
+    coul = T.CREME if coul is None else coul
+    for k in range(n):
+        t = (P.p + d + k / n) % 1.0
+        m = np.hypot(P.X - (x + 1.3 * math.sin(t * 6.0 + k)), P.Y - (y - h * t)) < 0.6 + 1.3 * t
+        P.remplir(m & (P.T > t * 0.9 + 0.05), coul)
+
+
+def avion_papier(P, x0, y0, x1, y1, coul=None, d=0.0):
+    """Un avion de papier qui plane de (x0, y0) à (x1, y1), en feston."""
+    coul = T.BLANC if coul is None else coul
+    t = (P.p + d) % 1.0
+    x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t + 2.5 * math.sin(t * 2 * math.pi * 2)
+    s = 1 if x1 > x0 else -1
+    P.poly([(x, y), (x - s * 4.0, y - 1.4), (x - s * 3.0, y + 0.2), (x - s * 4.0, y + 1.2)], coul)
+    P.trait(x, y, x - s * 3.0, y + 0.2, T.P3)
+
+
+def etincelle(P, x, y, coul=None, d=0.0):
+    """Une étincelle qui claque de temps en temps (un contact qui ne tient plus)."""
+    coul = T.LUM2 if coul is None else coul
+    t = (P.p + d) % 1.0
+    if t < 0.25:
+        r = 1.0 + 4.0 * t
+        for k in range(6):
+            a = k * math.pi / 3 + d * 7
+            P.point(x + r * math.cos(a), y + r * math.sin(a), coul if k % 2 else T.BLANC)
+        P.point(x, y, T.BLANC, 2)
+
+
+def yeux(P, x, y, coul=None, d=0.0, ecart=2.0):
+    """Deux yeux dans le noir : ils clignent, ils regardent ailleurs."""
+    coul = T.LUM2 if coul is None else coul
+    t = (P.p + d) % 1.0
+    if t < 0.82:
+        dx = 0.4 if t > 0.5 else 0.0
+        P.point(x + dx, y, coul)
+        P.point(x + ecart + dx, y, coul)
 
 
 # ---------------------------------------------------------------------------------------------------------------

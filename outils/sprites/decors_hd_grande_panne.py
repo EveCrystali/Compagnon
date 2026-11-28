@@ -146,7 +146,7 @@ def tickets(P, x, y0, y1, n=4, graine=0, coul=None):
 # Le bureau, 13 h 37 : le bas d'un écran vu de près, au petit matin. La barre des tâches est le sol ; la grande horloge
 # figée (le 7 penche) est la clé.
 # =====================================================================================================================
-@decor("grande-panne", "bureau-1337", soleil=(40.0, 6.0), tons=PANNE, nom="Le bureau, 13 h 37")
+@decor("grande-panne", "bureau-1337", soleil=(40.0, 6.0), tons=PANNE, nom="Le bureau, 13 h 37", matiere=True)
 def bureau_1337(P, tab):
     T = pg.T
     p = P.p
@@ -252,13 +252,29 @@ def bureau_1337(P, tab):
     P.rect(105, 71.2, 0.8, 2.0, G3)
     P.rect(96.8, 70.8, 7.4, 2.8, N0)
     P.rect(96.8, 70.8, 2.0 + 0.8 * (int(p * 8) % 2), 2.8, O2)
+    # ---- Seconde passe : la petite vie de l'écran.
+    if int(p * 8) % 2:                                          # le curseur de texte de la fenêtre figée clignote encore
+        P.rect(104.0 + 5 + 22.6, -10.0 + 39.0, 0.5, 3.0, N2)
+    P.poly([(40.0, 22.0), (52.0, 21.0), (52.6, 32.0 + 0.5 * onde(p)), (41.0, 33.0)], J3)          # un pense-bête collé sur l'écran
+    P.poly([(48.6, 32.4 + 0.5 * onde(p)), (52.6, 32.0 + 0.5 * onde(p)), (52.0, 29.0)], J1)
+    for j in range(3):
+        P.rect(42.0, 24.0 + j * 2.2, 8.0 - j * 2, 0.4, B2)
+    pg.toile_araignee(P, 198.0, -16.0, 14.0, sens=(-1, 1), coul=T.CIEL[10])
+    pg.araignee(P, 186.0, -16.0, 9.0, d=0.3)
+    pg.papillon_de_nuit(P, 185.0, -10.0, 5.0, coul=BLANC)
+    pg.souris(P, 22.0, 77.6, sens=1, coul=G3)
+    if (p * 2) % 1.0 < 0.5:                                     # un pixel mort qui se rallume, parfois
+        P.point(150.0, 44.0, C2)
+    for i in range(6):                                          # la neige de l'écran : quelques pixels qui tombent
+        t = (p + i / 6.0) % 1.0
+        P.point(60 + 22 * i, -14 + 60 * t, T.CIEL[10])
 
 
 # =====================================================================================================================
 # Le Hall des Pas Comptés : un hall de gare immense, des guichets aux rideaux baissés (« Retour à 13 h 38 »), une file
 # en serpentin, l'afficheur « 1 337 » (la clé), un banc de bois au premier plan.
 # =====================================================================================================================
-@decor("grande-panne", "hall-pas-comptes", soleil=(96.0, -10.0), tons=PANNE, nom="Le Hall des Pas Comptés")
+@decor("grande-panne", "hall-pas-comptes", soleil=(96.0, -10.0), tons=PANNE, nom="Le Hall des Pas Comptés", matiere=True)
 def hall(P, tab):
     T = pg.T
     p = P.p
@@ -408,13 +424,30 @@ def hall(P, tab):
         P.rect(min(hx_ + sens * 0.9, hx_ + sens * 1.8), hy_ + 0.1, 0.9, 0.5, O2)
         P.trait(x, 78.0, x, 79.0, O1)
     poussiere(P, 30, 0, 160, 60, 24, BLANC, 237)
+    # ---- Seconde passe : ce qui traîne dans un hall où l'on attend depuis 13 h 37.
+    P.poly([(120.0, 71.0), (127.0, 71.0), (126.0, 78.0), (121.0, 78.0)], G3)                      # un seau sous une fuite de la verrière
+    P.rect(119.6, 70.4, 7.8, 1.0, G4)
+    pg.goutte(P, 123.5, 20.0, 71.0, coul=C3, d=0.2, flaque=C3)
+    bal = 0.8 * onde(p)                                         # un ballon oublié, noué au banc
+    P.trait(120.0, 64.0, 121.0 + bal, 50.0, G1)
+    P.ell(121.0 + bal, 45.6, 3.4, 4.4, O2)
+    P.ell(120.0 + bal, 44.0, 1.2, 1.6, O3)
+    pg.souris(P, 70.0, 78.4, sens=-1, coul=G3)
+    pg.avion_papier(P, 20.0, 30.0, 170.0, 44.0, d=0.1)
+    pg.papillon_de_nuit(P, 96.0, 4.0, 34.0, coul=E5, d=0.5)
+    # Une valise oubliée, son étiquette qui bat.
+    P.rect(8.0, 66.0, 9.0, 7.0, B2)
+    P.rect(8.0, 66.0, 9.0, 1.0, B3)
+    P.rect(11.0, 64.4, 3.0, 1.6, B1)
+    P.poly([(17.0, 67.0), (19.6, 67.4 + 0.5 * onde(p, 0.3)), (19.2, 69.4 + 0.5 * onde(p, 0.3)), (17.0, 69.0)], BLANC)
+    pg.yeux(P, 4.0, 40.0, coul=J3, d=0.4)                       # quelqu'un, derrière un rideau de fer
 
 
 # =====================================================================================================================
 # Le pied de la Tour du tampon : une tour de pierre grise qui se perd dans la brume (la clé), la file enroulée trois
 # fois autour de sa base, une porte basse gardée par un tabouret trop petit, la lumière jaune des néons.
 # =====================================================================================================================
-@decor("grande-panne", "tour-tampon", soleil=(96.0, -30.0), tons=PANNE, nom="Le pied de la Tour du tampon")
+@decor("grande-panne", "tour-tampon", soleil=(96.0, -30.0), tons=PANNE, nom="Le pied de la Tour du tampon", matiere=True)
 def tour_tampon(P, tab):
     T = pg.T
     p = P.p
@@ -526,13 +559,31 @@ def tour_tampon(P, tab):
         else:
             P.poly([(x, y + 0.6), (x + 3.2, y), (x + 3.0, y + 1.0), (x + 0.2, y + 1.4)], E5)
     voile(P, (Y > 76.5), N0, 0.25)
+    # ---- Seconde passe : la vie autour de la tour.
+    pg.papillon_de_nuit(P, 17.0, 8.0, 5.0, coul=BLANC)
+    pg.papillon_de_nuit(P, 177.0, 8.0, 5.0, coul=BLANC, d=0.4)
+    pg.fumee(P, 40.0, 21.0, p)
+    v = onde(p)                                                 # le fanion d'une tour lointaine
+    P.trait(174.0, 0.0, 174.0, -8.0, T.CIEL[2])
+    P.poly([(174.0, -8.0), (180.0, -7.0 + 0.6 * v), (174.0, -5.0)], O2)
+    pg.goutte(P, 76.0, 31.0, 54.0, coul=T.CIEL[9], d=0.3)
+    t = (p * 1.0) % 1.0                                         # là-haut, un grand tampon s'abat sur une feuille, et remonte
+    ty = 10.0 + 6.0 * (1 - abs(math.sin(math.pi * t)) ** 6)
+    P.rect(120.0, 16.0, 9.0, 1.2, BLANC)
+    P.rect(123.0, ty - 6.0, 3.0, 6.0, B2)
+    P.rect(121.6, ty, 5.8, 1.6, V3)
+    for i in range(3):                                          # des pigeons sur la corniche ; l'un s'ébroue
+        x = 82.0 + i * 5.0
+        P.ell(x, 28.4, 1.8, 1.2, G4)
+        P.ell(x + 1.2, 27.2 - (0.5 if (i == 1 and int(p * 8) % 4 == 0) else 0), 0.8, 0.8, V3)
+    pg.yeux(P, 95.0, 71.0, coul=J3, d=0.6)                      # derrière le judas de la porte
 
 
 # =====================================================================================================================
 # Les étages de la Tour : un palier d'escalier en colimaçon qui donne sur un bureau encombré. Casiers de formulaires de
 # toutes les couleurs jusqu'au plafond, guichet vitré, tampons, affiches réglementaires, poussière dorée dans un rai.
 # =====================================================================================================================
-@decor("grande-panne", "etage-guichets", soleil=(150.0, -20.0), tons=PANNE, nom="Les étages de la Tour")
+@decor("grande-panne", "etage-guichets", soleil=(150.0, -20.0), tons=PANNE, nom="Les étages de la Tour", matiere=True)
 def etage_guichets(P, tab):
     T = pg.T
     p = P.p
@@ -644,13 +695,33 @@ def etage_guichets(P, tab):
     P.courbe([(nx + 25.4, 65.6), (nx + 20.4, 45.6), (nx + 15.4, 25.6)], J1, 1)
     papiers(P, 186.0, 80.0, 9.0, 7, 261)                         # une pile oubliée dans le coin
     poussiere(P, 20, -10, 180, 70, 30, J3, 262)
+    # ---- Seconde passe : la vie du guichet.
+    pg.araignee(P, 142.0, -12.0, 10.0, d=0.2)
+    pg.toile_araignee(P, 112.0, -16.0, 10.0, sens=(1, 1), coul=E5)
+    pg.avion_papier(P, 30.0, 10.0, 110.0, 40.0, d=0.6)
+    pg.vapeur(P, 146.0, 55.0, coul=BLANC, h=9.0)                # un gobelet de café, encore chaud
+    P.rect(144.6, 54.8, 3.0, 2.6, E5)
+    P.rect(144.6, 54.8, 3.0, 0.6, O2)
+    if int(p * 8) in (2, 3):                                    # la sonnette vibre quand le tampon retombe
+        P.trait(134.0, 52.0, 133.0, 50.6, J3)
+        P.trait(142.0, 52.0, 143.0, 50.6, J3)
+    tir = 1.5 + 1.5 * onde(p)                                   # un tiroir du comptoir qui bâille
+    P.rect(134.0, 62.0 + 0, 8.0, 4.0, B3)
+    P.rect(134.0, 62.0, 8.0, 0.6, E4)
+    P.rect(135.0, 60.6 - tir * 0.3, 6.0, 1.6, BLANC)
+    P.poly([(182.0, 50.0), (190.0, 50.0), (188.6, 56.4), (183.4, 56.4)], O1)                      # une plante sur le comptoir
+    for i in range(5):
+        a = -2.5 + i * 0.45 + 0.04 * onde(p, 0.1 * i)
+        P.courbe([(186.0, 50.0), (186.0 + 4 * math.cos(a), 50.0 + 5 * math.sin(a)), (186.0 + 7 * math.cos(a), 50.0 + 7 * math.sin(a) + 2)], T.S2, 1)
+    pg.souris(P, 70.0, 74.6, sens=1, coul=G3)
+    pg.papillon_de_nuit(P, 150.0, 4.0, 6.0, coul=BLANC, d=0.3)
 
 
 # =====================================================================================================================
 # Le bureau de la Planificatrice : un mur entier de petites cartes épinglées en rangs serrés (cochées à gauche, vierges à
 # droite), un grand bureau gris avec une réussite en cours, la lampe de bureau, une fin d'après-midi qui n'arrive pas.
 # =====================================================================================================================
-@decor("grande-panne", "bureau-echeance", soleil=(176.0, 10.0), tons=PANNE, nom="Le bureau de la Planificatrice")
+@decor("grande-panne", "bureau-echeance", soleil=(176.0, 10.0), tons=PANNE, nom="Le bureau de la Planificatrice", matiere=True)
 def bureau_echeance(P, tab):
     T = pg.T
     p = P.p
@@ -766,13 +837,25 @@ def bureau_echeance(P, tab):
             P.rect(-4.6 + i * 2.6, 45.0 + j * 9.4, 1.2, 1.6, E4 if (i + j) % 3 else O2)
     voile(P, Y > 76.8, ENCRE, 0.3)
     poussiere(P, 60, -10, 186, 70, 26, O3, 277)
+    # ---- Seconde passe : la vie du bureau.
+    pg.vapeur(P, 82.0, 58.4, coul=BLANC, h=10.0)                 # une tasse de thé qui n'a pas refroidi
+    P.rect(80.6, 58.4, 3.0, 2.4, C3)
+    P.rect(83.6, 59.0, 0.8, 1.2, C3)
+    pg.papillon_de_nuit(P, 112.0, 50.0, 6.0, coul=BLANC)
+    pg.araignee(P, 176.0, -14.0, 12.0, d=0.5)
+    t = (p + 0.3) % 1.0                                         # une carte se décroche du mur et tombe en feuille morte
+    P.rect(120.0 + 4 * math.sin(t * 9), 46.0 + 16 * t, 3.0, 2.2, BLANC)
+    P.point(121.0 + 4 * math.sin(t * 9), 46.6 + 16 * t, G4)
+    P.courbe([(72.0, 62.0), (66.0, 66.0 + 0.5 * onde(p)), (60.0, 64.0), (56.0, 70.0)], ENCRE, 1)   # le fil du téléphone
+    pg.souris(P, 180.0, 77.6, sens=-1, coul=G3)
+    pg.toile_araignee(P, -6.0, -16.0, 12.0, sens=(1, 1), coul=T.L4)
 
 
 # =====================================================================================================================
 # La Caverne des câbles : un tunnel sombre envahi de câbles épais comme des troncs, emmêlés du sol au plafond ; quelques
 # diodes clignotent au loin ; la lueur sarcelle d'une gelée lumineuse à un croisement.
 # =====================================================================================================================
-@decor("grande-panne", "caverne-cables", soleil=(46.0, 52.0), tons=PANNE, nom="La Caverne des câbles")
+@decor("grande-panne", "caverne-cables", soleil=(46.0, 52.0), tons=PANNE, nom="La Caverne des câbles", matiere=True)
 def caverne_cables(P, tab):
     T = pg.T
     p = P.p
@@ -854,13 +937,24 @@ def caverne_cables(P, tab):
             P.trait(xa - ep * 0.45, ya + 0.6, xa + ep * 0.45, ya - 0.6, N1, P.ep(0.5))
     pg.lucioles(P, [(30.0, 60.0), (84.0, 52.0), (100.0, 30.0), (140.0, 48.0), (24.0, 30.0), (160.0, 66.0), (118.0, 10.0)], graine=286)
     poussiere(P, 20, 0, 180, 70, 22, Q3, 287)
+    # ---- Seconde passe : la vie de la caverne.
+    pg.etincelle(P, 44.0, 22.0, coul=J3, d=0.1)
+    pg.etincelle(P, 150.0, 52.0, coul=C3, d=0.6)
+    pg.goutte(P, 88.0, -10.0, 71.0, coul=Q3, d=0.4, flaque=Q2)
+    pg.yeux(P, 30.0, 66.0, coul=J3, d=0.2)
+    pg.yeux(P, 176.0, 14.0, coul=O3, d=0.7, ecart=1.6)
+    pg.souris(P, 96.0, 73.0, sens=-1, coul=G2)
+    for i in range(5):                                          # les spores de la gelée, qui montent
+        t = (p + i / 5.0) % 1.0
+        P.point(50 + 6 * math.sin(t * 6 + i) + i * 2, 56 - 30 * t, Q3 if t < 0.6 else Q2)
+    pg.papillon_de_nuit(P, 54.0, 58.0, 9.0, coul=Q3, d=0.3)
 
 
 # =====================================================================================================================
 # Le Marais des mises à jour : une eau grise et des roseaux qui clignotent sous un ciel bas où flotte, à la place du
 # soleil, une immense barre de chargement arrêtée à 37 % ; une barque carrée glisse entre les roseaux ; brume froide.
 # =====================================================================================================================
-@decor("grande-panne", "marais-majs", soleil=(96.0, 14.0), tons=PANNE, nom="Le Marais des mises à jour")
+@decor("grande-panne", "marais-majs", soleil=(96.0, 14.0), tons=PANNE, nom="Le Marais des mises à jour", matiere=True)
 def marais_majs(P, tab):
     T = pg.T
     p = P.p
@@ -944,13 +1038,58 @@ def marais_majs(P, tab):
     for i, (x, y) in enumerate(((4.0, 52.0), (11.0, 46.0), (186.0, 50.0), (192.0, 58.0), (180.0, 44.0))):
         voyant(P, x, y, C3, T.N1, d=0.2 * i, part=0.4, r=0.6)
     pg.lucioles(P, [(30.0, 70.0), (150.0, 71.0), (60.0, 77.0), (120.0, 78.0)], graine=313)
+    # ---- Seconde passe : le marais se peuple.
+    # La pluie s'est arrêtée en l'air, à 37 % de sa chute : des gouttes immobiles, qui tremblent.
+    for i in range(46):
+        x, y = 4 + 184 * hz(i, 1, 314), -10 + 54 * hz(i, 2, 314)
+        tr = 0.2 * onde(p, hz(i, 3, 314))
+        P.trait(x, y + tr, x - 0.3, y + 1.6 + tr, T.CIEL[9] if i % 3 else C3)
+    # Un héron gris, immobile sur une patte ; il cligne ; son reflet tremble.
+    hx_, hy_ = 34.0, 70.0
+    P.trait(hx_, hy_, hx_, hy_ - 7.0, O1)
+    P.ell(hx_ + 0.4, hy_ - 9.0, 3.0, 2.2, G3)
+    P.ell(hx_ - 1.0, hy_ - 8.6, 2.0, 1.4, G4)
+    P.courbe([(hx_ + 2.4, hy_ - 10.0), (hx_ + 4.0, hy_ - 13.0), (hx_ + 2.6, hy_ - 16.0)], G4, P.ep(0.6))
+    P.ell(hx_ + 2.8, hy_ - 16.6, 1.1, 0.9, G4)
+    P.trait(hx_ + 3.6, hy_ - 16.4, hx_ + 6.6, hy_ - 15.8, O2)
+    P.point(hx_ + 3.0, hy_ - 16.8, ENCRE if int(p * 8) % 8 else G4)
+    for j in range(4):
+        if (j + int(p * 8)) % 3:
+            P.trait(hx_ - 1.2, hy_ + 1.4 + j * 1.2, hx_ + 1.6, hy_ + 1.4 + j * 1.2, T.EAU[6])
+    # Des nénuphars-mises à jour : une flèche qui tourne sur chacun, sans jamais finir son tour.
+    for i, (x, y, r) in enumerate(((66.0, 64.0, 4.4), (126.0, 61.0, 3.6), (160.0, 68.0, 4.8), (86.0, 56.0, 2.6))):
+        P.ell(x, y + 0.5, r, r * 0.36, T.EAU[0])
+        P.ell(x, y, r, r * 0.36, T.S2)
+        P.ell(x - r * 0.2, y - r * 0.08, r * 0.6, r * 0.18, T.S3)
+        a = 2 * math.pi * (p + 0.25 * i)
+        P.trait(x, y, x + r * 0.7 * math.cos(a), y + r * 0.26 * math.sin(a), C3)
+        P.point(x + r * 0.7 * math.cos(a), y + r * 0.26 * math.sin(a), BLANC)
+    # Une bouée de signalisation et son voyant orange ; elle penche avec le clapot.
+    bx_ = 172.0
+    pen = 0.8 * onde(p, 0.3)
+    P.poly([(bx_ - 3, 60.0), (bx_ + 3, 60.0), (bx_ + 1.4 + pen, 51.0), (bx_ - 1.4 + pen, 51.0)], O1)
+    P.rect(bx_ - 2.4 + pen * 0.5, 55.0, 4.8, 1.4, BLANC)
+    voyant(P, bx_ + pen, 49.6, O3, K1, d=0.2, part=0.4, r=0.9)
+    P.ell(bx_, 60.4, 4.0, 0.9, T.EAU[1])
+    # Sur le ponton : une lanterne, une canne à pêche et son bouchon qui danse, un seau de pixels.
+    P.courbe([(70.0, 73.0), (86.0, 58.0), (104.0, 50.0)], B1, 1)
+    P.trait(104.0, 50.0, 104.0, 64.0 + 0.5 * onde(p), T.CIEL[8])
+    P.ell(104.0, 64.6 + 0.5 * onde(p), 0.9, 0.9, O2)
+    pg.goutte(P, 104.0, 64.6, 64.6, coul=T.EAU[8], d=0.0, flaque=T.EAU[8])
+    P.poly([(58.0, 69.0), (64.0, 69.0), (63.2, 73.4), (58.8, 73.4)], G3)
+    P.rect(57.6, 68.4, 6.8, 0.9, G4)
+    for i in range(4):
+        P.rect(59.0 + (i % 2) * 2.4, 66.6 - (i // 2) * 1.6, 1.6, 1.6, (C2, O2, J2, V4)[i])
+    pg.papillon_de_nuit(P, 106.0, 50.0, 5.0, coul=BLANC, d=0.2)
+    pg.yeux(P, 8.0, 64.0, coul=J3, d=0.5)                       # une grenouille ? non : quelque chose, dans les roseaux
+    pg.araignee(P, 190.0, 44.0, 6.0, d=0.6)
 
 
 # =====================================================================================================================
 # La file d'impression : un quai fait de rames de papier où des feuilles jaunies attendent debout en rang, devant une
 # estrade où trône une énorme imprimante beige au voyant orange (la clé) ; lumière de réserve à fournitures.
 # =====================================================================================================================
-@decor("grande-panne", "file-impression", soleil=(60.0, -14.0), tons=PANNE, nom="La file d'impression")
+@decor("grande-panne", "file-impression", soleil=(60.0, -14.0), tons=PANNE, nom="La file d'impression", matiere=True)
 def file_impression(P, tab):
     T = pg.T
     p = P.p
@@ -1054,6 +1193,19 @@ def file_impression(P, tab):
     tickets(P, 100.0, 20.0, 60.0, 5, 329, coul=BLANC)
     voile(P, Y > 77.0, G0, 0.25)
     poussiere(P, 30, -10, 150, 60, 28, BLANC, 330)
+    # ---- Seconde passe : la vie de la réserve.
+    pg.souris(P, 44.0, 15.6, sens=1, coul=G3)                   # sur une étagère
+    pg.araignee(P, 96.0, -16.0, 12.0, d=0.1)
+    pg.toile_araignee(P, 108.0, -16.0, 9.0, sens=(-1, 1), coul=G4)
+    pg.goutte(P, 150.0, 49.0, 58.0, coul=ENCRE, d=0.5)           # une cartouche qui fuit, sous l'estrade
+    for i in range(5):                                          # la grille d'aération souffle : des rubans de papier y flottent
+        l = 3.0 + 1.5 * onde(p, 0.2 * i)
+        P.trait(126.0, 14.0 + i * 1.6, 126.0 - l, 14.4 + i * 1.6 + 0.6 * onde(p * 2, 0.1 * i), BLANC)
+    pg.papillon_de_nuit(P, 45.0, -10.0, 7.0, coul=BLANC, d=0.4)
+    P.rect(98.0, 56.0, 6.0, 5.0, B3)                             # un carton dont le rabat bat
+    P.poly([(98.0, 56.0), (104.0, 56.0), (105.0, 54.0 - 0.8 * onde(p)), (99.0, 54.0 - 0.8 * onde(p))], E3)
+    pg.vapeur(P, 154.0, 8.0, coul=G4, h=12.0, d=0.3)             # l'imprimante chauffe
+    pg.yeux(P, 12.0, 44.0, coul=J3, d=0.7)
 
 
 # =====================================================================================================================
@@ -1061,7 +1213,7 @@ def file_impression(P, tab):
 # clé), un escalier dont les dernières marches sont à moitié transparentes ; très loin dessous, les lumières de
 # l'ordinateur comme une ville la nuit. Le sol est à y = 70.
 # =====================================================================================================================
-@decor("grande-panne", "citadelle-nuage", soleil=(30.0, -4.0), tons=PANNE, nom="La Citadelle du nuage")
+@decor("grande-panne", "citadelle-nuage", soleil=(30.0, -4.0), tons=PANNE, nom="La Citadelle du nuage", matiere=True)
 def citadelle_nuage(P, tab):
     T = pg.T
     p = P.p
@@ -1191,6 +1343,17 @@ def citadelle_nuage(P, tab):
     d = pg.fbm((X + 3.0 * onde(p)) / 18.0, Y / 4.0, 3, 352)
     voile(P, (Y > 70.0 + 8 * (1 - d)) & ((X < 30) | (X > 162)), T.CIEL[10], 0.6)
     pg.lucioles(P, [(40.0, 40.0), (70.0, 22.0), (140.0, 8.0), (166.0, 30.0), (12.0, 10.0)], graine=353)
+    # ---- Seconde passe : la vie du rempart.
+    pg.papillon_de_nuit(P, 20.0, 48.0, 5.0, coul=BLANC)
+    pg.papillon_de_nuit(P, 178.0, 48.0, 5.0, coul=BLANC, d=0.5)
+    pg.avion_papier(P, 190.0, 10.0, 30.0, 40.0, coul=BLANC, d=0.2)     # un message qui s'envole de la tour
+    # Une étoile filante, de loin en loin.
+    if int(p * 8) in (1, 2):
+        P.trait(60.0 + int(p * 8) * 8, -10.0 + int(p * 8) * 2, 54.0 + int(p * 8) * 8, -11.6 + int(p * 8) * 2, BLANC)
+    P.ell(92.0, 65.0, 2.2, 1.4, G4)                              # un chat de pierre ? non : un vrai, endormi sur le parapet
+    P.ell(94.0, 64.2, 1.2, 1.0, G4)
+    P.poly([(93.4, 63.4), (93.8, 62.4), (94.4, 63.4)], G4)
+    P.courbe([(90.0, 65.6), (88.0, 66.4), (87.0, 65.4 + 0.5 * onde(p))], G4, 1)
 
 
 # =====================================================================================================================
@@ -1221,7 +1384,7 @@ def tour_dossiers(P, x, w, top, bas, graine, sombre=0.0, teintes=None):
         voile(P, (np.abs(P.X - x) < w / 2 + 2) & (P.Y > top) & (P.Y < bas), G0, sombre)
 
 
-@decor("grande-panne", "dossier-temp", soleil=(120.0, -30.0), tons=PANNE, nom="Le dossier Temp")
+@decor("grande-panne", "dossier-temp", soleil=(120.0, -30.0), tons=PANNE, nom="Le dossier Temp", matiere=True)
 def dossier_temp(P, tab):
     T = pg.T
     p = P.p
@@ -1241,7 +1404,6 @@ def dossier_temp(P, tab):
     for i in range(16):
         x = -2 + 13 * i + 4 * hz(i, 1, 361)
         tour_dossiers(P, x, 6 + 4 * hz(i, 2, 361), 6 + 30 * hz(i, 3, 361), 62.0, 362 + i, teintes=pale)
-    voile(P, (Y < 62), T.CIEL[8], 0.45)
     rai(P, 120.0, -16.0, 78.0, 30.0, -0.3, T.CIEL[10], 0.34, 40, 363)
     tab.plan("moyen", 0.5)
     # ---- L'allée : un plancher gris de poussière qui fuit entre les piles ; des traces de pas (les seuls, les nôtres).
@@ -1288,13 +1450,27 @@ def dossier_temp(P, tab):
     voile(P, Y > 77.0, G0, 0.3)
     poussiere(P, 20, -10, 180, 74, 46, T.CIEL[11], 393)
     pg.lucioles(P, [(22.0, 40.0), (176.0, 30.0)], graine=394)
+    # ---- Seconde passe : la vie du grenier.
+    pg.araignee(P, 66.0, -16.0, 14.0, d=0.2)
+    pg.toile_araignee(P, 22.0, 4.0, 9.0, sens=(1, 1), coul=T.CIEL[10])
+    pg.souris(P, 82.0, 62.0, sens=1, coul=G3)
+    pg.avion_papier(P, 40.0, 0.0, 150.0, 30.0, d=0.4)
+    pg.papillon_de_nuit(P, 128.0, 46.0, 6.0, coul=BLANC, d=0.1)
+    pg.goutte(P, 112.0, 9.6, 62.0, coul=T.CIEL[9], d=0.6, flaque=G4)
+    bal = 0.7 * onde(p)                                         # une étiquette qui pend au bout de sa ficelle
+    P.trait(160.0, 12.0, 160.0 + bal, 20.0, E5)
+    P.rect(158.6 + bal, 20.0, 3.0, 2.0, BLANC)
+    dos = 0.5 * onde(p, 0.3)                                    # le dossier du dessus d'une pile, qui va tomber (il hésite)
+    P.poly([(26.0 + dos, 3.0), (38.0 + dos, 2.0 - dos), (38.6 + dos, 4.4 - dos), (26.4 + dos, 5.6)], O1)
+    P.rect(28.0 + dos, 3.4, 3.0, 1.0, BLANC)
+    pg.yeux(P, 186.0, 60.0, coul=J3, d=0.3)
 
 
 # =====================================================================================================================
 # La cabane de papier : l'intérieur d'une petite cabane faite de brouillons froissés et collés, éclairée par une lampe
 # chaude, avec un hamac en ruban adhésif, une table basse, des cartes à jouer et une fenêtre en papier calque.
 # =====================================================================================================================
-@decor("grande-panne", "cabane-brouillon", soleil=(96.0, 6.0), tons=PANNE, nom="La cabane de papier")
+@decor("grande-panne", "cabane-brouillon", soleil=(96.0, 6.0), tons=PANNE, nom="La cabane de papier", matiere=True)
 def cabane_brouillon(P, tab):
     T = pg.T
     p = P.p
@@ -1426,6 +1602,20 @@ def cabane_brouillon(P, tab):
                  T.S1 if i % 2 else T.S2, P.ep(0.8), 1)
     voile(P, Y > 77.4, B1, 0.3)
     poussiere(P, 50, -6, 150, 50, 26, J3, 415)
+    # ---- Seconde passe : la vie de la cabane.
+    pg.papillon_de_nuit(P, 96.0, 8.0, 9.0, coul=BLANC)
+    pg.araignee(P, 170.0, -16.0, 10.0, d=0.3)
+    for (x, y) in ((76.0, 30.0), (120.0, 52.0)):                 # le coin d'une feuille du mur qui se décolle et bat
+        b = 1.0 * onde(p, x * 0.01)
+        P.poly([(x, y), (x + 5.0, y), (x + 5.0 + b, y + 3.0 + b)], E5)
+        P.poly([(x + 5.0, y), (x + 5.0 + b, y + 3.0 + b), (x + 3.4, y + 2.0)], E3)
+    t = (p + 0.5) % 1.0                                         # une carte glisse de la table
+    P.poly([(118.0 + 3 * t, 62.0 + 9 * t * t), (121.4 + 3 * t, 62.0 + 9 * t * t), (121.8 + 3 * t, 63.6 + 9 * t * t), (118.4 + 3 * t, 63.6 + 9 * t * t)], BLANC)
+    pg.souris(P, 150.0, 77.4, sens=-1, coul=G3)
+    P.rect(66.0, 70.0, 5.0, 6.0, K2)                             # un réveil sur une boîte : son aiguille tique
+    P.ell(68.5, 67.0, 2.6, 2.6, J2)
+    P.ell(68.5, 67.0, 1.9, 1.9, BLANC)
+    P.trait(68.5, 67.0, 68.5 + 1.4 * math.sin(int(p * 8) * 0.785), 67.0 - 1.4 * math.cos(int(p * 8) * 0.785), ENCRE)
 
 
 # =====================================================================================================================
@@ -1435,7 +1625,7 @@ def cabane_brouillon(P, tab):
 # =====================================================================================================================
 
 
-@decor("grande-panne", "horloge-systeme", soleil=(104.0, -40.0), tons=PANNE, nom="L'Horloge système")
+@decor("grande-panne", "horloge-systeme", soleil=(104.0, -40.0), tons=PANNE, nom="L'Horloge système", matiere=True)
 def horloge_systeme(P, tab):
     T = pg.T
     p = P.p
@@ -1526,3 +1716,13 @@ def horloge_systeme(P, tab):
         P.rect(x + bal - 2.2, -16.0 + l, 4.4, 0.8, J2)
     poussiere(P, 86, -14, 122, 70, 20, T.CIEL[11], 424)
     pg.lucioles(P, [(40.0, 66.0), (150.0, 70.0), (126.0, 50.0)], graine=425)
+    # ---- Seconde passe : ce qui bouge encore dans une horloge arrêtée.
+    pg.goutte(P, 150.0, 22.0, 70.0, coul=J2, d=0.2, flaque=J1)   # une goutte d'huile tombe d'une roue
+    pg.vapeur(P, 160.0, 54.0, coul=O3, h=9.0, d=0.4)             # la trappe respire
+    pg.papillon_de_nuit(P, 104.0, 0.0, 10.0, coul=T.CIEL[11])
+    pg.etincelle(P, 76.0, 20.0, coul=J3, d=0.5)                  # deux dents qui frottent
+    a = 0.1 * math.sin(p * 4 * math.pi)                         # la trotteuse du cadran essaie d'avancer, et revient
+    P.trait(104.0, 76.0, 104.0 + 30 * math.cos(-0.4 + a), 76.0 + 30 / 4.2 * math.sin(-0.4 + a), O2)
+    pg.araignee(P, 62.0, -16.0, 12.0, d=0.7)
+    pg.souris(P, 128.0, 77.6, sens=1, coul=G3)
+    pg.yeux(P, 186.0, 66.0, coul=J3, d=0.1)
