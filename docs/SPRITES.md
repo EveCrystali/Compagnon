@@ -209,13 +209,19 @@ py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans do
 - **Lisibilité** : chaque personnage se vérifie sur fond sombre, fond clair et décor (planche de groupe) ; une matière
   sombre porte un liseré clair côté lumière (le chapeau du Balayeur).
 - **Toise** : une par campagne, sur la planche de groupe, Pilou fin pour repère.
+- **Attitude** : chaque humain a une pose de repos qui le dit d'un coup d'œil (Tudal bras croisés, Basile une main à
+  la loupe, Anselme la lanterne levée, Lison sur la pointe des pieds), et une humeur bouge le corps, pas seulement le
+  visage (la tête tombe, le buste se penche, un poing se lève).
+- **Contrôles** : aucun pixel sans voisin (`Feuille.sans_orphelins`, appliqué à chaque image) ; les acteurs de moins
+  de 16 unités sont posés sur le décor HD le plus clair et le plus sombre
+  ([petits-acteurs.png](maquettes/personnages/petits-acteurs.png)) et portent un pixel sombre d'ancrage.
 
 | Campagne | État | Planche de groupe |
 |---|---|---|
 | La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
 | Le phare éteint (7) | dessinés et exportés (17 fichiers) ; pas encore lus par le moteur | [groupe-phare-eteint.png](maquettes/personnages/groupe-phare-eteint.png) |
 | Petit Nuage (9) | dessinés et exportés (19 fichiers) ; pas encore lus par le moteur | [groupe-petit-nuage.png](maquettes/personnages/groupe-petit-nuage.png) |
-| Acteurs de scène (29) | dessinés et exportés (`acteur-<nom>.txt`, 20 Ko) ; pas encore lus par le moteur | [acteurs.png](maquettes/personnages/acteurs.png) |
+| Acteurs de scène (32 : les 29 d'aujourd'hui, plus `grenouille`, `canard` et `escargot`, peints jusqu'ici dans le décor du prologue) | dessinés et exportés (`acteur-<nom>.txt`, 20 Ko) ; pas encore lus par le moteur | [acteurs.png](maquettes/personnages/acteurs.png) |
 
 Planches par personnage (toutes les humeurs, sept images) et GIF : `docs/maquettes/personnages/<campagne>-<id>.png`
 et `.gif`.

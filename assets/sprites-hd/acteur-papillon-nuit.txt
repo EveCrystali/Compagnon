@@ -3,19 +3,19 @@ id: acteur-papillon-nuit
 taille: 10 7
 ancre: 5 6
 duree: 70
-palette: a=#ffe8bf b=#d9c9a0 c=#b9a98a
+palette: a=#ffe8bf b=#8a7a5a c=#b89c6c d=#6a5c44
 images: 2
 10,
 ,a6,a,
 ,2a4,2a,
 ,3ab,3a,
-4,b5,
-4,c5,
+c3,b3,c,
+4,d5,
 10,
 10.
 .,6.,.
 .2,4.2,.
 .2,2.a.2,.
-.3a2.3a.
+,3a2.3a.
 2.a4.a2.
-10.
+c7.c.

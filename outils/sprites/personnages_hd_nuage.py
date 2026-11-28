@@ -19,8 +19,9 @@ ONDEE = Rampe("#5d667c", "#8790a4", "#a9b1c2", "#c3cad8", "#dfe4ec", cerne="#3a4
 ORAGE = Rampe("#262a35", "#3c4252", "#5c6478", "#8790a4", "#b4bccb", cerne="#14161c")
 SARCELLE = Rampe("#124a5a", "#1d6578", "#2f8f9c", "#5bb3ae", "#9fdcd2")
 VIO = Rampe("#2e2450", "#4a3a7e", "#6a5acd", "#9b8cff", "#c9c0ff")
-MARMOTTE = Rampe("#4a3018", "#6b4a2e", "#a07a52", "#c8a274", "#e6cfa6")
-AILE = Rampe("#2c2850", "#46406e", "#5c5a9a", "#8a79b8", "#b9aee0")
+MARMOTTE = Rampe("#352a20", "#5e4e3e", "#8c7a64", "#b4a48c", "#ded2ba")       # le pelage grisonné
+OCRE = Rampe("#a8743c", "#d2a066", "#eccb98", "#f8e6c4")
+AILE = Rampe("#4a4486", "#6e68ac", "#9a8cd0", "#c4b8ea", "#ebe6fb", cerne="#262248")   # un papier lavande : il se lit de nuit
 PLUME = Rampe("#5a6070", "#8890a0", "#b8bfcc", "#e2e6ee")
 LAITON = Rampe("#8a6a1c", "#b8922a", "#e8c447", "#fff0a0")
 PECHE = "#ffd29a"
@@ -231,15 +232,26 @@ def madame_bocal(f, e):
     a, g = 35, 84
     h = e.humeur
     up = -1 if e.souffle else 0
+    # Les pattes de derrière, sombres, et la queue courte en balai.
     for cote in (-1, 1):
-        p = f.boule(a + cote * 10, g - 3.2, 7.6, 3.2, MARMOTTE, biais=0.3)
+        f.boule(a + cote * 11, g - 2.8, 6.4, 2.8, MARMOTTE, biais=0.16)
         for k in (-1, 0, 1):
-            f.px(a + cote * 10 + k * 3 - 2, g - 1.4, MARMOTTE[0])
-    f.boule(a + 20, g - 10, 6.5, 5.0, MARMOTTE, biais=0.24)                                  # la queue
-    corps = f.boule(a, g - 27, 21.6, 25.2, MARMOTTE)
-    f.boule(a - 1, g - 22, 13.5, 17.5, MARMOTTE, biais=0.72, gain=0.4, dans=corps)            # le ventre clair
-    for (x, y) in ((a - 17, g - 30), (a - 18, g - 22), (a + 16, g - 34), (a + 18, g - 24), (a - 14, g - 40), (a + 13, g - 43)):
-        f.px(x, y, MARMOTTE[1]); f.px(x + 1, y + 1, MARMOTTE[1])                             # le poil
+            f.px(a + cote * 11 + k * 3 - 2, g - 1.2, MARMOTTE[2])
+    q = f.tube([(a + 17, g - 8, 3.4), (a + 25, g - 5, 2.6)], MARMOTTE, biais=0.14)
+    f.px(a + 27, g - 6, MARMOTTE[2]); f.px(a + 27, g - 4, MARMOTTE[2])
+    # Le corps en poire : épaules étroites, large en bas ; le poil grisonné, le ventre ocre.
+    def poire(y):
+        t = max(0.0, min(1.0, (y - (g - 56)) / 42.0))
+        return 11.5 + 11.5 * (t ** 0.8) - 5.0 * max(0.0, (y - (g - 10)) / 10.0) ** 2
+    corps = f.tour(a, g - 56 + up, g - 1.5, poire, MARMOTTE, biais=0.34)
+    f.boule(a - 1, g - 20, 12.5, 16, OCRE, biais=0.6, gain=0.4, dans=corps)
+    for (X, Y) in sorted(corps):                                  # le grison : des poils clairs et sombres semés
+        n = (X * 374761393 + Y * 668265263) & 0xFFFF
+        if abs(X - a) > 9 or Y < g - 38:
+            if n % 11 == 0 and X < a + 7:
+                f.pose(X, Y, MARMOTTE[4])
+            elif n % 13 == 0:
+                f.pose(X, Y, MARMOTTE[0])
     f.oy = up
     # Le bocal : verre, couvercle de laiton, et le courant d'air qui tourne dedans.
     verre = f.tour(a - 0.5, g - 39, g - 14, lambda y: 9.6 if y > g - 36 else 8.4, VERRE, biais=0.34)
@@ -247,36 +259,54 @@ def madame_bocal(f, e):
     ph = e.t % 4
     f.courbe([(a - 6, g - 20 - ph), (a - 2, g - 25 - ph * 0.5), (a + 3, g - 21), (a + 6, g - 27 + ph)], "#5a9fd8", dans=verre)
     f.courbe([(a - 5, g - 29 + ph), (a - 0.5, g - 32), (a + 4.5, g - 30 - ph * 0.5)], "#8fc8f0", dans=verre)
-    f.px(a + 2 - ph, g - 24 + ph, "#ff9a3c") if (int(a + 2 - ph), int(g - 24 + ph) + up) in verre else None   # une feuille prise dedans
+    if (int(a + 2 - ph), int(g - 24 + ph) + up) in verre:
+        f.px(a + 2 - ph, g - 24 + ph, "#ff9a3c")                  # une feuille prise dedans
     couv = f.rect(a - 10, g - 42.5, 19, 4, LAITON, rond=0.8)
     f.trait(a - 9, g - 42.5, a + 4, g - 42.5, LAITON[3]); f.trait(a - 10, g - 39.5, a + 8, g - 39.5, LAITON[0], dans=couv)
-    # Les bras, serrés autour.
+    # Les bras courts, serrés autour ; les mains sombres aux doigts écartés.
     for cote in (-1, 1):
-        s = f.tube([(a + cote * 16, g - 40, 4.4), (a + cote * 15, g - 30, 4.0), (a + cote * 9.5, g - 25, 3.6)], MARMOTTE,
-                   biais=0.3 if cote > 0 else 0.4)
+        s = f.tube([(a + cote * 12.5, g - 45, 3.8), (a + cote * 14, g - 34, 3.6), (a + cote * 9.5, g - 27, 3.2)], MARMOTTE,
+                   biais=0.26 if cote > 0 else 0.36)
         f.ourler(s, MARMOTTE[0], cotes=((0, 1), (-cote, 0)), dehors=False)
-        f.boule(a + cote * 8, g - 25.5, 3.4, 3.0, MARMOTTE, biais=0.2)
+        f.boule(a + cote * 8, g - 27, 3.2, 2.8, MARMOTTE, biais=0.1)
         for k in (-1, 0, 1):
-            f.px(a + cote * 7.5, g - 25.5 + k * 1.6, MARMOTTE[0])
-    # La tête : oreilles rondes, museau clair, truffe, deux incisives.
-    tx, ty = a - 0.5, g - 58.0
+            f.px(a + cote * 6 - (1 if cote > 0 else 0), g - 27 + k * 1.8, MARMOTTE[0])
+    # La tête : large et plate, posée sans cou ; petites oreilles basses, calotte sombre, grandes joues, museau clair.
+    tx, ty = a - 0.5, g - 60.0
     for cote in (-1, 1):
-        o = f.boule(tx + cote * 11.2, ty - 10.2, 3.4, 3.2, MARMOTTE, biais=0.3)
-        f.px(tx + cote * 11.2 - 0.5, ty - 9.8, MARMOTTE[0])
-    tete = f.boule(tx, ty, 15.2, 13.4, MARMOTTE)
-    mus = f.boule(tx - 1, ty + 5.4, 7.4, 5.2, MARMOTTE, biais=0.74, gain=0.4)
-    f.disque(tx - 1.4, ty + 2.6, 2.4, 1.6, ENCRE)
-    f.px(tx - 2.4, ty + 1.8, "#8890a0")
-    yo = ty - 2.6
-    for cote, x in ((-1, tx - 7.2), (1, tx + 5.8)):
-        oeil(f, x, yo, e, cote, rx=2.3, ry=2.8, iris=ENCRE, cil=MARMOTTE[0], ri=0.8, regard=(-0.3, 0), arc=MARMOTTE[0])
-    for x in (tx - 10.5, tx + 9.5):
-        f.disque(x, yo + 5.4, 2.6 if h == "joie" else 2.0, 1.4 if h == "joie" else 1.0, JOUE, dans=tete)
-    if e.bouche or h == "joie":
-        bouche(f, tx - 1.2, ty + 7.6, e, l=5.0, ligne=MARMOTTE[0])
+        f.boule(tx + cote * 11.6, ty - 4.6, 2.5, 2.3, MARMOTTE, biais=0.2)
+        f.px(tx + cote * 11.6 - 0.5, ty - 4.4, MARMOTTE[0])
+    tete = f.boule(tx, ty, 12.6, 10.2, MARMOTTE, biais=0.36)
+    for cote in (-1, 1):
+        tete |= f.boule(tx + cote * 8.4, ty + 4.6, 6.8, 5.6, MARMOTTE, biais=0.5 if cote < 0 else 0.4)     # les joues
+    f.boule(tx, ty - 3.4, 11.4, 6.6, MARMOTTE, biais=0.12, gain=0.4, cond=lambda x, y, u, v: y < ty - 5.4)   # la calotte
+    for (X, Y) in sorted(tete):
+        n = (X * 374761393 + Y * 668265263) & 0xFFFF
+        if n % 9 == 0 and Y - up > ty - 4:
+            f.pose(X, Y, MARMOTTE[4])
+    mus = f.boule(tx - 0.8, ty + 4.8, 6.2, 4.4, OCRE, biais=0.74, gain=0.36)
+    f.disque(tx - 1.2, ty + 2.4, 2.2, 1.4, ENCRE)
+    f.px(tx - 2.2, ty + 1.8, "#8890a0")
+    yo = ty - 1.6
+    for cote, x in ((-1, tx - 6.6), (1, tx + 5.2)):
+        oeil(f, x, yo, e, cote, rx=2.0, ry=2.4, iris=ENCRE, cil=MARMOTTE[0], ri=0.86, regard=(-0.3, 0), arc=MARMOTTE[0])
+    if h == "joie":
+        for x in (tx - 11.5, tx + 10.5):
+            f.disque(x, yo + 6.2, 2.4, 1.3, JOUE, dans=tete)
+    f.trait(tx - 1, ty + 4, tx - 1, ty + 5.4, MARMOTTE[0])
+    if e.bouche:
+        bouche(f, tx - 1.0, ty + 7.4, e, l=5.0, ligne=MARMOTTE[0])
+        f.px(tx - 2, ty + 6.4, BLANC); f.px(tx - 1, ty + 6.4, BLANC)
     else:
-        f.trait(tx - 3, ty + 6.4, tx + 0.6, ty + 6.4, MARMOTTE[0])
-        f.px(tx - 2, ty + 7.4, BLANC); f.px(tx - 1, ty + 7.4, BLANC); f.px(tx - 2, ty + 8.4, BLANC); f.px(tx - 1, ty + 8.4, "#d9cfb8")
+        f.courbe([(tx - 4.5, ty + 5.4), (tx - 2.8, ty + 6.6), (tx - 1, ty + 5.6)], MARMOTTE[0])
+        f.courbe([(tx - 1, ty + 5.6), (tx + 0.8, ty + 6.6), (tx + 2.5, ty + 5.4)], MARMOTTE[0])
+        for dx in (-2, -1):                                       # les deux grandes incisives
+            f.px(tx + dx, ty + 6.6, "#ffffff"); f.px(tx + dx, ty + 7.6, "#ffffff"); f.px(tx + dx, ty + 8.6, "#ffffff")
+        f.px(tx - 1, ty + 9.6, MARMOTTE[0]); f.px(tx - 2, ty + 9.6, MARMOTTE[0])
+        for y in (7.6, 8.6):
+            f.px(tx - 3, ty + y, MARMOTTE[1]); f.px(tx, ty + y, MARMOTTE[1])
+    for cote in (-1, 1):                                          # les moustaches
+        f.px(tx + cote * 7 - 1, ty + 5.4, MARMOTTE[4]); f.px(tx + cote * 9 - 1, ty + 5, MARMOTTE[4])
     f.oy = 0
 
 
@@ -292,6 +322,7 @@ def _froisseuse(f, cx, cy, s, e, phase, grande):
                       - 0.1 * cote, trame=0.06)
         for (px_, py_) in (pts[1], pts[3], pts[5]):
             f.trait(cx + cote * 3 * s, cy, px_, py_, AILE[4 if cote < 0 else 3], dans=aile)
+        f.ourler(aile, AILE[4], cotes=((0, -1),))                  # le bord du haut accroche la lumière
     for cote in (-1, 1):
         f.poly([(cx + cote * 1.6 * s, cy - 4 * s), (cx + cote * 5 * s, cy - 10.5 * s), (cx + cote * 5.4 * s, cy - 3 * s)], AILE,
                ton=2 if cote < 0 else 1)
