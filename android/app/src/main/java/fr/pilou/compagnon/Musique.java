@@ -48,12 +48,14 @@ final class Musique {
 
     static final class Morceau {
         final int ms, pas, filtre;
+        final boolean motif;
         final List<Voix> voix = new ArrayList<>();
 
-        Morceau(int ms, int pas, int filtre) {
+        Morceau(int ms, int pas, int filtre, boolean motif) {
             this.ms = ms;
             this.pas = pas;
             this.filtre = filtre;
+            this.motif = motif;
         }
     }
 
@@ -85,7 +87,7 @@ final class Musique {
             String[] jetons = p[p.length - 1].isEmpty() ? new String[0] : p[p.length - 1].split("\\s+");
             switch (p[0]) {
                 case "morceau":
-                    courant = new Morceau(Integer.parseInt(p[2]), Integer.parseInt(p[3]), Integer.parseInt(p[4]));
+                    courant = new Morceau(Integer.parseInt(p[2]), Integer.parseInt(p[3]), Integer.parseInt(p[4]), p.length > 5 && p[5].equals("motif"));
                     c.morceaux.put(p[1], courant);
                     break;
                 case "voix":
@@ -107,15 +109,15 @@ final class Musique {
         return c;
     }
 
-    /** {pas, longueur, f0, f1} par note ; la suite se répète, une note tenue au bout repart au début. */
-    static List<long[]> notes(List<String> jetons, int pas) {
+    /** {pas, longueur, f0, f1} par note ; la suite se répète ; dans une boucle, une note tenue au bout repart au début. */
+    static List<long[]> notes(List<String> jetons, int pas, boolean boucle) {
         String[] e = new String[pas];
         for (int k = 0; k < pas; k++) e[k] = jetons.get(k % jetons.size());
         List<long[]> n = new ArrayList<>();
         for (int k = 0; k < pas; k++) {
             if (e[k].equals("-") || e[k].equals(".")) continue;
             int longueur = 1;
-            while (longueur < pas && e[(k + longueur) % pas].equals("-")) longueur++;
+            while (longueur < pas && (boucle || k + longueur < pas) && e[(k + longueur) % pas].equals("-")) longueur++;
             String[] f = e[k].split(">");
             n.add(new long[]{k, longueur, frequence(f[0]), frequence(f[f.length - 1])});
         }
@@ -124,10 +126,10 @@ final class Musique {
 
     /** Échantillons 16 bits de la boucle au réglage « normale » ; le dernier enchaîne sur le premier. */
     static short[] synthetiser(Morceau m) {
-        int pasEch = TAUX * m.ms / 1000, total = pasEch * m.pas;
+        int pasEch = TAUX * m.ms / 1000, total = pasEch * m.pas + (m.motif ? TAUX * 20 / 1000 : 0);
         long[] acc = new long[total];
         for (Voix v : m.voix) {
-            for (long[] note : notes(v.jetons, m.pas)) {
+            for (long[] note : notes(v.jetons, m.pas, !m.motif)) {
                 int s0 = (int) note[0] * pasEch, n = (int) note[1] * pasEch;
                 long f0 = note[2], f1 = note[3];
                 if (v.tenue > 0) n = Math.min(n, TAUX * v.tenue / 1000);
@@ -167,11 +169,18 @@ final class Musique {
         // Passe-bas en anneau : un tour pour mettre le filtre en régime, le second donne la sortie.
         short[] sortie = new short[total];
         long y1 = 0, y2 = 0;
-        for (int tour = 0; tour < 2; tour++) {
+        for (int tour = 0; tour < (m.motif ? 1 : 2); tour++) {
             for (int i = 0; i < total; i++) {
                 y1 += (((acc[i] << 8) - y1) * m.filtre) >> 8;
                 y2 += ((y1 - y2) * m.filtre) >> 8;
-                if (tour == 1) sortie[i] = (short) Math.max(-32767, Math.min(32767, y2 >> 8));
+                if (tour == 1 || m.motif) sortie[i] = (short) Math.max(-32767, Math.min(32767, y2 >> 8));
+            }
+        }
+        if (m.motif) {
+            int q = TAUX * 8 / 1000;
+            for (int i = total - q; i < total; i++) {
+                long g = ((long) (total - 1 - i) << 16) / q;
+                sortie[i] = (short) ((sortie[i] * g) >> 16);
             }
         }
         return sortie;
@@ -179,8 +188,25 @@ final class Musique {
 
     /** Le prologue a sa musique, les autres campagnes celle de leur ton. */
     static String pour(String campagne, String ton) {
-        if ("prologue".equals(campagne)) return "prologue";
-        return "humour".equals(ton) || "mystere".equals(ton) || "emotion".equals(ton) ? ton : null;
+        return pour(campagne, ton, null);
+    }
+
+    /**
+     * Le champ facultatif « musique » d'une scène ou d'un nœud ({@code demande}) nomme un morceau, ou « calme » /
+     * « tension », la variante de la boucle du moment ; sans champ, la boucle du prologue ou du ton (comme Musique.Pour).
+     */
+    static String pour(String campagne, String ton, String demande) {
+        String base = "prologue".equals(campagne) ? "prologue"
+                : "humour".equals(ton) || "mystere".equals(ton) || "emotion".equals(ton) ? ton : null;
+        if (demande == null || demande.isEmpty()) return base;
+        Map<String, Morceau> c = catalogue().morceaux;
+        if (c.containsKey(demande)) return demande;
+        return base != null && c.containsKey(base + "-" + demande) ? base + "-" + demande : base;
+    }
+
+    static boolean estMotif(String id) {
+        Morceau m = catalogue().morceaux.get(id);
+        return m != null && m.motif;
     }
 
     static String ambiance(String decor) {
@@ -205,18 +231,30 @@ final class Musique {
             short[] boucle(String id);
         }
 
+        interface Motifs {
+            boolean motif(String id);
+        }
+
         private static final class Couche {
             String id;
-            boolean musique;
+            boolean musique, unique;
             short[] s;
             int pos, gain, cible;
         }
 
         private final Boucles boucles;
+        private final Motifs motifs;
         private final List<Couche> couches = new ArrayList<>();
+        private String dernierMotif;
 
         Melangeur(Boucles boucles) {
+            this(boucles, id -> false);
+        }
+
+        /** Un motif (une fin) part tout de suite, joue une fois et laisse le silence ; il rejoue après un autre morceau. */
+        Melangeur(Boucles boucles, Motifs motifs) {
             this.boucles = boucles;
+            this.motifs = motifs;
         }
 
         synchronized boolean silencieux() {
@@ -236,7 +274,9 @@ final class Musique {
                 c.cible = garde ? gain : 0;
                 present |= garde;
             }
-            if (present || id == null || gain <= 0) return;
+            boolean motif = id != null && musique && motifs.motif(id);
+            if (musique && !motif && id != null) dernierMotif = null;
+            if (present || id == null || gain <= 0 || (motif && id.equals(dernierMotif))) return;
             short[] s = boucles.boucle(id);
             if (s == null || s.length == 0) return;
             Couche c = new Couche();
@@ -244,7 +284,10 @@ final class Musique {
             c.musique = musique;
             c.s = s;
             c.cible = gain;
+            c.unique = motif;
+            c.gain = motif ? gain : 0;
             couches.add(c);
+            if (motif) dernierMotif = id;
         }
 
         synchronized void remplir(short[] bloc) {
@@ -255,7 +298,12 @@ final class Musique {
                     if (c.gain < c.cible) c.gain = Math.min(c.cible, c.gain + monte);
                     else if (c.gain > c.cible) c.gain = Math.max(c.cible, c.gain - descend);
                     somme[i] += ((long) c.s[c.pos] * c.gain) >> 16;
-                    if (++c.pos == c.s.length) c.pos = 0;
+                    if (++c.pos < c.s.length) continue;
+                    c.pos = 0;
+                    if (!c.unique) continue;
+                    c.gain = 0;
+                    c.cible = 0;
+                    break;
                 }
             }
             for (int i = 0; i < bloc.length; i++) bloc[i] = (short) Math.max(-32767, Math.min(32767, somme[i]));
@@ -271,7 +319,7 @@ final class Musique {
     private static Catalogue catalogue;
     private static final Map<String, short[]> BOUCLES = new HashMap<>();
     private static final Set<String> EN_CALCUL = new HashSet<>();
-    private static final Melangeur TABLE = new Melangeur(Musique::boucle);
+    private static final Melangeur TABLE = new Melangeur(Musique::boucle, Musique::estMotif);
     private static Thread fil;
 
     private static synchronized Catalogue catalogue() {
@@ -301,6 +349,11 @@ final class Musique {
      * vue est à l'écran et que sa fenêtre a le premier plan. Silence pendant un appel ou une visio et en silencieux.
      */
     static void suivre(View v, Supplier<String> campagne, Supplier<String> ton, Supplier<String> decor) {
+        suivre(v, campagne, ton, decor, () -> null);
+    }
+
+    /** {@code demande} : le champ facultatif « musique » de la scène ou du nœud en cours (voir pour). */
+    static void suivre(View v, Supplier<String> campagne, Supplier<String> ton, Supplier<String> decor, Supplier<String> demande) {
         Runnable[] tour = new Runnable[1];
         tour[0] = () -> {
             try {
@@ -310,7 +363,7 @@ final class Musique {
                         || am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
                 int g = gain(niveau(c));
                 boolean actif = g > 0 && v.isAttachedToWindow() && v.isShown() && v.hasWindowFocus() && !cache;
-                viser(actif ? pour(campagne.get(), ton.get()) : null, actif ? ambiance(decor.get()) : null, g);
+                viser(actif ? pour(campagne.get(), ton.get(), demande.get()) : null, actif ? ambiance(decor.get()) : null, g);
             } catch (RuntimeException e) {
                 viser(null, null, 0);
             }
