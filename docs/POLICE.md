@@ -75,4 +75,6 @@ arrondis, même place. Sur le PC, seulement si le « Dessin fin » est actif.
 | Phrase de Pilou en tête de bulle (petits mots, réactions, « toc toc ! ») | ✓ `BullePixel.cs` | — |
 | Mot du jour : bulle flottante, Accueil, widget | — | ✓ `Bulle.java`, `PresenceVue.motTete`, `Widget.java` |
 
-À convertir ensuite (chantier suivant) : voir la liste du compte rendu du chantier (PR « police pixel »).
+| En-tête, barre du bas, Accueil, Jouer, Boutique, Collection | — | ✓ `Style.Texte` (docs/STYLE.md) |
+
+Les tailles et les cas où la police système reste permise sont fixés dans [STYLE.md](STYLE.md).

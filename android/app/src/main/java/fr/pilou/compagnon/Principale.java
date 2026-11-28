@@ -34,18 +34,19 @@ public final class Principale extends Activity {
     static final int ACCUEIL = 0, AVENTURE = 1, JOUER = 2, BOUTIQUE = 3, COLLECTION = 4, REGLAGES = 5, N = 6, NAV = 5;
     static final String EXTRA_ONGLET = "onglet", EXTRA_LECTURE = "lecture";
     private static final String[] NOMS = {"Accueil", "Aventure", "Jouer", "Boutique", "Collection", "Réglages"};
-    private static final String[][] ICONES = {Ui.ACCUEIL, Ui.AVENTURE, Ui.JOUER, Ui.BOUTIQUE, Ui.COLLECTION, Ui.REGLAGES};
+    private static final String[] ICONES = {"ui-accueil", "ui-aventure", "ui-jouer", "ui-boutique", "ui-collection", "ui-reglages"};
 
     private final Handler h = new Handler(Looper.getMainLooper());
     private final Page[] pages = new Page[N];
-    private final LinearLayout[] boutons = new LinearLayout[N];
-    private final Ui.Icone[] icones = new Ui.Icone[N];
+    private final View[] boutons = new View[N], onglets = new View[N];
+    private final Style.Icone[] icones = new Style.Icone[N];
     private final TextView[] libelles = new TextView[N];
     private FrameLayout contenu, cadre, entete;
     private LinearLayout nav;
+    private int pixelNav;
     private Vitrine.Bandeau bandeau;
     private TextView pastilleBoutique, pastilleAventure;
-    private Ui.Icone roue;
+    private Style.Icone roue;
     private View boutonRoue;
     private View rangees;
     private int courant = -1, avantReglages = ACCUEIL;
@@ -61,32 +62,37 @@ public final class Principale extends Activity {
 
         LinearLayout racine = Ui.pile(this);
         racine.setBackgroundColor(p.fond);
-        // Bandeau permanent (niveau, XP, po, prochaine rangée) : un toucher ouvre les niveaux.
+        // Bandeau permanent (niveau, XP, po, prochaine rangée), sur toute la largeur : un toucher ouvre les niveaux.
         entete = new FrameLayout(this);
         entete.setBackgroundColor(Vitrine.NUIT);
-        LinearLayout ligneHaut = Ui.rangee(this);
-        ligneHaut.setGravity(Gravity.TOP);
         bandeau = new Vitrine.Bandeau(this);
         bandeau.setOnClickListener(v -> allerNiveaux());
-        ligneHaut.addView(bandeau, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        // La roue des Réglages : 48 dp de toucher, à droite des pièces d'or.
+        entete.addView(bandeau, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        // La roue des Réglages : 48 dp de toucher, posée sur le bandeau, à droite des pièces d'or. Ouverte : elle
+        // prend un cadre et la couleur d'accent (la forme le dit, pas la seule couleur).
         FrameLayout r = new FrameLayout(this);
-        roue = new Ui.Icone(this, Ui.REGLAGES, new int[]{0, Vitrine.ARGENT}, 2);
+        roue = new Style.Icone(this, ICONES[REGLAGES], Vitrine.ARGENT, 2);
         r.addView(roue, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        r.setBackground(Ui.touchable(this, Ui.arrondi(this, 0x00000000, 24, 0), 24));
         r.setContentDescription("Réglages");
         r.setOnClickListener(v -> aller(courant == REGLAGES ? avantReglages : REGLAGES, true));
-        LinearLayout.LayoutParams lr = new LinearLayout.LayoutParams(Ui.dp(this, 48), Ui.dp(this, 52));
-        lr.rightMargin = Ui.dp(this, 4);
-        ligneHaut.addView(r, lr);
+        FrameLayout.LayoutParams lr = new FrameLayout.LayoutParams(Ui.dp(this, 48), Ui.dp(this, 48), Gravity.TOP | Gravity.END);
+        lr.rightMargin = Ui.dp(this, 2);
+        lr.topMargin = Ui.dp(this, 2);
+        entete.addView(r, lr);
         boutonRoue = r;
-        entete.addView(ligneHaut, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         racine.addView(entete, Ui.large());
         contenu = new FrameLayout(this);
         racine.addView(contenu, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+        // Barre du bas : un liseré d'un module, puis les cinq onglets. Le libellé prend la plus grande taille de police
+        // pixel qui laisse chaque nom dans sa case (« Collection » ne touche plus « Boutique » en grande police).
+        Style.Palette st = Style.p(this);
+        View lisere = new View(this);
+        lisere.setBackgroundColor(st.bord);
+        racine.addView(lisere, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Style.u(this)));
         nav = Ui.rangee(this);
-        nav.setBackgroundColor(p.surface);
-        nav.setElevation(Ui.dp(this, 8));
+        nav.setBackgroundColor(st.carte);
+        int caseNav = getResources().getDisplayMetrics().widthPixels / NAV - 4 * Style.u(this);
+        pixelNav = Style.pixelQuiTient(this, java.util.Arrays.copyOf(NOMS, NAV), Style.PETIT, false, caseNav);
         for (int i = 0; i < NAV; i++) nav.addView(boutonNav(i), new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         racine.addView(nav, Ui.large());
         racine.setOnApplyWindowInsetsListener((v, ins) -> {
@@ -105,7 +111,7 @@ public final class Principale extends Activity {
             }
             entete.setPadding(gauche, haut, droite, 0);
             contenu.setPadding(gauche, 0, droite, 0);
-            nav.setPadding(gauche, Ui.dp(this, 6), droite, bas + Ui.dp(this, 6));
+            nav.setPadding(gauche, Ui.dp(this, 4), droite, bas + Ui.dp(this, 4));
             return ins;
         });
         // Cadre : l'app, et par-dessus, la fenêtre « Rangées débloquées » quand un niveau en ouvre.
@@ -129,7 +135,7 @@ public final class Principale extends Activity {
     @SuppressWarnings("deprecation")
     private void bordABord(Window w, Ui.Palette p) {
         w.setStatusBarColor(0x00000000);
-        w.setNavigationBarColor(p.surface);
+        w.setNavigationBarColor(Style.p(this).carte);
         boolean clair = !Ui.sombre(this);
         if (Build.VERSION.SDK_INT >= 30) {
             w.getDecorView(); // crée la fenêtre si besoin : getInsetsController() en dépend
@@ -147,39 +153,43 @@ public final class Principale extends Activity {
     }
 
     private View boutonNav(int i) {
-        Ui.Palette p = Ui.p(this);
+        Style.Palette p = Style.p(this);
+        int u = Style.u(this);
         LinearLayout b = Ui.pile(this);
         b.setGravity(Gravity.CENTER_HORIZONTAL);
-        b.setPadding(0, Ui.dp(this, 4), 0, Ui.dp(this, 2));
-        LinearLayout fond = Ui.rangee(this);
-        fond.setGravity(Gravity.CENTER);
-        fond.setPadding(Ui.dp(this, 12), Ui.dp(this, 5), Ui.dp(this, 12), Ui.dp(this, 5));
-        icones[i] = new Ui.Icone(this, ICONES[i], new int[]{0, p.doux}, 2);
-        fond.addView(icones[i]);
+        b.setPadding(0, u, 0, u);
+        b.setMinimumHeight(Ui.dp(this, 48));
+        // L'icône dans sa case : un cadre plat l'entoure quand l'onglet est ouvert.
+        FrameLayout fond = new FrameLayout(this);
+        fond.setPadding(3 * u, 2 * u, 3 * u, 2 * u);
+        icones[i] = new Style.Icone(this, ICONES[i], p.pale, 2);
+        fond.addView(icones[i], new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+        FrameLayout pose = new FrameLayout(this);
+        pose.addView(fond, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
         if (i == BOUTIQUE || i == AVENTURE) {
             // Pastille « ! » : une rangée vient de s'ouvrir (boutique) ; Pilou est revenu et attend (aventure).
-            TextView pastille = Ui.texte(this, "!", 10, Vitrine.ENCRE, true);
-            pastille.setBackground(Ui.arrondi(this, Vitrine.ORANGE, 8, 0));
-            pastille.setPadding(Ui.dp(this, 5), 0, Ui.dp(this, 5), 0);
+            Style.Texte pastille = new Style.Texte(this, "!", pixelNav, Vitrine.ENCRE, true, true);
+            pastille.setBackground(Style.plat(this, Vitrine.ORANGE, Vitrine.ENCRE));
+            pastille.setPadding(u, u, u, u);
+            pastille.setGravity(Gravity.CENTER);
+            pastille.setMinimumWidth(9 * pixelNav + 2 * u);
             pastille.setVisibility(View.GONE);
             pastille.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-            LinearLayout.LayoutParams lpb = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lpb.leftMargin = Ui.dp(this, 3);
-            lpb.gravity = Gravity.TOP;
-            fond.addView(pastille, lpb);
+            FrameLayout.LayoutParams lpb = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
+            pose.addView(pastille, lpb);
+            pose.setPadding(4 * u, 0, 4 * u, 0);
             if (i == BOUTIQUE) pastilleBoutique = pastille;
             else pastilleAventure = pastille;
         }
         boutons[i] = fond;
-        b.addView(fond);
-        libelles[i] = Ui.texte(this, NOMS[i], 12, p.doux, false);
-        // Le libellé prend toute la largeur de la case (pile verticale) : il faut centrer son texte.
+        b.addView(pose);
+        libelles[i] = new Style.Texte(this, NOMS[i], pixelNav, p.pale, false, true);
         libelles[i].setGravity(Gravity.CENTER_HORIZONTAL);
         libelles[i].setSingleLine(true);
-        libelles[i].setPadding(0, Ui.dp(this, 3), 0, 0);
-        b.addView(libelles[i]);
+        b.addView(libelles[i], Ui.large());
         b.setContentDescription(NOMS[i]);
         b.setOnClickListener(v -> aller(i, true));
+        onglets[i] = b;
         return b;
     }
 
@@ -201,17 +211,20 @@ public final class Principale extends Activity {
     void aller(int i, boolean anime) {
         if (i < 0 || i >= N) i = ACCUEIL;
         if (i == REGLAGES && courant != REGLAGES && courant >= 0) avantReglages = courant;
-        Ui.Palette p = Ui.p(this);
-        roue.couleurs(new int[]{0, i == REGLAGES ? Vitrine.ORANGE : Vitrine.ARGENT});
+        Style.Palette p = Style.p(this);
+        roue.couleur(i == REGLAGES ? Vitrine.ORANGE : Vitrine.ARGENT);
+        boutonRoue.setBackground(i == REGLAGES ? Style.plat(this, Vitrine.NUIT3, Vitrine.ORANGE) : null);
         boutonRoue.setSelected(i == REGLAGES);
         for (int k = 0; k < NAV; k++) {
+            // Onglet ouvert : un cadre autour de l'icône (la forme), et la couleur du choix (le bleu de la coche).
             boolean sel = k == i;
-            icones[k].couleurs(new int[]{0, sel ? p.bleu : p.doux});
-            boutons[k].setBackground(sel ? Ui.arrondi(this, p.voile | 0x10000000, 16, 0) : null);
-            libelles[k].setTextColor(sel ? p.bleu : p.doux);
-            libelles[k].setTypeface(null, sel ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+            icones[k].couleur(sel ? p.coche : p.pale);
+            boutons[k].setBackground(sel ? Style.plat(this, Style.melange(p.carte, p.coche, 0.14f), p.coche) : null);
+            int u = Style.u(this);
+            boutons[k].setPadding(3 * u, 2 * u, 3 * u, 2 * u); // le cadre remet sa propre marge : on repose la nôtre
+            libelles[k].setTextColor(sel ? p.coche : p.pale);
             // L'onglet courant est annoncé « sélectionné » par TalkBack.
-            if (boutons[k].getParent() instanceof View) ((View) boutons[k].getParent()).setSelected(sel);
+            onglets[k].setSelected(sel);
         }
         if (i == courant) {
             page(i).retourHaut();
@@ -267,11 +280,10 @@ public final class Principale extends Activity {
         int n = Gains.niveau(this, e), xp = Gains.xp(this, e);
         // Titre porté (boutique, ensemble complet, collection) à la place du titre de niveau.
         String titre = Boutique.nomTitre(Gains.porte(this, e).get(Boutique.TITRE));
-        bandeau.mettre(n, xp, e.po < 0 ? -1 : Gains.solde(this, e), titre != null ? titre : Butin.titre(n), Vitrine.prochaineRangee(n, xp));
+        bandeau.mettre(n, xp, e.po < 0 ? -1 : Gains.solde(this, e), titre != null ? titre : Butin.titre(n), Vitrine.prochainesRangees(n, xp));
         boolean neuf = courant != BOUTIQUE && PageBoutique.nouveautes(this, e) > 0;
         pastilleBoutique.setVisibility(neuf ? View.VISIBLE : View.GONE);
-        if (boutons[BOUTIQUE].getParent() instanceof View)
-            ((View) boutons[BOUTIQUE].getParent()).setContentDescription(neuf ? "Boutique, du nouveau" : "Boutique");
+        onglets[BOUTIQUE].setContentDescription(neuf ? "Boutique, du nouveau" : "Boutique");
         // Le niveau ne se compte qu'appairé : l'appairage d'un Pilou déjà grand n'ouvre pas la fenêtre « Rangées débloquées ».
         boolean appaire = Chiffre.valide(Prefs.code(this));
         int vu = appaire ? Prefs.de(this).getInt("niveauVu", 0) : 0;
@@ -296,8 +308,7 @@ public final class Principale extends Activity {
             pastilleAventure.setScaleY(0.2f);
             pastilleAventure.animate().scaleX(1).scaleY(1).setDuration(260).setInterpolator(new android.view.animation.OvershootInterpolator(2.5f)).start();
         }
-        if (boutons[AVENTURE].getParent() instanceof View)
-            ((View) boutons[AVENTURE].getParent()).setContentDescription(attend ? "Aventure, Pilou t'attend" : "Aventure");
+        onglets[AVENTURE].setContentDescription(attend ? "Aventure, Pilou t'attend" : "Aventure");
     }
 
     /** « NIVEAU 15 ! Rangées débloquées » : les objets entrés en rayon, « Voir en boutique » ou « Plus tard ». */
@@ -312,12 +323,8 @@ public final class Principale extends Activity {
         voile.setClickable(true);
         LinearLayout c = Ui.pile(this);
         c.setGravity(Gravity.CENTER_HORIZONTAL);
-        android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
-        g.setColor(Vitrine.NUIT);
-        g.setStroke(Ui.dp(this, 3), Vitrine.VIOLET_FONCE);
-        g.setCornerRadius(Ui.dp(this, 6));
-        c.setBackground(g);
         c.setPadding(Ui.dp(this, 18), Ui.dp(this, 18), Ui.dp(this, 18), Ui.dp(this, 16));
+        Style.fond(c, Style.cadre(this, Style.NUIT));
         c.addView(new Vitrine.Pixel(this, "NIVEAU " + apres + " !", 4, Vitrine.ORANGE, Vitrine.VIOLET_FONCE, false));
         Vitrine.Pixel sous = new Vitrine.Pixel(this, "RANGÉES DÉBLOQUÉES", 2, Vitrine.VIOLET, Vitrine.ENCRE, false);
         sous.setPadding(0, Ui.dp(this, 10), 0, 0);
@@ -327,7 +334,7 @@ public final class Principale extends Activity {
         for (int i = 0; i < Math.min(6, rayons.size()); i++)
             noms.append(i > 0 ? "   " : "").append(Boutique.signe(rayons.get(i))).append('\u00a0').append(Boutique.nomSlot(rayons.get(i)));
         if (rayons.size() > 6) noms.append("   +").append(rayons.size() - 6);
-        TextView t = Ui.texte(this, noms, 14, Vitrine.ARGENT_CLAIR, true);
+        TextView t = Style.texte(this, noms, 14, Vitrine.ARGENT_CLAIR, true);
         t.setGravity(Gravity.CENTER);
         t.setPadding(0, Ui.dp(this, 10), 0, Ui.dp(this, 6));
         c.addView(t, Ui.large());
@@ -348,16 +355,12 @@ public final class Principale extends Activity {
         c.addView(r);
         LinearLayout b = Ui.rangee(this);
         b.setPadding(0, Ui.dp(this, 14), 0, 0);
-        android.widget.Button voir = Ui.bouton(this, "Voir en boutique", true, v -> {
+        TextView voir = Style.bouton(this, Style.NUIT, "Voir en boutique", true, v -> {
             fermerRangees();
             allerBoutique(rayons.isEmpty() ? PageBoutique.VITRINE : rayons.get(0));
         });
-        voir.setBackground(Ui.touchable(this, Ui.arrondi(this, Vitrine.ORANGE, 6, 0), 6));
-        voir.setTextColor(Vitrine.ENCRE);
         b.addView(voir);
-        android.widget.Button tard = Ui.bouton(this, "Plus tard", false, v -> fermerRangees());
-        tard.setBackground(Ui.touchable(this, Ui.arrondi(this, Vitrine.NUIT3, 6, 0), 6));
-        tard.setTextColor(Vitrine.ARGENT_CLAIR);
+        TextView tard = Style.bouton(this, Style.NUIT, "Plus tard", false, v -> fermerRangees());
         LinearLayout.LayoutParams lt = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lt.leftMargin = Ui.dp(this, 8);
         b.addView(tard, lt);

@@ -1,0 +1,14 @@
+# signe d'interface (docs/STYLE.md) : pieds U+25AC
+id: signe-pieds
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+.......
+.......
+aaaaaaa
+aaaaaaa
+aaaaaaa
+.......
+.......

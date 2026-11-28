@@ -1,0 +1,14 @@
+# signe d'interface (docs/STYLE.md) : cadenas U+25A3
+id: signe-cadenas
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+..aaa..
+.a...a.
+.a...a.
+aaaaaaa
+aaa.aaa
+aaa.aaa
+aaaaaaa

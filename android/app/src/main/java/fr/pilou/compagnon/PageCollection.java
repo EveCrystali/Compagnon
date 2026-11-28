@@ -37,14 +37,17 @@ final class PageCollection extends Page {
 
     PageCollection(Principale a) {
         super(a);
-        corps.addView(Ui.titrePage(a, "Collection"));
-        corps.addView(Ui.sousTitre(a, "Ce que Pilou a pêché, cuisiné et débloqué."));
+        corps.addView(Style.titrePage(a, "Collection"));
+        corps.addView(Style.sousTitre(a, "Ce que Pilou a pêché, cuisiné et débloqué."));
         LinearLayout segments = Ui.rangee(a);
         Ui.Palette p = Ui.p(a);
-        segments.setBackground(Ui.arrondi(a, p.surface2, 14, 0));
+        Style.fond(segments, Style.arrondi(a, p.surface2, 14, 0));
         segments.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
+        // Les cinq noms tiennent chacun dans sa case, avec un module d'air de chaque côté, même en grande police.
+        int caseOnglet = (a.getResources().getDisplayMetrics().widthPixels - Ui.dp(a, 44)) / ONGLETS.length - 4 * Style.u(a);
+        int pixelOnglet = Style.pixelQuiTient(a, ONGLETS, Style.PETIT, true, caseOnglet);
         for (int i = 0; i < ONGLETS.length; i++) {
-            TextView t = Ui.texte(a, ONGLETS[i], Ui.T_ETIQUETTE, p.doux, true);
+            TextView t = new Style.Texte(a, ONGLETS[i], pixelOnglet, p.doux, true, true);
             t.setGravity(Gravity.CENTER);
             t.setPadding(0, Ui.dp(a, 9), 0, Ui.dp(a, 9));
             int k = i;
@@ -63,7 +66,7 @@ final class PageCollection extends Page {
         Ui.Palette p = Ui.p(app);
         for (int k = 0; k < ONGLETS.length; k++) {
             onglets[k].setTextColor(k == i ? p.bleu : p.doux);
-            onglets[k].setBackground(k == i ? Ui.arrondi(app, p.surface, 11, 0) : null);
+            Style.fond(onglets[k], k == i ? Style.arrondi(app, p.surface, 11, p.bleu) : null);
         }
         empreinte = "";
         rafraichir();
@@ -95,9 +98,9 @@ final class PageCollection extends Page {
 
     private void carnet(int n, Set<String> connues) {
         Ui.Palette p = Ui.p(app);
-        LinearLayout tete = Ui.carte(app);
-        tete.addView(Ui.texte(app, connues.size() + " / " + Butin.PRISES.size() + " espèces", Ui.T_CARTE, p.texte, true));
-        Ui.Barre b = new Ui.Barre(app);
+        LinearLayout tete = Style.carte(app);
+        tete.addView(Style.texte(app, connues.size() + " / " + Butin.PRISES.size() + " espèces", Ui.T_CARTE, p.texte, true));
+        Style.Barre b = new Style.Barre(app);
         b.part(connues.size() / (float) Butin.PRISES.size());
         LinearLayout.LayoutParams lb = Ui.large();
         lb.topMargin = Ui.dp(app, 8);
@@ -105,10 +108,10 @@ final class PageCollection extends Page {
         Map<String, Integer> stock = Gains.stock(app);
         int total = 0;
         for (int v : stock.values()) total += v;
-        TextView panier = Ui.texte(app, total == 0 ? "Panier vide." : "Dans le panier : " + total + " ingrédient" + (total > 1 ? "s" : ""), Ui.T_DETAIL, p.doux, false);
+        TextView panier = Style.texte(app, total == 0 ? "Panier vide." : "Dans le panier : " + total + " ingrédient" + (total > 1 ? "s" : ""), Ui.T_DETAIL, p.doux, false);
         panier.setPadding(0, Ui.dp(app, 8), 0, 0);
         tete.addView(panier);
-        TextView legende = Ui.texte(app, "· commun   ◇ peu commun   ◆ rare   ✦ épique   ★ légendaire", Ui.T_ETIQUETTE, p.doux, false);
+        TextView legende = Style.texte(app, "· commun   ◇ peu commun   ◆ rare   ✦ épique   ★ légendaire", Ui.T_ETIQUETTE, p.doux, false);
         legende.setPadding(0, Ui.dp(app, 6), 0, 0);
         tete.addView(legende);
         contenu.addView(tete, Ui.large(app, 12));
@@ -122,18 +125,18 @@ final class PageCollection extends Page {
             }
             Butin.Prise x = Butin.PRISES.get(i);
             boolean connue = connues.contains(x.id);
-            LinearLayout c = Ui.carte(app);
+            LinearLayout c = Style.carte(app);
             c.setGravity(Gravity.CENTER_HORIZONTAL);
             c.setPadding(Ui.dp(app, 6), Ui.dp(app, 10), Ui.dp(app, 6), Ui.dp(app, 10));
             c.addView(new Vignette(app, x, connue));
-            TextView nom = Ui.texte(app, connue ? x.nom : "???", Ui.T_DETAIL, connue ? p.texte : p.doux, true);
+            TextView nom = Style.texte(app, connue ? x.nom : "???", Ui.T_DETAIL, connue ? p.texte : p.doux, true);
             nom.setGravity(Gravity.CENTER);
             nom.setPadding(0, Ui.dp(app, 6), 0, 0);
             c.addView(nom, Ui.large());
             String sous = Butin.signe(x.rarete) + " " + Butin.nomRarete(x.rarete);
             if (!connue && x.niveauMin > n) sous = "niveau " + x.niveauMin;
             else if (connue && Gains.prises(app, x.id) > 0) sous += " · ×" + Gains.prises(app, x.id);
-            TextView s = Ui.texte(app, sous, Ui.T_ETIQUETTE, x.rarete >= Butin.EPIQUE ? p.orange : x.rarete == Butin.RARE ? p.bleu : p.doux, false);
+            TextView s = Style.texte(app, sous, Ui.T_ETIQUETTE, x.rarete >= Butin.EPIQUE ? p.orange : x.rarete == Butin.RARE ? p.bleu : p.doux, false);
             s.setGravity(Gravity.CENTER);
             c.addView(s, Ui.large());
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
@@ -202,29 +205,29 @@ final class PageCollection extends Page {
         int inventes = e.inventes, connues = 0;
         for (String f : faits) if (f.startsWith("inv:")) inventes++;
         for (Butin.Recette r : Butin.RECETTES) if (faits.contains(r.id)) connues++;
-        LinearLayout tete = Ui.carte(app);
-        tete.addView(Ui.texte(app, connues + " / " + Butin.RECETTES.size() + " recettes", Ui.T_CARTE, p.texte, true));
-        Ui.Barre b = new Ui.Barre(app);
+        LinearLayout tete = Style.carte(app);
+        tete.addView(Style.texte(app, connues + " / " + Butin.RECETTES.size() + " recettes", Ui.T_CARTE, p.texte, true));
+        Style.Barre b = new Style.Barre(app);
         b.part(connues / (float) Butin.RECETTES.size());
         LinearLayout.LayoutParams lb = Ui.large();
         lb.topMargin = Ui.dp(app, 8);
         tete.addView(b, lb);
-        TextView inv = Ui.texte(app, "Plats inventés : " + inventes, Ui.T_DETAIL, p.doux, false);
+        TextView inv = Style.texte(app, "Plats inventés : " + inventes, Ui.T_DETAIL, p.doux, false);
         inv.setPadding(0, Ui.dp(app, 8), 0, 0);
         tete.addView(inv);
         contenu.addView(tete, Ui.large(app, 12));
-        LinearLayout liste = Ui.carte(app);
+        LinearLayout liste = Style.carte(app);
         for (int i = 0; i < Butin.RECETTES.size(); i++) {
             Butin.Recette r = Butin.RECETTES.get(i);
-            if (i > 0) liste.addView(Ui.separateur(app));
+            if (i > 0) liste.addView(Style.separateur(app));
             boolean fait = faits.contains(r.id), verrou = !fait && r.niveauMin > n;
             LinearLayout l = Ui.rangee(app);
             l.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
-            l.addView(Ui.pastille(app, fait ? "✓" : verrou ? "·" : "?", fait ? p.bleu : p.argent));
+            l.addView(Style.caseSigne(app, fait ? "✓" : verrou ? "·" : "?", fait ? p.bleu : p.argent));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, fait ? r.nom : "???", Ui.T_CORPS, fait ? p.texte : p.doux, true));
-            t.addView(Ui.texte(app, verrou ? "dès le niveau " + r.niveauMin : (fait ? "" : "indice : ") + String.join(" + ", r.saveurs) + "  ·  +" + r.xp + " xp", Ui.T_ETIQUETTE, p.doux, false));
+            t.addView(Style.texte(app, fait ? r.nom : "???", Ui.T_CORPS, fait ? p.texte : p.doux, true));
+            t.addView(Style.texte(app, verrou ? "dès le niveau " + r.niveauMin : (fait ? "" : "indice : ") + String.join(" + ", r.saveurs) + "  ·  +" + r.xp + " xp", Ui.T_ETIQUETTE, p.doux, false));
             l.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             liste.addView(l, Ui.large());
         }
@@ -235,12 +238,12 @@ final class PageCollection extends Page {
 
     private void recompenses(int n) {
         Ui.Palette p = Ui.p(app);
-        LinearLayout tete = Ui.carte(app);
+        LinearLayout tete = Style.carte(app);
         Etat e = Prefs.etat(app);
         int stade = e.stade > 0 ? e.stade : Acces.stade(n);
-        tete.addView(Ui.texte(app, "Niveau " + n + " · " + Butin.titre(n), Ui.T_CARTE, p.texte, true));
-        tete.addView(Ui.texte(app, Acces.nomStade(stade) + " · prochain niveau : +" + Acces.poNiveau(n + 1) + " po", Ui.T_DETAIL, p.doux, false));
-        TextView explique = Ui.texte(app, "Les niveaux ouvrent l'accès : jeux, objets de la boutique, évolutions. Les objets s'achètent en pièces d'or.", Ui.T_ETIQUETTE, p.doux, false);
+        tete.addView(Style.texte(app, "Niveau " + n + " · " + Butin.titre(n), Ui.T_CARTE, p.texte, true));
+        tete.addView(Style.texte(app, Acces.nomStade(stade) + " · prochain niveau : +" + Acces.poNiveau(n + 1) + " po", Ui.T_DETAIL, p.doux, false));
+        TextView explique = Style.texte(app, "Les niveaux ouvrent l'accès : jeux, objets de la boutique, évolutions. Les objets s'achètent en pièces d'or.", Ui.T_ETIQUETTE, p.doux, false);
         explique.setPadding(0, Ui.dp(app, 6), 0, 0);
         tete.addView(explique);
         contenu.addView(tete, Ui.large(app, 12));
@@ -252,21 +255,21 @@ final class PageCollection extends Page {
         for (Object[] s : Acces.STADES) if ((Integer) s[0] > 1) lignes.add(new String[]{String.valueOf(s[2]), (String) s[1], "évolution"});
         for (String[] r : Butin.RECOMPENSES) if (r[1].equals("titre")) lignes.add(new String[]{r[0], r[2], "titre"});
         lignes.sort((x, y) -> Integer.compare(Integer.parseInt(x[0]), Integer.parseInt(y[0])));
-        LinearLayout liste = Ui.carte(app);
-        liste.addView(Ui.texte(app, "◆ Boutique : " + nbArticles + " / " + Boutique.CATALOGUE.size() + " articles dans les rangées ouvertes", Ui.T_CORPS, p.texte, true));
+        LinearLayout liste = Style.carte(app);
+        liste.addView(Style.texte(app, "◆ Boutique : " + nbArticles + " / " + Boutique.CATALOGUE.size() + " articles dans les rangées ouvertes", Ui.T_CORPS, p.texte, true));
         for (String[] r : lignes) {
             int niv = Integer.parseInt(r[0]);
             boolean ok = niv <= n;
-            liste.addView(Ui.separateur(app));
+            liste.addView(Style.separateur(app));
             LinearLayout l = Ui.rangee(app);
             l.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
-            TextView badge = Ui.pastille(app, ok ? "✓" : String.valueOf(niv), ok ? p.bleu : p.argent);
+            TextView badge = Style.caseSigne(app, ok ? "✓" : String.valueOf(niv), ok ? p.bleu : p.argent);
             badge.setTextSize(13);
             l.addView(badge);
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, r[1], Ui.T_CORPS, ok ? p.texte : p.doux, true));
-            t.addView(Ui.texte(app, r[2] + (ok ? " · ouvert" : " · niveau " + niv), Ui.T_ETIQUETTE, p.doux, false));
+            t.addView(Style.texte(app, r[1], Ui.T_CORPS, ok ? p.texte : p.doux, true));
+            t.addView(Style.texte(app, r[2] + (ok ? " · ouvert" : " · niveau " + niv), Ui.T_ETIQUETTE, p.doux, false));
             l.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             liste.addView(l, Ui.large());
         }
@@ -277,43 +280,43 @@ final class PageCollection extends Page {
 
     private void metiers(Etat e) {
         Ui.Palette p = Ui.p(app);
-        LinearLayout tete = Ui.carte(app);
+        LinearLayout tete = Style.carte(app);
         java.util.List<Metiers.Ligne> lignes = Metiers.lignes(e);
         int commences = 0;
         for (Metiers.Ligne l : lignes) if (l.commence()) commences++;
-        tete.addView(Ui.texte(app, commences + " / " + Metiers.TOUS.size() + " métiers commencés", Ui.T_CARTE, p.texte, true));
-        TextView explique = Ui.texte(app, Metiers.connus(e)
+        tete.addView(Style.texte(app, commences + " / " + Metiers.TOUS.size() + " métiers commencés", Ui.T_CARTE, p.texte, true));
+        TextView explique = Style.texte(app, Metiers.connus(e)
                 ? "Le temps passé dans chaque activité sur tes PC fait monter un métier, de Novice à Légende."
                 : "Le PC n'a encore rien envoyé : les métiers et les succès arrivent avec sa prochaine nouvelle.", Ui.T_DETAIL, p.doux, false);
         explique.setPadding(0, Ui.dp(app, 6), 0, 0);
         tete.addView(explique, Ui.large());
-        TextView legende = Ui.texte(app, Metiers.TRAVAIL + " travail (paliers 6 → 1500 h)   " + Metiers.LOISIR + " loisir (1 → 250 h)", Ui.T_ETIQUETTE, p.doux, false);
+        TextView legende = Style.texte(app, Metiers.TRAVAIL + " travail (paliers 6 → 1500 h)   " + Metiers.LOISIR + " loisir (1 → 250 h)", Ui.T_ETIQUETTE, p.doux, false);
         legende.setPadding(0, Ui.dp(app, 6), 0, 0);
         tete.addView(legende, Ui.large());
         contenu.addView(tete, Ui.large(app, 12));
 
-        LinearLayout liste = Ui.carte(app);
+        LinearLayout liste = Style.carte(app);
         for (int i = 0; i < lignes.size(); i++) {
             Metiers.Ligne l = lignes.get(i);
-            if (i > 0) liste.addView(Ui.separateur(app));
+            if (i > 0) liste.addView(Style.separateur(app));
             boolean actif = l.commence();
             int teinte = !actif ? p.argent : l.metier.travail ? p.bleu : p.orange;
             LinearLayout r = Ui.rangee(app);
             r.setGravity(Gravity.TOP);
             r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
-            r.addView(Ui.pastille(app, l.metier.signe(), teinte));
+            r.addView(Style.caseSigne(app, l.metier.signe(), teinte));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, l.metier.nom + " · " + l.grade(), Ui.T_CORPS, actif ? p.texte : p.doux, true), Ui.large());
+            t.addView(Style.texte(app, l.metier.nom + " · " + l.grade(), Ui.T_CORPS, actif ? p.texte : p.doux, true), Ui.large());
             if (actif && l.dixiemes > 0) {
-                Ui.Barre b = new Ui.Barre(app);
+                Style.Barre b = new Style.Barre(app);
                 b.part(l.part());
                 LinearLayout.LayoutParams lb = Ui.large();
                 lb.topMargin = Ui.dp(app, 5);
                 lb.bottomMargin = Ui.dp(app, 3);
                 t.addView(b, lb);
             }
-            t.addView(Ui.texte(app, l.texte(), Ui.T_ETIQUETTE, p.doux, false), Ui.large());
+            t.addView(Style.texte(app, l.texte(), Ui.T_ETIQUETTE, p.doux, false), Ui.large());
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             r.setAlpha(actif ? 1f : 0.6f);
             r.setContentDescription(l.metier.nom + (l.metier.travail ? ", métier de travail" : ", loisir") + ", " + l.grade() + ", " + l.texte());
@@ -322,30 +325,30 @@ final class PageCollection extends Page {
         contenu.addView(liste, Ui.large(app, 12));
 
         int obtenus = Metiers.obtenus(e);
-        LinearLayout tetes = Ui.carte(app);
-        tetes.addView(Ui.texte(app, "Succès " + obtenus + "/" + Metiers.SUCCES.size(), Ui.T_CARTE, p.texte, true));
-        Ui.Barre bs = new Ui.Barre(app);
+        LinearLayout tetes = Style.carte(app);
+        tetes.addView(Style.texte(app, "Succès " + obtenus + "/" + Metiers.SUCCES.size(), Ui.T_CARTE, p.texte, true));
+        Style.Barre bs = new Style.Barre(app);
         bs.part(obtenus / (float) Metiers.SUCCES.size());
         LinearLayout.LayoutParams lbs = Ui.large();
         lbs.topMargin = Ui.dp(app, 8);
         tetes.addView(bs, lbs);
         contenu.addView(tetes, Ui.large(app, 12));
-        LinearLayout succes = Ui.carte(app);
+        LinearLayout succes = Style.carte(app);
         java.util.List<Metiers.Succes> tries = Metiers.succesTries(e);
         for (int i = 0; i < tries.size(); i++) {
             Metiers.Succes s = tries.get(i);
-            if (i > 0) succes.addView(Ui.separateur(app));
+            if (i > 0) succes.addView(Style.separateur(app));
             boolean ok = e.succes.contains(s.id);
             Integer a = e.avance.get(s.id);
             String progres = ok || a == null ? "" : Metiers.progres(s, a);
             LinearLayout r = Ui.rangee(app);
             r.setGravity(Gravity.TOP);
             r.setPadding(0, Ui.dp(app, 4), 0, Ui.dp(app, 4));
-            r.addView(Ui.pastille(app, ok ? "✓" : "·", ok ? p.bleu : p.argent));
+            r.addView(Style.caseSigne(app, ok ? "✓" : "·", ok ? p.bleu : p.argent));
             LinearLayout t = Ui.pile(app);
             t.setPadding(Ui.dp(app, 12), 0, 0, 0);
-            t.addView(Ui.texte(app, s.nom, Ui.T_CORPS, ok ? p.texte : p.doux, true), Ui.large());
-            t.addView(Ui.texte(app, s.description + (progres.isEmpty() ? "" : " · " + progres) + "  ·  +" + s.xp + " xp", Ui.T_ETIQUETTE, p.doux, false), Ui.large());
+            t.addView(Style.texte(app, s.nom, Ui.T_CORPS, ok ? p.texte : p.doux, true), Ui.large());
+            t.addView(Style.texte(app, s.description + (progres.isEmpty() ? "" : " · " + progres) + "  ·  +" + s.xp + " xp", Ui.T_ETIQUETTE, p.doux, false), Ui.large());
             r.addView(t, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             r.setContentDescription(s.nom + (ok ? ", obtenu" : ", pas encore") + ", " + s.description + (progres.isEmpty() ? "" : ", " + progres));
             succes.addView(r, Ui.large());
@@ -360,13 +363,13 @@ final class PageCollection extends Page {
         int palier = Boutique.prochainPalier(n);
         if (palier == 0) return;
         int xp = Gains.xp(app, e);
-        LinearLayout c = Ui.carte(app);
-        c.setBackground(Ui.arrondi(app, Vitrine.NUIT, 18, Vitrine.VIOLET_FONCE));
+        LinearLayout c = Style.carte(app);
+        Style.fond(c, Style.arrondi(app, Vitrine.NUIT, 18, Vitrine.VIOLET_FONCE));
         c.addView(new Vitrine.Pixel(app, "PROCHAINE RANGÉE", 2, Vitrine.VIOLET, Vitrine.ENCRE, false));
         java.util.List<String> rayons = Boutique.rayonsDuPalier(palier);
         StringBuilder noms = new StringBuilder();
         for (String r : rayons) noms.append(noms.length() > 0 ? ", " : "").append(Boutique.nomSlot(r));
-        TextView t = Ui.texte(app, noms + " — niveau " + palier + " (encore " + Math.max(0, Butin.xpPourNiveau(palier) - xp) + " xp)", Ui.T_DETAIL,
+        TextView t = Style.texte(app, noms + " — niveau " + palier + " (encore " + Math.max(0, Butin.xpPourNiveau(palier) - xp) + " xp)", Ui.T_DETAIL,
                 Vitrine.ARGENT_CLAIR, true);
         t.setPadding(0, Ui.dp(app, 8), 0, Ui.dp(app, 6));
         c.addView(t, Ui.large());
@@ -384,24 +387,24 @@ final class PageCollection extends Page {
         c.addView(r, Ui.large());
         LinearLayout.LayoutParams lb = Ui.large();
         lb.topMargin = Ui.dp(app, 10);
-        c.addView(Ui.bouton(app, "Voir en boutique", true, v -> app.allerBoutique(rayons.isEmpty() ? PageBoutique.VITRINE : rayons.get(0))), lb);
+        c.addView(Style.bouton(app, Style.NUIT, "Voir en boutique", true, v -> app.allerBoutique(rayons.isEmpty() ? PageBoutique.VITRINE : rayons.get(0))), lb);
         contenu.addView(c, Ui.large(app, 12));
     }
 
     private void style(Etat e, int n) {
         Ui.Palette p = Ui.p(app);
-        LinearLayout tete = Ui.carte(app);
+        LinearLayout tete = Style.carte(app);
         tete.setGravity(Gravity.CENTER_HORIZONTAL);
         ImageView actuel = new ImageView(app);
         actuel.setImageBitmap(Dessin.image("repos", e.couleur, e.accessoire, 5));
         tete.addView(actuel);
-        TextView t = Ui.texte(app, "Ce que tu possèdes s'achète à la Boutique (pièces d'or) ; Pilou porte ce que tu choisis.", Ui.T_DETAIL, p.doux, false);
+        TextView t = Style.texte(app, "Ce que tu possèdes s'achète à la Boutique (pièces d'or) ; Pilou porte ce que tu choisis.", Ui.T_DETAIL, p.doux, false);
         t.setGravity(Gravity.CENTER);
         tete.addView(t, Ui.large());
         contenu.addView(tete, Ui.large(app, 6));
-        contenu.addView(Ui.titreSection(app, "Accessoires"));
+        contenu.addView(Style.titreSection(app, "Accessoires"));
         grille(n, "accessoire", e, true);
-        contenu.addView(Ui.titreSection(app, "Couleurs"));
+        contenu.addView(Style.titreSection(app, "Couleurs"));
         grille(n, "couleur", e, false);
     }
 
@@ -421,19 +424,19 @@ final class PageCollection extends Page {
             // Possédé : acheté à la boutique (ou déjà acquis avant la boutique) ; le bleu de base, toujours.
             boolean ok = !accessoires && cle.equals("bleu") || e.objets.contains(accessoires ? cle : "couleur-" + cle);
             boolean porte = accessoires ? cle.equals(e.accessoire) : cle.equals(e.couleur);
-            LinearLayout c = Ui.carte(app);
+            LinearLayout c = Style.carte(app);
             c.setGravity(Gravity.CENTER_HORIZONTAL);
             c.setPadding(Ui.dp(app, 6), Ui.dp(app, 8), Ui.dp(app, 6), Ui.dp(app, 10));
-            if (porte) c.setBackground(Ui.arrondi(app, p.surface, 18, p.bleu));
+            if (porte) Style.fond(c, Style.arrondi(app, p.surface, 18, p.bleu));
             ImageView img = new ImageView(app);
             Bitmap bm = Dessin.image("repos", accessoires ? e.couleur : cle, accessoires ? cle : e.accessoire, 2);
             img.setImageBitmap(bm);
             img.setAlpha(ok ? 1f : 0.3f);
             c.addView(img);
-            TextView nom = Ui.texte(app, r[2], Ui.T_ETIQUETTE, ok ? p.texte : p.doux, true);
+            TextView nom = Style.texte(app, r[2], Ui.T_ETIQUETTE, ok ? p.texte : p.doux, true);
             nom.setGravity(Gravity.CENTER);
             c.addView(nom, Ui.large());
-            TextView sous = Ui.texte(app, porte ? "● porté" : ok ? "✓ à toi" : niv > n ? "◇ niveau " + niv : "◆ boutique", Ui.T_ETIQUETTE, porte ? p.bleu : p.doux, false);
+            TextView sous = Style.texte(app, porte ? "● porté" : ok ? "✓ à toi" : niv > n ? "◇ niveau " + niv : "◆ boutique", Ui.T_ETIQUETTE, porte ? p.bleu : p.doux, false);
             sous.setGravity(Gravity.CENTER);
             c.addView(sous, Ui.large());
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);

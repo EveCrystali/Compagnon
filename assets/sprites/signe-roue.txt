@@ -1,0 +1,14 @@
+# signe d'interface (docs/STYLE.md) : roue U+2699
+id: signe-roue
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+a.aaa.a
+.aaaaa.
+aa...aa
+aa...aa
+aa...aa
+.aaaaa.
+a.aaa.a
