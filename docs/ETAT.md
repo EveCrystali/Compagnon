@@ -19,7 +19,7 @@ Dernière mise à jour : 28 novembre 2026.
 - **Illustrations** : 46 décors animés en boucle, 69 portraits animés de 29 personnages (champs `personnage` et
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
-- **Dessin fin 2× sur les 610 sprites** : plus aucun n'est agrandi automatiquement (`python3 outils/sprites/fin.py` :
+- **Dessin fin 2× sur les 589 sprites** : plus aucun n'est agrandi automatiquement (`python3 outils/sprites/fin.py` :
   « Encore agrandis automatiquement : 0 »).
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
