@@ -1,0 +1,19 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-aiguille
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 220
+palette: a=#e8a03a b=#b8732a
+images:
+aa..
+.ba.
+---
+.a..
+aba.
+---
+.aa.
+ab..
+---
+.a..
+aba.

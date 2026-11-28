@@ -700,6 +700,15 @@ public class CapturesCampagnesTest {
             org.junit.Assert.assertTrue(lp.theatre().aPerso());
             ecran(ac[0].get(), "phare-eteint-perrine-en-pied");
             ac[0].pause().stop().destroy();
+
+            // Petit Nuage : Brouillon flotte au-dessus du pré aux draps (personnage volant, sans alpha lissé).
+            Campagnes.Campagne pn = Campagnes.charger("petit-nuage");
+            ac = new ActivityController[1];
+            Lecture ln = ouvrirLecture(pn, "ch2-draps", ac);
+            org.junit.Assert.assertEquals(View.VISIBLE, ln.theatre().getVisibility());
+            org.junit.Assert.assertTrue(ln.theatre().aPerso());
+            ecran(ac[0].get(), "petit-nuage-brouillon-en-pied");
+            ac[0].pause().stop().destroy();
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");

@@ -157,7 +157,7 @@ public class TheatreTests
         // Avec la légende du lieu (en haut à gauche) et les boutons (en haut à droite) comme obstacles, le panneau peut
         // monter jusqu'en haut, entre les deux ; un humain en pied (24 × 44) est plus grand qu'un personnage-objet.
         var gene = new List<(int, int, int, int)> { (1, 1, 60, 12), (158, 1, 192, 10) };
-        foreach (var f in new[] { "grande-panne.txt", "phare-eteint.txt" })
+        foreach (var f in new[] { "grande-panne.txt", "phare-eteint.txt", "petit-nuage.txt" })
         foreach (var (_, sc) in Theatre.LireScenes(File.ReadAllText(Assets("scenes", f))))
         {
             var (x, y) = Theatre.PlacerPanneau(sc, 84, 30, sc.Place, true, (24, 44), gene);
@@ -170,6 +170,22 @@ public class TheatreTests
         Assert.False(ax < c.X1 && ax + 84 > c.X0 && ay < c.Y1 && ay + 30 > c.Y0, "le panneau couvre l'horloge");
         int sp = Theatre.Sol(auberge, auberge.Interlocuteur);
         Assert.False(ax < auberge.Interlocuteur + 13 && ax + 84 > auberge.Interlocuteur - 13 && ay + 30 > sp - 44, "le panneau couvre Perrine");
+    }
+
+    [Fact]
+    public void Petit_Nuage_sans_alpha_lisse()
+    {
+        // Petit Nuage : nuages, brume, vapeur et personnages n'ont aucune couleur semi-transparente ; le léger se dit en
+        // trame (un pixel sur deux), comme dans les décors. Palette : #RRGGBB ou #RRGGBBAA.
+        var b = B.Value;
+        var sc = Theatre.LireScenes(File.ReadAllText(Assets("scenes", "petit-nuage.txt")));
+        var ids = sc.Values.SelectMany(s => s.Acteurs).Select(a => a.Sprite)
+            .Concat(b.Fins.Keys.Where(k => k.StartsWith("pied-petit-nuage-", StringComparison.Ordinal))).Distinct().ToList();
+        Assert.True(ids.Count >= 15, $"{ids.Count} sprites");
+        foreach (var id in ids)
+        foreach (var (k, v) in b.Fins[id].Palette)
+            Assert.True(v.Length != 9 || v.EndsWith("ff", StringComparison.OrdinalIgnoreCase), $"{id} : {k}={v} est semi-transparent");
+        Assert.Equal(14, sc.Count);
     }
 
     [Fact]

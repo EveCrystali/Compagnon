@@ -84,12 +84,20 @@ Les humains (Le phare éteint) ont un portrait en buste : `humains_pied.py` les 
 personnages-objets, `repos`, `cligne`, `parle`). Chacun garde la palette et les signes de son portrait (le bonnet de
 Tudal, le ciré de Vernier, les lunettes d'Odile, la loupe de Basile).
 
+Petit Nuage (9 personnages) : leurs portraits sont déjà des corps entiers, repris tels quels. Ceux qui volent (Brouillon,
+Ondée, les Enclumes, les Froisseuses) flottent de 10 à 20 pixels au-dessus du sol et se balancent d'un pixel ; Dentelle
+pend au bout de son fil, sous le saule (`VOLANTS` et `FILS` dans `pieds_campagnes.py`).
+
+**Sans alpha lissé** (Petit Nuage) : nuages, brume, vapeur, flocons et ronds dans l'eau n'ont aucune couleur
+semi-transparente. Le léger se dit en trame, un pixel sur deux ou sur quatre, comme dans les décors (test
+`Petit_Nuage_sans_alpha_lisse`). Sur un fond sombre, une brume en damier fait un pavé trop dur : elle n'y est pas posée.
+
 Dans la fenêtre : quand un message a un `personnage` dessiné en pied, il entre ; un message sans personnage ne le
 renvoie pas tant qu'on reste dans le lieu ; un nouveau lieu repart sans personnage. Une réplique entre guillemets est
 la sienne : c'est lui qui parle dans la scène, pas Pilou. Sur PC, le panneau des choix se pose du côté opposé au
 personnage (`Theatre.PlacerPanneau`, grille de 2 pixels de scène) : il ne couvre jamais la légende du lieu ni les
 boutons, évite d'abord l'accessoire clé de la scène (`cle`), puis le personnage (boîte réelle de son sprite), puis
-Pilou ; il couvre plutôt un mur. La fin reste centrée.
+Pilou ; il couvre plutôt un mur. La fin reste centrée. Un libellé trop long passe à la ligne dans son cadre.
 
 ## Une scène par décor : `assets/scenes/<campagne>.txt`
 
@@ -154,15 +162,14 @@ place de la boîte. Le chapitre, le lieu et le sac sont à droite de la boîte.
 
 ## Ce qui reste (prochaines étapes)
 
-1. **Scènes de Petit Nuage** (14 décors) : sol, places, acteurs et réactions propres à chaque lieu (brume qui glisse,
-   bocaux…). Faites : La Grande Panne (12 scènes, acteurs de l'ordinateur : curseur, tickets, bulles du marais,
-   étincelles) et Le phare éteint (14 scènes : mouettes, chat sur les casiers, papillons de nuit autour des lanternes,
-   crabes, ronds dans l'eau).
-2. **Les personnages en pied de Petit Nuage** (9) : à passer en pied, portrait repris s'il est déjà un corps entier,
-   dessiné en pied sinon (comme les humains du phare).
-3. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
+Les trois grandes campagnes sont au théâtre : La Grande Panne (12 scènes, acteurs de l'ordinateur), Le phare éteint
+(14 scènes : mouettes, chat, papillons de nuit, crabes) et Petit Nuage (14 scènes : petits nuages qui passent, brume,
+vapeur, flocons, aiguilles de mélèze, rafales, poussière dorée, ronds dans l'eau), avec tous leurs personnages en pied.
+
+1. **Les scènes d'évolution de Pilou** (niveaux 10, 25, 40) : brief du pilote à venir.
+2. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
    simple.
-4. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).
+3. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).
 
 ## Jamais vérifié sur un vrai appareil
 

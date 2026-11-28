@@ -1410,8 +1410,13 @@ internal sealed class FenetreAventure : Window
         var texte = new TextePixel(libelle, CadrePixel.Texte) { Taille = 2, VerticalAlignment = VerticalAlignment.Center };
         var puce = CadrePixel.Puce(u * 0.6, CadrePixel.Bord);
         puce.SetValue(MarginProperty, new Thickness(0, 4, 10, 0));
-        var ligne = new StackPanel { Orientation = Orientation.Horizontal };
+        // Une grille (pas une pile horizontale) : le libellé reçoit la largeur qui reste et passe à la ligne au besoin.
+        var ligne = new Grid();
+        ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        puce.SetValue(VerticalAlignmentProperty, VerticalAlignment.Top);
         ligne.Children.Add(puce);
+        Grid.SetColumn(texte, 1);
         ligne.Children.Add(texte);
         var cadre = new CadrePixel { U = u, Child = ligne };
         cadre.Change += () => texte.Couleur = cadre.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
