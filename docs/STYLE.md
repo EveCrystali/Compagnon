@@ -15,6 +15,7 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | Téléphone, avant / après le plancher de lisibilité | [boutique](captures/style/android-lisibilite-boutique.png), [collection](captures/style/android-lisibilite-collection.png) |
 | PC avant / après à 100 % : boutique, journal, « Pilou et moi », expéditions | [boutique](captures/style/pc-boutique-avant-apres.png), [journal](captures/style/pc-journal-avant-apres.png), [« Pilou et moi »](captures/style/pc-traits-avant-apres.png), [expéditions](captures/style/pc-expeditions-avant-apres.png) |
 | Android avant / après : Accueil, Jouer, Boutique, Collection | [clair](captures/style/avant-apres-clair.png), [sombre](captures/style/avant-apres-sombre.png), [grande police](captures/style/avant-apres-grande-police.png) |
+| PC : titres-logos et en-tête commun, avant / après à 100 % | [captures/style/pc-titres-fins-avant-apres.png](captures/style/pc-titres-fins-avant-apres.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
 | Réglages (clair, sombre, grande police) et premier lancement | [captures/style/reglages-et-premier-lancement.png](captures/style/reglages-et-premier-lancement.png) |
 
@@ -38,10 +39,18 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 |---|---|---|
 | Menu du PC | 2 unités WPF (2 px à 100 %) | mesuré dans `MenuRetro.xaml` : bords, biseau, pointillés, curseur, coche sont tous dessinés par pas de 2 |
 | Bulle du bureau | 3 unités WPF (bord et pointe en escalier) | `FenetrePilou.cs` : `BorderThickness = 3`, pointe `Pixels` de 3 |
-| Fenêtre Aventure du PC | 5 unités WPF (le pixel de la scène à ×5) | `CadrePixel.cs`, [SCENES.md](SCENES.md) |
+| Fenêtre Aventure du PC | le pixel de la scène : 2 unités WPF en haute définition (480 × 240 à ×2), 5 pour une scène restée à l'ancien format (192 × 80 à ×5) | `CadrePixel.U`, [SCENES-HD.md](SCENES-HD.md), [SCENES.md](SCENES.md) |
+| Autres fenêtres du PC (boutique, journal, « Pilou et moi », expéditions), leur habillage, leurs titres-logos, l'en-tête commun | 2 unités WPF | `StylePixel.cs`, `LogoPixel.cs`, `Bandeau.cs`, `HabillageFenetre.cs` |
 | Téléphone, partout | le pixel de la scène : largeur de l'écran ÷ 192, entier (5 px à 1078 px de large, 3 px à 720) | `Aventure.unite`, repris par `Style.u` |
 
-Sur le téléphone, une seule taille de pixel dans toute l'app : celle de la scène de l'Aventure.
+**Le cadre suit l'unité de ce qu'il entoure** : un cadre, un logo ou un en-tête posé autour d'une scène ou d'un contenu
+prend son pixel, jamais un pixel plus gros (règle 9 de `CLAUDE.md` : le pixel art n'est jamais une baisse de
+définition, et cela vaut pour l'habillage). **La police, elle, garde son plancher de lisibilité** : quand le pixel
+s'affine, le texte ne rapetisse pas, il est dessiné plus fin (police « 2× »).
+
+Sur le téléphone, l'interface a une seule taille de pixel, celle de l'ancienne scène de l'Aventure (largeur ÷ 192). La
+scène en haute définition y est plus fine (2 px par unité sur un écran de 1078 px) : l'en-tête et la barre du bas sont
+donc à reprendre au pixel fin, comme sur le PC (second temps, pas encore fait).
 
 ## Palette
 
@@ -117,7 +126,8 @@ choisi quand un pixel de police tombe sur un nombre pair de pixels de l'écran.
   plusieurs formes, de la plus longue à la plus courte, et l'écran prend la première qui tient (`Style.choisir`) :
   « ▲ Niveau 15 : Tête, Yeux, Cou +9 · encore 1000 xp » → « ▲ Niveau 15 : Tête, Yeux, Cou +9 » → « ▲ Niveau 15 : 12 rangées ».
 - Capitales : seulement les titres de section et les enseignes (« BOUTIQUE »). Le gras (« titre ») : titres et boutons.
-- Enseigne : police « titre », ombre d'un pixel de police en bas à droite, dans la couleur du bord.
+- Enseigne secondaire (« ESSAYAGE », « RANGÉES DÉBLOQUÉES ») : police « titre », ombre d'un pixel de police en bas à
+  droite. Le titre d'une fenêtre est un **titre-logo** (voir plus bas), pas une enseigne agrandie.
 
 ### Plancher de lisibilité
 
@@ -251,6 +261,46 @@ python3 outils/sprites/icones.py      # planche de contrôle : outils/sprites/pl
 | Onglet ouvert | cadre plat à la couleur `coche` autour de l'icône, icône et libellé à la couleur `coche` |
 | Pastille « ! » | carré orange au cadre plat encre, en haut à droite de l'icône |
 
+## Titres-logos et en-tête commun (PC)
+
+![Titres et en-tête, avant / après, à 100 %](captures/style/pc-titres-fins-avant-apres.png)
+
+Avant, le titre d'une fenêtre était un mot de la police pixel agrandi quatre ou cinq fois (« AVENTURE » : pixels de
+5 px), et l'en-tête mêlait une pastille en gros pixels à des textes en police système. Au-dessus d'une scène au pixel
+de 2, cela se voyait. Les deux sont maintenant au module de 2.
+
+**Titre-logo** (`StylePixel.Logo("BOUTIQUE")`, `LogoPixel.cs`) :
+
+| Pièce | Règle |
+|---|---|
+| Lettres | police « titre » en dessin fin (`titre2x`) : capitales de 14 pixels, 1 pixel = 1 module (2 px à 100 %), soit 28 px de haut |
+| Relief | arête claire d'un pixel en haut de chaque trait, arête sombre d'un pixel en bas ; les deux teintes sont déduites de la couleur du corps |
+| Cerne | 1 pixel d'encre (`#1c2128`) autour des lettres |
+| Ombre | 1 pixel en bas à droite, à la couleur `bord` |
+| Couleur | orange (`#f69d50`) ; la boutique garde son néon qui grésille (`Couleur` se change) |
+| Boîte | celle de l'encre seule : pas de rangées vides au-dessus ni dessous |
+
+Si le dessin fin est coupé (repli de `Finesse`), le logo garde sa taille et retombe sur la police « titre » doublée.
+
+**En-tête commun** (`Bandeau.cs` : boutique, Aventure, expéditions, menu, info-bulle) :
+
+| Pièce | Règle |
+|---|---|
+| Pastille du niveau | cadre violet de 1 module ; « NIV » en étiquette, le nombre en titre-logo argent |
+| Titre, compte d'XP | police pixel, taille « corps » (plancher de lisibilité) |
+| Barre d'XP | vingt cases de 6 × 8 séparées de 2, arête claire de 2 en haut |
+| Pièces d'or | la pièce qui tourne, puis le solde en « titre » corps, orange |
+| Énergie | icône `ui-eclair` et « 50/100 » en étiquette, jaune |
+| Prochaine rangée | police pixel « corps », violet, sur toute la largeur |
+
+Deux lignes se **reformulent** au lieu de se tronquer, de la plus longue à la plus courte, selon la largeur
+(`StylePixel.Choisir`, les mêmes formes que sur le téléphone) :
+
+- « 240 / 875 xp · encore 635 xp avant le niveau 19 » → « 240 / 875 xp · encore 635 xp » → « 240 / 875 xp » ;
+- « ▲ Niveau 20 : Tête, Yeux, Dos +7 · encore 1560 xp » → « ▲ Niveau 20 : Tête, Yeux, Dos +7 » → « ▲ Niveau 20 : 10 rangées ».
+
+Reste dans la fenêtre Aventure (session « animations ») : le sous-titre en italique système à côté du logo.
+
 ## Fenêtres du PC : l'habillage commun
 
 Une fenêtre du jeu ne garde pas la barre de titre claire de Windows au-dessus d'un contenu en pixels. Elle prend
@@ -297,7 +347,8 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 | Écran | État |
 |---|---|
 | PC : menu « Sept portes », bulle, fenêtre Aventure | au guide |
-| PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) ; leur en-tête (`Bandeau.cs`, partagé avec le menu) reste en police système |
+| PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) |
+| PC : titres-logos et en-tête commun | au pixel fin (28 novembre 2026) : boutique, journal, « Pilou et moi », expéditions, Aventure, menu, info-bulle |
 | PC : journal, prénom, « Pilou et moi » | au guide (28 novembre 2026) ; le champ du prénom garde la police du système (exception des champs de saisie) |
 | PC : expéditions | au guide (28 novembre 2026) |
 | PC : habillage commun des fenêtres | posé sur la boutique, le journal, le prénom, « Pilou et moi », les expéditions ; à brancher sur l'Aventure et la scène d'évolution (session « animations »), puis sur amis et connecteurs quand ils seront au guide |

@@ -155,7 +155,7 @@ public sealed partial class FenetrePilou
     {
         int n = Niveau;
         var b = new Bandeau(compact: true);
-        b.Mettre(n, _xpTotal, Bourse().Solde, TitreAffiche(n), Bandeau.ProchaineRangee(n, _xpTotal));
+        b.Mettre(n, _xpTotal, Bourse().Solde, TitreAffiche(n), Bandeau.ProchainesRangees(n, _xpTotal));
         var m = new MenuItem { Header = b, ToolTip = "Ouvrir la boutique" };
         m.Click += (_, _) => OuvrirBoutique();
         return m;

@@ -352,7 +352,7 @@ public sealed partial class FenetrePilou
             _infoBulle = new ToolTip { Content = pile, Padding = new Thickness(4) };
             _scene.ToolTip = _infoBulle;
         }
-        _infoBandeau!.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchaineRangee(n, _xpTotal));
+        _infoBandeau!.Mettre(n, _xpTotal, Bourse().Solde, Recompenses.Titre(n), Bandeau.ProchainesRangees(n, _xpTotal));
         _infoTexte!.Text = $"{nom} · {_xpTotal}/{suivant} xp{activite}{HumeurSoins()}";
     }
 

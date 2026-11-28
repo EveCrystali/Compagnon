@@ -76,6 +76,29 @@ public static class Boutique
     public static IReadOnlyList<Article> Debloques(int avant, int apres) =>
         Catalogue.Where(a => a.NiveauMin > avant && a.NiveauMin <= apres).ToList();
 
+    // « Tête, Yeux, Cou +9 » : les trois premiers rayons du palier, puis le compte des autres.
+    public static string ListeRayons(int palier)
+    {
+        var rayons = RayonsDuPalier(palier).Select(NomSlot).ToList();
+        return rayons.Count <= 3 ? string.Join(", ", rayons) : string.Join(", ", rayons.Take(3)) + $" +{rayons.Count - 3}";
+    }
+
+    // L'annonce de la prochaine rangée pour l'en-tête, de la plus longue à la plus courte (les mêmes formes que sur
+    // le téléphone, Vitrine.prochainesRangees) : « ▲ Niveau 15 : Tête, Yeux, Cou +9 · encore 1000 xp » →
+    // « ▲ Niveau 15 : Tête, Yeux, Cou +9 » → « ▲ Niveau 15 : 12 rangées ». L'en-tête prend la première qui tient.
+    public static string[] AnnoncesRangee(int niveau, int xp)
+    {
+        int p = ProchainPalier(niveau);
+        if (p == 0) return new[] { "Toutes les rangées de la boutique sont ouvertes.", "Toutes les rangées sont ouvertes." };
+        int n = RayonsDuPalier(p).Count;
+        string tete = $"▲ Niveau {p} : ";
+        return new[]
+        {
+            $"{tete}{ListeRayons(p)} · encore {Math.Max(0, Profil.XpPourNiveau(p) - xp)} xp", tete + ListeRayons(p),
+            $"{tete}{n} {(n > 1 ? "rangées" : "rangée")}",
+        };
+    }
+
     // Rayons qui gagnent une rangée à ce palier (« Prochaine rangée : Dos, Main — niveau 15 »).
     public static IReadOnlyList<string> RayonsDuPalier(int palier) =>
         Rayons.Where(r => r != RayonEnsembles && Catalogue.Any(a => RayonDe(a.Slot) == r && a.NiveauMin == palier)).ToList();

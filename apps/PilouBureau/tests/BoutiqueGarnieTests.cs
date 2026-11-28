@@ -74,6 +74,23 @@ public class BoutiqueGarnieTests
         Assert.Contains("fond-arcade", Boutique.EnsembleDe("arcade")!.Pieces);
     }
 
+    // L'annonce de la prochaine rangée, pour l'en-tête : trois formes, de la plus longue à la plus courte, qui
+    // nomment toutes le niveau (un texte qui ne tient pas se reformule, docs/STYLE.md) ; une de moins quand tout est ouvert.
+    [Fact]
+    public void Prochaines_rangees_de_la_plus_longue_a_la_plus_courte()
+    {
+        var f = Boutique.AnnoncesRangee(1, 0);
+        int p = Boutique.ProchainPalier(1);
+        Assert.Equal(3, f.Length);
+        Assert.All(f, s => Assert.StartsWith($"▲ Niveau {p} : ", s));
+        Assert.True(f[0].Length > f[1].Length && f[1].Length > f[2].Length);
+        Assert.Contains("encore", f[0]);
+        Assert.EndsWith(Boutique.RayonsDuPalier(p).Count > 1 ? "rangées" : "rangée", f[2]);
+        var tout = Boutique.AnnoncesRangee(999, 0);
+        Assert.Equal(2, tout.Length);
+        Assert.True(tout[0].Length > tout[1].Length);
+    }
+
     [Fact]
     public void Collection_paliers_et_titres_gagnes()
     {
