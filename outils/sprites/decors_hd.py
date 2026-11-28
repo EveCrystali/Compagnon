@@ -1,7 +1,11 @@
 """Décors haute définition des campagnes (480 × 240, 2 px d'écran par pixel) : registre, format « décor compact », référence, planches.
 
     py outils/sprites/decors_hd.py                 tout écrire : assets/decors/, la référence, les planches
-    py outils/sprites/decors_hd.py prologue mare   un seul décor (la référence n'est alors pas réécrite)
+    py outils/sprites/decors_hd.py prologue mare   un seul décor (ou plusieurs : prologue mare seuil)
+    py outils/sprites/decors_hd.py prologue        une campagne
+
+La référence est réécrite à chaque fois, en entier : les décors qu'on ne repeint pas sont relus dans assets/decors/
+(leur empreinte se recalcule en une seconde). Après un changement, repeindre seulement les décors touchés suffit.
 
 Les lieux sont peints dans decors_hd_<campagne>.py avec les briques de paysage.py (docs/PEINTURE.md) ; chacun se
 déclare par @decor(campagne, id, soleil, tons). Ce module les joue image par image et écrit :
@@ -298,10 +302,17 @@ def planche_campagnes(premieres):
 def main():
     charger()
     args = sys.argv[1:]
-    choisis = [s for s in sorted(DECORS) if not args or (LIEUX[s][0] == args[0] and (len(args) < 2 or LIEUX[s][1] == args[1]))]
+    choisis = [s for s in sorted(DECORS) if not args or (LIEUX[s][0] == args[0] and (len(args) < 2 or LIEUX[s][1] in args[1:]))]
+    if args and not choisis:
+        sys.exit("Aucun décor ne correspond à : " + " ".join(args))
     ref = []
     premieres = {}
-    for sid in choisis:
+    for sid in sorted(DECORS):
+        fichier = os.path.join(SORTIE, sid + ".txt")
+        if sid not in choisis and os.path.exists(fichier):   # pas repeint : son empreinte se relit dans le fichier
+            with open(fichier, encoding="utf-8") as g:
+                ref += lignes_reference(g.read())
+            continue
         ims, texte = ecrire(sid)
         premieres[sid] = ims[0]
         ref += lignes_reference(texte)
@@ -310,13 +321,12 @@ def main():
         print("%s : %d Ko, plans : %s" % (sid, len(texte.encode("utf-8")) // 1024, ", ".join(
             "%s %d (%s)" % (q["nom"], q["profondeur"], "fixe" if len(q["images"]) == 1 else "%d images" % len(q["images"]))
             for q in d["plans"])))
-    planche_campagnes(premieres)
-    if not args:
-        with open(REFERENCE, "w", encoding="utf-8", newline="\n") as f:
-            f.write("# Décors haute définition (decors_hd.py, docs/SCENES-HD.md) : une ligne par plan,\n"
-                    "# id plan largeur hauteur images duree, puis l'empreinte FNV-1a de chaque image décodée (pixels ARGB\n"
-                    "# 0xFFrrggbb, transparent 0x00000000, rangée par rangée). Lu par les tests C# et Java.\n")
-            f.write("\n".join(ref) + "\n")
+    planche_campagnes(premieres)                       # une planche de campagne n'est refaite que si tous ses lieux sont repeints
+    with open(REFERENCE, "w", encoding="utf-8", newline="\n") as f:
+        f.write("# Décors haute définition (decors_hd.py, docs/SCENES-HD.md) : une ligne par plan,\n"
+                "# id plan largeur hauteur images duree, puis l'empreinte FNV-1a de chaque image décodée (pixels ARGB\n"
+                "# 0xFFrrggbb, transparent 0x00000000, rangée par rangée). Lu par les tests C# et Java.\n")
+        f.write("\n".join(ref) + "\n")
 
 
 if __name__ == "__main__":
