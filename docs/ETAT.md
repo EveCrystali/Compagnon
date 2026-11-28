@@ -38,13 +38,14 @@ Dernière mise à jour : 28 novembre 2026.
 
 ## En cours
 
-- **Le théâtre des campagnes** (branche `claude/campaign-animations-pixel-art-66992c`, docs/SCENES.md) : la lecture de
-  l'Aventure devient une scène vivante. Fait et testé : le moteur commun (référence Python, C#, Java, 3 tests de chaque
-  côté qui retombent sur les mêmes pixels), le mini-Pilou de scène (taille M, une quarantaine d'images), 13 acteurs et
-  effets, les six scènes du prologue (acteurs et réactions aux clics), la fenêtre PC en « Théâtre » (scène ×5, boîte
-  de dialogue, choix sur la scène, travelling, départ en route, absence pendant l'attente), vue dans l'essai
-  `campagne:lecture` / `attente` / `personnage` sur le PC d'Antoine. Le réglage « ✧ » décide désormais des animations
-  (chez Antoine, Windows a « Afficher les animations » coupé : tout était figé). Sur téléphone, même scène en haut de la lecture, à une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli ; captures Robolectric 1080 × 2400 relues.
+- **Le théâtre des campagnes** (PR #95, fusion automatique à CI verte ; docs/SCENES.md) : la lecture de l'Aventure
+  devient une scène vivante. Fait et testé : le moteur commun (référence Python, C#, Java, qui retombent sur les mêmes
+  pixels), le mini-Pilou de scène (taille M), 13 acteurs et effets, les six scènes du prologue (acteurs et réactions aux
+  clics) ; sur PC, la fenêtre en « Théâtre » (scène ×5, boîte de dialogue, choix sur la scène, travelling, départ en
+  route, absence pendant l'attente), vue en essai sur le PC d'Antoine ; sur téléphone, la scène en haut de la lecture à
+  une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli, bandeau au-dessus
+  (captures Robolectric 1078 × 2400 relues). Le réglage « ✧ » décide désormais des animations (chez Antoine, Windows a
+  « Afficher les animations » coupé : tout était figé). Jamais vu sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
@@ -77,8 +78,6 @@ Dernière mise à jour : 28 novembre 2026.
 
 ## Points connus
 
-- `PresenceTests.Vecteurs_partages_avec_le_telephone` échoue sur le PC d'Antoine, déjà sur `main` (28 novembre) : un
-  écart d'une heure pile entre l'heure locale et l'époque, donc une question de fuseau ; la CI ne le voit pas.
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.
