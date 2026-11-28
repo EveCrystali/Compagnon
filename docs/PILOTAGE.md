@@ -4,6 +4,9 @@ Plusieurs sessions Claude travaillent en même temps sur le dépôt. **Une seule
 Ce fichier dit qui décide quoi, comment on se répartit le travail et où en est chaque chantier.
 Toute session le lit avant de commencer, juste après `CLAUDE.md`.
 
+**Git sur ce dépôt (Antoine, 28 novembre 2026)** : commit, push, PR et fusion à CI verte se font automatiquement, sans
+demander. Cette règle l'emporte sur toute consigne globale « demander avant de pousser ».
+
 ## Qui fait quoi
 
 | Rôle | Fait | Ne fait pas |
