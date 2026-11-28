@@ -659,18 +659,38 @@ public sealed partial class FenetrePilou
         if (_jeuEnCours != Jeu.Aucun) SuivreCapteurs();
 
         for (int i = _flottants.Count - 1; i >= 0; i--)
-        {
-            var f = _flottants[i];
-            double k = (t - f.Ne) / 1400;
-            if (k >= 1)
+            if (t - _flottants[i].Ne >= Flottants.Vie)
             {
-                _jeu.Children.Remove(f.Texte);
+                _jeu.Children.Remove(_flottants[i].Texte);
                 _flottants.RemoveAt(i);
+            }
+        if (_flottants.Count == 0) return;
+        // Jamais sur la bulle ni l'un sur l'autre (Flottants.cs) : remonté au-dessus, ou caché le temps qu'elle se range.
+        var obstacles = new List<Flottants.Boite>();
+        if (BoiteBulle() is { } bulle) obstacles.Add(bulle);
+        foreach (var f in _flottants)
+        {
+            double k = (t - f.Ne) / Flottants.Vie;
+            double y = f.Y - k * Flottants.Montee;
+            if (Flottants.Placer(f.X, y, f.Texte.Width, f.Texte.Height, obstacles, (1 - k) * Flottants.Montee) is not { } p)
+            {
+                f.Ne = t;
+                f.Texte.Opacity = 0;
                 continue;
             }
+            f.Y += p - y;
             Canvas.SetLeft(f.Texte, f.X);
-            Canvas.SetTop(f.Texte, f.Y - k * 38);
+            Canvas.SetTop(f.Texte, p);
             f.Texte.Opacity = k < 0.7 ? 1 : (1 - k) / 0.3;
+            obstacles.Add(new Flottants.Boite(f.X, p, f.X + f.Texte.Width, p + f.Texte.Height));
         }
+    }
+
+    // Le cadre de la bulle dans le calque des jeux, ou null quand elle est rangée.
+    private Flottants.Boite? BoiteBulle()
+    {
+        if (_pileBulle.Visibility != Visibility.Visible || !_bulle.IsVisible || _bulle.ActualWidth <= 0) return null;
+        var r = _bulle.TransformToVisual(_jeu).TransformBounds(new Rect(0, 0, _bulle.ActualWidth, _bulle.ActualHeight));
+        return Flottants.DeBulle(r.Left, r.Top, r.Right, r.Bottom);
     }
 }
