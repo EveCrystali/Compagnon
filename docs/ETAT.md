@@ -38,7 +38,8 @@ Dernière mise à jour : 28 novembre 2026.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
-  Vu au vrai clic droit sur le PC d'Antoine, clair et sombre, à 100 % ; 125 et 150 % en rendu WPF seulement
+  **Thème sombre par défaut sur PC** (bulle, menu, fenêtre d'invitation : un seul réglage ; un choix déjà enregistré
+  est gardé). Vu au vrai clic droit sur le PC d'Antoine, clair et sombre, à 100 % ; 125 et 150 % en rendu WPF seulement
   (`--essai=menu[:porte][:clair|sombre][:moment][:joueur]`, planche `docs/maquettes/menu/captures/sept-portes.png`).
 
 ## En cours
