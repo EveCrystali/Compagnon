@@ -242,6 +242,16 @@ public final class Gains {
         PresenceTel.vecu(c, f -> f.ca++, "caresses");
     }
 
+    /** Le choix d'une scène d'évolution fait sur le téléphone : il part au PC (qui ne le garde que s'il n'en a pas). */
+    public static void garde(Context c, int stade, String id) {
+        if (!Etat.gardeValide(stade, id)) return;
+        modifier(c, g -> {
+            JSONObject ga = g.optJSONObject("gardes");
+            if (ga == null) g.put("gardes", ga = new JSONObject());
+            ga.put(String.valueOf(stade), id);
+        });
+    }
+
     /** Un soin fait sur le téléphone (nourrir, laver, calin, soin, vacances) : il part au PC. */
     public static void soin(Context c, String type, String objet) {
         Soins.Action a = new Soins.Action(nouvelId(), type, System.currentTimeMillis(), objet);

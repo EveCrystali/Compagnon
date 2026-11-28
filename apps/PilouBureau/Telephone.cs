@@ -199,6 +199,8 @@ public static class Telephone
         // et les variantes d'évolution.
         ["soins"] = Soins.JsonEtat(Soins.Etat(p.Soins, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())),
         ["formes"] = p.Evolution.Variantes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
+        // Ce que Pilou a gardé à chaque évolution : le téléphone n'en propose plus la scène et le Carnet dit la même chose.
+        ["gardes"] = Groupe.JsonGardes(p.Evolution.Gardes),
     };
 
     // ---- Retour : ce que le téléphone a gagné (atelier : pêche, cuisine, jeux, caresses)
@@ -208,7 +210,7 @@ public static class Telephone
 
     public sealed record Gain(string Id, int Xp, IReadOnlyDictionary<string, int> Prises, IReadOnlyList<string> Plats, int Caresses,
         int Jeux = 0, int Chasse = 0, IReadOnlyList<string>? Achats = null, IReadOnlyDictionary<string, string>? Equipe = null, double T = 0,
-        IReadOnlyList<ActionSoin>? Soins = null);
+        IReadOnlyList<ActionSoin>? Soins = null, IReadOnlyDictionary<int, string>? Gardes = null);
 
     public static Gain? LireGain(string json)
     {
@@ -239,7 +241,8 @@ public static class Telephone
             var soins = r.TryGetProperty("soins", out var so) ? PilouBureau.Soins.LireActions(so, 50) : new List<ActionSoin>();
             // Bornes : un message vient du téléphone appairé (chiffré), mais on reste prudent.
             return new Gain(id.GetString()!, Math.Clamp(Entier("xp"), 0, 2000), prises, plats.Take(20).ToList(), Math.Clamp(Entier("caresses"), 0, 200),
-                Math.Clamp(Entier("jeux"), 0, 100), Math.Clamp(Entier("chasse"), 0, 10_000_000), achats.Distinct().Take(10).ToList(), equipe, t, soins);
+                Math.Clamp(Entier("jeux"), 0, 100), Math.Clamp(Entier("chasse"), 0, 10_000_000), achats.Distinct().Take(10).ToList(), equipe, t, soins,
+                Groupe.LireGardes(r));
         }
         catch (JsonException)
         {
@@ -316,6 +319,9 @@ public static class Telephone
         foreach (var a in g.Soins ?? Array.Empty<ActionSoin>())
             if (PilouBureau.Soins.Ajouter(p.Soins, a) && a.Type is "soin" or "nourrir" or "laver" or "calin") soins++;
         S("soin", soins);
+        // Scènes d'évolution vues sur le téléphone : le choix gardé, s'il n'y en a pas déjà un (il ne change plus).
+        foreach (var (stade, id) in g.Gardes ?? new Dictionary<int, string>())
+            if (Groupe.GardeValide(stade, id)) p.Evolution.Gardes.TryAdd(stade, id);
         var (po, xpQuetes) = Quetes.Appliquer(p, r.Recompenses);
 
         // Boutique : achats et équipement faits sur le téléphone (le PC reste l'arbitre du solde).
