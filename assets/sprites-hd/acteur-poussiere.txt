@@ -1,0 +1,27 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-poussiere
+taille: 5 5
+ancre: 2 4
+duree: 160
+palette: a=#ffd98a b=#fff6d6
+images: 4
+,a3,
+aba2,
+,a3,
+5,
+5,
+.,3.
+,a,2.
+.,3.
+5.
+5.
+5.
+.,3.
+5.
+3.a.
+5.
+5.
+5.
+3.a.
+2.aba
+3.a.

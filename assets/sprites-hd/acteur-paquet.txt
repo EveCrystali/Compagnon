@@ -1,0 +1,51 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-paquet
+taille: 15 11
+ancre: 7 10
+duree: 120
+palette: a=#1c2128 b=#232b48 c=#ffffff d=#4fd8ff e=#e8fbff f=#f69d50
+images: 4
+14a,
+a12ba,
+abc2db3ebc2da,
+ab3db3eb3da,
+a12ba,
+ab3ebc2db3ea,
+ab3eb3db3ea,
+a12ba,
+a12ba,
+14a,
+15,
+15.
+15.
+2.3e.c2d.3e2.
+2.3e.3d.3e2.
+15.
+2.c2d.3e.c2d2.
+2.3d.3e.3d2.
+15.
+15.
+15.
+15.
+15.
+15.
+2.c2d.3e.c2d2.
+2.3d.3e.3d2.
+15.
+2.3e.c2d.3e2.
+2.3e.3d.3e2.
+15.
+12.2f.
+12.2f.
+15.
+15.
+15.
+2.3e.c2d.3e2.
+2.3e.3d.3e2.
+15.
+2.c2d.3e.c2d2.
+2.3d.3e.3d2.
+15.
+2f10.ba.
+2f10.2a.
+15.

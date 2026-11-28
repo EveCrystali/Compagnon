@@ -183,19 +183,48 @@ def exporter(campagnes=CAMPAGNES):
     return ref, poids
 
 
+def exporter_acteurs():
+    """Les acteurs de scène (acteurs_hd.py, SCENES-HD.md § 7) : `acteur-<nom>.txt`, ancre au milieu du bas. Pas de
+    miroir : ils gardent l'orientation des acteurs d'aujourd'hui, le moteur les retourne selon leur course."""
+    import acteurs_hd as A
+    global DUREE
+    os.makedirs(SORTIE, exist_ok=True)
+    ref, poids, duree0 = [], 0, DUREE
+    for nom in A.ORDRE:
+        a = A.ACTEURS[nom]
+        ims = [A.image(nom, i).c for i in range(a["n"])]
+        sid = "acteur-" + nom
+        DUREE = a["duree"]
+        texte = encoder(sid, ims, (a["w"], a["h"], a["w"] // 2, a["h"] - 1),
+                        "Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)")
+        d = decoder(texte)
+        inverse = {v: k for k, v in d["palette"].items()}
+        inverse[None] = ","
+        for g, image in zip(ims, d["images"]):
+            assert ["".join(r) for r in image] == ["".join(inverse[v] for v in rang) for rang in g], sid
+        with open(os.path.join(SORTIE, sid + ".txt"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(texte)
+        poids += len(texte.encode("utf-8"))
+        ref.append("%s %d %d %d %d %d %d %s" % (sid, d["w"], d["h"], d["ancre"][0], d["ancre"][1], len(d["images"]),
+                                                 d["duree"], " ".join("%08x" % fnv(im, d["palette"]) for im in d["images"])))
+    DUREE = duree0
+    return ref, poids
+
+
 def main():
     campagnes = tuple(sys.argv[1:]) or CAMPAGNES
     ref, poids = exporter(campagnes)
+    ref_a, poids_a = exporter_acteurs()
     autres = []
     if os.path.isfile(REFERENCE):
         with open(REFERENCE, encoding="utf-8") as f:
-            autres = [l for l in f.read().split("\n") if l and not l.startswith("#")
+            autres = [l for l in f.read().split("\n") if l and not l.startswith("#") and not l.startswith("acteur-")
                       and not any(l.startswith("pied-%s-" % c) for c in campagnes)]
-    entete = ["# Personnages en pied HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images duree, puis",
-              "# l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000, rangée par rangée)."]
+    entete = ["# Personnages en pied et acteurs HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images",
+              "# duree, puis l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000)."]
     with open(REFERENCE, "w", encoding="utf-8", newline="\n") as f:
-        f.write("\n".join(entete + sorted(autres + ref)) + "\n")
-    print("%d fichiers, %d Ko" % (len(ref), poids // 1024))
+        f.write("\n".join(entete + sorted(autres + ref + ref_a)) + "\n")
+    print("%d fichiers de personnages, %d Ko ; %d acteurs, %d Ko" % (len(ref), poids // 1024, len(ref_a), poids_a // 1024))
 
 
 if __name__ == "__main__":

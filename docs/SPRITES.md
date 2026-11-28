@@ -207,6 +207,7 @@ unité ; règle 9 de `CLAUDE.md`), jamais agrandis. Format et nommage : [SCENES-
 | `personnages_hd_panne.py` | les douze autres personnages de « La Grande Panne » |
 | `personnages_hd_phare.py` | les six adultes du « Phare éteint » : un corps commun (`jambes`, `manteau`, `poser_bras`, `tete`, `visage`), puis chacun ses traits |
 | `personnages_hd_nuage.py` | les huit autres personnages de « Petit Nuage » : nuages, bêtes, girouette |
+| `acteurs_hd.py` | les 29 acteurs de scène (bêtes et effets) : même nombre d'images, même ordre, même durée et même orientation que ceux d'`acteurs_scenes.py`, environ 2,5 fois plus fins ; les effets sont en trame, sans cerne |
 | `personnages_hd_export.py` | l'export `assets/sprites-hd/pied-*.txt` et la référence `personnages-hd-reference.txt` |
 | `planches_personnages_hd.py` | planches de contrôle et GIF (Pillow, outil de contrôle seulement) |
 
@@ -233,7 +234,7 @@ py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans do
 | La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
 | Le phare éteint (7) | dessinés et exportés (17 fichiers) ; pas encore lus par le moteur | [groupe-phare-eteint.png](maquettes/personnages/groupe-phare-eteint.png) |
 | Petit Nuage (9) | dessinés et exportés (19 fichiers) ; pas encore lus par le moteur | [groupe-petit-nuage.png](maquettes/personnages/groupe-petit-nuage.png) |
-| Acteurs de scène | à faire | — |
+| Acteurs de scène (29) | dessinés et exportés (`acteur-<nom>.txt`, 20 Ko) ; pas encore lus par le moteur | [acteurs.png](maquettes/personnages/acteurs.png) |
 
 Planches par personnage (toutes les humeurs, sept images) et GIF : `docs/maquettes/personnages/<campagne>-<id>.png`
 et `.gif`.

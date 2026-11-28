@@ -1,0 +1,51 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-ticket
+taille: 11 11
+ancre: 5 10
+duree: 160
+palette: a=#5a4a40 b=#ffffff c=#fbf3e4 d=#a9b4c8 e=#f69d50 f=#b9a98a
+images: 4
+,9a,
+abcb6ca
+acbcbcb3ca
+ab7aca
+a2bcb5ca
+ab6d2ca
+acbcbcb2eca
+abcb3c2eca
+a2bcb5ca
+a9fa
+,9a,
+.,6.2,.
+,a6.a2,
+,a.b2.c.a2,
+,ac4.c.2,
+,a6.a2,
+,ac3.2ca2,
+,a.b.2eca2,
+,a3.2eca2,
+,a6.a2,
+,a6.a2,
+.,6.2,.
+2.2,2.2,3.
+.2,a2.a2,2.
+.2,a2.a2,2.
+.2,.2c.2,2.
+.2,a2.a2,2.
+.2,a2ca2,2.
+.2,a.ca2,2.
+.2,a.ca2,2.
+.2,a2.a2,2.
+.2,a2ca2,2.
+2.2,2.2,3.
+2.2a2.2a3.
+.acb2.2ca2.
+.a2b2.2ca2.
+.ac.2a.ca2.
+.abc2.2ca2.
+.ac3d2ca2.
+.a2b.2eca2.
+.acb.2eca2.
+.abc2.2ca2.
+.a6fa2.
+2.2a2.2a3.

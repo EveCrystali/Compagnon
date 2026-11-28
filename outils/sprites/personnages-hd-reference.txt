@@ -1,5 +1,34 @@
-# Personnages en pied HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images duree, puis
-# l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000, rangée par rangée).
+# Personnages en pied et acteurs HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images
+# duree, puis l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000).
+acteur-abeille 15 11 7 10 2 60 93afa998 e7e39119
+acteur-aiguille 10 6 5 5 4 220 e628a62d d559a3fb 11dcaaab 63865535
+acteur-brume 56 14 28 13 4 600 05d15041 058e8439 e573fdcd f08152b5
+acteur-bulle 20 15 10 14 4 150 2e49a651 5f58e4fd c4cdf8ee 5f58e4fd
+acteur-bulle-marais 14 14 7 13 3 200 eb91a26a 4f11382e 7ddd3513
+acteur-chat 28 23 14 22 4 260 79e13c2c 502836b4 93a0fe28 bedd5abc
+acteur-crabe 20 13 10 12 2 120 7e203725 bae7067a
+acteur-curseur 14 21 7 20 2 400 fcc52d65 fcc52d65
+acteur-eclats 35 31 17 30 5 70 3b0e4551 284ae591 cde94655 d5b2ffd5 efae7fb5
+acteur-etincelle 13 13 6 12 3 80 a2be8611 eaeecc31 d93a6159
+acteur-feuille 11 10 5 9 4 160 d3ca7730 6a941ad3 47d8da84 7fdb8e00
+acteur-flocon 9 9 4 8 4 300 744d8b11 8df77851 6f2d8529 8df77851
+acteur-graine 13 12 6 11 2 300 b9efbde7 f72975f4
+acteur-libellule 22 14 11 13 2 50 8aaef69f a90e22e0
+acteur-mouette 26 16 13 15 4 140 678ae3f6 d9d2b561 5433bca3 d9d2b561
+acteur-note 11 15 5 14 2 180 897962ed 38f8449c
+acteur-nuage 52 20 26 19 4 520 e9448b6d 38636a05 a4982243 2655bd20
+acteur-oiseau 15 9 7 8 4 140 281361c2 1cc1a392 eccfedc2 1cc1a392
+acteur-papillon 16 13 8 12 4 120 220ffe46 25a3365c 92b9c899 25a3365c
+acteur-papillon-nuit 10 7 5 6 2 70 b7f31b94 d53beee9
+acteur-paquet 15 11 7 10 4 120 119ea180 b041ec50 b154ffb5 54afdaa9
+acteur-plouf 24 12 12 11 4 90 35e93843 d08e49ad 9492ceed 1c1804d1
+acteur-poisson 16 11 8 10 3 233 c1e67b4a 3d62b3ab 9a3ff8fb
+acteur-poussiere 5 5 2 4 4 160 c85c0ea3 289238a2 e1991462 18da6f23
+acteur-rafale 36 10 18 9 4 90 aa7d4cbc 40b79ac5 2984a0e1 eb0237ec
+acteur-rond 39 13 19 12 5 280 e2945075 7046b0c8 98ed458d c730a89d 409ea219
+acteur-rond-trame 39 13 19 12 5 280 0cb09329 802298b3 0d2d7b75 d813fbf5 c83d8915
+acteur-ticket 11 11 5 10 4 160 84b635be 56387c0e ba3eeba1 56387c0e
+acteur-vapeur 19 26 9 25 5 1000 9dfb9b61 19891a04 50dfa5a1 910c54c5 eb3db134
 pied-grande-panne-balayeur 42 103 20 102 5 150 bd6d7b8a ac344de3 f16f858c 6926dd1a b8e8d2cf
 pied-grande-panne-balayeur-triste 42 103 20 102 5 150 dcfb7b68 f768a1a9 b520ee3a 988f2bfc 95928549
 pied-grande-panne-brouillon 38 62 19 61 5 150 ee8a1147 048c9677 d0971fcc 3f47d294 fa4ac7f1
