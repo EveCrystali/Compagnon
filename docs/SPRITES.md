@@ -205,6 +205,7 @@ unité ; règle 9 de `CLAUDE.md`), jamais agrandis. Format et nommage : [SCENES-
 | `pinceau_hd.py` | la feuille et ses pinceaux, en Python pur : volumes éclairés d'en haut à gauche (`boule`, `tube`, `tour`, `poly`), rampes de trois à cinq tons, trame ordonnée seulement au passage d'un ton à l'autre, cerne teinté par matière, traits « pixel parfait » |
 | `personnages_hd.py` | le registre (`PERSOS`), l'état (`Etat`), le visage commun (`oeil`, `sourcil`, `bouche`), Grumeau, Lison, Brouillon le petit nuage |
 | `personnages_hd_panne.py` | les douze autres personnages de « La Grande Panne » |
+| `personnages_hd_phare.py` | les six adultes du « Phare éteint » : un corps commun (`jambes`, `manteau`, `poser_bras`, `tete`, `visage`), puis chacun ses traits |
 | `personnages_hd_export.py` | l'export `assets/sprites-hd/pied-*.txt` et la référence `personnages-hd-reference.txt` |
 | `planches_personnages_hd.py` | planches de contrôle et GIF (Pillow, outil de contrôle seulement) |
 
@@ -229,7 +230,7 @@ py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans do
 | Campagne | État | Planche de groupe |
 |---|---|---|
 | La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
-| Le phare éteint (7) | Lison dessinée (essai) ; six à faire | — |
+| Le phare éteint (7) | dessinés et exportés (17 fichiers) ; pas encore lus par le moteur | [groupe-phare-eteint.png](maquettes/personnages/groupe-phare-eteint.png) |
 | Petit Nuage (9) | Brouillon dessiné (essai) ; huit à faire | — |
 | Acteurs de scène | à faire | — |
 

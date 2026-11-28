@@ -23,11 +23,11 @@ Dernière mise à jour : 28 novembre 2026.
   (`assets/decors/`, docs/SPRITES.md) ; les six lieux du prologue sont peints en 480 × 240 (règle 9 ; planches avant / après
   dans `docs/maquettes/paysages/prologue/`). Pas encore affichés dans l'app (le Théâtre HD est un autre chantier) ;
   restent les 40 décors des trois grandes campagnes.
-- **Personnages haute définition** (docs/SPRITES.md) : les 13 personnages de « La Grande Panne » sont redessinés à
-  l'unité 480 × 240 et exportés (`assets/sprites-hd/`, format de docs/SCENES-HD.md, référence
-  `personnages-hd-reference.txt`) ; Lison et Brouillon le petit nuage sont dessinés. Pas encore affichés dans l'app
-  (le Théâtre HD ne les lit pas encore) ; jamais vus sur un vrai Windows ni un vrai téléphone. Restent 6 personnages
-  du « Phare éteint », 8 de « Petit Nuage » et les acteurs.
+- **Personnages haute définition** (docs/SPRITES.md) : les 13 personnages de « La Grande Panne » et les 7 du « Phare
+  éteint » sont redessinés à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, format de docs/SCENES-HD.md,
+  référence `personnages-hd-reference.txt`) ; Brouillon le petit nuage est dessiné. Pas encore affichés dans l'app
+  (le Théâtre HD ne les lit pas encore) ; jamais vus sur un vrai Windows ni un vrai téléphone. Restent 8 personnages
+  de « Petit Nuage » et les acteurs.
 - **Dessin fin 2×** : 664 sprites redessinés sur 693, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
   automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
