@@ -85,6 +85,8 @@ Dernière mise à jour : 28 novembre 2026.
 
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
+- **Menu clic droit au clavier** : les flèches, Entrée et Échap vont à l'appli au premier plan, pas au menu (Pilou
+  ne prend jamais le premier plan, règle 8). Souris seulement ; voir `AUDIT-MENU.md`.
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.
 - L'exe pèse 128 Mo (.NET embarqué) ; la compression le ramènerait vers 60–70 Mo, non faite.
 - Lancer une expédition depuis le téléphone n'est pas possible (lecture seule, voir `EXPEDITIONS.md`) ; seule la
