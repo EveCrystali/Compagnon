@@ -95,6 +95,13 @@ public static class Presence
     public static IReadOnlyList<Ligne> Mots => _mots ??= Lire(Ressource("mots.txt"));
     public static IReadOnlyList<Ligne> Gabarits => _gabarits ??= Lire(Ressource("journal.txt"));
 
+    // Les mots des traits de personnalité (assets/presence/traits.txt : annonce-<trait>, trait-<trait>), et la banque
+    // entière où Presence.Mot puise : les petits mots de toujours, puis ceux des traits.
+    private static List<Ligne>? _repliques, _banque;
+
+    public static IReadOnlyList<Ligne> Repliques => _repliques ??= Lire(Ressource("traits.txt"));
+    public static IReadOnlyList<Ligne> Banque => _banque ??= Mots.Concat(Repliques).ToList();
+
     private static string Ressource(string nom)
     {
         try
@@ -159,6 +166,9 @@ public static class Presence
         DateOnly.TryParseExact(texte, "yyyy-MM-dd", Ci, DateTimeStyles.None, out var d) ? d.DayNumber - 719162 : int.MinValue;
     private static DateOnly Date(int jour) => DateOnly.FromDayNumber(jour + 719162);
 
+    // Tôt le matin : de 5 h à 7 h 30 (avant, c'est encore la nuit de la veille).
+    public static bool TotLeMatin(int heure, int minute) => heure * 60 + minute is >= 300 and < 450;
+
     public static string Saison(int mois) => mois switch
     {
         12 or 1 or 2 => "hiver", 3 or 4 or 5 => "printemps", 6 or 7 or 8 => "ete", _ => "automne",
@@ -198,7 +208,9 @@ public static class Presence
         DateTime Local, Moment Moment, double AbsenceMin, double PresenceJourMin, double SeanceMin,
         string Activite, string Meteo, int Palier, int Stade, string Variante, string Prenom,
         string Metier = "", int Niveau = 0, string Objet = "", string Prise = "", string Plat = "", string Souvenir = "",
-        string DateAFeter = "", int PalierNouveau = -1, bool DemanderPrenom = false, int JoursEnsemble = 0, int Annees = 0);
+        string DateAFeter = "", int PalierNouveau = -1, bool DemanderPrenom = false, int JoursEnsemble = 0, int Annees = 0,
+        // Traits de personnalité (Traits.cs) : celui à annoncer (une fois), et les dominants déjà annoncés (« a,b,c »).
+        string TraitNouveau = "", string Traits = "");
 
     public sealed record Choix(string Famille, Ligne Ligne, string Texte);
 
@@ -213,6 +225,7 @@ public static class Presence
         {
             if (c.DateAFeter != "") l.Add("date-" + (c.DateAFeter[0] == 'a' ? "a" : c.DateAFeter));
             if (c.PalierNouveau > 0) l.Add("palier-" + c.PalierNouveau.ToString(Ci));
+            if (c.TraitNouveau != "") l.Add("annonce-" + c.TraitNouveau);
         }
         var rot = new List<(string F, int Poids)>();
         void Souvenirs(int poids)
@@ -270,6 +283,9 @@ public static class Presence
                 if (c.Metier != "") rot.Add(("metier", 1));
                 break;
         }
+        // Les traits dominants colorent ce qu'il dit : une famille de répliques chacun, au poids d'une pensée rare.
+        foreach (var id in c.Traits.Split(','))
+            if (id != "") rot.Add(("trait-" + id, 1));
         // Tirage pondéré de la première famille de la rotation ; les autres suivent dans l'ordre (repli).
         int total = rot.Sum(r => r.Poids), v = Tirer(graine + "|famille", total);
         int premier = 0;
@@ -351,7 +367,7 @@ public static class Presence
     public const int MaxMinutes = 180, MaxCaresses = 10, MaxSoins = 6, MaxJeux = 6;
 
     public sealed record Totaux(int Points, int Palier, int Jours, int Adoption, IReadOnlyCollection<string> Fetes, int PalierAnnonce,
-        string Prenom, long PrenomT, bool PrenomDemande, int Finies);
+        string Prenom, long PrenomT, bool PrenomDemande, int Finies, long Traits = 0, long TraitsDits = 0);
 
     public static int PalierDe(int points)
     {
@@ -373,8 +389,11 @@ public static class Presence
         string prenom = "";
         long prenomT = -1;
         bool demande = false;
+        long traits = 0, traitsDits = 0;
         foreach (var a in tous)
         {
+            traits |= a.Traits;
+            traitsDits |= a.TraitsDits;
             points += a.Minutes / 10 + a.Caresses + 2L * a.Soins + 2L * a.Jeux;
             jours.UnionWith(a.Jours);
             finies.UnionWith(a.Finies);
@@ -392,7 +411,7 @@ public static class Presence
         points += 10L * jours.Count + 5L * suites + 60L * finies.Count;
         int pts = (int)Math.Min(int.MaxValue, points);
         return new Totaux(pts, PalierDe(pts), jours.Count, adoption == int.MaxValue ? -1 : adoption, fetes, annonce,
-            prenomT < 0 ? "" : prenom, Math.Max(0, prenomT), demande, finies.Count);
+            prenomT < 0 ? "" : prenom, Math.Max(0, prenomT), demande, finies.Count, traits, traitsDits);
     }
 
     // La date à fêter aujourd'hui (une seule, sobrement), ou "" : anniversaire de l'adoption, un mois, six mois, puis
@@ -603,7 +622,8 @@ public static class Presence
 // les doublons n'y changent rien, et ce qu'un téléphone a déjà crédité au PC n'est jamais compté deux fois.
 public sealed class FaitsDuJour
 {
-    public int Mn, Tv, Am, Ta, Jx, Ca, So, Pc, Pq, Cu, Qu, Ce, Vi, Nv, Mg;
+    // Ma : 1 si la personne était là tôt le matin (entre 5 h et 7 h 30), pour le trait « lève-tôt ».
+    public int Mn, Tv, Am, Ta, Jx, Ca, So, Pc, Pq, Cu, Qu, Ce, Vi, Nv, Mg, Ma;
     public string Ac = "", Px = "", Cx = "", Me = "", Cf = "", Mo = "", Ex = "", Ob = "";
 
     public bool Vide => Mn < 5 && Tv == 0 && Jx == 0 && Ca == 0 && So == 0 && Pc == 0 && Cu == 0 && Qu == 0 && Ce == 0 && Vi == 0
@@ -626,6 +646,7 @@ public sealed class FaitsDuJour
             Mn = Math.Max(a.Mn, b.Mn), Tv = Math.Max(a.Tv, b.Tv), Ta = Math.Max(a.Ta, b.Ta), Jx = Math.Max(a.Jx, b.Jx),
             Ca = Math.Max(a.Ca, b.Ca), So = Math.Max(a.So, b.So), Pc = Math.Max(a.Pc, b.Pc), Cu = Math.Max(a.Cu, b.Cu),
             Qu = Math.Max(a.Qu, b.Qu), Ce = Math.Max(a.Ce, b.Ce), Vi = Math.Max(a.Vi, b.Vi), Nv = Math.Max(a.Nv, b.Nv),
+            Ma = Math.Max(a.Ma, b.Ma),
             Cx = Min(a.Cx, b.Cx), Cf = Min(a.Cf, b.Cf), Ex = Min(a.Ex, b.Ex), Ob = Min(a.Ob, b.Ob),
         };
         (r.Ac, r.Am) = a.Am > b.Am || (a.Am == b.Am && Min(a.Ac, b.Ac) == a.Ac) ? (a.Ac, a.Am) : (b.Ac, b.Am);
@@ -653,7 +674,7 @@ public sealed class FaitsDuJour
         }
         N("mn", Mn); N("tv", Tv); S("ac", Ac); N("am", Am); N("ta", Ta); N("jx", Jx); N("ca", Ca); N("so", So);
         N("pc", Pc); S("px", Px); N("pq", Pq); N("cu", Cu); S("cx", Cx); N("qu", Qu); S("me", Me); S("cf", Cf); N("ce", Ce);
-        N("vi", Vi); N("nv", Nv); S("mo", Mo); N("mg", Mg); S("ex", Ex); S("ob", Ob);
+        N("vi", Vi); N("nv", Nv); S("mo", Mo); N("mg", Mg); S("ex", Ex); S("ob", Ob); N("ma", Ma);
         return b.ToString();
     }
 
@@ -693,6 +714,7 @@ public sealed class FaitsDuJour
                 case "mg": f.Mg = Math.Min(n, 9); break;
                 case "ex": f.Ex = v; break;
                 case "ob": f.Ob = v; break;
+                case "ma": f.Ma = Math.Min(n, 1); break;
             }
         }
         return f;
@@ -713,6 +735,8 @@ public sealed class Appareil
     public string Prenom = "";
     public long PrenomT = -1;
     public bool PrenomDemande;
+    // Traits de personnalité (Traits.cs) : un bit par trait acquis, un bit par trait déjà annoncé. Jamais retirés.
+    public long Traits, TraitsDits;
     // FaitsDuJour des derniers jours (message seulement ; l'état les range dans son journal).
     public SortedDictionary<string, FaitsDuJour> Recents = new(StringComparer.Ordinal);
 
@@ -735,6 +759,8 @@ public sealed class Appareil
             Prenom = b.Prenom;
         }
         PrenomDemande |= b.PrenomDemande;
+        Traits |= b.Traits;
+        TraitsDits |= b.TraitsDits;
         if (b.Sorte is "pc" or "tel") Sorte = b.Sorte;
         foreach (var (j, f) in b.Recents)
             Recents[j] = Recents.TryGetValue(j, out var x) ? FaitsDuJour.Fusion(x, f) : f.Copie();
@@ -774,6 +800,8 @@ public sealed class Appareil
         if (Fetes.Count > 0) b.Append("fe ").Append(string.Join(",", Fetes)).Append('\n');
         if (PrenomT >= 0) b.Append("n ").Append(PrenomT.ToString(ci)).Append(' ').Append(Prenom).Append('\n');
         if (PrenomDemande) b.Append("q 1\n");
+        if (Traits != 0 || TraitsDits != 0)
+            b.Append("tr ").Append(PilouBureau.Traits.Hex(Traits)).Append(' ').Append(PilouBureau.Traits.Hex(TraitsDits)).Append('\n');
         if (recents)
             foreach (var (j, f) in Recents.Reverse().Take(maxRecents).Reverse())
                 if (f.Texte() is { Length: > 0 } ft) b.Append("d ").Append(j).Append(' ').Append(ft).Append('\n');
@@ -837,6 +865,16 @@ public sealed class Appareil
                 return true;
             }
             case "q": PrenomDemande = v == "1"; return true;
+            case "tr":
+            {
+                var p = v.Split(' ');
+                if (p.Length == 2)
+                {
+                    Traits = PilouBureau.Traits.DeHex(p[0]);
+                    TraitsDits = PilouBureau.Traits.DeHex(p[1]);
+                }
+                return true;
+            }
             case "d":
             {
                 int s = v.IndexOf(' ');

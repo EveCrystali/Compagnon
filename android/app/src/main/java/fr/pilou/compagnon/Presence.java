@@ -130,6 +130,24 @@ public final class Presence {
         return gabarits;
     }
 
+    // Les mots des traits de personnalité (assets/presence/traits.txt : annonce-<trait>, trait-<trait>), et la banque
+    // entière où Presence.mot puise : les petits mots de toujours, puis ceux des traits.
+    private static volatile List<Ligne> repliques, banque;
+
+    public static List<Ligne> repliques() {
+        if (repliques == null) repliques = lire(ressource("/presence/traits.txt"));
+        return repliques;
+    }
+
+    public static List<Ligne> banque() {
+        if (banque == null) {
+            List<Ligne> l = new ArrayList<>(mots());
+            l.addAll(repliques());
+            banque = l;
+        }
+        return banque;
+    }
+
     private static String ressource(String chemin) {
         try (InputStream in = Presence.class.getResourceAsStream(chemin)) {
             if (in == null) return "";
@@ -242,6 +260,12 @@ public final class Presence {
         return d.getDayOfWeek().getValue() % 7; // 0 dimanche … 6 samedi, comme DayOfWeek en C#
     }
 
+    /** Tôt le matin : de 5 h à 7 h 30 (avant, c'est encore la nuit de la veille). */
+    public static boolean totLeMatin(int heure, int minute) {
+        int m = heure * 60 + minute;
+        return m >= 300 && m < 450;
+    }
+
     public static String saison(int mois) {
         return mois == 12 || mois <= 2 ? "hiver" : mois <= 5 ? "printemps" : mois <= 8 ? "ete" : "automne";
     }
@@ -289,6 +313,8 @@ public final class Presence {
                 dateAFeter = "";
         public int palier, stade = 2, niveau, palierNouveau = -1, joursEnsemble, annees;
         public boolean demanderPrenom;
+        // Traits de personnalité (Traits.java) : celui à annoncer (une fois), et les dominants déjà annoncés (« a,b,c »).
+        public String traitNouveau = "", traits = "";
 
         public Contexte(LocalDateTime local, Moment moment) {
             this.local = local;
@@ -317,6 +343,7 @@ public final class Presence {
         Runnable annonces = () -> {
             if (!c.dateAFeter.isEmpty()) l.add("date-" + (c.dateAFeter.charAt(0) == 'a' ? "a" : c.dateAFeter));
             if (c.palierNouveau > 0) l.add("palier-" + c.palierNouveau);
+            if (!c.traitNouveau.isEmpty()) l.add("annonce-" + c.traitNouveau);
         };
         java.util.function.BiConsumer<String, Integer> rot = (f, p) -> {
             rf.add(f);
@@ -376,6 +403,8 @@ public final class Presence {
                 if (!c.metier.isEmpty()) rot.accept("metier", 1);
                 break;
         }
+        // Les traits dominants colorent ce qu'il dit : une famille de répliques chacun, au poids d'une pensée rare.
+        for (String id : c.traits.split(",")) if (!id.isEmpty()) rot.accept("trait-" + id, 1);
         int total = 0;
         for (int p : rp) total += p;
         int v = tirer(graine + "|famille", total), premier = 0;
@@ -458,9 +487,10 @@ public final class Presence {
         public final String prenom;
         public final long prenomT;
         public final boolean prenomDemande;
+        public final long traits, traitsDits;
 
         Totaux(int points, int palier, int jours, int adoption, Set<String> fetes, int palierAnnonce, String prenom, long prenomT,
-               boolean prenomDemande, int finies) {
+               boolean prenomDemande, int finies, long traits, long traitsDits) {
             this.points = points;
             this.palier = palier;
             this.jours = jours;
@@ -471,6 +501,8 @@ public final class Presence {
             this.prenomT = prenomT;
             this.prenomDemande = prenomDemande;
             this.finies = finies;
+            this.traits = traits;
+            this.traitsDits = traitsDits;
         }
     }
 
@@ -491,7 +523,10 @@ public final class Presence {
         String prenom = "";
         long prenomT = -1;
         boolean demande = false;
+        long traits = 0, traitsDits = 0;
         for (Appareil a : tous) {
+            traits |= a.traits;
+            traitsDits |= a.traitsDits;
             points += a.minutes / 10 + a.caresses + 2L * a.soins + 2L * a.jeux;
             jours.addAll(a.jours);
             finies.addAll(a.finies);
@@ -509,7 +544,7 @@ public final class Presence {
         points += 10L * jours.size() + 5L * suites + 60L * finies.size();
         int pts = (int) Math.min(Integer.MAX_VALUE, points);
         return new Totaux(pts, palierDe(pts), jours.size(), adoption == Integer.MAX_VALUE ? -1 : adoption, fetes, annonce,
-                prenomT < 0 ? "" : prenom, Math.max(0, prenomT), demande, finies.size());
+                prenomT < 0 ? "" : prenom, Math.max(0, prenomT), demande, finies.size(), traits, traitsDits);
     }
 
     public static final int[] PALIERS_JOURS = {7, 100, 200, 500, 1000};
@@ -755,7 +790,7 @@ public final class Presence {
 
     /** Les faits d'un jour, vus par un appareil. Fusion : maximum et paire de plus grand poids (FaitsDuJour en C#). */
     public static final class FaitsDuJour {
-        public int mn, tv, am, ta, jx, ca, so, pc, pq, cu, qu, ce, vi, nv, mg;
+        public int mn, tv, am, ta, jx, ca, so, pc, pq, cu, qu, ce, vi, nv, mg, ma;
         public String ac = "", px = "", cx = "", me = "", cf = "", mo = "", ex = "", ob = "";
 
         public boolean vide() {
@@ -788,6 +823,7 @@ public final class Presence {
             r.ce = Math.max(a.ce, b.ce);
             r.vi = Math.max(a.vi, b.vi);
             r.nv = Math.max(a.nv, b.nv);
+            r.ma = Math.max(a.ma, b.ma);
             r.cx = min(a.cx, b.cx);
             r.cf = min(a.cf, b.cf);
             r.ex = min(a.ex, b.ex);
@@ -843,6 +879,7 @@ public final class Presence {
             n(b, "mg", mg);
             s(b, "ex", ex);
             s(b, "ob", ob);
+            n(b, "ma", ma);
             return b.toString();
         }
 
@@ -890,6 +927,7 @@ public final class Presence {
                     case "mg": f.mg = Math.min(n, 9); break;
                     case "ex": f.ex = v; break;
                     case "ob": f.ob = v; break;
+                    case "ma": f.ma = Math.min(n, 1); break;
                     default: break;
                 }
             }
@@ -911,6 +949,8 @@ public final class Presence {
         public final TreeSet<Integer> jours = new TreeSet<>();
         public final TreeSet<String> finies = new TreeSet<>(), fetes = new TreeSet<>();
         public boolean prenomDemande;
+        // Traits de personnalité (Traits.java) : un bit par trait acquis, un bit par trait déjà annoncé. Jamais retirés.
+        public long traits, traitsDits;
         public final TreeMap<String, FaitsDuJour> recents = new TreeMap<>();
 
         public boolean absorber(Appareil b) {
@@ -929,6 +969,8 @@ public final class Presence {
                 prenom = b.prenom;
             }
             prenomDemande |= b.prenomDemande;
+            traits |= b.traits;
+            traitsDits |= b.traitsDits;
             if (b.sorte.equals("pc") || b.sorte.equals("tel")) sorte = b.sorte;
             for (Map.Entry<String, FaitsDuJour> e : b.recents.entrySet()) {
                 FaitsDuJour x = recents.get(e.getKey());
@@ -964,6 +1006,7 @@ public final class Presence {
             if (!fetes.isEmpty()) b.append("fe ").append(String.join(",", fetes)).append('\n');
             if (prenomT >= 0) b.append("n ").append(prenomT).append(' ').append(prenom).append('\n');
             if (prenomDemande) b.append("q 1\n");
+            if (traits != 0 || traitsDits != 0) b.append("tr ").append(Traits.hex(traits)).append(' ').append(Traits.hex(traitsDits)).append('\n');
             if (avecRecents) {
                 List<Map.Entry<String, FaitsDuJour>> l = new ArrayList<>(recents.entrySet());
                 for (int i = Math.max(0, l.size() - maxRecents); i < l.size(); i++) {
@@ -1037,6 +1080,14 @@ public final class Presence {
                     return true;
                 }
                 case "q": prenomDemande = v.equals("1"); return true;
+                case "tr": {
+                    String[] p = couper(v, " ");
+                    if (p.length == 2) {
+                        traits = Traits.deHex(p[0]);
+                        traitsDits = Traits.deHex(p[1]);
+                    }
+                    return true;
+                }
                 case "d": {
                     int s = v.indexOf(' ');
                     if (s > 0 && jourDe(v.substring(0, s)) != Integer.MIN_VALUE && recents.size() < 30)

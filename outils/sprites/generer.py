@@ -28,7 +28,11 @@ import campagnes_sprites
 import portraits_campagnes
 import scene_pilou
 import acteurs_scenes
+<<<<<<< HEAD
 import icones
+=======
+import traits_sprites
+>>>>>>> origin/main
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1883,7 +1887,11 @@ def dessiner():
     portraits_campagnes.tout()
     scene_pilou.tout()
     acteurs_scenes.tout()
+<<<<<<< HEAD
     icones.tout()
+=======
+    traits_sprites.tout()
+>>>>>>> origin/main
 
 
 if __name__ == "__main__":

@@ -23,6 +23,10 @@ Dernière mise à jour : 28 novembre 2026.
   automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
+- **Traits de personnalité** (docs/TRAITS.md) : vingt traits nés des habitudes (jours du journal), découverts et jamais
+  perdus, trois dominants qui changent une fois par semaine ; aucun chiffre ni bonus : une annonce dite une fois, des
+  répliques (80 lignes), et « Pilou et moi » (PC : Journal → Ses traits… ; téléphone : carte de l'Accueil) avec les
+  inconnus en « ? ». Moteur commun `Traits.cs` / `Traits.java`, vecteurs partagés, union entre appareils.
 - **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
   titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
   (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Depuis le guide de style : tout
@@ -106,6 +110,8 @@ Dernière mise à jour : 28 novembre 2026.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin, l'onglet Aventure et la notification de retour.
 - La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal sur de vraies pages, le mot du soir (notification, Doze), le
   widget et la bulle avec le mot, la synchronisation entre deux appareils réels.
+- Les traits : la fenêtre « Pilou et moi » sur un Windows à 125 % ou 150 %, la carte sur un vrai téléphone, la naissance
+  d'un trait au fil de vraies semaines et son annonce entre deux appareils ; les seuils sont une première estimation.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 - Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
   sortie audio) ; sur téléphone, aucune lecture réelle.
