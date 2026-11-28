@@ -187,6 +187,7 @@ public class CapturesStyleTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         attendre();
         ecran(c.get(), "neuf-accueil");
+        contenu(c.get().page(Principale.ACCUEIL), "neuf-accueil-long");
         c.pause().stop().destroy();
     }
 
@@ -194,8 +195,8 @@ public class CapturesStyleTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         Principale a = c.get();
         attendre();
-        int[] onglets = {Principale.ACCUEIL, Principale.JOUER, Principale.BOUTIQUE, Principale.COLLECTION};
-        String[] noms = {"accueil", "jouer", "boutique", "collection"};
+        int[] onglets = {Principale.ACCUEIL, Principale.JOUER, Principale.BOUTIQUE, Principale.COLLECTION, Principale.REGLAGES};
+        String[] noms = {"accueil", "jouer", "boutique", "collection", "reglages"};
         for (int i = 0; i < onglets.length; i++) {
             a.aller(onglets[i], false);
             attendre();
@@ -225,7 +226,10 @@ public class CapturesStyleTest {
 
     // Le même état de démonstration que CapturesTest : rien de personnel.
     private void appairer() {
-        Context ctx = RuntimeEnvironment.getApplication();
+        appairer(RuntimeEnvironment.getApplication());
+    }
+
+    static void appairer(Context ctx) {
         long t = System.currentTimeMillis();
         String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"Pêcheur du dimanche\",\"couleur\":\"bleu\","
                 + "\"humeur\":\"repos\",\"calmes\":2,\"sessions\":["

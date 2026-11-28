@@ -407,7 +407,7 @@ final class Style {
      * « fin » : sans l'ombre portée (boutons, cases). « plat » : le bord seul (puces, étiquettes). « pointille » : le
      * bord en pointillés, sans biseau (ce qui est fermé). Aucun arrondi, aucun lissage.
      */
-    static final class Cadre extends Drawable {
+    static class Cadre extends Drawable {
         static final int PLEIN = 0, FIN = 1, PLAT = 2;
         final int u, sorte;
         private final int fond, ombre, bord, clair, sombre;
@@ -642,6 +642,196 @@ final class Style {
         int d = Ui.dp(c, 38);
         t.setLayoutParams(new LinearLayout.LayoutParams(d, d));
         return t;
+    }
+
+    // ---------------------------------------------------------------------------------------------------- Réglages
+
+    /**
+     * La case à cocher du menu « Sept portes » : un carré vide au bord de deux pixels ; cochée, le carré laisse la
+     * place à la coche ✓, à la couleur du choix. La forme dit l'état, pas la couleur.
+     */
+    static final class Coche extends View implements android.widget.Checkable {
+        private boolean cochee;
+        private final int px;
+        private final Palette p;
+        private final Paint pt = new Paint();
+        private java.util.function.Consumer<Boolean> choix;
+
+        Coche(Context c, Palette p, boolean cochee) {
+            super(c);
+            this.p = p;
+            this.cochee = cochee;
+            px = Math.max(1, Math.round(1.5f * c.getResources().getDisplayMetrics().density));
+            pt.setAntiAlias(false);
+            setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        }
+
+        void auChoix(java.util.function.Consumer<Boolean> c) {
+            choix = c;
+        }
+
+        @Override
+        public void setChecked(boolean oui) {
+            if (oui == cochee) return;
+            cochee = oui;
+            invalidate();
+            if (choix != null) choix.accept(oui);
+        }
+
+        @Override
+        public boolean isChecked() {
+            return cochee;
+        }
+
+        @Override
+        public void toggle() {
+            setChecked(!cochee);
+        }
+
+        @Override
+        protected void onMeasure(int l, int h) {
+            setMeasuredDimension(12 * px, 12 * px);
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            if (cochee) {
+                boolean fin = px % 2 == 0;
+                Style.icone(c, Sprites.banque().get("ui-coche", fin ? 2 : 1), 0, 0, fin ? px / 2f : px, isEnabled() ? p.coche : p.eteint, pt);
+                return;
+            }
+            pt.setColor(isEnabled() ? p.pale : p.eteint);
+            c.drawRect(px, px, 11 * px, 3 * px, pt);
+            c.drawRect(px, 9 * px, 11 * px, 11 * px, pt);
+            c.drawRect(px, 3 * px, 3 * px, 9 * px, pt);
+            c.drawRect(9 * px, 3 * px, 11 * px, 9 * px, pt);
+        }
+    }
+
+    /** Ligne de réglage qu'on coche : titre, explication, case à cocher. Un toucher sur la ligne la bascule. */
+    static Coche interrupteur(Context c, LinearLayout dans, String titre, String sous, boolean actif, java.util.function.Consumer<Boolean> choix) {
+        Palette p = p(c);
+        LinearLayout r = Ui.rangee(c);
+        r.setPadding(Ui.dp(c, 4), Ui.dp(c, 8), Ui.dp(c, 4), Ui.dp(c, 8));
+        r.setMinimumHeight(Ui.dp(c, 48));
+        LinearLayout t = Ui.pile(c);
+        t.addView(new Texte(c, titre, CORPS, p.texte, false));
+        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, PETIT, p.pale, false));
+        LinearLayout.LayoutParams lt = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        lt.rightMargin = Ui.dp(c, 10);
+        r.addView(t, lt);
+        Coche k = new Coche(c, p, actif);
+        k.auChoix(oui -> {
+            r.setContentDescription(titre + (oui ? " : coché" : " : décoché"));
+            choix.accept(oui);
+        });
+        r.setContentDescription(titre + (actif ? " : coché" : " : décoché"));
+        r.addView(k);
+        fond(r, touchable(c, plat(c, 0, 0), 0));
+        r.setOnClickListener(v -> k.toggle());
+        dans.addView(r, Ui.large());
+        return k;
+    }
+
+    /** Ligne qu'on touche : titre, explication, chevron. */
+    static View ligne(Context c, String titre, String sous, int couleurTitre, View.OnClickListener action) {
+        Palette p = p(c);
+        LinearLayout r = Ui.rangee(c);
+        r.setPadding(Ui.dp(c, 4), Ui.dp(c, 8), Ui.dp(c, 4), Ui.dp(c, 8));
+        r.setMinimumHeight(Ui.dp(c, 48));
+        LinearLayout t = Ui.pile(c);
+        t.addView(new Texte(c, titre, CORPS, couleurTitre == 0 ? p.texte : couleurTitre, false));
+        if (sous != null && !sous.isEmpty()) t.addView(new Texte(c, sous, PETIT, p.pale, false));
+        LinearLayout.LayoutParams lt = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        lt.rightMargin = Ui.dp(c, 10);
+        r.addView(t, lt);
+        if (action != null) {
+            r.addView(chevron(c, p.pale));
+            fond(r, touchable(c, plat(c, 0, 0), 0));
+            r.setOnClickListener(action);
+        }
+        return r;
+    }
+
+    /** Champ de saisie : la police est celle du système (docs/STYLE.md), le cadre est en pixels, dans le creux. */
+    static void champ(android.widget.EditText e) {
+        Context c = e.getContext();
+        Palette p = p(c);
+        e.setTextColor(p.texte);
+        e.setHintTextColor(p.eteint);
+        e.setBackground(plat(c, p.creux, p.bord));
+        e.setPadding(Ui.dp(c, 14), Ui.dp(c, 12), Ui.dp(c, 14), Ui.dp(c, 12));
+    }
+
+    /** Curseur : une barre en cases (pleines jusqu'à la valeur) et un poussoir carré au cadre fin. */
+    static void curseur(android.widget.SeekBar b) {
+        Context c = b.getContext();
+        Palette p = p(c);
+        int u = u(c);
+        b.setProgressDrawable(new Drawable() {
+            private final Paint pt = new Paint();
+
+            @Override
+            public void draw(Canvas cv) {
+                Rect z = getBounds();
+                barre(cv, z.left, z.centerY() - u, z.width(), 2 * u, u, getLevel() / 10000f, p.coche, 0, p.creux, pt);
+            }
+
+            @Override
+            protected boolean onLevelChange(int niveau) {
+                invalidateSelf();
+                return true;
+            }
+
+            @Override
+            public void setAlpha(int a) {
+            }
+
+            @Override
+            public void setColorFilter(ColorFilter f) {
+            }
+
+            @Override
+            public int getOpacity() {
+                return PixelFormat.TRANSLUCENT;
+            }
+        });
+        b.setThumb(new Cadre(u, Cadre.FIN, p.carte, p.coche, 0, p.biseauClair, p.biseauSombre) {
+            @Override
+            public int getIntrinsicWidth() {
+                return 5 * u;
+            }
+
+            @Override
+            public int getIntrinsicHeight() {
+                return 7 * u;
+            }
+        });
+        b.setThumbOffset(0);
+        b.setSplitTrack(false);
+        b.setBackground(null);
+        b.setMinimumHeight(Ui.dp(c, 40));
+        b.setPadding(0, Ui.dp(c, 8), 0, Ui.dp(c, 8));
+    }
+
+    /** Message bref (ce que le système appelle un toast) : un cadre de nuit, en police pixel. */
+    @SuppressWarnings("deprecation")
+    static void dire(Context c, String s, boolean long_) {
+        try {
+            Texte t = new Texte(c, s, CORPS, NUIT.texte, false);
+            t.setGravity(Gravity.CENTER_HORIZONTAL);
+            t.setMaxWidth(Ui.dp(c, 300));
+            int m = 2 * u(c) + Ui.dp(c, 12);
+            t.setPadding(m, m - Ui.dp(c, 4), m + u(c), m - Ui.dp(c, 4) + u(c));
+            t.setBackground(cadre(c, NUIT));
+            t.setPadding(m, m - Ui.dp(c, 4), m + u(c), m - Ui.dp(c, 4) + u(c));
+            android.widget.Toast toast = new android.widget.Toast(c.getApplicationContext());
+            toast.setView(t);
+            toast.setDuration(long_ ? android.widget.Toast.LENGTH_LONG : android.widget.Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (RuntimeException e) {
+            android.widget.Toast.makeText(c, s, long_ ? android.widget.Toast.LENGTH_LONG : android.widget.Toast.LENGTH_SHORT).show();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------- Pointillés, titres

@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -222,10 +221,7 @@ final class PresenceVue extends LinearLayout {
         e.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         e.setSingleLine(true);
         e.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(Presence.PRENOM_MAX)});
-        e.setTextColor(p.texte);
-        e.setHintTextColor(p.doux);
-        Style.fond(e, Style.arrondi(a, p.surface2, 12, p.bord));
-        e.setPadding(Ui.dp(a, 14), Ui.dp(a, 12), Ui.dp(a, 14), Ui.dp(a, 12));
+        Style.champ(e);
         return e;
     }
 
@@ -294,13 +290,13 @@ final class PresenceVue extends LinearLayout {
                     MotDuSoir.programmer(a);
                 }));
         c.addView(Style.separateur(a));
-        Ui.interrupteur(a, c, "Son journal", "Une page par jour, de son point de vue, à partir de ce qu'il a vécu", e.journalActif, oui -> {
+        Style.interrupteur(a, c, "Son journal", "Une page par jour, de son point de vue, à partir de ce qu'il a vécu", e.journalActif, oui -> {
             Presence.Etat x = PresenceTel.etat(a);
             x.journalActif = oui;
             PresenceTel.garder(a, x);
         });
         c.addView(Style.separateur(a));
-        Ui.interrupteur(a, c, "Petits gestes de complicité", "Il te fait signe quand tu reviens", e.gestes, oui -> {
+        Style.interrupteur(a, c, "Petits gestes de complicité", "Il te fait signe quand tu reviens", e.gestes, oui -> {
             Presence.Etat x = PresenceTel.etat(a);
             x.gestes = oui;
             PresenceTel.garder(a, x);
@@ -323,12 +319,12 @@ final class PresenceVue extends LinearLayout {
             String n = Presence.nettoyerPrenom(champ.getText().toString());
             PresenceTel.prenom(a, n, false);
             champ.setText(n);
-            Toast.makeText(a, n.isEmpty() ? "Prénom effacé." : "Pilou s'en souviendra : " + n, Toast.LENGTH_SHORT).show();
+            Style.dire(a, n.isEmpty() ? "Prénom effacé." : "Pilou s'en souviendra : " + n, false);
         }), l1);
         r.addView(Style.bouton(a, "Effacer", false, v -> {
             PresenceTel.prenom(a, "", false);
             champ.setText("");
-            Toast.makeText(a, "Prénom effacé. Pilou ne le redemandera pas.", Toast.LENGTH_SHORT).show();
+            Style.dire(a, "Prénom effacé. Pilou ne le redemandera pas.", false);
         }), new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
         bloc.addView(r, Ui.large());
         c.addView(bloc, Ui.large());

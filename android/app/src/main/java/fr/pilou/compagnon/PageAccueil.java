@@ -79,7 +79,7 @@ final class PageAccueil extends Page {
         corps.addView(motDuJour, Ui.large(a, 14));
         if (!Prefs.bienvenueVue(a)) {
             Prefs.marquerBienvenue(a); // une seule fois : au prochain lancement, elle ne revient pas
-            bienvenue = Ui.texte(a, BIENVENUE, Ui.T_DETAIL, p.doux, false);
+            bienvenue = Style.texte(a, BIENVENUE, Ui.T_DETAIL, p.doux, false);
             bienvenue.setPadding(Ui.dp(a, 2), 0, 0, 0);
             corps.addView(bienvenue, Ui.large(a, 14));
         }
