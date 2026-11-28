@@ -1092,6 +1092,17 @@ def etage_guichets(P, tab):
     tab.plan("ciel", 0.0)
     P.rampe(np.ones(X.shape, dtype=bool), 0.5 + 0.004 * (X - 96) - 0.004 * (Y - 30) + 0.2 * (pg.fbm(X / 16.0, Y / 10.0, 3, 250) - 0.5),
             [E1, E2, E3, E4], 0.7)                            # le mur du fond, plâtre jauni
+    tout = np.ones(X.shape, dtype=bool)
+    voile(P, tout & (pg.fbm(X / 7.0, Y / 12.0, 3, 300) > 0.6), E2, 0.4)          # les taches d'humidité
+    voile(P, tout & (pg.fbm(X / 3.0, Y / 3.0, 2, 301) > 0.66), E5, 0.3)          # l'enduit qui s'écaille
+    dl = np.hypot((X - 150.0) / 46.0, (Y - 4.0) / 34.0)
+    voile(P, tout & (dl < 1.0), BLANC, 0.4 * (1 - dl), lumiere=True)             # le jour autour de la fenêtre
+    voile(P, tout & (X < 126.0), E1, np.clip((126.0 - X) / 20.0, 0, 0.45))       # l'angle, à l'ombre des casiers
+    voile(P, tout & (Y > 30.0), E1, np.clip((Y - 30.0) / 60.0, 0, 0.3))
+    P.courbe([(166.0, -16.0), (164.0, -8.0), (167.0, 0.0), (165.4, 9.0)], E1, 1)   # une fissure descend du plafond
+    P.rect(112.0, -16.0, 80.0, 2.2, E2)                         # la corniche
+    P.rect(112.0, -14.0, 80.0, 0.5, E5)
+    P.rect(112.0, -13.4, 80.0, 0.5, E1)
     tab.plan("lointains", 0.2)
     # ---- Le mur de casiers : jusqu'au plafond, des formulaires de toutes les couleurs, des étiquettes, une échelle.
     cx0, cx1, cy0, cy1 = 6.0, 112.0, -16.0, 62.0
@@ -1113,7 +1124,23 @@ def etage_guichets(P, tab):
                 if hz(i, j, 254) < 0.2:                        # une feuille qui dépasse et frémit
                     P.rect(x + lw - 1.6, y + lh - 2.2 + 0.3 * onde(p, hz(i, j, 255)), 1.6, 0.5, BLANC)
             P.rect(x + lw / 2 - 1.0, y + lh - 0.5, 2.0, 0.5, E5)                         # l'étiquette
-    voile(P, (X > cx0) & (X < cx0 + 30) & (Y < cy1), V1, np.clip(0.5 - (X - cx0) / 60.0, 0, 0.5))
+    cas = (X > cx0) & (X < cx1) & (Y > cy0) & (Y < cy1)
+    ry_ = (Y - cy0) % lh
+    voile(P, cas & (ry_ > 0.4) & (ry_ < 2.0), ENCRE, 0.5)                        # l'ombre de chaque tablette
+    P.remplir(cas & (ry_ < 0.3), B3)                            # leur chant, que le jour accroche
+    P.remplir(cas & (((X - cx0) % lw) < 0.3) & (ry_ >= 0.3), B2)
+    for (i, j, c0) in ((3, 7, J3), (10, 3, C3), (6, 9, J3)):    # une veilleuse oubliée dans un casier, un bocal qui luit
+        lx_, ly_ = cx0 + (i + 0.5) * lw, cy0 + (j + 0.6) * lh
+        if (p + 0.3 * i) % 1.0 > 0.12:
+            halo(P, lx_, ly_, 5.0, c0, 0.5)
+            P.ell(lx_, ly_, 0.9, 1.1, c0)
+            P.point(lx_ - 0.2, ly_ - 0.3, BLANC)
+    voile(P, cas & (X < cx0 + 46), V1, np.clip(0.55 - (X - cx0) / 84.0, 0, 0.55))
+    voile(P, cas & (Y < 14.0), ENCRE, np.clip((14.0 - Y) / 60.0, 0, 0.45))       # le haut se perd dans le noir du plafond
+    axe_ = 150.0 - 0.72 * (Y + 12.0) - 4.0
+    lum_ = cas & (np.abs(X - axe_) < 11.0) & (Y > 20.0)
+    pan_ = (((X - axe_ + 11.0) % 7.4) > 0.9) & ((((Y - 20.0) * 0.8 + (X - axe_) * 0.3) % 9.0) > 1.0)
+    voile(P, lum_ & pan_, J3, 0.42, lumiere=True)               # les carreaux de la fenêtre, posés en biais sur les casiers
     ex = 84.0                                                 # l'échelle à roulettes
     for dx in (0.0, 7.0):
         P.trait(ex + dx, 62.0, ex + dx + 3.0, -16.0, B2, P.ep(0.7))
@@ -1125,12 +1152,33 @@ def etage_guichets(P, tab):
     wx, wy, ww, wh = 136.0, -12.0, 28.0, 30.0
     P.rect(wx - 2, wy - 2, ww + 4, wh + 4, E1)
     P.rampe((X > wx) & (X < wx + ww) & (Y > wy) & (Y < wy + wh), 0.75 - 0.012 * (Y - wy) + 0.1 * (pg.fbm(X / 8.0, Y / 4.0, 2, 256) - 0.5),
-            [T.CIEL[7], T.CIEL[9], J3, BLANC], 0.6)
+            [T.CIEL[5], T.CIEL[7], T.CIEL[9], T.CIEL[10]], 0.5)
+    fen = (X > wx) & (X < wx + ww) & (Y > wy) & (Y < wy + wh)
+    for k, (cxn, cyn, rn) in enumerate(((wx + 7.0, wy + 6.0, 4.0), (wx + 11.5, wy + 7.0, 3.0), (wx + 21.0, wy + 11.0, 3.4), (wx + 25.0, wy + 12.0, 2.4))):
+        P.ell(cxn + 0.5 * onde(p, 0.2 * k), cyn, rn * 1.4, rn * 0.7, T.CIEL[11], cond=fen)
+        P.ell(cxn + 0.5 * onde(p, 0.2 * k) - 0.6, cyn - 0.5, rn * 0.9, rn * 0.4, BLANC, cond=fen)
+    for k, (tx_, tw_, tt_) in enumerate(((wx + 4.0, 5.0, wy + 15.0), (wx + 13.0, 4.0, wy + 9.0), (wx + 22.0, 6.0, wy + 18.0))):
+        P.rect(tx_, tt_, tw_, wy + wh - tt_, T.CIEL[6] if k != 1 else T.CIEL[8])         # d'autres tours, pâlies par la brume
+        P.rect(tx_, tt_, 0.8, wy + wh - tt_, T.CIEL[11])
+        P.rect(tx_ - 0.5, tt_, tw_ + 1.0, 0.6, T.CIEL[7])
+        for j in range(4):
+            if hz(k, j, 302) < 0.6 and tt_ + 2.5 + j * 3.4 < wy + wh - 1:
+                P.rect(tx_ + 1.6 + (j % 2) * 1.6, tt_ + 2.5 + j * 3.4, 0.8, 1.2, J2 if (p + hz(k, j, 303)) % 1.0 < 0.8 else T.CIEL[6])
+    voile(P, fen & (Y > wy + wh - 7.0), T.CIEL[11], np.clip((Y - wy - wh + 7.0) / 9.0, 0, 0.6))            # la brume au pied des tours
+    P.remplir(fen & (np.abs(X - wx - 2.0 - (Y - wy) * 0.5) < 1.2), T.CIEL[11])                             # un reflet sur la vitre
+    P.rect(wx - 2, wy - 2, 1.2, wh + 4, E5)                     # l'embrasure : le tableau de gauche prend le jour
+    P.rect(wx + ww, wy, 1.0, wh, ENCRE)
     for i in range(1, 3):
         P.rect(wx + i * ww / 3 - 0.4, wy, 0.8, wh, E1)
+        P.rect(wx + i * ww / 3 - 0.4, wy, 0.3, wh, E4)
     for j in range(1, 3):
         P.rect(wx, wy + j * wh / 3 - 0.4, ww, 0.8, E1)
     P.rect(wx - 3, wy + wh + 2, ww + 6, 1.4, E2)
+    P.rect(wx - 3, wy + wh + 2, ww + 6, 0.5, BLANC)
+    voile(P, (X > wx - 3) & (X < wx + ww + 3) & (Y > wy + wh + 3.4) & (Y < wy + wh + 6.0), E1, 0.4)   # l'ombre de l'appui
+    P.poly([(wx + 3.0, wy + wh + 2.0), (wx + 8.0, wy + wh + 2.0), (wx + 7.4, wy + wh - 1.6), (wx + 3.6, wy + wh - 1.6)], O1)   # un pot sur l'appui, à contre-jour
+    for k in range(4):
+        P.trait(wx + 5.5, wy + wh - 1.6, wx + 3.0 + k * 1.7 + 0.3 * onde(p, 0.1 * k), wy + wh - 6.0 - (k % 2), N1)
     # Les affiches réglementaires, et l'horloge de bureau arrêtée.
     affiche(P, 118.0, 26.0, 11.0, 15.0, E5, O1, 0)
     affiche(P, 131.0, 28.0, 9.0, 12.0, C3, N2, 1)
@@ -1148,10 +1196,33 @@ def etage_guichets(P, tab):
     for x in np.arange(gx0 + 6, gx1, 12.0):
         P.rect(x, gy + 4, 8.0, 12.0, B1)
         P.rect(x + 0.6, gy + 4.6, 6.8, 10.8, B2)
+    voile(P, (X > gx0) & (X < gx1) & (Y > gy + 0.6) & (Y < gy + 3.2), B1, 0.55)                            # l'ombre de la tablette
+    for x in np.arange(gx0 + 6, gx1, 12.0):
+        P.rect(x + 7.4, gy + 4.6, 0.6, 10.8, B3)                # le chant éclairé de chaque panneau
+        P.ell(x + 4.0, gy + 10.0, 0.6, 0.6, J2)                 # son bouton de laiton
+    P.rect(gx0, 76.6, gx1 - gx0, 1.4, B1)                       # la plinthe
     P.rect(gx0 - 1.5, gy - 1.6, gx1 - gx0 + 3, 2.2, B3)
     P.rect(gx0 - 1.5, gy - 1.6, gx1 - gx0 + 3, 0.6, E4)
     vitre = (X > gx0 + 4) & (X < gx1 - 2) & (Y > 40.0) & (Y < gy - 1.6)
-    voile(P, vitre, C3, 0.3)
+    P.rampe(vitre, 0.3 + 0.4 * (X - gx0) / (gx1 - gx0) - 0.014 * (Y - 40.0) + 0.2 * (pg.fbm(X / 6.0, Y / 4.0, 2, 304) - 0.5), [N0, N1, N2, C1], 0.4)
+    for j in range(3):                                          # les rayonnages du fond et leurs classeurs
+        P.rect(gx0 + 6.0, 43.6 + j * 4.4, 26.0, 0.5, N0)
+        for i in range(11):
+            if hz(i, j, 305) < 0.8:
+                hh = 2.4 + 1.2 * hz(i, j, 306)
+                P.rect(gx0 + 6.6 + i * 2.3, 43.6 + j * 4.4 - hh, 1.7, hh, (V2, C1, G2, N3, B1)[int(hz(i, j, 307) * 5)])
+    P.rect(178.0, 42.0, 7.0, 14.4, N0)                           # la porte du fond, entrouverte sur un couloir éclairé
+    P.poly([(179.0, 43.0), (183.0, 43.6), (183.0, 56.4), (179.0, 56.4)], J1)
+    P.rect(179.0, 43.0, 1.2, 13.4, J3)
+    P.trait(166.0, 40.0, 166.0, 43.0, N0)                        # la lampe pendue, qui se balance à peine
+    lpx = 166.0 + 0.5 * onde(p)
+    P.poly([(lpx - 3.0, 45.4), (lpx + 3.0, 45.4), (lpx + 1.2, 43.0), (lpx - 1.2, 43.0)], G1)
+    P.rect(lpx - 2.4, 45.4, 4.8, 0.6, J3)
+    cone = vitre & (np.abs(X - lpx) < 2.4 + (Y - 46.0) * 0.7) & (Y > 46.0)
+    voile(P, cone, J2, 0.35, lumiere=True)
+    P.rect(154.0, 49.6, 7.0, 6.8, N0)                            # le dossier d'une chaise vide
+    P.rect(154.6, 50.2, 5.8, 0.6, N3)
+    voile(P, vitre, C3, 0.16)
     voile(P, vitre & (np.abs((X - gx0) - (Y - 40) * 1.6 - 20) < 3), BLANC, 0.5)
     P.rect(gx0 + 3, 39.0, gx1 - gx0 - 4, 1.0, B1)
     P.rect(gx0 + 3, 39.0, 1.0, gy - 40.6, B1)
@@ -1170,11 +1241,18 @@ def etage_guichets(P, tab):
     P.rect(167.0, gy - 3.2, 5.0, 1.6, V2)
     P.rect(167.4, gy - 3.0, 4.2, 0.5, V4)
     # Le rai doré et sa poussière.
-    rai(P, 150.0, -12.0, 78.0, 20.0, -0.72, J3, 0.42, 34, 260)
+    rai(P, 150.0, -12.0, 78.0, 20.0, -0.72, J3, 0.5, 44, 260)
     # ---- Le palier : parquet en fuite, tapis usé, la rampe de l'escalier en colimaçon à gauche.
     sol = Y > 62.0
     dallage(P, sol & (X < gx0), 150.0, 46.0, B3, B2, larg=4.0, prof=0.9, joint=B1)
     voile(P, sol & (X < gx0) & (np.abs(X - (150 - (Y - 0) * 0.72 - 10)) < 12), J3, 0.3)
+    axs = 92.0 - (Y - 62.0) * 0.72
+    tache = sol & (X < gx0) & (np.abs(X - axs) < 13.0)
+    pan = (((X - axs + 13.0) % 8.7) > 1.0) & (((Y - 62.0) % 6.2) > 0.8)
+    voile(P, tache & pan, J3, 0.5, lumiere=True)
+    P.remplir(sol & (X < gx0) & tache & pan & (hz(P.YI, P.XI // 6, 308) < 0.08), BLANC)          # la cire brille dans le jour
+    voile(P, sol & (X > gx0 - 12.0) & (X < gx0), B1, np.clip((X - gx0 + 12.0) / 16.0, 0, 0.55))    # l'ombre du comptoir
+    voile(P, sol & (X < 34.0 + (Y - 62.0) * 0.8), N1, 0.45)                                        # l'ombre de l'escalier
     P.rect(30.0, 75.4, 78.0, 4.8, V2)
     P.rect(30.0, 75.4, 78.0, 0.6, V4)
     for x in range(32, 108, 4):
@@ -1189,12 +1267,20 @@ def etage_guichets(P, tab):
         l = 26.0 - i * 2.2
         P.poly([(nx, y), (nx + l, y + 2.4 - i * 0.2), (nx + l, y + 4.2 - i * 0.2), (nx, y + 2.4)], N1 if i % 2 else N0)
         P.trait(nx, y, nx + l, y + 2.4 - i * 0.2, G1)
+        P.trait(nx + l * 0.45, y + (2.4 - i * 0.2) * 0.45, nx + l, y + 2.4 - i * 0.2, J1 if i < 5 else G3)
+        P.rect(nx + l - 0.6, y + 2.4 - i * 0.2, 0.6, 1.8, J2 if i < 5 else G3)
         if i < 8:
             P.trait(nx + l - 1.0, y + 2.2, nx + l - 3.2, y - 14.0, N0)                   # un barreau
             P.ell(nx + l - 2.1, y - 6.0, 0.8, 1.2, N0)
     P.courbe([(nx + 25.0, 66.0), (nx + 20.0, 46.0), (nx + 15.0, 26.0), (nx + 10.0, 6.0), (nx + 6.0, -16.0)], N0, P.ep(1.2))
     P.courbe([(nx + 25.4, 65.6), (nx + 20.4, 45.6), (nx + 15.4, 25.6)], J1, 1)
     papiers(P, 186.0, 80.0, 9.0, 7, 261)                         # une pile oubliée dans le coin
+    sbx = 184.0 + 0.4 * onde(p, 0.3)                            # une suspension de tôle émaillée, à contre-jour
+    P.trait(184.0, -16.0, sbx, -9.0, ENCRE)
+    P.poly([(sbx - 6.0, -4.6), (sbx + 6.0, -4.6), (sbx + 2.0, -9.0), (sbx - 2.0, -9.0)], ENCRE)
+    P.poly([(sbx - 6.0, -4.6), (sbx - 2.0, -9.0), (sbx - 1.0, -9.0), (sbx - 4.4, -4.6)], N2)
+    P.rect(sbx - 5.0, -4.6, 10.0, 0.6, J3 if int(p * 8) % 7 else J2)
+    P.ell(sbx, -3.6, 1.6, 1.2, J3)
     poussiere(P, 20, -10, 180, 70, 30, J3, 262)
     # ---- Seconde passe : la vie du guichet.
     pg.araignee(P, 142.0, -12.0, 10.0, d=0.2)
@@ -1230,7 +1316,20 @@ def bureau_echeance(P, tab):
     tab.plan("ciel", 0.0)
     P.rampe(np.ones(X.shape, dtype=bool), 0.45 + 0.003 * (X - 60) + 0.004 * (Y + 16) + 0.18 * (pg.fbm(X / 18.0, Y / 12.0, 3, 270) - 0.5),
             [V1, V2, V3, T.L4], 0.7)                          # le papier peint, violet feutré
-    P.remplir((((X + Y * 0.5) % 6.0) < 0.5) & (P.T < 0.3), V3)
+    tout = np.ones(X.shape, dtype=bool)
+    voile(P, tout & ((X % 8.0) < 3.0), V1, 0.3)                                  # les rayures du papier peint
+    P.remplir(tout & (np.abs((X % 8.0) - 5.5) < 0.2) & (((Y + 16.0) % 5.0) < 2.4), V3)   # son semis de petits motifs
+    voile(P, tout & (pg.fbm(X / 9.0, Y / 14.0, 3, 310) > 0.62), V1, 0.3)         # il a passé par endroits
+    dl = np.hypot((X - 150.0) / 34.0, (Y - 30.0) / 50.0)
+    voile(P, tout & (dl < 1.0) & (X < 152.0), O3, 0.45 * (1 - dl), lumiere=True)  # le couchant bave sur le mur
+    voile(P, tout & (X < 60.0), N1, np.clip((60.0 - X) / 110.0, 0, 0.4))         # le fond de la pièce reste dans l'ombre
+    lam = tout & (Y > 47.0)                                     # le lambris
+    P.rampe(lam, 0.4 + 0.004 * (X - 40.0) + 0.25 * (pg.fbm(X / 1.6, Y / 16.0, 2, 311) - 0.5), [N1, N2, V1, V2], 0.4)
+    P.remplir(lam & (Y < 47.6), V3)
+    P.remplir(lam & (Y >= 47.6) & (Y < 48.4), N0)
+    cad = lam & (((X - 4.0) % 16.0) > 2.0) & (Y > 50.4) & (Y < 60.0)
+    P.remplir(cad & ((((X - 4.0) % 16.0) < 2.5) | (Y < 50.9)), N0)               # les panneaux moulurés
+    P.remplir(cad & ((((X - 4.0) % 16.0) > 15.5) | (Y > 59.5)), V3)
     tab.plan("lointains", 0.2)
     # ---- Le mur de cartes : à gauche, cochées et un peu jaunies ; à droite, vierges. Entre les deux, la carte du jour.
     mx0, my0, lw, lh, nc, nl = 6.0, -12.0, 5.0, 6.2, 27, 9
@@ -1248,7 +1347,10 @@ def bureau_echeance(P, tab):
                 P.rect(x, y, lw - 1.0, lh - 1.4 + bat, J3)
                 P.point(x + lw / 2 - 0.5, y + 0.3, O1, 2)
                 continue
+            P.rect(x - 0.5, y + 0.5, lw - 1.0, lh - 1.4, B1)                       # son ombre sur le liège
             P.rect(x, y, lw - 1.0, lh - 1.4, (E4 if hz(i, j, 273) < 0.5 else E5) if faite else BLANC)
+            if hz(i, j, 312) < 0.25:                           # un coin qui rebique
+                P.poly([(x + lw - 2.4, y + lh - 1.4), (x + lw - 1.0, y + lh - 1.4), (x + lw - 1.0, y + lh - 2.8)], E3)
             P.point(x + lw / 2 - 0.5, y + 0.2, (O2, C2, V4)[int(hz(i, j, 274) * 3)])                # la punaise
             if faite:
                 P.trait(x + 0.8, y + 2.6, x + 1.6, y + 3.6, N2)                                 # la coche
@@ -1256,20 +1358,55 @@ def bureau_echeance(P, tab):
             else:
                 P.rect(x + 0.7, y + 1.6, lw - 2.4, 0.4, G4)
                 P.rect(x + 0.7, y + 2.8, lw - 3.2, 0.4, G4)
-    P.courbe([(mx0 + jour[0] * lw + 2, my0 + jour[1] * lh + 5), (mx0 + 96, my0 + 52), (mx0 + 118, my0 + 46 + 0.5 * onde(p))], O2, 1)   # un fil
+    liege = (X > mx0 - 1.2) & (X < mx0 + nc * lw + 0.2) & (Y > my0 - 1.2) & (Y < my0 + nl * lh + 0.2)
+    voile(P, liege & (X < 70.0), N1, np.clip((70.0 - X) / 110.0, 0, 0.45))
+    lames = liege & (X > 70.0) & ((((Y - my0) * 1.0 + (X - 70.0) * 0.22) % 5.2) < 2.4)
+    voile(P, lames, O2, np.clip((X - 70.0) / 70.0, 0, 0.5))
+    voile(P, liege & (X > 70.0) & ~lames, N1, np.clip((X - 70.0) / 200.0, 0, 0.2))
+    P.rect(mx0 - 2.0, my0 - 2.0, nc * lw + 3.0, 0.5, B3)        # le cadre : son arête du haut
+    P.rect(mx0 + nc * lw + 0.5, my0 - 2.0, 0.5, nl * lh + 3.0, B3)
+    voile(P, (X > mx0 - 2.0) & (X < mx0 + nc * lw + 1.0) & (Y > my0 + nl * lh + 1.0) & (Y < my0 + nl * lh + 3.0), N0, 0.5)   # son ombre sur le mur
+    P.courbe([(mx0 + jour[0] * lw + 2, my0 + jour[1] * lh + 5), (mx0 + 96, my0 + 52), (mx0 + 118, my0 + 46 + 0.5 * onde(p))], ENCRE, 1)   # un fil
     tab.plan("moyen", 0.5)
     # ---- La haute fenêtre, à droite : une lumière orangée, toujours la même ; le store à moitié baissé.
     wx, wy, ww, wh = 152.0, -14.0, 30.0, 56.0
     P.rect(wx - 2, wy - 2, ww + 4, wh + 4, V1)
     P.rampe((X > wx) & (X < wx + ww) & (Y > wy) & (Y < wy + wh), 0.25 + 0.012 * (Y - wy), [T.CIEL[6], T.CIEL[8], O3, J3], 0.7)
-    P.ell(wx + 20, wy + 40, 5.0, 5.0, BLANC, cond=(X < wx + ww) & (Y < wy + wh))
+    fen = (X > wx) & (X < wx + ww) & (Y > wy) & (Y < wy + wh)
+    P.rampe(fen, 0.1 + 0.016 * (Y - wy) + 0.1 * (pg.fbm(X / 9.0, Y / 3.0, 2, 313) - 0.5), [T.CIEL[4], T.CIEL[6], V4, O2, O3, J3], 0.4)
+    halo(P, wx + 20, wy + 42, 16.0, J3, 0.5)
+    P.ell(wx + 20, wy + 42, 5.0, 5.0, J3, cond=fen)
+    P.ell(wx + 20, wy + 42, 3.8, 3.8, BLANC, cond=fen)
+    for k in range(5):                                          # des bandes de nuages, éclairées par-dessous
+        yn = wy + 26.0 + k * 3.4
+        mn = fen & (np.abs(Y - yn - 0.6 * np.sin(X / 4.0 + k)) < 0.4 + 0.9 * (pg.fbm((X + 2.0 * onde(p, 0.2 * k)) / 6.0, Y / 2.0, 2, 314 + k) - 0.3))
+        P.remplir(mn, V3 if k < 3 else V4)
+        P.remplir(mn & (np.roll(~mn, -1, axis=0)), O3)
+    for k, (tx_, tw_, tt_) in enumerate(((wx + 1.0, 5.0, wy + 44.0), (wx + 8.0, 3.0, wy + 40.0), (wx + 25.0, 5.0, wy + 46.0), (wx + 13.0, 4.0, wy + 49.0))):
+        P.rect(tx_, tt_, tw_, wy + wh - tt_, V2 if k % 2 else V3)             # les tours, à contre-jour dans la brume
+        P.rect(tx_ - 0.4, tt_, tw_ + 0.8, 0.6, V1)
+        if (p + 0.3 * k) % 1.0 < 0.85:
+            P.point(tx_ + 1.6, tt_ + 3.0, J3)
+    voile(P, fen & (Y > wy + wh - 5.0), O3, 0.4)
     for j in range(9):                                        # les lames du store
         y = wy + j * 2.6
         P.rect(wx, y, ww, 1.6, E4)
+        P.rect(wx, y, ww, 0.4, BLANC)
         P.rect(wx, y + 1.2, ww, 0.4, E2)
+        P.rect(wx, y + 1.6, ww, 0.5, O1)             # le couchant passe entre les lames
     P.trait(wx + ww - 3, wy + 23.4, wx + ww - 3, wy + 34 + 0.6 * onde(p), E4)
     P.rect(wx + ww / 2 - 0.5, wy, 1.0, wh, V1)
     P.rect(wx - 3, wy + wh + 2, ww + 6, 1.6, V2)
+    P.rect(wx - 3, wy + wh + 2, ww + 6, 0.5, O3)
+    P.rect(wx - 2, wy - 2, 1.0, wh + 4, O2)                      # le tableau de gauche prend la lumière
+    for (rx0, rx1, sens) in ((wx - 11.0, wx - 1.0, 1), (wx + ww + 1.0, wx + ww + 9.0, -1)):      # les rideaux lourds, et leurs plis
+        rid = (X > rx0 + 1.2 * np.sin(Y / 9.0)) & (X < rx1 + 0.8 * np.sin(Y / 7.0 + 1.0)) & (Y < 60.6 + 0.5 * np.sin(X * 0.6))
+        pli = np.sin((X - rx0) * 1.9 + 0.5 * np.sin(Y / 11.0) + 0.15 * onde(p))
+        P.rampe(rid, 0.45 + 0.3 * pli + 0.25 * sens * (X - (rx0 + rx1) / 2) / (rx1 - rx0), [N0, N1, V1, V2, V3], 0.4)
+        P.remplir(rid & (pli > 0.9) & (sens * (X - (rx0 + rx1) / 2) > 0), O2)                       # le liseré du couchant sur les plis
+        P.rect(rx0, 30.0, rx1 - rx0, 1.2, J1)                    # l'embrasse
+    P.rect(wx - 13.0, wy - 4.6, ww + 24.0, 1.4, B1)              # la tringle
+    P.rect(wx - 13.0, wy - 4.6, ww + 24.0, 0.4, B3)
     rai(P, wx + 6, wy + 26.0, 80.0, 24.0, -1.15, O3, 0.36, 26, 275)
     # Le classeur à tiroirs, la plante en pot, l'horloge murale arrêtée.
     P.rect(186.0, 30.0, 12.0, 48.0, G2)
@@ -1290,7 +1427,21 @@ def bureau_echeance(P, tab):
     # ---- Le parquet, puis le grand bureau gris : la réussite en cours, la lampe (abat-jour sarcelle), le téléphone.
     sol = Y > 62.0
     dallage(P, sol, 60.0, 44.0, B2, B1, larg=4.0, prof=0.8, joint=ENCRE)
-    voile(P, sol & (np.abs(X - (wx + 6 - (Y - 12) * 1.15)) < 16), O3, 0.3)
+    tapis = sol & (np.hypot((X - 98.0) / 56.0, (Y - 75.0) / 6.4) < 1.0)
+    dt = np.hypot((X - 98.0) / 56.0, (Y - 75.0) / 6.4)
+    P.rampe(tapis, 0.5 + 0.3 * (pg.fbm(X / 2.0, Y / 1.5, 2, 320) - 0.5) + 0.002 * (X - 98.0), [N2, V1, V2, V3], 0.4)
+    P.remplir(tapis & (dt > 0.9), O1)
+    P.remplir(tapis & (dt > 0.8) & (dt < 0.84), J1)
+    P.remplir(tapis & (dt < 0.7) & (np.abs(((X - 98.0) / 7.0 + (Y - 75.0) / 1.6) % 2.0 - 1.0) < 0.12), V4)   # son motif en losanges
+    P.remplir(tapis & (dt < 0.7) & (np.abs(((X - 98.0) / 7.0 - (Y - 75.0) / 1.6) % 2.0 - 1.0) < 0.12), V4)
+    axs = 154.0 - (Y - 62.0) * 1.5
+    tache = sol & (np.abs(X - axs) < 13)
+    lam_s = (((Y - 62.0) * 1.0 + (X - axs) * 0.2) % 3.4) < 2.2
+    voile(P, tache & lam_s, O2, 0.55)                           # les lames du store, sur le sol
+    P.remplir(tache & lam_s & (hz(P.YI, P.XI // 5, 323) < 0.1), O3)
+    voile(P, sol & (X > 40.0 - (Y - 62.0) * 0.4) & (X < 64.0) & (Y > 66.0), N0, 0.45)             # l'ombre du bureau, vers la gauche
+    voile(P, sol & (X > 176.0), N0, 0.4)
+    voile(P, sol & (np.abs(X - 179.0 + (Y - 78.4) * 1.5) < 1.2) & (Y > 64.0), N0, 0.5)             # l'ombre du lampadaire
     bx0, bx1, by = 64.0, 132.0, 60.0
     P.poly([(bx0, by), (bx1, by), (bx1 + 4, by + 6), (bx0 - 4, by + 6)], G3)                   # le plateau
     P.rampe(P.masque_poly([(bx0, by), (bx1, by), (bx1 + 4, by + 6), (bx0 - 4, by + 6)]), 0.45 + 0.5 * (X - bx0) / (bx1 - bx0),
@@ -1311,7 +1462,9 @@ def bureau_echeance(P, tab):
             P.point(x + 1.0, y + 0.5, (O2, N2)[i % 2])
             P.point(x + 2.6, y + 1.0, (O2, N2)[i % 2])
     lx, ly = 118.0, by + 1.0                                   # la lampe de bureau
-    halo(P, lx - 6, ly + 2, 22, J3, 0.45, ry=9)
+    halo(P, lx - 6, ly + 2, 26, J3, 0.6, ry=10)
+    cone = (np.abs(X - lx + 2.0) < 6.0 + (Y - ly + 9.0) * 0.9) & (Y > ly - 8.4) & (Y < ly + 0.6) & (P.a >= 0)
+    voile(P, cone, J3, 0.25, lumiere=True)
     P.ell(lx, ly + 0.6, 4.0, 1.2, J1)
     P.rect(lx - 0.5, ly - 9.0, 1.0, 9.6, J1)
     P.poly([(lx - 9.0, ly - 9.0), (lx + 5.0, ly - 9.0), (lx + 3.0, ly - 13.0), (lx - 7.0, ly - 13.0)], T.S1)
@@ -1326,16 +1479,33 @@ def bureau_echeance(P, tab):
     P.rect(87.0, 50.0, 22.0, 10.0, V1)
     P.ell(98.0, 50.6, 9.6, 6.8, V2)
     P.rect(88.4, 50.6, 19.2, 9.4, V2)
+    faut = (np.hypot((X - 98.0) / 9.6, (Y - 50.6) / 6.8) < 1.0) | ((np.abs(X - 98.0) < 9.6) & (Y > 50.6) & (Y < 60.0))
+    P.rampe(faut & ((P.a == V2) | (P.a == V1)), 0.4 + 0.04 * (X - 98.0) + 0.2 * np.sin(X * 1.05) * np.sin(Y * 1.2), [N1, V1, V2, V3], 0.4)   # le capitonnage
+    P.remplir(faut & (X > 106.4) & (Y < 58.0), O2)              # le liseré du couchant sur son flanc
     for (x, y) in ((92.0, 49.0), (98.0, 47.6), (104.0, 49.0), (95.0, 54.0), (101.0, 54.0)):
         P.point(x, y, V4)
+        P.point(x, y + 0.5, N0)
     tab.plan("premier", 1.0)
     # Premier plan sombre : le bord d'une étagère à gauche (classeurs), un lampadaire éteint à droite.
-    P.rect(-6.0, 40.0, 12.0, 40.0, N0)
-    for j in range(4):
-        P.rect(-6.0, 42.0 + j * 9.4, 11.0, 0.8, G1)
-        for i in range(4):
-            P.rect(-5.0 + i * 2.6, 43.4 + j * 9.4, 2.0, 7.4, (V2, N2, V1, N1)[(i + j) % 4])
-            P.rect(-4.6 + i * 2.6, 45.0 + j * 9.4, 1.2, 1.6, E4 if (i + j) % 3 else O2)
+    P.rect(-6.0, 14.0, 17.0, 66.0, N0)
+    P.rect(10.4, 14.0, 0.6, 66.0, V3)
+    P.rect(-6.0, 14.0, 17.0, 0.8, V3)
+    for j in range(7):
+        P.rect(-6.0, 16.0 + j * 9.4, 16.4, 0.8, G1)
+        for i in range(6):
+            if hz(i, j, 321) < 0.85:
+                hh = 6.0 + 1.6 * hz(i, j, 322)
+                P.rect(-5.0 + i * 2.6, 16.0 + (j + 1) * 9.4 - hh, 2.0, hh, (V2, N2, V1, N1, B1)[(i + 2 * j) % 5])
+                P.rect(-4.6 + i * 2.6, 16.0 + (j + 1) * 9.4 - hh + 1.4, 1.2, 1.6, E4 if (i + j) % 3 else O2)
+                P.rect(-5.0 + i * 2.6 + 1.7, 16.0 + (j + 1) * 9.4 - hh, 0.3, hh, V3)
+    lpx = 179.0
+    P.rect(lpx - 0.6, 24.0, 1.2, 54.0, ENCRE)
+    P.rect(lpx + 0.3, 24.0, 0.3, 54.0, O2)
+    P.ell(lpx, 78.4, 5.0, 1.4, ENCRE)
+    P.poly([(lpx - 7.0, 24.0), (lpx + 7.0, 24.0), (lpx + 4.0, 12.0), (lpx - 4.0, 12.0)], N0)
+    P.poly([(lpx + 5.6, 24.0), (lpx + 7.0, 24.0), (lpx + 4.0, 12.0), (lpx + 3.2, 12.0)], O2)
+    P.rect(lpx - 7.0, 23.4, 14.0, 0.6, N2)
+    P.trait(lpx - 3.0, 24.0, lpx - 3.0 + 0.3 * onde(p, 0.6), 29.0, J1)                             # sa chaînette
     voile(P, Y > 76.8, ENCRE, 0.3)
     poussiere(P, 60, -10, 186, 70, 26, O3, 277)
     # ---- Seconde passe : la vie du bureau.
@@ -1362,27 +1532,78 @@ def caverne_cables(P, tab):
     p = P.p
     X, Y = P.X, P.Y
     fx, fy = 62.0, 40.0                                       # le fond du tunnel, à gauche
+    gx_, gy_ = fx - 8.0, fy + 18.0                              # la gelée lumineuse : c'est elle qui éclaire tout
+    # ---- Le tunnel : une galerie qui fuit vers le croisement. Plus c'est loin, plus la lueur sarcelle noie tout ; les
+    # parois proches restent dans le noir. Des faisceaux courent le long des parois (ils convergent), des arceaux les tiennent.
     tab.plan("ciel", 0.0)
-    r = np.hypot(X - fx, (Y - fy) * 1.3)
-    P.rampe(np.ones(X.shape, dtype=bool), 0.9 - r / 120.0 + 0.2 * (pg.fbm(X / 10.0, Y / 7.0, 3, 280) - 0.5), [ENCRE, N0, V1, V2, N2], 0.8)
+    tout = np.ones(X.shape, dtype=bool)
+    e = np.hypot((X - fx) / 1.7, Y - fy)                        # 0 au point de fuite, grand au bord du cadre
+    ang = np.arctan2(Y - fy, (X - fx) / 1.7)
+    prof = 1.0 / np.maximum(e, 2.0)
+    fais = np.floor(ang * 9.0 + 0.6 * np.sin(np.log(np.maximum(e, 2.0)) * 3.0))            # un faisceau par secteur
+    v = 1.02 - e / 74.0 + 0.16 * (pg.fbm(X / 7.0, Y / 5.0, 3, 280) - 0.5) + 0.1 * (hz(fais, 0, 330) - 0.5)
+    P.rampe(tout, v, [ENCRE, N0, N1, V1, V2, Q1, Q2], 0.4)
+    fr_ = (ang * 9.0 + 0.6 * np.sin(np.log(np.maximum(e, 2.0)) * 3.0)) - fais
+    voile(P, tout & (fr_ < 0.16) & (e > 7.0), ENCRE, 0.5)                                  # l'ombre entre deux faisceaux
+    cote_l = np.where((X - gx_) * np.cos(ang) > 0, 1.0, -1.0)
+    P.remplir(tout & (fr_ > 0.2) & (fr_ < 0.3) & (e > 9.0) & (e < 60.0) & (hz(fais, 1, 330) < 0.6), Q1)     # leur dos accroche la lueur
+    anneau = np.log(np.maximum(e, 2.0)) * 3.2 - 0.0
+    ar = anneau - np.floor(anneau)
+    arceau = tout & (ar < 0.1) & (e > 10.0)                     # les arceaux de fer, de plus en plus serrés
+    P.remplir(arceau, ENCRE)
+    P.remplir(tout & (ar >= 0.1) & (ar < 0.14) & (e > 10.0) & (e < 70.0), Q1)              # leur chant, côté lueur
+    P.remplir(arceau & (np.abs((ang * 5.0) % 1.0 - 0.5) < 0.06), N2)                       # leurs boulons
+    # Le croisement, au bout : une arche claire, un autre tunnel qui part à gauche, la brume sarcelle.
+    bout = e < 9.0
+    P.rampe(bout, 0.9 - e / 14.0 + 0.2 * (pg.fbm(X / 3.0, Y / 3.0, 2, 331) - 0.5), [Q1, Q2, Q3, BLANC], 0.4)
+    P.rect(fx - 9.0, fy + 3.6, 18.0, 0.6, Q1)                    # le sol du croisement, très loin
+    for dx in (-5.0, -1.6, 4.4):                                # des câbles qui le traversent, minuscules
+        P.trait(fx + dx, fy - 6.0, fx + dx + 0.6, fy + 3.6, Q1)
+    P.rect(fx + 2.0, fy - 3.0, 0.6, 9.0, N1)                    # un poteau indicateur, minuscule
+    P.rect(fx + 0.6, fy - 3.0, 3.4, 1.4, J2)
+    # La lueur de la gelée : elle baigne le fond et meurt vers nous.
+    dg = np.hypot(X - gx_, (Y - gy_) * 1.3)
+    voile(P, tout & (dg < 60.0), Q2, 0.6 * np.clip(1 - dg / 60.0, 0, 1) ** 1.5, lumiere=True)
+    voile(P, tout & (dg < 20.0) & (Y < gy_ - 2.0), Q3, 0.4 * np.clip(1 - dg / 20.0, 0, 1), lumiere=True)
+    voile(P, tout & (np.hypot(X - gx_, (Y - gy_ - 3.0) * 1.6) < 20.0), N1, 0.5)               # derrière elle, un creux d'ombre : elle se détache
+    for i in range(26):                                         # des diodes, loin, sur les parois
+        a, d = 6.283 * hz(i, 1, 281), 10 + 40 * hz(i, 2, 281)
+        voyant(P, fx + 1.7 * d * math.cos(a), fy + d * math.sin(a), (O2, C2, J3, Q3)[i % 4], V1, d=hz(i, 3, 281), part=0.3 + 0.4 * hz(i, 4, 281), r=0.3 + d / 120.0)
+    # Le chemin de câbles du plafond : deux rails et leurs barreaux, qui filent vers le fond.
+    for k in range(14):
+        t = 1.0 / (1.0 + k * 0.42)
+        xa, ya = fx + (150.0 - fx) * t, fy + (-30.0 - fy) * t
+        xb, yb = fx + (196.0 - fx) * t, fy + (-22.0 - fy) * t
+        P.trait(xa, ya, xb, yb, N2 if k < 6 else Q1, max(1, P.ep(0.9 * t)))
+    P.trait(fx + 6.0, fy - 4.4, 150.0, -30.0, N0, 1)
+    P.trait(fx + 8.6, fy - 3.9, 196.0, -22.0, N0, 1)
     tab.plan("lointains", 0.2)
-    # ---- Le fond : le croisement, la gelée lumineuse sarcelle qui éclaire les parois, des diodes lointaines.
-    halo(P, fx - 8, fy + 14, 46, Q1, 0.75, ry=30)
-    halo(P, fx - 8, fy + 16, 26, Q2, 0.7, ry=16)
-    for i, (x, y, rr) in enumerate(((fx - 10, fy + 20, 7.0), (fx - 1, fy + 22, 4.6), (fx - 19, fy + 22.5, 3.8), (fx - 6, fy + 14, 3.0))):
+    # ---- La gelée, au croisement : des dômes translucides qui respirent, un cœur plus clair, des reflets.
+    for i, (x, y, rr) in enumerate(((gx_ - 2, gy_ + 2, 7.0), (gx_ + 7, gy_ + 4, 4.6), (gx_ - 11, gy_ + 4.5, 3.8), (gx_ + 2, gy_ - 4, 3.0), (gx_ + 13, gy_ + 5.6, 2.4))):
         souffle = 0.4 * onde(p, 0.2 * i)
+        P.ell(x, y, rr + souffle + 0.8, rr * 0.8 + souffle + 0.7, N1, cond=Y < fy + 25)
         P.ell(x, y, rr + souffle, rr * 0.8 + souffle, Q2, cond=Y < fy + 25)
         P.ell(x - rr * 0.2, y - rr * 0.2, rr * 0.6, rr * 0.5, Q3, cond=Y < fy + 25)
         P.ell(x - rr * 0.4, y - rr * 0.4, rr * 0.2, rr * 0.16, BLANC)
-    for i in range(22):
-        a, d = 6.283 * hz(i, 1, 281), 12 + 34 * hz(i, 2, 281)
-        voyant(P, fx + d * math.cos(a), fy + d * 0.7 * math.sin(a), (O2, C2, J3, Q3)[i % 4], V1, d=hz(i, 3, 281), part=0.3 + 0.4 * hz(i, 4, 281), r=0.35)
+        P.ell(x + rr * 0.3, y + rr * 0.3, rr * 0.16, rr * 0.12, Q1, cond=Y < fy + 25)            # une bulle prise dedans
     for i, (x, ep) in enumerate(((20, 5.0), (44, 3.4), (92, 4.2), (112, 3.0), (136, 5.4), (160, 3.6), (180, 4.6))):
         d = 5 * hz(i, 1, 288)                                # des troncs de câbles, loin, du sol au plafond
         pts = [(x - d, 82), (x + 4 - d, 56), (x - 3 + d, 30), (x + 5, 6), (x + d, -18)]
         cable(P, pts, ep, N0, V1 if i % 2 else N1, None)
         cable(P, [(px + ep * 0.7, py) for px, py in pts], ep * 0.5, ENCRE, N1, None)
-    voile(P, np.ones(X.shape, dtype=bool) & (P.a >= 0), Q1, 0.3 * np.exp(-(np.hypot(X - fx + 8, (Y - fy - 16) * 1.3) / 44.0) ** 2))
+        sens = -1 if x > gx_ else 1                            # le flanc tourné vers la gelée prend un liseré sarcelle
+        P.courbe([(px + sens * ep * 0.46, py) for px, py in pts[:3]], Q2 if abs(x - gx_) < 70 else Q1, 1)
+        for j in range(3):                                     # des colliers, une étiquette qui pend
+            yy = 14.0 + j * 22.0 + 6.0 * hz(i, j, 332)
+            P.rect(x - ep * 0.6 + d * (0.3 - j * 0.3), yy, ep * 1.2, 0.8, N2)
+        ty_ = 40.0 + 10.0 * hz(i, 5, 332)
+        bal = 0.4 * onde(p, 0.13 * i)
+        P.trait(x + 1.0, ty_, x + 1.4 + bal, ty_ + 3.0, G3)
+        P.rect(x + 0.2 + bal, ty_ + 3.0, 2.6, 1.8, E5 if i % 2 else J2)
+        P.rect(x + 0.7 + bal, ty_ + 3.7, 1.4, 0.4, G1)
+    tronc_ = (P.a >= 0) & (P.a != Q2) & (P.a != Q3) & (P.a != BLANC)
+    voile(P, tronc_, Q1, 0.5 * np.exp(-(np.hypot(X - gx_, (Y - gy_) * 1.3) / 50.0) ** 2))   # la lueur noie les troncs, au loin
+    voile(P, (P.a >= 0) & (np.abs(X - gx_) > 70.0), N0, 0.3)
     tab.plan("moyen", 0.5)
     # ---- Les câbles du milieu : des faisceaux qui pendent en guirlandes et rampent au sol, cuivre, violets, gris.
     for i, (x, ep) in enumerate(((6, 6.0), (70, 5.0), (148, 6.4))):
@@ -1390,6 +1611,15 @@ def caverne_cables(P, tab):
         coul = ((K1, K2, O2), (V1, V2, V3), (G0, G1, G2))[i]
         cable(P, pts, ep, coul[0], coul[1], coul[2])
         cable(P, [(px - ep * 0.8, py + 3) for px, py in pts], ep * 0.45, N0, N2, None)
+        sens = -1 if x > gx_ else 1
+        P.courbe([(px + sens * ep * 0.48, py) for px, py in pts[:4]], Q2, P.ep(0.5))
+        for j in range(4):                                     # des colliers de serrage
+            t = (j + 0.5) / 4.0
+            k = min(int(t * 4), 3)
+            xa = pts[k][0] + (pts[k + 1][0] - pts[k][0]) * (t * 4 - k)
+            ya = pts[k][1] + (pts[k + 1][1] - pts[k][1]) * (t * 4 - k)
+            P.rect(xa - ep * 0.55, ya, ep * 1.1, 1.0, ENCRE)
+            P.rect(xa - ep * 0.55, ya, ep * 1.1, 0.4, coul[2])
     for i in range(16):
         x0 = -6 + 13.5 * i + 5 * hz(i, 1, 282)
         y0 = -18.0
@@ -1408,7 +1638,19 @@ def caverne_cables(P, tab):
         P.rect(x + bal - 0.6, -18 + l + 2.6, 0.4, 1.0, J2)
         P.rect(x + bal + 0.3, -18 + l + 2.6, 0.4, 1.0, J2)
     sol = Y > 70.0 + 2.0 * np.sin(X / 17.0) + 1.0 * np.sin(X / 5.0)
-    P.rampe(sol, 0.4 + 0.3 * (pg.fbm(X / 6.0, Y / 2.0, 3, 284) - 0.5) + 0.3 * np.exp(-((X - fx + 8) / 40.0) ** 2), [ENCRE, N0, N1, Q1], 0.8)
+    lueur_s = np.exp(-((X - gx_) / 44.0) ** 2)
+    P.rampe(sol, 0.3 + 0.3 * (pg.fbm(X / 6.0, Y / 2.0, 3, 284) - 0.5) + 0.45 * lueur_s, [ENCRE, N0, N1, V1, Q1], 0.4)
+    P.remplir(sol & (np.abs(Y - (70.0 + 2.0 * np.sin(X / 17.0) + 1.0 * np.sin(X / 5.0)) - 0.3) < 0.4) & (lueur_s > 0.25), Q1)   # l'arête du sol, côté lueur
+    flaque = sol & (pg.fbm(X / 9.0, Y / 1.6, 3, 333) > 0.6) & (Y > 72.0)
+    P.remplir(flaque, N1)
+    voile(P, flaque, Q2, 0.6 * lueur_s, lumiere=True)
+    P.remplir(flaque & (hz(P.YI, (P.XI + int(p * 8)) // 4, 334) < 0.25 * lueur_s), Q3)       # les rides brillent
+    coul_ = sol & (np.abs(X - gx_) < 9.0 + (Y - 70.0) * 1.2) & (hz(P.YI, (P.XI + int(p * 8)) // 3, 335) < 0.4)
+    P.remplir(coul_, Q2)                                        # la gelée se reflète en traînées dans la dalle mouillée
+    P.remplir(coul_ & (np.abs(X - gx_) < 4.0), Q3)
+    for i, x in enumerate((20, 44, 92, 112, 136, 160, 180)):    # l'ombre que chaque tronc jette, en s'écartant de la lueur
+        sens = 1 if x > gx_ else -1
+        voile(P, sol & (np.abs(X - x - sens * (Y - 70.0) * 2.2 - sens * 2.0) < 2.2 + (Y - 70.0) * 0.3), ENCRE, 0.45)
     for i in range(9):                                        # les câbles qui rampent sur le sol
         x0 = -8 + 24 * i
         coul = ((K1, K2, O2), (V1, V2, V3), (G0, G1, G2))[i % 3]
@@ -1416,8 +1658,24 @@ def caverne_cables(P, tab):
               1.6, coul[0], coul[1], None)
     voile(P, sol & (Y > 75.5), N0, 0.55)                        # le chemin où l'on marche reste dégagé
     # Un boîtier de dérivation au mur : voyants qui courent, un interrupteur.
+    P.rect(151.0, 21.0, 18.0, 13.0, ENCRE)                       # son ombre
     P.rect(150.0, 20.0, 18.0, 13.0, G1)
     P.rect(150.0, 20.0, 18.0, 1.0, G3)
+    P.rect(150.0, 20.0, 0.6, 13.0, Q2)                          # son flanc, côté lueur
+    P.rect(150.0, 32.4, 18.0, 0.6, G0)
+    for (bx_, by_) in ((151.4, 21.6), (166.0, 21.6), (151.4, 31.0), (166.0, 31.0)):
+        P.point(bx_, by_, G4)                                   # ses vis
+    for k in range(3):                                          # trois gaines en sortent et plongent
+        P.courbe([(154.0 + k * 5.0, 33.0), (153.0 + k * 5.4, 44.0), (156.0 + k * 4.0, 58.0), (152.0 + k * 6.0, 72.0)], (G0, K1, V1)[k], P.ep(1.0))
+        P.courbe([(153.6 + k * 5.0, 33.0), (152.6 + k * 5.4, 44.0), (155.6 + k * 4.0, 58.0)], Q1, 1)
+    bx2 = 172.0 + 0.6 * onde(p, 0.4)                            # une baladeuse grillagée ; elle grésille, s'allume une image sur huit
+    P.courbe([(170.0, -18.0), (171.0, 20.0), (bx2, 44.0)], G0, 1)
+    vive = int(p * 8) == 5
+    P.ell(bx2, 47.4, 2.2, 3.0, J3 if vive else G2)
+    P.rect(bx2 - 1.4, 43.6, 2.8, 1.4, G1)
+    for k in (-1, 0, 1):
+        P.trait(bx2 + k * 1.4, 44.6, bx2 + k * 1.8, 50.4, G0)
+    P.trait(bx2 - 2.4, 47.4, bx2 + 2.4, 47.4, G0)
     for i in range(5):
         voyant(P, 153.0 + i * 3.0, 24.0, (Q3, O2)[i % 2], G0, d=i / 5.0, part=0.3, r=0.6)
     P.rect(155.0, 27.4, 8.0, 3.0, ENCRE)
@@ -1429,7 +1687,8 @@ def caverne_cables(P, tab):
         ep = (9.0, 10.0, 5.0, 6.0)[i]
         P.courbe(pts, ENCRE, P.ep(ep))
         d = ep * 0.42 * (1 if i % 2 == 0 else -1)
-        P.courbe([(x + d, y) for x, y in pts], Q1 if i % 2 == 0 else N1, 1)
+        P.courbe([(x + d, y) for x, y in pts], Q2 if i % 2 == 0 else Q1, P.ep(0.6))
+        P.courbe([(x + d * 0.7, y) for x, y in pts], Q1 if i % 2 == 0 else N1, 1)
         for j in range(6):                                    # les bagues du câble
             t = (j + 0.5) / 6.0
             k = min(int(t * 3), 2)
