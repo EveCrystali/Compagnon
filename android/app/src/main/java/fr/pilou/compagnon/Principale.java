@@ -48,6 +48,8 @@ public final class Principale extends Activity {
     private Style.Icone roue;
     private View boutonRoue;
     private View rangees;
+    /** La scène d'évolution ouverte par-dessus l'app (null sinon). */
+    private SceneEvolution evolution;
     private int courant = -1, avantReglages = ACCUEIL;
     private boolean actif;
 
@@ -254,6 +256,32 @@ public final class Principale extends Activity {
         ((PageAventure) page(AVENTURE)).lire();
     }
 
+    /** La scène d'évolution de ce stade, plein écran par-dessus l'app (accueil, carnet). Sans scène pour ce stade : rien. */
+    void ouvrirEvolution(int stade) {
+        if (evolution != null || Evolutions.scenes().get(stade) == null) return;
+        evolution = new SceneEvolution(this, stade, this::fermerEvolution);
+        cadre.addView(evolution, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        evolution.requestApplyInsets();
+        if (Vitrine.anime(this)) {
+            evolution.setAlpha(0);
+            evolution.animate().alpha(1).setDuration(200).start();
+        }
+    }
+
+    /** Pour les tests : la scène d'évolution ouverte. */
+    SceneEvolution evolution() {
+        return evolution;
+    }
+
+    void fermerEvolution() {
+        if (evolution == null) return;
+        View v = evolution;
+        evolution = null;
+        // Après le toucher (jamais pendant) : la vue touchée quitte l'écran au tour suivant.
+        h.post(() -> cadre.removeView(v));
+        if (courant >= 0) page(courant).rafraichir();
+    }
+
     /** Boutique, sur un rayon (PageBoutique.VITRINE : la vitrine). */
     void allerBoutique(String rayon) {
         aller(BOUTIQUE, true);
@@ -394,7 +422,8 @@ public final class Principale extends Activity {
     @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
-        if (rangees != null) fermerRangees();
+        if (evolution != null) fermerEvolution();
+        else if (rangees != null) fermerRangees();
         else if (courant >= 0 && page(courant).retour()) return;
         else if (courant == REGLAGES) aller(avantReglages, true);
         else if (courant != ACCUEIL) aller(ACCUEIL, true);

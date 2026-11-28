@@ -10,6 +10,10 @@ public sealed partial class FenetrePilou
     private const double DureeEvolution = 4200;
     private double _evolutionDebut = -1;
     private int _evolutionCible;
+    // La scène d'évolution qui attend d'être annoncée (le stade atteint), et quand l'annoncer : une seule bulle, après
+    // le saut et le salut, jamais pendant la saisie. Le Carnet la garde ensuite.
+    private int _sceneAAnnoncer;
+    private double _sceneDes;
 
     private bool Possede(string id) => Bourse().Inventaire.Contains(id);
 
@@ -84,7 +88,11 @@ public sealed partial class FenetrePilou
 
     private double ProgresEvolution(double t)
     {
-        if (_evolutionDebut < 0) return 0;
+        if (_evolutionDebut < 0)
+        {
+            AnnoncerScene(t);
+            return 0;
+        }
         double x = (t - _evolutionDebut) / DureeEvolution;
         if (x < 1) return Math.Max(0.001, x);
         _evolutionDebut = -1;
@@ -92,12 +100,47 @@ public sealed partial class FenetrePilou
         _profil.Evolution.StadeAffiche = 0;
         _profil.Ecrire(DossierPartage);
         ChoisirVariante(_evolutionCible);
-        Dire($"✦ Pilou est devenu {Acces.NomStade(_evolutionCible)} !", 5000);
         PublierSortie($"✦ {NomPilou} est devenu {Acces.NomStade(_evolutionCible)}", "");
         Flotter(Acces.NomStade(_evolutionCible).ToUpperInvariant(), 1.6, new Point(TeteX - 60, TeteY - 70));
         _salueJusque = t + 2500;
         _tSaut = t;
+        if (Evolutions.Embarquees().ContainsKey(_evolutionCible))
+        {
+            _sceneAAnnoncer = _evolutionCible;
+            _sceneDes = t + 3000;
+        }
         return 0;
+    }
+
+    // L'annonce de la scène : « il m'arrive quelque chose… » ; un clic sur la bulle l'ouvre (ClicAventure). Pendant la
+    // saisie, elle attend que le clavier se taise.
+    private void AnnoncerScene(double t)
+    {
+        if (_sceneAAnnoncer == 0 || t < _sceneDes || EnSaisie) return;
+        int stade = _sceneAAnnoncer;
+        _sceneAAnnoncer = 0;
+        Dire($"✦ il m'arrive quelque chose… je suis {Acces.NomStade(stade)} ! tu veux voir ?", 12000);
+        _messageTag = "evolution:" + stade.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        Bulle(_vivantes, Epoque);
+    }
+
+    // Pour le Carnet : les stades atteints et ce que Pilou en a gardé.
+    internal Evolution EvolutionProfil => _profil.Evolution;
+
+    // Ouvre la scène d'évolution de ce stade (bulle, Carnet, essai). Le choix est gardé la première fois seulement ; en
+    // démonstration (essai), rien n'est écrit.
+    internal void OuvrirSceneEvolution(int stade, bool demo = false)
+    {
+        if (!Evolutions.Embarquees().TryGetValue(stade, out var sc)) return;
+        var ev = _profil.Evolution;
+        var f = new FenetreScene(this, sc, ev.Variantes.GetValueOrDefault(stade, ""), demo ? null : id =>
+        {
+            if (ev.Gardes.ContainsKey(stade)) return;
+            ev.Gardes[stade] = id;
+            _profil.Ecrire(DossierPartage);
+        });
+        f.Show();
+        f.Activate();
     }
 
     // Pendant l'évolution : le stade visé (le dessin fond l'ancien dans le nouveau selon Pose.Evolution).

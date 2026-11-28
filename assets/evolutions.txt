@@ -1,0 +1,65 @@
+# Les scènes d'évolution (docs/SCENES.md, « Scènes d'évolution ») : Pilou raconte au joueur ce qui vient de lui arriver,
+# au fond du jardin, devant son pot-cabane. Une scène par stade atteint (2 : Pilou, niveau 10 ; 3 : Pilou Nimbus, 25 ;
+# 4 : Pilou Astral, 40). Lu par outils/sprites/evolutions.py (référence), Evolutions.cs et Evolutions.java.
+#
+#   scene <stade>
+#   titre <texte>
+#   decor <scène de assets/scenes/evolution.txt>
+#   pilou <humeur> <texte>              une réplique, toujours dite
+#   calin <humeur> <texte>              dite seulement si la variante du stade est câline
+#   espiegle <humeur> <texte>           dite seulement si elle est espiègle
+#   choix <question>                    le seul choix de la scène : ce qu'il garde de son ancienne forme
+#   option <id> <libellé>
+#   apres <id> <humeur> <texte>         dite seulement après cette option
+# Les répliques « pilou » écrites après les « apres » sont dites quel que soit le choix.
+
+scene 2
+titre Trop grand pour mon pot
+decor fond-du-jardin-matin
+pilou surpris Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+pilou joie J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+calin tendre Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+espiegle malice Je crois que c'est à force de faire des bêtises sur ton bureau. Ça étire. Je ne vois pas d'autre explication.
+pilou neutre Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+choix Qu'est-ce que Pilou garde de la Gouttelette ?
+option tache La petite tache qu'il laissait partout
+apres tache tendre La tache, donc. Je la pose sur le pot, à côté de la porte. Comme ça, en rentrant le soir, je sais que c'est chez moi.
+option rouler Sa façon de rouler au lieu de marcher
+apres rouler joie Rouler, donc. Je marche, maintenant, mais dans les descentes je me mets en boule. Personne ne peut m'interdire une descente.
+option ploc Le petit « ploc » quand il saute
+apres ploc malice Le ploc, donc. Je saute, ça fait ploc. C'est idiot, et c'est à moi. Ploc.
+pilou joie Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+
+scene 3
+titre Un nuage dans la tête
+decor fond-du-jardin-soir
+pilou surpris Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+pilou peur J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+calin tendre Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+espiegle malice J'ai essayé de le faire pleuvoir sur le chat du voisin. Il a refusé. Il a déjà meilleur caractère que moi.
+pilou tendre Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+choix Qu'est-ce que Pilou garde d'avant ?
+option pieds Ses pieds bien à plat dans l'herbe
+apres pieds determine Les pieds sur terre, donc. Le nuage flotte, moi je marche dessous. On se partage le travail.
+option peur Sa peur de l'eau, par habitude
+apres peur tendre La peur de l'eau, donc. Je la connais bien, elle ne me surprend plus. Le nuage a promis de prévenir avant de pleuvoir.
+option etincelle L'étincelle orange au bout de son antenne
+apres etincelle joie L'étincelle, donc. Le nuage s'est posé juste à côté, sans l'éteindre. Le soir, ça fait une petite lampe sous un petit toit.
+pilou joie Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+
+scene 4
+titre Des étoiles plein les poches
+decor fond-du-jardin-nuit
+pilou surpris Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+pilou joie J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+calin tendre J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+espiegle malice J'en ai accroché une à la boîte aux lettres, pour faire croire que le facteur était passé. Personne n'est venu voir. Je trouve ça très drôle quand même.
+pilou tendre Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+choix Qu'est-ce que Pilou garde de ce qu'il était ?
+option pot Son pot de fleurs, même s'il y entre de justesse
+apres pot tendre Le pot, donc. J'y entre en me tassant, et les étoiles dorment sur le toit. Une cabane, ça reste une cabane.
+option nuage Son petit nuage, pour les nuits trop claires
+apres nuage joie Le nuage, donc. Il garde les étoiles au chaud quand tu éteins l'écran. Ils se sont mis d'accord sans moi.
+option noir Sa trouille du noir, pour rester lui-même
+apres noir malice La trouille du noir, donc. Avec des étoiles autour, ce n'est plus très noir, mais je la garde quand même. On ne jette pas une vieille amie.
+pilou joie Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.

@@ -71,6 +71,7 @@ def charger():
     import decors_panne  # noqa: F401
     import decors_phare  # noqa: F401
     import decors_nuage  # noqa: F401
+    import decors_evolution  # noqa: F401
 
 
 def declares():

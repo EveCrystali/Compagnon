@@ -1,0 +1,257 @@
+# Référence des scènes d'évolution (outils/sprites/evolutions.py) : rejouée par EvolutionsTests.cs et
+# EvolutionsTest.java. Ne pas modifier à la main.
+scene 2 fond-du-jardin-matin | Trop grand pour mon pot | Qu'est-ce que Pilou garde de la Gouttelette ?
+option tache La petite tache qu'il laissait partout
+option rouler Sa façon de rouler au lieu de marcher
+option ploc Le petit « ploc » quand il saute
+deroule 2 calin - 5
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  - 1350 Qu'est-ce que Pilou garde de la Gouttelette ?
+deroule 2 calin tache 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  tendre 3510 La tache, donc. Je la pose sur le pot, à côté de la porte. Comme ça, en rentrant le soir, je sais que c'est chez moi.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 calin rouler 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  joie 3720 Rouler, donc. Je marche, maintenant, mais dans les descentes je me mets en boule. Personne ne peut m'interdire une descente.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 calin ploc 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  malice 2190 Le ploc, donc. Je saute, ça fait ploc. C'est idiot, et c'est à moi. Ploc.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 espiegle - 5
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  malice 3270 Je crois que c'est à force de faire des bêtises sur ton bureau. Ça étire. Je ne vois pas d'autre explication.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  - 1350 Qu'est-ce que Pilou garde de la Gouttelette ?
+deroule 2 espiegle tache 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  malice 3270 Je crois que c'est à force de faire des bêtises sur ton bureau. Ça étire. Je ne vois pas d'autre explication.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  tendre 3510 La tache, donc. Je la pose sur le pot, à côté de la porte. Comme ça, en rentrant le soir, je sais que c'est chez moi.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 espiegle rouler 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  malice 3270 Je crois que c'est à force de faire des bêtises sur ton bureau. Ça étire. Je ne vois pas d'autre explication.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  joie 3720 Rouler, donc. Je marche, maintenant, mais dans les descentes je me mets en boule. Personne ne peut m'interdire une descente.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 espiegle ploc 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  malice 3270 Je crois que c'est à force de faire des bêtises sur ton bureau. Ça étire. Je ne vois pas d'autre explication.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  malice 2190 Le ploc, donc. Je saute, ça fait ploc. C'est idiot, et c'est à moi. Ploc.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 autre - 5
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  - 1350 Qu'est-ce que Pilou garde de la Gouttelette ?
+deroule 2 autre tache 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  tendre 3510 La tache, donc. Je la pose sur le pot, à côté de la porte. Comme ça, en rentrant le soir, je sais que c'est chez moi.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 autre rouler 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  joie 3720 Rouler, donc. Je marche, maintenant, mais dans les descentes je me mets en boule. Personne ne peut m'interdire une descente.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+deroule 2 autre ploc 6
+  surpris 3360 Ce matin, en sortant de sous mon pot, je me suis cogné la tête. Le pot n'a pas bougé de la nuit. Donc c'est moi.
+  joie 4230 J'ai grandi. Pas beaucoup : un doigt. Enfin, si j'avais des doigts. Mes pieds dépassent du pot, et mon antenne pique au-dessus des fraisiers.
+  tendre 3210 Je crois que c'est à force de tes petits soins. On pousse mieux quand quelqu'un vérifie qu'on a bien mangé.
+  neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
+  malice 2190 Le ploc, donc. Je saute, ça fait ploc. C'est idiot, et c'est à moi. Ploc.
+  joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
+scene 3 fond-du-jardin-soir | Un nuage dans la tête | Qu'est-ce que Pilou garde d'avant ?
+option pieds Ses pieds bien à plat dans l'herbe
+option peur Sa peur de l'eau, par habitude
+option etincelle L'étincelle orange au bout de son antenne
+deroule 3 calin - 5
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  - 1050 Qu'est-ce que Pilou garde d'avant ?
+deroule 3 calin pieds 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  determine 2760 Les pieds sur terre, donc. Le nuage flotte, moi je marche dessous. On se partage le travail.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 calin peur 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  tendre 3540 La peur de l'eau, donc. Je la connais bien, elle ne me surprend plus. Le nuage a promis de prévenir avant de pleuvoir.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 calin etincelle 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  joie 3690 L'étincelle, donc. Le nuage s'est posé juste à côté, sans l'éteindre. Le soir, ça fait une petite lampe sous un petit toit.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 espiegle - 5
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  malice 3180 J'ai essayé de le faire pleuvoir sur le chat du voisin. Il a refusé. Il a déjà meilleur caractère que moi.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  - 1050 Qu'est-ce que Pilou garde d'avant ?
+deroule 3 espiegle pieds 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  malice 3180 J'ai essayé de le faire pleuvoir sur le chat du voisin. Il a refusé. Il a déjà meilleur caractère que moi.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  determine 2760 Les pieds sur terre, donc. Le nuage flotte, moi je marche dessous. On se partage le travail.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 espiegle peur 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  malice 3180 J'ai essayé de le faire pleuvoir sur le chat du voisin. Il a refusé. Il a déjà meilleur caractère que moi.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  tendre 3540 La peur de l'eau, donc. Je la connais bien, elle ne me surprend plus. Le nuage a promis de prévenir avant de pleuvoir.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 espiegle etincelle 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  malice 3180 J'ai essayé de le faire pleuvoir sur le chat du voisin. Il a refusé. Il a déjà meilleur caractère que moi.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  joie 3690 L'étincelle, donc. Le nuage s'est posé juste à côté, sans l'éteindre. Le soir, ça fait une petite lampe sous un petit toit.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 autre - 5
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  - 1050 Qu'est-ce que Pilou garde d'avant ?
+deroule 3 autre pieds 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  determine 2760 Les pieds sur terre, donc. Le nuage flotte, moi je marche dessous. On se partage le travail.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 autre peur 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  tendre 3540 La peur de l'eau, donc. Je la connais bien, elle ne me surprend plus. Le nuage a promis de prévenir avant de pleuvoir.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+deroule 3 autre etincelle 6
+  surpris 4050 Ce soir, j'avais la tête dans les nuages. Je veux dire : vraiment. Il y en a un petit accroché à mon antenne, et il ne veut pas partir.
+  peur 4380 J'ai fait trois fois le tour du pot en courant. Il m'a suivi trois fois. Il est léger, il est doux, et il sent la pluie. Moi qui n'aime pas l'eau.
+  tendre 4080 Il ne pleut pas sur moi. Il fait juste un peu d'ombre quand le soleil tape. Je crois qu'il me protège. Comme toi, avec tes petits soins.
+  tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
+  joie 3690 L'étincelle, donc. Le nuage s'est posé juste à côté, sans l'éteindre. Le soir, ça fait une petite lampe sous un petit toit.
+  joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
+scene 4 fond-du-jardin-nuit | Des étoiles plein les poches | Qu'est-ce que Pilou garde de ce qu'il était ?
+option pot Son pot de fleurs, même s'il y entre de justesse
+option nuage Son petit nuage, pour les nuits trop claires
+option noir Sa trouille du noir, pour rester lui-même
+deroule 4 calin - 5
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  - 1350 Qu'est-ce que Pilou garde de ce qu'il était ?
+deroule 4 calin pot 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  tendre 3210 Le pot, donc. J'y entre en me tassant, et les étoiles dorment sur le toit. Une cabane, ça reste une cabane.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 calin nuage 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  joie 3150 Le nuage, donc. Il garde les étoiles au chaud quand tu éteins l'écran. Ils se sont mis d'accord sans moi.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 calin noir 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  malice 4170 La trouille du noir, donc. Avec des étoiles autour, ce n'est plus très noir, mais je la garde quand même. On ne jette pas une vieille amie.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 espiegle - 5
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  malice 4560 J'en ai accroché une à la boîte aux lettres, pour faire croire que le facteur était passé. Personne n'est venu voir. Je trouve ça très drôle quand même.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  - 1350 Qu'est-ce que Pilou garde de ce qu'il était ?
+deroule 4 espiegle pot 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  malice 4560 J'en ai accroché une à la boîte aux lettres, pour faire croire que le facteur était passé. Personne n'est venu voir. Je trouve ça très drôle quand même.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  tendre 3210 Le pot, donc. J'y entre en me tassant, et les étoiles dorment sur le toit. Une cabane, ça reste une cabane.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 espiegle nuage 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  malice 4560 J'en ai accroché une à la boîte aux lettres, pour faire croire que le facteur était passé. Personne n'est venu voir. Je trouve ça très drôle quand même.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  joie 3150 Le nuage, donc. Il garde les étoiles au chaud quand tu éteins l'écran. Ils se sont mis d'accord sans moi.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 espiegle noir 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  malice 4560 J'en ai accroché une à la boîte aux lettres, pour faire croire que le facteur était passé. Personne n'est venu voir. Je trouve ça très drôle quand même.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  malice 4170 La trouille du noir, donc. Avec des étoiles autour, ce n'est plus très noir, mais je la garde quand même. On ne jette pas une vieille amie.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 autre - 5
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  - 1350 Qu'est-ce que Pilou garde de ce qu'il était ?
+deroule 4 autre pot 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  tendre 3210 Le pot, donc. J'y entre en me tassant, et les étoiles dorment sur le toit. Une cabane, ça reste une cabane.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 autre nuage 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  joie 3150 Le nuage, donc. Il garde les étoiles au chaud quand tu éteins l'écran. Ils se sont mis d'accord sans moi.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.
+deroule 4 autre noir 6
+  surpris 3630 Cette nuit, je n'arrivais pas à dormir sous mon pot. Il faisait trop clair. Puis j'ai compris : la lumière venait de moi.
+  joie 4740 J'ai des étoiles. Des petites, qui me tournent autour comme des moucherons, sauf qu'elles ne piquent pas. Quand je bouge, elles suivent avec un peu de retard.
+  tendre 4410 J'en ai compté une pour chaque fois que tu m'as dit bonjour. Après, j'ai arrêté de compter : il y en avait trop, et j'avais les yeux qui piquaient.
+  tendre 5310 Pilou Astral. C'est un grand nom pour quelqu'un qui dort sous un pot. Avant d'y aller, je garde une chose de ce que j'étais. Une seule, et je ne pourrai pas revenir la chercher.
+  malice 4170 La trouille du noir, donc. Avec des étoiles autour, ce n'est plus très noir, mais je la garde quand même. On ne jette pas une vieille amie.
+  joie 4290 Voilà. Je suis Pilou Astral. Le même, en plus lumineux. Je reviens en bas de ton écran ; si je brille trop, je mettrai une étoile en veilleuse.

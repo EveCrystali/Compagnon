@@ -257,7 +257,7 @@ public sealed partial class FenetrePilou
         var v = Soins.Variante(SoinsMaintenant().Score);
         _profil.Evolution.Variantes[stade] = v;
         _profil.Ecrire(DossierPartage);
-        Dire($"✦ un Pilou {Soins.NomVariante(v)} !", 4000);
+        // La variante se dit dans la scène d'évolution (assets/evolutions.txt) : pas de bulle de plus ici.
     }
 
     // Une seule icône, la plus pressante, près de la tête ; un clic la comble.

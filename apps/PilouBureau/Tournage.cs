@@ -190,6 +190,7 @@ public static class Tournage
         "campagne:lecture", "campagne:attente", "campagne:retour", "campagne:epreuve", "campagne:fin",
         "mot", "journal", "complicite",
         "campagne:personnage",
+        "scene-evolution:2", "scene-evolution:3", "scene-evolution:4",
     };
 
     // Familles à paramètre (--essai=stade:3, tenue:code, objet:cape, soins:faim, meteo:pluie:parapluie, campagne:prologue).

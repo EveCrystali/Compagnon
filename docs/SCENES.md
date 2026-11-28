@@ -160,16 +160,39 @@ lissage) ; `FenetreAventure.cs` raconte :
 Choisir, repartir et la fin se posent sur la scène ; une attente, une épreuve, « mettre de côté » s'affichent à la
 place de la boîte. Le chapitre, le lieu et le sac sont à droite de la boîte.
 
+## Scènes d'évolution
+
+Passer de Gouttelette à Pilou (niveau 10), à Pilou Nimbus (25), à Pilou Astral (40) se raconte dans une courte scène
+(30 à 60 s), au fond du jardin, devant le pot-cabane de Pilou (`decor-evolution-fond-du-jardin-<heure>`, dessiné par
+`outils/sprites/decors_evolution.py` : le matin, le soir, la nuit étoilée ; scènes dans `assets/scenes/evolution.txt`).
+
+- **Le script** : `assets/evolutions.txt` (format en tête du fichier). Des répliques avec leur humeur ; une réplique
+  câline et une espiègle (la variante du stade se dit dans la scène) ; un seul choix, ce que Pilou garde de son ancienne
+  forme, suivi de sa réplique ; une fin toujours heureuse. Pas de punition.
+- **Calculé en commun** : `outils/sprites/evolutions.py` (référence) écrit `evolutions-reference.txt` ; `Evolutions.cs`
+  et `Evolutions.java` le rejouent (mêmes répliques, même ordre, même temps d'écriture pour chaque variante et chaque
+  choix).
+- **Pilou reste passif** : à la fin de l'animation d'évolution, une seule bulle « il m'arrive quelque chose… tu veux
+  voir ? », posée quand le clavier se tait (PC) ; la scène ne s'ouvre que si on clique ou touche. La pierre de calme
+  retient l'évolution : rien ne se joue. Les anciennes bulles « Pilou est devenu… » et « un Pilou câlin ! » sont
+  remplacées par cette annonce et par la scène.
+- **Le choix** est gardé la première fois (`Evolution.Gardes` sur PC, `evolution.garde.<stade>` dans les préférences du
+  téléphone) ; le Carnet (« Ses évolutions ») le rappelle et laisse revoir la scène sans le changer.
+- **PC** : `FenetreScene.cs` (scène ×4, boîte de dialogue, choix au clic ou aux touches 1 à 3, musique du ton
+  « émotion ») ; essai `--essai=scene-evolution:2|3|4` (démonstration : rien n'est gardé). **Android** :
+  `SceneEvolution.java`, plein écran par-dessus l'app, boîte et choix en bas comme la lecture des campagnes.
+- **Limites** : le mini-Pilou de scène n'a qu'une forme (la transformation se dit par le texte) ; le choix n'est pas
+  partagé entre le PC et le téléphone.
+
 ## Ce qui reste (prochaines étapes)
 
 Les trois grandes campagnes sont au théâtre : La Grande Panne (12 scènes, acteurs de l'ordinateur), Le phare éteint
 (14 scènes : mouettes, chat, papillons de nuit, crabes) et Petit Nuage (14 scènes : petits nuages qui passent, brume,
 vapeur, flocons, aiguilles de mélèze, rafales, poussière dorée, ronds dans l'eau), avec tous leurs personnages en pied.
 
-1. **Les scènes d'évolution de Pilou** (niveaux 10, 25, 40) : brief du pilote à venir.
-2. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
+1. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
    simple.
-3. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).
+2. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).
 
 ## Jamais vérifié sur un vrai appareil
 

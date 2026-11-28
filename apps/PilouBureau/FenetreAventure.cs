@@ -661,7 +661,9 @@ internal sealed class FenetreAventure : Window
         var k = _pilou.CarnetCampagnes;
         var pages = Aventure.Carnet(k, Disponibles().Select(Charger).OfType<Campagne>());
         var pile = new StackPanel { Margin = new Thickness(0, 0, 8, 8) };
-        if (pages.All(p => p.Fins.Count == 0))
+        var evolutions = Evolutions.Embarquees().Values.Where(s => s.Stade <= _pilou.EvolutionProfil.StadeAtteint).ToList();
+        if (evolutions.Count > 0) pile.Children.Add(SesEvolutions(evolutions));
+        if (pages.All(p => p.Fins.Count == 0) && evolutions.Count == 0)
         {
             pile.Children.Add(Vide("Le carnet est encore vierge.", "Chaque fin d'aventure y laisse un souvenir, parfois un titre ou un objet à porter. "
                                                                     + "Commence par le prologue : la colline d'en face."));
@@ -688,6 +690,38 @@ internal sealed class FenetreAventure : Window
             }
         }
         return new ScrollViewer { Content = pile, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
+    }
+
+    // Ses évolutions (docs/SCENES.md, « Scènes d'évolution ») : une carte par stade atteint, ce qu'il a gardé de son
+    // ancienne forme, et la scène à revoir.
+    private UIElement SesEvolutions(List<Evolutions.Scene> scenes)
+    {
+        var bloc = new StackPanel { Margin = new Thickness(0, 12, 0, 6) };
+        bloc.Children.Add(Enseigne("SES ÉVOLUTIONS", Bandeau.ArgentClair, 2));
+        var cartes = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
+        var ev = _pilou.EvolutionProfil;
+        foreach (var sc in scenes)
+        {
+            var p = new StackPanel();
+            p.Children.Add(Texte($"✦ {Acces.NomStade(sc.Stade)}", 13.5, Encre, true));
+            p.Children.Add(Texte(sc.Titre, 12, EncrePale));
+            var garde = Evolutions.Garde(sc, ev.Gardes.GetValueOrDefault(sc.Stade));
+            var t = Texte(garde == "" ? "pas encore vue" : $"il a gardé : {garde.ToLowerInvariant()}", 11.5, garde == "" ? EncrePale : Encre, garde != "");
+            t.Margin = new Thickness(0, 6, 0, 6);
+            t.TextWrapping = TextWrapping.Wrap;
+            p.Children.Add(t);
+            int stade = sc.Stade;
+            var b = BoutonPixel(garde == "" ? "▸ voir" : "▸ revoir", garde == "", () => _pilou.OuvrirSceneEvolution(stade));
+            b.HorizontalAlignment = HorizontalAlignment.Left;
+            p.Children.Add(b);
+            cartes.Children.Add(new Border
+            {
+                Width = 230, MinHeight = 92, Margin = new Thickness(0, 0, 10, 10), Padding = new Thickness(10, 8, 10, 8),
+                Background = Parchemin, BorderBrush = Gel(Aventure.TeinteTon("emotion")), BorderThickness = new Thickness(3), Child = p,
+            });
+        }
+        bloc.Children.Add(cartes);
+        return bloc;
     }
 
     private static Border CarteFin(Campagne c, Noeud n, FinObtenue? f)
