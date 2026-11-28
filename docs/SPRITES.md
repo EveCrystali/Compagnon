@@ -152,21 +152,22 @@ Vérifié par `IllustrationsTests.cs` et `IllustrationsTest.java` (chaque décor
 déclaré a son sprite, au bon format, opaque, natif en fin ; chaque exclusif se voit porté aux quatre stades ; les
 emblèmes de ton ont quatre silhouettes différentes), et par quatre poses de `rendus-reference.txt`.
 
-## Décors haute définition (384 × 160)
+## Décors haute définition (480 × 240)
 
-Décision d'Antoine du 28 novembre 2026 (étude `docs/maquettes/paysages/`) : les décors passent à **384 × 160**, le
-double exact des 192 × 80, à 3 px par pixel (1152 px ; 12 pixels coupés de chaque côté sur un téléphone de 1078 px).
+Décision d'Antoine du 28 novembre 2026 (étude `docs/maquettes/paysages/`, règle 9 de `CLAUDE.md`) : les décors passent
+à **480 × 240 au minimum**, 2 px d'écran par pixel (960 × 480), cadre 2:1.
 Ils sont peints par `outils/sprites/paysage.py` ([PEINTURE.md](PEINTURE.md)) et écrits par
 `py outils/sprites/decors_hd.py` (numpy et Pillow, donc hors de `generer.py`).
 
-**Proposition envoyée à la session du Théâtre le 28 novembre ; pas encore confirmée par elle.** Tant que le Théâtre
-384 × 160 n'est pas fusionné, rien ne lit ces fichiers : les décors 192 × 80 d'`assets/sprites2x` restent en service.
+**Format provisoire.** La session du Théâtre écrit `docs/SCENES-HD.md` (tailles, plans de parallaxe, format, noms) :
+c'est lui qui fera foi, et les décors seront réexportés à son format. D'ici là, rien ne lit ces fichiers : les décors
+192 × 80 d'`assets/sprites2x` restent en service.
 
 | | |
 |---|---|
 | Emplacement | `assets/decors/decor-<campagne>-<décor>.txt` : mêmes identifiants que les décors actuels |
 | Embarquement | Android : déjà pris (tout `assets/` est en ressources) ; PC : une ligne `EmbeddedResource` à ajouter |
-| Coordonnées | 2 × celles du décor fin actuel (le sol vers y = 156) |
+| Coordonnées | 2,5 × celles du décor fin actuel, plus 40 pixels de ciel en haut : pixel = (2,5 x, 2,5 y + 40) ; le sol vers y = 235 |
 | Référence | `outils/sprites/decors-hd-reference.txt` : `id largeur hauteur images duree` puis l'empreinte FNV-1a de chaque image (pixels ARGB `0xFFrrggbb`, rangée par rangée, même calcul que `theatre.fnv`) |
 
 **Format « décor compact »** (texte UTF-8, fins de ligne LF) :
@@ -174,7 +175,7 @@ Ils sont peints par `outils/sprites/paysage.py` ([PEINTURE.md](PEINTURE.md)) et 
 ```
 # commentaire
 id: decor-prologue-mare
-taille: 384 160
+taille: 480 240
 duree: 200                       ms par image
 palette: a=#5b6fc4 b=#7384d0 …   une lettre par couleur, 67 au plus, décor opaque
 images: 8
@@ -187,8 +188,12 @@ images: 8
 - Le lecteur de référence est `decors_hd.decoder` (une trentaine de lignes) ; C# et Java le refont à l'identique, sans
   bibliothèque.
 
-**Poids mesuré** sur « La mare » (8 images) : 94 Ko, contre 481 Ko à une lettre par pixel (÷ 5) ; 46 Ko une fois
-compressé (APK). Extrapolé à 46 décors : ≈ 4,3 Mo, le poids des décors d'aujourd'hui.
+**Poids mesuré** sur les six décors du prologue (8 images chacun) : 81 à 161 Ko, 682 Ko en tout, contre 901 Ko
+*par décor* à une lettre par pixel (÷ 6 à 11) ; 256 Ko une fois compressés (APK). Extrapolé à 46 décors : ≈ 5,2 Mo
+(2 Mo compressés), à comparer aux 4,3 Mo des décors d'aujourd'hui.
+
+**Ce qui bouge.** D'une image à la suivante, 1,2 à 6 % des pixels changent (6 % : la mare et ses reflets) ; le « . »
+du format les isole, un moteur peut ne redessiner que les plages qui ne sont pas des « . ».
 
 ## Animations des campagnes
 

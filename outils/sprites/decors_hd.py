@@ -1,4 +1,4 @@
-"""Décors haute définition des campagnes (384 × 160) : registre, format « décor compact », référence, planches.
+"""Décors haute définition des campagnes (480 × 240, 2 px d'écran par pixel) : registre, format « décor compact », référence, planches.
 
     py outils/sprites/decors_hd.py                 tout écrire : assets/decors/, la référence, les planches
     py outils/sprites/decors_hd.py prologue mare   un seul décor (la référence n'est alors pas réécrite)
@@ -190,30 +190,31 @@ def planches(sid, ims):
     _, campagne, lieu = sid.split("-", 2)
     dossier = os.path.join(PLANCHES, campagne)
     os.makedirs(dossier, exist_ok=True)
-    vues = [pg.en_image(im, 3) for im in ims]
+    vues = [pg.en_image(im, 2) for im in ims]
     vues[0].save(os.path.join(dossier, lieu + ".png"))
     vues[0].save(os.path.join(dossier, lieu + ".gif"), save_all=True, append_images=vues[1:], duration=DECORS[sid][4],
                  loop=0)
-    # Avant (le décor 192 × 80 en service, à 5 px) au-dessus d'après (384 × 160 à 3 px), chacun à sa taille d'écran.
+    # Avant (le décor 192 × 80 en service, à 5 px) au-dessus d'après (480 × 240 à 2 px), chacun à sa taille d'écran.
     ancien = rendu._dossier("sprites2x").get(sid)
-    planche = Image.new("RGB", (1152, 400 + 16 + 480), (11, 14, 26))
+    planche = Image.new("RGB", (960, 400 + 16 + 480), (11, 14, 26))
     if ancien is not None:
-        planche.paste(pl.sprite_image(ancien, 5, 0).convert("RGB"), (96, 0))
+        planche.paste(pl.sprite_image(ancien, 5, 0).convert("RGB"), (0, 0))
     planche.paste(vues[0], (0, 416))
     planche.save(os.path.join(dossier, lieu + "-avant-apres.png"))
     # Montages : la scène avec Pilou et un personnage, dans la fenêtre du PC et sur un téléphone de 1078 × 2400.
     def scene(fmt, idx):
         im = vues[0].convert("RGBA")
-        for spr, x in zip(etude.personnages("D"), (etude.PLACE, etude.INTERLOCUTEUR)):
-            g = spr.resize((spr.width * 3, spr.height * 3), Image.NEAREST)
-            im.alpha_composite(g, ((int(round(x * 2)) - spr.width // 2) * 3, int(round(etude.SOL_Y * 2)) * 3 - g.height))
+        for spr, x in zip(etude.personnages("C"), (etude.PLACE + 4, etude.INTERLOCUTEUR)):
+            g = spr.resize((spr.width * 2, spr.height * 2), Image.NEAREST)
+            im.alpha_composite(g, ((int(round(x * 2.5)) - spr.width // 2) * 2,
+                                   int(round((etude.SOL_Y - pg.HAUT) * 2.5)) * 2 - g.height))
         return im.convert("RGB")
 
     vraie, etude.scene = etude.scene, scene
     try:
-        scene("D", None).save(os.path.join(dossier, lieu + "-scene.png"))
-        etude.montage_pc("D", None).save(os.path.join(dossier, lieu + "-pc.png"))
-        etude.montage_telephone("D", None).save(os.path.join(dossier, lieu + "-telephone.png"))
+        scene("C", None).save(os.path.join(dossier, lieu + "-scene.png"))
+        etude.montage_pc("C", None).save(os.path.join(dossier, lieu + "-pc.png"))
+        etude.montage_telephone("C", None).save(os.path.join(dossier, lieu + "-telephone.png"))
     finally:
         etude.scene = vraie
 
