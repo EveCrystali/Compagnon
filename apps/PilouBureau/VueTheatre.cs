@@ -252,7 +252,8 @@ internal sealed class VueTheatre : Border
     private int _visageImage = -1;
     public const int VisageW = 34, VisageH = 36;
 
-    public BitmapSource? Visage(string humeur, bool parle, double now)
+    // toujours : rend l'image même si elle n'a pas changé (une petite tête du fil, pas l'animation de la boîte).
+    public BitmapSource? Visage(string humeur, bool parle, double now, bool toujours = false)
     {
         if (_cx is null || _cx.P.Count == 0) return null;
         var P = _cx.P;
@@ -263,8 +264,8 @@ internal sealed class VueTheatre : Border
             : AnimationsCampagne.Cligne(t) ? P["cligne"].Premiere
             : niveau != AnimationsCampagne.Completes ? P[face].Premiere
             : parle ? P["parle"].Image(t) : P[face].Image(t);
-        if (im == _visageImage) return null;
-        _visageImage = im;
+        if (im == _visageImage && !toujours) return null;
+        if (!toujours) _visageImage = im;
         Array.Clear(_visage);
         Theatre.Poser(_visage, Banque.Commune.Fins.GetValueOrDefault(Theatre.IdPilou), im, Theatre.PilouX, Theatre.PilouY, false, _teinte(),
             Theatre.PilouX, Theatre.PilouY);
