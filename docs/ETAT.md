@@ -34,7 +34,7 @@ Dernière mise à jour : 28 novembre 2026.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
-  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets. Musiques et ambiances de l'Aventure : 4 boucles (prologue, humour, mystère, émotion) et 4 ambiances (vent, pluie, hall, mer), réglage « Musique » à part, « discrète » par défaut.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
@@ -80,6 +80,8 @@ Dernière mise à jour : 28 novembre 2026.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 - Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
   sortie audio) ; sur téléphone, aucune lecture réelle.
+- Les musiques : écoutées par personne. Sur PC, la boucle du prologue joue dans l'exe d'essai (session audio active, crête
+  mesurée vers -30 dBFS) et se coupe quand la fenêtre est réduite ; les autres boucles et le téléphone : jamais lus en vrai.
 
 ## Points connus
 

@@ -66,6 +66,7 @@ final class Lecture extends FrameLayout {
         super(a);
         this.app = a;
         this.page = page;
+        Musique.suivre(this, () -> campagne == null ? null : campagne.id, () -> campagne == null ? null : campagne.ton, () -> etat == null ? null : etat.decor); // docs/SONS.md
         p = Ui.p(a);
         d = a.getResources().getDisplayMetrics().density;
         largeurBulle = Math.round(a.getResources().getDisplayMetrics().widthPixels * 0.82f);
