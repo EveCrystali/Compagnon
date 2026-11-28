@@ -222,14 +222,20 @@ internal sealed class VueTheatre : Border
     }
 
     // Le personnage en pied (pied-<campagne>-<personnage>) : il entre par la droite ; "" : il ressort.
-    private string _perso = "";
+    private string _perso = "", _persoHumeur = "";
 
-    public void Perso(string sprite, double now)
+    // humeur : l'expression du message ; en HD, le personnage prend la variante dessinée pour elle
+    // (pied-<campagne>-<id>-<humeur>, même toile et même ancre), sinon sa version neutre.
+    public void Perso(string sprite, double now, string humeur = "")
     {
+        _persoHumeur = humeur;
         if (sprite == _perso) return;
         _perso = sprite;
         Ajouter(new Theatre.Evenement(T(now), "perso", Humeur: sprite));
     }
+
+    private SpriteHd? SpriteHd(string id) =>
+        id == _perso && _persoHumeur is { Length: > 0 } h && TheatreHd.SpriteHdDe(id + "-" + h) is { } v ? v : TheatreHd.SpriteHdDe(id);
 
     // Sa réplique : c'est lui qui parle, pas Pilou.
     public void ParlePerso(double now, double fin) => Ajouter(new Theatre.Evenement(T(now), "parle-perso", T(fin)));
@@ -299,7 +305,7 @@ internal sealed class VueTheatre : Border
 
     private void Composer(long t, string niveau, uint[] sortie, double now)
     {
-        if (_hd) TheatreHd.ComposerHd(_decorHd, _cx!, TheatreHd.SpriteHdDe, _evts, t, RendrePilou(now), _regard, niveau, sortie);
+        if (_hd) TheatreHd.ComposerHd(_decorHd, _cx!, SpriteHd, _evts, t, RendrePilou(now), _regard, niveau, sortie);
         else Theatre.Composer(_cx!, _decor, _teinte(), _evts, t, _regard, niveau, sortie);
     }
 

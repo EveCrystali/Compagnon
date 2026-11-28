@@ -29,16 +29,32 @@ final class TheatreVue extends View {
     static final int GLISSE = 1200;        // durée du travelling (ms)
     private static final int ENTREE_X = 40;  // là où Pilou se trouve à la fin du travelling
 
-    private final Bitmap bitmap = Bitmap.createBitmap(Theatre.W, Theatre.H, Bitmap.Config.ARGB_8888);
-    private final int[] px = new int[Theatre.W * Theatre.H];
-    private final int[] avant = new int[Theatre.W * Theatre.H];
-    private final int[] apres = new int[Theatre.W * Theatre.H];
+    /** La scène HD (docs/SCENES-HD.md) : 480 × 240 unités, au moins 2 pixels d'écran par unité (jamais 1). */
+    static final int HD_W = Theatre.HD.w, HD_H = Theatre.HD.h;
+
+    // La définition du lieu courant : ancienne (192 × 80) ou HD (480 × 240). Tampons et bitmap suivent.
+    private Theatre.Definition def = Theatre.ANCIENNE;
+    private Bitmap bitmap = Bitmap.createBitmap(def.w, def.h, Bitmap.Config.ARGB_8888);
+    private int[] px = new int[def.w * def.h];
+    private int[] avant = new int[def.w * def.h];
+    private int[] apres = new int[def.w * def.h];
     private final Paint pt = new Paint();
     private final Rect dst = new Rect();
+    private final Rect src = new Rect();
     private final Sprites.Banque banque = Sprites.banque();
 
     private Theatre.Contexte cx;
     private Sprite decor;
+    private TheatreHd.Decor decorHd;
+    // Le Pilou du joueur pour les scènes HD : la base de l'allure, le rendeur (recréé seulement si la base change).
+    private String couleurJoueur = "bleu", varianteJoueur = "";
+    private int stadeJoueur = 2;
+    private java.util.function.Function<Map<String, Object>, int[]> rendeur;
+    // La caméra des écrans étroits (HD) : x entier du bord gauche visible, qui suit Pilou doucement.
+    private int camera;
+    private double cameraF;
+    private int cameraCible;
+    private long cameraT = -1;
     private List<Theatre.Evenement> evts = new ArrayList<>();
     private long debut;
     private long glisse = -1;
@@ -84,16 +100,100 @@ final class TheatreVue extends View {
         return Aventure.unite(largeurPx);
     }
 
+    /** L'échelle HD : pixels d'écran par unité, entier, au moins 2 (480 px de large est refusé : trop petit). */
+    static int echelleHd(int largeurPx) {
+        return Math.max(2, largeurPx / HD_W);
+    }
+
+    /** Unités HD visibles sur cette largeur d'écran : toute la scène (480), ou floor(largeur / échelle) sur un écran étroit. */
+    static int visiblesHd(int largeurPx) {
+        return Math.max(1, Math.min(HD_W, largeurPx / echelleHd(largeurPx)));
+    }
+
+    /** Largeur en pixels d'écran de la partie visible d'une scène HD : 960 sur 1078 px, 720 sur 720 px. */
+    static int largeurZoneHd(int largeurPx) {
+        return visiblesHd(largeurPx) * echelleHd(largeurPx);
+    }
+
     /** La couleur de Pilou (nom de teinte : « bleu », « orange »…), comme PilouVue la reçoit. */
     void couleur(String couleur) {
-        teinte = RenduPilou.teinte(Dessin.allure("repos", 0, couleur, "", false, 0), banque);
+        String c = couleur == null || couleur.isEmpty() ? "bleu" : couleur;
+        if (c.equals(couleurJoueur) && teinte != null) return;
+        couleurJoueur = c;
+        teinte = RenduPilou.teinte(Dessin.allure("repos", 0, c, "", false, 0), banque);
+        rendeur = null;
         dernierPas = -1;
+    }
+
+    /** Le stade et la variante d'évolution (« calin », « espiegle », ou "") du Pilou du joueur, pour les scènes HD. */
+    void pilou(int stade, String variante) {
+        int s = stade >= 1 && stade <= 4 ? stade : 2;
+        String v = variante == null ? "" : variante;
+        if (s == stadeJoueur && v.equals(varianteJoueur)) return;
+        stadeJoueur = s;
+        varianteJoueur = v;
+        rendeur = null;
+        dernierPas = -1;
+    }
+
+    /** Le rendeur du Pilou fin du joueur (couleur, stade, variante) ; gardé tant que cette base ne change pas. */
+    private java.util.function.Function<Map<String, Object>, int[]> rendeur() {
+        if (rendeur == null) {
+            RenduPilou.Allure base = new RenduPilou.Allure();
+            base.couleur = couleurJoueur;
+            base.stade = stadeJoueur;
+            if (stadeJoueur >= 2 && !varianteJoueur.isEmpty())
+                base.objets = java.util.Arrays.asList("variante-" + varianteJoueur + "-" + stadeJoueur, "variante-" + varianteJoueur + "-" + stadeJoueur + "-tete");
+            rendeur = TheatreHd.rendeurPilou(base, banque);
+        }
+        return rendeur;
+    }
+
+    /** Aux animations réduites ou sans animation, le Pilou fin ne respire pas : le temps de son rendu reste à 0 (il cligne par sa pose). */
+    private java.util.function.Function<Map<String, Object>, int[]> rendeurNiveau() {
+        final java.util.function.Function<Map<String, Object>, int[]> r = rendeur();
+        if (vif()) return r;
+        return pose -> {
+            Map<String, Object> p = new HashMap<>(pose);
+            p.put("t", 0L);
+            return r.apply(p);
+        };
+    }
+
+    /** Pour les tests : le lieu courant est-il en haute définition (480 × 240) ? */
+    boolean hd() {
+        return def == Theatre.HD;
+    }
+
+    /** Pour les tests : largeur et hauteur du Bitmap. */
+    int largeurBitmap() {
+        return bitmap.getWidth();
+    }
+
+    int hauteurBitmap() {
+        return bitmap.getHeight();
+    }
+
+    /** Pour les tests : le x (unités) du bord gauche visible. */
+    int camera() {
+        return camera;
+    }
+
+    private boolean aDecor() {
+        return decor != null || decorHd != null;
     }
 
     // ---- Les scènes embarquées : assets/scenes/<campagne>.txt et animations.txt
 
     private static final Map<String, Map<String, Theatre.Scene>> SCENES = new HashMap<>();
+    private static final Map<String, Map<String, Theatre.Scene>> SCENES_HD = new HashMap<>();
     private static Map<String, Map<String, Theatre.Anim>> anims;
+
+    private static synchronized Theatre.Scene sceneHd(String campagne, String decor) {
+        Map<String, Theatre.Scene> s = SCENES_HD.get(campagne);
+        if (s == null) SCENES_HD.put(campagne, s = TheatreHd.scenes(campagne));
+        return s.get(decor);
+    }
 
     private static synchronized Theatre.Scene sceneDe(String campagne, String decor) {
         Map<String, Theatre.Scene> s = SCENES.get(campagne);
@@ -142,21 +242,41 @@ final class TheatreVue extends View {
         long now = maintenant();
         String k = campagne + "|" + decorId;
         lireNiveau(now, true);
-        if (k.equals(cle) && cx != null) return decor != null;
-        Sprite neuf = null;
+        if (k.equals(cle) && cx != null) return aDecor();
+        // HD : la scène HD de la campagne ET le décor HD existent. Sinon l'ancien, jamais les deux dans la même image.
+        TheatreHd.Decor neufHd = null;
+        Theatre.Scene sceneHdNeuve = null;
         try {
-            neuf = Sprites.decor(banque, campagne, decorId, 2);
+            sceneHdNeuve = sceneHd(campagne, decorId);
+            if (sceneHdNeuve != null) {
+                neufHd = TheatreHd.decor(campagne, decorId);
+                if (neufHd == null || neufHd.w != HD_W || neufHd.h != HD_H) neufHd = null;
+            }
         } catch (RuntimeException x) {
-            Journal.noter("théâtre : décor", x);
+            Journal.noter("théâtre : décor HD", x);
+            neufHd = null;
         }
-        boolean avait = cx != null && decor != null;
-        if (neuf == null) return false;
-        glisser = glisser && avait && vif() && !casse;
+        boolean hdNeuf = neufHd != null;
+        Sprite neuf = null;
+        if (!hdNeuf) {
+            try {
+                neuf = Sprites.decor(banque, campagne, decorId, 2);
+            } catch (RuntimeException x) {
+                Journal.noter("théâtre : décor", x);
+            }
+            if (neuf == null) return false;
+        }
+        boolean avait = cx != null && aDecor();
+        // Pas de travelling entre deux définitions : changement net.
+        glisser = glisser && avait && vif() && !casse && hdNeuf == hd();
         try {
-            Theatre.Contexte nouveau = new Theatre.Contexte(sceneDe(campagne, decorId), anims(), id -> fin(banque, id));
+            Theatre.Contexte nouveau = hdNeuf
+                    ? new Theatre.Contexte(sceneHdNeuve, anims(), id -> fin(banque, id), TheatreHd::spriteHd)
+                    : new Theatre.Contexte(sceneDe(campagne, decorId), anims(), id -> fin(banque, id));
             if (glisser) {
                 // Travelling : l'ancien lieu (sans Pilou) est gardé tel quel pour glisser.
-                Theatre.composer(cx, decor, teinte, evts, t(now), 0, niveau, avant, false);
+                if (hd()) TheatreHd.composerHd(decorHd, cx, evts, t(now), rendeur(), 0, niveau, avant, false);
+                else Theatre.composer(cx, decor, teinte, evts, t(now), 0, niveau, avant, false);
                 glisse = now;
             }
             cx = nouveau;
@@ -168,16 +288,33 @@ final class TheatreVue extends View {
         casse = false;
         cle = k;
         decor = neuf;
+        decorHd = neufHd;
+        definir(hdNeuf ? Theatre.HD : Theatre.ANCIENNE);
+        camera = 0;
+        cameraF = 0;
+        cameraT = -1;
         evts = new ArrayList<>();
         humeurVue = "";
         persoVu = "";
         persoParle = false;
         debut = glisser ? now + GLISSE : now;
         if (!glisser) glisse = -1;
-        if (vif()) evts.add(new Theatre.Evenement(0, "entree", glisser ? ENTREE_X : 0, 0));
+        // En HD, Pilou n'est pas dessiné pendant le glissement : il entre ensuite par la gauche.
+        if (vif()) evts.add(new Theatre.Evenement(0, "entree", glisser && !hdNeuf ? ENTREE_X : 0, 0));
         dernierPas = -1;
         invalidate();
         return true;
+    }
+
+    /** Passe à une définition : tampons et bitmap à la taille du lieu (rien ne bouge si elle ne change pas). */
+    private void definir(Theatre.Definition d) {
+        if (d == def) return;
+        def = d;
+        bitmap = Bitmap.createBitmap(d.w, d.h, Bitmap.Config.ARGB_8888);
+        px = new int[d.w * d.h];
+        avant = new int[d.w * d.h];
+        apres = new int[d.w * d.h];
+        derniere = 0;
     }
 
     private boolean ajouter(Theatre.Evenement e) {
@@ -228,7 +365,7 @@ final class TheatreVue extends View {
     void personnage(String campagne, String personnage) {
         if (cx == null || personnage == null || personnage.isEmpty()) return;
         String sid = "pied-" + campagne + "-" + personnage;
-        if (fin(banque, sid) == null || !cx.anims.containsKey(sid)) sid = "";
+        if (!cx.existe(sid) || !cx.anims.containsKey(sid)) sid = "";
         if (sid.equals(persoVu)) return;
         if (pousser(new Theatre.Evenement(t(maintenant()), "perso", 0, 0, sid))) persoVu = sid;
         if (sid.isEmpty()) persoParle = false;
@@ -256,7 +393,7 @@ final class TheatreVue extends View {
     void revient() {
         if (cx == null || !pret()) return;
         try {
-            if (!Theatre.pilou(cx, evts, t(maintenant())).visible) ajouter(new Theatre.Evenement(t(maintenant()), "entree"));
+            if (!Theatre.pilouEtat(cx, evts, t(maintenant()), 0, Animations.COMPLETES).visible) ajouter(new Theatre.Evenement(t(maintenant()), "entree"));
         } catch (RuntimeException x) {
             Journal.noter("théâtre : retour", x);
         }
@@ -266,7 +403,7 @@ final class TheatreVue extends View {
     void absent() {
         if (cx == null || !vif()) return;
         evts = new ArrayList<>();
-        evts.add(new Theatre.Evenement(0, "entree", Theatre.SORTIE_D + 4, 0));
+        evts.add(new Theatre.Evenement(0, "entree", def.w + Theatre.e(cx.scene, Theatre.SORTIE_D - Theatre.W) + 4, 0));
         evts.add(new Theatre.Evenement(0, "depart", 1, 0));
         humeurVue = "";
         persoVu = "";
@@ -297,8 +434,8 @@ final class TheatreVue extends View {
 
     void cliquer(float ex, float ey) {
         if (cx == null || !vif() || glisse >= 0 || dst.width() <= 0) return;
-        int x = (int) Math.floor((ex - dst.left) / (float) echelle), y = (int) Math.floor((ey - dst.top) / (float) echelle);
-        if (x < 0 || y < 0 || x >= Theatre.W || y >= Theatre.H) return;
+        int x = camera + (int) Math.floor((ex - dst.left) / (float) echelle), y = (int) Math.floor((ey - dst.top) / (float) echelle);
+        if (x < 0 || y < 0 || x >= def.w || y >= def.h) return;
         ajouter(new Theatre.Evenement(t(maintenant()), "clic", x, y));
     }
 
@@ -328,14 +465,16 @@ final class TheatreVue extends View {
                 }
             }
             long t = t(now);
+            boolean cam = hd() && majCamera(now, t);
             long pas = t / Theatre.PAS;
             boolean vif = vif();
-            if (pas == dernierPas && vif) return false;
-            if (!vif && dernierPas >= 0 && pas / 2 == dernierPas / 2) return false;
+            if (pas == dernierPas && vif) return cam;
+            if (!vif && dernierPas >= 0 && pas / 2 == dernierPas / 2) return cam;
             dernierPas = pas;
-            Theatre.composer(cx, decor, teinte, evts, t, 0, niveau, px);
+            if (hd()) TheatreHd.composerHd(decorHd, cx, evts, t, rendeurNiveau(), 0, niveau, px);
+            else Theatre.composer(cx, decor, teinte, evts, t, 0, niveau, px);
             long h = Theatre.fnv(px);
-            if (h == derniere) return false;
+            if (h == derniere) return cam;
             derniere = h;
             ecrire(px);
             return true;
@@ -346,17 +485,51 @@ final class TheatreVue extends View {
         }
     }
 
+    /** L échelle HD de la vue : la plus grande entière qui tient (largeur et hauteur), au moins 2. */
+    private int kHd() {
+        return Math.max(2, Math.min(getWidth() / HD_W, getHeight() / HD_H));
+    }
+
+    /**
+     * La caméra d un écran étroit (HD) : vise Pilou au centre du champ, bornée à [0, 480 − visibles], et l y rejoint
+     * doucement (demi-vie de 300 ms : environ une seconde). Vrai si le x entier a changé. Sur un écran assez large : 0, immobile.
+     */
+    private boolean majCamera(long now, long t) {
+        int vis = getWidth() > 0 ? Math.min(def.w, Math.max(1, getWidth() / kHd())) : def.w;
+        int max = def.w - vis;
+        if (max <= 0) {
+            boolean change = camera != 0;
+            camera = 0;
+            cameraF = 0;
+            return change;
+        }
+        Theatre.Etat e = Theatre.pilouEtat(cx, evts, t, 0, niveau);
+        if (e.visible) cameraCible = Math.max(0, Math.min(max, e.x - vis / 2));
+        if (cameraT < 0) cameraF = cameraCible;
+        else {
+            long dt = Math.max(0, Math.min(250, now - cameraT));
+            cameraF += (cameraCible - cameraF) * (1 - Math.pow(0.5, dt / 300.0));
+        }
+        cameraT = now;
+        int c = Math.max(0, Math.min(max, (int) Math.rint(cameraF)));
+        boolean change = c != camera;
+        camera = c;
+        return change;
+    }
+
     // Le travelling : décors côte à côte qui glissent (lissés), Pilou qui marche au milieu.
     private void glisser(double f) {
         double l = f * f * (3 - 2 * f);
-        int dx = (int) Math.rint(-l * Theatre.W);
-        Theatre.composer(cx, decor, teinte, Collections.<Theatre.Evenement>emptyList(), 0, 0, niveau, apres, false);
-        for (int y = 0; y < Theatre.H; y++)
-            for (int x = 0; x < Theatre.W; x++) {
+        final int w = def.w, h = def.h;
+        int dx = (int) Math.rint(-l * w);
+        if (hd()) TheatreHd.composerHd(decorHd, cx, Collections.<Theatre.Evenement>emptyList(), 0, rendeur(), 0, niveau, apres, false);
+        else Theatre.composer(cx, decor, teinte, Collections.<Theatre.Evenement>emptyList(), 0, 0, niveau, apres, false);
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++) {
                 int sx = x - dx;
-                px[y * Theatre.W + x] = sx < Theatre.W ? avant[y * Theatre.W + sx] : apres[y * Theatre.W + sx - Theatre.W];
+                px[y * w + x] = sx < w ? avant[y * w + sx] : apres[y * w + sx - w];
             }
-        Theatre.Anim m = cx.p.get("marche");
+        Theatre.Anim m = hd() ? null : cx.p.get("marche");   // en HD, Pilou entre ensuite
         if (m != null) {
             Theatre.poser(px, cx.sprites.apply(Theatre.ID_PILOU), m.image((long) (f * GLISSE)), ENTREE_X, Theatre.sol(cx.scene, ENTREE_X), false, teinte,
                     Theatre.PILOU_X, Theatre.PILOU_Y);
@@ -366,7 +539,7 @@ final class TheatreVue extends View {
     }
 
     private void ecrire(int[] p) {
-        bitmap.setPixels(p, 0, Theatre.W, 0, 0, Theatre.W, Theatre.H);
+        bitmap.setPixels(p, 0, def.w, 0, 0, def.w, def.h);
     }
 
     /** Pour les tests : l échelle (pixels d écran par pixel fin) de la dernière image dessinée. */
@@ -382,7 +555,7 @@ final class TheatreVue extends View {
     @Override
     protected void onMeasure(int largeur, int hauteur) {
         int w = MeasureSpec.getSize(largeur);
-        int h = MeasureSpec.getMode(hauteur) == MeasureSpec.UNSPECIFIED ? Theatre.H * echelle(w) : MeasureSpec.getSize(hauteur);
+        int h = MeasureSpec.getMode(hauteur) == MeasureSpec.UNSPECIFIED ? (hd() ? HD_H * echelleHd(w) : Theatre.H * echelle(w)) : MeasureSpec.getSize(hauteur);
         setMeasuredDimension(w, h);
     }
 
@@ -430,14 +603,25 @@ final class TheatreVue extends View {
     protected void onDraw(Canvas cv) {
         if (cx == null) return;
         avancer(maintenant());
-        int k = Math.max(1, Math.min(getWidth() / Theatre.W, Math.max(1, getHeight() / Theatre.H)));
+        // HD : au moins 2 pixels d écran par unité (jamais 1) ; si l écran est plus étroit que la scène, seule la partie
+        // de la caméra est montrée (visiblesHd unités, centrées). Ancien : le plus grand entier qui tient.
+        int k, vis;
+        if (hd()) {
+            k = kHd();
+            vis = Math.min(def.w, Math.max(1, getWidth() / k));
+        } else {
+            k = Math.max(1, Math.min(getWidth() / def.w, Math.max(1, getHeight() / def.h)));
+            vis = def.w;
+        }
         echelle = k;
-        int w = Theatre.W * k, h = Theatre.H * k;
+        int cam = Math.max(0, Math.min(def.w - vis, camera));
+        src.set(cam, 0, cam + vis, def.h);
+        int w = vis * k, h = def.h * k;
         int x = (getWidth() - w) / 2, y = 0;
         dst.set(x, y, x + w, y + h);
         cv.save();
         cv.clipRect(0, 0, getWidth(), getHeight());
-        cv.drawBitmap(bitmap, null, dst, pt);
+        cv.drawBitmap(bitmap, src, dst, pt);
         cv.restore();
     }
 }

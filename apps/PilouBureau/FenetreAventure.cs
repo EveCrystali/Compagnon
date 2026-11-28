@@ -68,6 +68,19 @@ internal sealed class FenetreAventure : Window
     private readonly ScrollViewer _repliqueDefile = new() { VerticalScrollBarVisibility = ScrollBarVisibility.Hidden, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, MaxHeight = 5 * LigneReplique };
     // La hauteur d'une ligne de réplique à l'écran : 12 pixels de police, chacun sur un nombre entier de pixels physiques
     // (2 à 100 %, 3 à 125 %…), pour que le défilement tombe toujours sur une ligne entière.
+    // La zone de travail de l'écran principal (sans la barre des tâches). PILOU_ZONE_ESSAI=LxH la simule (essais de mise
+    // en page : 1536x824, 1280x680, 1366x728).
+    internal static Size ZoneTravail()
+    {
+        var essai = Environment.GetEnvironmentVariable("PILOU_ZONE_ESSAI");
+        if (essai is { Length: > 0 } && essai.Split('x') is [var l, var h]
+            && double.TryParse(l, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var lw)
+            && double.TryParse(h, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var lh))
+            return new Size(lw, lh);
+        var z = SystemParameters.WorkArea;
+        return new Size(z.Width, z.Height);
+    }
+
     private static double LigneEcran()
     {
         double ppu = Math.Max(0.1, Finesse.PhysiqueParUnite);
@@ -99,7 +112,8 @@ internal sealed class FenetreAventure : Window
     private VueEpreuve? _epreuve;
     // Animations (ScenesAnimees.cs) : décor en boucle et ses transitions, portrait du personnage, fond, vignettes.
     private readonly ScenesAnimees _anims;
-    private Action? _miseEnPage;          // la mise en page de la lecture, refaite quand la scène change de définition
+    private Action? _miseEnPage;
+    private double _cacheScene;           // pixels d'écran de la scène cachés en haut quand la fenêtre est basse (cadrage)          // la mise en page de la lecture, refaite quand la scène change de définition
     private readonly Image _persoImage = new() { Width = 104, Height = 104, Stretch = Stretch.Uniform, Visibility = Visibility.Collapsed };
     private readonly TextePixel _persoNom = new("", CadrePixel.Titre) { Taille = 1.5 };
     private readonly StackPanel _perso = new() { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 16, 4), IsHitTestVisible = false };
@@ -218,10 +232,14 @@ internal sealed class FenetreAventure : Window
         Musique.Suivre(this, () => _campagne?.Id, () => _campagne?.Ton, () => _decorMontre.Split('|')[0]); // docs/SONS.md
         _anims = new ScenesAnimees(pilou);
         Title = "Aventure de Pilou";
-        Width = 1020;
-        Height = 880;                          // la scène HD (480 × 240 à ×2) gagne 80 px sur l’ancienne (80 × 5)
-        MinWidth = 840;
-        MinHeight = 560;
+        // La fenêtre ne dépasse jamais la zone de travail de l'écran : 1020 × 880 au plus (la scène HD, 480 × 240 à ×2,
+        // gagne 80 px sur l'ancienne) ; quand la hauteur manque, la boîte de dialogue cède d'abord, puis la scène est
+        // cadrée (Mettre, plus bas), jamais une unité non entière.
+        var zone = ZoneTravail();
+        Width = Math.Min(1020, zone.Width);
+        Height = Math.Min(880, zone.Height);
+        MinWidth = Math.Min(840, zone.Width);
+        MinHeight = Math.Min(560, zone.Height);
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
         Background = Fond;
@@ -906,12 +924,26 @@ internal sealed class FenetreAventure : Window
 
         // La scène prend la plus grande échelle entière qui laisse au moins 192 px à la boîte ; les cadres pixel ont pour
         // unité le pixel de la scène. Un lieu HD (480 × 240, docs/SCENES-HD.md) refait ce calcul quand il arrive.
+        // Quand la hauteur manque : la boîte passe de cinq à trois lignes (avec défilement), puis la scène est cadrée (on
+        // en voit le bas : le sol, Pilou, le personnage ; le haut du ciel est coupé), à la même unité entière.
         void Mettre() => Sur(() =>
         {
-            _theatre.Ajuster(g.ActualWidth, Math.Max(160, g.ActualHeight - 200));
-            _planche.Height = _theatre.HauteurScene * _theatre.Echelle;
+            _theatre.Ajuster(g.ActualWidth, double.MaxValue);
+            double voulu = _theatre.HauteurScene * _theatre.Echelle, ligne = LigneEcran();
+            double place = g.ActualHeight - 200;                       // la boîte à cinq lignes
+            int lignes = 5;
+            if (place < voulu)
+            {
+                lignes = 3;
+                place += 2 * ligne;                                    // la boîte cède deux lignes
+            }
+            _planche.Height = Math.Max(160, Math.Min(voulu, place));
+            // Cadrage : l'image remonte sous le bord haut de la planche (le ciel est caché, le sol reste).
+            _cacheScene = Math.Max(0, voulu - _planche.Height);
+            _theatre.VerticalAlignment = VerticalAlignment.Top;
+            _theatre.Margin = new Thickness(0, -_cacheScene, 0, 0);
             foreach (var cp in Cadres(g).Where(c => c.Tag as string == "cadre")) cp.U = _theatre.Echelle;
-            _repliqueDefile.MaxHeight = 5 * LigneEcran();
+            _repliqueDefile.MaxHeight = lignes * ligne;
         });
         g.SizeChanged += (_, _) => Mettre();
         _theatre.Redimensionne -= _miseEnPage;
@@ -931,19 +963,23 @@ internal sealed class FenetreAventure : Window
         _choixScene.Measure(new Size(Math.Min(l, _choixScene.MaxWidth), h));
         var d = _choixScene.DesiredSize;
         double ox = Math.Max(0, (l - _theatre.LargeurScene * k) / 2);
+        // Scène cadrée (fenêtre basse) : son haut est caché sous la planche ; en pixels de scène, la partie cachée est
+        // une zone interdite, et tout se décale d'autant.
+        double cache = _cacheScene;
         // La légende du lieu et les boutons, en pixels de scène (arrondis vers l'extérieur) : le panneau ne les couvre pas.
         var gene = new List<(int, int, int, int)>();
+        if (cache > 0) gene.Add((0, 0, _theatre.LargeurScene, (int)Math.Ceiling(cache / k)));
         foreach (var e in new FrameworkElement?[] { _legende, _outils })
         {
             if (e is not { IsVisible: true } || e.ActualWidth <= 0) continue;
             var p = e.TransformToAncestor(_planche).Transform(new System.Windows.Point(0, 0));
-            gene.Add(((int)Math.Floor((p.X - ox) / k) - 1, (int)Math.Floor(p.Y / k) - 1,
-                (int)Math.Ceiling((p.X - ox + e.ActualWidth) / k) + 1, (int)Math.Ceiling((p.Y + e.ActualHeight) / k) + 1));
+            gene.Add(((int)Math.Floor((p.X - ox) / k) - 1, (int)Math.Floor((p.Y + cache) / k) - 1,
+                (int)Math.Ceiling((p.X - ox + e.ActualWidth) / k) + 1, (int)Math.Ceiling((p.Y + cache + e.ActualHeight) / k) + 1));
         }
         var (x, y) = _theatre.PlacerPanneau((int)Math.Ceiling(d.Width / k), (int)Math.Ceiling(d.Height / k), _t, gene);
         _choixScene.HorizontalAlignment = HorizontalAlignment.Left;
         _choixScene.VerticalAlignment = VerticalAlignment.Top;
-        _choixScene.Margin = new Thickness(ox + x * k, y * k, 0, 0);
+        _choixScene.Margin = new Thickness(ox + x * k, Math.Max(0, y * k - cache), 0, 0);
     }
 
     // Le fil complet, à relire par-dessus la scène.
@@ -1704,7 +1740,7 @@ internal sealed class FenetreAventure : Window
             if (el is not null && _campagne is { } c2 && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, c2, cle) is { } p2)
             {
                 var pied = "pied-" + c2.Id + "-" + p2.Personnage;
-                _theatre.Perso(Banque.Commune.Fins.ContainsKey(pied) ? pied : "", now);
+                _theatre.Perso(Banque.Commune.Fins.ContainsKey(pied) ? pied : "", now, p2.Expression);
             }
         }
         _anims.Parle(_enCours is { } e && AnimationsCampagne.Parle(e.Texte));

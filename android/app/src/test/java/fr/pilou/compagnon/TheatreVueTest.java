@@ -79,12 +79,12 @@ public class TheatreVueTest {
     public void toucherSurLaSceneEstUnClicAuxCoordonneesDuDecor() {
         Context c = RuntimeEnvironment.getApplication();
         TheatreVue v = vue(c, Animations.COMPLETES);
-        assertTrue(v.lieu("prologue", "jardin", false));
+        assertTrue(v.lieu("petit-nuage", "jardin-lave", false));
         avancer(6000);
         long now = TheatreVue.maintenant();
         v.avancer(now);
         dessiner(v);                                    // la vue connaît alors sa place à l'écran
-        Theatre.Scene sc = Theatre.lireScenes(Sprites.ressource("/scenes/prologue.txt")).get("jardin");
+        Theatre.Scene sc = Theatre.lireScenes(Sprites.ressource("/scenes/petit-nuage.txt")).get("jardin-lave");
         int x = sc.place, y = Theatre.sol(sc, x) - 8;
         long avant = Theatre.fnv(v.image().clone());
         int k = TheatreVue.echelle(960);
@@ -134,5 +134,133 @@ public class TheatreVueTest {
         int[] fin = v.image().clone();
         v.avancer(g + TheatreVue.GLISSE + 3010);
         assertArrayEquals(fin, v.image());
+    }
+
+    // ---- Théâtre HD : la mare du prologue est en HD, un lieu de Petit Nuage reste en ancien
+
+    private static TheatreVue vueDe(Context c, int largeur, int hauteur) {
+        ScenesAnimees.regler(c, Animations.COMPLETES);
+        TheatreVue v = new TheatreVue(c);
+        v.measure(View.MeasureSpec.makeMeasureSpec(largeur, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(hauteur, View.MeasureSpec.EXACTLY));
+        v.layout(0, 0, largeur, hauteur);
+        return v;
+    }
+
+    @Test
+    public void echelleHdEntiereAuMoinsDeux() {
+        assertEquals(2, TheatreVue.echelleHd(1078));
+        assertEquals(2, TheatreVue.echelleHd(960));
+        assertEquals(2, TheatreVue.echelleHd(720));
+        assertEquals(2, TheatreVue.echelleHd(300));        // jamais 1
+        assertEquals(3, TheatreVue.echelleHd(1440));
+        assertEquals(480, TheatreVue.visiblesHd(1078));     // 959 px : rien n'est coupé
+        assertEquals(360, TheatreVue.visiblesHd(720));      // écran étroit : floor(720 / 2) unités
+        assertEquals(960, TheatreVue.largeurZoneHd(1078));
+        assertEquals(720, TheatreVue.largeurZoneHd(720));
+    }
+
+    @Test
+    public void laMareEstEnHdEtUnLieuSansDecorHdResteAncien() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vueDe(c, 1078, 480);
+        assertTrue(v.lieu("prologue", "mare", false));
+        assertTrue(v.hd());
+        assertEquals(480, v.largeurBitmap());
+        assertEquals(240, v.hauteurBitmap());
+        assertTrue(v.avancer(TheatreVue.maintenant()));
+        assertEquals(480 * 240, v.image().length);
+        dessiner(v);
+        assertEquals(2, v.echelleDessinee());
+        // Un lieu sans décor HD : l'ancien, 192 × 80, sans travelling entre deux définitions (changement net).
+        assertTrue(v.lieu("petit-nuage", "jardin-lave", true));
+        assertFalse(v.hd());
+        assertEquals(192, v.largeurBitmap());
+        assertEquals(80, v.hauteurBitmap());
+        assertTrue(v.avancer(TheatreVue.maintenant()));
+        assertEquals(192 * 80, v.image().length);
+        // Et retour en HD.
+        assertTrue(v.lieu("prologue", "jardin", true));
+        assertTrue(v.hd());
+        assertTrue(v.avancer(TheatreVue.maintenant()));
+        assertEquals(480 * 240, v.image().length);
+    }
+
+    @Test
+    public void pilouFinEntreDansLaMare() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vueDe(c, 1078, 480);
+        v.couleur("orange");
+        v.pilou(2, "");
+        assertTrue(v.lieu("prologue", "mare", false));
+        long t0 = TheatreVue.maintenant();
+        v.avancer(t0);
+        int[] sans = v.image().clone();
+        v.avancer(t0 + 6000);
+        assertFalse("Pilou est entré dans la scène", java.util.Arrays.equals(sans, v.image()));
+        // Changer la couleur ou le stade refait le rendu de Pilou, pas autre chose.
+        int[] orange = v.image().clone();
+        v.couleur("violet");
+        v.avancer(t0 + 6500);
+        assertFalse(java.util.Arrays.equals(orange, v.image()));
+    }
+
+    @Test
+    public void leTravellingHdGlisseSansPilouPuisIlEntre() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vueDe(c, 1078, 480);
+        assertTrue(v.lieu("prologue", "jardin", false));
+        long t0 = TheatreVue.maintenant();
+        v.avancer(t0 + 3000);
+        assertTrue(v.lieu("prologue", "mare", true));
+        assertTrue(v.hd());
+        long g = TheatreVue.maintenant();
+        assertTrue(v.avancer(g + 300));
+        int[] milieu = v.image().clone();
+        assertEquals(480 * 240, milieu.length);
+        assertTrue(v.avancer(g + 700));
+        assertFalse(java.util.Arrays.equals(milieu, v.image()));
+        v.avancer(g + TheatreVue.GLISSE + 3000);
+        int[] fin = v.image().clone();
+        v.avancer(g + TheatreVue.GLISSE + 3010);
+        assertArrayEquals(fin, v.image());
+    }
+
+    @Test
+    public void leTravellingAncienResteEntreDeuxLieuxAnciens() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vue(c, Animations.COMPLETES);
+        assertTrue(v.lieu("petit-nuage", "jardin-lave", false));
+        long t0 = TheatreVue.maintenant();
+        v.avancer(t0 + 3000);
+        assertTrue(v.lieu("petit-nuage", "chemin-creux", true));
+        assertFalse(v.hd());
+        long g = TheatreVue.maintenant();
+        assertTrue(v.avancer(g + 300));
+        int[] milieu = v.image().clone();
+        assertTrue(v.avancer(g + 600));
+        assertFalse(java.util.Arrays.equals(milieu, v.image()));
+    }
+
+    @Test
+    public void ecranEtroitCadreLaSceneEtLaCameraSuitPilou() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vueDe(c, 720, 480);
+        assertTrue(v.lieu("prologue", "mare", false));
+        long t0 = TheatreVue.maintenant();
+        v.avancer(t0 + 5000);
+        dessiner(v);
+        assertEquals(2, v.echelleDessinee());              // jamais 1
+        assertTrue("caméra bornée à [0, 120] : " + v.camera(), v.camera() >= 0 && v.camera() <= 480 - 360);
+        assertEquals("Pilou est à gauche : la caméra aussi", 0, v.camera());
+        // Il part par la droite : la caméra le suit doucement, sans jamais dépasser le bord de la scène.
+        v.depart();
+        int max = 0;
+        for (long dt = 5000; dt <= 40000; dt += 250) {
+            v.avancer(TheatreVue.maintenant() + dt);
+            assertTrue(v.camera() >= 0 && v.camera() <= 120);
+            max = Math.max(max, v.camera());
+        }
+        assertTrue("la caméra a suivi Pilou : " + max, max > 0);
+        assertEquals(480, v.largeurBitmap());
     }
 }

@@ -335,6 +335,13 @@ public final class TheatreHd {
     public static int[] composerHd(Decor decor, Theatre.Contexte cx, List<Theatre.Evenement> evts, long t,
                                    Function<Map<String, Object>, int[]> rendrePilou, int regard, String niveau,
                                    int[] sortie) {
+        return composerHd(decor, cx, evts, t, rendrePilou, regard, niveau, sortie, true);
+    }
+
+    /** avecPilou : faux pendant un travelling (Pilou entre ensuite, la vue ne le pose pas sur les décors qui glissent). */
+    public static int[] composerHd(Decor decor, Theatre.Contexte cx, List<Theatre.Evenement> evts, long t,
+                                   Function<Map<String, Object>, int[]> rendrePilou, int regard, String niveau,
+                                   int[] sortie, boolean avecPilou) {
         Theatre.Scene sc = cx.scene;
         int w = sc.d.w, h = sc.d.h;
         int[] px = sortie != null && sortie.length == w * h ? sortie : new int[w * h];
@@ -350,7 +357,7 @@ public final class TheatreHd {
         if (pp != null && cx.existe(pp.sprite))   // le dessin HD regarde à droite : retourné pour regarder Pilou
             poses.add(new Object[]{pp.y, 0, poses.size(), new Theatre.Pose(pp.sprite, pp.image, pp.x, pp.y, !pp.miroir)});
         Theatre.Etat etat = Theatre.pilouEtat(cx, evts, t, regard, niveau);
-        if (etat.visible) poses.add(new Object[]{etat.y, 1, poses.size(), etat});
+        if (etat.visible && avecPilou) poses.add(new Object[]{etat.y, 1, poses.size(), etat});
         Collections.sort(poses, (u, v) -> {
             int c = Integer.compare((Integer) u[0], (Integer) v[0]);
             if (c == 0) c = Integer.compare((Integer) u[1], (Integer) v[1]);

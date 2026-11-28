@@ -37,7 +37,7 @@ final class Lecture extends FrameLayout {
     private final CadrePixel.Cases jauge;
     private final LinearLayout.LayoutParams jaugeLp;
     private final FrameLayout.LayoutParams lieuLp;
-    private int reglageK, reglageW;
+    private int reglageK, reglageW, reglageZ;
     private final Defil defil;
     private final Fil fil;
     private final LinearLayout dock;
@@ -170,7 +170,7 @@ final class Lecture extends FrameLayout {
         jaugeLp.topMargin = 2 * u;
         jauge.setContentDescription("Avancement de l'aventure");
         colonne.addView(jauge, jaugeLp);
-        reglerLieu(a.getResources().getDisplayMetrics().widthPixels, u);
+        reglerLieu(a.getResources().getDisplayMetrics().widthPixels, u, Theatre.W * u);
 
         // ---- Le fil.
         // Pas de fondu : le défilement se cale sur une bulle entière (Defil), donc aucune ligne n'est tranchée au repos
@@ -269,33 +269,66 @@ final class Lecture extends FrameLayout {
     @Override
     protected void onMeasure(int largeur, int hauteur) {
         if (MeasureSpec.getMode(hauteur) != MeasureSpec.UNSPECIFIED) {
-            int k = Aventure.unite(MeasureSpec.getSize(largeur));
-            int kMax = MeasureSpec.getSize(hauteur) * 42 / 100 / Theatre.H;
-            k = Math.max(1, Math.min(k, kMax));
-            ViewGroup.LayoutParams lp = tete.getLayoutParams();
-            if (lp != null && lp.height != k * Theatre.H) lp.height = k * Theatre.H;
-            if (k != unite) {
-                unite = k;
-                ViewGroup.LayoutParams lq = perso.getLayoutParams();
-                lq.width = lq.height = 64 * k;
-                perso.setLayoutParams(lq);
-                pilou.pixel(Aventure.pixelUnite(k));
-            }
-            if (k > 0) {
-                reglerLieu(MeasureSpec.getSize(largeur), k);
-            }
+            largeurLue = MeasureSpec.getSize(largeur);
+            hauteurLue = MeasureSpec.getSize(hauteur);
+            adapterScene();
         }
         super.onMeasure(largeur, hauteur);
     }
 
+    private int largeurLue, hauteurLue;
+
+    /** La scène du lieu est-elle en haute définition (480 × 240, au moins 2 pixels d'écran par unité) ? */
+    private boolean sceneHd() {
+        return theatre.getVisibility() == View.VISIBLE && theatre.hd();
+    }
+
+    /**
+     * La hauteur de la scène suit le lieu : ancien décor 80 u à k pixels (k = l'unité de l'écran, 400 px sur 1078), HD
+     * 240 u à 2 pixels au moins (480 px) ; la puce de lieu et la jauge se calent sur la partie visible de la scène.
+     */
+    private void adapterScene() {
+        int largeur = largeurLue, hauteur = hauteurLue;
+        if (largeur <= 0) return;
+        int k = Aventure.unite(largeur);
+        int kMax = hauteur * 42 / 100 / Theatre.H;
+        k = Math.max(1, Math.min(k, kMax));
+        boolean hd = sceneHd();
+        int kh = Math.max(2, Math.min(largeur / TheatreVue.HD_W, hauteur * 42 / 100 / TheatreVue.HD_H));
+        int haut = hd ? kh * TheatreVue.HD_H : k * Theatre.H;
+        int zone = hd ? Math.min(TheatreVue.HD_W, largeur / kh) * kh : Theatre.W * k;
+        ViewGroup.LayoutParams lp = tete.getLayoutParams();
+        if (lp != null && lp.height != haut) {
+            lp.height = haut;
+            tete.setLayoutParams(lp);
+        }
+        if (k != unite) {
+            unite = k;
+            ViewGroup.LayoutParams lq = perso.getLayoutParams();
+            lq.width = lq.height = 64 * k;
+            perso.setLayoutParams(lq);
+            pilou.pixel(Aventure.pixelUnite(k));
+        }
+        reglerLieu(largeur, k, zone);
+    }
+
     /** Marge droite de la puce de lieu (pixels d'écran) : le vide à droite de la scène centrée (largeur px, unité k), plus 1 u. */
     static int margeLieuDroite(int largeur, int k) {
-        return Math.max(0, (largeur - Theatre.W * k) / 2) + k;
+        return margeLieuDroite(largeur, Theatre.W * k, k);
+    }
+
+    /** Idem pour une scène dont la partie visible fait zone pixels de large (HD : 960 sur 1078 px, 720 sur 720 px). */
+    static int margeLieuDroite(int largeur, int zone, int k) {
+        return Math.max(0, (largeur - zone) / 2) + k;
     }
 
     /** Largeur maximale de la puce de lieu entière : la scène moins 1 u de marge de chaque côté. */
     static int largeurPuceMax(int k) {
-        return Theatre.W * k - 2 * k;
+        return largeurPuceMax(Theatre.W * k, k);
+    }
+
+    static int largeurPuceMax(int zone, int k) {
+        return zone - 2 * k;
     }
 
     /** Largeur maximale du texte du lieu : la puce moins son cadre (2 × 2 u : bord et biseau) et son air (2 × 1 u), sans ombre. */
@@ -303,15 +336,20 @@ final class Lecture extends FrameLayout {
         return largeurPuceMax(k) - 6 * k;
     }
 
+    static int largeurTexteLieu(int zone, int k) {
+        return largeurPuceMax(zone, k) - 6 * k;
+    }
+
     /** Place la puce de lieu et la jauge sur la scène (largeur de l'écran et unité) ; ne fait rien si rien n'a changé. */
-    private void reglerLieu(int largeur, int k) {
-        if (largeur == reglageW && k == reglageK) return;
+    private void reglerLieu(int largeur, int k, int zone) {
+        if (largeur == reglageW && k == reglageK && zone == reglageZ) return;
         reglageW = largeur;
         reglageK = k;
-        lieuLp.leftMargin = margeLieuDroite(largeur, k);       // la marge est la même des deux côtés de la scène
+        reglageZ = zone;
+        lieuLp.leftMargin = margeLieuDroite(largeur, zone, k);       // la marge est la même des deux côtés de la scène
         lieuLp.topMargin = k;
-        lieu.maxLargeur(largeurTexteLieu(k));
-        jaugeLp.width = Theatre.W * k;
+        lieu.maxLargeur(largeurTexteLieu(zone, k));
+        jaugeLp.width = zone;
         jaugeLp.height = k;
         jaugeLp.topMargin = 2 * k;
     }
@@ -614,6 +652,10 @@ final class Lecture extends FrameLayout {
         theatre.setVisibility(ok ? View.VISIBLE : View.GONE);
         scene.setVisibility(ok ? View.GONE : View.VISIBLE);
         pilou.setVisibility(ok ? View.GONE : View.VISIBLE);
+        adapterScene();
+        puceLieu().requestLayout();
+        jauge.requestLayout();
+        tete.requestLayout();
     }
 
     /** Tout est écrit : le lieu de l'état (sans travelling), l'humeur du dernier message, et Pilou en route s'il attend. */
@@ -647,6 +689,9 @@ final class Lecture extends FrameLayout {
         // La couleur de Pilou : celle du niveau, ou la couleur achetée à la boutique (comme PilouVue).
         String achetee = porte.get(Boutique.COULEUR);
         theatre.couleur(achetee != null && !achetee.isEmpty() ? Vitrine.teinte(achetee) : pc.couleur);
+        // Le Pilou fin des scènes HD : le stade (celui du PC, sinon celui du niveau) et sa variante d'évolution.
+        int stadeHd = pc.stade > 0 ? pc.stade : Acces.stade(Gains.niveau(app, pc));
+        theatre.pilou(stadeHd, pc.formes.get(stadeHd));
         boolean fini = !ecrit && aEcrire.isEmpty();
         if (fini && etat.phase == Campagnes.Phase.Attente) {
             pilou.tenue("voyage-" + etat.tenue);
