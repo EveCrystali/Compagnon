@@ -41,7 +41,9 @@ rangée  0-1   accents des capitales      É Ê À Ç…
 - **Formes choisies pour la lecture** : **A** pointu (rond, il se lisait H à la taille texte), **x** en croix de 5
   (en 4 de large, il ressemblait à un н).
 - **Interligne** : 12 pixels (texte), 13 (titre).
-- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes.
+- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes. L'épaississement ne bouche
+  jamais un jour d'un pixel (sinon le « m » devient un pavé) ; M et W ont un gras dessiné à la main (7 de large).
+  Un test (PC et Android) refuse toute lettre ou chiffre de plus de 82 % de pixels pleins dans sa boîte.
 - **Accents** : composés (lettre nue + signe centré), pour que toutes les lettres accentuées aient le même accent.
 - **Signes** : ♥ ♡ ✓ ✗ ✧ ✦ ★ → ← ↑ ↓ ♪ ♫ ☁ ☀ ☾ ☂ ❄ ⚡ ☺ ▼ ▲ ▶ ◀ ● ○ ■ □ ◆, et `¤` dessiné comme une pièce
   (« po »).
