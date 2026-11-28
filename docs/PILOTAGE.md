@@ -28,6 +28,11 @@ beau, plus vivant, plus immersif, et on le prouve sur de vrais appareils.
 chevauchement, pixel inégal, libellé tronqué, chiffre faux dans une doc) est un vrai défaut. Chaque capture se relit
 à l'œil avant de dire « fait ». L'état des lieux et l'ordre proposé sont dans [AUDIT-V1.md](AUDIT-V1.md).
 
+**Haute définition (Antoine, 28 novembre 2026)** : le pixel art n'est jamais une baisse de qualité ni de définition
+(règle 9 de `CLAUDE.md`). Scènes des campagnes à 480 × 240 unités au minimum. Trois chantiers liés : le moteur du
+Théâtre (taille, format compact, charge mesurée), la peinture des 46 décors, les personnages et Pilou à la nouvelle
+unité. Le moteur fixe le format ; les deux autres s'y conforment.
+
 **Exigence de rendu** : chaque chantier qui touche à l'image ou au son va au-delà du strict nécessaire. Planche de
 contrôle avant / après, relecture à l'œil de chaque image produite, capture sur le vrai PC quand c'est possible,
 une seconde passe de finition avant la PR. « Ça marche » ne suffit pas : « c'est beau » est le critère.

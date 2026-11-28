@@ -152,6 +152,44 @@ Vérifié par `IllustrationsTests.cs` et `IllustrationsTest.java` (chaque décor
 déclaré a son sprite, au bon format, opaque, natif en fin ; chaque exclusif se voit porté aux quatre stades ; les
 emblèmes de ton ont quatre silhouettes différentes), et par quatre poses de `rendus-reference.txt`.
 
+## Décors haute définition (384 × 160)
+
+Décision d'Antoine du 28 novembre 2026 (étude `docs/maquettes/paysages/`) : les décors passent à **384 × 160**, le
+double exact des 192 × 80, à 3 px par pixel (1152 px ; 12 pixels coupés de chaque côté sur un téléphone de 1078 px).
+Ils sont peints par `outils/sprites/paysage.py` ([PEINTURE.md](PEINTURE.md)) et écrits par
+`py outils/sprites/decors_hd.py` (numpy et Pillow, donc hors de `generer.py`).
+
+**Proposition envoyée à la session du Théâtre le 28 novembre ; pas encore confirmée par elle.** Tant que le Théâtre
+384 × 160 n'est pas fusionné, rien ne lit ces fichiers : les décors 192 × 80 d'`assets/sprites2x` restent en service.
+
+| | |
+|---|---|
+| Emplacement | `assets/decors/decor-<campagne>-<décor>.txt` : mêmes identifiants que les décors actuels |
+| Embarquement | Android : déjà pris (tout `assets/` est en ressources) ; PC : une ligne `EmbeddedResource` à ajouter |
+| Coordonnées | 2 × celles du décor fin actuel (le sol vers y = 156) |
+| Référence | `outils/sprites/decors-hd-reference.txt` : `id largeur hauteur images duree` puis l'empreinte FNV-1a de chaque image (pixels ARGB `0xFFrrggbb`, rangée par rangée, même calcul que `theatre.fnv`) |
+
+**Format « décor compact »** (texte UTF-8, fins de ligne LF) :
+
+```
+# commentaire
+id: decor-prologue-mare
+taille: 384 160
+duree: 200                       ms par image
+palette: a=#5b6fc4 b=#7384d0 …   une lettre par couleur, 67 au plus, décor opaque
+images: 8
+12a3b.c200.                      puis images × hauteur lignes, sans séparateur
+```
+
+- Une ligne est une suite de plages `[n]c` : `n` décimal (absent : 1), `c` une lettre de palette, ou `.` pour « comme
+  le pixel de l'image précédente » (jamais dans la première image). La somme des `n` vaut la largeur.
+- Lettres permises : `a-z A-Z ! $ % & * + - / < > ? @ ^ _ ~`. Jamais un chiffre (ce sont les longueurs) ni `.`.
+- Le lecteur de référence est `decors_hd.decoder` (une trentaine de lignes) ; C# et Java le refont à l'identique, sans
+  bibliothèque.
+
+**Poids mesuré** sur « La mare » (8 images) : 94 Ko, contre 481 Ko à une lettre par pixel (÷ 5) ; 46 Ko une fois
+compressé (APK). Extrapolé à 46 décors : ≈ 4,3 Mo, le poids des décors d'aujourd'hui.
+
 ## Animations des campagnes
 
 Les campagnes vivent : décors en boucle, portraits des personnages, écriture lettre à lettre, transitions, fond qui

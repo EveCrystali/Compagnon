@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paysages haute définition</title>
+<style>
+  :root { --page:#0b0e1a; --carte:#151a2e; --texte:#e6ecf2; --pale:#adbac7; --bord:#6a5acd; --titre:#9b8cff; --orange:#f69d50; --bleu:#6cb6ff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--texte); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 2000px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { color: var(--titre); font-size: 22px; margin: 56px 0 8px; border-bottom: 2px dotted var(--bord); padding-bottom: 6px; }
+  h3 { margin: 0 0 6px; font-size: 17px; }
+  p, li { max-width: 80ch; }
+  .pale { color: var(--pale); }
+  img { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+  .carte { background: var(--carte); border: 2px solid var(--bord); padding: 12px; margin: 14px 0; overflow-x: auto; }
+  .lettre { display: inline-block; min-width: 2.2em; text-align: center; font-weight: 700; padding: 1px 8px; margin-right: 8px; color: #151a2e; background: var(--orange); }
+  .lettre.act { background: var(--pale); }
+  .lettre.reco { background: var(--bleu); }
+  .grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .grille img { width: 100%; height: auto; }
+  .rang { display: flex; gap: 16px; overflow-x: auto; align-items: flex-start; padding-bottom: 8px; }
+  .rang figure { margin: 0; flex: none; }
+  .rang.tel img { width: 539px; height: 1200px; image-rendering: auto; }
+  figcaption { margin-bottom: 6px; }
+  table { border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #3a4270; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #1d2440; }
+  td.n { text-align: right; white-space: nowrap; }
+  .reco-bloc { border-color: var(--bleu); border-style: double; border-width: 6px; }
+  a { color: var(--bleu); }
+  @media (max-width: 1000px) { .grille { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Paysages des campagnes : la mare au couchant, en quatre définitions</h1>
+<p class="pale">Étude du 28 novembre 2026. Un seul paysage (la mare du prologue), peint par le code de
+<code>outils/sprites/paysages_etude.py</code> dans quatre directions, à côté du décor en service. Toutes les images
+sont à leur taille d'écran réelle et sans lissage. Le détail chiffré est dans
+<a href="ETUDE.md">ETUDE.md</a>.</p>
+
+<div class="carte">
+<p><span class="lettre act">0</span><b>Actuel</b> : 192 × 80 unités, 5 px par unité.</p>
+<p><span class="lettre">A</span><b>Même définition, enrichie</b> : 192 × 80 unités, 5 px par unité.</p>
+<p><span class="lettre">B</span><b>Haute définition</b> : 320 × 160 unités, 3 px par unité.</p>
+<p><span class="lettre">C</span><b>Très haute définition</b> : 480 × 240 unités, 2 px par unité.</p>
+<p><span class="lettre reco">D</span><b>Le double exact de l'actuel</b> : 384 × 160 unités, 3 px par unité, 1152 px de large. <b>Recommandée.</b></p>
+</div>
+
+<h2>1. Les quatre, côte à côte (réduits de moitié)</h2>
+<p class="pale">Vue d'ensemble seulement : à cette taille le navigateur réduit les images. Pour juger le pixel,
+descendre à la section 2.</p>
+<div class="grille">
+  <figure class="carte"><figcaption><span class="lettre act">0</span>Actuel</figcaption><img src="actuel-decor.gif" alt="Décor actuel"></figure>
+  <figure class="carte"><figcaption><span class="lettre">A</span>192 × 80 enrichi</figcaption><img src="A-decor.gif" alt="Direction A"></figure>
+  <figure class="carte"><figcaption><span class="lettre">B</span>320 × 160</figcaption><img src="B-decor.gif" alt="Direction B"></figure>
+  <figure class="carte"><figcaption><span class="lettre">C</span>480 × 240</figcaption><img src="C-decor.gif" alt="Direction C"></figure>
+  <figure class="carte"><figcaption><span class="lettre reco">D</span>384 × 160</figcaption><img src="D-decor.gif" alt="Direction D"></figure>
+</div>
+
+<h2>2. Chaque décor à sa taille d'écran, en boucle</h2>
+<p class="pale">Huit images à 5 images par seconde (l'actuel : six images). Ce qui bouge : étoiles, nuages,
+oiseaux, moulin, fumée, fenêtres, linge, balançoire, mouton, reflets et éclats du soleil, ronds dans l'eau,
+grenouille, barque, libellule, nénuphars, herbes, feuilles, lanterne, roseaux, lucioles.</p>
+<div class="carte"><h3><span class="lettre act">0</span>Actuel — 960 × 400 px</h3><img src="actuel-decor.gif" width="960" height="400" alt=""></div>
+<div class="carte"><h3><span class="lettre">A</span>Même définition, enrichie — 960 × 400 px</h3><img src="A-decor.gif" width="960" height="400" alt=""></div>
+<div class="carte"><h3><span class="lettre">B</span>Haute définition — 960 × 480 px</h3><img src="B-decor.gif" width="960" height="480" alt=""></div>
+<div class="carte"><h3><span class="lettre">C</span>Très haute définition — 960 × 480 px</h3><img src="C-decor.gif" width="960" height="480" alt=""></div>
+<div class="carte"><h3><span class="lettre reco">D</span>Double exact de l'actuel — 1152 × 480 px (le téléphone de 1078 px en montre le milieu)</h3><img src="D-decor.gif" width="1152" height="480" alt=""></div>
+
+<h2>3. Parallaxe légère</h2>
+<p class="pale">La caméra glisse de ± 3 unités ; chaque plan suit à sa vitesse (ciel 0, nuages 0,08, lointains 0,2,
+plan moyen 0,5, premier plan 1). C'est une démonstration : le théâtre actuel n'a pas de plans séparés.</p>
+<div class="carte"><h3><span class="lettre">A</span></h3><img src="A-parallaxe.gif" width="960" height="400" alt=""></div>
+<div class="carte"><h3><span class="lettre">B</span></h3><img src="B-parallaxe.gif" width="960" height="480" alt=""></div>
+<div class="carte"><h3><span class="lettre">C</span></h3><img src="C-parallaxe.gif" width="960" height="480" alt=""></div>
+<div class="carte"><h3><span class="lettre reco">D</span></h3><img src="D-parallaxe.gif" width="1152" height="480" alt=""></div>
+
+<h2>4. La fenêtre Aventure du PC, à 100 %</h2>
+<p class="pale">Gabarit : capture réelle de la fenêtre. Pilou et le personnage (Grumeau, emprunté à « La Grande
+Panne ») sont à l'unité de chaque direction. En B, C et D la scène gagne 80 px de haut : la fenêtre s'allonge d'autant. En D elle s'élargit aussi de 192 px
+(le gabarit est étiré dans ses zones vides).</p>
+<div class="carte"><h3><span class="lettre act">0</span>Actuel</h3><img src="actuel-pc.png" width="1004" height="761" alt=""></div>
+<div class="carte"><h3><span class="lettre">A</span>Mini-Pilou et personnage en pied d'aujourd'hui, inchangés</h3><img src="A-pc.png" width="1004" height="761" alt=""></div>
+<div class="carte"><h3><span class="lettre">B</span>Le Pilou du bureau (48 × 56) et le portrait fin du personnage, déjà dessinés</h3><img src="B-pc.png" width="1004" height="841" alt=""></div>
+<div class="carte"><h3><span class="lettre">C</span>Le Pilou fin (96 × 112) ; le personnage n'existe pas à cette unité, il est trop petit</h3><img src="C-pc.png" width="1004" height="841" alt=""></div>
+<div class="carte"><h3><span class="lettre reco">D</span>Le mini-Pilou de scène doublé automatiquement (anguleux : à affiner) et le portrait fin du personnage</h3><img src="D-pc.png" width="1196" height="841" alt=""></div>
+
+<h2>5. L'écran Aventure du téléphone (1078 × 2400, montré à moitié)</h2>
+<p class="pale">Gabarit : capture Robolectric du même écran (1236 × 2745) ramenée à 1078 de large ; son habillage est
+donc un peu adouci, et son texte est celui du gabarit (« Devant la porte »). La scène, elle, est au pixel près. En D elle est cadrée : 37 px (12 unités) perdus de chaque côté.
+Cliquer une image pour la voir en entier.</p>
+<div class="carte"><div class="rang tel">
+  <figure><figcaption><span class="lettre act">0</span>Actuel</figcaption><a href="actuel-telephone.png"><img src="actuel-telephone.png" alt=""></a></figure>
+  <figure><figcaption><span class="lettre">A</span></figcaption><a href="A-telephone.png"><img src="A-telephone.png" alt=""></a></figure>
+  <figure><figcaption><span class="lettre">B</span></figcaption><a href="B-telephone.png"><img src="B-telephone.png" alt=""></a></figure>
+  <figure><figcaption><span class="lettre">C</span></figcaption><a href="C-telephone.png"><img src="C-telephone.png" alt=""></a></figure>
+  <figure><figcaption><span class="lettre reco">D</span></figcaption><a href="D-telephone.png"><img src="D-telephone.png" alt=""></a></figure>
+</div></div>
+
+<h2>6. Ce que chaque direction impose</h2>
+<div class="carte">
+<table>
+<tr><th></th><th><span class="lettre act">0</span>Actuel</th><th><span class="lettre">A</span>192 × 80</th><th><span class="lettre">B</span>320 × 160</th><th><span class="lettre">C</span>480 × 240</th><th><span class="lettre reco">D</span>384 × 160</th></tr>
+<tr><th>Rapport à l'actuel</th><td>—</td><td>× 1</td><td>× 5/3, autre cadre (2:1)</td><td>× 2,5, autre cadre (2:1)</td><td>× 2 exact, même cadre</td></tr>
+<tr><th>Pixels par image</th><td class="n">15 360</td><td class="n">15 360</td><td class="n">51 200 (× 3,3)</td><td class="n">115 200 (× 7,5)</td><td class="n">61 440 (× 4)</td></tr>
+<tr><th>Poids du décor (texte, mesuré)</th><td class="n">94 Ko, 6 images</td><td class="n">121 Ko, 8 images</td><td class="n">401 Ko</td><td class="n">902 Ko</td><td class="n">481 Ko</td></tr>
+<tr><th>46 décors (extrapolé)</th><td class="n">4,3 Mo</td><td class="n">≈ 5,6 Mo</td><td class="n">≈ 18 Mo</td><td class="n">≈ 41 Mo</td><td class="n">≈ 22 Mo</td></tr>
+<tr><th>Pilou de scène (92 poses)</th><td>en service</td><td>inchangé</td><td>à redessiner</td><td>à redessiner</td><td>doublé automatiquement ; anguleux, à affiner ensuite</td></tr>
+<tr><th>29 personnages en pied</th><td>13 faits, 16 à dessiner</td><td>inchangé</td><td>29 à redessiner</td><td>29 à redessiner</td><td>13 : le portrait fin 64 × 64 sert tel quel ; 16 à dessiner (déjà prévus)</td></tr>
+<tr><th>17 acteurs (bêtes, effets)</th><td>en service</td><td>inchangés</td><td>à redessiner</td><td>à redessiner</td><td>doublés automatiquement</td></tr>
+<tr><th>Scènes (places, sols, zones)</th><td>—</td><td>inchangées</td><td>à replacer à l'œil</td><td>à replacer à l'œil</td><td>coordonnées doublées</td></tr>
+<tr><th>Code PC et Android</th><td>—</td><td>aucun</td><td>taille, constantes de mouvement (× 5/3, non entier), référence, tests</td><td>idem, plus un format plus compact</td><td>taille et constantes × 2, référence, tests ; un cadrage sur téléphone</td></tr>
+<tr><th>Téléphone 1078 px</th><td>960 px, marges</td><td>960 px, marges</td><td>960 px, marges</td><td>960 px, marges</td><td>pleine largeur, 12 unités coupées par bord</td></tr>
+<tr><th>Téléphone 720 px</th><td>3 px, 576 px</td><td>3 px, 576 px</td><td>2 px, 640 px</td><td>1 px, 480 px : trop petit</td><td>2 px, pleine largeur, 12 unités coupées par bord</td></tr>
+<tr><th>Fenêtre du PC</th><td>—</td><td>inchangée</td><td>+ 80 px de haut</td><td>+ 80 px de haut</td><td>+ 80 px de haut, + 192 px de large (ou cadrée)</td></tr>
+<tr><th>Effet « waouh »</th><td>faible</td><td>moyen : plus riche, mais brouillé</td><td>fort ; le cadre haut donne le plus grand ciel</td><td>très fort, à peine au-dessus de B</td><td>fort ; plus fin que B, plus grand à l'écran</td></tr>
+<tr><th>Temps estimé (sessions)</th><td>—</td><td class="n">5 à 7</td><td class="n">14 à 19</td><td class="n">18 à 25</td><td class="n">9 à 13</td></tr>
+</table>
+</div>
+
+<h2>7. Recommandation</h2>
+<div class="carte reco-bloc">
+<p><b>Direction D</b> (384 × 160 à 3 px, le double exact de l'actuel). Confiance : 70 %.</p>
+<ul>
+<li>À l'écran, le pixel est le même qu'en B (3 px) et le dessin est plus fin (2 unités par unité actuelle contre 1,67).</li>
+<li>Tout ce qui existe se convertit par × 2 : scènes, mouvements, acteurs, Pilou de scène, 13 personnages. En B et C, tout cela est à refaire.</li>
+<li>Sur téléphone la scène prend toute la largeur (1078 px au lieu de 960).</li>
+<li>Ce qu'on perd face à B : le cadre plus haut (2:1) et son très grand ciel. Le cadre reste celui d'aujourd'hui (2,4:1).</li>
+<li>C reste trop cher pour ce qu'il ajoute ; A ne porte pas le fourmillement demandé.</li>
+</ul>
+<p class="pale">Rien de ceci n'a tourné dans l'application : ce sont des images produites par l'outil d'étude.
+La fluidité à 384 × 160 (quatre fois plus de pixels à composer qu'aujourd'hui) sur un vrai téléphone reste à mesurer
+avant de lancer la refonte.</p>
+</div>
+</main>
+</body>
+</html>

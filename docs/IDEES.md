@@ -21,6 +21,14 @@ existant), et aucune couleur ne s'oppose en rouge contre vert : chaque état a a
 | Pêche au curseur | Le curseur devient un hameçon qu'on remonte au bon moment. | Prolonge la pêche existante. |
 | Pluie de pixels | Après une capture d'écran, Pilou attrape des pixels qui remplissent sa collection de teintes. | Ne lit jamais l'image capturée. |
 
+## Campagnes liées (Antoine, 28 novembre 2026 : « nous y reviendrons plus tard »)
+
+- **Aujourd'hui, les quatre campagnes ne sont pas liées** : aucun choix, objet ni personnage ne passe de l'une à
+  l'autre. Le moteur sait seulement ouvrir une campagne quand d'autres sont finies (champ `"campagnes"`, #101).
+- **Pour la fin de jeu** : des campagnes à chapitres liées entre elles (un choix d'une campagne compte dans la
+  suivante, des personnages reviennent, un fil d'ensemble), ouvertes par le niveau ou par un haut fait. À cadrer
+  avec Antoine avant d'écrire : c'est du contenu neuf.
+
 ## Notifications et téléphone
 
 - **Lire les notifications Windows** : il faut donner à Pilou une identité de paquet signé (sparse

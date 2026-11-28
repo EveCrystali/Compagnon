@@ -60,6 +60,10 @@ captures Robolectric dans l'artefact `captures-ui`).
    `bordABord` après `setContentView`.
 8. **Windows** : la fenêtre de Pilou ne prend pas le focus ; ne pas appeler `SetForegroundWindow` à
    l'ouverture d'un menu WPF (il se referme).
+9. **Le pixel art n'est jamais une baisse de qualité ni de définition** (Antoine, 28 novembre 2026). Les
+   paysages des campagnes se peignent à 480 × 240 unités au minimum (2 px d'écran par unité), détaillés et
+   animés ; Pilou, les personnages et les acteurs de la scène sont à la même unité. Tout nouveau dessin vise
+   la finesse ; on n'agrandit jamais un dessin grossier pour remplir l'écran.
 
 ## Git
 

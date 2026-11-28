@@ -1,0 +1,3 @@
+# Décors haute définition (decors_hd.py) : id largeur hauteur images duree, puis l'empreinte FNV-1a de
+# chaque image décodée (pixels ARGB 0xFFrrggbb, rangée par rangée). Lu par les tests C# et Java.
+decor-prologue-mare 384 160 8 200 5830b973 9fcaaa7b 339f36a6 61150786 803903ab ce33a37c 3ddc7874 623d688e
