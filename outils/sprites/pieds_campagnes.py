@@ -7,11 +7,12 @@ gardent leur ordre (0 et 1 repos, 2 yeux fermés, 3 et 4 bouche ouverte) : les a
 `parle` sont écrites dans assets/scenes/animations.txt par theatre.py. Un personnage dessiné en buste (Mlle Renvoi)
 se tient derrière un guichet qu'on lui pose devant.
 
+Les humains (Le phare éteint) ont un portrait en buste : ils sont dessinés en pied par humains_pied.py.
 Campagnes déjà passées au théâtre en pied : CAMPAGNES (une campagne par PR, décidé avec le pilote le 28 novembre 2026).
 """
 import os
 
-CAMPAGNES = ("grande-panne",)
+CAMPAGNES = ("grande-panne", "phare-eteint")
 
 # Personnages en buste : le meuble posé devant eux (lignes d'en bas recouvertes).
 GUICHETS = {("grande-panne", "mlle-renvoi")}
@@ -77,8 +78,15 @@ def tout():
     for (c, p) in sorted(portraits_campagnes.PERSOS):
         if c not in CAMPAGNES:
             continue
-        s = _lire_1x(c, p)
-        ims = _grilles(s)
+        import humains_pied
+        if (c, p) in humains_pied.GENS:
+            # Les humains : dessinés en pied par humains_pied.py (leur portrait est un buste).
+            ims = humains_pied.images((c, p))
+            duree = 150
+        else:
+            s = _lire_1x(c, p)
+            ims = _grilles(s)
+            duree = s.duree
         h, w = len(ims[0]), len(ims[0][0])
         # Recadrage commun à toutes les images : la boîte des pixels pleins.
         xs = [x for g in ims for y in range(h) for x in range(w) if g[y][x] is not None]
@@ -100,6 +108,5 @@ def tout():
                 t.g = _guichet(t.g, W2)
             toiles.append(t)
         sid = "pied-%s-%s" % (c, p)
-        ecrire(sid, toiles, duree=s.duree, commentaire="Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après "
-               "portrait-%s-%s" % (c, p))
+        ecrire(sid, toiles, duree=duree, commentaire="Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : %s" % p)
         IDS.append(sid)

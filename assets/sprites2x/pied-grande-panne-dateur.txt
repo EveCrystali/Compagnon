@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-dateur
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : dateur
 id: pied-grande-panne-dateur
 slot: objet
 ancre: aucun

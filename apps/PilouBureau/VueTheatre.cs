@@ -294,6 +294,17 @@ internal sealed class VueTheatre : Border
 
     private void Ecrire(uint[] px) => _bitmap.WritePixels(new Int32Rect(0, 0, Theatre.W, Theatre.H), px, Theatre.W * 4, 0);
 
+    // Où poser un panneau de w × h pixels de scène (Theatre.PlacerPanneau) : coin haut-gauche en pixels de scène. gene :
+    // ce que la fenêtre pose déjà sur la scène, en pixels de scène.
+    public (int X, int Y) PlacerPanneau(int w, int h, double now, IReadOnlyList<(int X0, int Y0, int X1, int Y1)>? gene = null)
+    {
+        if (_cx is null) return (2, 9);
+        var p = Theatre.Pilou(_cx, _evts, T(now));
+        (int, int)? taille = _perso != "" && _cx.Sprites(_perso) is { Images.Count: > 0 } s && s.Images[0].Length > 0
+            ? (s.Images[0][0].Length, s.Images[0].Length) : null;
+        return Theatre.PlacerPanneau(_cx.Scene, w, h, p.X, _perso != "", taille, gene);
+    }
+
     // Où est Pilou dans la scène, en coordonnées de ce contrôle (pour poser une bulle ou un choix à côté de lui).
     public Point PositionPilou(double now)
     {

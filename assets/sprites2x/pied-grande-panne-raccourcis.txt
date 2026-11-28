@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-raccourcis
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : raccourcis
 id: pied-grande-panne-raccourcis
 slot: objet
 ancre: aucun

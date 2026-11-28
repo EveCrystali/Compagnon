@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-tic-tac
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : tic-tac
 id: pied-grande-panne-tic-tac
 slot: objet
 ancre: aucun

@@ -97,6 +97,8 @@ public final class Theatre {
         public int[] sol = {0, 78, W, 78};
         public int place = 24;
         public int interlocuteur = 150;
+        /** L'accessoire dont parle le texte (x0, y0, x1, y1), ou null : le panneau des choix du PC l'évite. */
+        public int[] cle;
         public final List<Acteur> acteurs = new ArrayList<>();
         public final List<Sensible> sensibles = new ArrayList<>();
     }
@@ -137,6 +139,8 @@ public final class Theatre {
                 sc.place = ent(m[1]);
             } else if (m[0].equals("interlocuteur")) {
                 sc.interlocuteur = ent(m[1]);
+            } else if (m[0].equals("cle")) {
+                sc.cle = new int[]{ent(m[1]), ent(m[2]), ent(m[3]), ent(m[4])};
             } else if (m[0].equals("acteur")) {
                 sc.acteurs.add(new Acteur("acteur-" + m[1], m[2], ents(m, 3)));
             } else if (m[0].equals("sensible")) {

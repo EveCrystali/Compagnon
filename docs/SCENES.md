@@ -76,12 +76,20 @@ marchant. Ses animations nommées (`assets/scenes/animations.txt`) : un visage d
 pour que ses pieds touchent le sol. Ses images gardent leur ordre (`repos` 0-1 à 900 ms, `cligne` 2, `parle` 3-4 à
 140 ms). Un personnage en buste se tient derrière un meuble posé devant lui (Mlle Renvoi : un guichet). Il regarde
 vers la place de Pilou, cligne décalé de Pilou, sautille quand on le touche et parfois de lui-même (une chance sur
-trois toutes les huit secondes). Campagnes passées en pied : La Grande Panne (13 personnages).
+trois toutes les huit secondes). Campagnes passées en pied : La Grande Panne (13 personnages), Le phare éteint
+(7 humains).
+
+Les humains (Le phare éteint) ont un portrait en buste : `humains_pied.py` les dessine en pied, au pixel de la scène
+(30 à 44 pixels de haut, silhouette construite par code : tête, vêtement, mains, jambes, bottes ; mêmes cinq images que les
+personnages-objets, `repos`, `cligne`, `parle`). Chacun garde la palette et les signes de son portrait (le bonnet de
+Tudal, le ciré de Vernier, les lunettes d'Odile, la loupe de Basile).
 
 Dans la fenêtre : quand un message a un `personnage` dessiné en pied, il entre ; un message sans personnage ne le
 renvoie pas tant qu'on reste dans le lieu ; un nouveau lieu repart sans personnage. Une réplique entre guillemets est
-la sienne : c'est lui qui parle dans la scène, pas Pilou. Sur PC, les choix se posent au milieu, en haut de la scène
-(Pilou se tient à gauche, le personnage à droite).
+la sienne : c'est lui qui parle dans la scène, pas Pilou. Sur PC, le panneau des choix se pose du côté opposé au
+personnage (`Theatre.PlacerPanneau`, grille de 2 pixels de scène) : il ne couvre jamais la légende du lieu ni les
+boutons, évite d'abord l'accessoire clé de la scène (`cle`), puis le personnage (boîte réelle de son sprite), puis
+Pilou ; il couvre plutôt un mur. La fin reste centrée.
 
 ## Une scène par décor : `assets/scenes/<campagne>.txt`
 
@@ -90,6 +98,7 @@ scene mare
 sol 4 78 188 78                       la ligne où marchent les pieds de Pilou (x0 y0 x1 y1 ; une pente est permise)
 place 18                              où il se tient
 interlocuteur 168                     où se tiendra un personnage en pied
+cle 50 10 68 56                       l'accessoire dont parle le texte (x0 y0 x1 y1, facultatif) : les choix ne le couvrent pas
 acteur libellule vol 60 40 160 58 7   acteur-libellule : comportement, puis ses paramètres
 acteur rond rond 70 68 2600 0
 sensible grenouille 90 48 102 60 bulle 93 55   ce qui répond au clic : zone, réaction, paramètres
@@ -145,11 +154,12 @@ place de la boîte. Le chapitre, le lieu et le sac sont à droite de la boîte.
 
 ## Ce qui reste (prochaines étapes)
 
-1. **Scènes des deux autres grandes campagnes** (Le phare éteint, Petit Nuage : 28 décors) : sol, places, acteurs et
-   réactions propres à chaque lieu (mouettes, chat du port, brume qui glisse, bocaux…). La Grande Panne est faite :
-   12 scènes, acteurs de l'ordinateur (paquets de données, curseur, tickets, bulles du marais, étincelles).
-2. **Les personnages en pied des deux autres campagnes** (16) : leurs portraits sont des bustes humains ou animaux,
-   il faudra les dessiner en pied (un premier jet de Tudal existe dans les planches de l'atelier).
+1. **Scènes de Petit Nuage** (14 décors) : sol, places, acteurs et réactions propres à chaque lieu (brume qui glisse,
+   bocaux…). Faites : La Grande Panne (12 scènes, acteurs de l'ordinateur : curseur, tickets, bulles du marais,
+   étincelles) et Le phare éteint (14 scènes : mouettes, chat sur les casiers, papillons de nuit autour des lanternes,
+   crabes, ronds dans l'eau).
+2. **Les personnages en pied de Petit Nuage** (9) : à passer en pied, portrait repris s'il est déjà un corps entier,
+   dessiné en pied sinon (comme les humains du phare).
 3. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
    simple.
 4. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).
