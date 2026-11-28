@@ -140,7 +140,7 @@ Tout le reste est fusionné. Journée du 28 novembre :
   scènes d'évolution et leur choix partagé (#129, #131, #133).
 - **Haute définition (règle 9)** : étude (#121, #122), format (#130), moteur 480 × 240 avec le Pilou fin du bureau
   (#146, #149), métamorphose (#151) ; 29 personnages et 32 acteurs (#126, #132, #134, #136, #138, #139, #140) ;
-  46 décors puis une passe en profondeur par campagne (#127, #137, #141, #142, #145, #147, #148, #153, #155 à #158,
+  46 décors puis une passe en profondeur par campagne (#127, #137, #141 à #145, #147, #148, #153, #155 à #158,
   #160, #161, #164 à #170).
 - **Sûreté** : un lancement d'essai n'écrit plus dans le vrai profil et n'envoie rien sur le réseau (#162) ; outil de
   planche d'une image par scène (#163).
