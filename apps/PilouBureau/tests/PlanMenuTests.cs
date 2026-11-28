@@ -87,3 +87,15 @@ public class PlanMenuTests
         Assert.All(Soins.Besoins, b => Assert.NotEqual("il a besoin de toi", PlanMenu.Manque(b)));
     }
 }
+
+// « Il se montre ▸ Musique », sous Sons : les trois niveaux de la musique de l'Aventure (#104).
+public class PlanMenuMusiqueTests
+{
+    [Fact]
+    public void ChoixDeMusique()
+    {
+        Assert.Equal(Musique.Niveaux, PlanMenu.ChoixMusique.Select(c => c.Valeur));
+        Assert.Equal(new[] { "Aucune", "Discrète", "Normale" }, PlanMenu.ChoixMusique.Select(c => c.Nom));
+        Assert.Contains(new Reglages().Musique, PlanMenu.ChoixMusique.Select(c => c.Valeur)); // le défaut est un choix du menu
+    }
+}

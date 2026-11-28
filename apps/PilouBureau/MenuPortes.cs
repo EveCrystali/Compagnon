@@ -359,6 +359,8 @@ public sealed partial class FenetrePilou
         m.Items.Add(Info("Plein écran, présentation, visio : l'annonce attend"));
         ChoixAPlat(m, "Sons", new[] { ("Aucun", "aucun"), ("Discrets", "discrets"), ("Normaux", "normaux") }, _reglages.Sons,
             v => { _reglages.Sons = v; Sons.Jouer(Son.Caresse); });
+        // La musique de l'Aventure (docs/SONS.md) ; lue en direct, elle change sans redémarrer.
+        ChoixAPlat(m, PlanMenu.TitreMusique, PlanMenu.ChoixMusique.ToArray(), _reglages.Musique, v => _reglages.Musique = v);
         return m;
     }
 

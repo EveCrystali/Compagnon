@@ -45,7 +45,9 @@ Dernière mise à jour : 28 novembre 2026.
   bugs, installation, bulle flottante. PC : la boutique et « Rangées débloquées » sont au guide (`StylePixel.cs` :
   texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom, « Pilou et moi » et les expéditions aussi, vus dans l'exe
   d'essai à 100 % ; restent amis et connecteurs (formulaires au thème clair du système), l'invitation, et l'en-tête
-  commun (`Bandeau.cs`).
+  commun (`Bandeau.cs`). Plancher de lisibilité (docs/STYLE.md) : plus aucun texte en minuscules dans la plus petite taille
+  de la police pixel, sur le PC (hauteur d'x de 10 px à 100 %, 7 pour le menu) comme sur le téléphone ; « petit » ne
+  sert plus qu'aux capitales et aux nombres. La bulle du bureau reste sous ce plancher (5 px) : à trancher.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant

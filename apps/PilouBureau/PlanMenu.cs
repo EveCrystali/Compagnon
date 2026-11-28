@@ -81,6 +81,13 @@ public static class PlanMenu
     // Lignes stables du premier niveau, bandeau compris (sans titres ni zone « En ce moment »).
     public static int LignesStables => 1 + Blocs.Sum(b => b.Count);
 
+    // « Il se montre ▸ Musique », juste sous Sons : les niveaux de Musique.Niveaux, dits au féminin (« la musique »).
+    public const string TitreMusique = "Musique";
+    public static readonly IReadOnlyList<(string Nom, string Valeur)> ChoixMusique = new[]
+    {
+        ("Aucune", "aucune"), ("Discrète", "discrete"), ("Normale", "normale"),
+    };
+
     // La ligne stable « Prendre soin » dit l'état, sauf quand la zone « En ce moment » le dit déjà juste au-dessus
     // (« Il a faim : prendre soin ») : pas deux fois la même phrase à deux lignes d'écart.
     public static string TitreSoin(string etat, bool dansLeMoment) => dansLeMoment ? Soin.Titre : $"{Soin.Titre} · {etat}";
