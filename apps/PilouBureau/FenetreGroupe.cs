@@ -202,7 +202,7 @@ public sealed partial class FenetrePilou
     private void Rejoindre()
     {
         var v = Saisie.Demander("Rejoindre un groupe d'appareils",
-            "Code à 16 caractères affiché par l'autre PC (clic droit → Intégrations → Groupe d'appareils : revoir le code). " +
+            "Code à 16 caractères affiché par l'autre PC (clic droit → Amis et appareils → Groupe d'appareils → revoir le code). " +
             "L'XP de tous les appareils du groupe s'additionne ; le téléphone appairé avec ce code en fait aussi partie.",
             "");
         if (v is null) return;

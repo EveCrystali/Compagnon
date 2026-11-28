@@ -1,6 +1,11 @@
 # Audit du menu clic droit (Windows)
 
 Audit du 27 novembre 2026, sur le code de `main` (après #79 et #80). Aucun code modifié.
+
+> **Statut (28 novembre 2026) : le menu retenu est en place** (chantier « Sept portes », branche
+> `claude/menu-sept-portes`). Vu au vrai clic droit sur le PC, clair et sombre, à 100 % ; planche :
+> [`maquettes/menu/captures/sept-portes.png`](maquettes/menu/captures/sept-portes.png). Écarts avec le plan ci-dessous :
+> voir « Ce qui a été fait » en fin de page.
 Constat d'Antoine : « le menu est très beau mais on s'y perd énormément avant de trouver ce qu'on veut ».
 
 **En trois lignes**
@@ -502,3 +507,23 @@ Maquette : [`maquettes/menu/retenu.html`](maquettes/menu/retenu.html).
   de 3 à 2 (zone du moment) ; rappeler Pilou d'une visite reste à 2 ; régler la discrétion reste à 3.
 - À confirmer pendant l'implémentation : le bandeau doit avoir l'air cliquable (infobulle « Ouvrir la boutique »
   déjà là ; un survol visible le dira mieux).
+
+### Ce qui a été fait (28 novembre 2026)
+
+Le menu retenu, construit dans `MenuPortes.cs` (règles testées sans Windows dans `PlanMenu.cs`). Choix pris pendant
+l'implémentation :
+
+- **Boutique** : le bandeau est la seule porte ; les nouveautés s'affichent sous lui (« ✦ n nouveautés à la
+  boutique »), le survol le surligne comme une entrée.
+- **En ce moment** : ordre fixe (il t'attend, expédition, visite, soin, jeu), deux lignes au plus. Les libellés disent
+  l'action : « Il a faim : prendre soin », « En expédition · voir ou rappeler ». Le titre « Toujours là » n'apparaît
+  que sous cette zone.
+- **Signes** : ◎ « Il se montre » et ◌ « Il se cache » (le rond plein ou pointillé dit lequel) ; ⏻ Quitter.
+- **Choix exclusifs** : un rond en pixels (point au centre quand il est choisi) ; les cases gardent le carré et la coche.
+- **Sons** (arrivés après l'audit) : dans « Il se montre », sous leur titre.
+- **Caresser** n'est plus dans le menu : c'est le clic gauche, rappelé dans l'infobulle de « Prendre soin ».
+- **Forme affichée** passe dans Apparence ; Évolution (dans Progrès) garde les pierres et la retenue.
+- Les infos longues deviennent des infobulles (prénom, journal, clavier, dossier de partage).
+- Les textes d'aide qui citaient l'ancien chemin (« Intégrations → … », « Pilou et moi ») suivent le nouveau.
+
+Non fait : un vrai changement d'échelle Windows à 125 / 150 % (rendu WPF seulement) ; l'étape 5 (Android).

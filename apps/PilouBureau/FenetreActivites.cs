@@ -283,64 +283,6 @@ public sealed partial class FenetrePilou
             : Math.Sin(t / 220.0) * ampleur;
     }
 
-    // ---- Menu
-
-    private MenuItem MenuActivites()
-    {
-        var m = new MenuItem { Header = "Métiers et succès" };
-        var stats = StatsActuelles(_activite);
-        var titre = _tenue != "" ? $"en ce moment : {Activites.Signe(_tenue)} {Activites.Nom(_tenue)}" : "en ce moment : rien de reconnu";
-        if (_discret) titre += _raisonDiscret switch
-        {
-            "presentation" => " · caché (présentation)",
-            "visio" => " · caché (visio)",
-            "reunion" => " · caché (réunion à l'agenda)",
-            _ => " · caché (plein écran)",
-        };
-        m.Items.Add(new MenuItem { Header = titre, IsEnabled = false });
-        m.Items.Add(new Separator());
-        foreach (var me in Metiers.Tous)
-        {
-            var sec = Metiers.Secondes(me, stats.Secondes); // heures de tout le groupe
-            int n = Metiers.Niveau(me, sec);
-            m.Items.Add(new MenuItem { Header = $"{me.Nom} — {Metiers.Grades[n]} · {Metiers.Progres(me, sec)}", IsEnabled = sec > 0 });
-        }
-        m.Items.Add(new Separator());
-        var succes = new MenuItem { Header = $"Succès ({_profil.Succes.Count}/{Succes.Tous.Count})" };
-        foreach (var d in Succes.Tous)
-        {
-            bool ok = _profil.Succes.Contains(d.Id);
-            var progres = ok ? "" : Succes.Progres(d, stats);
-            succes.Items.Add(new MenuItem
-            {
-                Header = (ok ? "✓  " : "·  ") + $"{d.Nom} — {d.Description}" + (progres == "" ? "" : $" ({progres})"),
-                IsEnabled = ok,
-            });
-        }
-        m.Items.Add(succes);
-
-        var reglages = new MenuItem { Header = "Activités : réglages" };
-        reglages.Items.Add(Case("Pilou regarde mes fenêtres (rien ne sort du PC)", _reglages.Activites, v =>
-        {
-            _reglages.Activites = v;
-            if (!v) _tenue = "";
-        }));
-        reglages.Items.Add(Case("Se cacher en plein écran (jeu, vidéo)", _reglages.CacherPleinEcran, v => _reglages.CacherPleinEcran = v));
-        reglages.Items.Add(Case("Se cacher en présentation", _reglages.CacherPresentation, v => _reglages.CacherPresentation = v));
-        reglages.Items.Add(Case("Se cacher en visio (caméra ou micro)", _reglages.CacherVisio, v => _reglages.CacherVisio = v));
-        reglages.Items.Add(new Separator());
-        foreach (var a in Activites.Toutes)
-            reglages.Items.Add(Case($"{Activites.Signe(a)}  {Activites.Nom(a)}", !_reglages.ActivitesCoupees.Contains(a), v =>
-            {
-                if (v) _reglages.ActivitesCoupees.Remove(a);
-                else if (!_reglages.ActivitesCoupees.Contains(a)) _reglages.ActivitesCoupees.Add(a);
-            }));
-        reglages.Items.Add(new Separator());
-        reglages.Items.Add(Entree("Ajouter mes logiciels… (activites.json)", OuvrirRegles));
-        m.Items.Add(reglages);
-        return m;
-    }
-
     // Ouvre le fichier de règles personnelles (créé avec un exemple s'il n'existe pas).
     private void OuvrirRegles()
     {

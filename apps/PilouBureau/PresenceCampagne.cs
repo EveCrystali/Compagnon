@@ -235,24 +235,6 @@ public sealed partial class FenetrePilou
 
     private string EtatAventureCourt() => Prudemment(() => Aventure.EtatCourt(CarnetCamp, _campEtat, (long)Epoque), "");
 
-    private MenuItem MenuAventure()
-    {
-        var etat = EtatAventureCourt();
-        var m = new MenuItem { Header = etat == "" ? "✉ Aventure…" : _retour.Signe ? "✉ Aventure · ! il t'attend" : $"✉ Aventure · {etat}" };
-        var ouvrir = Entree(_retour.Signe ? "✉ Lui répondre…" : "Ouvrir l'aventure…", OuvrirAventure);
-        ouvrir.FontWeight = FontWeights.SemiBold;
-        m.Items.Add(ouvrir);
-        if (CampagneOccupe && _campEtat is { } e)
-            m.Items.Add(new MenuItem { Header = Aventure.LigneBulle(e), IsEnabled = false });
-        m.Items.Add(new Separator());
-        m.Items.Add(Choix("Annonce de son retour", new[] { ("Un petit saut et une bulle (une fois)", "bulle"), ("Seulement le signe « ! »", "signe") },
-            _reglages.AnnonceAventure == "signe" ? "signe" : "bulle", v => _reglages.AnnonceAventure = v));
-        var calme = _reglages.CalmeDebut == _reglages.CalmeFin ? "jamais" : $"{_reglages.CalmeDebut} h – {_reglages.CalmeFin} h";
-        m.Items.Add(new MenuItem { Header = $"Heures calmes (réglage des amis) : {calme}", IsEnabled = false });
-        m.Items.Add(new MenuItem { Header = "Plein écran, présentation, visio : l'annonce attend", IsEnabled = false });
-        return m;
-    }
-
     // Texte de l'entrée « Aventure » du menu de l'icône (natif) : l'état en clair, et « ! » quand il t'attend.
     internal string TexteMenuIcone()
     {

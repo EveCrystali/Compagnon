@@ -50,17 +50,6 @@ public sealed partial class FenetrePilou
             m.Items.Add(Entree("… envoyer un essai", () => _ = Essayer()));
         }
 
-        // Un seul code pour le groupe : les autres PC (XP partagée) et le téléphone Android.
-        m.Items.Add(new Separator());
-        RemplirGroupe(m);
-        if (Telephone.Valide(_reglages.Telephone))
-            m.Items.Add(new MenuItem
-            {
-                Header = _telEnvoi < 0 ? $"   dernier envoi au téléphone : aucun{(_telEtat == "" ? "" : $" · {_telEtat}")}"
-                    : $"   dernier envoi au téléphone : il y a {Statut.Duree(Epoque - _telEnvoi)} · {(_telEtat == "" ? "ok" : _telEtat)}",
-                IsEnabled = false,
-            });
-
         m.Items.Add(new Separator());
         m.Items.Add(Entree("Brancher un autre logiciel… (aide)", () => Ouvrir(AideBrancher)));
         return m;

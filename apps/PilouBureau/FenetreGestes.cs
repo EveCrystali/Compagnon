@@ -220,48 +220,6 @@ public sealed partial class FenetrePilou
         return pile;
     }
 
-    // ---- Menu
-
-    private MenuItem MenuGestes()
-    {
-        var m = new MenuItem { Header = "Clavier, photo, notifications" };
-        m.Items.Add(Case("Pilou tape avec moi au clavier (compte les frappes, jamais lesquelles)", _reglages.GesteClavier, v =>
-        {
-            _reglages.GesteClavier = v;
-            AppliquerGestes();
-        }));
-        m.Items.Add(Case("Appareil photo à chaque capture d'écran", _reglages.GestePhoto, v =>
-        {
-            _reglages.GestePhoto = v;
-            AppliquerGestes();
-        }));
-        m.Items.Add(Case("Notifications Windows dans la bulle", _reglages.NotifsWindows, v =>
-        {
-            _reglages.NotifsWindows = v;
-            AppliquerGestes();
-        }));
-        if (_reglages.NotifsWindows)
-            m.Items.Add(new MenuItem { Header = "   état : " + (_sourceNotifs?.Etat ?? "démarrage…"), IsEnabled = false });
-
-        var notifs = new MenuItem { Header = "Notifications : réglages" };
-        notifs.Items.Add(Choix("Applis", new[] { ("Toutes", ModeApps.Toutes), ("Toutes sauf celles cochées", ModeApps.Sauf), ("Seulement celles cochées", ModeApps.Seulement) },
-            _reglages.NotifsMode, v => _reglages.NotifsMode = v));
-        var apps = _appsVues.Union(_reglages.NotifsApps, StringComparer.OrdinalIgnoreCase).OrderBy(a => a, StringComparer.OrdinalIgnoreCase).ToList();
-        if (apps.Count == 0) notifs.Items.Add(new MenuItem { Header = "   (les applis apparaîtront ici à leur première notification)", IsEnabled = false });
-        foreach (var a in apps)
-            notifs.Items.Add(Case("   " + a, _reglages.NotifsApps.Contains(a, StringComparer.OrdinalIgnoreCase), v =>
-            {
-                _reglages.NotifsApps.RemoveAll(x => string.Equals(x, a, StringComparison.OrdinalIgnoreCase));
-                if (v) _reglages.NotifsApps.Add(a);
-            }));
-        notifs.Items.Add(new Separator());
-        notifs.Items.Add(Case("Masquer le contenu (seulement « 1 message de X »)", _reglages.NotifsMasquer, v => _reglages.NotifsMasquer = v));
-        notifs.Items.Add(Entree("Paramètres Windows : Ne pas déranger…", () => Ouvrir("ms-settings:notifications")));
-        notifs.Items.Add(Entree("Comment ça marche (et ce qui manque)…", () => Ouvrir("https://github.com/EveCrystali/Compagnon/blob/main/docs/NOTIFICATIONS.md")));
-        m.Items.Add(notifs);
-        return m;
-    }
-
     // ---- Essais (--essai=clavier, --essai=photo, --essai=notif, --essai=notif:masque)
 
     private void EssaiGeste(string nom)

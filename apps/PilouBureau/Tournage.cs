@@ -142,7 +142,7 @@ public static class Tournage
         new("accueil", 2.5),                   // Pilou au repos, il dit bonjour
         new("promenade", 3),                   // il fait quelques pas
         new("attente", 4),                     // une IA t'attend : il court sous la souris
-        new("menu", 8),                        // le vrai menu clic droit rétro : survol, sous-menus Couleur et Intégrations
+        new("menu", 8),                        // le vrai menu clic droit rétro : survol, sous-menus Jouer et Apparence
         new("boutique", 6.5),                  // la boutique : Vitrine, puis le rayon Tête, essai d'un objet
         new("amis", 3.5),                      // la fenêtre Amis (amis fictifs, code fictif)
         new("clavier", 3.5, "clavier"),        // il tape avec toi

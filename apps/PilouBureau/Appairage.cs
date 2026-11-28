@@ -24,7 +24,7 @@ public static class Appairage
         pile.Children.Add(new TextBlock
         {
             Text = "Code du groupe d'appareils. Téléphone : vise ce QR code avec l'appareil photo (l'app Pilou s'ouvre et s'appaire), " +
-                   "ou tape le code dans l'app. Autre PC : clic droit sur Pilou → Intégrations → Rejoindre un (autre) groupe, et tape ce code. " +
+                   "ou tape le code dans l'app. Autre PC : clic droit sur Pilou → Amis et appareils → Groupe d'appareils → Rejoindre un (autre) groupe, et tape ce code. " +
                    "L'XP de tous s'additionne.",
             TextWrapping = TextWrapping.Wrap,
             FontSize = 12,

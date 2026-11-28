@@ -39,6 +39,7 @@ public partial class MenuRetro : ResourceDictionary
         ("MenuBiseauSombre", Gel("#0b0e1a"), Gel("#d9c7a3")),
         ("MenuPointilles", Bandeau.Bord, Gel("#c86a1c")),
         ("MenuCoche", Bandeau.BleuXp, Gel("#1f5fae")),
+        ("MenuTitre", Gel("#9b8cff"), Gel("#6a4fc8")),
     };
 
     // À appeler à chaque ouverture : le thème de Pilou a pu changer depuis.
