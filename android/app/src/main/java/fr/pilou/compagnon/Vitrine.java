@@ -97,12 +97,15 @@ final class Vitrine {
     /**
      * Enseigne : un mot en capitales dans la police pixel « titre », avec une ombre d'un pixel ; clignote doucement si
      * « neon ». pxDp : l'ancienne taille (police 3 × 5) ; la police de Pilou, plus haute, prend les trois quarts.
+     * Un grand titre (pxDp de 4 ou plus : « BOUTIQUE », « NIVEAU 12 ! ») est un titre-logo au pixel fin (Style.logo,
+     * docs/STYLE.md) : deux fois plus de pixels, relief, cerne, ombre, au lieu d'un mot agrandi à gros pixels.
      */
     static final class Pixel extends View {
         private String texte;
         private int couleur, ombre;
         private final int px;
-        private final boolean neon;
+        private final boolean neon, logo;
+        private byte[][] grille;
         private final Paint pt = new Paint();
 
         Pixel(Context c, String texte, float pxDp, int couleur, int ombre, boolean neon) {
@@ -112,13 +115,25 @@ final class Vitrine {
             this.ombre = ombre;
             this.px = Style.pixel(c, Math.max(Style.PETIT, pxDp * 0.75f));
             this.neon = neon && anime(c);
+            this.logo = pxDp >= 4;
             pt.setAntiAlias(false);
             setContentDescription(texte);
+        }
+
+        /** Pixels de l'écran par pixel du logo : la moitié de l'ancien pixel (le logo a deux fois plus de pixels). */
+        private int fin() {
+            return Math.max(1, px / 2);
+        }
+
+        private byte[][] grille() {
+            if (grille == null) grille = Style.grilleLogo(texte);
+            return grille;
         }
 
         void texte(String s, int c) {
             texte = s;
             couleur = c;
+            grille = null;
             setContentDescription(s);
             requestLayout();
             invalidate();
@@ -126,6 +141,10 @@ final class Vitrine {
 
         @Override
         protected void onMeasure(int l, int h) {
+            if (logo && grille().length > 0) {
+                setMeasuredDimension(grille()[0].length * fin() + getPaddingLeft() + getPaddingRight(), grille().length * fin() + getPaddingTop() + getPaddingBottom());
+                return;
+            }
             // Les capitales occupent les rangées 3 à 9 : deux rangées d'accent au-dessus, une d'ombre au-dessous.
             setMeasuredDimension(Style.largeur(texte, px, true) + px + getPaddingLeft() + getPaddingRight(), 10 * px + getPaddingTop() + getPaddingBottom());
         }
@@ -138,6 +157,10 @@ final class Vitrine {
                 long k = SystemClock.uptimeMillis() / 140 % 37;
                 if (k == 0 || k == 2) c = ORANGE_CLAIR;
                 postInvalidateDelayed(140);
+            }
+            if (logo && grille().length > 0) {
+                Style.logo(cv, grille(), getPaddingLeft(), getPaddingTop(), fin(), c, ombre == 0 ? ENCRE : ombre, ENCRE, pt);
+                return;
             }
             int x = getPaddingLeft(), y = getPaddingTop() - px;
             if (ombre != 0) Style.ecrire(cv, texte, x + px, y + px, px, ombre, true, pt);
@@ -254,24 +277,32 @@ final class Vitrine {
             cv.drawRect(bx, by, bx + bw, by + bh, pt);
             pt.setColor(NUIT2);
             cv.drawRect(bx + u, by + u, bx + bw - u, by + bh - u, pt);
-            Style.centrer(cv, "NIV", bx + bw / 2f, by + u + pp - 3 * pp, pp, ARGENT, false, pt);
-            int pn = Math.max(pp, Style.pixel(getContext(), Style.PAGE));
-            while (pn > pp && (Style.largeur(n, pn, true) > bw - 2 * u - 2 * pp || 7 * pn > bh - 2 * u - 11 * pp)) pn--;
-            int yn = by + u + 9 * pp + (bh - 2 * u - 9 * pp - 7 * pn) / 2;
-            Style.centrer(cv, n, bx + bw / 2f, yn - 3 * pn, pn, ARGENT_CLAIR, true, pt);
+            // « NIV » sur un nombre pair de pixels (dessin fin), puis le nombre en titre-logo au pixel fin : relief, cerne,
+            // ombre (Style.logo). Plus de nombre agrandi à gros pixels.
+            int pe = pp % 2 == 0 ? pp : pp + 1;
+            Style.centrer(cv, "NIV", bx + bw / 2f, by + u + pe - 3 * pe, pe, ARGENT, false, pt);
+            byte[][] logo = Style.grilleLogo(n);
+            int place = bh - 2 * u - 9 * pe, fin = Math.max(1, (Style.pixel(getContext(), Style.PAGE) + 1) / 2);
+            while (fin > 1 && logo.length > 0 && (logo[0].length * fin > bw - 2 * u - 2 * pe || logo.length * fin > place)) fin--;
+            if (logo.length > 0)
+                Style.logo(cv, logo, bx + (bw - logo[0].length * fin) / 2 + fin / 2, by + u + 9 * pe + (place - logo.length * fin) / 2, fin,
+                        ARGENT_CLAIR, 0xff1c2128, 0xff1c2128, pt);
             // Pièces d'or, à gauche de la roue.
             String sPo = po < 0 ? "— po" : po + " po";
             int xPo = w - reserve - Style.largeur(sPo, pc, true);
             Style.ecrire(cv, sPo, xPo, yTitre(), pc, ORANGE, true, pt);
-            Sprites.Sprite piece = Sprites.banque().get("po-tourne");
+            // La pièce au dessin fin quand son pixel est pair (la même taille à l'écran, deux fois plus de pixels).
+            Sprites.Sprite piece = Sprites.banque().get("po-tourne"), pieceFine = pe % 2 == 0 ? Sprites.banque().get("po-tourne", 2) : null;
             int xPiece = xPo;
             if (piece != null) {
-                xPiece = xPo - piece.w() * pp - 2 * u;
-                Dessin.Peintre pe = (g, hh, d, b, col) -> {
+                xPiece = xPo - piece.w() * pe - 2 * u;
+                Dessin.Peintre peintre = (g, hh, d, b, col) -> {
                     pt.setColor(col);
                     cv.drawRect(g, hh, d, b, pt);
                 };
-                Sprites.dessiner(pe, piece, xPiece, yTitre() + 3 * pc + (7 * pc - piece.h() * pp) / 2, pp, anime ? SystemClock.uptimeMillis() : 0, false);
+                boolean fine = pieceFine != null && pieceFine.w() > piece.w();
+                Sprites.dessiner(peintre, fine ? pieceFine : piece, xPiece, yTitre() + 3 * pc + (7 * pc - piece.h() * pe) / 2, fine ? pe / 2f : pe,
+                        anime ? SystemClock.uptimeMillis() : 0, false);
             }
             // Titre, barre d'XP en cases, chiffres.
             int x0 = bx + bw + 2 * u, x1 = xPiece - 2 * u;
