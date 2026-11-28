@@ -43,8 +43,9 @@ Dernière mise à jour : 28 novembre 2026.
   de soin, messages brefs ; `TextesSystemeTest` échoue dès qu'un texte de ces écrans est écrit en police système.
   **Jamais vu sur un vrai téléphone.** Restent en style système : liste des aventures, épreuves, atelier, chasse aux
   bugs, installation, bulle flottante. PC : la boutique et « Rangées débloquées » sont au guide (`StylePixel.cs` :
-  texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom et « Pilou et moi » aussi, vus dans l'exe d'essai à
-  100 % ; restent amis, invitation, connecteurs, expéditions, et l'en-tête commun (`Bandeau.cs`).
+  texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom, « Pilou et moi » et les expéditions aussi, vus dans l'exe
+  d'essai à 100 % ; restent amis et connecteurs (formulaires au thème clair du système), l'invitation, et l'en-tête
+  commun (`Bandeau.cs`).
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
