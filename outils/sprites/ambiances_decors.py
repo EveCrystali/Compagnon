@@ -379,6 +379,13 @@ def regles():
 
     # ---- Petit Nuage : ciels lavés, troupeau de nuages, neige, vapeur.
     herbes_n = [N.H1, N.H2, N.H3, N.H4, N.P1, N.P2, N.P3, N.P4]
+    # ---- Le fond du jardin de Pilou (scènes d'évolution) : l'herbe au vent, le soir des moucherons dorés, la nuit des
+    # étoiles qui scintillent.
+    d("evolution", "fond-du-jardin-matin", 6, 240, True, [vent((0, 27, 96, 40), 0.8, sur=herbes_n)])
+    d("evolution", "fond-du-jardin-soir", 6, 240, True, [
+        vent((0, 27, 96, 40), 0.6, sur=herbes_n), particules((40, 8, 96, 30), [N.L2, N.P4], n=8, dx=4, dy=-2, graine=87, oscille=1.0)])
+    d("evolution", "fond-du-jardin-nuit", 6, 250, True, [
+        scintille((0, 0, 96, 20), ecart=50, part=0.6, graine=88), vent((0, 27, 96, 40), 0.4, sur=[N.NU2, N.H1, N.H2])])
     d("petit-nuage", "jardin-lave", 6, 250, True, [
         onduler((0, 22, 96, 40), 0.5, 1.5), reflets((0, 24, 96, 40), N.C3, n=12, graine=71, eau=[N.EA1, N.EA2, N.EA3, N.EA4])])
     d("petit-nuage", "chemin-creux", 6, 240, True, [

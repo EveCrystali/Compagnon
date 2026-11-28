@@ -32,6 +32,9 @@ final class PageAccueil extends Page {
     private final LinearLayout sessions, groupe, guide, carteSessions;
     private String empreinteSessions = "", empreinteGroupe = "", empreinteQuetes = "";
     private int stadeVu;
+    /** L'étiquette « tu veux voir ? » qui suit une évolution vue en direct, et le stade dont elle ouvre la scène. */
+    private TextView evolutionBulle;
+    private int evolutionStade;
     private Style.TitreSection titreQuetes;
     private LinearLayout quetes;
     private long derniereCaresse;
@@ -109,6 +112,16 @@ final class PageAccueil extends Page {
         besoin.setVisibility(View.GONE);
         besoin.setOnClickListener(v -> combler(besoinMontre));
         scene.addView(besoin, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.END | Gravity.TOP));
+        // Après une évolution : une étiquette à toucher, une seule fois ; Pilou n'ouvre rien tout seul (la scène reste au Carnet).
+        evolutionBulle = Style.bouton(a, Style.NUIT, "il m'arrive quelque chose… ✦ tu veux voir ?", true, v -> {
+            int st = evolutionStade;
+            evolutionBulle.setVisibility(View.GONE);
+            a.ouvrirEvolution(st);
+        });
+        evolutionBulle.setVisibility(View.GONE);
+        FrameLayout.LayoutParams lev = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        lev.bottomMargin = Ui.dp(a, 6);
+        scene.addView(evolutionBulle, lev);
         heros.addView(scene, Ui.large());
         pilou.setOnClickListener(v -> caresser());
         pilou.setContentDescription("Pilou : toucher pour le caresser");
@@ -447,6 +460,18 @@ final class PageAccueil extends Page {
         if (mousseJusque > t) pilou.postDelayed(this::rafraichir, 2100);
     }
 
+    /** Une fois l'animation finie, l'étiquette « tu veux voir ? » (une seule fois par évolution vue) ; rien ne s'ouvre tout seul. */
+    private void proposerEvolution(int stade) {
+        if (Evolutions.scenes().get(stade) == null) return;
+        evolutionStade = stade;
+        pilou.postDelayed(() -> {
+            if (evolutionStade != stade) return;
+            evolutionBulle.setVisibility(View.VISIBLE);
+            evolutionBulle.setAlpha(0);
+            evolutionBulle.animate().alpha(1).setDuration(Vitrine.anime(app) ? 300 : 0).start();
+        }, PilouVue.DUREE_EVOLUTION);
+    }
+
     private Soins.EtatSoins soins(Etat e, int stade, long maintenant) {
         Soins.EtatSoins s = Gains.soins(app, e, maintenant);
         java.util.List<String> objets = new java.util.ArrayList<>();
@@ -493,8 +518,10 @@ final class PageAccueil extends Page {
         int total = Gains.xp(app, e), n = Gains.niveau(app, e), bas = Butin.xpPourNiveau(Math.min(n, Butin.niveau(total))), haut = Butin.xpPourNiveau(n + 1);
         // Stade d'évolution : celui du PC, sinon celui du niveau ; s'il grandit sous nos yeux, Pilou évolue.
         int stade = e.stade > 0 ? e.stade : Acces.stade(n);
-        if (stadeVu > 0 && stade > stadeVu) pilou.evoluer(stade);
-        else pilou.stade(stade);
+        if (stadeVu > 0 && stade > stadeVu) {
+            pilou.evoluer(stade);
+            proposerEvolution(stade);
+        } else pilou.stade(stade);
         stadeVu = stade;
         Soins.EtatSoins s = soins(e, stade, maintenant);
         // Même titre que le bandeau : celui que Pilou porte, sinon celui du niveau.

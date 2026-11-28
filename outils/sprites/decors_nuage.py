@@ -26,6 +26,7 @@ EA1, EA2, EA3, EA4 = "#1b3550", "#2c5577", "#4f7fa6", "#8fb6d8"
 L1, L2, L3 = "#f69d50", "#ffd29a", "#fff1c9"
 ENCRE, NU1, NU2 = "#161a26", "#0f1a33", "#1d2c55"
 RO1, RO2 = "#8a4a1f", "#b8652e"
+MU1, MU2 = ENCRE, SO1                    # mûres : presque noires, un reflet violet (couleurs de la palette)
 
 PAL = Palette(C1, C2, C3, C4, SO1, SO2, SO3, SO4, AU1, AU2, NE1, NE2, NE3, NE4, R1, R2, R3, R4, H1, H2, H3, H4, P1, P2,
               P3, P4, M1, M2, TE1, TE2, TE3, B1, B2, B3, EA1, EA2, EA3, EA4, L1, L2, L3, ENCRE, NU1, NU2, RO1, RO2).rampes(
@@ -80,6 +81,27 @@ def nuage_vivant(t, x, y, l, h, c=NE4, cl=NE4, o=NE2, yeux=False):
         point(t, x + 1.2, y - h * 0.2, R1)
 
 
+
+def ronce(t, x0, y0, x1, y1, haut, graine, baies=3):
+    """Une tige de ronce en arc (de (x0, y0) à (x1, y1), bombée de `haut`) : prune sombre, épines d'un pixel fin
+    tous les deux pixels, deux ou trois feuilles dentelées et quelques mûres."""
+    mx, my = (x0 + x1) / 2, min(y0, y1) - haut
+    courbe(t, [(x0, y0), (mx, my), (x1, y1)], B1, ep=2)
+    n = 18
+    for i in range(1, n):
+        u = i / n
+        x = (1 - u) ** 2 * x0 + 2 * (1 - u) * u * mx + u * u * x1
+        y = (1 - u) ** 2 * y0 + 2 * (1 - u) * u * my + u * u * y1
+        if i % 2 == 0:
+            point(t, x + 0.5, y - 0.5 if i % 4 else y + 1.5, B1)           # l'épine, dessus puis dessous
+        if i in (5, 11):
+            ell(t, x, y + 1, 1.4, 0.8, H3)                                  # une feuille
+            point(t, x - 0.5, y + 0.8, H4)
+        if baies and i in (3, 9, 15)[:baies] and hasard(i, graine, 7) > 0.3:
+            ell(t, x, y + 1.3, 0.8, 0.8, MU1)                               # une mûre
+            point(t, x - 0.3, y + 1, MU2)
+
+
 @decor("petit-nuage", "jardin-lave", images=2, duree=1400)
 def jardin_lave(t, k):
     degrade(t, 0, 24, [C2, C3, C4])
@@ -92,6 +114,10 @@ def jardin_lave(t, k):
     for i in range(30):
         x, y = hasard(i, 4, 2) * 96, 17 + hasard(i, 5, 2) * 6
         point(t, x, y, NE3 if i % 2 else H4)
+    # Les tiges arquées qui sortent du massif : on reconnaît des ronces à leurs épines et à leurs mûres.
+    for i in range(8):
+        x = 2 + i * 12 + hasard(i, 8, 2) * 3
+        ronce(t, x, 21, x + 9 + hasard(i, 9, 2) * 3, 22, 6 + hasard(i, 10, 2) * 3, i, baies=3)
     # L'herbe couchée et luisante, les flaques qui reflètent le ciel.
     relief(t, lambda x: 24 + 0.6 * math.sin(x / 5), H2, lisere=H4)
     for i in range(40):
@@ -102,17 +128,27 @@ def jardin_lave(t, k):
         hline(t, x - l / 3, x + l / 6, y - 0.4, C4)
         point(t, x + l / 4 - k, y + 0.2, NE4)
     # Le pot de fleurs retourné, l'arrosoir renversé.
-    poly(t, [(34, 31), (40, 29), (42, 34), (36, 35.5)], RO2)
-    poly(t, [(33.5, 30.5), (35, 30), (37, 35.8), (35.5, 36.3)], RO1)
+    # Le pot de fleurs renversé : la cabane de Pilou (docs/LORE.md). Terre cuite, le bord épais posé dans l'herbe,
+    # le trou d'écoulement en haut, une petite porte en arche ; la lumière vient de gauche.
+    poly(t, [(33.5, 27.5), (40.5, 27.5), (42.5, 35), (31.5, 35)], RO2)
+    poly(t, [(38.5, 27.5), (40.5, 27.5), (42.5, 35), (40, 35)], RO1)
+    trait(t, 34.6, 28.4, 33.2, 34, M2, ep=1)
+    rect(t, 30.5, 35, 13, 2, RO2)
+    rect(t, 40.5, 35, 3, 2, RO1)
+    hline(t, 30.5, 43.5, 35, RO1)
+    hline(t, 31, 40, 35.5, M2)
+    ell(t, 37, 27.6, 1.2, 0.5, B1)
+    ell(t, 36.4, 37, 1.6, 2.8, B1, cond=lambda x, y, u, v: y <= 37)
+    point(t, 37.2, 35.8, M1)
     ell(t, 66, 33, 6, 3.4, R3)
     ell(t, 66, 32.2, 5, 2.4, R4)
     poly(t, [(71, 32), (79, 30), (79.5, 31.4), (71, 34)], R3)
     ell(t, 80, 30.8, 1.4, 1.6, R4)
     courbe(t, [(62, 30.2), (64, 26.5), (69, 29.8)], R2, ep=t.e)
-    # Détail : un tout petit nuage s'est pris dans l'herbe, derrière l'arrosoir.
-    nuage(t, 57, 30.5, 6, 2.2, NE4, NE4, NE2)
-    point(t, 56, 29.8 + (0 if k else 0.4), R1)
-    point(t, 58, 29.8 + (0 if k else 0.4), R1)
+    # Au premier plan à droite, le roncier où Brouillon s'est pris (lui est dessiné en pied par la scène, à la
+    # même échelle partout : pas de petit nuage peint ici).
+    for (a, b, h, g) in ((84, 40, 12, 1), (88, 40, 15, 2), (92, 40, 10, 3), (80, 40, 8, 4)):
+        ronce(t, a, b, a + 8 + g % 3, b, h, g + 20)
 
 
 @decor("petit-nuage", "chemin-creux", images=1)

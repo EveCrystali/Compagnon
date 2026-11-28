@@ -1,0 +1,29 @@
+# Scènes d'évolution (docs/SCENES.md, assets/evolutions.txt) : le fond du jardin de Pilou, devant son pot-cabane, à
+# trois heures (decor-evolution-fond-du-jardin-<heure>). Coordonnées en pixels du décor fin (192 × 80).
+
+scene fond-du-jardin-matin
+sol 4 76 188 76
+place 100
+interlocuteur 160
+cle 46 50 76 78
+acteur papillon vol 110 40 170 60 19
+acteur papillon vol 120 44 180 64 23
+acteur oiseau traverse 6 14 15000 2000 22
+
+scene fond-du-jardin-soir
+sol 4 76 188 76
+place 100
+interlocuteur 160
+cle 46 50 76 78
+acteur poussiere vol 110 30 170 50 29
+acteur poussiere vol 120 34 176 54 31
+acteur poussiere vol 100 28 160 46 37
+
+scene fond-du-jardin-nuit
+sol 4 76 188 76
+place 100
+interlocuteur 160
+cle 46 50 76 78
+acteur poussiere vol 90 50 180 70 41
+acteur poussiere vol 10 54 50 72 43
+acteur poussiere vol 130 44 186 62 47

@@ -176,6 +176,15 @@ public sealed partial class FenetrePilou
                 OuvrirAventure();
                 return true;
             }
+            // L'annonce d'une évolution (FenetreNiveaux.AnnoncerScene) : « evolution:<stade> » ouvre sa scène.
+            var etiquette = (d as FrameworkElement)?.Tag ?? (d as FrameworkContentElement)?.Tag;
+            if (etiquette is string tag && tag.StartsWith("evolution:", StringComparison.Ordinal)
+                && int.TryParse(tag[10..], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int stade))
+            {
+                _message = "";
+                OuvrirSceneEvolution(stade);
+                return true;
+            }
         }
         return false;
     }

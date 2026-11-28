@@ -219,6 +219,9 @@ def main():
     import theatre
     theatre.ecrire_animations()
     theatre.ecrire_reference()
+    # Les scènes d'évolution (assets/evolutions.txt) : répliques par variante et par choix.
+    import evolutions
+    evolutions.ecrire_reference()
     print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; vie-reference.txt ; "
           "police-reference.txt ; theatre-reference.txt")
 

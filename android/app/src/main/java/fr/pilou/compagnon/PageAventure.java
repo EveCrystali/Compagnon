@@ -157,7 +157,7 @@ final class PageAventure extends Page {
                 .append(Campagnes.signature(k)).append('|')
                 .append(k.nonLus()).append('|').append(etat == null ? "-" : etat.phase + etat.noeud).append('|').append(CampagnesTel.refus(app));
         int[] attente = CampagnesTel.enAttente(app);
-        e.append('|').append(attente[0]).append(',').append(attente[1]);
+        e.append('|').append(attente[0]).append(',').append(attente[1]).append('|').append(evolutionsSignature());
         String nouvelle = e.toString();
         if (!nouvelle.equals(empreinte)) {
             empreinte = nouvelle;
@@ -507,6 +507,48 @@ final class PageAventure extends Page {
 
     // ---- Le carnet de voyage
 
+    /** Le stade d'évolution atteint : celui du PC, sinon celui du niveau (comme l'accueil). */
+    private int stadeAtteint() {
+        Etat e = Prefs.etat(app);
+        return e.stade > 0 ? e.stade : Acces.stade(Gains.niveau(app, e));
+    }
+
+    /** Ce que le carnet montre des évolutions (change quand un stade est atteint ou qu'un choix est gardé) : sert à l'empreinte. */
+    private String evolutionsSignature() {
+        StringBuilder b = new StringBuilder().append(stadeAtteint());
+        for (int s = 2; s <= 4; s++) b.append(',').append(SceneEvolution.garde(app, s));
+        return b.toString();
+    }
+
+    /** « Ses évolutions » : pour chaque stade atteint (2 à 4), le titre de la scène, ce que Pilou a gardé, et « ▸ revoir ». */
+    private void evolutions() {
+        Ui.Palette p = Ui.p(app);
+        int atteint = stadeAtteint();
+        boolean titre = false;
+        for (int stade = 2; stade <= atteint; stade++) {
+            Evolutions.Scene sc = Evolutions.scenes().get(stade);
+            if (sc == null) continue;
+            if (!titre) {
+                corps.addView(Ui.titreSection(app, "Ses évolutions"));
+                titre = true;
+            }
+            LinearLayout carte = Ui.carte(app);
+            carte.addView(Ui.texte(app, Acces.nomStade(stade), Ui.T_DETAIL, p.doux, false));
+            carte.addView(Ui.texte(app, sc.titre, Ui.T_CARTE, p.texte, true));
+            String id = SceneEvolution.garde(app, stade);
+            String libelle = id == null ? null : sc.libelle(id);
+            if (libelle != null) carte.addView(Ui.texte(app, "il a gardé : " + libelle, Ui.T_CORPS, p.texte, false), Ui.large(app, 2));
+            final int st = stade;
+            TextView revoir = Ui.texte(app, "▸ revoir", Ui.T_CORPS, p.bleu, true);
+            revoir.setMinHeight(Ui.dp(app, 48));
+            revoir.setGravity(Gravity.CENTER_VERTICAL);
+            revoir.setContentDescription("Revoir la scène : " + sc.titre);
+            revoir.setOnClickListener(v -> app.ouvrirEvolution(st));
+            carte.addView(revoir);
+            corps.addView(carte, Ui.large(app, 10));
+        }
+    }
+
     private void carnet(Campagnes.Carnet k) {
         Ui.Palette p = Ui.p(app);
         TextView retour = Ui.texte(app, "‹  Aventures", Ui.T_CORPS, p.bleu, true);
@@ -520,6 +562,7 @@ final class PageAventure extends Page {
         titre.setPadding(0, 0, 0, Ui.dp(app, 2));
         corps.addView(titre);
         corps.addView(Ui.sousTitre(app, "Les fins, les souvenirs et les titres de vos aventures."));
+        evolutions();
         boolean rien = true;
         for (Campagnes.Campagne c : CampagnesTel.catalogue()) {
             List<Campagnes.FinObtenue> fins = Campagnes.fins(k, c);

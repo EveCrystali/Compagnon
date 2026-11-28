@@ -109,13 +109,18 @@ Dernière mise à jour : 28 novembre 2026.
   en pied, les volants flottent au-dessus du sol. La musique du ton « émotion » et l'ambiance du décor sont visées dans
   ces scènes (trace pendant l'essai PC ; test par scène). Sur PC, un choix trop long passe à la ligne au lieu d'être
   coupé. Jamais sur un vrai téléphone ; le son lui-même n'a pas été écouté.
+- **Scènes d'évolution** (branche `claude/scenes-evolution`, docs/SCENES.md) : trois scènes au fond du jardin (niveaux
+  10, 25, 40), un choix « ce qu'il garde », variante câline ou espiègle dite dans la scène ; annoncées par une seule
+  bulle, ouvertes seulement au clic ; Carnet « Ses évolutions » sur PC et téléphone ; script commun avec référence.
+  Captures PC (essai) et téléphone (Robolectric) relues. Pas joué en vrai : l'annonce par bulle sur le PC (un essai
+  écrirait dans le vrai profil), ni sur un vrai téléphone. Jardin des Ronces corrigé (pot, ronces, Brouillon en pied).
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
-0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : les scènes d'évolution de Pilou (niveaux 10, 25, 40),
-   les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
+0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : les chorégraphies des choix, puis les quatre liens avec
+   le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
    fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir
    [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage (Pilou 0.9.45, sans pêche, cuisine,

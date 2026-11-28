@@ -644,6 +644,33 @@ public class CapturesCampagnesTest {
         return l;
     }
 
+    /** Ouvre la scène d'évolution de ce stade, touche la boîte de Pilou jusqu'à la question, et capture « evolution-<stade> ». */
+    private void evolutionJusquaLaQuestion(int stade) {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        appairer(ctx);
+        android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+        ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = ac.get();
+        a.ouvrirEvolution(stade);
+        attendre();
+        SceneEvolution ev = a.evolution();
+        org.junit.Assert.assertNotNull(ev);
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(4000));   // Pilou est entré dans la scène
+        attendre();
+        for (int i = 0; i < 40 && !ev.questionPosee(); i++) {
+            for (View w : toutes(ev)) {
+                CharSequence d = w.getContentDescription();
+                if (d != null && d.toString().startsWith("Pilou raconte")) w.performClick();
+            }
+            attendre();
+        }
+        org.junit.Assert.assertTrue("la question est posée", ev.questionPosee());
+        org.junit.Assert.assertEquals(3, ev.optionsVues().size());
+        ecran(a, "evolution-" + stade);
+        ac.pause().stop().destroy();
+    }
+
     /**
      * Deux captures du pilote (1078 x 2400, sombre) : une lecture avec au moins trois bulles d'historique au-dessus des
      * choix (les précédentes remplissent l'espace, entières : le défilement tombe sur une bulle) ; et La Grande Panne avec
@@ -709,6 +736,9 @@ public class CapturesCampagnesTest {
             org.junit.Assert.assertTrue(ln.theatre().aPerso());
             ecran(ac[0].get(), "petit-nuage-brouillon-en-pied");
             ac[0].pause().stop().destroy();
+
+            // Les scènes d'évolution (stades 2, 3, 4), avancées jusqu'à la question : options visibles.
+            for (int stade = 2; stade <= 4; stade++) evolutionJusquaLaQuestion(stade);
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");

@@ -61,6 +61,9 @@ public sealed class Evolution
     // Variante de chaque stade (2 à 4), choisie au passage d'après la qualité des soins : « calin » ou
     // « espiegle ». Partagée dans le groupe ; la première décision l'emporte.
     public Dictionary<int, string> Variantes { get; set; } = new();
+    // Ce que Pilou a gardé de son ancienne forme, par stade (2 à 4) : l'option choisie la première fois que sa scène
+    // d'évolution est jouée (assets/evolutions.txt). Revoir la scène ne la change plus.
+    public Dictionary<int, string> Gardes { get; set; } = new();
 
     public int Affiche => StadeAffiche >= 1 && StadeAffiche <= StadeAtteint ? StadeAffiche : Math.Max(1, StadeAtteint);
 

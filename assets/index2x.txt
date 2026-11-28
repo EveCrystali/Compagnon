@@ -177,6 +177,9 @@ crea-hydre-dependances
 crea-slime-cache
 crea-spectre-404
 cube-pixel
+decor-evolution-fond-du-jardin-matin
+decor-evolution-fond-du-jardin-nuit
+decor-evolution-fond-du-jardin-soir
 decor-grande-panne-bureau-1337
 decor-grande-panne-bureau-echeance
 decor-grande-panne-cabane-brouillon

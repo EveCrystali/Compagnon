@@ -54,9 +54,10 @@ public class MusiqueTests
         foreach (var f in Directory.EnumerateFiles(dossier, "*.txt").Where(f => Path.GetFileName(f) != "animations.txt"))
         {
             var id = Path.GetFileNameWithoutExtension(f);
-            var camp = Campagnes.Charger(id);
-            Assert.NotNull(camp);
-            var m = Musique.Pour(id, camp!.Ton);
+            // Les scènes d'évolution (pseudo-campagne « evolution », FenetreScene) jouent la musique du ton « émotion ».
+            var ton = id == "evolution" ? "emotion" : Campagnes.Charger(id)?.Ton;
+            Assert.NotNull(ton);
+            var m = Musique.Pour(id, ton);
             Assert.NotNull(m);
             Assert.True(c.Morceaux.ContainsKey(m!), $"{id} : {m}");
             foreach (var (decor, _) in Theatre.LireScenes(File.ReadAllText(f)))
