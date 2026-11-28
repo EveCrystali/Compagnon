@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-grumeau
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : grumeau
 id: pied-grande-panne-grumeau
 slot: objet
 ancre: aucun

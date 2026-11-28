@@ -1,0 +1,17 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-crabe
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 120
+palette: a=#1c2128 b=#d0662e c=#f69d50
+images:
+.a...a..
+bb.b.bb.
+.bcbbb..
+b.b.b.b.
+---
+.a...a..
+bb.b.bb.
+.bcbbb..
+.b.b.b..

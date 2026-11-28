@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-spectre-404
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : spectre-404
 id: pied-grande-panne-spectre-404
 slot: objet
 ancre: aucun

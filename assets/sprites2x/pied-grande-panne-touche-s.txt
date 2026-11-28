@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-touche-s
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : touche-s
 id: pied-grande-panne-touche-s
 slot: objet
 ancre: aucun

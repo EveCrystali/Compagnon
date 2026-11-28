@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-golem
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : golem
 id: pied-grande-panne-golem
 slot: objet
 ancre: aucun
