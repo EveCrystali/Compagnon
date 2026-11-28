@@ -59,8 +59,17 @@ internal sealed class FenetreScene : Window
 
         _theatre = new VueTheatre(() => AnimationsCampagne.Niveau(pilou.AnimationsCampagnes, Bandeau.Anime),
             () => RenduPilou.Teinte(pilou.AllurePortrait("repos", 0), Banque.Commune));
-        _theatre.Ajuster(Theatre.W * 4, Theatre.H * 4);
-        _theatre.Lieu("evolution", sc.Decor, 0, glisser: false);
+        // En HD, Pilou entre de près (x 150) : il est à sa place (250) quand la métamorphose commence.
+        _theatre.Lieu("evolution", sc.Decor, 0, glisser: false, entree: TheatreHd.ScenesHd("evolution").ContainsKey(sc.Decor) ? 150 : 0);
+        if (_theatre.Hd)
+        {
+            // Le fond du jardin en HD (480 × 240 à ×2) : la fenêtre s'élargit, sans jamais dépasser la zone de travail.
+            _theatre.Ajuster(Theatre.Hd.W * 2, Theatre.Hd.H * 2);
+            var zone = FenetreAventure.ZoneTravail();
+            Width = Math.Min(Theatre.Hd.W * 2 + 44, zone.Width);
+            Height = Math.Min(800, zone.Height);
+        }
+        else _theatre.Ajuster(Theatre.W * 4, Theatre.H * 4);
 
         var racine = new Grid { Margin = new Thickness(18, 12, 18, 14) };
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -127,8 +136,8 @@ internal sealed class FenetreScene : Window
         // fond l'ancienne forme dans la nouvelle), puis il parle. À l'ancienne définition, il parle dès son entrée.
         if (_theatre.Hd)
         {
-            _theatre.Metamorphose(sc.Stade - 1, sc.Stade, T + 1500);
-            Dire(0, T + 1500 + VueTheatre.DureeMetamorphose + 400);
+            _theatre.Metamorphose(sc.Stade - 1, sc.Stade, T + 2200);
+            Dire(0, T + 2200 + VueTheatre.DureeMetamorphose + 500);
         }
         else Dire(0, T + 900);                            // le temps que Pilou entre dans la scène
     }

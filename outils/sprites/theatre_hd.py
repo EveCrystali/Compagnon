@@ -200,6 +200,10 @@ AJUSTEMENTS = {
     ("prologue", "jardin"): {"+": ["acteur escargot pose 235 200"]},          # sur la grande feuille
     ("grande-panne", "marais-majs"): {"+": ["acteur canard pose 355 200"]},
     ("phare-eteint", "guet-de-nuit"): {"cle": "240 50 300 145"},              # le phare vu par la fenêtre, pas toute la fenêtre
+    # Le fond du jardin (scènes d'évolution) : le pot-cabane du tableau HD, centre x 75, du sol (215) à y 100.
+    ("evolution", "fond-du-jardin-matin"): {"cle": "38 100 112 215"},
+    ("evolution", "fond-du-jardin-soir"): {"cle": "38 100 112 215"},
+    ("evolution", "fond-du-jardin-nuit"): {"cle": "38 100 112 215"},
     ("petit-nuage", "etang-qui-fume"): {
         "+": ["acteur grenouille pose 195 228"],                              # sur la berge
         "sensible:grenouille": "sensible grenouille 183 210 207 229 bulle 195 219",

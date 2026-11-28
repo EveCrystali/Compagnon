@@ -136,22 +136,52 @@ final class TheatreVue extends View {
         dernierPas = -1;
     }
 
+    /** L'allure de base du Pilou fin du joueur : sa couleur, son stade, sa variante. */
+    private RenduPilou.Allure baseJoueur() {
+        RenduPilou.Allure base = new RenduPilou.Allure();
+        base.couleur = couleurJoueur;
+        base.stade = stadeJoueur;
+        if (stadeJoueur >= 2 && !varianteJoueur.isEmpty())
+            base.objets = java.util.Arrays.asList("variante-" + varianteJoueur + "-" + stadeJoueur, "variante-" + varianteJoueur + "-" + stadeJoueur + "-tete");
+        return base;
+    }
+
     /** Le rendeur du Pilou fin du joueur (couleur, stade, variante) ; gardé tant que cette base ne change pas. */
     private java.util.function.Function<Map<String, Object>, int[]> rendeur() {
-        if (rendeur == null) {
-            RenduPilou.Allure base = new RenduPilou.Allure();
-            base.couleur = couleurJoueur;
-            base.stade = stadeJoueur;
-            if (stadeJoueur >= 2 && !varianteJoueur.isEmpty())
-                base.objets = java.util.Arrays.asList("variante-" + varianteJoueur + "-" + stadeJoueur, "variante-" + varianteJoueur + "-" + stadeJoueur + "-tete");
-            rendeur = TheatreHd.rendeurPilou(base, banque);
-        }
+        if (rendeur == null) rendeur = TheatreHd.rendeurPilou(baseJoueur(), banque);
         return rendeur;
     }
 
+    // La métamorphose des scènes d'évolution (docs/SCENES.md), comme VueTheatre.Metamorphose sur PC : Pilou garde son
+    // ancien stade jusqu'à metaDebut, puis le bureau fond l'ancienne forme dans la nouvelle (Allure.evolution de 0 à 1),
+    // puis il reste au nouveau stade.
+    static final long DUREE_METAMORPHOSE = 4200;               // la même que l'évolution du bureau
+    private int metaApres;
+    private String metaVariante = "";
+    private long metaDebut = -1;
+
+    void metamorphose(int avant, String varianteAvant, int apres, String varianteApres, long debut) {
+        pilou(avant, varianteAvant);
+        metaApres = apres;
+        metaVariante = varianteApres == null ? "" : varianteApres;
+        metaDebut = debut;
+        dernierPas = -1;
+    }
+
+    /** Le rendeur à l'instant now : pendant le fondu de la métamorphose, sans cache (l'évolution change à chaque pas). */
+    private java.util.function.Function<Map<String, Object>, int[]> rendeur(long now) {
+        if (metaDebut < 0 || now < metaDebut) return rendeur();
+        double f = (now - metaDebut) / (double) DUREE_METAMORPHOSE;
+        pilou(metaApres, metaVariante);
+        if (f >= 1) return rendeur();
+        final RenduPilou.Allure base = baseJoueur();
+        base.evolution = Math.max(0.001, f);
+        return pose -> RenduPilou.rendre(TheatreHd.allure(base, pose), banque, null, 2);
+    }
+
     /** Aux animations réduites ou sans animation, le Pilou fin ne respire pas : le temps de son rendu reste à 0 (il cligne par sa pose). */
-    private java.util.function.Function<Map<String, Object>, int[]> rendeurNiveau() {
-        final java.util.function.Function<Map<String, Object>, int[]> r = rendeur();
+    private java.util.function.Function<Map<String, Object>, int[]> rendeurNiveau(long now) {
+        final java.util.function.Function<Map<String, Object>, int[]> r = rendeur(now);
         if (vif()) return r;
         return pose -> {
             Map<String, Object> p = new HashMap<>(pose);
@@ -238,7 +268,15 @@ final class TheatreVue extends View {
      * Montre ce lieu (décor de la campagne) ; rend faux s'il n'a pas de dessin. glisser : un travelling depuis le lieu
      * précédent (faux quand la lecture rattrape d'un coup des messages déjà lus).
      */
+    /** Pour les tests : jouer l'ancienne définition même quand le décor HD existe (tous les lieux réels en ont un). */
+    boolean ancienneSeule;
+
     boolean lieu(String campagne, String decorId, boolean glisser) {
+        return lieu(campagne, decorId, glisser, 0);
+    }
+
+    /** entree : en HD sans travelling, d'où Pilou entre (0 : le bord gauche), en unités de la scène. */
+    boolean lieu(String campagne, String decorId, boolean glisser, int entree) {
         long now = maintenant();
         String k = campagne + "|" + decorId;
         lireNiveau(now, true);
@@ -247,7 +285,7 @@ final class TheatreVue extends View {
         TheatreHd.Decor neufHd = null;
         Theatre.Scene sceneHdNeuve = null;
         try {
-            sceneHdNeuve = sceneHd(campagne, decorId);
+            sceneHdNeuve = ancienneSeule ? null : sceneHd(campagne, decorId);
             if (sceneHdNeuve != null) {
                 neufHd = TheatreHd.decor(campagne, decorId);
                 if (neufHd == null || neufHd.w != HD_W || neufHd.h != HD_H) neufHd = null;
@@ -300,7 +338,7 @@ final class TheatreVue extends View {
         debut = glisser ? now + GLISSE : now;
         if (!glisser) glisse = -1;
         // En HD, Pilou n'est pas dessiné pendant le glissement : il entre ensuite par la gauche.
-        if (vif()) evts.add(new Theatre.Evenement(0, "entree", glisser && !hdNeuf ? ENTREE_X : 0, 0));
+        if (vif()) evts.add(new Theatre.Evenement(0, "entree", glisser ? (hdNeuf ? 0 : ENTREE_X) : hdNeuf ? entree : 0, 0));
         dernierPas = -1;
         invalidate();
         return true;
@@ -488,7 +526,7 @@ final class TheatreVue extends View {
             if (pas == dernierPas && vif) return cam;
             if (!vif && dernierPas >= 0 && pas / 2 == dernierPas / 2) return cam;
             dernierPas = pas;
-            if (hd()) TheatreHd.composerHd(decorHd, cx, evts, t, rendeurNiveau(), 0, niveau, px);
+            if (hd()) TheatreHd.composerHd(decorHd, cx, evts, t, rendeurNiveau(now), 0, niveau, px);
             else Theatre.composer(cx, decor, teinte, evts, t, 0, niveau, px);
             long h = Theatre.fnv(px);
             if (h == derniere) return cam;

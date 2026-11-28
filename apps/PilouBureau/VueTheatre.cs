@@ -169,7 +169,8 @@ internal sealed class VueTheatre : Border
     // Montre ce lieu (décor de la campagne) ; rend faux s'il n'a pas de dessin. glisser : un travelling depuis le lieu
     // précédent (faux quand la fenêtre rattrape d'un coup des messages déjà lus). Le HD est pris dès que le décor HD et
     // sa scène HD existent (docs/SCENES-HD.md, § 2).
-    public bool Lieu(string campagne, string decor, double now, bool glisser = true)
+    // entree : d'où Pilou entre (0 : le bord gauche).
+    public bool Lieu(string campagne, string decor, double now, bool glisser = true, int entree = 0)
     {
         var cle = campagne + "|" + decor;
         if (cle == _cle && _cx is not null) return _decor is not null || _decorHd is not null;
@@ -198,7 +199,7 @@ internal sealed class VueTheatre : Border
         _perso = "";
         _debut = glisser ? now + Glisse : now;
         if (!glisser) _glisse = -1;
-        if (Vif) _evts.Add(new Theatre.Evenement(0, "entree", glisser ? Theatre.E(_cx.Scene, EntreeX) : 0));
+        if (Vif) _evts.Add(new Theatre.Evenement(0, "entree", glisser ? Theatre.E(_cx.Scene, EntreeX) : entree));
         _dernierPas = -1;
         return true;
     }
