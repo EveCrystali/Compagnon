@@ -1,8 +1,9 @@
 # Peindre un paysage de campagne
 
-Les décors des campagnes sont de grands paysages en pixel art, 384 × 160, peints par du code. Décision d'Antoine du
-28 novembre 2026, après l'étude `docs/maquettes/paysages/` : « D minimum. Pixel art ne doit pas rimer avec baisse de
-qualité/définition. » Cette page suffit pour peindre un lieu neuf au même niveau.
+Les décors des campagnes sont de grands paysages en pixel art, **480 × 240 à 2 px d'écran par pixel, cadre 2:1**,
+peints par du code. Décision d'Antoine du 28 novembre 2026, après l'étude `docs/maquettes/paysages/` : « C minimum.
+Pixel art ne doit pas rimer avec baisse de qualité/définition, c'est une règle à figer. » (règle 9 de `CLAUDE.md`).
+Cette page suffit pour peindre un lieu neuf au même niveau.
 
 | Fichier | Rôle |
 |---|---|
@@ -17,7 +18,8 @@ py outils/sprites/decors_hd.py prologue mare    # un seul lieu (la référence n
 ```
 
 Il faut numpy et Pillow. Les planches sortent dans `docs/maquettes/paysages/<campagne>/` : `<lieu>.gif` (la boucle),
-`<lieu>-avant-apres.png`, `<lieu>-pc.png`, `<lieu>-telephone.png`.
+`<lieu>-avant-apres.png`, `<lieu>-pc.png`, `<lieu>-telephone.png`. Les montages reprennent le gabarit de l'étude :
+l'étiquette du lieu, le texte et les places de Pilou et du personnage sont ceux du gabarit, pas ceux de la scène.
 
 ## Composer un lieu
 
@@ -37,15 +39,16 @@ def mare(P, tab):
 4. **Peindre du fond vers nous**, un `tab.plan(nom, profondeur)` par plan. Premier plan sombre, plan moyen, lointains
    clairs et bleutés, ciel : c'est ce contraste qui donne la profondeur.
 5. **Semer la vie** : dix à vingt petites choses qui bougent, liées à la phase `P.p`.
-6. **Regarder**, à la taille d'écran (3 px par pixel). Puis une deuxième et une troisième passe.
+6. **Regarder**, à la taille d'écran (2 px par pixel). Puis une deuxième et une troisième passe.
 
-**Coordonnées.** Tout se donne en « unités du monde » : 192 de large, 80 de haut, le sol vers y = 78, comme les
-scènes d'avant. La grille est deux fois plus fine ; les demi-unités sont permises. Le peintre déborde de 6 unités de
+**Coordonnées.** Tout se donne en « unités du monde » : x de 0 à 192, y de -16 (`pg.HAUT`, le haut du cadre) à 80, le
+sol vers y = 78. De y = 0 à 80, ce sont les coordonnées des scènes d'avant ; le cadre 2:1 ajoute 16 unités de ciel ou
+de plafond. La grille est deux fois et demie plus fine (un pixel = 0,4 unité) ; les fractions sont permises. Le peintre déborde de 6 unités de
 chaque côté (`MARGE`) pour la parallaxe et le cadrage.
 
-**Places à laisser lisibles.** Pilou se tient à gauche, son interlocuteur à droite (dans le prologue : x ≈ 18 à 24 et
-x ≈ 165, pieds à y = 78). Pas de fleur vive ni de détail important à ces endroits. Sur un téléphone de 1078 px, 12
-pixels du décor sont coupés de chaque côté : rien d'essentiel dans les 6 unités de bord.
+**Places à laisser lisibles.** Pilou se tient à gauche, son interlocuteur à droite (lire `assets/scenes/<campagne>.txt` :
+`sol`, `place`, `interlocuteur`, en coordonnées d'avant). À cette définition Pilou est grand : environ 38 unités de
+large et 45 de haut. Pas de fleur vive ni de détail important derrière lui ni derrière le personnage.
 
 ## Les briques
 

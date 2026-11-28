@@ -1,8 +1,10 @@
-"""Le moteur de peinture des paysages (docs/PEINTURE.md) : de quoi composer un décor de campagne 384 × 160 comme un
-peintre, par le code. Né de l'étude docs/maquettes/paysages (direction D, choisie par Antoine le 28 novembre 2026).
+"""Le moteur de peinture des paysages (docs/PEINTURE.md) : de quoi composer un décor de campagne 480 × 240 comme un
+peintre, par le code. Né de l'étude docs/maquettes/paysages (direction C, choisie par Antoine le 28 novembre 2026 :
+règle 9 de CLAUDE.md, « le pixel art n'est jamais une baisse de qualité ni de définition »).
 
-Un décor se décrit en « unités du monde » : 192 de large, 80 de haut, le sol vers y = 78 (les coordonnées des décors
-d'avant). La grille réelle est deux fois plus fine (384 × 160) : les grandes formes se donnent en unités, les petites
+Un décor se décrit en « unités du monde » : x de 0 à 192, y de -16 (le haut du cadre) à 80, le sol vers y = 78. De
+y = 0 à 80 ce sont les coordonnées des décors d'avant ; le cadre 2:1 ajoute 16 unités de ciel ou de plafond au-dessus.
+La grille réelle est deux fois et demie plus fine (480 × 240, 2 px d'écran par pixel) : les grandes formes se donnent en unités, les petites
 choses (feuilles, brins, tuiles, éclats) se posent au pixel.
 
 Trois idées à garder en tête :
@@ -21,7 +23,8 @@ import math
 import numpy as np
 from PIL import Image, ImageDraw
 
-W, H = 384, 160                   # la grille d'un décor
+W, H = 480, 240                   # la grille d'un décor (cadre 2:1)
+HAUT = -16.0                      # le y du haut du cadre, en unités du monde
 IMAGES, DUREE = 8, 200            # la boucle d'ambiance par défaut : 8 images à 5 images par seconde
 MARGE = 6                         # unités peintes hors champ de chaque côté (parallaxe, cadrage du téléphone)
 BAYER = (np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]) + 0.5) / 16.0
@@ -87,7 +90,7 @@ def rvb(h):
     return int(h[1:3], 16), int(h[3:5], 16), int(h[5:7], 16)
 
 
-FIN = False        # détails réservés à une grille encore plus fine (2,5 px par unité et plus)
+FIN = True         # les détails que seule une grille de 2,5 pixels par unité peut porter
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -248,6 +251,7 @@ class Peintre:
         """Les pixels du masque dont le voisin du dessus n'en fait pas partie (le liseré de lumière)."""
         haut = np.zeros_like(masque)
         haut[1:] = masque[:-1]
+        haut[0] = masque[0]                           # le bord du cadre n'est pas une crête
         return masque & ~haut
 
     def volumes(self, boules, rampe, lum, plancher=None, grain=0.0, graine=0, trame=0.55, gain=0.55, base=0.5):
@@ -378,7 +382,7 @@ def ciel(P, horizon=45.5, haut=0.2, halo=0.34, etoiles=0.0, lune=None, disque=5.
     P.rampe(tout, v, T.CIEL, trame)
     if etoiles > 0:
         pas = 4.0
-        for cy in range(-1, 12):
+        for cy in range(int(P.y0 // pas) - 1, 12):
             for cx in range(-2, 52):
                 if hz(cx, cy, 11) > 0.22:
                     continue
@@ -523,8 +527,9 @@ def champ(P, f, x0, x1, y0, y1, a, b, pente=1.6, haie=True):
         P.remplir(h, T.S0)
 
 
-def colline(P, f, centre, demi, jusque=None, graine=91):
-    """Une colline ronde à contre-jour : le flanc tourné vers le soleil accroche la lumière, liseré d'or sur la crête."""
+def colline(P, f, centre, demi, jusque=None, graine=91, fonce=0.012):
+    """Une colline ronde à contre-jour : le flanc tourné vers le soleil accroche la lumière, liseré d'or sur la crête.
+    fonce : ce qu'elle perd de clarté par unité en descendant (une très grande colline : 0,004)."""
     fx = f(P.X)
     m = (P.Y >= fx)
     if jusque is not None:
@@ -532,7 +537,7 @@ def colline(P, f, centre, demi, jusque=None, graine=91):
     cote = 1.0 if P.soleil[0] < centre else -1.0
     u = (P.X - centre) / demi * cote
     v = 0.44 - 0.42 * u + 0.2 * (fbm(P.X / 6.0, P.Y / 3.0, 3, graine) - 0.5) + 0.05 * np.sin((P.Y - fx) * 1.5 + P.X * 0.2) \
-        - 0.012 * (P.Y - fx)
+        - fonce * (P.Y - fx)
     P.rampe(m, v, [T.S0, T.S1, T.S2, T.S3, T.S4], 0.75)
     cr = P.crete(m)
     P.remplir(cr & (u < 0.3), T.OR3)
