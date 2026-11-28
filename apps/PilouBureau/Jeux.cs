@@ -234,7 +234,7 @@ public sealed partial class FenetrePilou
         }
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
         // --essai=mot, journal, complicite : la présence au quotidien, sur des données de démonstration (rien n'est écrit).
-        if (nom is "mot" or "journal" or "complicite") EssaiPresence(nom);
+        if (nom is "mot" or "journal" or "complicite" or "traits") EssaiPresence(nom);
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=menu[:jouer|apparence/accessoire…][:clair|sombre][:moment] : le vrai menu clic droit ouvert (MenuEssai.cs).
         if (nom == "menu" || nom.StartsWith("menu:")) EssaiMenu(nom[4..]);

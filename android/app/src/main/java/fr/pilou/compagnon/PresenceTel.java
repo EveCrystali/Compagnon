@@ -113,6 +113,7 @@ public final class PresenceTel {
             if (e.journalActif) {
                 Presence.FaitsDuJour f = e.aujourdhui(Presence.jourTexte(maintenant));
                 f.mn += m;
+                if (Presence.totLeMatin(maintenant.getHour(), maintenant.getMinute())) f.ma = 1;
                 String meteo = meteo(c);
                 if (!meteo.isEmpty()) {
                     Presence.FaitsDuJour x = new Presence.FaitsDuJour();
@@ -146,8 +147,10 @@ public final class PresenceTel {
             LocalDateTime maintenant = LocalDateTime.now();
             String jour = Presence.jourTexte(maintenant);
             if (jour.equals(e.motJour)) return e.motTexte;
+            // Les traits de personnalité (Traits.java) : relus une fois par jour, avant de choisir le mot.
+            boolean neuf = Traits.decouvrir(e);
             Presence.Contexte x = contexte(c, e, maintenant);
-            Presence.Choix ch = Presence.mot(x, Presence.mots(), e.dits, jour + "|" + e.moi.id + "|tel");
+            Presence.Choix ch = Presence.mot(x, Presence.banque(), e.dits, jour + "|" + e.moi.id + "|tel");
             e.motJour = jour;
             e.motTexte = ch == null ? "" : ch.texte;
             e.motNotifie = "";
@@ -155,8 +158,15 @@ public final class PresenceTel {
                 Presence.retenir(e.dits, ch.ligne.id, Presence.jour(maintenant));
                 if (ch.famille.startsWith("date-")) e.moi.fetes.add(x.dateAFeter);
                 if (ch.famille.startsWith("palier-")) e.moi.palierAnnonce = Math.max(e.moi.palierAnnonce, x.palier);
+                // Un trait n'est annoncé qu'une fois dans le groupe.
+                if (ch.famille.startsWith("annonce-")) {
+                    Traits.Trait t = Traits.trouver(ch.famille.substring("annonce-".length()));
+                    if (t != null) e.moi.traitsDits |= t.bit();
+                    neuf = true;
+                }
             }
             garder(c, e);
+            if (neuf) p(c).edit().putBoolean("presenceUrgent", true).apply();
             return e.motTexte;
         } catch (RuntimeException x) {
             Journal.noter("présence : mot du jour", x);
@@ -197,6 +207,15 @@ public final class PresenceTel {
         x.palierNouveau = t.palier > t.palierAnnonce ? t.palier : -1;
         x.joursEnsemble = t.jours;
         x.annees = x.dateAFeter.startsWith("a") ? Presence.entier(x.dateAFeter.substring(1), 0, 99) : 0;
+        // Traits : un seul à annoncer ; les répliques ne viennent que des dominants déjà annoncés.
+        Traits.Trait nouveau = Traits.aAnnoncer(Traits.tous(), t.traits, t.traitsDits);
+        x.traitNouveau = nouveau == null ? "" : nouveau.id;
+        StringBuilder dominants = new StringBuilder();
+        for (Traits.Trait d : Traits.dominants(Traits.tous(), t.traits & t.traitsDits, Traits.journal(e), auj)) {
+            if (dominants.length() > 0) dominants.append(',');
+            dominants.append(d.id);
+        }
+        x.traits = dominants.toString();
         return x;
     }
 
@@ -211,6 +230,18 @@ public final class PresenceTel {
             if (change) garder(c, e);
         } catch (RuntimeException x) {
             Journal.noter("présence : campagnes", x);
+        }
+    }
+
+    // ---- Les traits de personnalité (Traits.java, docs/TRAITS.md)
+
+    /** Les trois traits dominants de Pilou en ce moment (au plus) : pour la carte « Pilou et moi » et les saynètes. */
+    public static List<Traits.Trait> traitsDominants(Context c) {
+        try {
+            return Traits.dominants(etat(c), Presence.jour(LocalDateTime.now()));
+        } catch (RuntimeException x) {
+            Journal.noter("présence : traits", x);
+            return new ArrayList<>();
         }
     }
 
@@ -310,6 +341,11 @@ public final class PresenceTel {
                     }
                 }
                 e.compacter(auj);
+                // Les faits des autres appareils peuvent faire naître un trait ici aussi.
+                if (Traits.decouvrir(e)) {
+                    change = true;
+                    p(c).edit().putBoolean("presenceUrgent", true).apply();
+                }
                 if (change) garder(c, e);
             }
             if (!dernier.equals(depuis)) p(c).edit().putString("presenceDernierId", dernier).apply();
