@@ -26,11 +26,31 @@ d'une seconde (la plus longue, `palier`, fait 840 ms).
 `GardeSons` (PC) et `Sons.Garde` (téléphone), mêmes règles, mêmes tests :
 
 - jamais si le réglage est « aucun » ;
-- jamais quand Pilou est caché : plein écran, présentation, visio, caché à la main (PC) ; appel, visio (mode audio de
-  communication), silencieux ou vibreur (téléphone) ;
+- un son qui **répond à un geste du joueur** (`caresse`, `choix`, `achat`, `peche`, `aventure`, sons de Chasse aux
+  bugs) passe par le **volume multimédia, quel que soit le mode de sonnerie**, comme dans n'importe quel jeu ; il ne
+  se tait que pendant un appel ou une visio (téléphone : mode audio de communication ; PC : visio, réunion,
+  présentation), en « Ne pas déranger » silence total, ou volume multimédia à zéro ;
+- un son **spontané** se tait en plus quand Pilou est caché : plein écran, caché à la main (PC) ; silencieux ou
+  vibreur (téléphone) ;
 - les sons **spontanés** (`mot`, `expedition`, `campagne`, `palier`, `succes`) jamais pendant la saisie, et **six par
   heure au plus** ; les sons qui répondent à un geste (clic, choix, achat) partent même si on vient de taper ;
 - jamais en rafale : 1,2 s entre deux sons, 4 s avant de rejouer le même (clics répétés sur Pilou).
+
+**Un réglage coché qui ne produit rien sans explication est un défaut.** Sur le téléphone, chaque son qui n'a pas
+pu partir est noté pour le diagnostic (« son X non joué : raison », cinq lignes au plus, rien de personnel) ; les
+Réglages ont un bouton **« Essayer »** sous Sons et Musique : il joue un son tout de suite (même au réglage « Aucun »,
+sans la garde d'espacement) ou dit en clair pourquoi rien ne peut sortir (« volume multimédia à zéro », « téléphone en
+appel ou en visio »).
+
+Dans chaque écran de l'app (`setVolumeControlStream(STREAM_MUSIC)`), les touches de volume règlent le volume
+multimédia, celui des sons de Pilou, et non la sonnerie. Le flux est déjà le bon : `USAGE_GAME` part sur le multimédia
+(vérifié sur le téléphone d'Antoine), on n'y touche pas.
+
+Le piège corrigé en v1 (confirmé par Antoine sur son téléphone : en sonnerie normale, le son marche et suit le volume
+multimédia) : le téléphone taisait tout dès qu'il était en vibreur ou en silencieux, volume multimédia
+monté ou pas, sans rien dire ; beaucoup de gens laissent leur téléphone en vibreur. Le PC avait le même genre de
+piège, plus discret : un geste dans la fenêtre Aventure se taisait si Pilou était caché à la main ou si Windows
+signalait un plein écran.
 
 Les sons accompagnent des moments qui passent déjà par la retenue de la présence (`Vivacite.cs`) : ils n'en créent
 aucun et n'en consomment aucun.
@@ -90,8 +110,8 @@ Règles :
   environ -8,5 dB) ; un réglage déjà enregistré garde son choix ;
 - **seulement dans l'Aventure** : la fenêtre Aventure au premier plan (PC), la lecture d'une campagne à l'écran avec le
   focus (téléphone) ; perdre le premier plan, réduire, fermer coupe en fondu ;
-- **jamais quand Pilou est caché** : plein écran, présentation, visio (PC) ; appel, visio, silencieux ou vibreur
-  (téléphone) ;
+- **au volume multimédia, quel que soit le mode de sonnerie** (comme un jeu) ; silence pendant un appel ou une visio
+  (téléphone), en visio, réunion ou présentation (PC) ;
 - **très bas** : crête au plus 6000 (-14,7 dBFS) au réglage « normale », de -19 à -26 dBFS en pratique, RMS vers
   -30 dBFS ; les sons de Pilou restent devant ;
 - **fondus** : entrée en 1,5 s, sortie en 1 s ;

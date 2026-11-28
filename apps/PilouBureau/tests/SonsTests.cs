@@ -64,6 +64,22 @@ public class SonsTests
     }
 
     [Fact]
+    public void Un_geste_ne_se_tait_qu_en_visio_un_son_spontane_aussi_quand_Pilou_est_cache()
+    {
+        // Même règle que le téléphone (docs/SONS.md) : caché à la main ou plein écran ne coupe pas un geste du joueur.
+        foreach (var geste in new[] { Son.Caresse, Son.Choix, Son.Achat, Son.Peche, Son.Aventure })
+        {
+            Assert.False(Sons.Muet(geste, cache: true, appel: false));
+            Assert.True(Sons.Muet(geste, cache: true, appel: true));
+        }
+        foreach (var spontane in new[] { Son.Mot, Son.Expedition, Son.Campagne, Son.Palier, Son.Succes })
+        {
+            Assert.True(Sons.Muet(spontane, cache: true, appel: false));
+            Assert.False(Sons.Muet(spontane, cache: false, appel: false));
+        }
+    }
+
+    [Fact]
     public void Sons_normaux_par_defaut_et_aucun_coupe_tout()
     {
         Assert.Equal("normaux", new Reglages().Sons);

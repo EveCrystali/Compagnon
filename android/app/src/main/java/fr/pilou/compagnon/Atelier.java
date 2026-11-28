@@ -21,6 +21,7 @@ public final class Atelier extends Activity implements Terrain.Ecoute {
     @Override
     protected void onCreate(Bundle sauve) {
         super.onCreate(sauve);
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC); // les touches de volume règlent le multimédia, pas la sonnerie (docs/SONS.md)
         Journal.installer(this);
         Ui.Palette p = Ui.p(this);
         getWindow().setBackgroundDrawable(new ColorDrawable(p.fond));

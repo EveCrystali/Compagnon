@@ -180,7 +180,9 @@ Dernière mise à jour : 28 novembre 2026.
   d'un trait au fil de vraies semaines et son annonce entre deux appareils ; les seuils sont une première estimation.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 - Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
-  sortie audio) ; sur téléphone, aucune lecture réelle.
+  sortie audio) ; sur téléphone, premier essai d'Antoine (28 nov. 2026) : aucun son. Cause probable, corrigée : tout se
+  taisait en vibreur ou silencieux. Un geste passe maintenant au volume multimédia ; bouton « Essayer » et trace des
+  silences dans le diagnostic. Pas encore réécouté sur le téléphone.
 - Les musiques : écoutées par personne. Sur PC, la boucle du prologue joue dans l'exe d'essai (session audio active, crête
   mesurée vers -30 dBFS) et se coupe quand la fenêtre est réduite ; les autres boucles et le téléphone : jamais lus en vrai. Second lot : jamais lu dans l'exe.
 

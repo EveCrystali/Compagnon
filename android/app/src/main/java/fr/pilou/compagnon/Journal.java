@@ -17,10 +17,10 @@ public final class Journal {
     }
 
     public static synchronized void installer(Context c) {
-        if (pose) return;
-        pose = true;
         Context app = c.getApplicationContext();
         appli = app;
+        if (pose) return;
+        pose = true;
         Thread.UncaughtExceptionHandler avant = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler((fil, e) -> {
             try {
@@ -55,6 +55,31 @@ public final class Journal {
         } catch (Throwable ignore) {
             // le journal ne doit jamais faire tomber l'app
         }
+    }
+
+    /**
+     * Un son qui n'a pas pu partir : « son X non joué : raison », gardé (cinq lignes au plus) pour le diagnostic.
+     * Rien de personnel : un nom de son et une raison technique. Deux fois la même ligne de suite n'en font qu'une.
+     */
+    public static synchronized void son(String id, String raison) {
+        Context app = appli;
+        if (app == null) return;
+        try {
+            String ligne = "son " + id + " non joué : " + raison;
+            String avant = Prefs.de(app).getString("sonsNonJoues", "");
+            String[] l = avant.isEmpty() ? new String[0] : avant.split("\n");
+            if (l.length > 0 && l[0].endsWith(" · " + ligne)) return;
+            StringBuilder b = new StringBuilder(new SimpleDateFormat("HH:mm:ss", Locale.ROOT).format(new Date()) + " · " + ligne);
+            for (int i = 0; i < Math.min(4, l.length); i++) b.append('\n').append(l[i]);
+            Prefs.de(app).edit().putString("sonsNonJoues", b.toString()).apply();
+        } catch (Throwable ignore) {
+            // le journal ne doit jamais faire tomber l'app
+        }
+    }
+
+    /** Les derniers sons non joués, le plus récent d'abord ("" : aucun). */
+    public static String sons(Context c) {
+        return Prefs.de(c).getString("sonsNonJoues", "");
     }
 
     /** La dernière erreur rattrapée ("" : aucune). */
