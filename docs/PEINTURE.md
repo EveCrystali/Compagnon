@@ -17,7 +17,8 @@ py outils/sprites/decors_hd.py prologue mare    # un seul lieu (la référence n
 ```
 
 Il faut numpy et Pillow. Les planches sortent dans `docs/maquettes/paysages/<campagne>/` : `<lieu>.gif` (la boucle),
-`<lieu>-avant-apres.png`, `<lieu>-pc.png`, `<lieu>-telephone.png`.
+`<lieu>-avant-apres.png`, `<lieu>-pc.png`, `<lieu>-telephone.png`. Les montages reprennent le gabarit de l'étude :
+l'étiquette du lieu, le texte et les places de Pilou et du personnage sont ceux du gabarit, pas ceux de la scène.
 
 ## Composer un lieu
 

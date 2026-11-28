@@ -248,6 +248,7 @@ class Peintre:
         """Les pixels du masque dont le voisin du dessus n'en fait pas partie (le liseré de lumière)."""
         haut = np.zeros_like(masque)
         haut[1:] = masque[:-1]
+        haut[0] = masque[0]                           # le bord du cadre n'est pas une crête
         return masque & ~haut
 
     def volumes(self, boules, rampe, lum, plancher=None, grain=0.0, graine=0, trame=0.55, gain=0.55, base=0.5):
@@ -523,8 +524,9 @@ def champ(P, f, x0, x1, y0, y1, a, b, pente=1.6, haie=True):
         P.remplir(h, T.S0)
 
 
-def colline(P, f, centre, demi, jusque=None, graine=91):
-    """Une colline ronde à contre-jour : le flanc tourné vers le soleil accroche la lumière, liseré d'or sur la crête."""
+def colline(P, f, centre, demi, jusque=None, graine=91, fonce=0.012):
+    """Une colline ronde à contre-jour : le flanc tourné vers le soleil accroche la lumière, liseré d'or sur la crête.
+    fonce : ce qu'elle perd de clarté par unité en descendant (une très grande colline : 0,004)."""
     fx = f(P.X)
     m = (P.Y >= fx)
     if jusque is not None:
@@ -532,7 +534,7 @@ def colline(P, f, centre, demi, jusque=None, graine=91):
     cote = 1.0 if P.soleil[0] < centre else -1.0
     u = (P.X - centre) / demi * cote
     v = 0.44 - 0.42 * u + 0.2 * (fbm(P.X / 6.0, P.Y / 3.0, 3, graine) - 0.5) + 0.05 * np.sin((P.Y - fx) * 1.5 + P.X * 0.2) \
-        - 0.012 * (P.Y - fx)
+        - fonce * (P.Y - fx)
     P.rampe(m, v, [T.S0, T.S1, T.S2, T.S3, T.S4], 0.75)
     cr = P.crete(m)
     P.remplir(cr & (u < 0.3), T.OR3)
