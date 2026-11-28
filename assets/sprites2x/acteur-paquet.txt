@@ -1,0 +1,27 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-paquet
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 120
+palette: a=#1c2128 b=#4fd8ff c=#e8fbff d=#f69d50
+images:
+aaaaa.
+abcba.
+acbca.
+aaaaa.
+---
+aaaaa.
+acbca.
+abcba.
+aaaaa.
+---
+aaaaa.
+abcba.
+acbca.
+aaaad.
+---
+aaaaa.
+acbca.
+abcba.
+daaaa.

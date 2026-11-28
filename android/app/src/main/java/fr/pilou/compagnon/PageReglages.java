@@ -10,13 +10,10 @@ import android.provider.Settings;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Réglages, par sections : appairage, Pilou flottant, notifications, jeux, mises à jour, diagnostic, à propos.
@@ -26,23 +23,23 @@ final class PageReglages extends Page {
 
     private final TextView statut, dernier, plantage;
     private final EditText champCode, champRelais;
-    private final Switch bulle;
-    private final Button cacher, ramener, copierPlantage, effacerPlantage, autoriser;
+    private final Style.Coche bulle;
+    private final TextView cacher, ramener, copierPlantage, effacerPlantage, autoriser;
     private final PilouVue apercu;
     private final LinearLayout blocPlantage;
 
     PageReglages(Principale a) {
         super(a);
         Ui.Palette p = Ui.p(a);
-        corps.addView(Ui.titrePage(a, "Réglages"));
-        corps.addView(Ui.sousTitre(a, "Pilou " + a.version()));
+        corps.addView(Style.titrePage(a, "Réglages"));
+        corps.addView(Style.sousTitre(a, "Pilou " + a.version()));
 
         // ---- Appairage
-        corps.addView(Ui.titreSection(a, "Appairage avec le PC"));
-        LinearLayout c = Ui.carte(a);
-        statut = Ui.texte(a, "", Ui.T_CORPS, p.texte, true);
+        corps.addView(Style.titreSection(a, "Appairage avec le PC"));
+        LinearLayout c = Style.carte(a);
+        statut = Style.texte(a, "", Ui.T_CORPS, p.texte, true);
         c.addView(statut);
-        TextView aide = Ui.texte(a, "Sur le PC : clic droit sur Pilou → Amis et appareils → Groupe d'appareils → Partager l'XP entre mes appareils. Vise le QR code avec l'appareil photo, "
+        TextView aide = Style.texte(a, "Sur le PC : clic droit sur Pilou → Amis et appareils → Groupe d'appareils → Partager l'XP entre mes appareils. Vise le QR code avec l'appareil photo, "
                 + "ou tape le code ici. Le même code relie tous tes appareils (XP partagée).", Ui.T_DETAIL, p.doux, false);
         aide.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 6));
         c.addView(aide);
@@ -51,13 +48,13 @@ final class PageReglages extends Page {
         c.addView(champCode, Ui.large(a, 8));
         champRelais = champ(a, Prefs.RELAIS_DEFAUT, InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
         c.addView(champRelais, Ui.large(a, 10));
-        c.addView(Ui.bouton(a, "Appairer", true, v -> {
+        c.addView(Style.bouton(a, "Appairer", true, v -> {
             if (a.appairer(champCode.getText().toString(), champRelais.getText().toString())) {
-                Toast.makeText(a, "Appairé ✓ — j'attends des nouvelles du PC…", Toast.LENGTH_LONG).show();
+                Style.dire(a, "Appairé ✓ — j'attends des nouvelles du PC…", true);
                 rafraichir();
-            } else Toast.makeText(a, "Code incomplet : 16 caractères, comme sur le PC.", Toast.LENGTH_LONG).show();
+            } else Style.dire(a, "Code incomplet : 16 caractères, comme sur le PC.", true);
         }), Ui.large(a, 4));
-        c.addView(Ui.ligne(a, "Ne plus écouter le PC", "Efface le code ; Pilou garde ses gains en attente", p.orange, v -> {
+        c.addView(Style.ligne(a, "Ne plus écouter le PC", "Efface le code ; Pilou garde ses gains en attente", p.orange, v -> {
             Prefs.de(a).edit().putString("code", "").remove("etat").remove("dernierId").apply();
             Veille.arreter(a);
             champCode.setText("");
@@ -66,26 +63,25 @@ final class PageReglages extends Page {
         corps.addView(c, Ui.large());
 
         // ---- Pilou flottant
-        corps.addView(Ui.titreSection(a, "Pilou flottant"));
-        c = Ui.carte(a);
-        bulle = Ui.interrupteur(a, c, "Par-dessus les autres applis", "Toucher : la bulle · glisser : le déplacer · appui long : l'app",
+        corps.addView(Style.titreSection(a, "Pilou flottant"));
+        c = Style.carte(a);
+        bulle = Style.interrupteur(a, c, "Par-dessus les autres applis", "Toucher : la bulle · glisser : le déplacer · appui long : l'app",
                 Prefs.bulle(a), oui -> {
                     Prefs.de(a).edit().putBoolean("bulle", oui).apply();
                     if (oui && !Settings.canDrawOverlays(a))
                         a.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + a.getPackageName())));
                     Veille.demarrer(a);
                 });
-        c.addView(Ui.separateur(a));
+        c.addView(Style.separateur(a));
         LinearLayout taille = Ui.rangee(a);
         taille.setPadding(Ui.dp(a, 4), Ui.dp(a, 8), 0, 0);
         LinearLayout gauche = Ui.pile(a);
-        gauche.addView(Ui.texte(a, "Taille", Ui.T_CORPS, p.texte, false));
+        gauche.addView(Style.texte(a, "Taille", Ui.T_CORPS, p.texte, false));
         SeekBar curseur = new SeekBar(a);
         int min = Math.round(Prefs.TAILLE_MIN * 100), max = Math.round(Prefs.TAILLE_MAX * 100);
         curseur.setMax(max - min);
         curseur.setProgress(Math.round(Prefs.taille(a) * 100) - min);
-        curseur.setProgressTintList(android.content.res.ColorStateList.valueOf(p.bleu));
-        curseur.setThumbTintList(android.content.res.ColorStateList.valueOf(p.bleu));
+        Style.curseur(curseur);
         gauche.addView(curseur, Ui.large());
         taille.addView(gauche, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         float d = a.getResources().getDisplayMetrics().density;
@@ -116,22 +112,21 @@ final class PageReglages extends Page {
         });
         apercu.pixel(2.2f * d * Math.min(Prefs.taille(a), 1.2f));
         c.addView(taille, Ui.large());
-        LinearLayout actions = Ui.rangee(a);
-        cacher = Ui.bouton(a, "", false, v -> {
+        // L'un sous l'autre : en grande police, deux boutons côte à côte couperaient leur libellé.
+        LinearLayout actions = Ui.pile(a);
+        cacher = Style.bouton(a, "", false, v -> {
             boolean cache = Veille.cache(a);
             Veille.cacher(a, !cache);
             v.postDelayed(this::rafraichir, 300);
         });
-        LinearLayout.LayoutParams lc = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-        lc.rightMargin = Ui.dp(a, 8);
-        actions.addView(cacher, lc);
+        actions.addView(cacher, Ui.large(a, 8));
         // Ramener : Pilou réapparaît, replacé dans l'écran (s'il était perdu hors du bord).
-        ramener = Ui.bouton(a, "Ramener Pilou", false, v -> {
+        ramener = Style.bouton(a, "Ramener Pilou", false, v -> {
             Veille.cacher(a, false);
-            Toast.makeText(a, "Pilou revient à l'écran.", Toast.LENGTH_SHORT).show();
+            Style.dire(a, "Pilou revient à l'écran.", false);
             v.postDelayed(this::rafraichir, 300);
         });
-        actions.addView(ramener, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        actions.addView(ramener, Ui.large());
         c.addView(actions, Ui.large());
         corps.addView(c, Ui.large());
 
@@ -139,79 +134,79 @@ final class PageReglages extends Page {
         PresenceVue.reglages(a, corps);
 
         // ---- Notifications
-        corps.addView(Ui.titreSection(a, "Notifications"));
-        c = Ui.carte(a);
-        Ui.interrupteur(a, c, "Une IA t'attend", "Autorisation demandée, question posée", Prefs.alerteAttente(a),
+        corps.addView(Style.titreSection(a, "Notifications"));
+        c = Style.carte(a);
+        Style.interrupteur(a, c, "Une IA t'attend", "Autorisation demandée, question posée", Prefs.alerteAttente(a),
                 oui -> Prefs.de(a).edit().putBoolean("alerteAttente", oui).apply());
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Une session a fini", "Fin de tour ou erreur", Prefs.alerteFin(a),
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Une session a fini", "Fin de tour ou erreur", Prefs.alerteFin(a),
                 oui -> Prefs.de(a).edit().putBoolean("alerteFin", oui).apply());
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Retours de Pilou (aventures)", "Une seule notification quand il revient d'une étape, jamais de relance",
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Retours de Pilou (aventures)", "Une seule notification quand il revient d'une étape, jamais de relance",
                 Prefs.alerteAventure(a), oui -> {
                     Prefs.de(a).edit().putBoolean("alerteAventure", oui).apply();
                     new Thread(() -> Retour.programmer(a.getApplicationContext()), "pilou-retour").start();
                 });
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Mises à jour de Pilou", "Une fois par jour au plus", Prefs.alerteMaj(a),
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Mises à jour de Pilou", "Une fois par jour au plus", Prefs.alerteMaj(a),
 
                 oui -> Prefs.de(a).edit().putBoolean("alerteMaj", oui).apply());
-        c.addView(Ui.separateur(a));
-        autoriser = Ui.bouton(a, "Autoriser les notifications", true, v -> a.demanderNotifications());
+        c.addView(Style.separateur(a));
+        autoriser = Style.bouton(a, "Autoriser les notifications", true, v -> a.demanderNotifications());
         c.addView(autoriser, Ui.large(a, 4));
-        c.addView(Ui.ligne(a, "Réglages système des notifications", "Sons, vibrations, écran verrouillé", 0, v -> {
+        c.addView(Style.ligne(a, "Réglages système des notifications", "Sons, vibrations, écran verrouillé", 0, v -> {
             Intent i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, a.getPackageName());
             a.startActivity(i);
         }));
         corps.addView(c, Ui.large());
 
         // ---- Soins
-        corps.addView(Ui.titreSection(a, "Soins"));
-        c = Ui.carte(a);
+        corps.addView(Style.titreSection(a, "Soins"));
+        c = Style.carte(a);
         Soins.EtatSoins es = Gains.soins(a, Prefs.etat(a), System.currentTimeMillis());
-        Ui.interrupteur(a, c, "Vacances", "Tout est figé : ses besoins ne baissent plus", es.vacances,
+        Style.interrupteur(a, c, "Vacances", "Tout est figé : ses besoins ne baissent plus", es.vacances,
                 oui -> Gains.soin(a, "vacances", oui ? "1" : "0"));
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Me prévenir s'il a besoin de moi", "Une fois par jour au plus", Prefs.alerteSoins(a),
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Me prévenir s'il a besoin de moi", "Une fois par jour au plus", Prefs.alerteSoins(a),
                 oui -> Prefs.de(a).edit().putBoolean("alerteSoins", oui).apply());
         corps.addView(c, Ui.large());
 
         // ---- Jeux
-        corps.addView(Ui.titreSection(a, "Jeux"));
-        c = Ui.carte(a);
+        corps.addView(Style.titreSection(a, "Jeux"));
+        c = Style.carte(a);
         c.addView(choixSons(a));
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Sons de Chasse aux bugs", "Petits bruits rétro pendant la partie", Prefs.son(a),
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Sons de Chasse aux bugs", "Petits bruits rétro pendant la partie", Prefs.son(a),
                 oui -> Prefs.de(a).edit().putBoolean("son", oui).apply());
-        c.addView(Ui.separateur(a));
-        Ui.interrupteur(a, c, "Vibrations", "Quand Pilou est touché, quand un boss tombe", Prefs.vibrations(a),
+        c.addView(Style.separateur(a));
+        Style.interrupteur(a, c, "Vibrations", "Quand Pilou est touché, quand un boss tombe", Prefs.vibrations(a),
                 oui -> Prefs.de(a).edit().putBoolean("vibrations", oui).apply());
         corps.addView(c, Ui.large());
 
         // ---- Mises à jour
-        corps.addView(Ui.titreSection(a, "Mises à jour"));
-        c = Ui.carte(a);
-        c.addView(Ui.ligne(a, "Version " + a.version(), "Pilou vérifie une fois par jour ; tu peux le faire maintenant", 0,
+        corps.addView(Style.titreSection(a, "Mises à jour"));
+        c = Style.carte(a);
+        c.addView(Style.ligne(a, "Version " + a.version(), "Pilou vérifie une fois par jour ; tu peux le faire maintenant", 0,
                 v -> a.startActivity(new Intent(a, Installation.class))));
         corps.addView(c, Ui.large());
 
         // ---- Diagnostic
-        corps.addView(Ui.titreSection(a, "Diagnostic"));
-        c = Ui.carte(a);
-        dernier = Ui.texte(a, "", Ui.T_CORPS, p.texte, false);
+        corps.addView(Style.titreSection(a, "Diagnostic"));
+        c = Style.carte(a);
+        dernier = Style.texte(a, "", Ui.T_CORPS, p.texte, false);
         c.addView(dernier);
-        c.addView(Ui.ligne(a, "Copier le diagnostic", "À coller dans un message pour signaler un souci", 0, v -> copier("Diagnostic de Pilou", diagnostic())));
+        c.addView(Style.ligne(a, "Copier le diagnostic", "À coller dans un message pour signaler un souci", 0, v -> copier("Diagnostic de Pilou", diagnostic())));
         blocPlantage = Ui.pile(a);
-        blocPlantage.addView(Ui.separateur(a));
-        blocPlantage.addView(Ui.texte(a, "Dernier plantage", Ui.T_CORPS, p.orange, true));
-        plantage = Ui.texte(a, "", Ui.T_ETIQUETTE, p.doux, false);
+        blocPlantage.addView(Style.separateur(a));
+        blocPlantage.addView(Style.texte(a, "Dernier plantage", Ui.T_CORPS, p.orange, true));
+        plantage = Style.texte(a, "", Ui.T_ETIQUETTE, p.doux, false);
         plantage.setTypeface(Typeface.MONOSPACE);
         plantage.setTextIsSelectable(true);
         plantage.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 8));
         blocPlantage.addView(plantage);
         LinearLayout r = Ui.rangee(a);
-        copierPlantage = Ui.bouton(a, "Copier le rapport", false, v -> copier("Plantage de Pilou", Journal.dernier(a)));
-        effacerPlantage = Ui.bouton(a, "Effacer", false, v -> {
+        copierPlantage = Style.bouton(a, "Copier le rapport", false, v -> copier("Plantage de Pilou", Journal.dernier(a)));
+        effacerPlantage = Style.bouton(a, "Effacer", false, v -> {
             Journal.effacer(a);
             rafraichir();
         });
@@ -224,16 +219,16 @@ final class PageReglages extends Page {
         corps.addView(c, Ui.large());
 
         // ---- À propos
-        corps.addView(Ui.titreSection(a, "À propos"));
-        c = Ui.carte(a);
-        c.addView(Ui.texte(a, "Pilou, un petit compagnon qui vit en bas de ton écran. Il mène sa petite vie sans te déranger, "
+        corps.addView(Style.titreSection(a, "À propos"));
+        c = Style.carte(a);
+        c.addView(Style.texte(a, "Pilou, un petit compagnon qui vit en bas de ton écran. Il mène sa petite vie sans te déranger, "
                 + "grandit pendant que tu travailles, joue, mange, pêche, cuisine et chasse les bugs avec toi ; "
                 + "tout le reste est en option, pour le personnaliser. Et au passage, branché à tes applis "
                 + "(IA de code, Discord, musique, agenda…), il te prévient de ce qui compte.", Ui.T_CORPS, p.texte, false));
-        c.addView(Ui.ligne(a, "Code source", "github.com/EveCrystali/Compagnon", 0,
+        c.addView(Style.ligne(a, "Code source", "github.com/EveCrystali/Compagnon", 0,
                 v -> a.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(DEPOT)))));
-        c.addView(Ui.separateur(a));
-        TextView lic = Ui.texte(a, "Logiciel libre. Aucune bibliothèque tierce : seulement le framework Android. "
+        c.addView(Style.separateur(a));
+        TextView lic = Style.texte(a, "Logiciel libre. Aucune bibliothèque tierce : seulement le framework Android. "
                 + "Relais : ntfy (logiciel libre), messages chiffrés de bout en bout (AES-256-GCM).", Ui.T_ETIQUETTE, p.doux, false);
         lic.setPadding(Ui.dp(a, 4), Ui.dp(a, 6), Ui.dp(a, 4), 0);
         c.addView(lic);
@@ -246,17 +241,14 @@ final class PageReglages extends Page {
         e.setHint(indice);
         e.setInputType(type);
         e.setSingleLine(true);
-        e.setTextColor(p.texte);
-        e.setHintTextColor(p.doux);
-        e.setBackground(Ui.arrondi(a, p.surface2, 12, p.bord));
-        e.setPadding(Ui.dp(a, 14), Ui.dp(a, 12), Ui.dp(a, 14), Ui.dp(a, 12));
+        Style.champ(e);
         return e;
     }
 
     private void copier(String titre, String texte) {
         ClipboardManager cm = app.getSystemService(ClipboardManager.class);
         cm.setPrimaryClip(ClipData.newPlainText(titre, texte));
-        Toast.makeText(app, "Copié : colle-le dans ton message.", Toast.LENGTH_SHORT).show();
+        Style.dire(app, "Copié : colle-le dans ton message.", false);
     }
 
     private String diagnostic() {
@@ -304,10 +296,10 @@ final class PageReglages extends Page {
         String[] noms = {"Aucun", "Discrets", "Normaux"};
         LinearLayout bloc = Ui.pile(a);
         bloc.setPadding(Ui.dp(a, 4), Ui.dp(a, 8), 0, Ui.dp(a, 8));
-        bloc.addView(Ui.texte(a, "Sons de Pilou", Ui.T_CORPS, p.texte, false));
-        bloc.addView(Ui.texte(a, "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux", Ui.T_DETAIL, p.doux, false));
+        bloc.addView(Style.texte(a, "Sons de Pilou", Ui.T_CORPS, p.texte, false));
+        bloc.addView(Style.texte(a, "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux", Ui.T_DETAIL, p.doux, false));
         LinearLayout r = Ui.rangee(a);
-        r.setBackground(Ui.arrondi(a, p.surface2, 14, 0));
+        Style.fond(r, Style.arrondi(a, p.surface2, 14, 0));
         r.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
         TextView[] t = new TextView[noms.length];
         Runnable peindre = () -> {
@@ -315,12 +307,13 @@ final class PageReglages extends Page {
             for (int j = 0; j < t.length; j++) {
                 boolean choisi = Sons.NIVEAUX[j].equals(actuel);
                 t[j].setTextColor(choisi ? p.bleu : p.doux);
-                t[j].setBackground(choisi ? Ui.arrondi(a, p.surface, 11, 0) : null);
+                Style.fond(t[j], choisi ? Style.arrondi(a, p.surface, 11, p.bleu) : null);
                 t[j].setText((choisi ? "● " : "") + noms[j]);
             }
         };
         for (int k = 0; k < noms.length; k++) {
-            TextView x = Ui.texte(a, noms[k], Ui.T_ETIQUETTE, p.doux, true);
+            TextView x = new Style.Texte(a, noms[k], Style.pixelOptions(a, noms), p.doux, true, true);
+            x.setSingleLine(true);
             x.setGravity(Gravity.CENTER);
             x.setMinHeight(Ui.dp(a, 40));
             int kk = k;

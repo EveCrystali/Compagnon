@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : demi-b U+25D2
+id: signe-demi-b
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+....aaaaaa....
+...aaaaaaaa...
+..aaa....aaa..
+.aaa......aaa.
+aa..........aa
+aa..........aa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+.aaaaaaaaaaaa.
+..aaaaaaaaaa..
+...aaaaaaaa...
+....aaaaaa....

@@ -1006,7 +1006,10 @@ internal sealed class FenetreAventure : Window
                     Replique(x, "");
                     if (!_enRoute) _theatre.Revient(now);
                     _theatre.Humeur(x.Humeur, now);
-                    _theatre.Parle(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
+                    // Une réplique entre guillemets est celle du personnage : c'est lui qui parle dans la scène.
+                    if (AnimationsCampagne.Parle(x.Texte) && _campagne is { } cp && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, cp, x.Cle) is not null)
+                        _theatre.ParlePerso(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
+                    else _theatre.Parle(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
                     break;
                 }
                 var el2 = Element(x);
@@ -1310,6 +1313,11 @@ internal sealed class FenetreAventure : Window
             _choixScene.Child = contenu;
             _choixScene.Visibility = Visibility.Visible;
             _choixScene.MaxWidth = _etat is { Phase: Phase.Fin } ? 760 : 520;
+            // Pilou se tient à gauche, le personnage à droite : les choix se posent au milieu, en haut, sur le décor.
+            bool fin = _etat is { Phase: Phase.Fin };
+            _choixScene.HorizontalAlignment = HorizontalAlignment.Center;
+            _choixScene.VerticalAlignment = fin ? VerticalAlignment.Center : VerticalAlignment.Top;
+            _choixScene.Margin = new Thickness(0, 46, 0, 10);
             Apparaitre(_choixScene, 260, 10);
         }
         else
@@ -1611,6 +1619,12 @@ internal sealed class FenetreAventure : Window
             }
             _persoNom.Texte = nom;
             _anims.Personnage(_persoImage, s, false, now);
+            // En pied dans la scène s'il est dessiné (un message sans personnage ne le renvoie pas).
+            if (el is not null && _campagne is { } c2 && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, c2, cle) is { } p2)
+            {
+                var pied = "pied-" + c2.Id + "-" + p2.Personnage;
+                _theatre.Perso(Banque.Commune.Fins.ContainsKey(pied) ? pied : "", now);
+            }
         }
         _anims.Parle(_enCours is { } e && AnimationsCampagne.Parle(e.Texte));
     }

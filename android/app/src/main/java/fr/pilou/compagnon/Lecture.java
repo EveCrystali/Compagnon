@@ -157,7 +157,8 @@ final class Lecture extends FrameLayout {
         lieu.maxLignes(1);
         puceLieu.encre(lieu, cp.texte);
         puceLieu.addView(lieu);
-        lieuLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
+        // En haut à gauche de la scène, comme sur PC : le bas à droite est la place du personnage en pied.
+        lieuLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.START);
         tete.addView(puceLieu, lieuLp);
         colonne.addView(tete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 184)));
 
@@ -306,8 +307,8 @@ final class Lecture extends FrameLayout {
         if (largeur == reglageW && k == reglageK) return;
         reglageW = largeur;
         reglageK = k;
-        lieuLp.rightMargin = margeLieuDroite(largeur, k);
-        lieuLp.bottomMargin = k;
+        lieuLp.leftMargin = margeLieuDroite(largeur, k);       // la marge est la même des deux côtés de la scène
+        lieuLp.topMargin = k;
         lieu.maxLargeur(largeurTexteLieu(k));
         jaugeLp.width = Theatre.W * k;
         jaugeLp.height = k;
@@ -758,7 +759,9 @@ final class Lecture extends FrameLayout {
                 perso.parle(Animations.parle(x.texte));
                 if (!enRoute) theatre.revient();
                 theatre.humeur(humeur, true);
-                theatre.parle(Animations.dureeEcriture(x.texte));
+                // Une réplique est dite par le personnage en pied s'il est là ; sinon, par Pilou.
+                long duree = Animations.dureeEcriture(x.texte);
+                if (!(Animations.parle(x.texte) && theatre.parlePerso(duree))) theatre.parle(duree);
                 enCours = new ScenesAnimees.Ecriture(t, x.texte, () -> {
                     perso.parle(false);
                     theatre.tait();
@@ -931,6 +934,9 @@ final class Lecture extends FrameLayout {
         try {
             Campagnes.Noeud n = campagne == null ? null : campagne.noeud(m.noeud);
             Sprites.Sprite s = n == null ? null : Animations.portrait(Sprites.banque(), campagne.id, n.personnage, n.expression, 2);
+            if (n != null) theatre.personnage(campagne.id, n.personnage);
+            // Dessiné en pied dans la scène : pas de portrait par-dessus (il le cacherait) ; sinon le portrait reste.
+            if (theatre.aPerso()) s = null;
             perso.montrer(s, s == null ? "" : ScenesAnimees.nomPersonnage(n.personnage));
         } catch (RuntimeException x) {
             Journal.noter("lecture : personnage", x);
@@ -1034,7 +1040,8 @@ final class Lecture extends FrameLayout {
             case Attente: attente(false); break;
             case Repos: attente(true); break;
             case Fin:
-                dock.setVisibility(View.GONE);
+                // La carte de fin défile dans le fil ; le retour reste épinglé dans le pied, toujours entier.
+                dock.addView(action("Retour aux aventures", true, null, v -> page.fermerLecture()), Ui.large());
                 fin();
                 break;
             default:
@@ -1294,8 +1301,7 @@ final class Lecture extends FrameLayout {
         c.addView(pixelCarte(("Fins découvertes · " + obtenues.size() + " / " + toutes.size()).toUpperCase(java.util.Locale.FRENCH), cp.pale, false, false), haut(4 * u));
         c.addView(grilleFinsPixel(obtenues, toutes, etat.noeud), haut(2 * u));
 
-        c.addView(action("Retour aux aventures", true, null, v -> page.fermerLecture()), haut(4 * u));
-        c.addView(action("Rejouer depuis le début", false, null, v -> page.rejouer(campagne)), haut(3 * u));
+        c.addView(action("Rejouer depuis le début", false, null, v -> page.rejouer(campagne)), haut(4 * u));
         cadre.addView(c, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         if (etat.issue.equals("bonne") || etat.issue.equals("secrete"))
             cadre.addView(new Aventure.Etincelles(app, new int[]{Vitrine.ORANGE, Vitrine.BLEU_CLAIR, Aventure.CREME, Vitrine.VIOLET}),

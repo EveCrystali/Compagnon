@@ -18,35 +18,35 @@ final class PageJouer extends Page {
     PageJouer(Principale a) {
         super(a);
         Ui.Palette p = Ui.p(a);
-        corps.addView(Ui.titrePage(a, "Jouer"));
-        resume = Ui.sousTitre(a, "");
+        corps.addView(Style.titrePage(a, "Jouer"));
+        resume = Style.sousTitre(a, "");
         corps.addView(resume);
 
         // En vedette : Chasse aux bugs.
-        LinearLayout vedette = Ui.carte(a);
-        vedette.setPadding(0, 0, 0, Ui.dp(a, 16));
-        vedette.setClipToOutline(true);
+        LinearLayout vedette = Style.carte(a);
+        int ev = 2 * Style.u(a);
+        vedette.setPadding(ev, ev, ev + Style.u(a), ev + Style.u(a) + Ui.dp(a, 12));
         apercu = new Apercu(a);
         vedette.addView(apercu, Ui.large());
         LinearLayout infos = Ui.pile(a);
         infos.setPadding(Ui.dp(a, 16), Ui.dp(a, 14), Ui.dp(a, 16), 0);
         LinearLayout ligneTitre = Ui.rangee(a);
-        ligneTitre.addView(Ui.texte(a, "Chasse aux bugs", Ui.T_CARTE, p.texte, true), new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-        ligneTitre.addView(Ui.puceTexte(a, "NOUVEAU", p.orange));
+        ligneTitre.addView(Style.texte(a, "Chasse aux bugs", Ui.T_CARTE, p.texte, true), new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        ligneTitre.addView(Style.puce(a, "NOUVEAU", p.orange));
         infos.addView(ligneTitre, Ui.large());
-        infos.addView(Ui.texte(a, "Des vagues de bugs descendent vers la prod. Glisse pour bouger Pilou, il tire tout seul. "
+        infos.addView(Style.texte(a, "Des vagues de bugs descendent vers la prod. Glisse pour bouger Pilou, il tire tout seul. "
                 + "Café : tir rapide. ✓ Tests : bouclier. Toutes les 5 vagues, le Bug de prod.", Ui.T_DETAIL, p.doux, false));
-        record = Ui.texte(a, "", Ui.T_DETAIL, p.bleu, true);
+        record = Style.texte(a, "", Ui.T_DETAIL, p.bleu, true);
         record.setPadding(0, Ui.dp(a, 8), 0, Ui.dp(a, 12));
         infos.addView(record);
-        boutonChasse = Ui.bouton(a, "Jouer", true, v -> ouvrirChasse());
+        boutonChasse = Style.bouton(a, "Jouer", true, v -> ouvrirChasse());
         infos.addView(boutonChasse, Ui.large());
         vedette.addView(infos, Ui.large());
         vedette.setOnClickListener(v -> ouvrirChasse());
         corps.addView(vedette, Ui.large(a, 6));
 
-        corps.addView(Ui.titreSection(a, "L'atelier de Pilou"));
-        cuisine = Ui.texte(a, "", Ui.T_DETAIL, p.doux, false);
+        corps.addView(Style.titreSection(a, "L'atelier de Pilou"));
+        cuisine = Style.texte(a, "", Ui.T_DETAIL, p.doux, false);
         Object[][] jeux = {
                 {"Pêche", "Touche le bouchon quand il plonge", Ui.PECHE, new int[]{0, p.bleu, p.orange, p.argent, p.orange}, "peche"},
                 {"Cuisine", cuisine, Ui.CUISINE, new int[]{0, p.argent, p.bleu, p.orange}, "cuisine"},
@@ -62,44 +62,44 @@ final class PageJouer extends Page {
                 corps.addView(rang, Ui.large(a, 12));
             }
             Object[] j = jeux[i];
-            LinearLayout c = Ui.carte(a);
+            LinearLayout c = Style.carte(a);
             c.addView(new Ui.Icone(a, (String[]) j[2], (int[]) j[3], 3));
-            TextView t = Ui.texte(a, (String) j[0], Ui.T_CORPS, p.texte, true);
+            TextView t = Style.texte(a, (String) j[0], Ui.T_CORPS, p.texte, true);
             t.setPadding(0, Ui.dp(a, 10), 0, Ui.dp(a, 2));
             c.addView(t);
             if (j[1] instanceof TextView) c.addView((TextView) j[1]);
-            else c.addView(Ui.texte(a, (String) j[1], Ui.T_DETAIL, p.doux, false));
+            else c.addView(Style.texte(a, (String) j[1], Ui.T_DETAIL, p.doux, false));
             String jeu = (String) j[4];
-            c.setBackground(Ui.touchable(a, Ui.arrondi(a, p.surface, 18, p.bord), 18));
+            Style.fond(c, Style.touchable(a, Style.arrondi(a, p.surface, 18, p.bord), 18));
             c.setOnClickListener(v -> {
                 if (jeu.isEmpty()) a.aller(Principale.COLLECTION, true);
                 else if (!Acces.jeuOuvert(jeu, niveau())) verrou(jeu);
                 else a.startActivity(new Intent(a, Atelier.class).putExtra(Atelier.EXTRA_JEU, jeu));
             });
             if (!jeu.isEmpty()) {
-                TextView v = Ui.texte(a, "", Ui.T_ETIQUETTE, p.orange, true);
+                TextView v = Style.texte(a, "", Ui.T_ETIQUETTE, p.orange, true);
                 c.addView(v);
                 verrous.put(jeu, new View[]{c, v});
             }
-            LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+            LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1); // deux cartes d'un rang : même hauteur
             if (i % 2 == 0) l.rightMargin = Ui.dp(a, 6);
             else l.leftMargin = Ui.dp(a, 6);
             rang.addView(c, l);
         }
-        TextView note = Ui.texte(a, "Tout ce que Pilou gagne ici (XP, prises, plats) part vers ton PC, qui garde la progression.", Ui.T_DETAIL, p.doux, false);
+        TextView note = Style.texte(a, "Tout ce que Pilou gagne ici (XP, prises, plats) part vers ton PC, qui garde la progression.", Ui.T_DETAIL, p.doux, false);
         note.setPadding(Ui.dp(a, 4), Ui.dp(a, 6), Ui.dp(a, 4), 0);
         corps.addView(note);
     }
 
     private final java.util.Map<String, View[]> verrous = new java.util.HashMap<>();
-    private android.widget.Button boutonChasse;
+    private TextView boutonChasse;
 
     private int niveau() {
         return Gains.niveau(app, Prefs.etat(app));
     }
 
     private void verrou(String jeu) {
-        android.widget.Toast.makeText(app, Acces.nomJeu(jeu) + " s'ouvre au niveau " + Acces.niveauJeu(jeu), android.widget.Toast.LENGTH_SHORT).show();
+        Style.dire(app, Acces.nomJeu(jeu) + " s'ouvre au niveau " + Acces.niveauJeu(jeu), false);
     }
 
     private void ouvrirChasse() {

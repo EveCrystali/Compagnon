@@ -1,0 +1,27 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-ticket
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 160
+palette: a=#fbf3e4 b=#5a4a40 c=#f69d50 d=#d9c7a3
+images:
+aaaa
+abba
+aaca
+dddd
+---
+.aa.
+abba
+aaca
+.dd.
+---
+..a.
+.ab.
+.ac.
+..d.
+---
+.aa.
+abba
+aaca
+.dd.

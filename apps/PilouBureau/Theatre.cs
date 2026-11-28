@@ -17,6 +17,10 @@ public static class Theatre
     private const int RegardCycle = 7000, RegardDebut = 3000, RegardDuree = 1200;
     private const int VolCycle = 1700, VolPose = 1190, FuiteVol = 1500, FuiteAbsent = 6000;
     public const int ClicsMax = 24;
+    // Le personnage en pied : il entre par la droite, se tient sur `interlocuteur`, sautille quand on le touche.
+    private const int VitessePerso = 48, PersoCycle = 8000, PersoSaut = 5000;
+    private const int EntreePerso = W + 18;
+    private static readonly int[] SautPerso = { 0, -2, -4, -5, -4, -2, 0 };
 
     private static readonly int[] Sinus =
     {
@@ -118,7 +122,8 @@ public static class Theatre
     }
 
     // ---- Événements : entree (A : x de départ, 0 : le bord gauche), depart (A : +1 droite, -1 gauche), humeur
-    // (Humeur), parle (A : fin de la réplique ; une nouvelle réplique remplace la précédente, A = T la coupe), clic
+    // (Humeur), parle (A : fin de la réplique ; une nouvelle réplique remplace la précédente, A = T la coupe), perso
+    // (Humeur : le sprite du personnage en pied, "" : plus personne), parle-perso (A : fin de sa réplique), clic
     // (A, B : point touché en pixels du décor). Toujours ajoutés dans l'ordre du temps.
 
     public readonly record struct Evenement(long T, string Sorte, long A = 0, long B = 0, string Humeur = "");
@@ -129,6 +134,7 @@ public static class Theatre
     {
         public Scene Scene { get; }
         public Dictionary<string, Anim> P { get; }
+        public Dictionary<string, Dictionary<string, Anim>> Anims { get; }
         public Func<string, Sprite?> Sprites { get; }
         private readonly Dictionary<int, Cible> _cibles = new();
         private int _evtsVus = -1;
@@ -138,6 +144,7 @@ public static class Theatre
         {
             Scene = scene;
             P = anims.TryGetValue(IdPilou, out var p) ? p : new();
+            Anims = anims;
             Sprites = sprites;
         }
 
@@ -289,7 +296,7 @@ public static class Theatre
                     }
                     else if (c.Sorte == "sensible" && c.Reaction == "bulle")
                         action = new Action { Sorte = "anim", T0 = e.T, Nom = "surpris", Duree = P["surpris"].Duree + 1200 };
-                    else if (c.Sorte is "sensible" or "acteur")
+                    else if (c.Sorte is "sensible" or "acteur" or "perso")
                         action = new Action { Sorte = "anim", T0 = e.T, Nom = c.X >= x ? "regard-d" : "regard-g", Duree = 900 };
                     break;
                 }
@@ -322,6 +329,82 @@ public static class Theatre
             return new EtatPilou(x, y, P[nom].Premiere, false, true);
         }
         return new EtatPilou(x, y, P[Face(humeur)].Image(t), miroir, true);
+    }
+
+    // ---- Le personnage en pied
+
+    private static int XEntree(Scene sc, long tIn, long t) => (int)Math.Max(sc.Interlocuteur, EntreePerso - (t - tIn) * VitessePerso / 1000);
+
+    private static (string Cur, long TIn, (string Sid, long T, int X)? Sortie, List<(long, long)> Paroles) EtatPerso(Scene sc, IReadOnlyList<Evenement> evts, long t)
+    {
+        string cur = "";
+        long tIn = 0;
+        (string, long, int)? sortie = null;
+        var paroles = new List<(long, long)>();
+        for (int i = 0; i < evts.Count; i++)
+        {
+            var e = evts[i];
+            if (e.T > t) break;
+            if (e.Sorte == "perso")
+            {
+                var sid = e.Humeur ?? "";
+                if (sid == cur) continue;
+                // Remplacé par un autre : il s'efface ; plus personne : il ressort en marchant.
+                sortie = cur != "" && sid == "" ? (cur, e.T, XEntree(sc, tIn, e.T)) : null;
+                cur = sid;
+                tIn = e.T;
+                paroles = new List<(long, long)>();
+            }
+            else if (e.Sorte == "parle-perso")
+            {
+                paroles = new List<(long, long)> { (e.T, e.A) };
+            }
+        }
+        return (cur, tIn, sortie, paroles);
+    }
+
+    // (sprite, image, x, y, miroir) du personnage en pied, ou null. Il regarde vers la place de Pilou.
+    public static Pose? Perso(Contexte cx, IReadOnlyList<Evenement> evts, long t, string niveau = AnimationsCampagne.Completes)
+    {
+        var sc = cx.Scene;
+        var (cur, tIn, sortie, paroles) = EtatPerso(sc, evts, t);
+        bool miroir = sc.Place > sc.Interlocuteur;
+        if (niveau != AnimationsCampagne.Completes)
+        {
+            if (cur == "" || !cx.Anims.TryGetValue(cur, out var ar)) return null;
+            int im = niveau == AnimationsCampagne.Reduites && AnimationsCampagne.Cligne(t + 1700) && ar.TryGetValue("cligne", out var cl) ? cl.Premiere : ar["repos"].Premiere;
+            return new Pose(cur, im, sc.Interlocuteur, Sol(sc, sc.Interlocuteur), miroir);
+        }
+        if (cur == "")
+        {
+            if (sortie is not { } so || !cx.Anims.TryGetValue(so.Sid, out var a0)) return null;
+            long xs = so.X + (t - so.T) * VitessePerso / 1000;
+            if (xs > W + 30) return null;
+            int k0 = (int)(t / 166 % 2);
+            return new Pose(so.Sid, a0["repos"].Image(t), (int)xs, Sol(sc, (int)Math.Min(xs, W)) - k0, false);
+        }
+        if (!cx.Anims.TryGetValue(cur, out var a)) return null;
+        int x = XEntree(sc, tIn, t), y = Sol(sc, x);
+        if (x > sc.Interlocuteur)
+        {
+            int k = (int)(t / 166 % 2);     // il trottine : un pixel de haut une image sur deux
+            return new Pose(cur, a["repos"].Image(t), x, y - k, miroir);
+        }
+        // Un saut quand on le touche, ou de temps en temps.
+        long saut = -1;
+        foreach (var k in Clics(evts))
+        {
+            long tc = evts[k].T;
+            if (tIn <= tc && tc <= t && t - tc < SautPerso.Length * Pas && cx.CibleDe(evts, k).Sorte == "perso") saut = (t - tc) / Pas;
+        }
+        long cy = t / PersoCycle, u = t % PersoCycle;
+        if (saut < 0 && t - tIn > PersoCycle && AnimationsCampagne.Hasard(cy, 21, 7) < 3000 && u >= PersoSaut && u < PersoSaut + SautPerso.Length * Pas)
+            saut = (u - PersoSaut) / Pas;
+        if (saut >= 0) return new Pose(cur, a["repos"].Premiere, x, y + SautPerso[saut], miroir);
+        foreach (var (t0, t1) in paroles)
+            if (t0 <= t && t < t1 && a.TryGetValue("parle", out var pa)) return new Pose(cur, pa.Image(t - t0), x, y, miroir);
+        if (a.TryGetValue("cligne", out var c2) && AnimationsCampagne.Cligne(t + 1700)) return new Pose(cur, c2.Premiere, x, y, miroir);
+        return new Pose(cur, a["repos"].Image(t), x, y, miroir);
     }
 
     // ---- Les acteurs : (x au centre, y la ligne du bas, image ou -1 s'il est absent, miroir)
@@ -434,6 +517,12 @@ public static class Theatre
         var sc = cx.Scene;
         var p = Pilou(cx, avant, tc);
         if (p.Visible && Math.Abs(x - p.X) <= 10 && y >= p.Y - 22 && y <= p.Y + 1) return new Cible("pilou", 0, "", p.X);
+        if (Perso(cx, avant, tc) is { } pp)
+        {
+            var sp = cx.Sprites(pp.Sprite);
+            int w = sp?.W ?? 24, h = sp?.H ?? 32;
+            if (Math.Abs(x - pp.X) <= w / 2 && y > pp.Y - h && y <= pp.Y) return new Cible("perso", 0, "", pp.X);
+        }
         for (int i = 0; i < sc.Acteurs.Count; i++)
         {
             if (sc.Acteurs[i].Comportement is not ("vol" or "traverse")) continue;
@@ -576,6 +665,7 @@ public static class Theatre
         }
         var poses = new List<(int Y, int Z, Pose P)>();
         foreach (var a in Acteurs(cx, evts, t, niveau)) poses.Add((a.Y, 0, a));
+        if (Perso(cx, evts, t, niveau) is { } pp && cx.Sprites(pp.Sprite) is not null) poses.Add((pp.Y, 0, pp));
         var p = Pilou(cx, evts, t, regard, niveau);
         if (p.Visible && avecPilou) poses.Add((p.Y, 1, new Pose(IdPilou, p.Image, p.X, p.Y, p.Miroir)));
         // Tri stable par (pieds, Pilou après les acteurs à égalité), comme la référence.

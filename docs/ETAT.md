@@ -19,8 +19,8 @@ Dernière mise à jour : 28 novembre 2026.
 - **Illustrations** : 46 décors animés en boucle, 69 portraits animés de 29 personnages (champs `personnage` et
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
-- **Dessin fin 2× sur les 589 sprites** : plus aucun n'est agrandi automatiquement (`python3 outils/sprites/fin.py` :
-  « Encore agrandis automatiquement : 0 »).
+- **Dessin fin 2×** : 664 sprites redessinés sur 693, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
+  automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
 - **Traits de personnalité** (docs/TRAITS.md) : vingt traits nés des habitudes (jours du journal), découverts et jamais
@@ -29,8 +29,20 @@ Dernière mise à jour : 28 novembre 2026.
   inconnus en « ? ». Moteur commun `Traits.cs` / `Traits.java`, vecteurs partagés, union entre appareils.
 - **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
   titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
-  (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Le reste des fenêtres reste en police
-  système (chantier suivant).
+  (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Depuis le guide de style : tout
+  l'Accueil, Jouer, la Boutique, la Collection, l'en-tête et la barre du bas du téléphone.
+- **Guide de style** (docs/STYLE.md, 28 novembre 2026) : la main de Pilou écrite et mesurée sur le menu « Sept
+  portes », la bulle et le cadre de l'Aventure : palette nommée (clair, sombre), module, cadre en pixels (bord, biseau,
+  ombre portée, coins en escalier), tailles de police, états des boutons, titres de section, pointillés, puces ;
+  54 icônes pixel maison (`outils/sprites/icones.py`, `ui-*` 12 × 12 et `signe-*` 7 × 7) à la place des signes de
+  clavier. Appliqué au téléphone hors Aventure : en-tête (« Prochaine rangée… » reformulée, plus jamais tronquée),
+  barre du bas (libellés qui ne se touchent plus en grande police), Accueil, Jouer, Boutique, Collection, « Rangées
+  débloquées » (`Style.java`). Captures Robolectric 1078 × 2400 à 440 dpi en clair, sombre et grande police, relues
+  une par une (`CapturesStyleTest`, docs/captures/style/). Finition du même jour : Réglages (cases à cocher du
+  menu, options, curseur, champs), carte « Pilou et moi » et ses traits, ligne de premier lancement, icône du besoin
+  de soin, messages brefs ; `TextesSystemeTest` échoue dès qu'un texte de ces écrans est écrit en police système.
+  **Jamais vu sur un vrai téléphone.** Restent en style système : liste des aventures, épreuves, atelier, chasse aux
+  bugs, installation, bulle flottante ; et toutes les fenêtres du PC hors menu, bulle et Aventure.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
@@ -70,11 +82,15 @@ Dernière mise à jour : 28 novembre 2026.
   ou une campagne finie, en plus du niveau (`"succes"`, `"campagnes"`, PC et Android, validateur) ; la Bibliothèque
   dit ce qui manque. L'aide du niveau en expédition se voit au départ et contre le boss. Testé (PC, CI) ; jamais vu
   sur un vrai téléphone.
-- **Style pixel de l'Aventure** (branche `claude/aventure-style-pixel`) : sous la scène, cadres pixel (bord, coins en
+- **Style pixel de l'Aventure** (PR #103 et #108) : sous la scène, cadres pixel (bord, coins en
   escalier, biseau, ombre, comme le menu « Sept portes ») et police pixel pour le récit, les choix, le bandeau et le lieu,
   sur PC et téléphone ; fil calé sur des bulles entières (plus de ligne tranchée). Captures téléphone sombre, clair,
-  grande police et PC à 100 % relues ; jamais vu sur un vrai téléphone. Reste en police système : les cartes d'attente,
-  d'épreuve, de fin et le menu ⋯ du téléphone.
+  grande police et PC à 100 % relues ; jamais vu sur un vrai téléphone. Seconde passe (#108) : cartes, menu ⋯ et fil « Relire »
+  au même style.
+- **Théâtre de « La Grande Panne »** (branche `claude/theatre-grande-panne`) : 12 scènes avec leurs acteurs (paquets de
+  données, curseur, tickets, bulles, étincelles), les 13 personnages en pied (repris de leurs portraits 1×, Mlle Renvoi
+  derrière un guichet), qui entrent, parlent leurs répliques et sautillent quand on les touche ; moteur commun étendu
+  (référence, C#, Java). Vu sur le PC d'Antoine (essai `personnage`) ; jamais sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
@@ -132,7 +148,7 @@ Dernière mise à jour : 28 novembre 2026.
   | Même cas, titre long (« La nuit des six bateaux ») | Était coupé par le portrait ; il passe maintenant en entier devant lui (vérifié sur les captures de la PR) | Faible | Si le chevauchement gêne sur téléphone : portrait plus petit à 156 dp (choix de design) |
   | `*-grande-panne-*` chapitre 1 (« 13 h 37 ») | Le titre blanc se pose sur l'afficheur pixel « 1337 » du décor : deux textes superposés | Faible | Décor (`assets/`) ou titre décalé : à trancher |
   | Titres de chapitre sur décor clair (prologue, `petit-nuage` « Lâcher ») | Blanc + ombre sur ciel crème ou rose : lisible mais contraste faible | Faible | Proposé : voile sombre derrière le titre |
-  | `jeu-petit-grandepolice-*` barre du bas | « Boutique » et « Collection » se touchent, sans espace | Moyenne | Proposé : libellés réduits ou sur deux lignes en grande police (`Principale`) |
+  | `jeu-petit-grandepolice-*` barre du bas | « Boutique » et « Collection » se touchent, sans espace | Moyenne | Corrigé le 28 novembre (guide de style) : les libellés prennent la plus grande taille qui tient dans leur case |
   | `jeu-petit-grandepolice-*` puce de lieu | Nom tronqué (« Au-dessus de l'Abr… », « Le Bigorneau Qui T… ») | Faible | Accepté (points de suspension), ou `maxWidth` plus large |
   | Toutes, en-tête | « Prochaine rangée : … (enc… » tronqué | Faible | Hors campagnes, à reformuler plus court |
   | `*-epreuve-jeu` | « ÉPREUVE » en police pixel : très petit, accent non visible | Faible | Proposé : police pixel ×2 pour ce titre |
