@@ -69,7 +69,7 @@ arrête d'écrire : **⚙ Réglages ▸ Tenir son journal**.
 | qu'il parle moins | ◎ Il se montre ▸ Il me parle : peu, normalement, jamais |
 | une bulle plus petite | ◎ Il se montre ▸ Bulle : compacte, ou seulement quand on t'attend |
 | moins de mouvement | ◎ Il se montre ▸ Il bouge (promenade, regard, petits jeux, petits gestes) |
-| moins de bruit | ◎ Il se montre ▸ Sons : aucun, discrets, normaux |
+| moins de bruit | ◎ Il se montre ▸ Sons : aucun, discrets, normaux ; Musique (celle de l'Aventure) : aucune, discrète, normale |
 | qu'il disparaisse en plein écran, en présentation, en visio | ◌ Il se cache ▸ (cochés par défaut) |
 | qu'il disparaisse tout de suite | ◌ Se cacher 10 min |
 | l'arrêter | ⏻ Quitter (il revient à la prochaine session) |
