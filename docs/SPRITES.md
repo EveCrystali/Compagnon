@@ -228,6 +228,12 @@ py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans do
 - **Lisibilité** : chaque personnage se vérifie sur fond sombre, fond clair et décor (planche de groupe) ; une matière
   sombre porte un liseré clair côté lumière (le chapeau du Balayeur).
 - **Toise** : une par campagne, sur la planche de groupe, Pilou fin pour repère.
+- **Attitude** : chaque humain a une pose de repos qui le dit d'un coup d'œil (Tudal bras croisés, Basile une main à
+  la loupe, Anselme la lanterne levée, Lison sur la pointe des pieds), et une humeur bouge le corps, pas seulement le
+  visage (la tête tombe, le buste se penche, un poing se lève).
+- **Contrôles** : aucun pixel sans voisin (`Feuille.sans_orphelins`, appliqué à chaque image) ; les acteurs de moins
+  de 16 unités sont posés sur le décor HD le plus clair et le plus sombre
+  ([petits-acteurs.png](maquettes/personnages/petits-acteurs.png)) et portent un pixel sombre d'ancrage.
 
 | Campagne | État | Planche de groupe |
 |---|---|---|

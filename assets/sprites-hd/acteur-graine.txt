@@ -3,19 +3,19 @@ id: acteur-graine
 taille: 13 12
 ancre: 6 11
 duree: 300
-palette: a=#fff8e1 b=#d9c9a0 c=#6b5236 d=#8a6e4b
+palette: a=#fff8e1 b=#d9c9a0 c=#b09a6c d=#6b5236 e=#8a6e4b
 images: 2
 5,a7,
 3,a,b2,a4,
-2,a,2b2,ba3,
-ab,2b,3b,ba,
-2,8b3,
-5,bab5,
+2,a,cb2,ca3,
+ac,bc,bcb,ca,
+2,4c2b2c3,
+5,cac5,
 6,b6,
 6,b6,
 6,b6,
-5,cd6,
-6,d6,
+5,de6,
+6,e6,
 13,
 5.,7.
 5.a7.

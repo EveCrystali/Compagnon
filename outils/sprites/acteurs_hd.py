@@ -44,6 +44,7 @@ def image(nom, i):
     f.ox = f.oy = 0
     if a["cerne"]:
         f.cerner()
+        f.sans_orphelins()
     return f
 
 
@@ -113,7 +114,7 @@ def graine(f, i):
         ang = math.radians(-160 + k * 23.3)
         r = 5.4 if i == 0 else 4.8
         x, y = 6 + r * math.cos(ang) * (1.0 if i == 0 else 1.12), 5.4 + r * math.sin(ang) * 0.86
-        f.trait(6, 5.4, x, y, "#d9c9a0", ""); f.px(x, y, "#fff8e1", "")
+        f.trait(6, 5.4, x, y, "#d9c9a0" if k % 2 else "#b09a6c", ""); f.px(x, y, "#fff8e1", "")
     f.px(6, 5, "#fff8e1", "")
     f.trait(6, 6, 6, 8.4, "#d9c9a0", "")
     f.px(6, 9, "#8a6e4b", ""); f.px(6, 10, "#8a6e4b", ""); f.px(5, 9.6, "#6b5236", "")
@@ -186,7 +187,7 @@ def bulle_marais(f, i):
         ang = k * math.pi / 20
         if i == 2 and k % 3 == 0:
             continue
-        f.px(7 + r * math.cos(ang), 7 + r * math.sin(ang), "#a9c8ee", "")
+        f.px(7 + r * math.cos(ang), 7 + r * math.sin(ang), "#a9c8ee" if math.sin(ang) < 0.2 else "#7098d4", "")
     if i < 2:
         voile(f, lambda px, py: (px - 7) ** 2 + (py - 7) ** 2 <= (r - 1) ** 2, (0, 0, 14, 14), "#d6e6fa", 0.3)
     f.px(7 - r * 0.45, 7 - r * 0.45, "#ffffff", ""); f.px(7 - r * 0.45 + 1, 7 - r * 0.45 - 1, "#ffffff", "")
@@ -204,11 +205,11 @@ def _etoile(f, cx, cy, r, c, coeur, diag=False):
 @acteur("etincelle", 13, 13, 3, 80, cerne=False)
 def etincelle(f, i):
     if i == 0:
-        _etoile(f, 6, 6, 5, ORANGE[2], ORANGE[4]); _etoile(f, 6, 6, 2, ORANGE[3], ORANGE[4], diag=True)
+        _etoile(f, 6, 6, 5, ORANGE[1], ORANGE[2]); _etoile(f, 6, 6, 2, ORANGE[2], ORANGE[4], diag=True)
     elif i == 1:
-        _etoile(f, 6, 6, 2, ORANGE[3], ORANGE[4])
+        _etoile(f, 6, 6, 2, ORANGE[1], ORANGE[3])
     else:
-        _etoile(f, 6, 6, 6, ORANGE[2], ORANGE[3], diag=True)
+        _etoile(f, 6, 6, 6, ORANGE[1], ORANGE[2], diag=True)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -258,7 +259,9 @@ def papillon_nuit(f, i):
             f.poly([(5, 4), (5 + cote * 4.4, 0.4), (5 + cote * 3.4, 4.6)], "#ffe8bf", cerne="")
         else:
             f.poly([(5, 3.4), (5 + cote * 4.6, 3.6), (5 + cote * 3, 6.2)], "#ffe8bf", cerne="")
-    f.px(4.5, 3, "#d9c9a0", ""); f.px(4.5, 4, "#d9c9a0", ""); f.px(4.5, 5, "#b9a98a", "")
+    f.px(4.5, 3, "#8a7a5a", ""); f.px(4.5, 4, "#8a7a5a", ""); f.px(4.5, 5, "#6a5c44", "")
+    for cote in (-1, 1):                                       # le bord de l'aile, plus sombre
+        f.px(4.5 + cote * 3.6, 4.6 if i == 0 else 6.2, "#b89c6c", "")
 
 
 @acteur("crabe", 20, 13, 2, 120)
@@ -320,7 +323,7 @@ def vapeur(f, i):
 
 @acteur("flocon", 9, 9, 4, 300, cerne=False)
 def flocon(f, i):
-    c, p = ("#ffffff", "#9fb4d8") if i % 2 == 0 else ("#dbe6f6", "#ffffff")
+    c, p = ("#ffffff", "#7f96c8") if i % 2 == 0 else ("#dbe6f6", "#9fb4d8")
     diag = i == 2
     for k in range(4):
         ang = k * math.pi / 2 + (math.pi / 4 if diag else 0)
@@ -360,6 +363,7 @@ def poussiere(f, i):
     x, y = ((1, 1), (1, 1), (3, 3), (3, 3))[i]
     c = ("#fff6d6", "#ffd98a", "#ffd98a", "#fff6d6")[i]
     f.px(x, y, c, "")
+    f.px(x + 1, y + 1, "#c8963c", "")                          # son ombre dorée : elle se lit sur un mur clair
     if i in (0, 3):
         for (dx, dy) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             f.px(x + dx, y + dy, "#ffd98a", "")
