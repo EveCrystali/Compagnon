@@ -562,6 +562,50 @@ public sealed class CampagnesVecteurs
             s.SignatureH();
         }
 
+        // 6 bis. Divergence quand le perdant est en retard : au même choix, le PC avance de huit pas, le téléphone d'aucun ;
+        //    une heure plus tard, le rejeu du téléphone n'atteint pas l'étape de la base reçue. La route des décisions dit
+        //    que les histoires se sont séparées : le fil du téléphone repart de la base reçue, sans son choix perdant.
+        s.Cas("divergence-perdant-en-retard");
+        td = T0 + 420 * 86_400_000L;
+        s.Carnet("dr-pc");
+        s.Demarrer("phare-eteint", 99, td, "pc-a", "dr");
+        for (int i = 0; i < 60; i++)
+        {
+            var x = s.EtatH(td)!;
+            if (x.Phase == Campagnes.Phase.Choix && x.Options.Count >= 2 && x.ChapitreNumero >= 2) break;
+            Pas("phare-eteint", "pc-a", ref td);
+        }
+        s.EchangerH(td, "dr-pc", "dr-tel");
+        ed = s.EtatH(td)!;
+        s.Carnet("dr-pc");
+        s.Choisir("phare-eteint", td + 10_000, "pc-a", ed.Options[0].Id);
+        s.Carnet("dr-tel");
+        s.Choisir("phare-eteint", td + 70_000, "tel-b", ed.Options[1].Id);
+        tp = td + 10_000;
+        s.Carnet("dr-pc");
+        for (int i = 0; i < 8; i++) Pas("phare-eteint", "pc-a", ref tp);
+        long tr = Math.Max(tp, td + 70_000) + 3_600_000;
+        s.Carnet("dr-pc");
+        s.EtatH(tr);
+        s.Carnet("dr-tel");
+        s.EtatH(tr);
+        s.Carnet("dr-pc");
+        foreach (var m in s.MessagesH("pc-a", "pc"))
+        {
+            s.Carnet("dr-tel");
+            s.Recevoir("tel-b", tr, m);
+        }
+        s.Carnet("dr-tel");
+        s.EtatH(tr);
+        s.FilH();
+        s.EchangerH(tr + 1000, "dr-tel", "dr-pc");
+        foreach (var nom in new[] { "dr-pc", "dr-tel" })
+        {
+            s.Carnet(nom);
+            s.FilH();
+            s.SignatureH();
+        }
+
         // 7. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
         //    simulateur et jouée par le carnet (choix, épreuves, dés, « vas-y », attentes franchies à l'horloge, échecs,
         //    abandons et reprises, rejeu), états en empreinte, messages et signature en empreinte.

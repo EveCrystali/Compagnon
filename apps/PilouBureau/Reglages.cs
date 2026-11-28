@@ -64,6 +64,8 @@ public sealed class Reglages
     // Animations des campagnes (fenêtre Aventure) : « completes », « reduites » ou « aucune » ; texte écrit d'un coup.
     public string AnimationsCampagnes { get; set; } = "completes";
     public bool TexteInstantane { get; set; }
+    // Sons (docs/SONS.md) : « aucun » (par défaut, en attendant qu'Antoine tranche), « discrets » ou « normaux ».
+    public string Sons { get; set; } = "aucun";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
     // Icône près de l'horloge (zone de notification) : la porte de secours si l'overlay ne répond plus.

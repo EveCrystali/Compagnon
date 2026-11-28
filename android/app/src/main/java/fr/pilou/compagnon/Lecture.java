@@ -83,7 +83,7 @@ final class Lecture extends FrameLayout {
         lp.leftMargin = Ui.dp(a, 10);
         lp.bottomMargin = Ui.dp(a, 2);
         tete.addView(pilou, lp);
-        pilou.setOnClickListener(v -> pilou.jouer("caresse", 1600));
+        pilou.setOnClickListener(v -> { pilou.jouer("caresse", 1600); Sons.jouer(v.getContext(), Sons.CARESSE); });
 
         LinearLayout barreHaut = Ui.rangee(a);
         barreHaut.setGravity(Gravity.TOP);
@@ -116,6 +116,8 @@ final class Lecture extends FrameLayout {
         lpp.rightMargin = Ui.dp(a, 14);
         lpp.bottomMargin = Ui.dp(a, 40);
         tete.addView(perso, lpp);
+        // Sur un petit écran, la scène rapetisse et le portrait remonte jusqu'à la barre : boutons et titre restent devant.
+        barreHaut.bringToFront();
 
         lieu = Ui.puceScene(a, "");
         LayoutParams ll = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
@@ -642,6 +644,7 @@ final class Lecture extends FrameLayout {
         }
         choisie.setBackground(Ui.arrondi(app, p.bleu, 14, 0));
         Ui.vibrer(app, 8);
+        Sons.jouer(app, Sons.CHOIX);
         postDelayed(() -> decider(() -> CampagnesTel.choisir(app, o.id)), Vitrine.anime(app) ? 170 : 0);
     }
 

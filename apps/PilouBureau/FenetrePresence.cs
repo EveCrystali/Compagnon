@@ -281,6 +281,7 @@ public sealed partial class FenetrePilou
             e.Moi.PrenomDemande = true;
             _presenceUrgent = true;
         }
+        Sons.Jouer(choix.Famille.StartsWith("palier-", StringComparison.Ordinal) ? Son.Palier : Son.Mot);
         Dire(choix.Texte, question ? 15000 : 7000);
         if (question)
         {

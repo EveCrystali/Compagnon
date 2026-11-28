@@ -97,6 +97,7 @@ public sealed partial class FenetrePilou : Window
         _devant = devant;
         _demo = demo;
         _reglages = Reglages.Lire(dossier);
+        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         CalculerEchelle();
         WindowStyle = WindowStyle.None;
@@ -278,6 +279,7 @@ public sealed partial class FenetrePilou : Window
             _reglages.Bulle, v => _reglages.Bulle = v));
         menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
             _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
+        menu.Items.Add(Choix("Sons", new[] { ("Aucun", "aucun"), ("Discrets", "discrets"), ("Normaux", "normaux") }, _reglages.Sons, v => { _reglages.Sons = v; Sons.Jouer(Son.Caresse); }));
         var accessoires = new MenuItem { Header = "Accessoire" };
         foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
                      Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
@@ -570,6 +572,8 @@ public sealed partial class FenetrePilou : Window
                 FontSize = 12.5,
                 FontStyle = FontStyles.Italic,
                 Foreground = Couleurs.Texte,
+                // Une phrase plus large que la bulle passe à la ligne au lieu d'être coupée net (vu sur un vrai Windows).
+                TextWrapping = TextWrapping.Wrap,
                 Margin = new Thickness(0, 1, 0, 1),
             });
         if (BlocDiagnostics() is { } diag) _lignes.Children.Add(diag);
@@ -643,6 +647,7 @@ public sealed partial class FenetrePilou : Window
         FontFamily = new FontFamily("Segoe UI"),
         FontSize = 11.5,
         Foreground = Couleurs.Pale,
+        TextTrimming = TextTrimming.CharacterEllipsis,
         Margin = new Thickness(0, 1, 0, 1),
     };
 
@@ -1177,6 +1182,7 @@ public sealed partial class FenetrePilou : Window
     private void Caresser()
     {
         Signaler("caresse", 1);
+        Sons.Jouer(Son.Caresse);
         SoinCaresse();
         Vecu(f => f.Ca++, "caresses");
         _tCaresse = Maintenant;

@@ -39,6 +39,7 @@ public sealed partial class FenetrePilou
         _xpTotal = TotalXp();
         FlotterPo($"+{po} po");
         if (xp > 0) Flotter($"+{xp} xp", 1, new Point(TeteX - 18, TeteY - 30));
+        Sons.Jouer(Son.Succes);
         var coffre = gains.FirstOrDefault(g => g.Coffre);
         var quete = gains.FirstOrDefault(g => !g.Coffre);
         Dire(coffre is not null ? $"✦ {coffre.Texte} !" : $"✦ quête réussie : {quete?.Texte}", 4200);
