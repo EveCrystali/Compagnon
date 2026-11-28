@@ -277,6 +277,27 @@ public class ExpeditionsTests
 
     // ---- Tirage déterministe
 
+    // L'avance de niveau se voit : au départ (+0,6 % par niveau au-dessus du lieu, 6 % au plus) et dans la ligne du boss.
+    [Fact]
+    public void L_aide_du_niveau_se_voit_au_depart_et_contre_le_boss()
+    {
+        var l = Expeditions.Lieux[1];
+        Assert.Equal("", Expeditions.AideAuDepart(l, l.Niveau));
+        Assert.Equal("ton niveau t'aide : +1,8 %", Expeditions.AideAuDepart(l, l.Niveau + 3));
+        Assert.Equal("ton niveau t'aide : +6 % (au plus)", Expeditions.AideAuDepart(l, l.Niveau + 25));
+        int vus = 0;
+        for (int i = 0; i < 200; i++)
+        {
+            var bas = Expeditions.Resoudre(Exp(l, "b" + i, l.Niveau), Array.Empty<string>()).Journal;
+            var haut = Expeditions.Resoudre(Exp(l, "b" + i, l.Niveau + 3), Array.Empty<string>()).Journal;
+            Assert.DoesNotContain(bas, s => s.Contains("mon niveau"));
+            var boss = haut.Where(s => s.StartsWith("★") || s.Contains("(♥ −2)")).ToList();
+            Assert.All(boss, s => Assert.Contains("+1,8 %", s));
+            vus += boss.Count;
+        }
+        Assert.True(vus > 20, $"{vus} combats de boss");
+    }
+
     private static Expedition Exp(Lieu l, string id, int niveau, string arme = "", string talisman = "") => new()
     {
         Id = id, Lieu = l.Id, Debut = T0, Fin = T0 + l.Minutes * 60_000.0, Graine = Expeditions.GraineDe("pc-essai", id), Niveau = niveau,

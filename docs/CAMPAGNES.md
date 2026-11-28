@@ -77,6 +77,15 @@ uniques dans toute la campagne.
 ```
 
 `ton` : `humour`, `mystere`, `emotion` ou `epique`. `niveau` : niveau de Pilou requis pour commencer.
+`succes` et `campagnes` (facultatifs) : d'autres conditions d'ouverture, pour les campagnes ajoutées au fil du temps.
+`"succes": ["plume"]` demande des hauts faits obtenus (identifiants de `Succes.Tous` dans `Metiers.cs`) ;
+`"campagnes": ["prologue"]` demande des campagnes déjà menées à une fin. Huit au plus chacun ; le validateur vérifie
+chaque identifiant. Tant qu'il manque quelque chose, la Bibliothèque (PC et téléphone) montre la campagne fermée,
+avec un signe de forme (▣ sur PC, ◇ sur le téléphone), et dit en une ligne ce qui manque, sans rien dévoiler :
+« s'ouvre au niveau 2, avec le haut fait « Plume » et après « La colline d'en face » » (`Campagnes.Manque`, même
+texte des deux côtés, vecteur `ouverture-haut-fait`). Le démarrage est refusé avec ce même texte. Aucune des quatre
+campagnes actuelles n'a de telle condition ; la campagne d'essai `campagnes-essai/haut-fait` (tests) en a, et
+`--essai=campagne:bibliotheque` la montre sur le PC.
 `decors` (facultatif) : les décors illustrés de la campagne, 6 à 14 ; la `description` sert à l'illustrateur.
 `objets` : les objets de l'histoire, et les objets exclusifs que donnent les fins ; ceux-ci portent
 `"portable": true` (et, si possible, `"emplacement"` : `tete`, `yeux`, `cou`, `dos`, `main`, `pieds` ou

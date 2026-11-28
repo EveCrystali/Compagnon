@@ -76,6 +76,42 @@ public class CapturesCampagnesTest {
         }
     }
 
+    /**
+     * La bibliothèque d'un joueur de niveau 12 sans haut fait, avec la campagne d'essai fermée par « Plume » et par le
+     * prologue : la carte dit ce qu'il manque (préfixe « bibliotheque-haut-fait »), clair et sombre.
+     */
+    @Test
+    public void bibliothequeAvecUneCampagneFermeeParUnHautFait() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        try {
+            dossier = new File("build/captures");
+            dossier.mkdirs();
+            CampagnesTel.EN_PLUS.add(CampagnesTest.hautFait());
+            for (String[] f : new String[][]{FORMATS[0], FORMATS[1]}) {
+                format = f[0];
+                RuntimeEnvironment.setQualifiers(f[1]);
+                essayer("bibliotheque-haut-fait", () -> {
+                    Prefs.de(ctx).edit().clear().commit();
+                    appairer(ctx);
+                    CampagnesTel.prechargerMaintenant();
+                    ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+                    Principale a = ac.get();
+                    a.aller(Principale.AVENTURE, false);
+                    attendre();
+                    PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+                    pa.rafraichir();
+                    attendre();
+                    vue(pa.corps, "bibliotheque-haut-fait");
+                    ac.pause().stop().destroy();
+                });
+            }
+        } catch (Throwable t) {
+            System.out.println("CAPTURES-SAUTEES " + t);
+        } finally {
+            CampagnesTel.EN_PLUS.clear();
+        }
+    }
+
     private void essayer(String nom, Runnable r) {
         try {
             r.run();

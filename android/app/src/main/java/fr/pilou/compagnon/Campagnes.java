@@ -39,7 +39,8 @@ import java.util.TreeSet;
  *                    etat.humeur, etat.chapitre…, etat.progression, etat.issue (fin obtenue), etat.reprise et
  *                    message.reprise (retour à un check-point : ce que Pilou redit n'est pas nouveau)
  *                    carnet.fil : les messages (Pilou et joueur), carnet.nonLus(), Campagnes.marquerLu(carnet)
- *   Décisions      Campagnes.demarrer(carnet, campagne, niveau, maintenant, appareil, biblio, graine, neuf) → null ou le refus
+ *   Ouverture      Campagnes.manque(carnet, campagne, niveau, succès, biblio) → "" ou « s'ouvre au niveau 5 et après … »
+ *   Décisions      Campagnes.demarrer(carnet, campagne, niveau, maintenant, appareil, biblio, graine, neuf[, succès]) → null ou le refus
  *                  Campagnes.choisir(carnet, campagne, maintenant, appareil, idOption)   (phase Choix)
  *                  Campagnes.continuer(…)        « vas-y » : Pilou part (phase Depart)
  *                  Campagnes.epreuve(…, reussie) résultat d'un mini-jeu (phase Epreuve)
@@ -179,6 +180,8 @@ public final class Campagnes {
     public static final class Campagne {
         public String id = "", titre = "", ton = "", accroche = "", duree = "", depart = "";
         public int niveau = 1;
+        /** Conditions d'ouverture en plus du niveau (facultatives) : hauts faits obtenus (ids de Metiers.SUCCES), campagnes finies. */
+        public List<String> succes = new ArrayList<>(), apres = new ArrayList<>();
         public final List<Chapitre> chapitres = new ArrayList<>();
         public final TreeMap<String, Integer> variables = new TreeMap<>();
         public List<Nomme> objets = new ArrayList<>(), souvenirs = new ArrayList<>(), decors = new ArrayList<>();
@@ -398,6 +401,14 @@ public final class Campagnes {
         return fin ? new Prime(po, xp, s(r, "souvenir"), s(r, "titre"), s(r, "objet")) : new Prime(po, xp, "", "", "");
     }
 
+    /** Une liste d'identifiants (au plus 8, sans doublon, dans l'ordre de la fiche). */
+    private static List<String> lireIds(JSONObject o, String cle) {
+        List<String> l = new ArrayList<>();
+        for (Object x : liste(o, cle))
+            if (x instanceof String && idValide((String) x) && !l.contains(x) && l.size() < 8) l.add((String) x);
+        return l;
+    }
+
     private static List<Nomme> lireNommes(JSONObject o, String cle) {
         List<Nomme> r = new ArrayList<>();
         for (Object x : liste(o, cle)) {
@@ -475,6 +486,8 @@ public final class Campagnes {
             c.duree = s(r, "duree");
             c.depart = s(r, "depart");
             c.niveau = Math.max(1, n(r, "niveau", 1));
+            c.succes = lireIds(r, "succes");
+            c.apres = lireIds(r, "campagnes");
             c.objets = lireNommes(r, "objets");
             c.souvenirs = lireNommes(r, "souvenirs");
             c.decors = lireNommes(r, "decors");
@@ -1523,6 +1536,34 @@ public final class Campagnes {
         return b != null && !b.fins.isEmpty();
     }
 
+    /** « a », « a et b », « a, b et c ». */
+    private static String et(List<String> l) {
+        if (l.size() <= 1) return String.join("", l);
+        return String.join(", ", l.subList(0, l.size() - 1)) + " et " + l.get(l.size() - 1);
+    }
+
+    /**
+     * Ce qu'il manque pour ouvrir la campagne, en une ligne sans rien dévoiler de l'histoire ("" : ouverte) : le niveau, les
+     * hauts faits (par leur nom), les campagnes à finir (par leur titre). Même texte que Campagnes.Manque (PC).
+     */
+    public static String manque(Carnet k, Campagne c, int niveau, java.util.Collection<String> succes, Biblio biblio) {
+        List<String> l = new ArrayList<>(), hf = new ArrayList<>(), ca = new ArrayList<>();
+        if (niveau < c.niveau) l.add("au niveau " + c.niveau);
+        for (String id : c.succes)
+            if (!succes.contains(id)) {
+                Metiers.Succes d = Metiers.succes(id);
+                hf.add("« " + (d != null ? d.nom : id) + " »");
+            }
+        if (!hf.isEmpty()) l.add((hf.size() == 1 ? "avec le haut fait " : "avec les hauts faits ") + et(hf));
+        for (String id : c.apres)
+            if (!finie(k, id)) {
+                Campagne x = biblio.charger(id);
+                ca.add("« " + (x != null && !x.titre.isEmpty() ? x.titre : id) + " »");
+            }
+        if (!ca.isEmpty()) l.add("après " + et(ca));
+        return l.isEmpty() ? "" : "s'ouvre " + et(l);
+    }
+
     /** Une partie est-elle en cours (ni finie, ni abandonnée) ? */
     public static boolean enCours(Carnet k, Biblio biblio, long maintenant) {
         if (k.courante == null) return false;
@@ -1542,7 +1583,17 @@ public final class Campagnes {
      * quand même). Une seule campagne à la fois : il faut finir ou abandonner celle en cours. graine null : tirée au hasard.
      */
     public static String demarrer(Carnet k, Campagne c, int niveau, long maintenant, String appareil, Biblio biblio, String graine, boolean neuf) {
+        return demarrer(k, c, niveau, maintenant, appareil, biblio, graine, neuf, null);
+    }
+
+    /** succes : les hauts faits obtenus ; null : l'appelant ne vérifie ni les hauts faits ni les campagnes à finir (essai). */
+    public static String demarrer(Carnet k, Campagne c, int niveau, long maintenant, String appareil, Biblio biblio, String graine, boolean neuf,
+                                  java.util.Collection<String> succes) {
         if (niveau < c.niveau) return "niveau " + c.niveau + " requis";
+        if (succes != null) {
+            String m = manque(k, c, niveau, succes, biblio);
+            if (!m.isEmpty()) return m;
+        }
         if (c.noeud(c.depart) == null) return "campagne illisible";
         actualiser(k, biblio, maintenant);
         if (enCours(k, biblio, maintenant)) return "une campagne est déjà en cours";

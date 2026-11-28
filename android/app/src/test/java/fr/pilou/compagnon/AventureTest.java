@@ -52,6 +52,7 @@ public class AventureTest {
 
     @After
     public void ranger() {
+        CampagnesTel.EN_PLUS.clear();
         CampagnesTel.horloge = System::currentTimeMillis;
         CampagnesTel.graineEssai = null;
     }
@@ -218,6 +219,20 @@ public class AventureTest {
     private static boolean contient(View racine, String morceau) {
         for (String s : textes(racine)) if (s.contains(morceau)) return true;
         return false;
+    }
+
+    /** Une campagne fermée par un haut fait : la carte dit ce qu'il manque, en une ligne, avec le signe ◇ ; pas de bouton actif. */
+    @Test
+    public void uneCampagneFermeeParUnHautFaitDitCeQuIlManque() {
+        CampagnesTel.EN_PLUS.add(CampagnesTest.hautFait());
+        ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = ac.get();
+        a.aller(Principale.AVENTURE, false);
+        idle(200);
+        PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+        assertTrue(textes(pa).toString(), contient(pa, "S'ouvre au niveau 2, avec le haut fait « Plume » et après « La colline d'en face »."));
+        assertTrue(contient(pa, "◇  Niveau 2"));
+        ac.pause().stop().destroy();
     }
 
     @Test

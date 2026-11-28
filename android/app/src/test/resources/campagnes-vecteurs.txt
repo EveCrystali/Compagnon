@@ -837,6 +837,20 @@ signatureh 7902e1fb1ae11001
 carnet dr-tel
 filh 6 5 c60ee6cd273452d0
 signatureh 7902e1fb1ae11001
+cas ouverture-haut-fait
+carnet ov
+ouverture prologue 1 - ouverte
+ouverture prologue 2 marathon ouverte
+ouverture essai 1 - s'ouvre au niveau 3
+ouverture essai 2 marathon s'ouvre au niveau 3
+ouverture essai-haut-fait 1 - s'ouvre au niveau 2, avec le haut fait « Plume » et après « La colline d'en face »
+ouverture essai-haut-fait 2 marathon s'ouvre avec le haut fait « Plume » et après « La colline d'en face »
+ouverture essai-haut-fait 2 plume s'ouvre après « La colline d'en face »
+ouverture essai-haut-fait 1 plume,marathon s'ouvre au niveau 2 et après « La colline d'en face »
+recevoir ov 1790000000000 1 {"v":1,"a":"pc-z","k":"pc","h":{"prologue":[1,1,{"XYa4":1790000000},""]}}
+ouverture essai-haut-fait 1 - s'ouvre au niveau 2 et avec le haut fait « Plume »
+ouverture essai-haut-fait 2 plume ouverte
+ouverture essai-haut-fait 5 plume,gamer ouverte
 # parcours complets : prologue
 cas parcours-prologue-m12
 carnet j-prologue-m12

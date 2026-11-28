@@ -1,0 +1,32 @@
+{
+  "v": 1,
+  "id": "essai-haut-fait",
+  "titre": "La porte du haut fait",
+  "ton": "epique",
+  "accroche": "La campagne d'essai, fermée par un haut fait et une autre campagne. Elle ne sert qu'aux tests et aux captures (PC et Android).",
+  "niveau": 2,
+  "succes": ["plume"],
+  "campagnes": ["prologue"],
+  "duree": "≈ 2 heures",
+  "court": true,
+  "depart": "a-debut",
+  "chapitres": [
+    { "id": "a", "titre": "Le carrefour", "fichier": "chapitre-01.json" },
+    { "id": "b", "titre": "La maison", "fichier": "chapitre-02.json" }
+  ],
+  "variables": { "courage": 1, "ruse": 0 },
+  "objets": [
+    { "id": "cle", "nom": "Clé" },
+    { "id": "pain", "nom": "Pain" },
+    { "id": "cape-d-essai", "nom": "Cape d'essai", "portable": true, "emplacement": "dos" },
+    { "id": "caillou-d-essai", "nom": "Caillou d'essai", "portable": true }
+  ],
+  "souvenirs": [
+    { "id": "s-bon", "nom": "La porte ouverte", "texte": "Tu es entré par la porte." },
+    { "id": "s-secret", "nom": "Le passage", "texte": "Tu as trouvé le passage." }
+  ],
+  "decors": [
+    { "id": "d-un", "nom": "Le carrefour", "description": "un carrefour de terre battue, quatre poteaux" },
+    { "id": "d-deux", "nom": "La maison", "description": "une maison de pierre, une porte, une fenêtre" }
+  ]
+}
