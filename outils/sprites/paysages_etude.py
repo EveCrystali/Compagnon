@@ -6,6 +6,8 @@ peinte par le code dans trois définitions, pour qu'Antoine tranche à l'œil.
     A  192 ×  80 unités, 5 px par unité   la définition d'aujourd'hui, enrichie
     B  320 × 160 unités, 3 px par unité   haute définition, grand paysage
     C  480 × 240 unités, 2 px par unité   très haute définition
+    D  384 × 160 unités, 3 px par unité   exactement le double de l'actuel (même rapport), 1152 px de large :
+                                          plus large que l'écran, donc cadrée sur téléphone
 
 Rien n'est importé ni dessiné à la main dans un logiciel : chaque pixel sort des fonctions ci-dessous. Le même
 tableau est décrit une seule fois, en « unités du monde » (celles du décor actuel : 192 de large, le sol à y = 80) ;
@@ -30,7 +32,7 @@ from PIL import Image, ImageDraw
 ICI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ICI)
 
-FORMATS = {"A": (192, 80, 5), "B": (320, 160, 3), "C": (480, 240, 2)}
+FORMATS = {"A": (192, 80, 5), "B": (320, 160, 3), "C": (480, 240, 2), "D": (384, 160, 3)}
 IMAGES, DUREE = 8, 200            # la boucle d'ambiance : 8 images à 5 images par seconde
 MARGE = 6                         # unités peintes hors champ de chaque côté, pour la parallaxe
 SOLEIL = (112.0, 37.0)
@@ -1084,13 +1086,18 @@ def personnages(fmt):
     """(Pilou, personnage) à l'unité de la définition : images RGBA, un pixel par unité.
     A : le mini-Pilou de scène et le personnage en pied d'aujourd'hui (dessinés à l'unité de 5 px).
     B : le Pilou du bureau 48 × 56 et le portrait fin 64 × 64 du personnage, déjà dessinés.
-    C : le Pilou fin 96 × 112 ; le personnage n'existe pas à cette unité (on montre le portrait fin, trop petit)."""
+    C : le Pilou fin 96 × 112 ; le personnage n'existe pas à cette unité (on montre le portrait fin, trop petit).
+    D : tout ce qui existe à l'unité d'aujourd'hui, doublé (agrandissement automatique ou dessin fin déjà fait)."""
     import planches
     import rendu
     fins = rendu._dossier("sprites2x")
     if fmt == "A":
         pilou = planches.sprite_image(fins["scene-pilou"], 1, 0)
         perso = planches.sprite_image(fins["pied-grande-panne-grumeau"], 1, 0)
+    elif fmt == "D":
+        # Le double exact : le mini-Pilou de scène agrandi par la règle commune (MMPX), le portrait fin du personnage.
+        pilou = planches.sprite_image(rendu.agrandir(fins["scene-pilou"]), 1, 0)
+        perso = planches.sprite_image(fins["portrait-grande-panne-grumeau"], 1, 0)
     else:
         B = rendu.banque()
         g = rendu.rendre(rendu.Pose(expr="joie"), B, rendu.teintes(), rendu.tenues(), 1 if fmt == "B" else 2)
@@ -1118,6 +1125,15 @@ def montage_pc(fmt, idx):
     g = Image.open(os.path.join(GABARITS, "pc-fenetre-100.png")).convert("RGB")
     sc = scene(fmt, idx)
     x0, y0, bas = 22, 136, 532
+    large = sc.width - 960
+    if large > 0:
+        # Fenêtre élargie : on étire le gabarit dans une colonne vide (500 au-dessus de la scène, 700 dans la boîte).
+        g2 = Image.new("RGB", (g.width + large, g.height))
+        for (ya, yb, col) in ((0, bas, 500), (bas, g.height, 700)):
+            g2.paste(g.crop((0, ya, col, yb)), (0, ya))
+            g2.paste(g.crop((col, ya, col + 1, yb)).resize((large, yb - ya)), (col, ya))
+            g2.paste(g.crop((col, ya, g.width, yb)), (col + large, ya))
+        g = g2
     plus = sc.height - 400
     out = Image.new("RGB", (g.width, g.height + plus))
     out.paste(g.crop((0, 0, g.width, y0)), (0, 0))
@@ -1126,7 +1142,8 @@ def montage_pc(fmt, idx):
     out.paste(sc, (x0, y0))
     out.paste(g.crop((0, bas, g.width, g.height)), (0, bas + plus))
     # Étiquette « LA MARE » (coins en escalier de 5 px) et boutons « Relire », « De côté… ».
-    for (a, b, c2, d, coin) in ((24, 144, 137, 192, 5), (824, 144, 892, 173, 2), (897, 144, 980, 173, 2)):
+    for (a, b, c2, d, coin) in ((24, 144, 137, 192, 5), (824 + max(0, large), 144, 892 + max(0, large), 173, 2),
+                                (897 + max(0, large), 144, 980 + max(0, large), 173, 2)):
         bout = g.crop((a, b, c2, d)).convert("RGBA")
         px = bout.load()
         for (cx, cy) in ((0, 0), (bout.width - coin, 0), (0, bout.height - coin), (bout.width - coin, bout.height - coin)):
@@ -1149,6 +1166,9 @@ def montage_telephone(fmt, idx):
     out = Image.new("RGB", (1078, 2400), t.getpixel((5, t.height - 3)))
     out.paste(t, (0, 0))
     sc = scene(fmt, idx)
+    if sc.width > 1078:                                                 # cadrage : on perd (largeur - 1078) / 2 par bord
+        g0 = (sc.width - 1078) // 2
+        sc = sc.crop((g0, 0, g0 + 1078, sc.height))
     haut = int(round(332 * r))
     libre = int(round(1240 * r))                                        # le fil commence plus bas
     d = ImageDraw.Draw(out)
@@ -1206,7 +1226,7 @@ def actuel(dossier):
 def main():
     dossier = sys.argv[1] if len(sys.argv) > 1 else os.path.normpath(os.path.join(ICI, "..", "..", "docs", "maquettes",
                                                                                  "paysages"))
-    seuls = sys.argv[2] if len(sys.argv) > 2 else "ABC"
+    seuls = sys.argv[2] if len(sys.argv) > 2 else "ABCD"
     os.makedirs(dossier, exist_ok=True)
     mesures = {}
     for fmt in seuls:
