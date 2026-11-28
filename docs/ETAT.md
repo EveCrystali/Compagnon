@@ -27,6 +27,10 @@ Dernière mise à jour : 27 novembre 2026.
   titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
   (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Le reste des fenêtres reste en police
   système (chantier suivant).
+- **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
+  poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
+  d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
+  comme après) ; jamais vu sur un vrai téléphone.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,

@@ -223,6 +223,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("tenue:")) _essaiTenue = nom[6..];
         // --essai=humeur:joie (peur, triste, surpris, determine, fatigue, tendre, colere, malice, neutre).
         if (nom.StartsWith("humeur:")) _essaiHumeur = nom[7..];
+        // --essai=vie[:completes|reduites|aucune][:heure] : saut, marche et chute en boucle (VieFenetre.cs).
+        if (nom == "vie" || nom.StartsWith("vie:")) EssaiVie(nom);
         // --essai=dessin:origine : le rendu d'origine (grille 48 × 56) ; dessin:fin : le dessin fin.
         if (nom.StartsWith("dessin:"))
         {

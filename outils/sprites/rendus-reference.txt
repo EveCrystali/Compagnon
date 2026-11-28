@@ -90,3 +90,20 @@ expr=determine t=300 objets=casquette-gardien,sifflet-lison,corne-de-poche,cire-
 expr=joie t=500 stade=3 objets=bonnet-de-givre,echarpe-de-veille,caillou-du-col,baluchon-cabosse | f98d3a79e06ec174bba593cfbe1423b59c7fdbca8253676fad0cfd7ccd55c07c
 expr=malice t=800 stade=4 objets=eteignoir,sablier-de-poche,galet-machoire | ff19211d017bb8d084eb566386f1accc9d4e3138f1cb2417e7e2a5ea4328c169
 expr=tendre t=200 stade=1 objets=casserole-chapeau,plume-de-girouette | eb132f7ad1a86e7740c6be53c8230c290f5cb69e8f75556613246c31869780c3
+expr=repos t=0 saut=1.2 etire=0.45 antenne=-0.36 vie=1 | 685497350e3c499bd499dec55a8f76412656bf22ccee5e6f955cca939695416d
+expr=repos t=0 saut=3 vie=1 | 1ad9373e75dd171924284d6d6c51cdb0844180e638308124a33d45d30faac0b8
+expr=repos t=0 etire=-1 antenne=0.72 atterri=40 vie=1 | ba4fc43d7d7c8c683bbf3e13ad6eaf93ee1ba466fee03bab6a1d16a336866e2d
+expr=repos t=0 etire=0.38 antenne=-0.3 atterri=130 vie=1 stade=1 | d18244007c849da94ef37e0d01e8b453176f1ecf5c1c187e61fdecb5fd909359
+expr=joie t=0 etire=-0.6 atterri=200 vie=1 stade=3 | ee09c6efd1f1f6189a317badc84d6b4eba8e1825c69c25495de239ba3d5052a6
+expr=fete t=250 saut=2.1 etire=0.3 antenne=0.2 vie=1 stade=4 | 425efb1cb0006bf878ee78e8b84917d02b16d14246e20abd537d2267ffba8405
+expr=repos t=170 marche=1 regard=1 vie=1 | 412a60fd64613081d584227b13d1b4b33ea779dbeb8c516875efb1f2775964f7
+expr=repos t=250 marche=1 regard=1 vie=1 | eb5c06b441d470b64711b7e79409f861de7bcc92ea542d4d59a33f5c6baff882
+expr=repos t=500 marche=1 regard=-1 vie=1 | 50c9d909524b872f7c39fdc85cdb2e1987d36f8f281fd3754c8b9a3cb5e6f66b
+expr=repos t=170 marche=1 regard=1 vie=1 stade=1 | 4ebf56c21e26f58644f6a4eed1c6b39e7bfad5fbd50e73fcd50debbe4a9c66b0
+expr=repos t=90 marche=1 course=1 regard=-1 vie=1 | 5a8ba4e9e3508b88f03cc0012d23f36cbdc30465537a2d765bab7658ef43e06c
+expr=repos t=170 marche=1 regard=1 assis=1 vie=1 | 6c66c820c8b6208ec385787dfdf7dff862e672ec313d6727ed12e02af822a78f
+expr=repos t=0 lumiere=matin | a3923b671851cb24fbc7d2920419214b7e8d268363269c8f806ab610dbff04cb
+expr=repos t=0 lumiere=soir couleur=lavande | 46a77b37e70640a47dd388ae50ae16e507ad847edc1a0b5c2d1709fb18d18ce7
+expr=dort t=2100 lumiere=nuit stade=3 | b2fa34aba3bf2f4823b62df3790564c87f7f84330d9c8409bc78a34003e01247
+expr=inquiet t=320 lumiere=soir | cd0fe87878b85ed026800300e0892fc1310f25e619dda00275da005eb3acc272
+expr=repos t=0 lumiere=nuit couleur=sable objets=chapeau-explorateur | be96281d0de107634bbe36ac98844e2398ad5060e04ff0965ac8ca37f6baef9c

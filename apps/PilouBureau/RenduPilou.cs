@@ -21,6 +21,12 @@ public sealed class Allure
     public int Stade = 2;                    // 1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral
     public double Evolution;                 // 0..1 : animation d'évolution vers Stade (0 ou 1 : aucune)
     public string Reaction = "";             // « sueur » : gouttes sur les tempes
+    // Vie du personnage (Vie.cs) : étirement du corps (−1 écrasé … 1 étiré), retard de l'antenne (−1 … 1, positif :
+    // pointe plus haute), ms depuis l'atterrissage (−1 : aucun), lumière du moment (« matin », « soir », « nuit »
+    // ou "") ; Vie : animations complètes (ombre tramée en l'air, bouffées de poussière).
+    public double Etire, Antenne, Atterri = -1;
+    public string Lumiere = "";
+    public bool Vie;
 
     public Allure Copie() => (Allure)MemberwiseClone();
 }
@@ -276,6 +282,7 @@ public static class RenduPilou
 
         int st = a.Stade is >= 1 and <= 4 ? a.Stade : 2;
         var te = Teinte(a, b);
+        if (a.Lumiere != "" && a.Expr != "inquiet") te = PilouBureau.Vie.Eclairer(te, a.Lumiere); // l'alerte garde sa couleur franche
         double t = a.T;
         double periode = a.Expr == "dort" ? 4200 : a.Expr is "concentre" or "attente" ? 1600 : 2600;
         double bb = Math.Sin(2 * Math.PI * t / periode);
@@ -284,6 +291,8 @@ public static class RenduPilou
         if (a.Expr == "dort") { rx += 0.6; ry -= 0.9; }
         rx += 1.2 * a.Chute + 0.7 * a.Assis - 0.8 * a.Suspendu;
         ry -= 1.4 * a.Chute + 0.8 * a.Assis - 1.1 * a.Suspendu;
+        rx -= 0.9 * a.Etire;
+        ry += 1.1 * a.Etire;
         rx *= StadeX(st);
         ry *= StadeY(st);
         double cadence = a.Course ? 70 : 160;
@@ -319,7 +328,7 @@ public static class RenduPilou
         double vitesse = a.Salue || a.Expr == "fete" ? 90 : a.Expr == "concentre" ? 300 : 650;
         int balance = a.Expr == "dort" ? 0 : Math.Clamp((int)Math.Round(Math.Sin(t / vitesse) * 0.9 * ec, MidpointRounding.ToEven)
             + (a.Marche ? -Math.Sign(a.Regard) * ec : 0), -ec, ec);
-        int hautAntenne = (st == 1 ? 3 : 6) * ec;
+        int hautAntenne = Math.Max(2 * ec, (st == 1 ? 3 : 6) * ec + Rond(a.Antenne * 2 * ec));
         geo = new Geometrie(cx / ec, cy / ec, rx / ec, ry / ec, (int)Math.Floor(sommet / (double)ec), (int)Math.Floor(ey / (double)ec),
             (int)Math.Floor(pied / (double)ec));
 
@@ -401,12 +410,15 @@ public static class RenduPilou
         if (a.Suspendu < 0.1)
         {
             int demi = (int)(Math.Max(6, 15 * StadeX(st) - a.Saut * 2.8) * ec);
+            // Vie : en l'air, l'ombre s'éclaircit en trame (d'abord le bas de l'ombre, puis toute l'ombre).
+            int trame = a.Vie ? a.Saut >= 2.4 ? 2 : a.Saut >= 1.0 ? 1 : 0 : 0;
+            bool Ombre(int x, int j, bool bas) => trame == 0 || (trame == 1 && !bas) || (x + j) % 2 == 0;
             if (ec == 1)
                 for (int x = C - demi; x < C + demi; x++)
                 {
                     if (x < 0 || x >= W) continue;
-                    if (g[52 * W + x] == 0) g[52 * W + x] = OmbreSol;
-                    if (Math.Abs(x - C + 0.5) < demi - 3 && g[53 * W + x] == 0) g[53 * W + x] = OmbreSol;
+                    if (g[52 * W + x] == 0 && Ombre(x, 0, false)) g[52 * W + x] = OmbreSol;
+                    if (Math.Abs(x - C + 0.5) < demi - 3 && g[53 * W + x] == 0 && Ombre(x, 1, true)) g[53 * W + x] = OmbreSol;
                 }
             else
                 // Quatre lignes fines, bouts arrondis.
@@ -414,7 +426,7 @@ public static class RenduPilou
                 {
                     int retrait = OmbreFine[j];
                     for (int x = c0 - demi + retrait; x < c0 + demi - retrait; x++)
-                        if (x >= 0 && x < w && g[(104 + j) * w + x] == 0) g[(104 + j) * w + x] = OmbreSol;
+                        if (x >= 0 && x < w && g[(104 + j) * w + x] == 0 && Ombre(x, j, j >= 2)) g[(104 + j) * w + x] = OmbreSol;
                 }
         }
 
@@ -677,6 +689,36 @@ public static class RenduPilou
                 }
                 else Motif(x - 2, y - 2, SueurFine, ch => ch == 'g' ? Goutte : ch == 'c' ? GoutteClaire : ch == 'w' ? Blanc : 0);
             }
+
+        // Vie : bouffées de poussière au ras du sol (le pied arrière en marchant, les deux côtés à l'atterrissage), en
+        // blocs d'un pixel de la grille 1× ; posées seulement sur le vide ou l'ombre, jamais sur Pilou.
+        if (a.Vie && a.Suspendu < 0.1 && a.Assis <= 0.5)
+        {
+            int pg = (st == 1 ? C - 8 : C - 10) * ec, pd = (st == 1 ? C + 3 : C + 4) * ec, largeur = (st == 1 ? 5 : 6) * ec;
+            void Bouffee(int x0, int sg, (int Recul, int Haut, bool Plein)[] points)
+            {
+                foreach (var (recul, haut, plein) in points)
+                    for (int j = 0; j < ec; j++)
+                    for (int i = 0; i < ec; i++)
+                    {
+                        int x = x0 + sg * recul * ec + i, y = pied + ec + haut * ec + j;
+                        if (x >= 0 && x < w && y >= 0 && y < h && (g[y * w + x] == 0 || g[y * w + x] == OmbreSol))
+                            g[y * w + x] = plein ? PilouBureau.Vie.Poussiere : PilouBureau.Vie.PoussiereLegere;
+                    }
+            }
+            if (a.Marche && !a.Course)
+            {
+                int sens = a.Regard >= 0 ? 1 : -1;
+                int ib = PilouBureau.Vie.Bouffee((long)Math.Floor(t), (int)cadence, sens);
+                if (ib >= 0) Bouffee(sens > 0 ? pg + dx - ec : pd + dx + largeur, -sens, PilouBureau.Vie.Bouffees[ib]);
+            }
+            int ia = a.Atterri >= 0 ? PilouBureau.Vie.BouffeeAtterrissage((long)Math.Floor(a.Atterri)) : -1;
+            if (ia >= 0)
+            {
+                Bouffee(pg + dx - ec, -1, PilouBureau.Vie.BouffeesAtterrissage[ia]);
+                Bouffee(pd + dx + largeur, 1, PilouBureau.Vie.BouffeesAtterrissage[ia]);
+            }
+        }
         return g;
     }
 
