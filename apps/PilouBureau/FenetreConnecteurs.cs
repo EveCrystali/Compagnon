@@ -17,7 +17,8 @@ public sealed partial class FenetrePilou
     // Au chargement : registre (connecteurs intégrés + météo), API locale.
     private void DemarrerConnecteurs()
     {
-        _registre = new Registre(_reglages.Connecteurs, new CoffreDpapi(_dossier), () => _reglages.Ecrire(_dossier));
+        // En essai, un coffre en mémoire : aucun secret réel n'est lu.
+        _registre = new Registre(_reglages.Connecteurs, _essai ? new CoffreMemoire() : new CoffreDpapi(_dossier), () => _reglages.Ecrire(_dossier));
         foreach (var c in ConnecteursIntegres()) _registre.Ajouter(c);
         _registre.Ajouter(new ConnecteurMeteo());
         // Deuxième vague : désactivés tant que tu ne les coches pas.
@@ -62,7 +63,7 @@ public sealed partial class FenetrePilou
     {
         _api?.Dispose();
         _api = null;
-        if (_registre is null || !_reglages.Connecteurs.Api) return;
+        if (_registre is null || !_reglages.Connecteurs.Api || _essai) return;
         _api = new ApiLocale(() => _registre.JetonApi(), () => _etatApi, e => _registre.Recevoir(e), diagnostics: RecevoirDiagnostics);
         if (!_api.Demarrer(_reglages.Connecteurs.PortApi)) _registre.Noter("api", _api.Erreur ?? "API indisponible");
         else _registre.Noter("api", $"API locale sur http://127.0.0.1:{_api.Port}/");
@@ -71,7 +72,7 @@ public sealed partial class FenetrePilou
     // Appelé à chaque lecture (300 ms) : relevés dus, météo vécue, état servi par l'API.
     private void BattreConnecteurs(IReadOnlyList<EtatSession> vivantes, double epoque)
     {
-        if (_registre is null) return;
+        if (_registre is null || _essai) return;         // un essai n'interroge aucun service
         if (Maintenant - _connecteursBattus >= 1000)
         {
             _connecteursBattus = Maintenant;

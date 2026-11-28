@@ -172,5 +172,9 @@ acteurs qui réagissent (vol, traverse, rond…).
 | Acteur HD | `assets/sprites-hd/acteur-<nom>.txt` | session « personnages HD » |
 | Pilou | rendu fin du bureau, pas de fichier | — |
 
+**Relire un décor repeint** : `python3 outils/sprites/planche_scenes_hd.py [sortie] [campagne…]` écrit
+`hd-<campagne>.png`, une image par scène (Pilou, le personnage qui y parle, l'accessoire clé en orange, le panneau
+des choix en bleu) ; à vérifier : pieds sur le sol, personnage ni coupé ni caché, clé dégagée. Sortie par défaut : `planches-hd/`.
+
 Un seul lecteur (le décodeur compact, § 3) pour les décors, les personnages et les acteurs, des deux côtés, sans
 bibliothèque.
