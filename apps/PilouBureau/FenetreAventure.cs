@@ -263,7 +263,7 @@ internal sealed class FenetreAventure : Window
         racine.Children.Add(_bandeau);
         var tete = new Grid { Margin = new Thickness(0, 10, 0, 10) };
         var titre = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
-        titre.Children.Add(new Pixels(Police.Texte("AVENTURE"), new Brush?[] { null, Bandeau.OrangePo }, Gel("#6a5acd"), 5) { VerticalAlignment = VerticalAlignment.Center });
+        titre.Children.Add(new LogoPixel("AVENTURE", Bandeau.OrangePo) { VerticalAlignment = VerticalAlignment.Center });
         titre.Children.Add(new TextBlock
         {
             Text = "Pilou t'écrit, tu choisis, il part pour de vrai.", Foreground = Bandeau.Argent, FontSize = 12, FontFamily = new FontFamily("Segoe UI"),

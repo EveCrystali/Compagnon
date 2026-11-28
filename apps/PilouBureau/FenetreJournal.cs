@@ -54,7 +54,7 @@ internal sealed class FenetreJournal : Window
 
         var racine = new DockPanel { Margin = new Thickness(18, 12, 18, 14) };
         var tete = new StackPanel { Margin = new Thickness(0, 0, 0, 10) };
-        var enseigne = StylePixel.Enseigne("JOURNAL", Bandeau.OrangePo, Bandeau.Violet, 4);
+        var enseigne = StylePixel.Logo("JOURNAL");
         enseigne.HorizontalAlignment = HorizontalAlignment.Center;
         enseigne.Margin = new Thickness(0, 0, 0, 4);
         tete.Children.Add(enseigne);

@@ -65,7 +65,7 @@ internal sealed class FenetreTraits : Window
         UseLayoutRounding = true;
 
         var racine = new StackPanel { Margin = new Thickness(20, 12, 20, 14) };
-        var enseigne = StylePixel.Enseigne("PILOU ET MOI", Bandeau.OrangePo, Bandeau.Violet, 4);
+        var enseigne = StylePixel.Logo("PILOU ET MOI");
         enseigne.HorizontalAlignment = HorizontalAlignment.Center;
         enseigne.Margin = new Thickness(0, 0, 0, 6);
         racine.Children.Add(enseigne);
