@@ -177,6 +177,7 @@ final class PageReglages extends Page {
         c.addView(choixSons(a));
         c.addView(Style.separateur(a));
         c.addView(choixMusique(a));
+        c.addView(essaiSon(a));
         c.addView(Style.separateur(a));
         Style.interrupteur(a, c, "Sons de Chasse aux bugs", "Petits bruits rétro pendant la partie", Prefs.son(a),
                 oui -> Prefs.de(a).edit().putBoolean("son", oui).apply());
@@ -265,7 +266,10 @@ final class PageReglages extends Page {
                 + "\ngains en attente : " + Gains.enAttente(app) + " xp"
                 + "\ncampagnes : " + CampagnesTel.diagnostic(app)
                 + "\nflottant : " + Prefs.bulle(app) + " · permission " + Settings.canDrawOverlays(app) + " · caché " + Veille.cache(app)
-                + "\nnotifications : " + app.notificationsPermises();
+                + "\nnotifications : " + app.notificationsPermises()
+                + "\nsons : " + Sons.niveau(app) + " · musique " + Musique.niveau(app) + " · geste "
+                + (Sons.empechement(app, false).isEmpty() ? "possible" : Sons.empechement(app, false))
+                + (Journal.sons(app).isEmpty() ? "" : "\n" + Journal.sons(app));
     }
 
     @Override
@@ -294,15 +298,43 @@ final class PageReglages extends Page {
 
     // Sons de Pilou (docs/SONS.md) : aucun, discrets, normaux (par défaut) ; le choix fait entendre le « pouic ».
     private static LinearLayout choixSons(Principale a) {
-        return choixNiveau(a, "Sons de Pilou", "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux",
+        return choixNiveau(a, "Sons de Pilou", "Quelques notes quand tu le touches ou choisis ; au volume multimédia, jamais en appel",
                 "sons", Sons.NIVEAUX, new String[]{"Aucun", "Discrets", "Normaux"}, () -> Sons.niveau(a),
                 () -> Sons.jouer(a, Sons.CARESSE));
     }
 
     // Musique et ambiances de l'Aventure (docs/SONS.md) : aucune, discrète (par défaut), normale.
     private static LinearLayout choixMusique(Principale a) {
-        return choixNiveau(a, "Musique de l'Aventure", "Une boucle très basse pendant la lecture d'une campagne, et le bruit du lieu",
+        return choixNiveau(a, "Musique de l'Aventure", "Une boucle très basse pendant la lecture d'une campagne, et le bruit du lieu ; au volume multimédia",
                 "musique", Musique.NIVEAUX, new String[]{"Aucune", "Discrète", "Normale"}, () -> Musique.niveau(a), () -> { });
+    }
+
+    /**
+     * « Essayer » : un son tout de suite, au volume multimédia ; si rien ne peut sortir, la raison en clair. Un réglage
+     * coché qui ne produit rien sans explication est un défaut (docs/SONS.md).
+     */
+    private static LinearLayout essaiSon(Principale a) {
+        Ui.Palette p = Ui.p(a);
+        LinearLayout bloc = Ui.pile(a);
+        bloc.setPadding(Ui.dp(a, 4), 0, 0, Ui.dp(a, 8));
+        TextView resultat = Style.texte(a, "", Ui.T_DETAIL, p.doux, false);
+        resultat.setVisibility(View.GONE);
+        bloc.addView(Style.bouton(a, "Essayer", false, v -> {
+            String r = Sons.jouer(a, Sons.CARESSE, true);
+            android.media.AudioManager am = a.getSystemService(android.media.AudioManager.class);
+            String vol = am == null ? "" : " (" + am.getStreamVolume(android.media.AudioManager.STREAM_MUSIC) + " sur "
+                    + am.getStreamMaxVolume(android.media.AudioManager.STREAM_MUSIC) + ")";
+            String texte = r.isEmpty() ? "♪  Un « pouic » vient de partir au volume multimédia" + vol + "."
+                    : "◇  Rien ne peut sortir : " + r + ".";
+            if (r.isEmpty() && Sons.niveau(a).equals("aucun")) texte += " Les sons de Pilou sont sur « Aucun » : rien d'autre ne sonnera.";
+            resultat.setText(texte);
+            resultat.setTextColor(r.isEmpty() ? p.bleu : p.orange);
+            resultat.setVisibility(View.VISIBLE);
+        }), Ui.large());
+        LinearLayout.LayoutParams lr = Ui.large();
+        lr.topMargin = Ui.dp(a, 6);
+        bloc.addView(resultat, lr);
+        return bloc;
     }
 
     private static LinearLayout choixNiveau(Principale a, String titre, String detail, String cle, String[] niveaux,

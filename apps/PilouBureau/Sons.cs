@@ -143,20 +143,26 @@ public static class Sons
     private static readonly object Verrou = new();
     private static Func<string> _niveau = () => "aucun";
     private static Func<string> _musique = () => "aucune";
-    private static Func<bool> _cache = () => true, _saisie = () => false;
+    private static Func<bool> _cache = () => true, _appel = () => true, _saisie = () => false;
     private static readonly GardeSons Garde = new();
 
     // Branché une fois au démarrage : le réglage, « Pilou est caché » (plein écran, présentation, visio, caché à la
-    // main), « on tape » et le réglage de la musique (Musique.cs).
-    public static void Brancher(Func<string> niveau, Func<bool> cache, Func<bool> saisie, Func<string>? musique = null)
+    // main), « on tape », le réglage de la musique (Musique.cs) et « en visio, réunion ou présentation » (`appel`).
+    public static void Brancher(Func<string> niveau, Func<bool> cache, Func<bool> saisie, Func<string>? musique = null,
+        Func<bool>? appel = null)
     {
         _niveau = niveau;
         _cache = cache;
         _saisie = saisie;
+        _appel = appel ?? cache;
         if (musique is not null) _musique = musique;
     }
 
-    internal static bool Cache() => _cache();
+    // Même règle que le téléphone (docs/SONS.md) : un son qui répond à un geste du joueur, et la musique de l'Aventure,
+    // ne se taisent qu'en visio, réunion ou présentation ; un son spontané se tait aussi quand Pilou est caché.
+    public static bool Muet(Son son, bool cache, bool appel) => Spontane(son) ? cache : appel;
+
+    internal static bool Appel() => _appel();
     internal static string NiveauMusique() => _musique();
 
     public static void Jouer(Son son)
@@ -164,7 +170,7 @@ public static class Sons
         try
         {
             var niveau = _niveau();
-            if (!Garde.Peut(son, Environment.TickCount64, niveau, _cache(), _saisie())) return;
+            if (!Garde.Peut(son, Environment.TickCount64, niveau, Muet(son, _cache(), _appel()), _saisie())) return;
             var h = Pret(son, niveau == "discrets");
             if (h is { } g) PlaySound(g.AddrOfPinnedObject(), IntPtr.Zero, SndMemory | SndAsync | SndNoDefault);
         }

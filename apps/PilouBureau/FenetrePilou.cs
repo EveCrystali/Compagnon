@@ -102,7 +102,8 @@ public sealed partial class FenetrePilou : Window
         _demo = demo;
         _essai = essai;
         _reglages = Reglages.Lire(dossier);
-        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie, () => _reglages.Musique); // docs/SONS.md
+        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie, () => _reglages.Musique,
+            () => _discret && _raisonDiscret != "plein-ecran"); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         CalculerEchelle();
         WindowStyle = WindowStyle.None;

@@ -1,5 +1,6 @@
 package fr.pilou.compagnon;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
@@ -47,7 +48,8 @@ final class Sons {
             pistes.put(Chasse.Evenement.BOSS_TOUCHE, piste(balayage(220, 180, 0.04, 0.12, true)));
             pistes.put(Chasse.Evenement.FIN, piste(notes(new double[]{523, 440, 349, 262}, 0.14, 0.18)));
         } catch (RuntimeException e) {
-            this.actif = false; // pas de sortie audio : silence
+            this.actif = false; // pas de sortie audio : silence, noté pour le diagnostic
+            Journal.son("chasse", "pistes non créées : " + e.getClass().getSimpleName());
         }
     }
 
@@ -56,12 +58,22 @@ final class Sons {
         AudioTrack t = pistes.get(e);
         if (t == null) return;
         try {
-            if (t.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) t.stop();
-            t.reloadStaticData();
-            t.play();
-        } catch (IllegalStateException ignore) {
-            // piste libérée ou occupée : son perdu
+            String r = lancer(t);
+            if (!r.isEmpty()) Journal.son("chasse " + e.name().toLowerCase(java.util.Locale.ROOT), r);
+        } catch (IllegalStateException x) {
+            Journal.son("chasse " + e.name().toLowerCase(java.util.Locale.ROOT), "piste libérée ou occupée");
         }
+    }
+
+    /** Rembobine et lance une piste statique ; "" si elle joue, sinon la raison (pour le diagnostic). */
+    static String lancer(AudioTrack t) {
+        if (t == null) return "son absent du catalogue";
+        if (t.getState() != AudioTrack.STATE_INITIALIZED) return "piste non prête (état " + t.getState() + ")";
+        if (t.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) t.stop();
+        int r = t.reloadStaticData();
+        if (r != AudioTrack.SUCCESS) return "rembobinage refusé (" + r + ")";
+        t.play();
+        return t.getPlayState() == AudioTrack.PLAYSTATE_PLAYING ? "" : "lecture refusée par le système";
     }
 
     void liberer() {
@@ -277,31 +289,58 @@ final class Sons {
     }
 
     /**
-     * Joue un son de Pilou si le réglage le permet. Silence pendant un appel ou une visio (mode audio de communication)
-     * et quand le téléphone est en silencieux ou en vibreur.
+     * Pourquoi un son ne peut pas sortir maintenant ("" : rien ne l'en empêche). Un son qui répond à un geste du joueur
+     * passe par le volume multimédia quel que soit le mode de sonnerie, comme dans n'importe quel jeu ; un son
+     * spontané ({@link Garde#spontane}) respecte silencieux et vibreur. Toujours le silence pendant un appel ou une visio.
      */
+    static String empechement(int mode, int sonnerie, int volume, boolean silenceTotal, boolean spontane) {
+        if (mode != AudioManager.MODE_NORMAL) return "téléphone en appel ou en visio";
+        if (spontane && sonnerie == AudioManager.RINGER_MODE_SILENT) return "téléphone en silencieux";
+        if (spontane && sonnerie == AudioManager.RINGER_MODE_VIBRATE) return "téléphone en vibreur";
+        if (silenceTotal) return "« Ne pas déranger » en silence total";
+        if (volume <= 0) return "volume multimédia à zéro";
+        return "";
+    }
+
+    static String empechement(Context c, boolean spontane) {
+        AudioManager am = c.getSystemService(AudioManager.class);
+        if (am == null) return "pas de sortie audio";
+        NotificationManager nm = c.getSystemService(NotificationManager.class);
+        boolean total = nm != null && nm.getCurrentInterruptionFilter() == NotificationManager.INTERRUPTION_FILTER_NONE;
+        return empechement(am.getMode(), am.getRingerMode(), am.getStreamVolume(AudioManager.STREAM_MUSIC), total, spontane);
+    }
+
+    /** Joue un son de Pilou si le réglage le permet (voir empechement) ; un silence imprévu est noté pour le diagnostic. */
     static void jouer(Context c, String id) {
+        jouer(c, id, false);
+    }
+
+    /**
+     * {@code essai} : le bouton « Essayer » des Réglages, qui passe la garde d'espacement et joue même au réglage
+     * « Aucun » (au niveau normal). Renvoie "" si le son est parti, sinon la raison en clair.
+     */
+    static String jouer(Context c, String id, boolean essai) {
+        String raison;
         try {
             String niveau = niveau(c);
-            AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
-            boolean cache = am != null && (am.getMode() != AudioManager.MODE_NORMAL
-                    || am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL);
-            if (!GARDE.peut(id, android.os.SystemClock.uptimeMillis(), niveau, cache, false)) return;
-            AudioTrack t = pret(id, niveau.equals("discrets"));
-            if (t == null) return;
-            if (t.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) t.stop();
-            t.reloadStaticData();
-            t.play();
+            boolean permis = niveau.equals("discrets") || niveau.equals("normaux");
+            if (!permis && !essai) return "réglage « Aucun »";
+            raison = empechement(c, Garde.spontane(id));
+            if (raison.isEmpty() && !essai && !GARDE.peut(id, android.os.SystemClock.uptimeMillis(), niveau, false, false))
+                raison = Garde.spontane(id) ? "garde (espacement ou six par heure)" : "garde (trop près du précédent)";
+            if (raison.isEmpty()) raison = lancer(pret(id, niveau.equals("discrets")));
         } catch (RuntimeException e) {
-            // pas de sortie audio : silence
+            raison = "erreur " + e.getClass().getSimpleName();
         }
+        if (!raison.isEmpty()) Journal.son(id, raison);
+        return raison;
     }
 
     private static synchronized AudioTrack pret(String id, boolean discret) {
         String cle = id + (discret ? "-discret" : "");
         AudioTrack t = PILOU.get(cle);
         if (t != null) return t;
-        if (catalogue == null) catalogue = lire(ressource("/sons.txt"));
+        if (catalogue == null || catalogue.isEmpty()) catalogue = lire(ressource("/sons.txt"));
         List<Note> notes = catalogue.get(id);
         if (notes == null) return null;
         short[] s = synthetiser(notes);

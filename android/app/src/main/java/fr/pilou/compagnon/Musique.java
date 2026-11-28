@@ -346,7 +346,8 @@ final class Musique {
 
     /**
      * Une ligne dans la lecture d'une campagne : la musique suit la campagne, l'ambiance suit le décor, tant que la
-     * vue est à l'écran et que sa fenêtre a le premier plan. Silence pendant un appel ou une visio et en silencieux.
+     * vue est à l'écran et que sa fenêtre a le premier plan. Au volume multimédia, quel que soit le mode de sonnerie
+     * (comme un jeu, docs/SONS.md) ; silence pendant un appel ou une visio.
      */
     static void suivre(View v, Supplier<String> campagne, Supplier<String> ton, Supplier<String> decor) {
         suivre(v, campagne, ton, decor, () -> null);
@@ -359,12 +360,12 @@ final class Musique {
             try {
                 Context c = v.getContext();
                 AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
-                boolean cache = am == null || am.getMode() != AudioManager.MODE_NORMAL
-                        || am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+                boolean cache = am == null || am.getMode() != AudioManager.MODE_NORMAL;
                 int g = gain(niveau(c));
                 boolean actif = g > 0 && v.isAttachedToWindow() && v.isShown() && v.hasWindowFocus() && !cache;
                 viser(actif ? pour(campagne.get(), ton.get(), demande.get()) : null, actif ? ambiance(decor.get()) : null, g);
             } catch (RuntimeException e) {
+                Journal.son("musique", "erreur " + e.getClass().getSimpleName());
                 viser(null, null, 0);
             }
             if (v.isAttachedToWindow()) v.postDelayed(tour[0], 250);
@@ -406,6 +407,7 @@ final class Musique {
                     .setTransferMode(AudioTrack.MODE_STREAM)
                     .setBufferSizeInBytes(Math.max(min, taille * 4))
                     .build();
+            if (t.getState() != AudioTrack.STATE_INITIALIZED) Journal.son("musique", "piste non prête (état " + t.getState() + ")");
             t.play();
             short[] bloc = new short[taille];
             while (true) {
@@ -419,7 +421,7 @@ final class Musique {
                 t.write(bloc, 0, bloc.length);
             }
         } catch (RuntimeException e) {
-            // pas de sortie audio : silence
+            Journal.son("musique", "erreur " + e.getClass().getSimpleName()); // pas de sortie audio : silence
         } finally {
             if (t != null) {
                 try {
