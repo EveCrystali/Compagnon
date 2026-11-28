@@ -29,7 +29,7 @@ REFERENCE = os.path.join(ICI, "decors-hd-reference.txt")
 PLANCHES = os.path.join(RACINE, "docs", "maquettes", "paysages")
 # Les lettres de palette : jamais un chiffre (ce sont les longueurs des plages), ni « . » (pixel inchangé).
 LETTRES = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&*+-/<>?@^_~"
-CAMPAGNES = ("prologue", "grande-panne", "phare-eteint", "petit-nuage")
+CAMPAGNES = ("prologue", "grande-panne", "phare-eteint", "petit-nuage", "evolution")
 DECORS = {}
 # Les deux lieux par campagne qui ont leurs montages PC et téléphone (les autres : image, boucle, avant / après).
 MONTAGES = {"prologue": ("mare", "seuil"), "grande-panne": ("hall-pas-comptes", "horloge-systeme"),

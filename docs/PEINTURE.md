@@ -70,7 +70,8 @@ poussière), `voile` et `halo` (lumière, ombre ou brume posées en trame), `pou
 `decors_hd_grande_panne.py` (douze intérieurs) : `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`,
 `affiche` (pictogramme sans texte), `cable`, `tickets`, `tour_dossiers`. Dans `decors_hd_phare_eteint.py` (nuit, brume,
 mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`.
-Dans `decors_hd_petit_nuage.py` (montagne, neige, ciels) : `sommets` (roche et neige en crête), `deux_dents`, `meleze`,
+Dans `decors_hd_evolution.py` (le fond du jardin de Pilou, à trois heures : un lieu, une fonction, un paramètre
+d'heure) : `pot_cabane`, `rose_tremiere`. Dans `decors_hd_petit_nuage.py` (montagne, neige, ciels) : `sommets` (roche et neige en crête), `deux_dents`, `meleze`,
 `aiguilles`, `petit_nuage` (un nuage du troupeau, avec ses yeux), `flaque`, `cairn`, `bocal`, `brume_claire`. La profondeur d'un
 intérieur vient du point de fuite, des éclairages et d'un premier plan sombre ; le « ciel » est le mur ou le plafond.
 
