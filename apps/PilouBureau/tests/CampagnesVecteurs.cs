@@ -15,6 +15,7 @@ using PilouBureau;
 //   actualiser <ms> <état|rien> · messages <appareil> <sorte> <n> puis n lignes « m <json> »
 //   recevoir <moi> <ms> <0|1> <json> · signature <json> · fil <messages> <non lus> <empreinte> · lu
 //   acquis <id> <po> <xp> <fins> · attente <po> <xp>
+//   ouverture <id> <niveau> <succès, séparés par des virgules, ou -> <ce qui manque, ou « ouverte »>
 public sealed class CampagnesVecteurs
 {
     public const string Reference = "android/app/src/test/resources/campagnes-vecteurs.txt";
@@ -41,7 +42,23 @@ public sealed class CampagnesVecteurs
         return _essai;
     }
 
-    public static Campagnes.Campagne? Biblio(string id) => id == "essai" ? Essai() : Campagnes.Charger(id);
+    private static Campagnes.Campagne? _hautFait;
+
+    // La campagne d'essai fermée par un haut fait (« Plume ») et par le prologue (campagnes-essai/haut-fait).
+    public static Campagnes.Campagne HautFait()
+    {
+        if (_hautFait is not null) return _hautFait;
+        var dossier = Path.Combine(Racine().FullName, "android/app/src/test/resources/campagnes-essai/haut-fait");
+        return _hautFait = Campagnes.Lire(File.ReadAllText(Path.Combine(dossier, "campagne.json")),
+            f => File.Exists(Path.Combine(dossier, f)) ? File.ReadAllText(Path.Combine(dossier, f)) : null)!;
+    }
+
+    public static Campagnes.Campagne? Biblio(string id) => id switch
+    {
+        "essai" => Essai(),
+        "essai-haut-fait" => HautFait(),
+        _ => Campagnes.Charger(id),
+    };
 
     public static string Empreinte(string s)
     {
@@ -239,6 +256,13 @@ public sealed class CampagnesVecteurs
         var a = Campagnes.Acquis(K, c);
         L.Add($"acquis {id} {F(a.Po)} {F(a.Xp)} {string.Join(",", Campagnes.Fins(K, c).Select(f => f.Noeud))}");
         return a;
+    }
+
+    public string Ouverture(string id, int niveau, params string[] succes)
+    {
+        var m = Campagnes.Manque(K, Biblio(id)!, niveau, succes, Biblio);
+        L.Add($"ouverture {id} {F(niveau)} {(succes.Length == 0 ? "-" : string.Join(",", succes))} {(m == "" ? "ouverte" : m)}");
+        return m;
     }
 
     public (int Po, int Xp) Attente()
@@ -605,6 +629,21 @@ public sealed class CampagnesVecteurs
             s.FilH();
             s.SignatureH();
         }
+
+        // 6 ter. Ouverture d'une campagne par le niveau, un haut fait et une campagne finie (ce que dit la bibliothèque).
+        s.Cas("ouverture-haut-fait");
+        s.Carnet("ov");
+        foreach (var id in new[] { "prologue", "essai", "essai-haut-fait" })
+        {
+            s.Ouverture(id, 1);
+            s.Ouverture(id, 2, "marathon");
+        }
+        s.Ouverture("essai-haut-fait", 2, "plume");
+        s.Ouverture("essai-haut-fait", 1, "plume", "marathon");
+        s.Recevoir("ov", T0, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"h\":{\"prologue\":[1,1,{\"" + Campagnes.Code("fin-x") + "\":1790000000},\"\"]}}");
+        s.Ouverture("essai-haut-fait", 1);
+        s.Ouverture("essai-haut-fait", 2, "plume");
+        s.Ouverture("essai-haut-fait", 5, "plume", "gamer");
 
         // 7. Parcours complets des quatre campagnes (docs/TEST-JEU.md) : pour chaque fin, une partie entière trouvée par le
         //    simulateur et jouée par le carnet (choix, épreuves, dés, « vas-y », attentes franchies à l'horloge, échecs,

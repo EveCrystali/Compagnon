@@ -225,6 +225,7 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("humeur:")) _essaiHumeur = nom[7..];
         // --essai=vie[:completes|reduites|aucune][:heure] : saut, marche et chute en boucle (VieFenetre.cs).
         if (nom == "vie" || nom.StartsWith("vie:")) EssaiVie(nom);
+        if (nom == "saynete" || nom.StartsWith("saynete:")) EssaiSaynete(nom);
         // --essai=dessin:origine : le rendu d'origine (grille 48 × 56) ; dessin:fin : le dessin fin.
         if (nom.StartsWith("dessin:"))
         {
@@ -233,10 +234,12 @@ public sealed partial class FenetrePilou
         }
         if (nom.StartsWith("objet:")) _essaiObjet = nom[6..];
         // --essai=mot, journal, complicite : la présence au quotidien, sur des données de démonstration (rien n'est écrit).
-        if (nom is "mot" or "journal" or "complicite") EssaiPresence(nom);
+        if (nom is "mot" or "journal" or "complicite" or "traits") EssaiPresence(nom);
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=menu[:jouer|apparence/accessoire…][:clair|sombre][:moment] : le vrai menu clic droit ouvert (MenuEssai.cs).
         if (nom == "menu" || nom.StartsWith("menu:")) EssaiMenu(nom[4..]);
+        // --essai=bienvenue (avec un dossier de données neuf) : la première minute en accéléré, pour la filmer.
+        if (nom == "bienvenue") _bienvenueVite = 5;
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
         // --essai=expedition:depart|absent|retour|defaite|journal : une expédition sans attendre (rien n'est écrit).

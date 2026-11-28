@@ -50,32 +50,37 @@ internal sealed class FenetreAventure : Window
     // Le théâtre (docs/SCENES.md) : la scène vivante en haut, la boîte de dialogue dessous, les choix posés sur la scène.
     private readonly VueTheatre _theatre;
     private readonly Grid _planche = new() { ClipToBounds = true, Background = Gel("#0a0d1a") };
-    private readonly Border _choixScene = new()
+    // Les choix, le départ et la fin se posent sur la scène, dans un cadre pixel (CadrePixel.cs).
+    private readonly CadrePixel _choixScene = new()
     {
-        HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 22, 0),
-        Padding = new Thickness(14, 10, 14, 6), Background = Gel("#e6151a2e"), BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2),
+        HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 46, 22, 10),
         MaxWidth = 640, Visibility = Visibility.Collapsed,
     };
-    private readonly Border _filPanneau = new()
-    {
-        Background = Gel("#f0121729"), BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2), Margin = new Thickness(40, 34, 40, 14),
-        Visibility = Visibility.Collapsed,
-    };
+    // « ☰ Relire » : tout le fil, par-dessus la scène, dans un cadre pixel.
+    private readonly CadrePixel _filPanneau = new() { Margin = new Thickness(40, 34, 40, 14), Visibility = Visibility.Collapsed };
     private readonly Grid _boite = new() { Cursor = Cursors.Hand };
-    private readonly TextBlock _qui = Texte(11.5, Gel("#6e3d86"), true);
-    private readonly TextBlock _replique = Texte(13.5, Gel("#1c2128"));
+    // La réplique en police pixel (docs/POLICE.md) : 2 unités WPF par pixel de police (la police fine à 100 %).
+    private readonly TextePixel _qui = new("PILOU", CadrePixel.Titre) { Titre = true, Taille = 2 };
+    private readonly TextePixel _replique = new("", CadrePixel.Texte) { Taille = 2 };
     // Une longue réplique défile dans la boîte (elle suit l'écriture ; la molette remonte).
     private readonly ScrollViewer _repliqueDefile = new() { VerticalScrollBarVisibility = ScrollBarVisibility.Hidden, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, MaxHeight = 5 * LigneReplique };
+    // La hauteur d'une ligne de réplique à l'écran : 12 pixels de police, chacun sur un nombre entier de pixels physiques
+    // (2 à 100 %, 3 à 125 %…), pour que le défilement tombe toujours sur une ligne entière.
+    private static double LigneEcran()
+    {
+        double ppu = Math.Max(0.1, Finesse.PhysiqueParUnite);
+        return 12 * PolicePixel.PixelsPhysiques(2, ppu) / ppu;
+    }
     // Hauteur exacte d'une ligne de réplique : le défilement tombe toujours sur une ligne entière (jamais tranchée).
-    private const double LigneReplique = 18;
-    private readonly TextBlock _suite = Texte("▼", 13, Gel("#8a6e4b"), true);
+    private const double LigneReplique = 24;     // 12 pixels de police × 2
+    private readonly TextePixel _suite = new("▼", CadrePixel.Pale) { Taille = 2 };
     private uint[] _teinte = Array.Empty<uint>();
     private readonly Pixels _decorLieu = new(Police.Texte(" "), new Brush?[] { null, Gel("#fff6e0") }, Gel("#151a2e"), 3);
     private readonly TextBlock _decorChapitre = Texte(11.5, Gel("#fff6e0"));
     private readonly StackPanel _ecrit = new() { Orientation = Orientation.Horizontal, Margin = new Thickness(46, 4, 0, 0), Visibility = Visibility.Collapsed };
     private uint[]? _voyagePrecedent;
     private Image? _voyage;
-    private TextBlock? _compte, _heureRetour;
+    private TextePixel? _compte, _heureRetour;
     private Border? _jaugeAttente;
     private readonly System.Diagnostics.Stopwatch _chrono = System.Diagnostics.Stopwatch.StartNew();
     private Vue? _vueMontree;
@@ -84,7 +89,7 @@ internal sealed class FenetreAventure : Window
     private List<Aventure.Element> _elements = new();
     private int _montres;
     private Aventure.Element? _enCours;
-    private TextBlock? _texteEnCours;
+    private TextePixel? _texteEnCours;
     private double _debutEcriture, _pauseJusque, _dernierClic = -1e9;
     private bool _toutDeSuite, _confirmer, _enRoute;
     private string _cleAction = "", _decorMontre = "\u0001", _message = "";
@@ -93,7 +98,7 @@ internal sealed class FenetreAventure : Window
     // Animations (ScenesAnimees.cs) : décor en boucle et ses transitions, portrait du personnage, fond, vignettes.
     private readonly ScenesAnimees _anims;
     private readonly Image _persoImage = new() { Width = 104, Height = 104, Stretch = Stretch.Uniform, Visibility = Visibility.Collapsed };
-    private readonly TextBlock _persoNom = Texte(11, Gel("#fff6e0"));
+    private readonly TextePixel _persoNom = new("", CadrePixel.Titre) { Taille = 1.5 };
     private readonly StackPanel _perso = new() { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 16, 4), IsHitTestVisible = false };
     private Aventure.Element? _dernierPilou;
     private string _persoCle = "\u0001";
@@ -211,7 +216,7 @@ internal sealed class FenetreAventure : Window
         _anims = new ScenesAnimees(pilou);
         Title = "Aventure de Pilou";
         Width = 1020;
-        Height = 720;
+        Height = 800;
         MinWidth = 840;
         MinHeight = 560;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -225,7 +230,6 @@ internal sealed class FenetreAventure : Window
         _boite.MouseLeftButtonDown += (_, _) => Sur(Accelerer);
         RenderOptions.SetBitmapScalingMode(_persoImage, BitmapScalingMode.NearestNeighbor);
         _persoNom.HorizontalAlignment = HorizontalAlignment.Center;
-        _persoNom.FontStyle = FontStyles.Italic;
         _perso.Children.Add(_persoImage);
         _perso.Children.Add(_persoNom);
 
@@ -256,7 +260,7 @@ internal sealed class FenetreAventure : Window
 
         _defile.Content = _fil;
         _defile.PreviewMouseLeftButtonDown += (_, _) => Sur(Accelerer);
-        _ecrit.Children.Add(Texte("Pilou écrit", 11.5, Bandeau.Argent));
+        _ecrit.Children.Add(new TextePixel("Pilou écrit", CadrePixel.Pale) { Taille = 2 });
         for (int i = 0; i < 3; i++)
             _ecrit.Children.Add(new Border { Width = 4, Height = 4, Background = Bandeau.Argent, Margin = new Thickness(i == 0 ? 6 : 3, 8, 0, 0) });
 
@@ -403,14 +407,14 @@ internal sealed class FenetreAventure : Window
     private UIElement ConstruireBibliotheque()
     {
         var k = _pilou.CarnetCampagnes;
-        var toutes = Disponibles().Select(Charger).OfType<Campagne>().ToList();
+        var toutes = Disponibles().Select(Charger).OfType<Campagne>().Concat(_pilou.CampagnesEnPlus).ToList();
         var pile = new StackPanel { Margin = new Thickness(0, 0, 8, 8) };
         if (toutes.Count == 0)
         {
             pile.Children.Add(Vide("Aucune aventure dans cet exe.", "Les campagnes vivent dans assets/campagnes : elles arrivent avec la prochaine mise à jour."));
             return pile;
         }
-        var fiches = Aventure.Bibliotheque(k, toutes, _pilou.NiveauAventure, _etat, (long)_pilou.EpoqueAventure);
+        var fiches = Aventure.Bibliotheque(k, toutes, _pilou.NiveauAventure, _etat, (long)_pilou.EpoqueAventure, _pilou.SuccesAventure);
         int i = 0;
         foreach (var f in fiches)
         {
@@ -470,7 +474,7 @@ internal sealed class FenetreAventure : Window
 
         var boutons = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
         if (ferme)
-            boutons.Children.Add(Texte($"▣ niveau {f.Niveau}", 12.5, Bandeau.Argent, true));
+            boutons.Children.Add(Texte($"▣ {f.Verrou}", 12.5, Bandeau.Argent, true));
         else
         {
             string signe = f.Statut switch { Aventure.Statut.EnCours => "◉", Aventure.Statut.Suspendue => "◌", Aventure.Statut.Finie => "↻", _ => "▶" };
@@ -713,7 +717,7 @@ internal sealed class FenetreAventure : Window
         };
     }
 
-    private static Border Pastille(string texte, Brush teinte, string? sprite = null)
+    private static FrameworkElement Pastille(string texte, Brush teinte, string? sprite = null)
     {
         var p = new StackPanel { Orientation = Orientation.Horizontal };
         if (sprite is not null && Apercu.Sprite(sprite) is { } im)
@@ -722,8 +726,8 @@ internal sealed class FenetreAventure : Window
             v.Margin = new Thickness(0, 0, 6, 0);
             p.Children.Add(v);
         }
-        p.Children.Add(Texte(texte, 12, teinte, true));
-        return new Border { Background = Bandeau.Nuit, BorderBrush = teinte, BorderThickness = new Thickness(1), Padding = new Thickness(8, 3, 8, 3), Margin = new Thickness(0, 0, 8, 6), Child = p };
+        p.Children.Add(new TextePixel(texte, teinte) { Taille = 2, VerticalAlignment = VerticalAlignment.Center });
+        return new CadrePixel { U = 2, AvecOmbre = false, Couleur = teinte, Margin = new Thickness(0, 0, 8, 6), Child = p };
     }
 
     // ---- Lecture
@@ -760,10 +764,10 @@ internal sealed class FenetreAventure : Window
         var legende = new StackPanel();
         _decorLieu.Margin = new Thickness(0, 1, 0, 0);
         legende.Children.Add(_decorLieu);
-        _planche.Children.Add(new Border
+        _planche.Children.Add(new CadrePixel
         {
             HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(10, 10, 0, 0),
-            Padding = new Thickness(8, 5, 8, 5), Background = Gel("#b0151a2e"), IsHitTestVisible = false, Child = legende,
+            AvecOmbre = false, Retrait = 0.6, IsHitTestVisible = false, Child = legende, Tag = "cadre",
         });
         _filPanneau.Child = _defile;
         _filPanneau.Visibility = Visibility.Collapsed;
@@ -790,12 +794,10 @@ internal sealed class FenetreAventure : Window
         _portrait.Margin = new Thickness(0, 0, 12, 0);
         _boite.Children.Add(_portrait);
         var texte = new StackPanel();
-        _qui.Text = "PILOU";
+        _qui.Texte = "PILOU";
         texte.Children.Add(_qui);
-        _replique.LineHeight = LigneReplique;
-        _replique.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
         _replique.Margin = new Thickness(0);
-        _repliqueDefile.Margin = new Thickness(0, 2, 0, 0);
+        _repliqueDefile.Margin = new Thickness(0, 6, 0, 0);
         _repliqueDefile.Content = Lib(_replique);
         texte.Children.Add(Lib(_repliqueDefile));
         Grid.SetColumn(texte, 1);
@@ -805,7 +807,7 @@ internal sealed class FenetreAventure : Window
         _persoImage.Height = 128;
         _persoImage.Margin = new Thickness(-16, -6, -16, -18);
         _persoImage.HorizontalAlignment = HorizontalAlignment.Center;
-        _persoNom.Foreground = Gel("#6e3d86");
+        _persoNom.Couleur = CadrePixel.Titre;
         _perso.Margin = new Thickness(10, -4, 0, 0);
         _perso.VerticalAlignment = VerticalAlignment.Top;
         _perso.Width = 96;
@@ -818,13 +820,10 @@ internal sealed class FenetreAventure : Window
         Grid.SetColumn(_suite, 1);
         _boite.Children.Add(_suite);
         var dialogue = new Grid();
-        dialogue.Children.Add(new Border
-        {
-            Background = Parchemin, BorderBrush = ParcheminBord, BorderThickness = new Thickness(3), Padding = new Thickness(12, 6, 14, 6), Child = _boite,
-        });
-        _action.Background = Bandeau.Nuit2;
-        _action.BorderBrush = Bandeau.Bord;
-        _action.BorderThickness = new Thickness(2);
+        dialogue.Children.Add(new CadrePixel { Child = _boite, Tag = "cadre" });
+        _action.Background = null;
+        _action.BorderThickness = new Thickness(0);
+        _action.Padding = new Thickness(0);
         _action.Visibility = Visibility.Collapsed;
         dialogue.Children.Add(_action);
         bas.Children.Add(dialogue);
@@ -865,11 +864,14 @@ internal sealed class FenetreAventure : Window
         Grid.SetRow(bas, 1);
         g.Children.Add(bas);
 
-        // La scène prend la plus grande échelle entière qui laisse au moins 118 px à la boîte.
+        // La scène prend la plus grande échelle entière qui laisse au moins 192 px à la boîte ; les cadres pixel ont pour
+        // unité le pixel de la scène.
         g.SizeChanged += (_, _) => Sur(() =>
         {
-            _theatre.Ajuster(g.ActualWidth, Math.Max(160, g.ActualHeight - 126));
+            _theatre.Ajuster(g.ActualWidth, Math.Max(160, g.ActualHeight - 200));
             _planche.Height = Theatre.H * _theatre.Echelle;
+            foreach (var cp in Cadres(g)) cp.U = _theatre.Echelle;
+            _repliqueDefile.MaxHeight = 5 * LigneEcran();
         });
         _persoCle = "\u0001";
         _dernierPilou = null;
@@ -924,7 +926,7 @@ internal sealed class FenetreAventure : Window
         if (_compte is not null && e.EnAttente)
         {
             double reste = e.Fin - _pilou.EpoqueAventure;
-            _compte.Text = reste > 0 ? $"encore {Aventure.Restant(reste)}" : "il arrive…";
+            _compte.Texte = reste > 0 ? $"encore {Aventure.Restant(reste)}" : "il arrive…";
             if (_jaugeAttente is not null) _jaugeAttente.Child = Cases(1 - reste / Math.Max(1, e.Fin - e.T), 24, Bandeau.OrangePo);
         }
     }
@@ -970,8 +972,8 @@ internal sealed class FenetreAventure : Window
         if (_enCours is { } el && _texteEnCours is { } tb)
         {
             int n = _toutDeSuite || _anims.TexteInstantane ? el.Texte.Length : AnimationsCampagne.Lettres(el.Texte, (long)(now - _debutEcriture));
-            tb.Text = n >= el.Texte.Length ? el.Texte : el.Texte[..n] + ((int)(now / 280) % 2 == 0 ? "▌" : " ");
-            _replique.Text = tb.Text;
+            tb.Texte = n >= el.Texte.Length ? el.Texte : el.Texte[..n] + ((int)(now / 280) % 2 == 0 ? "▌" : " ");
+            _replique.Texte = tb.Texte;
             _repliqueDefile.ScrollToEnd();
             if (n >= el.Texte.Length)
             {
@@ -1005,7 +1007,10 @@ internal sealed class FenetreAventure : Window
                     Replique(x, "");
                     if (!_enRoute) _theatre.Revient(now);
                     _theatre.Humeur(x.Humeur, now);
-                    _theatre.Parle(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
+                    // Une réplique entre guillemets est celle du personnage : c'est lui qui parle dans la scène.
+                    if (AnimationsCampagne.Parle(x.Texte) && _campagne is { } cp && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, cp, x.Cle) is not null)
+                        _theatre.ParlePerso(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
+                    else _theatre.Parle(now, now + AnimationsCampagne.DureeEcriture(x.Texte));
                     break;
                 }
                 var el2 = Element(x);
@@ -1074,8 +1079,8 @@ internal sealed class FenetreAventure : Window
 
     private void Replique(Aventure.Element x, string texte)
     {
-        _qui.Text = x.Sorte == Aventure.Sorte.Reprise ? "↺ PILOU" : "PILOU";
-        _replique.Text = texte;
+        _qui.Texte = x.Sorte == Aventure.Sorte.Reprise ? "↺ PILOU" : "PILOU";
+        _replique.Texte = texte;
         _repliqueDefile.ScrollToHome();
     }
 
@@ -1119,29 +1124,20 @@ internal sealed class FenetreAventure : Window
         _lieu.Text = nom == "" ? "" : "▸ " + nom;
     }
 
-    private (UIElement Ligne, TextBlock Texte) BullePilou(Aventure.Element x, string texte)
+    private (UIElement Ligne, TextePixel Texte) BullePilou(Aventure.Element x, string texte)
     {
-        var tb = Texte(texte, 13.5, Encre);
-        tb.LineHeight = 20;
-        var bulle = new Border
-        {
-            Background = Parchemin, BorderBrush = ParcheminBord, BorderThickness = new Thickness(2), Padding = new Thickness(12, 8, 12, 9),
-            MaxWidth = 560, HorizontalAlignment = HorizontalAlignment.Left, Child = tb,
-        };
-        var g = new Grid { Margin = new Thickness(0, 0, 60, 10) };
-        g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(40) });
+        var tb = new TextePixel(texte, CadrePixel.Texte) { Taille = 2 };
+        var bulle = new CadrePixel { U = 3, Child = tb, MaxWidth = 620, HorizontalAlignment = HorizontalAlignment.Left };
+        var g = new Grid { Margin = new Thickness(0, 0, 40, 10) };
+        g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(44) });
         g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        // Une petite tête au début d'une série de messages, la pointe de la bulle vers elle.
+        // Une petite tête (le mini-Pilou de la scène) au début d'une série de messages.
         var avant = _fil.Children.OfType<FrameworkElement>().LastOrDefault(f => !ReferenceEquals(f, _ecrit));
-        bool premier = avant is not { Tag: "pilou" };
-        if (premier)
+        if (avant is not { Tag: "pilou" } && _theatre.Visage(x.Humeur, false, 0, true) is { } visage)
         {
-            var tete = new Image { Source = Apercu.Image(_pilou.AllurePortrait(x.Humeur is "" or "neutre" ? "repos" : x.Humeur, 0), fin: true), Width = 34, Height = 40, VerticalAlignment = VerticalAlignment.Top };
+            var tete = new Image { Source = visage, Width = VueTheatre.VisageW, Height = VueTheatre.VisageH, VerticalAlignment = VerticalAlignment.Top };
             RenderOptions.SetBitmapScalingMode(tete, BitmapScalingMode.NearestNeighbor);
             g.Children.Add(tete);
-            var pointe = new Pixels(Pixels.Motif("0001", "0012", "0122", "0012", "0001"), new Brush?[] { null, ParcheminBord, Parchemin }, null, 2)
-                { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 10, -2, 0) };
-            g.Children.Add(pointe);
         }
         Grid.SetColumn(bulle, 1);
         g.Children.Add(bulle);
@@ -1170,26 +1166,24 @@ internal sealed class FenetreAventure : Window
             }
             case Aventure.Sorte.Joueur:
             {
-                var tb = Texte("▶ " + x.Texte, 13, Bandeau.ArgentClair, true);
+                var tb = new TextePixel("▶ " + x.Texte, CadrePixel.SurvolTexte) { Taille = 2 };
                 var p = new StackPanel { HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(90, 2, 0, 12), Tag = "joueur" };
-                p.Children.Add(new TextBlock { Text = "toi", FontSize = 10.5, Foreground = Bandeau.Violet, HorizontalAlignment = HorizontalAlignment.Right, FontFamily = new FontFamily("Segoe UI"), Margin = new Thickness(0, 0, 4, 2) });
-                p.Children.Add(new Border { Background = CaseClaire, BorderBrush = Bandeau.Violet, BorderThickness = new Thickness(2), Padding = new Thickness(12, 7, 12, 8), MaxWidth = 460, Child = tb });
+                p.Children.Add(new TextePixel("toi", CadrePixel.Titre) { Taille = 2, Titre = true, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 0, 4, 4) });
+                p.Children.Add(new CadrePixel { U = 3, Fond = CadrePixel.SurvolFond, MaxWidth = 460, Child = tb });
                 return p;
             }
             case Aventure.Sorte.Reprise:
             {
                 var p = new StackPanel { Margin = new Thickness(40, 2, 60, 12), Tag = "reprise" };
                 var tete = new StackPanel { Orientation = Orientation.Horizontal, Cursor = Cursors.Hand };
-                tete.Children.Add(Texte(x.Texte, 13, Bandeau.Violet, true));
-                var plus = Texte($"   ▸ relire ({x.Sous.Count})", 11.5, Bandeau.Argent);
+                tete.Children.Add(new TextePixel(x.Texte, CadrePixel.Titre) { Taille = 2, Titre = true });
+                var plus = new TextePixel($"   ▶ relire ({x.Sous.Count})", CadrePixel.Pale) { Taille = 2 };
                 tete.Children.Add(plus);
                 p.Children.Add(tete);
                 var sous = new StackPanel { Visibility = Visibility.Collapsed, Margin = new Thickness(10, 4, 0, 0) };
                 foreach (var s in x.Sous)
                 {
-                    var t = Texte(s, 12, Bandeau.Argent);
-                    t.FontStyle = FontStyles.Italic;
-                    t.Margin = new Thickness(0, 0, 0, 4);
+                    var t = new TextePixel(s, CadrePixel.Pale) { Taille = 2, Margin = new Thickness(0, 0, 0, 6) };
                     sous.Children.Add(t);
                 }
                 p.Children.Add(sous);
@@ -1198,7 +1192,7 @@ internal sealed class FenetreAventure : Window
                     ev.Handled = true;
                     bool ouvert = sous.Visibility == Visibility.Visible;
                     sous.Visibility = ouvert ? Visibility.Collapsed : Visibility.Visible;
-                    plus.Text = ouvert ? $"   ▸ relire ({x.Sous.Count})" : "   ▾ replier";
+                    plus.Texte = ouvert ? $"   ▶ relire ({x.Sous.Count})" : "   ▼ replier";
                 };
                 return p;
             }
@@ -1227,13 +1221,13 @@ internal sealed class FenetreAventure : Window
             _action.Child = null;
             return;
         }
-        if (_message != "") p.Children.Add(Texte("◌ " + _message, 12, Bandeau.Violet, true));
+        if (_message != "") p.Children.Add(Px("◌ " + _message, 12, Bandeau.Violet, true));
         if (_confirmer)
         {
-            p.Children.Add(Texte("Mettre l'aventure de côté ?", 15, Bandeau.ArgentClair, true));
-            p.Children.Add(Texte("Pilou rentre à la maison. L'aventure reprendra au dernier check-point : ce qui est acquis reste acquis.", 12.5, Bandeau.Argent));
+            p.Children.Add(Px("Mettre l'aventure de côté ?", 15, Bandeau.ArgentClair, true));
+            p.Children.Add(Px("Pilou rentre à la maison. L'aventure reprendra au dernier check-point : ce qui est acquis reste acquis.", 12.5, Bandeau.Argent));
             var l = Rangee();
-            l.Children.Add(Bouton("◌ Oui, la mettre de côté", false, () =>
+            l.Children.Add(BoutonPixel("◌ Oui, la mettre de côté", false, () =>
             {
                 _confirmer = false;
                 _message = _pilou.CampagneAbandonner() ?? "";
@@ -1241,7 +1235,7 @@ internal sealed class FenetreAventure : Window
                 if (_message == "") Montrer(Vue.Bibliotheque);
                 else Rafraichir();
             }));
-            l.Children.Add(Bouton("▶ Non, on continue", true, () =>
+            l.Children.Add(BoutonPixel("▶ Non, on continue", true, () =>
             {
                 _confirmer = false;
                 _cleAction = "";
@@ -1257,8 +1251,8 @@ internal sealed class FenetreAventure : Window
             {
                 p.Children.Add(Enseigne(e.Reprise ? "ON REPREND ICI · QUE FAIT PILOU ?" : "QUE FAIT PILOU ?", Bandeau.OrangePo, 2));
                 if (e.Reprise)
-                    p.Children.Add(Texte("↺ Après son repos, Pilou repart du dernier check-point. Ce qui était acquis l'est toujours.", 11.5, Bandeau.Violet));
-                var l = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
+                    p.Children.Add(Px("↺ Après son repos, Pilou repart du dernier check-point. Ce qui était acquis l'est toujours.", 11.5, Bandeau.Violet));
+                var l = new StackPanel { Margin = new Thickness(0, 10, 0, 0) };
                 int i = 1;
                 foreach (var o in e.Options)
                 {
@@ -1278,7 +1272,7 @@ internal sealed class FenetreAventure : Window
             {
                 p.Children.Add(Enseigne("PILOU EST PRÊT À REPARTIR", Bandeau.OrangePo, 2));
                 var l = Rangee();
-                l.Children.Add(Bouton("▶ Vas-y !   (Entrée)", true, Continuer, 14));
+                l.Children.Add(BoutonPixel("▶ Vas-y !   (Entrée)", true, Continuer, 14));
                 p.Children.Add(l);
                 break;
             }
@@ -1294,16 +1288,16 @@ internal sealed class FenetreAventure : Window
                 break;
             case Phase.Abandon:
             {
-                p.Children.Add(Texte("◌ Aventure mise de côté.", 15, Bandeau.ArgentClair, true));
-                p.Children.Add(Texte("Elle reprendra au dernier check-point quand tu voudras.", 12.5, Bandeau.Argent));
+                p.Children.Add(Px("◌ Aventure mise de côté.", 15, Bandeau.ArgentClair, true));
+                p.Children.Add(Px("Elle reprendra au dernier check-point quand tu voudras.", 12.5, Bandeau.Argent));
                 var l = Rangee();
-                l.Children.Add(Bouton("◌ Reprendre", true, () => Demarrer(c.Id, false)));
-                l.Children.Add(Bouton("☰ Bibliothèque", false, () => Montrer(Vue.Bibliotheque)));
+                l.Children.Add(BoutonPixel("◌ Reprendre", true, () => Demarrer(c.Id, false)));
+                l.Children.Add(BoutonPixel("☰ Bibliothèque", false, () => Montrer(Vue.Bibliotheque)));
                 p.Children.Add(l);
                 break;
             }
             default:
-                p.Children.Add(Texte("Cette aventure a un souci dans ses fichiers : elle ne peut pas continuer ici. Une mise à jour la réparera.", 12.5, Bandeau.Argent));
+                p.Children.Add(Px("Cette aventure a un souci dans ses fichiers : elle ne peut pas continuer ici. Une mise à jour la réparera.", 12.5, Bandeau.Argent));
                 break;
         }
         Poser(p);
@@ -1320,13 +1314,18 @@ internal sealed class FenetreAventure : Window
             _choixScene.Child = contenu;
             _choixScene.Visibility = Visibility.Visible;
             _choixScene.MaxWidth = _etat is { Phase: Phase.Fin } ? 760 : 520;
+            // Pilou se tient à gauche, le personnage à droite : les choix se posent au milieu, en haut, sur le décor.
+            bool fin = _etat is { Phase: Phase.Fin };
+            _choixScene.HorizontalAlignment = HorizontalAlignment.Center;
+            _choixScene.VerticalAlignment = fin ? VerticalAlignment.Center : VerticalAlignment.Top;
+            _choixScene.Margin = new Thickness(0, 46, 0, 10);
             Apparaitre(_choixScene, 260, 10);
         }
         else
         {
             _choixScene.Child = null;
             _choixScene.Visibility = Visibility.Collapsed;
-            _action.Child = contenu;
+            _action.Child = new CadrePixel { U = _theatre.Echelle, Child = contenu };
             _action.Visibility = Visibility.Visible;
             Apparaitre(contenu, 240, 10);
         }
@@ -1334,29 +1333,94 @@ internal sealed class FenetreAventure : Window
 
     private static WrapPanel Rangee() => new() { Margin = new Thickness(0, 10, 0, 0) };
 
+    // Un texte en police pixel (docs/POLICE.md) ; les tailles du système d'avant deviennent deux tailles : récit
+    // (2 unités par pixel de police) et titre (police titre).
+    private static TextePixel Px(string texte, double taille, Brush couleur, bool gras = false) =>
+        new(texte, couleur) { Taille = taille >= 15 ? 2.5 : 2, Titre = gras && taille >= 14 };
+
+    // Un bouton en cadre pixel ; le principal est mis en avant (fond orange, puce ▶).
+    private Button BoutonPixel(string texte, bool principal, Action action, double taille = 13)
+    {
+        double u = _theatre.Echelle;
+        var t = new TextePixel(texte, principal ? CadrePixel.SurvolTexte : CadrePixel.Texte) { Taille = 2, VerticalAlignment = VerticalAlignment.Center };
+        var ligne = new StackPanel { Orientation = Orientation.Horizontal };
+        if (principal)
+        {
+            var puce = CadrePixel.Puce(u * 0.6, CadrePixel.SurvolTexte);
+            puce.SetValue(MarginProperty, new Thickness(0, 4, 8, 0));
+            ligne.Children.Add(puce);
+        }
+        ligne.Children.Add(t);
+        var cadre = new CadrePixel { U = u, Child = ligne, Fond = principal ? CadrePixel.SurvolFond : CadrePixel.FondNuit };
+        if (!principal) cadre.Change += () => t.Couleur = cadre.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
+        var b = new Button
+        {
+            Content = cadre, Cursor = Cursors.Hand, Margin = new Thickness(0, 0, 2 * u, 2 * u), FocusVisualStyle = null, Template = Nu(),
+            ToolTip = null,
+        };
+        b.MouseEnter += (_, _) => cadre.Survol = true;
+        b.MouseLeave += (_, _) =>
+        {
+            cadre.Survol = false;
+            cadre.Enfonce = false;
+        };
+        b.PreviewMouseLeftButtonDown += (_, _) => cadre.Enfonce = true;
+        b.PreviewMouseLeftButtonUp += (_, _) => cadre.Enfonce = false;
+        b.Click += (_, _) => Sur(action);
+        return b;
+    }
+
     private Button BoutonOption(int n, string libelle, Action action)
     {
-        var contenu = new StackPanel { Orientation = Orientation.Horizontal };
-        contenu.Children.Add(new Border
+        double u = _theatre.Echelle;
+        var texte = new TextePixel(libelle, CadrePixel.Texte) { Taille = 2, VerticalAlignment = VerticalAlignment.Center };
+        var puce = CadrePixel.Puce(u * 0.6, CadrePixel.Bord);
+        puce.SetValue(MarginProperty, new Thickness(0, 4, 10, 0));
+        var ligne = new StackPanel { Orientation = Orientation.Horizontal };
+        ligne.Children.Add(puce);
+        ligne.Children.Add(texte);
+        var cadre = new CadrePixel { U = u, Child = ligne, Tag = "cadre" };
+        cadre.Change += () => texte.Couleur = cadre.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
+        var b = new Button
         {
-            Background = Bandeau.Nuit, BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(1), Padding = new Thickness(4, 3, 4, 3),
-            Margin = new Thickness(0, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center,
-            Child = new Pixels(Police.Texte(n.ToString()), new Brush?[] { null, Bandeau.OrangePo }, null, 2),
-        });
-        contenu.Children.Add(new TextBlock
+            Content = cadre, Cursor = Cursors.Hand, Margin = new Thickness(0, 0, 0, 2 * u), Tag = n, ToolTip = $"touche {n}",
+            HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Stretch, FocusVisualStyle = null,
+            Template = Nu(),
+        };
+        b.MouseEnter += (_, _) =>
         {
-            Text = libelle, FontSize = 13.5, FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, TextWrapping = TextWrapping.Wrap,
-            MaxWidth = 300, VerticalAlignment = VerticalAlignment.Center,
-        });
-        var b = Bouton("", false, action);
-        b.Content = contenu;
-        b.MinWidth = 220;
-        b.MaxWidth = 460;
-        b.Tag = n;
-        b.MouseEnter += (_, _) => _theatre.Regarde(1);
-        b.MouseLeave += (_, _) => _theatre.Regarde(0);
-        b.ToolTip = $"touche {n}";
+            cadre.Survol = true;
+            _theatre.Regarde(1);
+        };
+        b.MouseLeave += (_, _) =>
+        {
+            cadre.Survol = false;
+            cadre.Enfonce = false;
+            _theatre.Regarde(0);
+        };
+        b.PreviewMouseLeftButtonDown += (_, _) => cadre.Enfonce = true;
+        b.PreviewMouseLeftButtonUp += (_, _) => cadre.Enfonce = false;
+        b.Click += (_, _) => Sur(action);
         return b;
+    }
+
+    // Un bouton sans habit : le cadre pixel qu'il contient fait tout le dessin.
+    private static ControlTemplate Nu()
+    {
+        var t = new ControlTemplate(typeof(Button)) { VisualTree = new FrameworkElementFactory(typeof(ContentPresenter)) };
+        t.Seal();
+        return t;
+    }
+
+    // Les cadres pixel d'un arbre visuel (pour leur donner l'unité de la scène).
+    private static IEnumerable<CadrePixel> Cadres(DependencyObject racine)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(racine); i++)
+        {
+            var e = VisualTreeHelper.GetChild(racine, i);
+            if (e is CadrePixel cp) yield return cp;
+            foreach (var c in Cadres(e)) yield return c;
+        }
     }
 
     private void Choisir(string option)
@@ -1389,16 +1453,16 @@ internal sealed class FenetreAventure : Window
     {
         var p = new StackPanel();
         var tete = new StackPanel { Orientation = Orientation.Horizontal };
-        tete.Children.Add(Texte(Aventure.SigneJeu(e.Jeu) + "  ", 20, Bandeau.OrangePo, true));
+        tete.Children.Add(Px(Aventure.SigneJeu(e.Jeu) + "  ", 20, Bandeau.OrangePo, true));
         tete.Children.Add(Enseigne($"ÉPREUVE · {Aventure.NomJeu(e.Jeu)}", Bandeau.OrangePo, 2.5));
-        tete.Children.Add(Texte($"   {Aventure.Pastilles(e.Difficulte)}", 14, Bandeau.Violet, true));
+        tete.Children.Add(Px($"   {Aventure.Pastilles(e.Difficulte)}", 14, Bandeau.Violet, true));
         p.Children.Add(tete);
         var aide = e.Aide > 0 ? $" · ce que Pilou a appris l'aide (+{e.Aide})" : "";
-        p.Children.Add(Texte(Aventure.Consigne(e.Jeu) + aide, 12.5, Bandeau.Argent));
+        p.Children.Add(Px(Aventure.Consigne(e.Jeu) + aide, 12.5, Bandeau.Argent));
         var l = Rangee();
         if (!JeuAuto(e.Jeu))
-            l.Children.Add(Bouton("▶ Jouer (≈ 15 s)", true, () => LancerEpreuve(e, false), 14));
-        l.Children.Add(Bouton($"⚄ Laisser faire les dés ({e.Chance} %)", JeuAuto(e.Jeu), () => LancerEpreuve(e, true), 13));
+            l.Children.Add(BoutonPixel("▶ Jouer (≈ 15 s)", true, () => LancerEpreuve(e, false), 14));
+        l.Children.Add(BoutonPixel($"⚄ Laisser faire les dés ({e.Chance} %)", JeuAuto(e.Jeu), () => LancerEpreuve(e, true), 13));
         p.Children.Add(l);
         return p;
     }
@@ -1429,7 +1493,7 @@ internal sealed class FenetreAventure : Window
         _scene.Children.Add(v);
         Apparaitre(v, 200, 0);
         _cleAction = "";
-        _action.Child = Texte("Concentre-toi… (Échap : laisser faire les dés)", 12, Bandeau.Argent);
+        _action.Child = Px("Concentre-toi… (Échap : laisser faire les dés)", 12, Bandeau.Argent);
         Focus();
     }
 
@@ -1464,18 +1528,18 @@ internal sealed class FenetreAventure : Window
         var p = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
         bool repos = e.Phase == Phase.Repos;
         p.Children.Add(Enseigne(repos ? "PILOU SE REPOSE" : "PILOU EST EN ROUTE", Bandeau.OrangePo, 2));
-        var pendant = Texte(repos ? "Il est rentré un peu cabossé. Il reprend des forces." : (e.Pendant == "" ? "Pilou avance" : e.Pendant), 16, Bandeau.ArgentClair, true);
+        var pendant = Px(repos ? "Il est rentré un peu cabossé. Il reprend des forces." : (e.Pendant == "" ? "Pilou avance" : e.Pendant), 16, Bandeau.ArgentClair, true);
         pendant.Margin = new Thickness(0, 6, 0, 2);
         p.Children.Add(pendant);
-        _heureRetour = Texte($"{(repos ? "jusqu'à" : "retour vers")} {Aventure.Heure(e.Fin)}", 13, Bandeau.Argent);
+        _heureRetour = Px($"{(repos ? "jusqu'à" : "retour vers")} {Aventure.Heure(e.Fin)}", 13, Bandeau.Argent);
         p.Children.Add(_heureRetour);
         var ligne = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 6, 0, 6) };
-        _compte = new TextBlock { FontFamily = new FontFamily("Consolas"), FontSize = 20, FontWeight = FontWeights.Bold, Foreground = Bandeau.OrangePo, VerticalAlignment = VerticalAlignment.Center };
+        _compte = new TextePixel("", Bandeau.OrangePo) { Taille = 3, Titre = true, VerticalAlignment = VerticalAlignment.Center };
         ligne.Children.Add(_compte);
         _jaugeAttente = new Border { Margin = new Thickness(14, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
         ligne.Children.Add(_jaugeAttente);
         p.Children.Add(ligne);
-        p.Children.Add(Texte(repos ? "Ensuite, il reprendra au dernier check-point. Tu peux fermer cette fenêtre : je te préviens."
+        p.Children.Add(Px(repos ? "Ensuite, il reprendra au dernier check-point. Tu peux fermer cette fenêtre : je te préviens."
                                    : "Tu peux fermer cette fenêtre : je te préviens à mon retour. (Je reste en bas de ton écran, en route.)", 12, Bandeau.Violet));
         Grid.SetColumn(p, 1);
         g.Children.Add(p);
@@ -1489,10 +1553,10 @@ internal sealed class FenetreAventure : Window
         g.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         var teinte = Gel(Aventure.TeinteIssue(e.Issue));
-        var signe = new TextBlock
+        var signe = new TextePixel(Aventure.SigneIssue(e.Issue), teinte)
         {
-            Text = Aventure.SigneIssue(e.Issue), FontSize = 56, Foreground = teinte, FontFamily = new FontFamily("Segoe UI Symbol"),
-            VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 22, 0), RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
+            Taille = 6, Titre = true, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 22, 0),
+            RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
         };
         if (Bandeau.Anime)
         {
@@ -1505,7 +1569,7 @@ internal sealed class FenetreAventure : Window
         g.Children.Add(signe);
         var p = new StackPanel();
         p.Children.Add(Enseigne(Aventure.NomIssue(e.Issue), teinte, 2.5));
-        var titre = Texte($"« {e.TitreFin} »", 18, Bandeau.ArgentClair, true);
+        var titre = Px($"« {e.TitreFin} »", 18, Bandeau.ArgentClair, true);
         titre.Margin = new Thickness(0, 6, 0, 6);
         p.Children.Add(titre);
         var gains = new WrapPanel();
@@ -1525,11 +1589,11 @@ internal sealed class FenetreAventure : Window
             vitrine.Children.Add(_anims.Eclat(ScenesAnimees.Vue(ts, 36), 60, Gel(Aventure.TeinteTon(c.Ton)), AnimationsCampagne.DelaiRecompense(i + 1)));
         if (vitrine.Children.Count > 0) p.Children.Add(vitrine);
         p.Children.Add(gains);
-        p.Children.Add(Texte($"Fins trouvées : {Aventure.Fins6(k, c)}", 13, Bandeau.ArgentClair, true));
+        p.Children.Add(Px($"Fins trouvées : {Aventure.Fins6(k, c)}", 13, Bandeau.ArgentClair, true));
         var l = Rangee();
-        l.Children.Add(Bouton("❖ Le carnet", true, () => Montrer(Vue.Carnet)));
-        l.Children.Add(Bouton("↻ Rejouer", false, () => Demarrer(c.Id, true)));
-        l.Children.Add(Bouton("☰ Bibliothèque", false, () => Montrer(Vue.Bibliotheque)));
+        l.Children.Add(BoutonPixel("❖ Le carnet", true, () => Montrer(Vue.Carnet)));
+        l.Children.Add(BoutonPixel("↻ Rejouer", false, () => Demarrer(c.Id, true)));
+        l.Children.Add(BoutonPixel("☰ Bibliothèque", false, () => Montrer(Vue.Bibliotheque)));
         p.Children.Add(l);
         Grid.SetColumn(p, 1);
         g.Children.Add(p);
@@ -1554,8 +1618,14 @@ internal sealed class FenetreAventure : Window
                 s = AnimationsCampagne.Portrait(Banque.Commune, c.Id, pe.Personnage, pe.Expression, ScenesAnimees.Echelle);
                 nom = NomPersonnage(pe.Personnage);
             }
-            _persoNom.Text = nom;
+            _persoNom.Texte = nom;
             _anims.Personnage(_persoImage, s, false, now);
+            // En pied dans la scène s'il est dessiné (un message sans personnage ne le renvoie pas).
+            if (el is not null && _campagne is { } c2 && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, c2, cle) is { } p2)
+            {
+                var pied = "pied-" + c2.Id + "-" + p2.Personnage;
+                _theatre.Perso(Banque.Commune.Fins.ContainsKey(pied) ? pied : "", now);
+            }
         }
         _anims.Parle(_enCours is { } e && AnimationsCampagne.Parle(e.Texte));
     }

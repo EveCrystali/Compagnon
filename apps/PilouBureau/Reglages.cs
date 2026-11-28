@@ -16,7 +16,9 @@ public sealed class Reglages
     // (Placement.Echelle). Décoché : le rendu d'origine (grille 48 × 56, taille libre).
     public bool DessinFin { get; set; } = true;
     public ModeBulle Bulle { get; set; } = ModeBulle.Compacte;
-    public ThemeBulle Theme { get; set; } = ThemeBulle.Auto;
+    // Thème de la bulle, du menu clic droit et de la fenêtre d'invitation : sombre par défaut (décision d'Antoine,
+    // 28 novembre 2026). Un réglage déjà enregistré garde son choix : seule une valeur absente prend ce défaut.
+    public ThemeBulle Theme { get; set; } = ThemeBulle.Sombre;
     public Accessoire Accessoire { get; set; } = Accessoire.Saison;
     public bool Promenade { get; set; } = true;
     public bool SuitSouris { get; set; } = true;

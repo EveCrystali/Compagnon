@@ -1,0 +1,92 @@
+# Scènes de « La Grande Panne » (docs/SCENES.md) : une section par décor (assets/sprites2x/decor-grande-panne-<décor>).
+# Coordonnées en pixels du décor fin (192 × 80). Format : voir assets/scenes/prologue.txt.
+# L'intérieur de l'ordinateur : des paquets de données passent, des tickets tombent, le curseur rôde.
+
+scene bureau-1337
+sol 4 78 188 78
+place 66
+interlocuteur 150
+acteur curseur vol 30 18 180 48 41
+acteur paquet traverse 10 40 9000 3000 34
+
+scene hall-pas-comptes
+sol 4 78 188 78
+place 46
+interlocuteur 148
+acteur ticket chute 104 12 7000 0
+acteur ticket chute 120 14 7000 3500
+acteur paquet traverse 4 10 11000 6000 30
+
+scene tour-tampon
+sol 4 78 188 78
+place 52
+interlocuteur 142
+acteur ticket chute 60 0 6500 1500
+acteur ticket chute 150 0 6500 4800
+acteur paquet traverse 10 30 12000 2000 26
+
+scene etage-guichets
+sol 4 78 188 78
+place 34
+interlocuteur 152
+acteur ticket chute 96 30 8000 2500
+acteur curseur vol 70 10 180 40 43
+
+scene bureau-echeance
+sol 4 78 188 78
+place 30
+interlocuteur 156
+acteur ticket chute 40 6 9000 0
+acteur ticket chute 110 4 9000 4500
+
+scene caverne-cables
+sol 4 78 188 78
+place 118
+interlocuteur 168
+acteur etincelle vol 20 10 180 40 47
+acteur etincelle vol 40 20 170 50 53
+acteur paquet traverse 14 30 8000 1000 40
+
+scene marais-majs
+sol 4 78 188 78
+place 30
+interlocuteur 160
+acteur bulle-marais flotte 60 76 5000 0 0 -9
+acteur bulle-marais flotte 134 78 6200 2600 0 -8
+acteur rond rond 112 74 3200 900
+sensible eau 0 64 192 80 rond
+
+scene file-impression
+sol 4 78 188 78
+place 122
+interlocuteur 172
+acteur ticket chute 150 44 6000 0
+acteur ticket chute 168 44 6000 3000
+
+scene citadelle-nuage
+sol 4 70 188 70
+place 44
+interlocuteur 150
+acteur paquet traverse 6 30 7000 0 36
+acteur paquet traverse 8 34 9500 4000 28
+
+scene dossier-temp
+sol 4 78 188 78
+place 34
+interlocuteur 152
+acteur ticket chute 70 20 7500 1000
+acteur ticket chute 140 18 7500 4700
+acteur curseur vol 20 10 180 40 59
+
+scene cabane-brouillon
+sol 4 78 188 78
+place 42
+interlocuteur 160
+acteur ticket chute 60 0 8500 0
+acteur ticket chute 130 0 8500 4200
+
+scene horloge-systeme
+sol 4 78 188 78
+place 40
+interlocuteur 152
+acteur etincelle vol 20 10 180 50 61

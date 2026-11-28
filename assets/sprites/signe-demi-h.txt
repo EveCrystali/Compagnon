@@ -1,0 +1,14 @@
+# signe d'interface (docs/STYLE.md) : demi-h U+25D3
+id: signe-demi-h
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+..aaa..
+.aaaaa.
+aaaaaaa
+aaaaaaa
+a.....a
+.a...a.
+..aaa..

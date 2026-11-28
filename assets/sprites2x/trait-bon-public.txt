@@ -1,0 +1,39 @@
+# trait de personnalité : bon-public
+id: trait-bon-public
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#3b4654 c=#1f4f8a d=#f69d50 e=#768390
+images:
+................................
+................................
+.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbccccccccdcccccccccccccccbbaa
+aabbccccccccdddcccccccccccccbbaa
+aabbccccccccdddddcccccccccccbbaa
+aabbccccccccdddddddcccccccccbbaa
+aabbccccccccdddddddddcccccccbbaa
+aabbccccccccdddddddddcccccccbbaa
+aabbccccccccdddddddcccccccccbbaa
+aabbccccccccdddddcccccccccccbbaa
+aabbccccccccdddcccccccccccccbbaa
+aabbccccccccdcccccccccccccccbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbccccccccccccccccccccccccbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aaaaaaaaaaaaaaeeeeaaaaaaaaaaaaaa
+.aaaaaaaaaaaaaeeeeaaaaaaaaaaaaa.
+.......aaaaaaaeeeeaaaaaaa.......
+......aaaaaaaaeeeeaaaaaaaa......
+......aaeeeeeeeeeeeeeeeeaa......
+......aaeeeeeeeeeeeeeeeeaa......
+......aaaaaaaaaaaaaaaaaaaa......
+.......aaaaaaaaaaaaaaaaaa.......

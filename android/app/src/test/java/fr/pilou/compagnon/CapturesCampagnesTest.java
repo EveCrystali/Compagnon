@@ -76,6 +76,42 @@ public class CapturesCampagnesTest {
         }
     }
 
+    /**
+     * La bibliothèque d'un joueur de niveau 12 sans haut fait, avec la campagne d'essai fermée par « Plume » et par le
+     * prologue : la carte dit ce qu'il manque (préfixe « bibliotheque-haut-fait »), clair et sombre.
+     */
+    @Test
+    public void bibliothequeAvecUneCampagneFermeeParUnHautFait() {
+        Context ctx = RuntimeEnvironment.getApplication();
+        try {
+            dossier = new File("build/captures");
+            dossier.mkdirs();
+            CampagnesTel.EN_PLUS.add(CampagnesTest.hautFait());
+            for (String[] f : new String[][]{FORMATS[0], FORMATS[1]}) {
+                format = f[0];
+                RuntimeEnvironment.setQualifiers(f[1]);
+                essayer("bibliotheque-haut-fait", () -> {
+                    Prefs.de(ctx).edit().clear().commit();
+                    appairer(ctx);
+                    CampagnesTel.prechargerMaintenant();
+                    ActivityController<Principale> ac = Robolectric.buildActivity(Principale.class).setup().visible();
+                    Principale a = ac.get();
+                    a.aller(Principale.AVENTURE, false);
+                    attendre();
+                    PageAventure pa = (PageAventure) a.page(Principale.AVENTURE);
+                    pa.rafraichir();
+                    attendre();
+                    vue(pa.corps, "bibliotheque-haut-fait");
+                    ac.pause().stop().destroy();
+                });
+            }
+        } catch (Throwable t) {
+            System.out.println("CAPTURES-SAUTEES " + t);
+        } finally {
+            CampagnesTel.EN_PLUS.clear();
+        }
+    }
+
     private void essayer(String nom, Runnable r) {
         try {
             r.run();
@@ -347,6 +383,183 @@ public class CapturesCampagnesTest {
         return l;
     }
 
+    /** Position (x, y) d'une vue dans la racine donnée (somme des positions des parents, moins leur défilement). */
+    private static int[] position(View v, View racine) {
+        int x = 0, y = 0;
+        for (View c = v; c != racine && c != null; c = c.getParent() instanceof View ? (View) c.getParent() : null) {
+            x += c.getLeft() - (c == v ? 0 : c.getScrollX());
+            y += c.getTop() - (c == v ? 0 : c.getScrollY());
+        }
+        return new int[]{x, y};
+    }
+
+    private static List<View> toutes(View v) {
+        List<View> l = new ArrayList<>();
+        l.add(v);
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) l.addAll(toutes(((android.view.ViewGroup) v).getChildAt(i)));
+        return l;
+    }
+
+    /** Rien sous le bandeau n'est écrit par la police système : tout TextView visible est un défaut ; tout signe de la police pixel est dessiné. */
+    private static void sansTexteSysteme(Lecture l) {
+        List<String> sys = new ArrayList<>();
+        systemes(l, sys);
+        org.junit.Assert.assertTrue("texte système dans la lecture : " + sys, sys.isEmpty());
+        List<TextePixelVue> pv = new ArrayList<>();
+        pixels(l, pv);
+        PolicePixel pol = PolicePixel.texte();
+        for (TextePixelVue t : pv)
+            for (char ch : PolicePixel.preparer(t.texte()).toCharArray())
+                if (!Character.isWhitespace(ch) && ch != 0x202F) org.junit.Assert.assertTrue("glyphe absent de la police : U+" + Integer.toHexString(ch) + " dans « " + t.texte() + " »", pol.connu(ch));
+    }
+
+    private static void pixels(View v, List<TextePixelVue> l) {
+        if (v.getVisibility() != View.VISIBLE) return;
+        if (v instanceof TextePixelVue) l.add((TextePixelVue) v);
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) pixels(((android.view.ViewGroup) v).getChildAt(i), l);
+    }
+
+    private static void systemes(View v, List<String> l) {
+        if (v.getVisibility() != View.VISIBLE) return;
+        if (v instanceof android.widget.TextView && ((android.widget.TextView) v).getText().length() > 0) l.add(((android.widget.TextView) v).getText().toString());
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) systemes(((android.view.ViewGroup) v).getChildAt(i), l);
+    }
+
+    /**
+     * La lecture « main de Pilou » (cadres et police pixel) sur un téléphone 1078 × 2400 (392 × 873 dp, 440 dpi, densité 2,75) :
+     * le prologue à son premier choix en sombre, en clair, en grande police (× 1,3, sombre), et La Grande Panne avec son
+     * personnage en sombre. Images dans build/captures (jeu-telephone-portrait-*).
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void lecturePixelSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        String[][] cas = {
+                {"sombre", "w392dp-h873dp-night-440dpi", "1", "4"},
+                {"clair", "w392dp-h873dp-notnight-440dpi", "1", "4"},
+                {"grandepolice-sombre", "w392dp-h873dp-night-440dpi", "1.3", "5"},
+        };
+        try {
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            for (String[] c : cas) {
+                format = "jeu-telephone-portrait-" + c[0];
+                RuntimeEnvironment.setQualifiers(c[1]);
+                RuntimeEnvironment.setFontScale(Float.parseFloat(c[2]));
+                ActivityController<Principale>[] ac = new ActivityController[1];
+                Lecture l = ouvrirLecture(pro, "p1-sac", ac);
+                Activity a = ac[0].get();
+                ecran(a, "prologue-choix");
+                android.util.DisplayMetrics m = a.getResources().getDisplayMetrics();
+                org.junit.Assert.assertEquals(1078, m.widthPixels);
+                org.junit.Assert.assertEquals(5, l.unite());
+                // Le texte du récit et des choix : police pixel entière (4 pixels d'écran, 5 en grande police), jamais la police système.
+                List<TextePixelVue> pv = new ArrayList<>();
+                pixels(l, pv);
+                int choix = 0;
+                List<TextePixelVue> bulles = new ArrayList<>();
+                pixels(l.filVue(), bulles);
+                org.junit.Assert.assertFalse(bulles.isEmpty());
+                for (TextePixelVue t : bulles) org.junit.Assert.assertEquals(Integer.parseInt(c[3]), t.pixel());
+                for (Campagnes.OptionVue o : CampagnesTel.etat(RuntimeEnvironment.getApplication()).options)
+                    for (TextePixelVue t : pv) if (t.texte().equals(o.libelle)) {
+                        choix++;
+                        org.junit.Assert.assertEquals(Integer.parseInt(c[3]), t.pixel());
+                    }
+                org.junit.Assert.assertTrue("choix en police pixel", choix > 0);
+                List<String> sys = new ArrayList<>();
+                systemes(l, sys);
+                for (String s : sys) org.junit.Assert.assertFalse("texte système sous la scène : " + s, s.contains("CHAPITRE") || s.contains("Devant"));
+                // Le fil est ancré en bas : la dernière bulle finit 2 u au-dessus du bas de la zone du fil (les choix), et le
+                // défilement tombe sur 0 (tout tient) ou sur le haut d'une bulle (moins 2 u) ou sur le bas du contenu.
+                android.widget.ScrollView defil = (android.widget.ScrollView) l.filVue().getParent();
+                android.view.ViewGroup fil = (android.view.ViewGroup) l.filVue();
+                int y = defil.getScrollY();
+                View derniere = fil.getChildAt(fil.getChildCount() - 1);
+                org.junit.Assert.assertEquals("2 u entre la dernière bulle et les choix", 2 * l.unite(), defil.getHeight() - (derniere.getBottom() - y));
+                boolean cale = y == 0 || y == fil.getHeight() - defil.getHeight();
+                for (int i = 0; i < fil.getChildCount(); i++) if (fil.getChildAt(i).getTop() - 2 * l.unite() == y) cale = true;
+                org.junit.Assert.assertTrue("fil calé : scrollY=" + y, cale);
+                // Pas de séparateur de chapitre en tête du fil visible : le bandeau dit déjà « CHAPITRE 1 / 2 ».
+                for (String s : AventureTest.textes(fil)) org.junit.Assert.assertFalse("séparateur en double : " + s, s.contains("CHAPITRE 1 - ") || s.contains("Chapitre 1 ·"));
+                // La puce de lieu tient dans la scène (192 u de large, centrée), en haut à gauche à 1 u de ses bords (le bas à
+                // droite est la place du personnage en pied).
+                int k = l.unite(), W = m.widthPixels, scGauche = (W - 192 * k) / 2, scDroite = scGauche + 192 * k;
+                View puce = l.puceLieu();
+                int[] pp = position(puce, l);
+                int[] pt = position(l.tete(), l);
+                org.junit.Assert.assertEquals(scGauche + k, pp[0]);
+                org.junit.Assert.assertTrue(pp[0] + puce.getWidth() <= scDroite - k);
+                org.junit.Assert.assertEquals(pt[1] + k, pp[1]);
+                org.junit.Assert.assertTrue(pp[1] + puce.getHeight() <= pt[1] + 80 * k);
+                // La jauge : sous la scène, sur sa largeur exacte.
+                int[] pj = position(l.jaugeVue(), l);
+                org.junit.Assert.assertEquals(scGauche, pj[0]);
+                org.junit.Assert.assertEquals(192 * k, l.jaugeVue().getWidth());
+                org.junit.Assert.assertTrue(pj[1] >= pt[1] + 80 * k);
+                // Les bulles de Pilou ont la largeur des choix.
+                View bulle = null, choisir = null;
+                for (View v : toutes(l)) {
+                    String d = v.getContentDescription() == null ? "" : v.getContentDescription().toString();
+                    if (bulle == null && d.startsWith("Pilou : ") && v instanceof CadrePixel.Pave) bulle = v;
+                    if (choisir == null && d.startsWith("Choisir : ")) choisir = v;
+                }
+                org.junit.Assert.assertNotNull(bulle);
+                org.junit.Assert.assertNotNull(choisir);
+                org.junit.Assert.assertEquals(choisir.getWidth(), bulle.getWidth());
+                org.junit.Assert.assertEquals(position(choisir, l)[0], position(bulle, l)[0]);
+                ac[0].pause().stop().destroy();
+            }
+            // Les cartes du pied et la fin, en sombre : attente (compte à rebours à un tiers), fin, feuille « ⋯ ». Tout en police pixel.
+            format = "jeu-telephone-portrait-sombre";
+            RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
+            RuntimeEnvironment.setFontScale(1f);
+            Map<String, String[]> pires = piresCas(pro);
+            ActivityController<Principale>[] ap = new ActivityController[1];
+            Lecture la = ouvrirLecture(pro, pires.get("attente")[0], ap);
+            org.junit.Assert.assertEquals(Campagnes.Phase.Attente, CampagnesTel.etat(RuntimeEnvironment.getApplication()).phase);
+            horloge[0] += (CampagnesTel.etat(RuntimeEnvironment.getApplication()).fin - horloge[0]) / 3;
+            la.rafraichir();
+            attendre();
+            ecran(ap[0].get(), "attente");
+            sansTexteSysteme(la);
+            ap[0].pause().stop().destroy();
+
+            ap = new ActivityController[1];
+            Lecture lf = ouvrirLecture(pro, pires.get("fin")[0], ap);
+            org.junit.Assert.assertEquals(Campagnes.Phase.Fin, CampagnesTel.etat(RuntimeEnvironment.getApplication()).phase);
+            ecran(ap[0].get(), "fin");
+            vue(lf.filVue(), "fin-fil");
+            sansTexteSysteme(lf);
+            ap[0].pause().stop().destroy();
+
+            ap = new ActivityController[1];
+            Lecture lm = ouvrirLecture(pro, "p1-sac", ap);
+            View plus = AventureTest.trouver(lm, "Plus : carnet, mettre de côté");
+            org.junit.Assert.assertNotNull(plus);
+            plus.performClick();
+            attendre();
+            org.junit.Assert.assertTrue(lm.coucheOuverte());
+            ecran(ap[0].get(), "menu");
+            sansTexteSysteme(lm);
+            ap[0].pause().stop().destroy();
+
+            // La Grande Panne avec personnage, en sombre.
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            ouvrirLecture(gp, noeudAvecPersonnage(gp), ac);
+            ecran(ac[0].get(), "grande-panne-personnage-pixel");
+            ac[0].pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+            RuntimeEnvironment.setFontScale(1f);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     public void uneSeuleUniteDePixelSurTelephonePortrait() {
@@ -370,11 +583,17 @@ public class CapturesCampagnesTest {
             org.junit.Assert.assertEquals(View.VISIBLE, l.theatre().getVisibility());
             org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
             org.junit.Assert.assertEquals(k, l.theatre().echelleDessinee());
-            // Le portrait du personnage : 64k × 64k, k pixels d'écran par pixel fin.
-            org.junit.Assert.assertEquals(View.VISIBLE, l.portrait().getVisibility());
-            org.junit.Assert.assertEquals(64 * k, l.portrait().getWidth());
-            org.junit.Assert.assertEquals(64 * k, l.portrait().getHeight());
-            org.junit.Assert.assertEquals(k, l.portrait().echelle());
+            // Le personnage est dessiné en pied dans la scène (même pixel, celui du théâtre) : pas de portrait par-dessus.
+            // S'il n'était pas dessiné en pied, son portrait serait de 64k × 64k, k pixels d'écran par pixel fin.
+            if (l.theatre().aPerso()) {
+                org.junit.Assert.assertNotEquals(View.VISIBLE, l.portrait().getVisibility());
+            } else {
+                org.junit.Assert.assertEquals(View.VISIBLE, l.portrait().getVisibility());
+                org.junit.Assert.assertEquals(64 * k, l.portrait().getWidth());
+                org.junit.Assert.assertEquals(64 * k, l.portrait().getHeight());
+                org.junit.Assert.assertEquals(k, l.portrait().echelle());
+            }
+            org.junit.Assert.assertTrue("Grumeau en pied dans la scène", l.theatre().aPerso());
             // Le mini-Pilou de repli (jamais montré avec le théâtre, mais prêt) : même pixel fin.
             org.junit.Assert.assertEquals((float) k, l.pilouRepli().pixelFin(), 0.001f);
             ac[0].pause().stop().destroy();
@@ -389,6 +608,93 @@ public class CapturesCampagnesTest {
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");
+        }
+    }
+
+    /** Une partie vraiment jouée depuis le début (le fil garde tout ce qui a été dit), ouverte dans la lecture. */
+    private Lecture ouvrirPartieJouee(Campagnes.Campagne c, int bulles, ActivityController<Principale>[] ac) {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        appairer(ctx);
+        horloge[0] = 1_790_000_000_000L;
+        CampagnesTel.horloge = () -> horloge[0];
+        android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+        CampagnesTel.prechargerMaintenant();
+        org.junit.Assert.assertNull(CampagnesTel.demarrer(ctx, c.id, true));
+        for (int i = 0; i < 30; i++) {
+            Campagnes.Etat e = CampagnesTel.etat(ctx);
+            if (e.phase == Campagnes.Phase.Choix && CampagnesTel.fil(ctx, c.id).size() >= bulles + 1) break;
+            if (e.phase == Campagnes.Phase.Choix && !e.options.isEmpty()) org.junit.Assert.assertNull(CampagnesTel.choisir(ctx, e.options.get(0).id));
+            else if (e.phase == Campagnes.Phase.Depart) org.junit.Assert.assertNull(CampagnesTel.continuer(ctx));
+            else if (e.phase == Campagnes.Phase.Epreuve) org.junit.Assert.assertNull(CampagnesTel.epreuve(ctx, true));
+            else if (e.phase == Campagnes.Phase.Attente || e.phase == Campagnes.Phase.Repos) horloge[0] = e.fin + 1000;
+            else break;
+        }
+        System.out.println("PARTIE-JOUEE " + CampagnesTel.etat(ctx).phase + " " + CampagnesTel.etat(ctx).noeud + " fil=" + CampagnesTel.fil(ctx, c.id).size());
+        org.junit.Assert.assertEquals(Campagnes.Phase.Choix, CampagnesTel.etat(ctx).phase);
+        ac[0] = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = ac[0].get();
+        a.ouvrirLecture();
+        attendre();
+        Lecture l = ((PageAventure) a.page(Principale.AVENTURE)).lecture();
+        l.accelerer();
+        attendre();
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(4000));
+        attendre();
+        return l;
+    }
+
+    /**
+     * Deux captures du pilote (1078 x 2400, sombre) : une lecture avec au moins trois bulles d'historique au-dessus des
+     * choix (les précédentes remplissent l'espace, entières : le défilement tombe sur une bulle) ; et La Grande Panne avec
+     * Grumeau en pied dans le hall.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void historiqueEtPersonnageEnPiedSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        format = "jeu-telephone-portrait-sombre";
+        RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
+        RuntimeEnvironment.setFontScale(1f);
+        try {
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            Lecture l = ouvrirPartieJouee(pro, 4, ac);
+            Activity a = ac[0].get();
+            org.junit.Assert.assertEquals(1078, a.getResources().getDisplayMetrics().widthPixels);
+            org.junit.Assert.assertEquals(2400, a.getResources().getDisplayMetrics().heightPixels);
+            ecran(a, "historique");
+            // Les bulles visibles au-dessus des choix : au moins trois entières, aucune coupée par le bas du fil (celle qu entame le haut est masquée par Defil, la place reste vide).
+            android.widget.ScrollView defil = (android.widget.ScrollView) l.filVue().getParent();
+            android.view.ViewGroup fil = (android.view.ViewGroup) l.filVue();
+            int y = defil.getScrollY(), entieres = 0;
+            for (int i = 0; i < fil.getChildCount(); i++) {
+                View v = fil.getChildAt(i);
+                String d = v.getContentDescription() == null ? "" : v.getContentDescription().toString();
+                boolean bulle = false;
+                for (View w : toutes(v)) {
+                    String dw = w.getContentDescription() == null ? "" : w.getContentDescription().toString();
+                    if (w instanceof CadrePixel.Pave && (dw.startsWith("Pilou : ") || dw.startsWith("Toi : "))) bulle = true;
+                }
+                if (!bulle) continue;
+                boolean coupee = v.getTop() < y + defil.getHeight() && v.getBottom() > y + defil.getHeight();
+                org.junit.Assert.assertFalse("bulle coupée : " + d + " top=" + v.getTop() + " bas=" + v.getBottom() + " y=" + y, coupee);
+                if (v.getTop() >= y && v.getBottom() <= y + defil.getHeight()) entieres++;
+            }
+            org.junit.Assert.assertTrue("bulles entières visibles : " + entieres, entieres >= 3);
+            ac[0].pause().stop().destroy();
+
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            ac = new ActivityController[1];
+            Lecture lg = ouvrirLecture(gp, "ch1-reponse", ac);
+            org.junit.Assert.assertEquals(View.VISIBLE, lg.theatre().getVisibility());
+            ecran(ac[0].get(), "grande-panne-grumeau-en-pied");
+            ac[0].pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+            RuntimeEnvironment.setFontScale(1f);
         }
     }
 }

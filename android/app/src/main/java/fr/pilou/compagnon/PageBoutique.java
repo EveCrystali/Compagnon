@@ -4,12 +4,10 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -29,7 +27,7 @@ import java.util.TreeMap;
 /**
  * Boutique rétro (gratuite, aucune vraie monnaie) : enseigne néon, cabine d'essayage, onglets par rayon,
  * étagères par rangée de niveau. Le niveau ouvre la rangée, les pièces d'or achètent ; le PC vérifie et applique.
- * Chaque état a un signe de forme : ▣ fermé (« NIV 15 »), ◉ achetable, ◌ trop cher, ✓ à toi, ★ porté, ⇢ en route,
+ * Chaque état a un signe de forme : ▣ fermé (« NIV 15 »), ¤ achetable, ◌ trop cher, ✓ à toi, ★ porté, ⇢ en route,
  * ⌛ saison (jours restants ou « revient »), ✧ de passage. Rareté : lisere de couleur et signe (· ◇ ◆ ✦ ★ ✺).
  * Onglet « Ensembles » (progression 3/6, bonus porté) et compteur de collection sous l'enseigne.
  */
@@ -42,7 +40,7 @@ final class PageBoutique extends Page {
     private final PilouVue essai;
     private final TextView bulleEssai, nom, detail, message, collection;
     private final LinearLayout jauge;
-    private final Button essayer, acheter, porter;
+    private final TextView essayer, acheter, porter;
     private final LinearLayout cabine;
     private String rayon = VITRINE, choisi = "", empreinte = "";
     private boolean essaiActif = true;
@@ -53,14 +51,14 @@ final class PageBoutique extends Page {
         // Enseigne : « BOUTIQUE » en néon pixel sur fond nuit.
         LinearLayout enseigne = Ui.pile(a);
         enseigne.setGravity(Gravity.CENTER_HORIZONTAL);
-        enseigne.setBackground(cadre(a, Vitrine.NUIT, Vitrine.VIOLET_FONCE, 3));
         enseigne.setPadding(Ui.dp(a, 12), Ui.dp(a, 16), Ui.dp(a, 12), Ui.dp(a, 12));
+        Style.fond(enseigne, cadre(a, Vitrine.NUIT, Vitrine.VIOLET_FONCE, 3));
         enseigne.addView(new Vitrine.Pixel(a, "BOUTIQUE", 4.2f, Vitrine.ORANGE, Vitrine.VIOLET_FONCE, true));
-        TextView sous = Ui.texte(a, "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.", Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
+        TextView sous = Style.texte(a, "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.", Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
         sous.setGravity(Gravity.CENTER);
         sous.setPadding(0, Ui.dp(a, 10), 0, 0);
         enseigne.addView(sous, Ui.large());
-        collection = Ui.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT_CLAIR, true);
+        collection = Style.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT_CLAIR, true);
         collection.setGravity(Gravity.CENTER);
         collection.setPadding(0, Ui.dp(a, 8), 0, Ui.dp(a, 4));
         enseigne.addView(collection, Ui.large());
@@ -72,8 +70,8 @@ final class PageBoutique extends Page {
 
         // Cabine d'essayage : décor, Pilou avec l'objet essayé, boutons.
         cabine = Ui.pile(a);
-        cabine.setBackground(cadre(a, Vitrine.NUIT, Vitrine.NUIT3, 2));
         cabine.setPadding(Ui.dp(a, 12), Ui.dp(a, 12), Ui.dp(a, 12), Ui.dp(a, 12));
+        Style.fond(cabine, cadre(a, Vitrine.NUIT, Vitrine.NUIT3, 2));
         cabine.addView(new Vitrine.Pixel(a, "ESSAYAGE", 2, Vitrine.VIOLET, Vitrine.ENCRE, false));
         scene = new FrameLayout(a);
         scene.setBackgroundColor(Vitrine.CIEL);
@@ -85,7 +83,7 @@ final class PageBoutique extends Page {
         essai.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         scene.addView(essai, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
-        bulleEssai = Ui.texte(a, "ça te va bien !", Ui.T_ETIQUETTE, Vitrine.ENCRE, false);
+        bulleEssai = Style.texte(a, "ça te va bien !", Ui.T_ETIQUETTE, Vitrine.ENCRE, false);
         bulleEssai.setPadding(Ui.dp(a, 10), Ui.dp(a, 4), Ui.dp(a, 10), Ui.dp(a, 5));
         bulleEssai.setVisibility(View.GONE);
         FrameLayout.LayoutParams lbu = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -95,10 +93,10 @@ final class PageBoutique extends Page {
         LinearLayout.LayoutParams ls = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 210));
         ls.topMargin = Ui.dp(a, 8);
         cabine.addView(scene, ls);
-        nom = Ui.texte(a, "", Ui.T_CARTE, Vitrine.ARGENT_CLAIR, true);
+        nom = Style.texte(a, "", Ui.T_CARTE, Vitrine.ARGENT_CLAIR, true);
         nom.setPadding(0, Ui.dp(a, 10), 0, 0);
         cabine.addView(nom, Ui.large());
-        detail = Ui.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT, false);
+        detail = Style.texte(a, "", Ui.T_DETAIL, Vitrine.ARGENT, false);
         cabine.addView(detail, Ui.large());
         LinearLayout boutons = Ui.rangee(a);
         boutons.setPadding(0, Ui.dp(a, 10), 0, 0);
@@ -109,13 +107,13 @@ final class PageBoutique extends Page {
         });
         acheter = bouton(a, "Acheter", true, v -> acheter());
         porter = bouton(a, "Porter", false, v -> porter());
-        for (Button b : new Button[]{essayer, acheter, porter}) {
+        for (TextView b : new TextView[]{essayer, acheter, porter}) {
             LinearLayout.LayoutParams lb = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
             lb.rightMargin = Ui.dp(a, 6);
             boutons.addView(b, lb);
         }
         cabine.addView(boutons, Ui.large());
-        message = Ui.texte(a, "", Ui.T_ETIQUETTE, Vitrine.VIOLET, false);
+        message = Style.texte(a, "", Ui.T_ETIQUETTE, Vitrine.VIOLET, false);
         message.setPadding(0, Ui.dp(a, 6), 0, 0);
         cabine.addView(message, Ui.large());
         corps.addView(cabine, Ui.large(a, 12));
@@ -123,8 +121,8 @@ final class PageBoutique extends Page {
         // Rayonnage : onglets des rayons (défilement horizontal) puis étagères, toujours sur fond nuit (arcade),
         // quel que soit le thème du téléphone : les titres pixel gardent leur contraste.
         LinearLayout rayonnage = Ui.pile(a);
-        rayonnage.setBackground(cadre(a, Vitrine.NUIT, Vitrine.NUIT3, 2));
         rayonnage.setPadding(Ui.dp(a, 10), Ui.dp(a, 10), Ui.dp(a, 10), Ui.dp(a, 6));
+        Style.fond(rayonnage, cadre(a, Vitrine.NUIT, Vitrine.NUIT3, 2));
         HorizontalScrollView bande = new HorizontalScrollView(a);
         bande.setHorizontalScrollBarEnabled(false);
         onglets = Ui.rangee(a);
@@ -135,20 +133,21 @@ final class PageBoutique extends Page {
         corps.addView(rayonnage, Ui.large());
     }
 
-    private static GradientDrawable cadre(Context c, int fond, int bord, float ep) {
-        GradientDrawable g = new GradientDrawable();
-        g.setColor(fond);
-        g.setCornerRadius(Ui.dp(c, 4));
-        g.setStroke(Ui.dp(c, ep), bord);
-        return g;
+    /**
+     * Cadre en pixels de la boutique (docs/STYLE.md), toujours de nuit : les trois panneaux (épaisseur 2 et plus sur
+     * fond nuit) prennent le cadre plein, tout le reste (étiquettes, onglets, cartes d'étagère) un cadre plat.
+     */
+    private static android.graphics.drawable.Drawable cadre(Context c, int fond, int bord, float ep) {
+        Style.Palette n = Style.NUIT;
+        if (fond == Vitrine.NUIT && ep >= 2)
+            return new Style.Cadre(Style.u(c), Style.Cadre.PLEIN, fond, n.bordExt, bord == Vitrine.NUIT3 ? Vitrine.NUIT3 : bord, n.biseauClair, n.biseauSombre);
+        return Style.plat(c, fond, ep <= 0 || bord == 0 ? fond : bord);
     }
 
-    private static Button bouton(Context c, String s, boolean plein, View.OnClickListener action) {
-        Button b = Ui.bouton(c, s, plein, action);
-        b.setTextSize(14);
-        b.setPadding(Ui.dp(c, 6), Ui.dp(c, 10), Ui.dp(c, 6), Ui.dp(c, 10));
-        b.setBackground(Ui.touchable(c, cadre(c, plein ? Vitrine.ORANGE : Vitrine.NUIT3, plein ? Vitrine.ENCRE : Vitrine.VIOLET_FONCE, 2), 4));
-        b.setTextColor(plein ? Vitrine.ENCRE : Vitrine.ARGENT_CLAIR);
+    private static TextView bouton(Context c, String s, boolean plein, View.OnClickListener action) {
+        Style.Texte b = Style.bouton(c, Style.NUIT, s, plein, action);
+        int u = Style.u(c);
+        b.setPadding(2 * u + Ui.dp(c, 4), 2 * u + Ui.dp(c, 6), 2 * u + Ui.dp(c, 4), 2 * u + Ui.dp(c, 6));
         return b;
     }
 
@@ -212,7 +211,7 @@ final class PageBoutique extends Page {
         ongletsRayons(e, n);
         etageres.removeAllViews();
         if (e.po < 0) {
-            TextView t = Ui.texte(app, "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC). En attendant, on peut regarder.", Ui.T_DETAIL, Vitrine.ARGENT, false);
+            TextView t = Style.texte(app, "La boutique s'ouvre quand le PC donne des nouvelles (Pilou ≥ 0.9.10 sur le PC). En attendant, on peut regarder.", Ui.T_DETAIL, Vitrine.ARGENT, false);
             t.setPadding(Ui.dp(app, 4), Ui.dp(app, 10), 0, Ui.dp(app, 4));
             etageres.addView(t, Ui.large());
         }
@@ -252,7 +251,7 @@ final class PageBoutique extends Page {
         int cases = 24, pleines = total == 0 ? 0 : n * cases / total;
         for (int i = 0; i < cases; i++) {
             View c = new View(app);
-            c.setBackground(cadre(app, i < pleines ? Vitrine.VIOLET : Vitrine.NUIT2, Vitrine.VIOLET_FONCE, i < pleines ? 0 : 1));
+            Style.fond(c, cadre(app, i < pleines ? Vitrine.VIOLET : Vitrine.NUIT2, Vitrine.VIOLET_FONCE, i < pleines ? 0 : 1));
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(Ui.dp(app, 9), Ui.dp(app, 6));
             l.rightMargin = Ui.dp(app, 2);
             jauge.addView(c, l);
@@ -279,7 +278,7 @@ final class PageBoutique extends Page {
             entete(en.signe + " " + en.nom.toUpperCase(Locale.ROOT), sous, actif ? Vitrine.ORANGE : complet ? Vitrine.VIOLET : Vitrine.BLEU,
                     false, false);
             if (a > 0 && !actif) {
-                Button tout = bouton(app, "Porter les " + a + " pièces", false, v -> {
+                TextView tout = bouton(app, "Porter les " + a + " pièces", false, v -> {
                     for (Boutique.Article x : pieces) if (e.objets.contains(x.id)) Gains.equiper(app, x.slot, x.id);
                     envoyer();
                     message.setText("★ Pilou porte l'ensemble " + en.nom);
@@ -320,11 +319,11 @@ final class PageBoutique extends Page {
         Boutique.StyleBulle st = Boutique.style(vu.get(Boutique.BULLE));
         bulleEssai.setVisibility(st == null ? View.GONE : View.VISIBLE);
         if (st != null) {
-            GradientDrawable g = new GradientDrawable();
+            android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
             g.setColor(st.fond != 0 ? st.fond : 0xfff6f8fa);
             g.setStroke(Ui.dp(app, st.epaisseur), st.bord);
             g.setCornerRadius(Ui.dp(app, st.rayon));
-            bulleEssai.setBackground(g);
+            Style.fond(bulleEssai, g);
             bulleEssai.setTextColor(st.sombre ? Vitrine.ARGENT_CLAIR : Vitrine.ENCRE);
         }
         if (a == null) {
@@ -347,7 +346,7 @@ final class PageBoutique extends Page {
                 : porteIci ? "★ porté" : possede ? (bonus ? "✓ actif" : surPc ? "✓ à toi · se porte depuis le PC" : "✓ à toi")
                 : enRoute ? "⇢ achat en route vers le PC…"
                 : !dispo ? indispo(a)
-                : solde >= prix ? "◉ " + prix + " po" + (prix < a.prix ? " (au lieu de " + a.prix + ")" : "")
+                : solde >= prix ? "¤ " + prix + " po" + (prix < a.prix ? " (au lieu de " + a.prix + ")" : "")
                 : "◌ " + prix + " po · il manque " + (prix - solde) + " po";
         StringBuilder plus = new StringBuilder();
         if (!a.saison.isEmpty() && Boutique.enSaison(a.saison, jour()))
@@ -414,8 +413,8 @@ final class PageBoutique extends Page {
 
     private View onglet(String r, String texte, boolean neuf) {
         boolean actif = r.equals(rayon);
-        TextView t = Ui.texte(app, neuf ? texte + "  !" : texte, Ui.T_DETAIL, actif ? 0xffffffff : Vitrine.ARGENT, true);
-        t.setBackground(cadre(app, actif ? Vitrine.VIOLET_FONCE : Vitrine.NUIT2, actif ? 0xffd2caff : neuf ? Vitrine.ORANGE : Vitrine.FERME, 2));
+        TextView t = Style.texte(app, neuf ? texte + "  !" : texte, Ui.T_DETAIL, actif ? 0xffffffff : Vitrine.ARGENT, true);
+        Style.fond(t, cadre(app, actif ? Vitrine.VIOLET_FONCE : Vitrine.NUIT2, actif ? 0xffd2caff : neuf ? Vitrine.ORANGE : Vitrine.FERME, 2));
         t.setPadding(Ui.dp(app, 12), Ui.dp(app, 9), Ui.dp(app, 12), Ui.dp(app, 9));
         t.setOnClickListener(v -> rayon(r));
         t.setContentDescription(texte.substring(2) + (actif ? ", rayon affiché" : "") + (neuf ? ", nouvelle rangée" : ""));
@@ -504,7 +503,7 @@ final class PageBoutique extends Page {
         Vitrine.Pixel t = new Vitrine.Pixel(app, titre, 2.2f, couleur, Vitrine.ENCRE, false);
         r.addView(t);
         l.addView(r);
-        TextView s = Ui.texte(app, sous, Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
+        TextView s = Style.texte(app, sous, Ui.T_ETIQUETTE, Vitrine.ARGENT, false);
         s.setPadding(0, Ui.dp(app, 4), 0, 0);
         l.addView(s);
         if (flash && Vitrine.anime(app)) {
@@ -573,12 +572,12 @@ final class PageBoutique extends Page {
         else if (possede) { bord = Vitrine.VIOLET; signe = "✓"; }
         else if (enRoute) { bord = Vitrine.BLEU_CLAIR; signe = "⇢"; }
         else if (!dispo) { bord = Vitrine.FERME; signe = a.passage ? "✧" : "⌛"; }
-        else if (solde >= prix && e.po >= 0) { bord = Vitrine.BLEU; signe = "◉"; }
+        else if (solde >= prix && e.po >= 0) { bord = Vitrine.BLEU; signe = "¤"; }
         else { bord = Vitrine.GRIS; signe = "◌"; }
 
         LinearLayout c = Ui.pile(app);
         c.setGravity(Gravity.CENTER_HORIZONTAL);
-        c.setBackground(Ui.touchable(app, cadre(app, choisie ? Vitrine.NUIT3 : Vitrine.NUIT2, choisie ? Vitrine.ARGENT_CLAIR : bord,
+        c.setBackground(Style.touchable(app, cadre(app, choisie ? Vitrine.NUIT3 : Vitrine.NUIT2, choisie ? Vitrine.ARGENT_CLAIR : bord,
                 choisie || porteIci ? 3 : 2), 4));
         c.setPadding(Ui.dp(app, 4), Ui.dp(app, 4), Ui.dp(app, 4), Ui.dp(app, 6));
         FrameLayout haut = new FrameLayout(app);
@@ -589,7 +588,7 @@ final class PageBoutique extends Page {
         // Rareté : signe dans sa couleur (et celui de l'ensemble), en bas à gauche ; lisere au-dessus.
         String ens = "";
         for (Boutique.Ensemble en : Boutique.ENSEMBLES) if (en.pieces.contains(a.id)) ens = " " + en.signe;
-        TextView rar = Ui.texte(app, Boutique.signeRarete(a.rarete) + ens, Ui.T_DETAIL, Boutique.couleurRarete(a.rarete), true);
+        TextView rar = Style.texte(app, Boutique.signeRarete(a.rarete) + ens, Ui.T_DETAIL, Boutique.couleurRarete(a.rarete), true);
         haut.addView(rar, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START | Gravity.BOTTOM));
         View lisere = new View(app);
         lisere.setBackgroundColor(Boutique.couleurRarete(a.rarete));
@@ -598,17 +597,17 @@ final class PageBoutique extends Page {
         ll.bottomMargin = Ui.dp(app, 2);
         c.addView(lisere, ll);
         if (!signe.isEmpty()) {
-            TextView s = Ui.texte(app, signe, Ui.T_CORPS, bord, true);
+            TextView s = Style.texte(app, signe, Ui.T_CORPS, bord, true);
             haut.addView(s, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.END | Gravity.TOP));
         }
         if (ruban != null) {
-            TextView r = Ui.texte(app, ruban, 10, Vitrine.ENCRE, true);
+            TextView r = Style.texte(app, ruban, 10, Vitrine.ENCRE, true);
             r.setBackgroundColor(Vitrine.ORANGE);
             r.setPadding(Ui.dp(app, 4), 0, Ui.dp(app, 4), Ui.dp(app, 1));
             haut.addView(r, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START | Gravity.TOP));
         }
         c.addView(haut, Ui.large());
-        TextView nomT = Ui.texte(app, a.nom, 12, ouvert ? Vitrine.ARGENT_CLAIR : Vitrine.ARGENT, false);
+        TextView nomT = Style.texte(app, a.nom, 12, ouvert ? Vitrine.ARGENT_CLAIR : Vitrine.ARGENT, false);
         nomT.setSingleLine(true);
         nomT.setEllipsize(TextUtils.TruncateAt.END);
         nomT.setGravity(Gravity.CENTER);
@@ -629,22 +628,22 @@ final class PageBoutique extends Page {
                            boolean connu, boolean dispo) {
         LinearLayout r = Ui.rangee(app);
         r.setGravity(Gravity.CENTER);
-        r.setBackground(cadre(app, Vitrine.ENCRE, bord, 1));
+        Style.fond(r, cadre(app, Vitrine.ENCRE, bord, 1));
         r.setPadding(Ui.dp(app, 6), Ui.dp(app, 2), Ui.dp(app, 6), Ui.dp(app, 2));
-        if (a.recompense && !possede) r.addView(Ui.texte(app, "▣ à gagner", 12, Vitrine.ARGENT, true));
+        if (a.recompense && !possede) r.addView(Style.texte(app, "▣ à gagner", 12, Vitrine.ARGENT, true));
         else if (!ouvert) {
             ImageView cad = new ImageView(app);
             Bitmap b = Vitrine.sprite("cadenas", Ui.dp(app, 1), 0, false);
             if (b != null) cad.setImageBitmap(b);
             cad.setPadding(0, 0, Ui.dp(app, 4), 0);
             r.addView(cad);
-            r.addView(Ui.texte(app, "NIV " + a.niveauMin, 12, Vitrine.ARGENT, true));
-        } else if (porteIci) r.addView(Ui.texte(app, "★ porté", 12, Vitrine.ORANGE, true));
-        else if (possede) r.addView(Ui.texte(app, a.recompense ? "✓ gagné" : "✓ à toi", 12, Vitrine.VIOLET, true));
-        else if (enRoute) r.addView(Ui.texte(app, "⇢ en route", 12, Vitrine.BLEU_CLAIR, true));
+            r.addView(Style.texte(app, "NIV " + a.niveauMin, 12, Vitrine.ARGENT, true));
+        } else if (porteIci) r.addView(Style.texte(app, "★ porté", 12, Vitrine.ORANGE, true));
+        else if (possede) r.addView(Style.texte(app, a.recompense ? "✓ gagné" : "✓ à toi", 12, Vitrine.VIOLET, true));
+        else if (enRoute) r.addView(Style.texte(app, "⇢ en route", 12, Vitrine.BLEU_CLAIR, true));
         else if (!dispo) {
             LocalDate d = Boutique.prochainPassage(a, jour());
-            r.addView(Ui.texte(app, a.passage ? (d == null ? "✧ vitrine" : "✧ " + d.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", Locale.FRENCH)))
+            r.addView(Style.texte(app, a.passage ? (d == null ? "✧ vitrine" : "✧ " + d.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", Locale.FRENCH)))
                     : "⌛ " + Boutique.nomSaison(a.saison), 12, Vitrine.ARGENT, true));
         }
         else {
@@ -653,7 +652,7 @@ final class PageBoutique extends Page {
             lp.rightMargin = Ui.dp(app, 4);
             r.addView(pc, lp);
             boolean assez = connu && solde >= prix;
-            r.addView(Ui.texte(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), 12, assez ? Vitrine.ORANGE : Vitrine.ARGENT, true));
+            r.addView(Style.texte(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), 12, assez ? Vitrine.ORANGE : Vitrine.ARGENT, true));
         }
         LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         l.topMargin = Ui.dp(app, 4);
@@ -672,7 +671,7 @@ final class PageBoutique extends Page {
             Boutique.StyleBulle st = Boutique.style(a.id);
             int w = Math.round(70 * d), h = Math.round(42 * d);
             Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            GradientDrawable g = new GradientDrawable();
+            android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
             g.setColor(ferme ? Vitrine.NUIT2 : st != null && st.fond != 0 ? st.fond : 0xfff6f8fa);
             g.setStroke(Math.round((st == null ? 2 : st.epaisseur) * d), ferme ? Vitrine.FERME : st == null ? Vitrine.BLEU : st.bord);
             g.setCornerRadius((st == null ? 0 : st.rayon) * d);
@@ -690,7 +689,7 @@ final class PageBoutique extends Page {
             int w = Math.round(92 * d), h = Math.round(44 * d);
             Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             android.graphics.Canvas cv = new android.graphics.Canvas(b);
-            GradientDrawable g = new GradientDrawable();
+            android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
             g.setColor(Vitrine.NUIT);
             g.setStroke(Math.round(2 * d), ferme ? Vitrine.FERME : Boutique.couleurRarete(a.rarete));
             g.setBounds(0, 0, w, h);

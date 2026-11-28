@@ -478,6 +478,14 @@ public static class Expeditions
     // Avance de niveau sur le lieu : +0,6 point par niveau, 6 au plus.
     private static double Avance(Lieu l, int niveau) => Math.Clamp(niveau - l.Niveau, 0, 10) * 0.006;
 
+    // L'aide du niveau, en points de chance (combats, boss et pièges), écrite à la française : « 1,8 » ; "" sans avance.
+    public static string AideNiveau(Lieu l, int niveau) =>
+        Avance(l, niveau) <= 0 ? "" : (Avance(l, niveau) * 100).ToString("0.#", System.Globalization.CultureInfo.GetCultureInfo("fr-FR"));
+
+    // Ce que montre la carte d'un lieu au départ : « ton niveau t'aide : +1,8 % » ("" : pas d'avance sur ce lieu).
+    public static string AideAuDepart(Lieu l, int niveau) =>
+        AideNiveau(l, niveau) is { Length: > 0 } a ? $"ton niveau t'aide : +{a} %" + (niveau - l.Niveau >= 10 ? " (au plus)" : "") : "";
+
     public static Resultat Resoudre(Expedition x, IReadOnlyCollection<string> possedes, IReadOnlyCollection<string>? trophees = null)
     {
         var l = Trouver(x.Lieu) ?? Lieux[0];
@@ -518,12 +526,14 @@ public static class Expeditions
                         bossBattu = true;
                         int gain = h.Entre(2 + l.Risque, 4 + 2 * l.Risque);
                         po += gain;
-                        j.Add(Un(h, BossGagnes).Replace("{Un}", Majuscule(c.Un)).Replace("{un}", c.Un).Replace("{Le}", Majuscule(c.Le)).Replace("{le}", c.Le) + $" (+{gain} po)");
+                        j.Add(Un(h, BossGagnes).Replace("{Un}", Majuscule(c.Un)).Replace("{un}", c.Un).Replace("{Le}", Majuscule(c.Le)).Replace("{le}", c.Le) + $" (+{gain} po)"
+                              + (AideNiveau(l, x.Niveau) is { Length: > 0 } a ? $" · mon niveau m'a aidé : +{a} %" : ""));
                     }
                     else
                     {
                         pv -= 2; // un boss tape fort
-                        j.Add(Un(h, BossPerdus).Replace("{Un}", Majuscule(c.Un)).Replace("{un}", c.Un).Replace("{Le}", Majuscule(c.Le)).Replace("{le}", c.Le) + " (♥ −2)");
+                        j.Add(Un(h, BossPerdus).Replace("{Un}", Majuscule(c.Un)).Replace("{un}", c.Un).Replace("{Le}", Majuscule(c.Le)).Replace("{le}", c.Le) + " (♥ −2)"
+                              + (AideNiveau(l, x.Niveau) is { Length: > 0 } a ? $" · même avec mon niveau (+{a} %)" : ""));
                     }
                     break;
                 }

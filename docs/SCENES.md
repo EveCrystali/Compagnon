@@ -46,7 +46,9 @@ empreinte FNV-1a de chaque image) ; `TheatreTests.cs` et `TheatreTest.java` la r
 | `depart` | a : +1 droite, -1 gauche | il marche jusqu'à sortir de la scène (un choix l'envoie en route) |
 | `humeur` | a : l'humeur du message | son visage de repos ; « joie » et « surpris » jouent aussi un geste |
 | `parle` | a : fin de la réplique | sa bouche bouge pendant l'écriture ; une nouvelle réplique remplace la précédente (a = t la coupe) |
-| `clic` | a, b : point touché (pixels du décor) | Pilou (saut de joie, puis coucou), un acteur (il s'enfuit), une chose sensible (sa réaction) |
+| `perso` | a : sprite du personnage en pied (`pied-<campagne>-<personnage>`), "" : plus personne | il entre par la droite en trottinant jusqu'à `interlocuteur` ; remplacé, il s'efface ; « plus personne », il ressort par la droite |
+| `parle-perso` | a : fin de sa réplique | sa bouche bouge pendant qu'on écrit une de ses répliques (« … ») |
+| `clic` | a, b : point touché (pixels du décor) | Pilou (saut de joie, puis coucou), le personnage (il sautille, Pilou le regarde), un acteur (il s'enfuit), une chose sensible (sa réaction) |
 
 Un clic ne voit que ce qui le précède : en ajouter un ne change jamais le passé (testé). Les 24 derniers clics
 seulement comptent. Le regard suit la souris sur le PC (paramètre `regard`, pas un événement) ; rien sur le téléphone.
@@ -66,6 +68,20 @@ sauter), étirement en vol, amorti à la réception, l'antenne qui traîne derri
 marchant. Ses animations nommées (`assets/scenes/animations.txt`) : un visage de repos par humeur (`repos-joie`,
 `repos-peur`…), `cligne`, `marche`, `joie`, `peur`, `regard-g`, `regard-d`, `regard-h`, `bond`, `coucou`, `parle`,
 `pense`, `surpris`.
+
+## Les personnages en pied
+
+`pied-<campagne>-<personnage>` (`pieds_campagnes.py`, dessin fin seulement) : pour les personnages-objets, le portrait
+1× (32 × 32, dessiné nativement) est déjà un corps entier, au pixel même de la scène ; il est repris tel quel, recadré
+pour que ses pieds touchent le sol. Ses images gardent leur ordre (`repos` 0-1 à 900 ms, `cligne` 2, `parle` 3-4 à
+140 ms). Un personnage en buste se tient derrière un meuble posé devant lui (Mlle Renvoi : un guichet). Il regarde
+vers la place de Pilou, cligne décalé de Pilou, sautille quand on le touche et parfois de lui-même (une chance sur
+trois toutes les huit secondes). Campagnes passées en pied : La Grande Panne (13 personnages).
+
+Dans la fenêtre : quand un message a un `personnage` dessiné en pied, il entre ; un message sans personnage ne le
+renvoie pas tant qu'on reste dans le lieu ; un nouveau lieu repart sans personnage. Une réplique entre guillemets est
+la sienne : c'est lui qui parle dans la scène, pas Pilou. Sur PC, les choix se posent au milieu, en haut de la scène
+(Pilou se tient à gauche, le personnage à droite).
 
 ## Une scène par décor : `assets/scenes/<campagne>.txt`
 
@@ -92,6 +108,23 @@ Un décor sans section garde une scène par défaut (sol à 77, place 30, sans a
 `theatre-<campagne>-<décor>.gif` (Pilou entre, on le touche, on touche chaque chose sensible, il s'en va) et une
 planche d'images clés.
 
+## Style : la main de Pilou sous la scène
+
+Tout ce qui se lit et se touche autour de la scène est en pixels, à l'image du menu « Sept portes »
+(`MenuRetro.xaml`) : `CadrePixel` (PC, `CadrePixel.cs` ; téléphone, `CadrePixel.java`) et la police pixel
+(`TextePixel`, `TextePixelVue`, docs/POLICE.md). Mesures, en unités U = le pixel de la scène (5 unités WPF sur le PC
+à ×5 ; k pixels d'écran sur le téléphone, 5 à 1078 px de large) :
+
+| Élément | Mesure |
+|---|---|
+| Cadre | ombre portée 1 U (bas, droite), bord 1 U, biseau 1 U (clair haut et gauche, sombre bas et droite), retrait du contenu 1 U ; coins en escalier (le pixel de coin de chaque couche est retiré) |
+| Appuyé | fond de survol, plus d'ombre, contenu décalé de 1 U |
+| Couleurs (sombre / clair) | fond #151a2e / #fbf3e4, texte #e6ecf2 / #1c2128, bord #6a5acd / #2f7ed8, biseau #3a4270 et #0b0e1a / #ffffff et #d9c7a3, ombre #0b0e1a / #1c2128, survol #f69d50 / #1f5fae, titres #9b8cff / #6a4fc8 |
+| Choix | un cadre par choix, puce « ▶ » en pixels (3 × 5) à la couleur du bord, 2 U entre deux choix |
+| Réplique (PC) | police pixel, 2 unités WPF par pixel de police (police fine à 100 %), ligne de 12 pixels de police ; cinq lignes visibles, le défilement tombe sur une ligne entière |
+| Nom de qui parle (PC) | police titre, même taille ; nom du personnage sous son portrait en police pixel |
+| Lieu | petit cadre sans ombre, retrait 0,6 U |
+
 ## Sur Windows
 
 `VueTheatre.cs` affiche (image 192 × 80 réécrite seulement quand elle change, agrandie d'un facteur entier sans
@@ -112,10 +145,11 @@ place de la boîte. Le chapitre, le lieu et le sac sont à droite de la boîte.
 
 ## Ce qui reste (prochaines étapes)
 
-1. **Scènes des trois grandes campagnes** (40 décors) : sol, places, acteurs et réactions propres à chaque lieu
-   (mouettes, chat du port, brume qui glisse, paquets de données, bocaux…), avec de nouveaux acteurs.
-2. **Les 29 personnages en pied** (`pied-<campagne>-<personnage>` : repos, clignement, parole, un geste à lui), placés
-   sur `interlocuteur` quand le message les fait vivre. Un premier jet de Tudal existe dans les planches de l'atelier.
+1. **Scènes des deux autres grandes campagnes** (Le phare éteint, Petit Nuage : 28 décors) : sol, places, acteurs et
+   réactions propres à chaque lieu (mouettes, chat du port, brume qui glisse, bocaux…). La Grande Panne est faite :
+   12 scènes, acteurs de l'ordinateur (paquets de données, curseur, tickets, bulles du marais, étincelles).
+2. **Les personnages en pied des deux autres campagnes** (16) : leurs portraits sont des bustes humains ou animaux,
+   il faudra les dessiner en pied (un premier jet de Tudal existe dans les planches de l'atelier).
 3. **Chorégraphies des choix** : un choix peut jouer un trajet (sauter de nénuphar en nénuphar) au lieu de la sortie
    simple.
 4. **Le Pilou du bureau** : les quatre liens décidés (échos, bout de décor, départ et retour, objets du sac).

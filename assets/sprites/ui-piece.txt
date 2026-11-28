@@ -1,0 +1,19 @@
+# icône d'interface (docs/STYLE.md) : piece
+id: ui-piece
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#f69d50
+images:
+............
+....aaaa....
+..aaaaaaaa..
+..aaabbaaa..
+.aaabaabaaa.
+.aaabaabaaa.
+.aaabaabaaa.
+..aaabbaaa..
+..aaaaaaaa..
+....aaaa....
+............
+............

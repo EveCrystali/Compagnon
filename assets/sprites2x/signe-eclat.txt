@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : eclat U+273A
+id: signe-eclat
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+aa....aa....aa
+aaa...aa...aaa
+.aaa..aa..aaa.
+..aa..aa..aa..
+.....aaaa.....
+....aaaaaa....
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+....aaaaaa....
+.....aaaa.....
+..aa..aa..aa..
+.aaa..aa..aaa.
+aaa...aa...aaa
+aa....aa....aa

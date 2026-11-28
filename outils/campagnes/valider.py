@@ -44,7 +44,20 @@ PROPRES = {
     "echec": {"repos_min"},
     "fin": {"issue", "titre", "recompenses"},
 }
-FICHE = {"v", "id", "titre", "ton", "accroche", "niveau", "duree", "depart", "chapitres", "variables", "objets", "souvenirs", "decors", "court"}
+FICHE = {"v", "id", "titre", "ton", "accroche", "niveau", "succes", "campagnes", "duree", "depart", "chapitres", "variables", "objets", "souvenirs",
+         "decors", "court"}
+# Les hauts faits qui peuvent ouvrir une campagne : ceux de Metiers.cs, copiés dans la référence partagée du téléphone.
+SUCCES_REF = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "android", "app", "src", "test", "resources",
+                                           "metiers-succes.txt"))
+
+
+def hauts_faits():
+    """Identifiants des succès connus (lignes « succes <id>|… » de metiers-succes.txt) ; None si le fichier manque."""
+    try:
+        with open(SUCCES_REF, encoding="utf-8") as f:
+            return {l.split(" ", 1)[1].split("|", 1)[0] for l in f if l.startswith("succes ")}
+    except OSError:
+        return None
 # Où se porte un objet exclusif gagné à une fin (« portable »).
 EMPLACEMENTS = ("tete", "yeux", "cou", "dos", "main", "pieds", "compagnon")
 OBJETS_MAX = 6
@@ -294,6 +307,23 @@ class Validateur:
             r.erreur(f, "", f"« ton » doit être l'un de : {', '.join(TONS)}")
         if not entier(fiche.get("niveau")) or fiche.get("niveau") < 1:
             r.erreur(f, "", "« niveau » doit être un entier ≥ 1 (le niveau de Pilou requis)")
+        # Conditions d'ouverture en plus du niveau : hauts faits (Metiers.cs), campagnes à avoir finies (dossiers voisins).
+        connus = hauts_faits()
+        voisines = {d for d in os.listdir(os.path.dirname(self.dossier))
+                    if os.path.isfile(os.path.join(os.path.dirname(self.dossier), d, "campagne.json"))}
+        for cle, quoi in (("succes", "haut fait"), ("campagnes", "campagne")):
+            if cle not in fiche:
+                continue
+            l = fiche[cle]
+            if not isinstance(l, list) or not all(isinstance(x, str) for x in l) or len(l) > 8 or len(set(l)) != len(l):
+                r.erreur(f, "", f"« {cle} » est une liste d'au plus 8 identifiants, sans doublon")
+                continue
+            for x in l:
+                if cle == "succes" and connus is not None and x not in connus:
+                    r.erreur(f, "", f"haut fait « {x} » inconnu (identifiants de Metiers.cs : {', '.join(sorted(connus))})")
+                if cle == "campagnes" and (x == self.nom or x not in voisines):
+                    r.erreur(f, "", f"campagne « {x} » : " + ("une campagne ne s'ouvre pas par elle-même" if x == self.nom
+                                                               else "aucune campagne de ce nom à côté de celle-ci"))
 
         variables = fiche.get("variables", {})
         if not isinstance(variables, dict):

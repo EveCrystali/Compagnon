@@ -76,7 +76,7 @@ public class BoutiqueTest {
         assertTrue(Boutique.style("bulle-nuit").sombre);
         assertNull(Boutique.style("rien"));
         String s = Vitrine.prochaineRangee(14, Butin.xpPourNiveau(14));
-        assertTrue(s, s.contains("niveau 15") && s.contains("encore " + (Butin.xpPourNiveau(15) - Butin.xpPourNiveau(14)) + " xp"));
+        assertTrue(s, s.contains("Niveau 15") && s.contains("encore " + (Butin.xpPourNiveau(15) - Butin.xpPourNiveau(14)) + " xp"));
         assertEquals("", Vitrine.prochaineRangee(50, 0));
     }
 

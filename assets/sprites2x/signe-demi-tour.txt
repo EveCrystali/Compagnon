@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : demi-tour U+21A9
+id: signe-demi-tour
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+......aa......
+.....aaa......
+....aa........
+....aa........
+..aaaaaaaaaaaa
+..aaaaaaaaaaaa
+....aa......aa
+....aa......aa
+.....aaa....aa
+......aa....aa
+............aa
+............aa
+....aaaaaaaaaa
+....aaaaaaaaaa

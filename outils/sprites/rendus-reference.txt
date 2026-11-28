@@ -107,3 +107,13 @@ expr=repos t=0 lumiere=soir couleur=lavande | 46a77b37e70640a47dd388ae50ae16e507
 expr=dort t=2100 lumiere=nuit stade=3 | b2fa34aba3bf2f4823b62df3790564c87f7f84330d9c8409bc78a34003e01247
 expr=inquiet t=320 lumiere=soir | cd0fe87878b85ed026800300e0892fc1310f25e619dda00275da005eb3acc272
 expr=repos t=0 lumiere=nuit couleur=sable objets=chapeau-explorateur | be96281d0de107634bbe36ac98844e2398ad5060e04ff0965ac8ca37f6baef9c
+expr=neutre t=0 assis=1 regard=1 regard_y=1 objets=sc-pieces-3 vie=1 | 9cc391b7ace6c39fc1714e0ebde3a855b171461e9dbe13b07ba2630eca57823f
+expr=neutre t=600 assis=1 regard_y=1 objets=tenue-lecture-livre vie=1 stade=3 | 997e87985d893aa7b253170f1e79628d2c9a4183465ebace5e75c5be8e4685c9
+expr=malice t=0 saut=1.1 etire=0.2 regard=-1 objets=sc-etincelle-2 vie=1 | 9bc1fcb613fb1ca38303d1e697096350246193562e09f475a6c8c28a2e5fe832
+expr=fete t=0 objets=sc-etincelle-6 vie=1 stade=4 | 764443f16bd6b22d57694390a804b1c62a2a93fa560fd3222ac670f71f00fe2a
+expr=malice t=0 etire=-0.4 tremble=0.5 objets=sc-encre-2 vie=1 | 785cabc822c595cf20f5f292480be4c0ecdee0d6440da949f241b1a748da08a5
+expr=neutre t=0 tremble=2.3 regard=1 regard_y=1 vie=1 stade=1 | 15b9cd037010a0b1d81543f3146846c01190b6a90001cbc0fde1ed138db88826
+expr=neutre t=0 regard_y=0 objets=sc-flocon-4 vie=1 | 6f34a0d9790174bd41a67093d76e67a68fc29d7a84cd7b9aa3352ae105f255da
+expr=neutre t=0 objets=sc-feuille-4 vie=1 stade=3 | a921980e815c4e284cb57e15a1f150171a8699f5c9541725305c24c74c1c33e6
+expr=joie t=0 cligne=1 objets=sc-papillon-5 vie=1 | 69ab81439469a40125a829c662ef5ba11d1adeb046c1b5cd2143fd09ce63e301
+expr=tendre t=0 regard=1 regard_y=-1 objets=sc-papillon-4,sc-encre-4 vie=1 stade=2 | 0c5d844f1dfd0f43a813dba083019644be342a7678bbb76d14adb49494462f11

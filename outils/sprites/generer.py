@@ -18,6 +18,7 @@ import boutique_sprites
 import meteo_sprites
 import visites_sprites
 import gestes_sprites
+import saynetes_sprites
 import expedition_sprites
 import defense_sprites
 import garde_robe
@@ -27,6 +28,9 @@ import campagnes_sprites
 import portraits_campagnes
 import scene_pilou
 import acteurs_scenes
+import pieds_campagnes
+import icones
+import traits_sprites
 
 # ---- Couleurs
 ENCRE = "#1c2128"
@@ -1872,6 +1876,7 @@ def dessiner():
     garde_robe.objets()
     visites_sprites.tout()
     gestes_sprites.tout()
+    saynetes_sprites.tout()
     expedition_sprites.tout()
     defense_sprites.tout()
     voyage_sprites.tout()
@@ -1880,6 +1885,9 @@ def dessiner():
     portraits_campagnes.tout()
     scene_pilou.tout()
     acteurs_scenes.tout()
+    pieds_campagnes.tout()
+    icones.tout()
+    traits_sprites.tout()
 
 
 if __name__ == "__main__":

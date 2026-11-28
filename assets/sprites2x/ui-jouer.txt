@@ -1,0 +1,31 @@
+# icône d'interface (docs/STYLE.md) : jouer
+id: ui-jouer
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+........................
+........................
+........................
+........................
+..aaaaaaaaaaaaaaaaaaaa..
+.aaaaaaaaaaaaaaaaaaaaaa.
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaa..aaaa
+aaaa..aaaaaaaaaaa....aaa
+aaa....aaaaaaaaa..aa..aa
+aaa....aaaaaaaaa..aa..aa
+aaaa..aaaaaaaaaaa....aaa
+aaaaaaaaaaaaaaaaaa..aaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaa......aaaaaaaaa
+aaaaaaaa........aaaaaaaa
+.aaaaaa..........aaaaaa.
+..aaaa............aaaa..
+........................
+........................
+........................
+........................
