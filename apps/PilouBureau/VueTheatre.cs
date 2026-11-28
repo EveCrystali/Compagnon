@@ -415,6 +415,71 @@ internal sealed class VueTheatre : Border
         return Apercu.Bitmap(_petit, VisageW, VisageH);
     }
 
+    // ---- En HD, les portraits de la boîte au pixel de la scène (docs/SCENES-HD.md) : le Pilou fin (son stade, son
+    // allure, l'humeur du message, la bouche qui parle), recadré sur son corps ; et le buste du personnage, tiré de son
+    // sprite HD en pied (la variante de l'humeur s'il y en a une). La fenêtre les affiche à l'échelle de la scène.
+
+    // Le cadre du corps du Pilou fin dans sa grille 96 × 112, par stade (mesuré sur le rendu fin, marge d'une unité).
+    private static (int X, int Y, int W, int H) CorpsPilou(int stade) => stade switch
+    {
+        1 => (24, 39, 48, 70),
+        3 => (4, 26, 88, 86),
+        4 => (7, 9, 82, 104),
+        _ => (16, 20, 64, 89),
+    };
+
+    private PoseHd _dernierVisage;
+    private int _dernierStade = -1;
+
+    public BitmapSource? VisageHd(string humeur, bool parle, double now, bool toujours = false)
+    {
+        if (!_hd) return null;
+        long t = (long)now;
+        string niveau = _niveau();
+        bool vif = niveau == AnimationsCampagne.Completes;
+        var pose = new PoseHd(humeur is "" or "neutre" ? "repos" : humeur, vif ? t / Theatre.Pas * Theatre.Pas : 0, false,
+            vif && parle && t / 140 % 2 == 0, niveau != AnimationsCampagne.Aucune && AnimationsCampagne.Cligne(t), 0, 0, false);
+        var rendre = RendrePilou(now);
+        int stade = _base?.Stade ?? 2;
+        if (!toujours && pose == _dernierVisage && stade == _dernierStade) return null;
+        _dernierVisage = pose;
+        _dernierStade = stade;
+        var g = rendre(pose);
+        var (x0, y0, w, h) = CorpsPilou(stade);
+        var crop = new uint[w * h];
+        for (int y = 0; y < h; y++)
+            Array.Copy(g, (y0 + y) * TheatreHd.PilouW + x0, crop, y * w, w);
+        return Apercu.Bitmap(crop, w, h);
+    }
+
+    // Le buste du personnage en pied : le haut de son sprite HD (64 unités au plus), image de repos ou de parole.
+    private string _busteVu = "";
+    private int _busteImage = -1;
+
+    public BitmapSource? BusteHd(bool parle, double now, bool toujours = false)
+    {
+        if (!_hd || _perso == "" || SpriteHd(_perso) is not { } s) return null;
+        long t = (long)now;
+        bool vif = _niveau() == AnimationsCampagne.Completes;
+        int im = !vif ? 0 : parle && s.Images.Count >= 5 ? 3 + (int)(t / 140 % 2)
+            : s.Images.Count >= 3 && AnimationsCampagne.Cligne(t + 1700) ? 2 : (int)(t / 900 % 2);
+        im = Math.Min(im, s.Images.Count - 1);
+        var cle = s.Id + "|" + _persoHumeur;
+        if (!toujours && cle == _busteVu && im == _busteImage) return null;
+        _busteVu = cle;
+        _busteImage = im;
+        // Le haut du sprite : on saute les rangées vides du dessus, puis 64 unités.
+        var g = s.Images[im];
+        int haut = 0;
+        while (haut < s.H - 1 && Enumerable.Range(0, s.W).All(x => g[haut * s.W + x] == 0)) haut++;
+        int h = Math.Min(64, s.H - haut);
+        var crop = new uint[s.W * h];
+        Array.Copy(g, haut * s.W, crop, 0, s.W * h);
+        // Le dessin HD regarde à droite : retourné, il regarde Pilou (à gauche de la boîte).
+        for (int y = 0; y < h; y++) Array.Reverse(crop, y * s.W, s.W);
+        return Apercu.Bitmap(crop, s.W, h);
+    }
+
     private void Ecrire(uint[] px) => _s.Bitmap.WritePixels(new Int32Rect(0, 0, _s.W, _s.H), px, _s.W * 4, 0);
 
     // Où poser un panneau de w × h pixels de scène (Theatre.PlacerPanneau) : coin haut-gauche en pixels de scène. gene :

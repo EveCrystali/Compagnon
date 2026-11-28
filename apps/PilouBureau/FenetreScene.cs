@@ -242,14 +242,14 @@ internal sealed class FenetreScene : Window
     }
 }
 
-// Essai --essai=lieu:<campagne>:<décor> (captures, docs/SCENES-HD.md) : la vue de scène seule, à son unité entière, avec
-// Pilou qui entre, se réjouit puis parle. Rien n'est écrit.
+// Essai --essai=lieu:<campagne>:<décor>[:<personnage>[:<humeur>]] (captures, docs/SCENES-HD.md) : la vue de scène seule,
+// à son unité entière, avec Pilou qui entre, se réjouit puis parle, et le personnage en pied s'il est donné. Rien n'est écrit.
 internal sealed class FenetreLieu : Window
 {
     private readonly VueTheatre _theatre;
     private readonly System.Diagnostics.Stopwatch _chrono = System.Diagnostics.Stopwatch.StartNew();
 
-    public FenetreLieu(FenetrePilou pilou, string campagne, string decor)
+    public FenetreLieu(FenetrePilou pilou, string campagne, string decor, string perso = "", string humeur = "")
     {
         Title = "Pilou · lieu " + campagne + " " + decor;
         Background = FenetreAventure.Gel("#0f1324");
@@ -263,6 +263,7 @@ internal sealed class FenetreLieu : Window
         _theatre.Ajuster(Theatre.Hd.W * 2, Theatre.Hd.H * 2);
         _theatre.Humeur("joie", 2600);
         _theatre.Parle(3200, 6400);
+        if (perso != "") _theatre.Perso("pied-" + campagne + "-" + perso, 400, humeur);
         Content = new Border { Padding = new Thickness(12), Child = _theatre };
         var m = new DispatcherTimer(DispatcherPriority.Render, Dispatcher) { Interval = TimeSpan.FromMilliseconds(30) };
         bool ecrit = false;
@@ -276,7 +277,7 @@ internal sealed class FenetreLieu : Window
             rtb.Render(c);
             var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
             enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rtb));
-            using var fs = System.IO.File.Create(System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"pilou-lieu-{campagne}-{decor}.png"));
+            using var fs = System.IO.File.Create(System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"pilou-lieu-{campagne}-{decor}{(perso == "" ? "" : "-" + perso)}{(humeur == "" ? "" : "-" + humeur)}.png"));
             enc.Save(fs);
         };
         m.Start();
