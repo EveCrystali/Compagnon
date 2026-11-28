@@ -67,6 +67,7 @@ public sealed class Reglages
     public bool TexteInstantane { get; set; }
     // Sons (docs/SONS.md) : « aucun » (par défaut, en attendant qu'Antoine tranche), « discrets » ou « normaux ».
     public string Sons { get; set; } = "normaux";
+    public string Musique { get; set; } = "discrete";
     // Mise à jour automatique (dernière release du dépôt), vérifiée au démarrage puis chaque jour.
     public bool MiseAJourAuto { get; set; } = true;
     // Icône près de l'horloge (zone de notification) : la porte de secours si l'overlay ne répond plus.

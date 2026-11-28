@@ -28,7 +28,7 @@ import java.util.Map;
  * Un AudioTrack statique par son ; rejouer = rembobiner.
  */
 final class Sons {
-    private static final int TAUX = 22050;
+    static final int TAUX = 22050;
     private final Map<Chasse.Evenement, AudioTrack> pistes = new EnumMap<>(Chasse.Evenement.class);
     private boolean actif;
 

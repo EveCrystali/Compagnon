@@ -97,7 +97,7 @@ public sealed partial class FenetrePilou : Window
         _devant = devant;
         _demo = demo;
         _reglages = Reglages.Lire(dossier);
-        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie); // docs/SONS.md
+        Sons.Brancher(() => _reglages.Sons, () => Maintenant < _cacheJusque || _discret, () => EnSaisie, () => _reglages.Musique); // docs/SONS.md
         if (demo) Tournage.Regler(_reglages); // tournage : réglages fictifs, en mémoire (FenetreVisite.cs)
         CalculerEchelle();
         WindowStyle = WindowStyle.None;

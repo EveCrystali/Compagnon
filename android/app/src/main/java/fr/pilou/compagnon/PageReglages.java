@@ -181,6 +181,8 @@ final class PageReglages extends Page {
         c = Ui.carte(a);
         c.addView(choixSons(a));
         c.addView(Ui.separateur(a));
+        c.addView(choixMusique(a));
+        c.addView(Ui.separateur(a));
         Ui.interrupteur(a, c, "Sons de Chasse aux bugs", "Petits bruits rétro pendant la partie", Prefs.son(a),
                 oui -> Prefs.de(a).edit().putBoolean("son", oui).apply());
         c.addView(Ui.separateur(a));
@@ -300,20 +302,32 @@ final class PageReglages extends Page {
 
     // Sons de Pilou (docs/SONS.md) : aucun, discrets, normaux (par défaut) ; le choix fait entendre le « pouic ».
     private static LinearLayout choixSons(Principale a) {
+        return choixNiveau(a, "Sons de Pilou", "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux",
+                "sons", Sons.NIVEAUX, new String[]{"Aucun", "Discrets", "Normaux"}, () -> Sons.niveau(a),
+                () -> Sons.jouer(a, Sons.CARESSE));
+    }
+
+    // Musique et ambiances de l'Aventure (docs/SONS.md) : aucune, discrète (par défaut), normale.
+    private static LinearLayout choixMusique(Principale a) {
+        return choixNiveau(a, "Musique de l'Aventure", "Une boucle très basse pendant la lecture d'une campagne, et le bruit du lieu",
+                "musique", Musique.NIVEAUX, new String[]{"Aucune", "Discrète", "Normale"}, () -> Musique.niveau(a), () -> { });
+    }
+
+    private static LinearLayout choixNiveau(Principale a, String titre, String detail, String cle, String[] niveaux,
+                                            String[] noms, java.util.function.Supplier<String> actuel, Runnable apres) {
         Ui.Palette p = Ui.p(a);
-        String[] noms = {"Aucun", "Discrets", "Normaux"};
         LinearLayout bloc = Ui.pile(a);
         bloc.setPadding(Ui.dp(a, 4), Ui.dp(a, 8), 0, Ui.dp(a, 8));
-        bloc.addView(Ui.texte(a, "Sons de Pilou", Ui.T_CORPS, p.texte, false));
-        bloc.addView(Ui.texte(a, "Quelques notes courtes aux bons moments ; jamais en appel ni en silencieux", Ui.T_DETAIL, p.doux, false));
+        bloc.addView(Ui.texte(a, titre, Ui.T_CORPS, p.texte, false));
+        bloc.addView(Ui.texte(a, detail, Ui.T_DETAIL, p.doux, false));
         LinearLayout r = Ui.rangee(a);
         r.setBackground(Ui.arrondi(a, p.surface2, 14, 0));
         r.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
         TextView[] t = new TextView[noms.length];
         Runnable peindre = () -> {
-            String actuel = Sons.niveau(a);
+            String choix = actuel.get();
             for (int j = 0; j < t.length; j++) {
-                boolean choisi = Sons.NIVEAUX[j].equals(actuel);
+                boolean choisi = niveaux[j].equals(choix);
                 t[j].setTextColor(choisi ? p.bleu : p.doux);
                 t[j].setBackground(choisi ? Ui.arrondi(a, p.surface, 11, 0) : null);
                 t[j].setText((choisi ? "● " : "") + noms[j]);
@@ -325,9 +339,9 @@ final class PageReglages extends Page {
             x.setMinHeight(Ui.dp(a, 40));
             int kk = k;
             x.setOnClickListener(v -> {
-                Prefs.de(a).edit().putString("sons", Sons.NIVEAUX[kk]).apply();
+                Prefs.de(a).edit().putString(cle, niveaux[kk]).apply();
                 peindre.run();
-                Sons.jouer(a, Sons.CARESSE);
+                apres.run();
             });
             t[k] = x;
             r.addView(x, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
