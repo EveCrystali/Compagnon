@@ -26,6 +26,9 @@ internal sealed class FenetreScene : Window
     private readonly TextePixel _suite = new("▼", CadrePixel.Titre) { Taille = 2 };
     private readonly StackPanel _options = new() { Margin = new Thickness(0, 10, 0, 0) };
     private readonly CadrePixel _boite;
+    private readonly Grid _racine, _planche;
+    private readonly Border _scene;
+    private readonly FrameworkElement _tete;
     private List<Evolutions.Replique> _lignes;
     private int _i = -1;
     private double _debut, _fin;
@@ -39,7 +42,7 @@ internal sealed class FenetreScene : Window
         _variante = Evolutions.Variante(variante);
         _garder = garder;
         _lignes = Evolutions.Deroule(sc, _variante, null);
-        Title = "Pilou · " + sc.Titre;
+        Title = "Évolution de Pilou";                     // la barre ; le titre de la scène est dans la fenêtre
         // La scène à ×4 (768 × 320) : la fenêtre tient sur un écran de portable à 125 % ; sa taille ne bouge pas d'une
         // réplique à l'autre (la boîte prend la place qui reste).
         Width = 830;
@@ -50,12 +53,6 @@ internal sealed class FenetreScene : Window
         UseLayoutRounding = true;
         SnapsToDevicePixels = true;
         ShowInTaskbar = true;
-        // Habillage maison : pas de barre de titre Windows (claire, système) au-dessus du pixel sombre ; la tête de la
-        // fenêtre est dessinée ici (titre, ✕), on la déplace en la tirant, Échap ferme.
-        WindowStyle = WindowStyle.None;
-        ResizeMode = ResizeMode.NoResize;
-        BorderBrush = Bandeau.Bord;
-        BorderThickness = new Thickness(2);
 
         _theatre = new VueTheatre(() => AnimationsCampagne.Niveau(pilou.AnimationsCampagnes, Bandeau.Anime),
             () => RenduPilou.Teinte(pilou.AllurePortrait("repos", 0), Banque.Commune));
@@ -67,40 +64,26 @@ internal sealed class FenetreScene : Window
             _theatre.Ajuster(Theatre.Hd.W * 2, Theatre.Hd.H * 2);
             var zone = FenetreAventure.ZoneTravail();
             Width = Math.Min(Theatre.Hd.W * 2 + 44, zone.Width);
-            Height = Math.Min(800, zone.Height);
+            Height = Math.Min(800 + HabillageFenetre.HauteurBarre, zone.Height);
         }
         else _theatre.Ajuster(Theatre.W * 4, Theatre.H * 4);
 
-        var racine = new Grid { Margin = new Thickness(18, 12, 18, 14) };
+        var racine = _racine = new Grid { Margin = new Thickness(18, 12, 18, 14) };
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-        var tete = new Grid { Margin = new Thickness(0, 0, 0, 10), Background = Brushes.Transparent, Cursor = Cursors.SizeAll };
-        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        tete.Children.Add(new TextePixel(sc.Titre, Bandeau.OrangePo) { Taille = 3, Titre = true, VerticalAlignment = VerticalAlignment.Center });
-        var croix = new TextePixel("✕", CadrePixel.Texte) { Taille = 2 };
-        var fermer = new CadrePixel { U = 2, Child = croix, Cursor = Cursors.Hand, VerticalAlignment = VerticalAlignment.Center, ToolTip = "Fermer (Échap)" };
-        fermer.Change += () => croix.Couleur = fermer.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
-        fermer.MouseEnter += (_, _) => fermer.Survol = true;
-        fermer.MouseLeave += (_, _) => fermer.Survol = false;
-        fermer.MouseLeftButtonDown += (_, e) =>
-        {
-            e.Handled = true;
-            Close();
-        };
-        Grid.SetColumn(fermer, 1);
-        tete.Children.Add(fermer);
-        tete.MouseLeftButtonDown += (_, e) =>
-        {
-            if (e.ButtonState == MouseButtonState.Pressed) DragMove();
-        };
+        // Le titre de la scène ; la barre (habillage commun) porte réduire, fermer et le déplacement.
+        var tete = new TextePixel(sc.Titre, Bandeau.OrangePo) { Taille = 3, Titre = true, Margin = new Thickness(0, 0, 0, 10) };
+        _tete = tete;
         racine.Children.Add(tete);
 
-        var scene = new Border { BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(2), HorizontalAlignment = HorizontalAlignment.Center, Child = _theatre };
-        Grid.SetRow(scene, 1);
-        racine.Children.Add(scene);
+        // La scène dans une planche qui la cadre par le haut quand la hauteur manque (Cadrer, plus bas).
+        _scene = new Border { BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(2), VerticalAlignment = VerticalAlignment.Top, Child = _theatre };
+        _planche = new Grid { ClipToBounds = true, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top };
+        _planche.Children.Add(_scene);
+        Grid.SetRow(_planche, 1);
+        racine.Children.Add(_planche);
 
         var dedans = new Grid { Margin = new Thickness(10, 6, 10, 6) };
         dedans.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -118,6 +101,11 @@ internal sealed class FenetreScene : Window
         Grid.SetRow(_boite, 2);
         racine.Children.Add(_boite);
         Content = racine;
+        // L'habillage commun (docs/STYLE.md, « Fenêtres du PC ») : barre en pixels (réduire, fermer, déplacer), cadre d'un
+        // module ; la fenêtre ne dépasse toujours pas la zone de travail.
+        HabillageFenetre.Poser(this);
+        Height = Math.Min(Height, FenetreAventure.ZoneTravail().Height);
+        racine.SizeChanged += (_, _) => Cadrer();
 
         KeyDown += (_, e) =>
         {
@@ -216,6 +204,22 @@ internal sealed class FenetreScene : Window
             };
             _options.Children.Add(cadre);
         }
+    }
+
+    // Petite zone de travail : la scène est cadrée par le haut, comme dans l'Aventure (le ciel se cache ; le sol, Pilou et
+    // le pot-cabane restent), toujours au même pixel entier. La boîte garde au moins la place de la question et de ses
+    // trois options (≈ 215 px, mesuré sur la scène du stade 4).
+    private const double ReserveBoite = 215;
+
+    private void Cadrer()
+    {
+        if (_racine.ActualHeight <= 0) return;
+        double pleine = _theatre.HauteurScene * _theatre.Echelle + 4;
+        double reserve = ReserveBoite + _boite.Margin.Top;
+        double dispo = _racine.ActualHeight - _tete.ActualHeight - _tete.Margin.Bottom - reserve;
+        double h = Math.Max(160, Math.Min(pleine, Math.Floor(dispo)));
+        _planche.Height = h;
+        _scene.Margin = new Thickness(0, -(pleine - h), 0, 0);
     }
 
     // Le choix : gardé la première fois seulement (le Carnet laisse revoir la scène sans le changer).

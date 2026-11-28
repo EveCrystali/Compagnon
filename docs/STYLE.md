@@ -317,7 +317,8 @@ Deux lignes se **reformulent** au lieu de se tronquer, de la plus longue à la p
 - « 240 / 875 xp · encore 635 xp avant le niveau 19 » → « 240 / 875 xp · encore 635 xp » → « 240 / 875 xp » ;
 - « ▲ Niveau 20 : Tête, Yeux, Dos +7 · encore 1560 xp » → « ▲ Niveau 20 : Tête, Yeux, Dos +7 » → « ▲ Niveau 20 : 10 rangées ».
 
-Reste dans la fenêtre Aventure (session « animations ») : le sous-titre en italique système à côté du logo.
+Le sous-titre de l'Aventure (« Pilou t'écrit, tu choisis… ») est en police pixel, taille « corps », dans la place qui
+reste entre le logo et les onglets (deux lignes au plus quand la fenêtre est étroite).
 
 **Sur le téléphone** (`Style.grilleLogo`, `Style.logo`, même grille que `LogoPixel.cs`) : un grand titre de
 `Vitrine.Pixel` (taille 4 ou plus : « BOUTIQUE », « NIVEAU 12 ! », l'issue d'une épreuve) est un titre-logo dont le
@@ -370,7 +371,7 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 
 | Écran | État |
 |---|---|
-| PC : menu « Sept portes », bulle, fenêtre Aventure | au guide |
+| PC : menu « Sept portes », bulle, fenêtre Aventure | au guide ; l'Aventure et la scène d'évolution dans l'habillage commun (28 novembre 2026) |
 | PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) |
 | PC : titres-logos et en-tête commun | au pixel fin (28 novembre 2026) : boutique, journal, « Pilou et moi », expéditions, Aventure, menu, info-bulle |
 | Téléphone : nombre du niveau, grands titres, « NIV », pièce d'or | au dessin fin (28 novembre 2026) ; les cadres gardent le module des pages |
