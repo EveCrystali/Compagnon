@@ -1,6 +1,21 @@
 # Décors haute définition (decors_hd.py, docs/SCENES-HD.md) : une ligne par plan,
 # id plan largeur hauteur images duree, puis l'empreinte FNV-1a de chaque image décodée (pixels ARGB
 # 0xFFrrggbb, transparent 0x00000000, rangée par rangée). Lu par les tests C# et Java.
+decor-evolution-fond-du-jardin-matin ciel 480 240 1 0 db10a49f
+decor-evolution-fond-du-jardin-matin nuages 480 240 8 200 98267e0e 33468e66 b3e17b40 5894cd37 39750fc3 fa7f735e fa616989 4fbc0c8d
+decor-evolution-fond-du-jardin-matin lointains 480 240 8 200 1728eccd 93b98f1d b708158d f2272aad 4ebe9f9d fae0784d ce48b9ad 47dd5b3d
+decor-evolution-fond-du-jardin-matin moyen 480 240 8 200 26f15abf 7775fd46 8fa3e6d2 ad1351fa 166c63ab fda6c27c afa7eb36 57d53d91
+decor-evolution-fond-du-jardin-matin premier 480 240 8 200 9d52f515 43d9cccd e562d0aa 890879ef 25c4cea5 43f56fd0 5431e482 fd775fcf
+decor-evolution-fond-du-jardin-nuit ciel 480 240 8 200 b9c16ed9 ebceb864 a7623bf8 0d7fecd9 affa5081 f1d69ff6 10d0fa60 bccf8393
+decor-evolution-fond-du-jardin-nuit nuages 480 240 8 200 b511d243 f08e3286 1664613b 02cdbb46 b511d243 5ca27529 b0806a93 5ca27529
+decor-evolution-fond-du-jardin-nuit lointains 480 240 1 0 69e2ea6a
+decor-evolution-fond-du-jardin-nuit moyen 480 240 8 200 cd014a3d d4956479 63330795 a0e865d5 bbe6d607 fa24ddc7 ec43316b fd2a1aed
+decor-evolution-fond-du-jardin-nuit premier 480 240 8 200 8dff1747 f98c4743 b876f256 b23778a2 4bc3c4fa 3fb3b52c 0fdc8b73 a668c483
+decor-evolution-fond-du-jardin-soir ciel 480 240 8 200 a8b3f686 b908b453 7e49d81d 531eab51 b622592d 9dd97376 8b7b0daa dd7fe9ff
+decor-evolution-fond-du-jardin-soir nuages 480 240 8 200 da6edf0b 0bcd5305 cd7285fd 6dd69a00 8827868f bdacced7 0895460b 7c56a819
+decor-evolution-fond-du-jardin-soir lointains 480 240 8 200 3bc3c0a2 c0f89ae2 ea5eeb32 603aaea2 01b8f6e2 8d9932a2 4f533632 3c710562
+decor-evolution-fond-du-jardin-soir moyen 480 240 8 200 86757562 5975d594 55f28c0b 6dd939d4 624e9684 ac4cdf64 171f6f12 4490716b
+decor-evolution-fond-du-jardin-soir premier 480 240 8 200 19e393ed 9ff2a5ce 9df53aa6 c6b4ac47 7fe68287 c269a906 eefa5fe0 2d9d452e
 decor-grande-panne-bureau-1337 ciel 480 240 8 200 7ef80ca5 88494d94 20e2345e b6d6d3c5 25d974ce fd5b2d76 ebb3a8dc 436e5b78
 decor-grande-panne-bureau-1337 nuages 480 240 8 200 ae9d8bb8 faf995d1 6ca8b138 103e1def f2494a60 b6bea32a c91af792 2a6061a6
 decor-grande-panne-bureau-1337 lointains 480 240 8 200 0fe12450 d74c3a7a a4606c9f 58c2109c a0a64c66 b3d1f3cd e39ec527 fc8f24df
@@ -121,10 +136,10 @@ decor-phare-eteint-atelier-basile ciel 480 240 1 0 298f491f
 decor-phare-eteint-atelier-basile lointains 480 240 8 200 c82e3348 e9fc794c 636abcc9 f8590e96 77775a03 7925a571 dd8416d8 f7adb24c
 decor-phare-eteint-atelier-basile moyen 480 240 8 200 32778d3e 69eec7fb 663cc303 db343c0b b376eaeb b8d448ca 44511633 2836a0b2
 decor-phare-eteint-atelier-basile premier 480 240 8 200 caff6d39 3014247d d3038a36 9725abf3 4a94d66c e2591039 59f658a5 c2b467ec
-decor-phare-eteint-auberge-bigorneau ciel 480 240 1 0 ff162b2f
-decor-phare-eteint-auberge-bigorneau lointains 480 240 8 200 41491f0f 50161b2c 4bb8b51c 6bdcd2e0 c9e52790 57e4c183 4e92ed98 96b9eaab
-decor-phare-eteint-auberge-bigorneau moyen 480 240 8 200 bfc21510 ec461187 0b06522a e79a2347 cce7f7da 1e4d3db5 b82623c9 f0fff77d
-decor-phare-eteint-auberge-bigorneau premier 480 240 8 200 8248cb94 b5f80f62 390fc393 1208dabd df09690e a1e6a247 4ade3906 5aee99be
+decor-phare-eteint-auberge-bigorneau ciel 480 240 8 200 55f9c5ae 70786e04 2ebc2125 f1736900 68100d85 07d805a0 7c4d6cd9 5b28dee8
+decor-phare-eteint-auberge-bigorneau lointains 480 240 8 200 10f42e38 37f94532 8796bd00 1a2957e2 89dd8656 89c8b143 8103e050 275ad622
+decor-phare-eteint-auberge-bigorneau moyen 480 240 8 200 c954a87b 817e3e63 9bb21fa6 28df1980 443d1631 be9eacc1 729096fd b1ee3cb3
+decor-phare-eteint-auberge-bigorneau premier 480 240 8 200 407bf973 21ad183d 9dec09be d801d999 3f90ac78 6753923a 42fc8c18 df255d16
 decor-phare-eteint-cave-du-phare ciel 480 240 1 0 da367a07
 decor-phare-eteint-cave-du-phare lointains 480 240 8 200 0369f4e7 a42aadef a42aadef a42aadef a42aadef a42aadef a42aadef a42aadef
 decor-phare-eteint-cave-du-phare moyen 480 240 8 200 1136fe4d 82068bea 3d453991 82068bea 8bb4122d d672ed25 bea91c7a 2b29c3c5
@@ -133,10 +148,9 @@ decor-phare-eteint-chambre-de-veille ciel 480 240 1 0 385d78f9
 decor-phare-eteint-chambre-de-veille lointains 480 240 8 200 3ba6adc1 29411a8e 324d5d04 29411a8e 3ba6adc1 8302760a f2f94bbe 8302760a
 decor-phare-eteint-chambre-de-veille moyen 480 240 8 200 dcd1e052 650fc5a6 38d17078 dddce8e8 166bf708 67b87810 c0087026 a1009fe8
 decor-phare-eteint-chambre-de-veille premier 480 240 8 200 046f7fc0 888c2f45 b105af23 b99c69b4 dc527f09 e82a88cd bf69a22d 9f46349f
-decor-phare-eteint-chez-pilou ciel 480 240 1 0 a5eaa5df
-decor-phare-eteint-chez-pilou lointains 480 240 8 200 7dc54b69 86e22efe 70155295 aae32a70 9c44b6b8 e169c1ae 2e6598e3 a97847b0
-decor-phare-eteint-chez-pilou moyen 480 240 8 200 91657162 34f4498e c2415274 3981c61e c0a15452 8aabe685 e0087257 3a598451
-decor-phare-eteint-chez-pilou premier 480 240 8 200 1583cf2f 0e2c778e e12cd6d8 bb0d6566 04eb718c 37c8fbf3 87a857d7 7aeabb9f
+decor-phare-eteint-chez-pilou ciel 480 240 8 200 4250d244 adb422ee 50f3c247 fca7bf7e 1b9f3122 a39aa002 94580e4b 79fe40ba
+decor-phare-eteint-chez-pilou moyen 480 240 8 200 3d615028 b709e695 96770aa3 a9648505 315f5d2e a3b5a070 3b133e1d 8a3da5d3
+decor-phare-eteint-chez-pilou premier 480 240 8 200 a4ad7e32 6de29506 b39238f3 41526996 b00d55d2 8e1073bb 237783ea 5a9fcd5e
 decor-phare-eteint-grotte-souffleur ciel 480 240 8 200 0b167fa3 c8bd32d0 39201a5f c8bd32d0 0b167fa3 957a79a6 adb8e074 957a79a6
 decor-phare-eteint-grotte-souffleur lointains 480 240 8 200 f1d08a4c 356d59f0 1b4f5787 9cb05050 bd79cf34 37f37ac3 27b5ea92 509ba9bb
 decor-phare-eteint-grotte-souffleur moyen 480 240 8 200 6856dc1d f86514f7 282167b7 1e6aa8ad de69f28a f2bbd830 4377634e 3af1aa75
@@ -171,11 +185,11 @@ decor-phare-eteint-place-mairie nuages 480 240 8 200 d6d5d050 a3507200 709895f1 
 decor-phare-eteint-place-mairie lointains 480 240 8 200 eb37b8af 45c2b240 83eb6917 781330ed 3d2e9bc4 51c670c4 a0760333 170c9fdc
 decor-phare-eteint-place-mairie moyen 480 240 8 200 c0d5942e e7f16af5 be7b2e19 9ea76a99 feb941bd bee545a3 a1726716 d15f0e43
 decor-phare-eteint-place-mairie premier 480 240 8 200 6faa3bb4 1abdcf20 e95d1c74 09e0bd58 f2e39e39 ce2862c8 26b98b40 fbcd1c55
-decor-phare-eteint-port-trebrume ciel 480 240 1 0 e9ef6899
-decor-phare-eteint-port-trebrume nuages 480 240 8 200 9dffdcc5 a34636d4 13e7e64c a34636d4 9dffdcc5 9156920d 533d87d2 9156920d
-decor-phare-eteint-port-trebrume lointains 480 240 8 200 5568dbbf 436d22c0 bb013c5e 42275c76 054f7730 30bc6948 d6ca7638 72139ab6
-decor-phare-eteint-port-trebrume moyen 480 240 8 200 b797b9e5 32ca76e1 f9a4a851 a1020748 616831b7 1927f2d0 205f8c4c fc70dacc
-decor-phare-eteint-port-trebrume premier 480 240 8 200 eea70fbd 718e4424 89680256 9b22dddb 447d6adb d77b42fd 6b564587 deb586e4
+decor-phare-eteint-port-trebrume ciel 480 240 8 200 eb2355e6 0884bd36 c9826386 7a7052e9 01f5eb86 60c0454c e438f207 463004cc
+decor-phare-eteint-port-trebrume nuages 480 240 8 200 00ab0741 6052ab66 c6d058ce 033ff177 818b7c3b a515eea7 9dc62564 f5001666
+decor-phare-eteint-port-trebrume lointains 480 240 8 200 2c379330 fca97b4e df16fdab e9c3d019 c0f365ec fafea413 bd30376b eeb0bdea
+decor-phare-eteint-port-trebrume moyen 480 240 8 200 b6a84b32 020b508f 2e35954f c75475e2 7d000a32 31ee5b4a 565d1b5f fdd98a63
+decor-phare-eteint-port-trebrume premier 480 240 8 200 0464f86d 7df9fd9e 73e04b17 34902784 188ce29e b2f2e15a ab8d1dfe a9e0e5de
 decor-phare-eteint-sentier-douaniers ciel 480 240 1 0 81769181
 decor-phare-eteint-sentier-douaniers nuages 480 240 8 200 dc11bee7 ef58b690 7eb8b4c5 ef58b690 dc11bee7 bd14dd3b 512128fe bd14dd3b
 decor-phare-eteint-sentier-douaniers lointains 480 240 8 200 6066ef7b bf6f467c 42f7a229 b9f8f71a 94dc3e6c 433a09fd 8f8f187c 5551ea5a
