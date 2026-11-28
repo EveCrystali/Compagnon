@@ -261,15 +261,20 @@ internal sealed class FenetreAventure : Window
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         racine.Children.Add(_bandeau);
+        // L'en-tête : le logo, le sous-titre dans la place qui reste (deux lignes au plus), les onglets à droite.
         var tete = new Grid { Margin = new Thickness(0, 10, 0, 10) };
-        var titre = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
-        titre.Children.Add(new LogoPixel("AVENTURE", Bandeau.OrangePo) { VerticalAlignment = VerticalAlignment.Center });
-        titre.Children.Add(new TextBlock
-        {
-            Text = "Pilou t'écrit, tu choisis, il part pour de vrai.", Foreground = Bandeau.Argent, FontSize = 12, FontFamily = new FontFamily("Segoe UI"),
-            FontStyle = FontStyles.Italic, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(14, 0, 0, 2),
-        });
-        tete.Children.Add(titre);
+        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        tete.Children.Add(new LogoPixel("AVENTURE", Bandeau.OrangePo) { VerticalAlignment = VerticalAlignment.Center });
+        // Le sous-titre en police pixel, taille « Corps » (plancher des minuscules, docs/STYLE.md), plus de texte système.
+        var sousTitre = StylePixel.Texte("Pilou t'écrit, tu choisis, il part pour de vrai.", Bandeau.Argent, StylePixel.Corps);
+        sousTitre.MaxLignes = 2;
+        sousTitre.VerticalAlignment = VerticalAlignment.Center;
+        sousTitre.Margin = new Thickness(14, 0, 14, 0);
+        Grid.SetColumn(sousTitre, 1);
+        tete.Children.Add(sousTitre);
+        Grid.SetColumn(_onglets, 2);
         tete.Children.Add(_onglets);
         Grid.SetRow(tete, 1);
         racine.Children.Add(tete);
@@ -312,6 +317,11 @@ internal sealed class FenetreAventure : Window
         StateChanged += (_, _) => Sur(Veille);
         IsVisibleChanged += (_, _) => Sur(Veille);
         PreviewKeyDown += (_, e) => Sur(() => Touche(e));
+        // L'habillage commun (docs/STYLE.md, « Fenêtres du PC ») : barre en pixels et cadre d'un module. La barre compte
+        // dans la hauteur, qui ne dépasse toujours pas la zone de travail.
+        HabillageFenetre.Poser(this);
+        Height = Math.Min(Height, Math.Min(880, zone.Height));
+        MinHeight = Math.Min(MinHeight, zone.Height);
     }
 
     // Une erreur dans la fenêtre : notée, la fenêtre se referme après trois (Pilou n'est jamais touché).
