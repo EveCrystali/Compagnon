@@ -24,6 +24,10 @@ tableau ci-dessous via son compte rendu, et le pilote l'intègre.
 là (quatre campagnes, présence, boutique, métiers). On ne rajoute pas de fonctions de jeu : on rend l'existant plus
 beau, plus vivant, plus immersif, et on le prouve sur de vrais appareils.
 
+**Finition de la version 1 (Antoine, 28 novembre 2026)** : le projet se peaufine. Un défaut de détail (texte tranché,
+chevauchement, pixel inégal, libellé tronqué, chiffre faux dans une doc) est un vrai défaut. Chaque capture se relit
+à l'œil avant de dire « fait ». L'état des lieux et l'ordre proposé sont dans [AUDIT-V1.md](AUDIT-V1.md).
+
 **Exigence de rendu** : chaque chantier qui touche à l'image ou au son va au-delà du strict nécessaire. Planche de
 contrôle avant / après, relecture à l'œil de chaque image produite, capture sur le vrai PC quand c'est possible,
 une seconde passe de finition avant la PR. « Ça marche » ne suffit pas : « c'est beau » est le critère.
@@ -106,12 +110,11 @@ Trois lignes de résumé, puis :
 
 ## Chantiers
 
-Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, petit matin.
+Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, matin.
 
 | Chantier | Branche / PR | Périmètre | État |
 |---|---|---|---|
-| Animations des campagnes en pixel art (dont l'échelle unique des scènes Aventure) | `claude/campaign-animations-pixel-art-66992c` | `outils/sprites/scene_pilou.py`, `assets/scenes/`, `docs/maquettes/animations/`, dessin des scènes Aventure | En cours ; le pilote lui a confié le défaut de taille de pixel vu par Antoine sur téléphone |
-| Sons « normaux » par défaut (choix d'Antoine, 28 novembre) | `claude/sons-normaux` | défaut des réglages de sons PC et Android, une ligne de `DECISIONS.md` | En cours |
+| Théâtre de « La Grande Panne » (suite des animations, une campagne par PR) | `claude/theatre-grande-panne` | scènes, acteurs en pied, `assets/scenes/`, dessin des scènes Aventure PC et Android | En cours |
 | Menu « Sept portes » | `claude/menu-sept-portes` | partie menu de `FenetrePilou.cs`, `MenuRetro.*`, `MenuNotification.cs`, `AUDIT-MENU.md` | En cours |
 | Pilotage (ce fichier) | `claude/pilotage` | `docs/PILOTAGE.md`, `CLAUDE.md` | En cours |
 
@@ -123,6 +126,8 @@ Fusionnés :
   (#84, #85) ; liste de contrôle Windows, quatre défauts corrigés (#86) ; dix sons 8 bits (#87) ; police pixel
   maison de la bulle (#88) ; vie du personnage, ressorts, ombre, poussière, lumière de l'heure (#90) ; gains qui ne
   passent plus sur la bulle (#91).
+- 28 novembre, matin : sons « normaux » par défaut (#93) ; théâtre des campagnes, prologue mis en scène, une seule
+  unité de pixel sur téléphone, bandeau au-dessus de la scène (#95).
 
 Leçon : la relecture des captures Robolectric (#83) n'a pas vu le décor trop agrandi qu'Antoine a vu sur son
 téléphone. Les captures de contrôle doivent être prises au format d'un vrai téléphone en portrait (1080 × 2400,
@@ -130,6 +135,8 @@ densité 2,75), pas seulement au format par défaut.
 
 ### Questions ouvertes pour Antoine
 
+- Les cinq questions de la fin de [AUDIT-V1.md](AUDIT-V1.md) (idle, questions de Pilou, RPG, public de la v1,
+  après le niveau 50).
 - Windows à 125 / 150 %, épreuves au clavier et à la souris, extensions d'éditeur : à vérifier à la main (#86).
 
 ### File d'attente (lancés par le pilote, dans cet ordre)
