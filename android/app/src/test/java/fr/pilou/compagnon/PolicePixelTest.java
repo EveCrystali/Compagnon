@@ -71,6 +71,30 @@ public class PolicePixelTest {
         for (int i = 0; i < s.length(); i++) assertTrue("« " + s.charAt(i) + " »", p.connu(s.charAt(i)));
     }
 
+    /** « déjà », « toujours » : le j laisse le même blanc qu'un i après la lettre d'avant (son crochet passe dessous). */
+    @Test
+    public void leJNeLaissePasPlusDeBlancQuUnI() {
+        for (PolicePixel p : new PolicePixel[]{PolicePixel.texte(), PolicePixel.ressource("titre")}) {
+            for (char c : "aeéouàdnstxzr".toCharArray())
+                assertEquals("« " + c + "j »", blanc(p, c, 'i'), blanc(p, c, 'j'));
+        }
+    }
+
+    /** Colonnes vides entre la lettre a et l'œil de la lettre b (rangées 5 à 10, sans point ni crochet). */
+    private static int blanc(PolicePixel p, char a, char b) {
+        java.util.Set<Long> seul = new java.util.HashSet<>();
+        int droite = Integer.MIN_VALUE;
+        for (int[] q : p.pixels(java.util.Collections.singletonList(String.valueOf(a)))) {
+            seul.add(((long) q[0] << 32) | (q[1] & 0xffffffffL));
+            droite = Math.max(droite, q[0]);
+        }
+        int gauche = Integer.MAX_VALUE;
+        for (int[] q : p.pixels(java.util.Collections.singletonList("" + a + b)))
+            if (!seul.contains(((long) q[0] << 32) | (q[1] & 0xffffffffL)) && q[1] >= 5 && q[1] <= 10)
+                gauche = Math.min(gauche, q[0]);
+        return gauche - droite - 1;
+    }
+
     @Test
     public void typographieFrancaise() {
         assertEquals("bonjour ! c’est « toi »", PolicePixel.preparer("bonjour ! c'est « toi »"));
