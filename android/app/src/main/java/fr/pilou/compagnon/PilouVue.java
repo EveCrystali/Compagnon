@@ -169,6 +169,54 @@ public final class PilouVue extends View {
         return niveau;
     }
 
+    // Saynètes de repos (Saynetes.java ; docs/SPRITES.md) : au repos, une petite scène de 3 à 8 s de temps en temps,
+    // tirée comme sur le PC ; coupées par le réglage ✧ (niveau « aucune »). Aucun gain n'y est lié.
+    private Saynetes.Saynete saynete;
+    private long sayneteDebut, sayneteProchaine = -1;
+    private String sayneteDerniere = "";
+    private final java.util.Random hasardSaynete = new java.util.Random();
+
+    /** La saynète du moment (null : aucune) ; en commence une si c'est l'heure. */
+    private Saynetes.Jeu saynete(long t, String e, String niveau) {
+        if (!anime || !e.equals("repos") || Animations.AUCUNE.equals(niveau)) {
+            saynete = null;
+            if (sayneteProchaine < t + 8000) sayneteProchaine = t + 8000;
+            return null;
+        }
+        if (sayneteProchaine < 0) sayneteProchaine = t + 15_000 + hasardSaynete.nextInt(15_000);
+        if (saynete == null && t >= sayneteProchaine) {
+            java.util.List<String> portes = new java.util.ArrayList<>();
+            for (String v : equipe.values()) if (v != null && !v.isEmpty()) portes.add(v);
+            String main = equipe.get(Boutique.MAIN), compagnon = equipe.get(Boutique.COMPAGNON);
+            Saynetes.Contexte c = new Saynetes.Contexte(heure, java.util.Calendar.getInstance().get(java.util.Calendar.MONTH) + 1,
+                    stade, portes, compagnon != null && !compagnon.isEmpty(), main == null || main.isEmpty(), false);
+            java.util.List<Saynetes.Saynete> banque = Saynetes.commune();
+            saynete = Saynetes.trouver(banque, Saynetes.tirer(banque, hasardSaynete.nextInt(10_000), c, sayneteDerniere));
+            sayneteDebut = t;
+            if (saynete != null) sayneteDerniere = saynete.id;
+            sayneteProchaine = t + (saynete != null ? saynete.duree : 0) + 25_000 + hasardSaynete.nextInt(20_000);
+        }
+        if (saynete == null) return null;
+        Saynetes.Jeu j = Saynetes.jouer(saynete, t - sayneteDebut, niveau, 1);
+        if (j == null) saynete = null;
+        return j;
+    }
+
+    /** Ce que la saynète impose au dessin (mêmes règles que SaynetesFenetre.cs sur le PC). */
+    private static void appliquer(RenduPilou.Allure a, Saynetes.Jeu j, java.util.List<String> portes) {
+        if (!j.expr.equals("repos")) a.expr = j.expr;
+        a.assis = Math.max(a.assis, j.assis / 1000.0);
+        a.saut += j.saut / 1000.0;
+        a.etire = j.etire / 1000.0;
+        a.tremble += j.penche / 1000.0;
+        a.regard = j.regard;
+        a.regardY = j.regardY;
+        a.cligne |= j.cligne;
+        a.baille = j.baille;
+        a.salue |= j.salue;
+        portes.addAll(j.objets);
+    }
+
     private boolean marque;
     private final android.graphics.Paint pinceauMarque = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
 
@@ -212,6 +260,7 @@ public final class PilouVue extends View {
             saut = bond[0] / 1000f;
         }
         String e = t < finPassager ? passager : expr;
+        Saynetes.Jeu jeu = bond != null && ds < Vie.dureeBond(VOL, niveau) ? null : saynete(t, e, niveau);
         RenduPilou.Allure a = Dessin.allure(e, t, couleur, accessoire, t < finClin, saut);
         if (bond != null) {
             a.etire = bond[1] / 1000.0;
@@ -233,6 +282,7 @@ public final class PilouVue extends View {
         // Ensembles portés en entier : leur effet bonus.
         portes.addAll(Boutique.bonusPortes(equipe));
         portes.addAll(objetsSoins);
+        if (jeu != null) appliquer(a, jeu, portes);
         bouder(a, portes, e, t);
         a.objets = portes;
         Meteo.appliquer(a, meteo, t);

@@ -229,6 +229,49 @@ Essai sur le PC : `--essai=vie[:completes|reduites|aucune][:heure]` (saut, march
 9 s). Planches : `python3 outils/sprites/planches_vie.py` → `sauts.png`, `receptions.png`, `lumieres.png`,
 `avant-apres.gif` dans `outils/sprites/planches/vie`.
 
+## Saynètes de repos
+
+Au calme, Pilou s'occupe tout seul quelques secondes, à la place d'une occupation ordinaire. La banque est
+`assets/saynetes.txt`, écrite par `outils/sprites/saynetes.py` et lue telle quelle par `Saynetes.cs` et
+`Saynetes.java` ; tirages et poses sont vérifiés des deux côtés par `saynetes-reference.txt`. Les accessoires sont
+des sprites `sc-<nom>-<k>`, une image par étape (`saynetes_sprites.py`) : c'est la saynète qui choisit l'étape.
+
+| Saynète | Poids | Condition | Ce qu'il fait |
+|---|---|---|---|
+| lit | 16 | stade 2 à 4, main libre | s'assoit avec le livre de lecture, suit les lignes, sourit à un passage |
+| compte | 12 | main libre | assis, empile ses pièces une à une ; le compte est bon |
+| etincelle | 10 | — | poursuit une petite étincelle à petits bonds, la rattrape sur l'antenne |
+| endort | 8 | 12 h – 16 h, 20 h – 7 h | assis, clignements lents, bâillement, la tête tombe… et le sursaut |
+| bord | 8 | — (miroir vers le bord le plus proche) | se penche par-dessus le bord, découvre le vide, recule |
+| etire | 16 | — | s'étire, un bras en l'air, les yeux fermés |
+| ciel | 10 | — | regarde les nuages passer |
+| danse | 8 | pas au travail | petite danse à petits bonds, notes de musique |
+| flocon | 10 | décembre à février | un flocon descend sur son nez |
+| feuille | 10 | septembre à novembre | une feuille lui tombe sur la tête, il se secoue |
+| papillon | 10 | mars à août | un papillon passe, se pose sur l'antenne, repart |
+| boit | 12 | tasse de café ou chocolat porté | assis, petites gorgées les yeux fermés |
+| guette | 12 | lunette ou jumelles portées | guette au loin, et tiens ! un petit bond |
+| compagnon | 12 | un compagnon porté | un regard, un bond, un cœur sur l'antenne |
+| eternue | 1 (rare) | — | éternue une bulle d'encre qui monte et éclate |
+| salue | 1 (rare) | — (miroir) | salue… personne, et fait mine de rien |
+
+Règles :
+- **Retenue** : seulement au calme (expression « repos »), jamais pendant la saisie, jamais caché (plein écran,
+  visio) ; sur le PC, une chance sur trois à la place d'une occupation (une sur sept au travail), au moins 40 s entre
+  deux (80 s au travail), jamais deux fois la même de suite ; sur le téléphone, une toutes les 25 à 45 s tant que
+  il est affiché et animé. Interrompue dès que quelque chose se passe (caresse, IA qui attend, jeu, campagne, prise).
+- **Rien à gagner** : aucune xp, aucune pièce n'est liée à une saynète.
+- **Raccords** : chaque mouvement part de 0 et y revient (il se ramasse avant, retombe après) ; `saynetes.verifier()`
+  le contrôle, ainsi que les durées (3 à 8 s).
+- **Pas de faux signal** : les expressions qui disent quelque chose d'une session (concentre, attente, inquiet,
+  surpris, grimace : roue, « ! » ou croix orange sur l'antenne) sont interdites dans les saynètes.
+- **Réglage ✧** : complètes, tout ; réduites, sans saut, étirement ni penché (posture, regard, visage, objets) ;
+  aucune, pas de saynète.
+
+Essai sur le PC : `--essai=saynete[:<id>][:completes|reduites|aucune]` (toutes à la suite, ou une seule en boucle).
+Planche : `python3 outils/sprites/planches_saynetes.py [dossier] [pas_ms]` → une bande par saynète dans
+`outils/sprites/planches/saynetes`.
+
 ## Format d'un sprite
 
 ```
