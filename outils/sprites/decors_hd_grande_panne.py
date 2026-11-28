@@ -19,7 +19,7 @@ import numpy as np
 
 import paysage as pg
 from decors_hd import decor
-from paysage import Tons, cs, hz, onde
+from paysage import Tons, cs, hz, onde, voile, halo, dallage, rai, poussiere, roue
 
 N0, N1, N2, N3 = cs("#141a33", "#1f2a52", "#2f3f78", "#4a5fa8")
 E1, E2, E3, E4, E5 = cs("#5e5446", "#8a7d68", "#b8a98c", "#ddd0b2", "#f3ead2")
@@ -53,54 +53,6 @@ SEGMENTS = {"0": "abcdef", "1": "bc", "2": "abged", "3": "abgcd", "4": "fgbc", "
 # ---------------------------------------------------------------------------------------------------------------
 def _a(x):
     return np.asarray(x, dtype=float)
-
-
-def voile(P, masque, coul, force):
-    """Pose une couleur en trame par-dessus ce qui est peint (lumière, ombre, brume) : force 0..1, nombre ou grille."""
-    P.remplir(masque & (P.T < force), coul)
-
-
-def halo(P, x, y, r, coul, force=0.6, ry=None):
-    """Une lueur ronde tramée, plus dense au centre."""
-    d = np.hypot(P.X - x, (P.Y - y) * (r / (ry or r)))
-    voile(P, d < r, coul, force * (1 - d / r))
-
-
-def dallage(P, masque, fx, yh, a, b, larg=5.0, prof=1.6, joint=None):
-    """Un sol en perspective : des dalles a / b qui fuient vers (fx, yh) ; joint : la couleur des joints."""
-    dy = np.maximum(P.Y - yh, 0.25)
-    u = (P.X - fx) / dy * 10.0
-    z = 60.0 / dy
-    cu, cz = np.floor(u / larg), np.floor(z * prof)
-    P.remplir(masque & ((cu + cz) % 2 == 0), a)
-    P.remplir(masque & ((cu + cz) % 2 != 0), b)
-    if joint is not None:
-        fu, fz = u / larg - cu, z * prof - cz
-        P.remplir(masque & ((fu < 0.06 + 0.012 * dy / 10) | (fz < 0.05)), joint)
-
-
-def rai(P, x, y0, y1, largeur, pente, coul, force=0.45, grains=18, graine=0, masque=None):
-    """Un rai de lumière qui tombe de (x, y0) jusqu'à y1, en biais (pente : unités de x par unité de y), avec sa
-    poussière qui scintille et dérive."""
-    cx = x + (P.Y - y0) * pente
-    m = (P.Y >= y0) & (P.Y <= y1) & (np.abs(P.X - cx) < largeur / 2 * (1 + (P.Y - y0) / 60.0))
-    if masque is not None:
-        m &= masque
-    voile(P, m, coul, force * (1 - 0.6 * np.abs(P.X - cx) / (largeur / 2 * (1 + (P.Y - y0) / 60.0))))
-    for i in range(grains):
-        t = (P.p * 0.5 + hz(i, 1, graine)) % 1.0
-        y = y0 + (y1 - y0) * ((hz(i, 2, graine) + t * 0.25) % 1.0)
-        gx = x + (y - y0) * pente + (hz(i, 3, graine) - 0.5) * largeur * 0.8 + 0.6 * onde(P.p, hz(i, 4, graine))
-        if (P.p + hz(i, 5, graine)) % 1.0 < 0.6:
-            P.point(gx, y, pg.T.BLANC if hz(i, 6, graine) < 0.4 else coul)
-
-
-def poussiere(P, x0, y0, x1, y1, n, coul, graine=0):
-    """Des grains de poussière en suspension dans une zone."""
-    for i in range(n):
-        if (P.p + hz(i, 1, graine)) % 1.0 < 0.55:
-            P.point(x0 + (x1 - x0) * hz(i, 2, graine) + 0.8 * onde(P.p, hz(i, 4, graine)),
-                    y0 + (y1 - y0) * hz(i, 3, graine) + 0.5 * onde(P.p, 0.25 + hz(i, 5, graine)), coul)
 
 
 def neon(P, x0, x1, y, coul, clair, vacille=0.0, lueur=7.0):
@@ -1481,22 +1433,6 @@ def cabane_brouillon(P, tab):
 # balancier doré arrêté, penché d'un côté (la clé) ; un levier à son pied ; une trappe ronde au fond ; une lumière
 # bleutée qui tombe d'en haut.
 # =====================================================================================================================
-def roue(P, x, y, r, dents, coul, clair, sombre, angle=0.0, moyeu=None):
-    """Une roue dentée : couronne à dents carrées, rayons, moyeu."""
-    dx, dy = P.X - x, P.Y - y
-    d = np.hypot(dx, dy)
-    a = np.arctan2(dy, dx) + angle
-    dent = ((a * dents / (2 * math.pi)) % 1.0) < 0.5
-    m = (d < r) | ((d < r * 1.12) & dent)
-    P.remplir(m, coul)
-    P.remplir(m & (d > r * 0.84) & (dy < -r * 0.3), clair)
-    P.remplir((d < r * 0.74) & (d > r * 0.3), sombre)
-    for k in range(5):
-        b = angle + k * 2 * math.pi / 5
-        P.trait(x + r * 0.3 * math.cos(b), y + r * 0.3 * math.sin(b), x + r * 0.76 * math.cos(b), y + r * 0.76 * math.sin(b), coul,
-                max(1, P.ep(r * 0.1)))
-    P.remplir(d < r * 0.3, coul)
-    P.remplir(d < r * 0.12, moyeu if moyeu is not None else clair)
 
 
 @decor("grande-panne", "horloge-systeme", soleil=(104.0, -40.0), tons=PANNE, nom="L'Horloge système")

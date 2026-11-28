@@ -20,9 +20,9 @@ Dernière mise à jour : 28 novembre 2026.
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
 - **Paysages haute définition** (docs/PEINTURE.md) : moteur de peinture `outils/sprites/paysage.py`, format « décor compact »
-  (`assets/decors/`, docs/SPRITES.md) ; 18 décors peints en 480 × 240 (règle 9), au format à plans de docs/SCENES-HD.md : les 6 du
-  prologue et les 12 de La Grande Panne (planches dans `docs/maquettes/paysages/<campagne>/`). Pas encore affichés
-  dans l'app (le Théâtre HD est un autre chantier) ; restent Le phare éteint et Petit Nuage (28 décors).
+  (`assets/decors/`, docs/SPRITES.md) ; 32 décors peints en 480 × 240 (règle 9), au format à plans de docs/SCENES-HD.md : les 6 du
+  prologue, les 12 de La Grande Panne et les 14 du Phare éteint (planches dans `docs/maquettes/paysages/<campagne>/`).
+  Pas encore affichés dans l'app (le Théâtre HD est un autre chantier) ; reste Petit Nuage (14 décors).
 - **Personnages haute définition** (docs/SPRITES.md) : les 13 personnages de « La Grande Panne » et les 7 du « Phare
   éteint » sont redessinés à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, format de docs/SCENES-HD.md,
   référence `personnages-hd-reference.txt`) ; Brouillon le petit nuage est dessiné. Pas encore affichés dans l'app

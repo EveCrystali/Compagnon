@@ -65,10 +65,11 @@ large et 45 de haut. Pas de fleur vive ni de détail important derrière lui ni 
 Une brique manque ? L'écrire dans le fichier de la campagne d'abord ; la monter dans `paysage.py` quand une autre
 campagne s'en sert.
 
-**Intérieurs.** `decors_hd_grande_panne.py` en donne douze et leurs briques, à reprendre telles quelles : `dallage`
-(sol en perspective vers un point de fuite), `rai` (rai de lumière et sa poussière), `voile` et `halo` (lumière,
-ombre ou brume posées en trame), `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`, `affiche`
-(pictogramme sans texte), `cable`, `tickets`, `poussiere`, `roue` (engrenage), `tour_dossiers`. La profondeur d'un
+**Intérieurs.** Dans `paysage.py` : `dallage` (sol en perspective vers un point de fuite), `rai` (rai de lumière et sa
+poussière), `voile` et `halo` (lumière, ombre ou brume posées en trame), `poussiere`, `roue` (engrenage). Dans
+`decors_hd_grande_panne.py` (douze intérieurs) : `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`,
+`affiche` (pictogramme sans texte), `cable`, `tickets`, `tour_dossiers`. Dans `decors_hd_phare_eteint.py` (nuit, brume,
+mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`. La profondeur d'un
 intérieur vient du point de fuite, des éclairages et d'un premier plan sombre ; le « ciel » est le mur ou le plafond.
 
 **`P.rampe(masque, valeur, rampe, trame)`** est le pinceau central : une valeur de 0 à 1 par pixel devient un ton de
