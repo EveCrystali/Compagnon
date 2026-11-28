@@ -42,8 +42,14 @@ public class SaynetesTests
                 var c = Champs(m.Skip(1));
                 var ctx = new Saynetes.Contexte(int.Parse(c["heure"]), int.Parse(c["mois"]), int.Parse(c["stade"]),
                     c["objets"] == "-" ? Array.Empty<string>() : c["objets"].Split(','), c["compagnon"] == "1",
-                    c["mainlibre"] == "1", c["travail"] == "1");
+                    c["mainlibre"] == "1", c["travail"] == "1", c["traits"] == "-" ? Array.Empty<string>() : c["traits"].Split(','));
                 obtenu = Saynetes.Tirer(banque, int.Parse(c["u"]), ctx, c["evite"] == "-" ? "" : c["evite"]) is { Length: > 0 } id ? id : "-";
+            }
+            else if (m[0] == "eveil")
+            {
+                var c = Champs(m.Skip(1));
+                int h = int.Parse(c["heure"]);
+                obtenu = (Saynetes.Endormi(h, double.Parse(c["inactif"])) ? "dort" : "eveille") + $" nuit={(Saynetes.Nuit(h) ? 1 : 0)}";
             }
             else
                 obtenu = Texte(Saynetes.Jouer(Saynetes.Trouver(banque, m[1])!, long.Parse(m[2]), m[3], int.Parse(m[4])));
@@ -59,7 +65,9 @@ public class SaynetesTests
         foreach (var s in banque)
             Assert.Null(Saynetes.Jouer(s, s.Duree / 2, AnimationsCampagne.Aucune));
         var ctx = new Saynetes.Contexte(10, 6, 2, Array.Empty<string>(), false, true, false);
-        int rares = Enumerable.Range(0, 10000).Count(u => Saynetes.Trouver(banque, Saynetes.Tirer(banque, u, ctx))!.Poids == 1);
-        Assert.InRange(rares, 100, 300); // deux rares : de l'ordre d'une fois sur cent chacune
+        var tires = Enumerable.Range(0, 10000).Select(u => Saynetes.Trouver(banque, Saynetes.Tirer(banque, u, ctx))!).ToList();
+        int rares = tires.Count(s => s.Poids == 1);
+        Assert.InRange(rares, 150, 500); // quatre rares : de l'ordre d'une fois sur cent chacune
+        Assert.DoesNotContain(tires, s => s.Poids == 0); // les réactions au monde ne sont jamais tirées
     }
 }

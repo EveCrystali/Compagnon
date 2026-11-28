@@ -19,6 +19,37 @@ public sealed partial class FenetrePilou
 
     private bool EssaiEveille => _essaiVie || _essaiSaynete is not null;
 
+    // ---- Réactions au monde (saynètes de poids 0 : jamais tirées au sort)
+    private bool _lache, _survolReagi;
+
+    // Une réaction : seulement s'il est libre (pas pris, pas en jeu ni en campagne), et pas au niveau « aucune ».
+    private bool Reagir(string id, double t, int sens)
+    {
+        if (NiveauSaynete == AnimationsCampagne.Aucune || _attrape || CampagneOccupe || _jeuEnCours != Jeu.Aucun
+            || _geste is Geste.SauteSouris or Geste.Ballon) return false;
+        if (Saynetes.Trouver(Saynetes.Commune, id) is not { } s) return false;
+        _saynete = s;
+        _sayneteDebut = t;
+        _sayneteSens = sens >= 0 ? 1 : -1;
+        _geste = Geste.Saynete;
+        return true;
+    }
+
+    // Arrivé au bout de sa marche contre le bord de l'écran : une fois sur deux, il freine et regarde le vide.
+    private void AuBord(double t, double min, double max)
+    {
+        bool gauche = _x - min < 3, droite = max - _x < 3;
+        if ((gauche || droite) && !EnSaisie && _hasard.NextDouble() < 0.5) Reagir("freine", t, droite ? 1 : -1);
+    }
+
+    // La souris reste longtemps sur lui (6 s) : une fois par survol, il tente de l'attraper.
+    private void SurvolLong(double t)
+    {
+        if (_survolSceneDebut < 0) _survolReagi = false;
+        else if (!_survolReagi && t - _survolSceneDebut > 6000 && _geste is Geste.Rien or Geste.Assis)
+            _survolReagi = Reagir("survol", t, 1) || true;
+    }
+
     private string NiveauSaynete => _essaiNiveauSaynete ?? NiveauVie;
 
     private Saynetes.Contexte ContexteSaynete(bool travail)
@@ -70,6 +101,7 @@ public sealed partial class FenetrePilou
     // Ce que la saynète impose à la pose (après HabillerVie).
     private void HabillerSaynete(Pose p, double t)
     {
+        SurvolLong(t);
         if (_geste != Geste.Saynete) _saynete = null;
         if (_saynete is not { } s) return;
         if (Saynetes.Jouer(s, (long)(t - _sayneteDebut), NiveauSaynete, _sayneteSens) is not { } j) return;

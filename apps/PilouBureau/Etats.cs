@@ -124,9 +124,11 @@ public sealed class Suivi
     public Expr Expression(double maintenant, double tCaresse)
     {
         if (maintenant - tCaresse < 2400) return Expr.Caresse;
-        if (_choisie is null) return Expr.Dort;
+        // Sans session d'IA (ou la session s'est endormie), Pilou est éveillé : c'est un compagnon de tout. Il ne dort
+        // que si tu t'absentes, ou la nuit (Saynetes.Endormi, appliqué par FenetrePilou.Sommeil).
+        if (_choisie is null) return Expr.Repos;
         var e = _choisie.Etat;
-        if (e.Humeur == "dort") return Expr.Dort;
+        if (e.Humeur == "dort") return Expr.Repos;
         if (Durees.TryGetValue(e.Humeur, out var d) && maintenant - _choisie.TRev < d)
         {
             return e.Humeur switch

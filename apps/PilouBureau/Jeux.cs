@@ -423,7 +423,8 @@ public sealed partial class FenetrePilou
     // Personne au clavier depuis 10 min et rien qui tourne : il s'endort. Le premier geste le réveille.
     private Expr Sommeil(Expr expr, double t)
     {
-        bool personne = _inactif > 10 * 60_000 && !_vivantes.Any(e => e.EnTour || e.Attente != "");
+        // Tu t'absentes (10 min, ou 2 min la nuit) et aucune IA ne travaille ni n'attend : il s'endort (Saynetes.Endormi).
+        bool personne = Saynetes.Endormi(_essaiHeure ?? DateTime.Now.Hour, _inactif) && !_vivantes.Any(e => e.EnTour || e.Attente != "");
         if (personne && !_dortBureau)
         {
             _dortBureau = true;

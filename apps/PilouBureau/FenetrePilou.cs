@@ -673,6 +673,8 @@ public sealed partial class FenetrePilou : Window
                 {
                     _vy = 0;
                     _auSol = true;
+                    if (_lache) Reagir("lache", t, _sens);
+                    _lache = false;
                 }
                 _atterri = t;
             }
@@ -876,6 +878,7 @@ public sealed partial class FenetrePilou : Window
                 {
                     _geste = Geste.Rien;
                     _pauseJusque = t + (2500 + _hasard.NextDouble() * 6000) * pause;
+                    AuBord(t, min, max);
                     return false;
                 }
                 _sens = Math.Sign(ecart);
@@ -1163,6 +1166,7 @@ public sealed partial class FenetrePilou : Window
         if (_attrape)
         {
             _attrape = false;
+            _lache = true; // une fois retombé, il se secoue (SaynetesFenetre.cs)
             _zone = ZoneSous(_x, _yPieds);
             _cible = _x;
             _pauseJusque = Maintenant + 4000;

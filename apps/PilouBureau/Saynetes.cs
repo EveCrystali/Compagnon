@@ -7,10 +7,13 @@ namespace PilouBureau;
 public static class Saynetes
 {
     public static readonly string[] Continus = { "assis", "saut", "etire", "penche" };
+    // Un trait dominant (Traits.cs) triple le poids des saynètes qui lui ressemblent : le poids seulement, aucun gain.
+    public const int Trait = 3;
 
-    // Contexte du tirage : heure, mois (1…12), stade, objets portés, compagnon porté, main libre, tu travailles.
+    // Contexte du tirage : heure, mois (1…12), stade, objets portés, compagnon porté, main libre, tu travailles,
+    // traits dominants (identifiants de Traits.cs, vide s'il n'y en a pas).
     public sealed record Contexte(int Heure, int Mois, int Stade, IReadOnlyCollection<string> Objets, bool Compagnon,
-        bool MainLibre, bool Travail);
+        bool MainLibre, bool Travail, IReadOnlyCollection<string>? Traits = null);
 
     // Ce que la saynète impose : continus en millièmes (assis 0…1000, saut, étirement, penché), le reste tel quel.
     public sealed record Jeu(int Assis, int Saut, int Etire, int Penche, string Expr, int Regard, int RegardY,
@@ -24,6 +27,7 @@ public static class Saynetes
         internal readonly List<int> Mois = new();
         internal (int A, int B)? Stades;
         internal string[] ObjetsRequis = Array.Empty<string>();
+        internal string[] Traits = Array.Empty<string>();
         internal bool Compagnon, MainLibre, Repos;
         public bool Tourne;
         internal readonly Dictionary<string, List<(int T, int V)>> Cles = Continus.ToDictionary(k => k, _ => new List<(int, int)>());
@@ -67,6 +71,7 @@ public static class Saynetes
                             s.Stades = (int.Parse(st[0]), int.Parse(st[1]));
                             break;
                         case "objet": s.ObjetsRequis = v.Split('|'); break;
+                        case "trait": s.Traits = v.Split('|'); break;
                         case "compagnon": s.Compagnon = true; break;
                         case "mainlibre": s.MainLibre = true; break;
                         case "repos": s.Repos = true; break;
@@ -117,20 +122,32 @@ public static class Saynetes
         return true;
     }
 
-    // L'identifiant tiré (u : 0…9999) parmi les saynètes permises, sauf « evite » ; "" s'il n'y en a pas.
+    // Poids de la saynète dans ce contexte : triplé si elle ressemble à l'un des traits dominants.
+    public static int Poids(Saynete s, Contexte c) =>
+        s.Poids * (c.Traits is { Count: > 0 } t && s.Traits.Any(t.Contains) ? Trait : 1);
+
+    // L'identifiant tiré (u : 0…9999) parmi les saynètes permises, sauf « evite » ; "" s'il n'y en a pas. Les réactions
+    // au monde (poids 0) ne sont jamais tirées : l'appelant les lance.
     public static string Tirer(IReadOnlyList<Saynete> banque, int u, Contexte c, string evite = "")
     {
-        var ok = banque.Where(s => s.Id != evite && Permise(s, c)).ToList();
-        long total = ok.Sum(s => (long)s.Poids);
+        var ok = banque.Where(s => s.Id != evite && s.Poids > 0 && Permise(s, c)).ToList();
+        long total = ok.Sum(s => (long)Poids(s, c));
         if (total == 0) return "";
         long x = Div(u * total, 10000);
         foreach (var s in ok)
         {
-            if (x < s.Poids) return s.Id;
-            x -= s.Poids;
+            if (x < Poids(s, c)) return s.Id;
+            x -= Poids(s, c);
         }
         return ok[^1].Id;
     }
+
+    // Éveil (saynetes.py) : sans aucune session d'IA, Pilou est éveillé ; il ne dort que si tu t'absentes, ou la nuit.
+    public const int Absent = 10 * 60_000, AbsentNuit = 2 * 60_000;
+
+    public static bool Nuit(int heure) => ((heure % 24) + 24) % 24 < 6;
+
+    public static bool Endormi(int heure, double inactifMs) => inactifMs >= Absent || (Nuit(heure) && inactifMs >= AbsentNuit);
 
     public static Saynete? Trouver(IReadOnlyList<Saynete> banque, string id) => banque.FirstOrDefault(s => s.Id == id);
 

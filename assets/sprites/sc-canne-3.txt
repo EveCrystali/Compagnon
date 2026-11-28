@@ -1,0 +1,33 @@
+# Saynète « pêche » : la canne, étape 3 sur 3
+id: sc-canne-3
+slot: effet
+ancre: main
+decalage: -1 -16
+palette: a=#8a4a1f b=#adbac7 c=#d9803a d=#b4dbff e=#6cb6ff
+images:
+..........
+..........
+..........
+........a.
+.......ab.
+.......ab.
+......a.b.
+......a.b.
+.....a..b.
+.....a..b.
+....a...b.
+....a...b.
+...a....b.
+...a....b.
+..a.....b.
+..c.....b.
+.c......b.
+........b.
+........b.
+........b.
+........b.
+........b.
+........b.
+........b.
+........d.
+.....eeeee

@@ -47,6 +47,8 @@ public class ChiffreTest {
         assertEquals("✓ docs · fini · il y a 3 min", l.get(2).toString());
         assertEquals("❗ 1 t'attend  ·  ◐ 1 en cours  ·  ✓ 1 finie", e.resume(t + 500));
         assertEquals("inquiet", e.expression(t + 500));
-        assertEquals("dort", e.expression(t + 26 * 60_000L));
+        // PC muet : éveillé le jour, endormi la nuit (un compagnon de tout, pas seulement des IA).
+        assertEquals("repos", e.expression(t + 26 * 60_000L, 15));
+        assertEquals("dort", e.expression(t + 26 * 60_000L, 3));
     }
 }
