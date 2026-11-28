@@ -143,6 +143,69 @@ def poisson(f, i):
     f.px(12.4, y + pente * 3 - 0.8, ENCRE); f.px(12.4, y + pente * 3 - 1.6, "#ffffff")
 
 
+SARCELLE = Rampe("#124a5a", "#1d6578", "#2f8f9c", "#5bb3ae", "#9fdcd2")
+CANARD = Rampe("#6b4a2e", "#a07a52", "#c8a274", "#e6cfa6", cerne="#3a2a1c")
+COQUILLE = Rampe("#8a4a1f", "#c8803a", "#f2bd6e", "#ffe6b0")
+
+
+# Trois bêtes du prologue, peintes jusqu'ici dans le décor, devenues de vrais acteurs à la demande du moteur.
+@acteur("grenouille", 20, 15, 4, 400)
+def grenouille(f, i):
+    gonfle = i >= 2                                          # repos, repos (elle cligne), gorge gonflée deux fois
+    g = 14
+    for cote in (-1, 1):                                     # les cuisses repliées et les pieds
+        f.boule(10 + cote * 5.6, g - 3, 3.0, 3.0, SARCELLE, biais=0.3 if cote > 0 else 0.4)
+        f.px(10 + cote * 7.4 - 0.5, g - 0.6, SARCELLE[4]); f.px(10 + cote * 5.4 - 0.5, g - 0.6, SARCELLE[4])
+    c = f.boule(10, g - 5.4, 6.2, 4.8, SARCELLE)
+    f.boule(9.6, g - 3.2 + (0.6 if gonfle else 0), 3.6 + (1.6 if gonfle else 0), 2.4 + (1.4 if gonfle else 0),
+            Rampe("#c9b06c", "#f6e6a8", "#fff6d2"), biais=0.6)                       # le ventre, la gorge qui se gonfle
+    for cote, x in ((-1, 6.8), (1, 12.6)):                   # les yeux, en haut du crâne
+        f.boule(x, g - 10.4, 2.4, 2.3, SARCELLE, biais=0.46)
+        if i == 1:
+            f.trait(x - 1, g - 10.4, x + 0.6, g - 10.4, SARCELLE[0])
+        else:
+            f.px(x - 0.5, g - 10.6, "#ffffff"); f.px(x + 0.5, g - 10.6, ENCRE); f.px(x - 0.5, g - 9.6, ENCRE); f.px(x + 0.5, g - 9.6, ENCRE)
+    if gonfle:
+        f.px(8.6, g - 7.2, "#0e3a48"); f.px(9.6, g - 7.2, "#3b1f33"); f.px(10.6, g - 7.2, "#0e3a48")     # elle chante
+    else:
+        f.trait(7.6, g - 7.2, 11.6, g - 7.2, "#0e3a48", dans=c)
+
+
+@acteur("canard", 24, 19, 4, 300)
+def canard(f, i):
+    bob = (0, 1, 0, 1)[i]                                    # il se dandine sur l'eau ; la tête est à droite
+    g = 17
+    f.oy = bob
+    c = f.boule(10.5, g - 5, 8.6, 4.8, CANARD)
+    f.poly([(1.4, g - 9.4 - (i % 2)), (5, g - 6.4), (2.6, g - 4.6)], CANARD, ton=1)                      # la queue
+    aile = f.boule(9, g - 5.4, 5.2, 2.8, CANARD, biais=0.2)
+    f.courbe([(5.6, g - 4.8), (9, g - 3.4), (12.6, g - 4.8)], CANARD[0], dans=aile)
+    f.tube([(15.6, g - 7.6, 2.0), (17, g - 11.6, 1.8)], CANARD, biais=0.44)                               # le cou
+    f.boule(17.4, g - 13, 3.0, 2.8, SARCELLE, biais=0.44)                                                 # la tête sarcelle
+    f.trait(15.6, g - 10.4, 18.6, g - 10.4, "#ffffff")                                                    # le collier blanc
+    f.poly([(19.8, g - 13.6), (23.4, g - 12.6), (19.8, g - 11.6)], ORANGE, ton=2)                         # le bec
+    f.px(18.2, g - 13.8, ENCRE); f.px(18.2, g - 14.6, "#ffffff")
+    f.oy = 0
+    for x in range(1 + (i % 2), 22, 2):                      # le sillage, en trame
+        f.px(x, g + 0.4, "#cfe0ff", "")
+    f.px(0 + i % 2, g - 0.6, "#cfe0ff", ""); f.px(21 - i % 2, g - 0.6, "#cfe0ff", "")
+
+
+@acteur("escargot", 19, 13, 4, 500)
+def escargot(f, i):
+    e = (0.0, 1.0, 2.0, 1.0)[i]                              # il s'étire puis se ramasse ; la tête est à droite
+    g = 12
+    f.tube([(2.4 - e * 0.3, g - 1.6, 1.2), (8, g - 2.0, 1.9), (14 + e * 0.6, g - 2.2, 1.7)], CANARD, biais=0.5)     # le pied
+    f.tube([(14 + e * 0.6, g - 2.6, 1.5), (15.4 + e * 0.6, g - 5.4, 1.2)], CANARD, biais=0.5)                       # le cou
+    for dx in (0.0, 1.8):                                    # les deux cornes, un œil au bout
+        f.trait(15 + e * 0.6 + dx, g - 6.4, 15.4 + e * 0.6 + dx, g - 9 + (0.6 if i == 2 and dx else 0), CANARD[1])
+        f.px(15.4 + e * 0.6 + dx, g - 9.6 + (0.6 if i == 2 and dx else 0), CANARD[3])
+    c = f.boule(7.6, g - 6.2, 5.0, 4.6, COQUILLE)
+    f.courbe([(7.6, g - 6.2), (9.4, g - 6.8), (9.2, g - 8.4), (6.8, g - 8.8), (5, g - 6.6), (6.6, g - 4), (10, g - 4.2), (11.2, g - 7)],
+             COQUILLE[0], dans=c)                             # la spirale
+    f.px(5.6, g - 8.6, COQUILLE[3])
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # La Grande Panne
 # ---------------------------------------------------------------------------------------------------------------------

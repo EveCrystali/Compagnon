@@ -1,0 +1,83 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-canard
+taille: 24 19
+ancre: 12 18
+duree: 300
+palette: a=#172a3a b=#9fdcd2 c=#5bb3ae d=#ffffff e=#2f8f9c f=#1c2128 g=#45281e h=#f69d50 i=#1d6578 j=#3a2a1c k=#e6cfa6 l=#c8a274 m=#a07a52 n=#6b4a2e o=#cfe0ff
+images: 4
+16,3a5,
+15,a2bca4,
+14,a3bdea3,
+13,ac2bcfe3g,
+13,a5ce3hg
+14,ac2e2ia2g,
+8,5j,j4da4,
+5,3j2klklj2klmj5,
+2,3j8kl2klmj5,
+,j2m2k8lk2lmj5,
+,j2m2lk4l2mn2l3mj4,
+,j2m6l3mn2l3mj4,
+,j3l2nml2m3nl4mj4,
+,j3l2m6nl4mnj4,
+2,j6lml6mnj5,
+3,2j9m2n2j6,
+o4,3jmnm2n3j5,o2,
+,o3,o,ojojojo,o5,o2,
+24,
+16.3,5.
+15.,3a,4.
+14.,a2.ca,3.
+13.,a2.bd.a2,.
+15.2b.f.3g,
+13.ac.3ce3hg
+8.5,.ac2e2ia2g.
+5.3,5j,j4da4.
+3.2,3j2.l.lj10.
+3.2j.7k2.k8.
+4.2kl4.3lk.l.j,4.
+6.k3.l13.
+2.2m.3l.l.2m2.l8.
+5.2nml2m2.nl3.m5.
+.jl2.2m6nl3.mnj4.
+2.j6l.l3.3mnj5.
+,o.2j3m.m.3m2n2j2.o,2.
+.,o.ojojononojojo.o.o,2.
+9.j.j12.
+16.3a5.
+15.a2bca4.
+14.ab2.dea3.
+13.ac2.cf.3g.
+15.2c.c.3hg
+13.,a.2e2ia2g,
+8.5j.j4da3,.
+5.3j2klklj2klmj,4.
+3.2j3k2.k.kl10.
+3.mk.7l2.l8.
+4.2lk4.2mnl.m.mj4.
+6.l3.m13.
+2.2l.2nm.m.2n2.m8.
+5.2m4n2.lm3.n5.
+.,j2.4lml3m3.nj,4.
+2.,2j4m.m3.2n2j,5.
+o,.2,3j.n.2n3j2,2.,o2.
+.o,.,o,ojojojo,o,.,.,o2.
+9.,.,12.
+16.3,5.
+15.,3a,4.
+14.,a2.ca,3.
+13.,a2.bd.a2,.
+15.2b.f.3g,
+13.ac.3ce3hg
+8.5,.ac2e2ia2g.
+5.3,5j,j4da4.
+3.2,3j2.l.lj10.
+3.2j.7k2.k8.
+4.2kl4.3lk.l.j,4.
+6.k3.l13.
+2.2m.3l.l.2m2.l8.
+5.2nml2m2.nl3.m5.
+.jl2.2m6nl3.mnj4.
+2.j6l.l3.3mnj5.
+,o.2j3m.m.3m2n2j2.o,2.
+.,o.ojojononojojo.o.o,2.
+9.j.j12.

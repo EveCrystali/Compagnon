@@ -240,7 +240,7 @@ py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans do
 | La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
 | Le phare éteint (7) | dessinés et exportés (17 fichiers) ; pas encore lus par le moteur | [groupe-phare-eteint.png](maquettes/personnages/groupe-phare-eteint.png) |
 | Petit Nuage (9) | dessinés et exportés (19 fichiers) ; pas encore lus par le moteur | [groupe-petit-nuage.png](maquettes/personnages/groupe-petit-nuage.png) |
-| Acteurs de scène (29) | dessinés et exportés (`acteur-<nom>.txt`, 20 Ko) ; pas encore lus par le moteur | [acteurs.png](maquettes/personnages/acteurs.png) |
+| Acteurs de scène (32 : les 29 d'aujourd'hui, plus `grenouille`, `canard` et `escargot`, peints jusqu'ici dans le décor du prologue) | dessinés et exportés (`acteur-<nom>.txt`, 20 Ko) ; pas encore lus par le moteur | [acteurs.png](maquettes/personnages/acteurs.png) |
 
 Planches par personnage (toutes les humeurs, sept images) et GIF : `docs/maquettes/personnages/<campagne>-<id>.png`
 et `.gif`.

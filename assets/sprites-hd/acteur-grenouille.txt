@@ -1,0 +1,67 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-grenouille
+taille: 20 15
+ancre: 10 14
+duree: 400
+palette: a=#172a3a b=#9fdcd2 c=#5bb3ae d=#2f8f9c e=#ffffff f=#1c2128 g=#1d6578 h=#0e3a48 i=#fff6d2 j=#f6e6a8 k=#124a5a l=#4d6267 m=#5c5141 n=#3b1f33 o=#c9b06c
+images: 4
+6,2a4,2a6,
+5,abca,2abca5,
+4,a2b2ca3bcda4,
+3,acbefda2befda4,
+4,ac2fgb2c2fga4,
+4,ad2g2bcd2gda4,
+3,a3b5hc2dga3,
+3,ac3b4c3dga3,
+2,a2bcb2c2i2c2dgca2,
+,a2b3c5ijd2gcda,
+ac2bdc6ij2gkcdga
+a4cd4i3jgkcdgka
+,ac3dgji3jgk2d2ga,
+,lbgbga5m2abgba2,
+2,l3a8,3a3,
+20.
+20.
+20.
+5.3k3.3k6.
+6.cd4.cd6.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+5.bef3.bef6.
+6.2f4.2f6.
+20.
+7.b.n.c8.
+20.
+6.3i2.2i7.
+5.2i5.2i6.
+5.i6.i2j5.
+4.2i4.2i.2j5.
+5.3i.2i.3j5.
+5.ijiji4j6.
+5.2m5jom6.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.
+20.

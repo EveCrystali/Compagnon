@@ -229,7 +229,9 @@ def acteurs(z=4):
         x, y, hmax = 6, 6, 0
         for nom in A.ORDRE:
             a = A.ACTEURS[nom]
-            vieux = PL.sprite_image(fins["acteur-" + nom], 5, 0)
+            # Un acteur né en HD (grenouille, canard, escargot) n'a pas d'ancienne version : sa case reste vide.
+            vieux = PL.sprite_image(fins["acteur-" + nom], 5, 0) if "acteur-" + nom in fins else \
+                Image.new("RGBA", (20, 20), (0, 0, 0, 0))
             large = vieux.width + 8 + a["w"] * 2 + 14 + a["n"] * (a["w"] * z + 4) + 18
             if x + large > W - 6:
                 x, y, hmax = 6, y + hmax + 12, 0
