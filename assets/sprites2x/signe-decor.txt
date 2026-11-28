@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : decor U+25A7
+id: signe-decor
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aa....aa....aa
+aa....aa....aa
+aa..aaa...aaaa
+aa..aa...aaaaa
+aaaaa...aa..aa
+aaaa...aaa..aa
+aa....aaa...aa
+aa...aaa...aaa
+aa..aa....aaaa
+aa..aa...aaaaa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa

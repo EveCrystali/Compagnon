@@ -45,12 +45,12 @@ final class Ui {
         }
     }
 
-    // Thème clair : bleu, orange et argent assombris pour tenir le contraste WCAG AA (≥ 4,5:1) sur le fond
-    // et sur les cartes (texte bleu ou orange, texte blanc sur bouton bleu).
-    static final Palette CLAIRE = new Palette(0xfff6f8fa, 0xffffffff, 0xffeef2f6, 0xffd8dee4, 0xff1c2128, 0xff57606a,
-            0xff1f6fc5, 0xffa8530f, 0xff6a7889, 0xffffffff, 0x141f6fc5);
-    static final Palette SOMBRE = new Palette(0xff161b22, 0xff22272e, 0xff2d333b, 0xff373e47, 0xffcdd9e5, 0xff909dab,
-            0xff6cb6ff, 0xfff69d50, 0xffadbac7, 0xff1c2128, 0x226cb6ff);
+    // Les couleurs du guide de style (docs/STYLE.md, Style.java) : crème le jour, bleu nuit la nuit, celles du menu
+    // « Sept portes » du PC. Bleu, orange et gris tiennent le contraste WCAG AA (≥ 4,5:1) sur la page et sur les cartes.
+    static final Palette CLAIRE = new Palette(0xffefe3cb, 0xfffbf3e4, 0xffe6d7b8, 0xffd9c7a3, 0xff1c2128, 0xff57606a,
+            0xff1f5fae, 0xff9c4a0a, 0xff767c84, 0xffffffff, 0x141f5fae);
+    static final Palette SOMBRE = new Palette(0xff0b0e1a, 0xff151a2e, 0xff2a3156, 0xff3a4270, 0xffe6ecf2, 0xffadbac7,
+            0xff6cb6ff, 0xfff69d50, 0xffadbac7, 0xff151a2e, 0x226cb6ff);
 
     /**
      * Échelle typographique (sp) : titre de page, titre de carte, corps, détail ; plus l'étiquette de section (capitales

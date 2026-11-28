@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : quart U+25D4
+id: signe-quart
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+....aaaaaa....
+...aaaaaaaa...
+..aa..aaaaaa..
+.aaa..aaaaaaa.
+aaa...aaaaaaaa
+aa....aaaaaaaa
+aa....aaaaaaaa
+aa....aaaaaaaa
+aa..........aa
+aaa.........aa
+.aaa......aaa.
+..aaa....aaa..
+...aaaaaaaa...
+....aaaaaa....

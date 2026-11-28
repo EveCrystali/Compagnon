@@ -351,6 +351,9 @@ creneau("Y", RONDES + ".,…", -1)
 creneau("L", "TVY’'", -1)
 creneau("r", ".,…", -1)
 creneau("f", ".,…", -1)
+# Le « j » garde deux colonnes vides à gauche de sa hampe (son crochet part sous la ligne) : après une lettre sans
+# jambage, il se rapproche d'un pixel (« bonjour » ne s'écrit plus « bon jour »).
+creneau("abcdehiklmnorstuvwxzàâäéèêëîïôöùûüçœæ", "j", -1)
 creneau("«‹", "  ", 0)
 creneau("  ", "»›", 0)
 creneau("lLdDjJ", "’'", 0)
@@ -530,10 +533,26 @@ def police_texte():
             "chasse": CHASSE, "ligne": LIGNE}
 
 
+# Glyphes gras redessinés à la main : l'épaississement automatique bouche leurs creux d'un pixel (le « m » devenait
+# un pavé plein). Deux pixels par fût, un pixel par creux, deux de plus que le texte au lieu d'un.
+GRAS_MAIN = {
+    "m": "#######. ##.##.## ##.##.## ##.##.## ##.##.##",
+    "w": "##....## ##....## ##.##.## ######## .##..##.",
+    "M": "##....## ###..### ######## ##.##.## ##....## ##....## ##....##",
+    "W": "##....## ##....## ##....## ##.##.## ######## ###..### ##....##",
+    "#": ".##.##. ####### .##.##. ####### .##.##.",
+}
+
+
 def police_titre():
     gl = {}
     for c, (haut, rangs) in G.items():
         gl[c] = (haut, gras(rangs)) if rangs and c not in LARGEURS_VIDES else (haut, rangs)
+    for c, motif in GRAS_MAIN.items():
+        haut, rangs = G[c]
+        main = motif.split()
+        assert len(main) == len(rangs) and len(set(len(r) for r in main)) == 1, c
+        gl[c] = (haut, main)
     vides = {c: (w + 1 if w else 1) for c, w in LARGEURS_VIDES.items()}
     return {"nom": "titre", "glyphes": gl, "vides": vides, "crenage": dict(CRENAGE), "chasse": CHASSE,
             "ligne": LIGNE + 1}

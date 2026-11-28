@@ -1,0 +1,21 @@
+# signe d'interface (docs/STYLE.md) : titre U+275E
+id: signe-titre
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aa..........aa
+aa..........aa
+aa..aaaaaa..aa
+aa..aaaaaa..aa
+aa..........aa
+aa..........aa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aaaaaaaaaaaaaa
+aaaaaa..aaaaaa
+aaaaa....aaaaa
+aaaa......aaaa

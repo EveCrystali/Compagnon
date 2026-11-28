@@ -1,0 +1,19 @@
+# icône d'interface (docs/STYLE.md) : reglages
+id: ui-reglages
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128
+images:
+....aaaa....
+.aa.aaaa.aa.
+.aaaaaaaaaa.
+..aaa..aaa..
+aaaa....aaaa
+aaa......aaa
+aaa......aaa
+aaaa....aaaa
+..aaa..aaa..
+.aaaaaaaaaa.
+.aa.aaaa.aa.
+....aaaa....

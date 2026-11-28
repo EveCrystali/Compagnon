@@ -35,7 +35,10 @@ rangée  0-1   accents des capitales      É Ê À Ç…
 - **Chasse variable** : capitales et chiffres 5 de large (I, 1 : 3 ; L : 4 ; Œ Æ : 7), minuscules 4 (i 1, l 2,
   f r t 3, m w v 5). Un pixel entre deux glyphes, une espace normale de 2 (4 pixels entre deux mots).
 - **Interligne** : 12 pixels (texte), 13 (titre).
-- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes.
+- **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes. Cinq glyphes dont
+  l'épaississement bouchait les creux sont redessinés à la main (`GRAS_MAIN` : m, w, M, W, #).
+- **Crénage** : quelques paires se rapprochent d'un pixel (T, F, P, V, Y, L, r, f ; et le « j » après une lettre sans
+  jambage).
 - **Accents** : composés (lettre nue + signe centré), pour que toutes les lettres accentuées aient le même accent.
 - **Signes** : ♥ ♡ ✓ ✗ ✧ ✦ ★ → ← ↑ ↓ ♪ ♫ ☁ ☀ ☾ ☂ ❄ ⚡ ☺ ▼ ▲ ▶ ◀ ● ○ ■ □ ◆, et `¤` dessiné comme une pièce
   (« po »).
@@ -67,4 +70,8 @@ arrondis, même place. Sur le PC, seulement si le « Dessin fin » est actif.
 | Phrase de Pilou en tête de bulle (petits mots, réactions, « toc toc ! ») | ✓ `BullePixel.cs` | — |
 | Mot du jour : bulle flottante, Accueil, widget | — | ✓ `Bulle.java`, `PresenceVue.motTete`, `Widget.java` |
 
-À convertir ensuite (chantier suivant) : voir la liste du compte rendu du chantier (PR « police pixel »).
+| Récit, choix, bandeau et lieu de l'Aventure | ✓ `FenetreAventure.cs` | ✓ `Lecture.java` |
+| En-tête, barre du bas, Accueil, Jouer, Boutique, Collection | — | ✓ `Style.Texte` (docs/STYLE.md) |
+
+Les tailles et les cas où la police système reste permise sont fixés dans [STYLE.md](STYLE.md). À convertir ensuite :
+les fenêtres du PC hors menu, bulle et Aventure ; sur le téléphone, Réglages, liste des aventures, épreuves, atelier.

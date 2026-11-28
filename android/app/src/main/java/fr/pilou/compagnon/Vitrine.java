@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -95,11 +94,14 @@ final class Vitrine {
         return id;
     }
 
-    /** Texte en police pixel (Police), avec ombre ; clignote doucement si « neon ». */
+    /**
+     * Enseigne : un mot en capitales dans la police pixel « titre », avec une ombre d'un pixel ; clignote doucement si
+     * « neon ». pxDp : l'ancienne taille (police 3 × 5) ; la police de Pilou, plus haute, prend les trois quarts.
+     */
     static final class Pixel extends View {
         private String texte;
         private int couleur, ombre;
-        private final float px;
+        private final int px;
         private final boolean neon;
         private final Paint pt = new Paint();
 
@@ -108,7 +110,7 @@ final class Vitrine {
             this.texte = texte;
             this.couleur = couleur;
             this.ombre = ombre;
-            this.px = Ui.dp(c, pxDp);
+            this.px = Style.pixel(c, Math.max(Style.PETIT, pxDp * 0.75f));
             this.neon = neon && anime(c);
             pt.setAntiAlias(false);
             setContentDescription(texte);
@@ -124,7 +126,8 @@ final class Vitrine {
 
         @Override
         protected void onMeasure(int l, int h) {
-            setMeasuredDimension(Math.round((Police.largeur(texte) + 1) * px), Math.round(6 * px));
+            // Les capitales occupent les rangées 3 à 9 : deux rangées d'accent au-dessus, une d'ombre au-dessous.
+            setMeasuredDimension(Style.largeur(texte, px, true) + px + getPaddingLeft() + getPaddingRight(), 10 * px + getPaddingTop() + getPaddingBottom());
         }
 
         @Override
@@ -136,13 +139,9 @@ final class Vitrine {
                 if (k == 0 || k == 2) c = ORANGE_CLAIR;
                 postInvalidateDelayed(140);
             }
-            int cc = c;
-            Dessin.Peintre pe = (g, hh, d, b, col) -> {
-                pt.setColor(col);
-                cv.drawRect(g, hh, d, b, pt);
-            };
-            if (ombre != 0) Police.ecrire(pe, texte, px, px, px, ombre);
-            Police.ecrire(pe, texte, 0, 0, px, cc);
+            int x = getPaddingLeft(), y = getPaddingTop() - px;
+            if (ombre != 0) Style.ecrire(cv, texte, x + px, y + px, px, ombre, true, pt);
+            Style.ecrire(cv, texte, x, y, px, c, true, pt);
         }
     }
 
@@ -178,127 +177,144 @@ final class Vitrine {
     }
 
     /**
-     * Bandeau permanent en haut de l'app : niveau (pastille pixel), mini barre d'XP, pièces d'or avec une pièce
-     * qui tourne, titre ; dessous, la prochaine rangée de la boutique. Un toucher : la page des niveaux.
+     * Bandeau permanent en haut de l'app (docs/STYLE.md, « En-tête ») : pastille de niveau au cadre violet, titre,
+     * barre d'XP en cases, chiffres, pièces d'or avec une pièce qui tourne ; dessous, la prochaine rangée de la
+     * boutique, sur toute la largeur. Tout est écrit en police pixel. Un toucher : la page des niveaux.
+     * La roue des Réglages se pose par-dessus, en haut à droite : le bandeau lui garde « reserve » pixels.
      */
     static final class Bandeau extends View {
         private int niveau = 1, xp, po = -1;
-        private String titre = "", suite = "";
-        private final Paint pt = new Paint(), txt = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private String titre = "";
+        private String[] suites = {};
+        private final Paint pt = new Paint();
         private final boolean anime;
+        private final int u, pp, pc, reserve;
 
         Bandeau(Context c) {
             super(c);
             pt.setAntiAlias(false);
-            txt.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
             anime = anime(c);
+            u = Style.u(c);
+            pp = Style.pixel(c, Style.PETIT);
+            pc = Math.max(pp, Style.pixel(c, Style.CORPS));
+            reserve = Ui.dp(c, 50);
             setClickable(true);
             setFocusable(true);
         }
 
-        void mettre(int niveau, int xp, int po, String titre, String suite) {
-            if (niveau == this.niveau && xp == this.xp && po == this.po && titre.equals(this.titre) && suite.equals(this.suite)) return;
+        void mettre(int niveau, int xp, int po, String titre, String[] suites) {
+            if (niveau == this.niveau && xp == this.xp && po == this.po && titre.equals(this.titre) && java.util.Arrays.equals(suites, this.suites)) return;
             this.niveau = niveau;
             this.xp = xp;
             this.po = po;
             this.titre = titre;
-            this.suite = suite;
+            this.suites = suites;
             int haut = Butin.xpPourNiveau(niveau + 1);
             setContentDescription("Niveau " + niveau + ", " + titre + ", " + xp + " sur " + haut + " xp"
-                    + (po >= 0 ? ", " + po + " pièces d'or" : "") + (suite.isEmpty() ? "" : ". " + suite) + ". Toucher : voir les niveaux.");
+                    + (po >= 0 ? ", " + po + " pièces d'or" : "") + (suites.length == 0 ? "" : ". Boutique, prochaines rangées : " + suites[0].replace("▲ ", ""))
+                    + ". Toucher : voir les niveaux.");
             requestLayout();
             invalidate();
         }
 
-        private float dp(float v) {
-            return Ui.dp(getContext(), v);
+        // Hauteurs, en pixels de l'écran : marge, titre (12 rangées), barre, chiffres, puis la ligne de la boutique.
+        private int yTitre() {
+            return 2 * u;
+        }
+
+        private int yBarre() {
+            return yTitre() + 13 * pp;
+        }
+
+        private int yXp() {
+            return yBarre() + 3 * u - pp;
+        }
+
+        private int basCorps() {
+            return yXp() + 12 * pp + u;
         }
 
         @Override
         protected void onMeasure(int l, int h) {
-            setMeasuredDimension(MeasureSpec.getSize(l), Math.round(dp(suite.isEmpty() ? 52 : 70)));
+            int haut = suites.length == 0 ? basCorps() + 2 * u : basCorps() - pp + 12 * pp + 2 * u;
+            setMeasuredDimension(MeasureSpec.getSize(l), Math.max(haut, Ui.dp(getContext(), 52)));
         }
 
         @Override
         protected void onDraw(Canvas cv) {
-            float w = getWidth(), m = dp(12);
+            int w = getWidth(), m = Ui.dp(getContext(), 12);
             cv.drawColor(NUIT);
+            // Liseré violet d'un module, sur toute la largeur (comme le cadre de l'en-tête du menu du PC).
             pt.setColor(VIOLET_FONCE);
-            cv.drawRect(0, getHeight() - dp(2), w, getHeight(), pt);
-            Dessin.Peintre pe = (g, hh, d, b, col) -> {
-                pt.setColor(col);
-                cv.drawRect(g, hh, d, b, pt);
-            };
-            // Pastille de niveau : « NIV » au-dessus du nombre, cadre violet.
-            float bx = m, by = dp(6), bw = dp(42), bh = dp(40);
+            cv.drawRect(0, getHeight() - u, w, getHeight(), pt);
+            // Pastille de niveau : « NIV » au-dessus du nombre, cadre violet d'un module.
+            String n = String.valueOf(niveau);
+            int bx = m, by = yTitre(), bh = basCorps() - by, bw = Math.max(Ui.dp(getContext(), 42), Style.largeur("NIV", pp, false) + 2 * u + 4 * pp);
             pt.setColor(VIOLET);
             cv.drawRect(bx, by, bx + bw, by + bh, pt);
             pt.setColor(NUIT2);
-            cv.drawRect(bx + dp(2), by + dp(2), bx + bw - dp(2), by + bh - dp(2), pt);
-            float p1 = dp(1.5f);
-            Police.centre(pe, "NIV", bx + bw / 2, by + dp(5), p1, ARGENT, 0);
-            String n = String.valueOf(niveau);
-            float p2 = n.length() >= 3 ? dp(2.5f) : dp(3.5f);
-            Police.centre(pe, n, bx + bw / 2, by + dp(15), p2, ARGENT_CLAIR, ENCRE);
-            // Pièces d'or à droite.
+            cv.drawRect(bx + u, by + u, bx + bw - u, by + bh - u, pt);
+            Style.centrer(cv, "NIV", bx + bw / 2f, by + u + pp - 3 * pp, pp, ARGENT, false, pt);
+            int pn = Math.max(pp, Style.pixel(getContext(), Style.PAGE));
+            while (pn > pp && (Style.largeur(n, pn, true) > bw - 2 * u - 2 * pp || 7 * pn > bh - 2 * u - 11 * pp)) pn--;
+            int yn = by + u + 9 * pp + (bh - 2 * u - 9 * pp - 7 * pn) / 2;
+            Style.centrer(cv, n, bx + bw / 2f, yn - 3 * pn, pn, ARGENT_CLAIR, true, pt);
+            // Pièces d'or, à gauche de la roue.
             String sPo = po < 0 ? "— po" : po + " po";
-            txt.setTextSize(dp(16));
-            txt.setColor(ORANGE);
-            float lPo = txt.measureText(sPo);
-            float xPo = w - m - lPo;
-            cv.drawText(sPo, xPo, by + dp(20), txt);
+            int xPo = w - reserve - Style.largeur(sPo, pc, true);
+            Style.ecrire(cv, sPo, xPo, yTitre() + 2 * pp, pc, ORANGE, true, pt);
             Sprites.Sprite piece = Sprites.banque().get("po-tourne");
+            int xPiece = xPo;
             if (piece != null) {
-                float pp = dp(1.6f);
-                Sprites.dessiner(pe, piece, xPo - piece.w() * pp - dp(6), by + dp(7), pp, anime ? SystemClock.uptimeMillis() : 0, false);
+                xPiece = xPo - piece.w() * pp - 2 * u;
+                Dessin.Peintre pe = (g, hh, d, b, col) -> {
+                    pt.setColor(col);
+                    cv.drawRect(g, hh, d, b, pt);
+                };
+                Sprites.dessiner(pe, piece, xPiece, yTitre() + 2 * pp + 3 * pc + (7 * pc - piece.h() * pp) / 2, pp, anime ? SystemClock.uptimeMillis() : 0, false);
             }
-            // Titre, barre d'XP pixel, chiffres.
-            float x0 = bx + bw + dp(10), x1 = xPo - dp(30);
-            txt.setTextSize(dp(12));
-            txt.setColor(ARGENT_CLAIR);
-            String t = titre;
-            while (t.length() > 3 && txt.measureText(t) > x1 - x0) t = t.substring(0, t.length() - 2);
-            if (!t.equals(titre)) t = t + "…";
-            cv.drawText(t, x0, by + dp(13), txt);
+            // Titre, barre d'XP en cases, chiffres.
+            int x0 = bx + bw + 2 * u, x1 = xPiece - 2 * u;
+            Style.ecrire(cv, Style.tronquer(titre, pp, true, x1 - x0), x0, yTitre(), pp, ARGENT_CLAIR, true, pt);
             // Niveau acquis gardé (comme l'Accueil) : si l'XP est sous le palier du niveau, la barre part du palier de la courbe.
             int bas = Butin.xpPourNiveau(Math.min(niveau, Butin.niveau(xp))), haut = Butin.xpPourNiveau(niveau + 1);
             float part = haut > bas ? Math.max(0, Math.min(1, (xp - bas) / (float) (haut - bas))) : 1;
-            int cases = 16;
-            float pas = (x1 - x0) / cases, ecart = Math.max(1, pas * 0.2f), yb = by + dp(19);
+            int pas = 4 * u, cases = Math.max(1, (x1 - x0 + u) / pas), yb = yBarre();
             int pleines = (int) Math.floor(part * cases);
             for (int i = 0; i < cases; i++) {
                 pt.setColor(i < pleines ? BLEU : NUIT3);
-                cv.drawRect(x0 + i * pas, yb, x0 + (i + 1) * pas - ecart, yb + dp(8), pt);
+                cv.drawRect(x0 + i * pas, yb, x0 + i * pas + 3 * u, yb + 3 * u, pt);
                 if (i < pleines) {
                     pt.setColor(BLEU_CLAIR);
-                    cv.drawRect(x0 + i * pas, yb, x0 + (i + 1) * pas - ecart, yb + dp(2), pt);
+                    cv.drawRect(x0 + i * pas, yb, x0 + i * pas + 3 * u, yb + u, pt);
                 }
             }
-            txt.setTextSize(dp(10.5f));
-            txt.setColor(ARGENT);
-            txt.setTypeface(Typeface.DEFAULT);
-            cv.drawText(Math.max(0, xp - bas) + " / " + (haut - bas) + " xp · niv " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp",
-                    x0, yb + dp(20), txt);
-            if (!suite.isEmpty()) {
-                txt.setColor(VIOLET);
-                txt.setTextSize(dp(11));
-                String s = suite;
-                while (s.length() > 3 && txt.measureText(s) > w - 2 * m) s = s.substring(0, s.length() - 2);
-                cv.drawText(s.equals(suite) ? s : s + "…", m, getHeight() - dp(9), txt);
-            }
-            txt.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
+            String dans = Math.max(0, xp - bas) + " / " + (haut - bas) + " xp";
+            String chiffres = Style.choisir(new String[]{dans + " · niveau " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp",
+                    dans + " · niv " + (niveau + 1) + " dans " + Math.max(0, haut - xp) + " xp", dans}, pp, false, w - reserve - x0);
+            Style.ecrire(cv, chiffres, x0, yXp(), pp, ARGENT, false, pt);
+            if (suites.length > 0)
+                Style.ecrire(cv, Style.choisir(suites, pp, false, w - 2 * m), m, basCorps() - pp, pp, VIOLET, false, pt);
             if (anime && isShown()) postInvalidateDelayed(120);
         }
     }
 
-    /** « ▲ Prochaine rangée : Dos, Main — niveau 15 (encore 340 xp) » ; vide quand tout est ouvert. */
+    /** « ▲ Niveau 15 : Dos, Main · encore 340 xp » : la prochaine rangée de la boutique ; vide quand tout est ouvert. */
     static String prochaineRangee(int niveau, int xp) {
+        String[] f = prochainesRangees(niveau, xp);
+        return f.length == 0 ? "" : f[0];
+    }
+
+    /** La même annonce, de la plus longue à la plus courte : le bandeau prend la première qui tient sur sa ligne. */
+    static String[] prochainesRangees(int niveau, int xp) {
         int p = Boutique.prochainPalier(niveau);
-        if (p == 0) return "";
+        if (p == 0) return new String[0];
         java.util.List<String> r = Boutique.rayonsDuPalier(p);
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < Math.min(3, r.size()); i++) s.append(i > 0 ? ", " : "").append(Boutique.nomSlot(r.get(i)));
         if (r.size() > 3) s.append(" +").append(r.size() - 3);
-        return "▲ Prochaine rangée : " + s + " — niveau " + p + " (encore " + Math.max(0, Butin.xpPourNiveau(p) - xp) + " xp)";
+        String tete = "▲ Niveau " + p + " : ";
+        return new String[]{tete + s + " · encore " + Math.max(0, Butin.xpPourNiveau(p) - xp) + " xp", tete + s,
+                tete + r.size() + (r.size() > 1 ? " rangées" : " rangée")};
     }
 }
