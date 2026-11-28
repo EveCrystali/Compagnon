@@ -1,0 +1,57 @@
+# Scènes HD de « prologue » (docs/SCENES-HD.md) : écrites par outils/sprites/theatre_hd.py depuis
+# assets/scenes/prologue.txt, dans le repère des paysages (x × 2,5 ; y × 2,5 + 40). Ne pas modifier à la main :
+# corriger la scène d'origine, ou le tableau.
+
+scene jardin
+sol 10 235 470 235
+place 100
+interlocuteur 375
+acteur papillon vol 175 115 425 185 3
+acteur oiseau traverse 60 95 17000 6000 65
+acteur abeille vol 250 170 375 205 9
+
+scene mare
+sol 10 235 470 235
+place 80
+interlocuteur 420
+acteur libellule vol 150 140 400 185 7
+acteur rond rond 175 210 2600 0
+acteur rond rond 312 220 3400 1300
+acteur poisson saut 280 210 11000 5000
+acteur oiseau traverse 55 80 23000 15000 75
+sensible grenouille 225 160 255 190 bulle 232 177
+sensible eau 65 157 430 232 rond
+
+scene pente
+sol 15 232 465 102
+place 85
+interlocuteur 300
+acteur graine flotte 395 125 9000 0 -35 -8
+acteur graine flotte 402 117 9000 4500 -28 -10
+acteur papillon vol 100 90 300 155 5
+sensible pissenlit 380 95 430 145 graines 400 122
+
+scene pied-colline
+sol 10 227 470 227
+place 90
+interlocuteur 375
+acteur oiseau traverse 50 85 15000 2000 70
+acteur oiseau traverse 55 90 15000 9000 55
+acteur papillon vol 25 165 225 205 11
+
+scene seuil
+sol 15 230 320 230
+place 75
+interlocuteur 250
+acteur papillon vol 10 125 100 175 13
+acteur abeille vol 15 140 85 180 17
+acteur oiseau traverse 65 115 19000 4000 60
+
+scene sommet
+sol 10 235 470 235
+place 175
+interlocuteur 375
+acteur feuille chute 85 105 8000 2000
+acteur feuille chute 110 100 8000 6000
+acteur oiseau traverse 65 105 14000 0 50
+acteur oiseau traverse 75 115 14000 5000 62

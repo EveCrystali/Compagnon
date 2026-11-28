@@ -265,6 +265,7 @@ class Pose:
         self.tenue = ""        # tenue d'activité, ou tenue de voyage « voyage-<mode> » (voir voyager)
         self.objets = []
         self.cligne = self.clin = self.marche = self.course = self.baille = self.etourdi = False
+        self.parle = False      # bouche ouverte (le Théâtre HD : une réplique, une image sur deux, docs/SCENES-HD.md)
         self.fatigue = self.salue = False
         self.boude = self.dos = False   # il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage)
         self.regard = self.regard_y = 0
@@ -681,7 +682,7 @@ def rendre_stade(p, B, T, TEN, e=1):
         elif "oeil-" + od in B:
             s = B["oeil-" + od]
             poser(s, True, (C + 10 - ecart) * e + dxf - s.dx - s.w, ey + s.dy)
-    bo = None if p.dos else B.get("bouche-baille" if p.baille else "bouche-boude" if moue else "bouche-" + p.expr) or B.get("bouche-repos")
+    bo = None if p.dos else B.get("bouche-baille" if p.baille else "bouche-surpris" if p.parle else "bouche-boude" if moue else "bouche-" + p.expr) or B.get("bouche-repos")
     if bo:
         poser(bo, False, c0 - bo.w // 2 + dxf, ey + 9 * e + bo.dy)
     if p.expr in JOUES and not p.dos:

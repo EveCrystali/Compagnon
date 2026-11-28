@@ -31,6 +31,22 @@ sys.path.insert(0, ICI)
 import animations  # noqa: E402
 
 W, H = 192, 80
+
+
+class Definition:
+    """La taille de la scène et l'échelle des longueurs du moteur (docs/SCENES-HD.md) : l'ancienne (192 × 80) et la
+    haute définition (480 × 240, longueurs × 5/2). Une scène porte la sienne ; on ne mélange jamais les deux."""
+    def __init__(self, nom, w, h, num, den):
+        self.nom, self.w, self.h, self.num, self.den = nom, w, h, num, den
+
+
+ANCIENNE = Definition("ancienne", 192, 80, 1, 1)
+HD = Definition("hd", 480, 240, 5, 2)
+
+
+def E(sc, v):
+    """Une longueur ou une vitesse du moteur (écrite à l'ancienne unité) dans la définition de la scène."""
+    return div(v * sc.d.num, sc.d.den)
 PAS = 83                       # douze images par seconde, « en deux » comme un dessin animé
 VITESSE = 24                   # marche de Pilou, pixels fins par seconde
 ENTREE, SORTIE_D, SORTIE_G = -14, 206, -14
@@ -80,9 +96,10 @@ def lisse(num, den):
 # ---- Les scènes : assets/scenes/<campagne>.txt
 
 class Scene:
-    def __init__(self, nom):
+    def __init__(self, nom, d=None):
         self.nom = nom
-        self.sol = (0, 78, W, 78)
+        self.d = d or ANCIENNE
+        self.sol = (0, self.d.h - 2, self.d.w, self.d.h - 2)
         self.place = 24
         self.interlocuteur = 150
         self.cle = None            # (x0, y0, x1, y1) : l'accessoire dont parle le texte (le panneau des choix l'évite)
@@ -90,7 +107,7 @@ class Scene:
         self.sensibles = []        # (nom, x0, y0, x1, y1, réaction, [paramètres entiers])
 
 
-def lire_scenes(texte):
+def lire_scenes(texte, d=None):
     scenes, sc = {}, None
     for brut in texte.splitlines():
         l = brut.split("#", 1)[0].strip()
@@ -98,7 +115,7 @@ def lire_scenes(texte):
             continue
         m = l.split()
         if m[0] == "scene":
-            sc = scenes[m[1]] = Scene(m[1])
+            sc = scenes[m[1]] = Scene(m[1], d)
         elif sc is None:
             continue
         elif m[0] == "sol":
@@ -163,7 +180,14 @@ def _clics(evts):
 
 
 def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
-    """(x, y, image, miroir, visible) : x au centre, y la ligne des pieds."""
+    """(x, y, image, miroir, visible) : x au centre, y la ligne des pieds (image du mini-Pilou de scene-pilou)."""
+    x, y, nom, dt, miroir, vis, _ = pilou_etat(sc, A, evts, t, regard, niv)
+    a = A[PILOU][nom]
+    return x, y, (a[0] if dt < 0 else image_anim(a, dt)), miroir, vis
+
+
+def pilou_etat(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
+    """(x, y, animation, temps dans l'animation (-1 : sa première image, fixe), miroir, visible, humeur)."""
     P = A[PILOU]
     vif = niv == animations.COMPLETES
     x, humeur, action, parti = sc.place, "neutre", None, False
@@ -172,11 +196,8 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
         for e in evts:
             if e[0] <= t and e[1] == "humeur":
                 humeur = e[2]
-        a = P[_face(humeur)]
-        im = a[0]
-        if niv == animations.REDUITES and animations.cligne(t):
-            im = P["cligne"][0]
-        return x, sol(sc, x), im, x > W // 2, True
+        nom = "cligne" if niv == animations.REDUITES and animations.cligne(t) else _face(humeur)
+        return x, sol(sc, x), nom, -1, x > sc.d.w // 2, True, humeur
 
     def fin_action(act, jusque):
         """Applique la fin d'une action terminée avant `jusque` ; rend (x, action restante, parti)."""
@@ -185,10 +206,10 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
             return None
         if act[0] == "marche":
             _, t0, x0, x1 = act
-            fait = (jusque - t0) * VITESSE // 1000
+            fait = (jusque - t0) * E(sc, VITESSE) // 1000
             if fait >= abs(x1 - x0):
                 x = x1
-                parti = x1 >= SORTIE_D or x1 <= SORTIE_G
+                parti = x1 >= sortie_d or x1 <= sortie_g
                 return None
             return act
         if act[0] == "anim":
@@ -199,10 +220,11 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
     def position(act, jusque):
         if act is not None and act[0] == "marche":
             _, t0, x0, x1 = act
-            fait = (jusque - t0) * VITESSE // 1000
+            fait = (jusque - t0) * E(sc, VITESSE) // 1000
             return x0 + fait if x1 >= x0 else x0 - fait
         return x
 
+    entree, sortie_d, sortie_g = E(sc, ENTREE), sc.d.w + E(sc, SORTIE_D - W), E(sc, SORTIE_G)
     clics_vus = set(_clics(evts))
     n_pilou = 0
     for ie, e in enumerate(evts):
@@ -211,12 +233,12 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
         action = fin_action(action, e[0])
         sorte = e[1]
         if sorte == "entree":
-            x0 = e[2] if e[2] else ENTREE          # a : d'où il entre (0 : du bord gauche)
+            x0 = e[2] if e[2] else entree          # a : d'où il entre (0 : du bord gauche)
             x, parti = x0, False
             action = ("marche", e[0], x0, sc.place)
         elif sorte == "depart":
             x = position(action, e[0])
-            action = ("marche", e[0], x, SORTIE_D if e[2] >= 0 else SORTIE_G)
+            action = ("marche", e[0], x, sortie_d if e[2] >= 0 else sortie_g)
         elif sorte == "humeur":
             humeur = e[2] if e[2] in HUMEURS else "neutre"
             if action is None or action[0] == "anim":
@@ -239,38 +261,64 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
                 action = ("anim", e[0], nom, 900)
     action = fin_action(action, t)
     if parti:
-        return x, sol(sc, x), P[_face(humeur)][0], False, False
+        return x, sol(sc, x), _face(humeur), -1, False, False, humeur
     if action is not None and action[0] == "marche":
         _, t0, x0, x1 = action
         px = position(action, t)
-        return px, sol(sc, px), image_anim(P["marche"], t - t0), x1 < x0, True
-    miroir = x > W // 2
+        return px, sol(sc, px), "marche", t - t0, x1 < x0, True, humeur
+    miroir = x > sc.d.w // 2
     if action is not None and action[0] == "anim":
         _, t0, nom, d = action
         if nom == "surpris" and t - t0 >= duree_anim(P["surpris"]):
-            return x, sol(sc, x), image_anim(P["repos-peur"], t - t0), miroir, True
+            return x, sol(sc, x), "repos-peur", t - t0, miroir, True, humeur
         if nom in ("regard-d", "regard-g"):
-            return x, sol(sc, x), P[nom][0], False, True
-        return x, sol(sc, x), image_anim(P[nom], t - t0), miroir, True
+            return x, sol(sc, x), nom, -1, False, True, humeur
+        return x, sol(sc, x), nom, t - t0, miroir, True, humeur
     for (t0, t1) in paroles:
         if t0 <= t < t1:
-            return x, sol(sc, x), image_anim(P["parle"], t - t0), miroir, True
+            return x, sol(sc, x), "parle", t - t0, miroir, True, humeur
     if animations.cligne(t):
-        return x, sol(sc, x), P["cligne"][0], miroir, True
+        return x, sol(sc, x), "cligne", -1, miroir, True, humeur
     if regard:
-        return x, sol(sc, x), P["regard-d" if regard > 0 else "regard-g"][0], False, True
+        return x, sol(sc, x), "regard-d" if regard > 0 else "regard-g", -1, False, True, humeur
     c = t // REGARD_CYCLE
     u = t % REGARD_CYCLE
     if animations.hasard(c, 11, 3) < 4000 and REGARD_DEBUT <= u < REGARD_DEBUT + REGARD_DUREE:
         nom = "regard-g" if animations.hasard(c, 12, 3) < 5000 else "regard-d"
-        return x, sol(sc, x), P[nom][0], False, True
-    return x, sol(sc, x), image_anim(P[_face(humeur)], t), miroir, True
+        return x, sol(sc, x), nom, -1, False, True, humeur
+    return x, sol(sc, x), _face(humeur), t, miroir, True, humeur
+
+
+def pose_hd(etat, t):
+    """La pose du Pilou fin du bureau (rendu.Pose, champs seulement) pour l'état de pilou_etat : en HD, le Pilou de
+    scène est le vrai Pilou du bureau (docs/SCENES-HD.md, § 5). Arithmétique entière, puis un seul float exact (saut)."""
+    _, _, nom, dt, _, _, humeur = etat
+    expr = "repos" if humeur == "neutre" else humeur
+    p = {"expr": expr, "t": t}
+    if nom == "marche":
+        p["marche"] = True
+    elif nom == "parle":
+        p["parle"] = (dt // 140) % 2 == 0
+    elif nom == "cligne":
+        p["cligne"] = True
+    elif nom in ("regard-d", "regard-g"):
+        p["regard"] = 1 if nom == "regard-d" else -1
+    elif nom == "joie":
+        f = min(1000, dt * 1000 // 700)
+        p["expr"], p["saut"] = "joie", 12 * f * (1000 - f) // 1000 / 1000
+    elif nom == "coucou":
+        p["expr"], p["salue"] = "joie", True
+    elif nom == "surpris":
+        p["expr"], p["saut"] = "surpris", (1.5 if dt < 250 else 0.0)
+    elif nom == "repos-peur":
+        p["expr"] = "peur"
+    return p
 
 
 # ---- Le personnage en pied
 
 def _x_entree(sc, t_in, t):
-    return max(sc.interlocuteur, ENTREE_PERSO - (t - t_in) * VITESSE_PERSO // 1000)
+    return max(sc.interlocuteur, sc.d.w + E(sc, ENTREE_PERSO - W) - (t - t_in) * E(sc, VITESSE_PERSO) // 1000)
 
 
 def _etat_perso(sc, evts, t):
@@ -305,11 +353,11 @@ def perso(sc, A, evts, t, niv=animations.COMPLETES):
         if sortie is None or sortie[0] not in A:
             return None
         sid, t_out, x_out = sortie
-        x = x_out + (t - t_out) * VITESSE_PERSO // 1000
-        if x > W + 30:
+        x = x_out + (t - t_out) * E(sc, VITESSE_PERSO) // 1000
+        if x > sc.d.w + E(sc, 30):
             return None
         k = (t // 166) % 2
-        return sid, image_anim(A[sid]["repos"], t), x, sol(sc, min(x, W)) - k, False
+        return sid, image_anim(A[sid]["repos"], t), x, sol(sc, min(x, sc.d.w)) - k, False
     if cur not in A:
         return None
     a = A[cur]
@@ -328,7 +376,7 @@ def perso(sc, A, evts, t, niv=animations.COMPLETES):
     if saut < 0 and t - t_in > PERSO_CYCLE and animations.hasard(c, 21, 7) < 3000 and PERSO_SAUT <= u < PERSO_SAUT + len(SAUT_PERSO) * PAS:
         saut = (u - PERSO_SAUT) // PAS
     if saut >= 0:
-        return cur, a["repos"][0], x, y + SAUT_PERSO[saut], miroir
+        return cur, a["repos"][0], x, y + E(sc, SAUT_PERSO[saut]), miroir
     for (t0, t1) in paroles:
         if t0 <= t < t1 and "parle" in a:
             return cur, image_anim(a["parle"], t - t0), x, y, miroir
@@ -344,7 +392,7 @@ def _fuites(sc, A, evts, i, t):
     return [evts[k][0] for k in _clics(evts) if evts[k][0] <= t and cible_clic(sc, A, evts, k)[:2] == ("acteur", i)]
 
 
-def _vol(p, t):
+def _vol(sc, p, t):
     x0, y0, x1, y1, g = p
     c, u = t // VOL_CYCLE, t % VOL_CYCLE
     ax = x0 + animations.hasard(c, 1, g) * (x1 - x0) // 10000
@@ -353,7 +401,7 @@ def _vol(p, t):
     by = y0 + animations.hasard(c + 1, 2, g) * (y1 - y0) // 10000
     f = 0 if u < VOL_POSE else lisse(u - VOL_POSE, VOL_CYCLE - VOL_POSE)
     x = ax + div((bx - ax) * f, 1000)
-    y = ay + div((by - ay) * f, 1000) + div(SINUS[(t // 140) % 32], 700)
+    y = ay + div((by - ay) * f, 1000) + div(SINUS[(t // 140) % 32] * sc.d.num, 700 * sc.d.den)
     return x, y, bx < ax
 
 
@@ -368,22 +416,22 @@ def position_acteur(sc, A, evts, i, t, duree=100):
             if t < tf + FUITE_ABSENT:
                 if t >= tf + FUITE_VOL:
                     return 0, 0, -1, False
-                fx, fy, _ = _vol(p, tf)
-                d = 1 if fx < W // 2 else -1
-                return fx - d * ((t - tf) * 90 // 1000), fy - (t - tf) * 30 // 1000, t // duree, d > 0
-        x, y, m = _vol(p, t)
+                fx, fy, _ = _vol(sc, p, tf)
+                d = 1 if fx < sc.d.w // 2 else -1
+                return fx - d * ((t - tf) * E(sc, 90) // 1000), fy - (t - tf) * E(sc, 30) // 1000, t // duree, d > 0
+        x, y, m = _vol(sc, p, t)
         return x, y, t // duree, m
     if comp == "traverse":
         y0, y1, periode, decalage, vitesse = p
         tt = t + decalage
         c, u = tt // periode, tt % periode
-        x = -12 + u * vitesse // 1000
-        y = y0 + animations.hasard(c, 3, 5) * (y1 - y0) // 10000 + div(SINUS[(t // 160) % 32], 800)
+        x = -E(sc, 12) + u * vitesse // 1000
+        y = y0 + animations.hasard(c, 3, 5) * (y1 - y0) // 10000 + div(SINUS[(t // 160) % 32] * sc.d.num, 800 * sc.d.den)
         for tf in fuites:
             if (tf + decalage) // periode == c:
-                x += (t - tf) * 60 // 1000
-                y -= (t - tf) * 25 // 1000
-        if x > W + 12 or y < -8:
+                x += (t - tf) * E(sc, 60) // 1000
+                y -= (t - tf) * E(sc, 25) // 1000
+        if x > sc.d.w + E(sc, 12) or y < -E(sc, 8):
             return 0, 0, -1, False
         return x, y, t // duree, False
     if comp == "rond":
@@ -398,25 +446,26 @@ def position_acteur(sc, A, evts, i, t, duree=100):
         if u >= 700:
             return 0, 0, -1, False
         f = u * 1000 // 700
-        arc = 12 * 4 * f * (1000 - f) // 1000000
-        return x + 20 * f // 1000, y - arc, 0 if f < 400 else 1 if f < 600 else 2, False
+        arc = E(sc, 12) * 4 * f * (1000 - f) // 1000000
+        return x + E(sc, 20) * f // 1000, y - arc, 0 if f < 400 else 1 if f < 600 else 2, False
     if comp == "pose":
         x, y = p[0], p[1]
         return x, y, t // duree, False
     if comp == "flotte":
         x, y, periode, decalage, vx, vy = p
         u = (t + decalage) % periode
-        px = x + div(u * vx, 1000) + div(SINUS[(u // 200) % 32] * 2, 1000)
+        px = x + div(u * vx, 1000) + div(SINUS[(u // 200) % 32] * E(sc, 2), 1000)
         py = y + div(u * vy, 1000)
-        if px < -8 or px > W + 8 or py < -8 or py > H + 8:
+        m8 = E(sc, 8)
+        if px < -m8 or px > sc.d.w + m8 or py < -m8 or py > sc.d.h + m8:
             return 0, 0, -1, False
         return px, py, t // duree, False
     if comp == "chute":
         x, y, periode, decalage = p
         u = (t + decalage) % periode
-        py = y + u * 14 // 1000
-        px = x + div(SINUS[(u // 150) % 32] * 4, 1000)
-        if py > H + 4:
+        py = y + u * E(sc, 14) // 1000
+        px = x + div(SINUS[(u // 150) % 32] * E(sc, 4), 1000)
+        if py > sc.d.h + E(sc, 4):
             return 0, 0, -1, False
         return px, py, u // duree, False
     return 0, 0, -1, False
@@ -444,8 +493,10 @@ def cible_clic(sc, A, evts, k):
 
 
 def _cible(sc, A, avant, tc, cx, cy):
-    px, py, _, _, vis = pilou(sc, A, avant, tc)
-    if vis and abs(cx - px) <= 10 and py - 22 <= cy <= py + 1:
+    ep = pilou_etat(sc, A, avant, tc)
+    px, py, vis = ep[0], ep[1], ep[5]
+    lx, ly = (E(sc, 10), E(sc, 22)) if sc.d is ANCIENNE else (31, 87)
+    if vis and abs(cx - px) <= lx and py - ly <= cy <= py + 1:
         return ("pilou", 0, "", px)
     pp = perso(sc, A, avant, tc)
     if pp is not None:
@@ -456,7 +507,7 @@ def _cible(sc, A, avant, tc, cx, cy):
         if comp not in ("vol", "traverse"):
             continue
         ax, ay, im, _ = position_acteur(sc, A, avant, i, tc, DUREES.get(sid, 100))
-        if im >= 0 and abs(cx - ax) <= 6 and ay - 7 <= cy <= ay + 2:
+        if im >= 0 and abs(cx - ax) <= E(sc, 6) and ay - E(sc, 7) <= cy <= ay + E(sc, 2):
             return ("acteur", i, "", 0)
     for j, (nom, x0, y0, x1, y1, reaction, p) in enumerate(sc.sensibles):
         if x0 <= cx <= x1 and y0 <= cy <= y1:
@@ -492,31 +543,31 @@ def effets(sc, A, B, evts, t, niv=animations.COMPLETES):
         cible = cible_clic(sc, A, evts, k)
         if cible[0] == "pilou" and dt < 350:
             px, py, _, _, _ = pilou(sc, A, evts[:k], tc)
-            out.append(("acteur-eclats", dt // 70, px, py - 24, False))
+            out.append(("acteur-eclats", dt // 70, px, py - E(sc, 24), False))
         elif cible[0] == "sensible":
             j, reaction = cible[1], cible[2]
             pr = sc.sensibles[j][6]
             if reaction == "bulle" and dt < 1050:
                 out.append(("acteur-bulle", (0, 1, 2, 1, 2, 3, 0)[dt // 150], pr[0], pr[1], False))
             if reaction == "bulle" and dt < 1100:
-                out.append(("acteur-note", (t // 180) % 2, pr[0] + 5, pr[1] - 5 - dt * 10 // 1000, False))
+                out.append(("acteur-note", (t // 180) % 2, pr[0] + E(sc, 5), pr[1] - E(sc, 5) - dt * E(sc, 10) // 1000, False))
             if reaction == "rond":
                 ronds[j] = ronds.get(j, 0) + 1
                 if dt < 1400:
-                    out.append(("acteur-rond", dt // 280, e[2], e[3] + 2, False))
+                    out.append(("acteur-rond", dt // 280, e[2], e[3] + E(sc, 2), False))
                 if ronds[j] % 3 == 0 and dt < 700:
                     f = dt * 1000 // 700
-                    arc = 12 * 4 * f * (1000 - f) // 1000000
-                    out.append(("acteur-poisson", 0 if f < 400 else 1 if f < 600 else 2, e[2] + 20 * f // 1000, e[3] - arc, False))
+                    arc = E(sc, 12) * 4 * f * (1000 - f) // 1000000
+                    out.append(("acteur-poisson", 0 if f < 400 else 1 if f < 600 else 2, e[2] + E(sc, 20) * f // 1000, e[3] - arc, False))
                     if dt < 360:
                         out.append(("acteur-plouf", dt // 90, e[2], e[3], False))
                 if ronds[j] % 3 == 0 and 700 <= dt < 1060:
-                    out.append(("acteur-plouf", (dt - 700) // 90, e[2] + 20, e[3], False))
+                    out.append(("acteur-plouf", (dt - 700) // 90, e[2] + E(sc, 20), e[3], False))
             if reaction == "graines" and dt < 4000:
                 for k in range(5):
-                    vx = -8 - k * 3
-                    vy = -6 + k * 2
-                    gx = pr[0] + div(dt * vx, 1000) + div(SINUS[(dt // 200 + k * 5) % 32] * 2, 1000)
+                    vx = E(sc, -8 - k * 3)
+                    vy = E(sc, -6 + k * 2)
+                    gx = pr[0] + div(dt * vx, 1000) + div(SINUS[(dt // 200 + k * 5) % 32] * E(sc, 2), 1000)
                     gy = pr[1] + div(dt * vy, 1000)
                     out.append(("acteur-graine", (t // 300 + k) % 2, gx, gy, False))
     return [o for o in out if o[0] in B]
@@ -532,33 +583,33 @@ def _argb(c, teinte):
     return a, r, v, b
 
 
-def poser(px, B, sid, im, x, y, miroir, teinte, ancre_x=None, ancre_y=None):
+def poser(px, B, sid, im, x, y, miroir, teinte, ancre_x=None, ancre_y=None, w=W, h=H):
     """Pose l'image im du sprite sid : (x, y) est le point d'ancrage (par défaut le milieu du bas)."""
     s = B.get(sid)
     if s is None or not s.images:
         return
     g = s.images[im % len(s.images)]
-    w, h = s.w, s.h
-    ax = w // 2 if ancre_x is None else ancre_x
-    ay = h - 1 if ancre_y is None else ancre_y
-    ox, oy = x - (w - 1 - ax if miroir else ax), y - ay
+    sw, sh = s.w, s.h
+    ax = sw // 2 if ancre_x is None else ancre_x
+    ay = sh - 1 if ancre_y is None else ancre_y
+    ox, oy = x - (sw - 1 - ax if miroir else ax), y - ay
     cache = {}
     for j, ligne in enumerate(g):
         Y = oy + j
-        if Y < 0 or Y >= H:
+        if Y < 0 or Y >= h:
             continue
         for i, ch in enumerate(ligne):
             if ch == ".":
                 continue
-            X = ox + (w - 1 - i if miroir else i)
-            if X < 0 or X >= W:
+            X = ox + (sw - 1 - i if miroir else i)
+            if X < 0 or X >= w:
                 continue
             if ch not in cache:
                 cache[ch] = _argb(s.palette[ch], teinte)
             a, r, v, b = cache[ch]
             if a == 0:
                 continue
-            k = Y * W + X
+            k = Y * w + X
             if a == 255:
                 px[k] = 0xFF000000 | (r << 16) | (v << 8) | b
             else:
