@@ -517,7 +517,7 @@ l'implémentation :
   boutique »), le survol le surligne comme une entrée.
 - **En ce moment** : ordre fixe (il t'attend, expédition, visite, soin, jeu), deux lignes au plus. Les libellés disent
   l'action : « Il a faim : prendre soin », « En expédition · voir ou rappeler ». Le titre « Toujours là » n'apparaît
-  que sous cette zone.
+  que sous cette zone. Quand la zone dit déjà l'état des soins, la ligne stable redevient « Prendre soin » seul.
 - **Signes** : ◎ « Il se montre » et ◌ « Il se cache » (le rond plein ou pointillé dit lequel) ; ⏻ Quitter.
 - **Choix exclusifs** : un rond en pixels (point au centre quand il est choisi) ; les cases gardent le carré et la coche.
 - **Sons** (arrivés après l'audit) : dans « Il se montre », sous leur titre.
@@ -527,3 +527,13 @@ l'implémentation :
 - Les textes d'aide qui citaient l'ancien chemin (« Intégrations → … », « Pilou et moi ») suivent le nouveau.
 
 Non fait : un vrai changement d'échelle Windows à 125 / 150 % (rendu WPF seulement) ; l'étape 5 (Android).
+
+**Clavier (essayé pour de vrai le 28 novembre 2026, défaut antérieur à ce chantier)** : après un vrai clic droit, les
+flèches, Entrée et Échap ne vont pas au menu mais à l'appli qui a le premier plan (essai : un Bloc-notes vide) ; le menu
+ne surligne rien et Échap ne le ferme pas. C'est la conséquence de la règle 8 (Pilou ne prend jamais le premier plan,
+pas de `SetForegroundWindow` à l'ouverture). Le menu se pilote donc à la souris seulement ; un pilotage au clavier
+demanderait de capter ces touches pendant que le menu est ouvert (chantier à décider). Les titres de section ne
+prennent pas le focus (`Focusable = false`), vérifié dans le code, pas au clavier pour la raison ci-dessus.
+
+« Version 0.8.0 » dans Réglages : seulement l'exe construit sur place (`<Version>0.8.0</Version>` du `.csproj`) ; la
+publication passe `-p:Version=0.9.n` (`release.yml`), la version installée affiche donc le bon numéro.
