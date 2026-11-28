@@ -1,8 +1,84 @@
-# Décors haute définition (decors_hd.py) : id largeur hauteur images duree, puis l'empreinte FNV-1a de
-# chaque image décodée (pixels ARGB 0xFFrrggbb, rangée par rangée). Lu par les tests C# et Java.
-decor-prologue-jardin 480 240 8 200 4ce614a4 70541fbb 0054f828 1bacba85 c88c8614 bb525a00 1bebdc5b 5757e175
-decor-prologue-mare 480 240 8 200 1ebd98ab 4d1f437e 725eb1b8 55177e65 7079c2bc 5faeeb6a 3a312b58 f7288bee
-decor-prologue-pente 480 240 8 200 71a56ce8 ee97f900 0c67e325 c2bedea5 b07cca8a d5a758bc 23743cf3 f0e901e6
-decor-prologue-pied-colline 480 240 8 200 d22810bf 0e2f518e 4f7ecb22 e4930d35 d1ea80fe 3e9522a7 4b0817bd 0bf6f6b5
-decor-prologue-seuil 480 240 8 200 abf637d9 19bec950 206c509a 689937ee e6c7b781 60cf0c38 fda7bad4 b94f36bf
-decor-prologue-sommet 480 240 8 200 2d1fbcf9 6d68fe5f 80af24df be8376ea 01c1b39b 6480cbcb 8c7ee2cb 5e1254db
+# Décors haute définition (decors_hd.py, docs/SCENES-HD.md) : une ligne par plan,
+# id plan largeur hauteur images duree, puis l'empreinte FNV-1a de chaque image décodée (pixels ARGB
+# 0xFFrrggbb, transparent 0x00000000, rangée par rangée). Lu par les tests C# et Java.
+decor-grande-panne-bureau-1337 ciel 480 240 1 0 b0b7f840
+decor-grande-panne-bureau-1337 nuages 480 240 8 200 f15d98dc 5706ceb2 90aed0a0 c35e8014 38e1153c c91fd03b b2bfeb91 7f001560
+decor-grande-panne-bureau-1337 lointains 480 240 1 0 f39fac98
+decor-grande-panne-bureau-1337 moyen 480 240 8 200 fcfcb395 72acdddb 2d51d764 84b2827e a56b3af5 d390e0a2 b4b6ed9f fa319ce9
+decor-grande-panne-bureau-1337 premier 480 240 8 200 16b823bc 2e189a0c 2047611c 2e189a0c 2047611c 36a3380c 2047611c 2e189a0c
+decor-grande-panne-bureau-echeance ciel 480 240 1 0 323ef4a8
+decor-grande-panne-bureau-echeance lointains 480 240 8 200 6774f58d 717e33fb 9d6f22d2 717e33fb 6774f58d 498fc44b 2bdcfe57 498fc44b
+decor-grande-panne-bureau-echeance moyen 480 240 8 200 dc575d18 4c4edc4d 5994849d 5381d41e f2c9c252 30a5f3bb 073101e4 1398d7c5
+decor-grande-panne-bureau-echeance premier 480 240 8 200 4ab5e7af 9aee5e55 4a3e0df5 7f679541 3e9cb497 883c862b 566bae91 f17d5537
+decor-grande-panne-cabane-brouillon ciel 480 240 1 0 47b99ac8
+decor-grande-panne-cabane-brouillon lointains 480 240 8 200 aec7a852 4876272c b40248be 73636cb4 750f51ba ad508b08 ca75b63e 20d432a4
+decor-grande-panne-cabane-brouillon moyen 480 240 8 200 ed507c74 f1d46a85 2fd31083 c22ab7c8 63bea068 eb07f618 9da63b0c f5e0f685
+decor-grande-panne-cabane-brouillon premier 480 240 8 200 e4a7e588 ef939d39 ab6d917c 3c95441b 1ab19767 93b5313f 9198b496 04a85f26
+decor-grande-panne-caverne-cables ciel 480 240 1 0 e8b494f3
+decor-grande-panne-caverne-cables lointains 480 240 8 200 e6515b15 38b24416 faf05ffd 76c6d30f 86fbdc4e 380a1ee0 07e55c5b e1acac13
+decor-grande-panne-caverne-cables moyen 480 240 8 200 491af8d6 eeacdb39 b4ba1118 ccb648cb 6e0d7952 06f42237 6759c47b 3df45ab2
+decor-grande-panne-caverne-cables premier 480 240 8 200 8dbf2e4b cefee7c8 1dba8aec 41b892b4 357d4894 7a6fa6bd e3332939 abcbea09
+decor-grande-panne-citadelle-nuage ciel 480 240 8 200 dedeb3c5 0ae22d27 53ad0b74 bda32352 518f9eb5 a72b8abc bb9190e3 c4fd30c1
+decor-grande-panne-citadelle-nuage nuages 480 240 8 200 07d03662 ba4bb00b a799ddcf 98e8b6dd 94b93331 533eb118 f27133b5 745e3446
+decor-grande-panne-citadelle-nuage lointains 480 240 8 200 fc9a1848 83d5ff0b ea78edce bb2f8bab 443059b0 8f1b22fd 5548f6c6 445d393b
+decor-grande-panne-citadelle-nuage moyen 480 240 8 200 643aa760 ea2b5e12 49c27b65 54d77256 994110bb 7159dfa0 5f952256 b3ea2c0a
+decor-grande-panne-citadelle-nuage premier 480 240 8 200 7f3b8b14 13c40913 685447d5 3031f939 c26f3306 4e80fc6b c830249d 4f4c8035
+decor-grande-panne-dossier-temp ciel 480 240 1 0 6f3fe8be
+decor-grande-panne-dossier-temp lointains 480 240 8 200 931594d7 10c132f1 915712bc 34a3f400 d1a6b73a 913acd4d 70917d6c 80c072b7
+decor-grande-panne-dossier-temp moyen 480 240 8 200 1508b167 4ad11f05 61da6225 3e6bb300 c7fbb239 5d511bed 3a166d90 461d32bf
+decor-grande-panne-dossier-temp premier 480 240 8 200 8135a2eb a9d0a4e2 c9850b90 52f34114 79286e19 e1cd2b58 43fde263 9697abcf
+decor-grande-panne-etage-guichets ciel 480 240 1 0 22a927e8
+decor-grande-panne-etage-guichets lointains 480 240 8 200 c1d4fc40 a9421d1c 16995d80 00fc16a4 ef2a12ad 1e4b7a0a 229a040a df6e02d3
+decor-grande-panne-etage-guichets moyen 480 240 8 200 4fdfb100 c8cc8e9e 7edaf908 9d3e1675 b73628a4 2568e252 96c6fe09 97e3d21c
+decor-grande-panne-etage-guichets premier 480 240 8 200 434d51f5 2d611957 052d6f61 63eec16f 00140cb5 60bf8b9d 33a8a32f 1f58c3c7
+decor-grande-panne-file-impression ciel 480 240 1 0 b949f085
+decor-grande-panne-file-impression lointains 480 240 8 200 480873d7 480873d7 60bb066b 60bb066b 60bb066b 60bb066b 60bb066b 60bb066b
+decor-grande-panne-file-impression moyen 480 240 8 200 e077d1cb 0f22eb57 8349d794 22454826 747a8e0a 3d75b3bb 7943a880 23114f02
+decor-grande-panne-file-impression premier 480 240 8 200 3cbd62ea 468867af 550646aa 64c21d9b 0af2c87b 937c2662 742bf38e 0c948816
+decor-grande-panne-hall-pas-comptes ciel 480 240 1 0 94b0d4ad
+decor-grande-panne-hall-pas-comptes lointains 480 240 1 0 7168bc92
+decor-grande-panne-hall-pas-comptes moyen 480 240 8 200 f8c57e2c c0642ccd b8d27d06 29106987 d9226dd2 3dadafe7 91f23c10 e332aaf7
+decor-grande-panne-hall-pas-comptes premier 480 240 8 200 c2143813 1e6e85a0 07567fc7 0423a754 b01290d6 f6b4245b 3e3de91e d32b2931
+decor-grande-panne-horloge-systeme ciel 480 240 1 0 ac22c9a6
+decor-grande-panne-horloge-systeme lointains 480 240 8 200 8866abaf bcf33687 d2954d4f f060785f d2954d4f ae954f67 d2954d4f f060785f
+decor-grande-panne-horloge-systeme moyen 480 240 8 200 728246ce d03d7091 c962522f cba4500d 1e8a22f2 3bee898c 7a1a6680 460e5e20
+decor-grande-panne-horloge-systeme premier 480 240 8 200 f01fd0b3 8d597c55 695bcafb 17a447e5 1ee252b9 35bcbc06 ac24765d 94c8c77a
+decor-grande-panne-marais-majs ciel 480 240 1 0 28ca5577
+decor-grande-panne-marais-majs nuages 480 240 8 200 0998bce9 d6bee871 0cd89ac5 99d90597 3f9d52de 0a712781 af3de70c 1438c63c
+decor-grande-panne-marais-majs lointains 480 240 1 0 78b9c413
+decor-grande-panne-marais-majs moyen 480 240 8 200 5db529c3 7c7a4c84 7f62ac7a 2ea6af91 6abaf383 9cec31e8 1df78305 bd609c71
+decor-grande-panne-marais-majs premier 480 240 8 200 8e921300 405411bc 07a27c44 7189b944 2356a3f4 3cd1da9c 50eedbd8 68d3ac0b
+decor-grande-panne-tour-tampon ciel 480 240 1 0 d3565e85
+decor-grande-panne-tour-tampon lointains 480 240 8 200 1be28e8f f105b8e1 843d036d 2617f6f0 9fdb4b9b 5996ff58 e8a3bb71 44cda08b
+decor-grande-panne-tour-tampon moyen 480 240 8 200 79bf3354 9bdda785 e267d50b fbc6543e 5f162a51 76f1225b 37d1c27d a8c013ee
+decor-grande-panne-tour-tampon premier 480 240 8 200 685bee67 5a205d87 91c0ba14 54c0c30b a55ef10c e8e7fc9a ca12fb7f 8f26022c
+decor-prologue-jardin ciel 480 240 1 0 4ec7863f
+decor-prologue-jardin nuages 480 240 8 200 d7db9173 0b8e9bf4 29c2674c 210a2b0c 508d4a54 22362867 a3010895 365089df
+decor-prologue-jardin lointains 480 240 8 200 0cff76a1 d9a4b83f 1bcbd513 019d7a7f 76914301 f18c601f 054ca193 e508759f
+decor-prologue-jardin moyen 480 240 8 200 2497c6dc a959d5d4 e369a464 9e0fcefc 83793b76 e1df0447 0bb8abed 3d57fc85
+decor-prologue-jardin premier 480 240 8 200 5d576f85 8c56c51e 39a9ff49 00fff687 90bfbf76 65e7ba89 38ec1a59 41858cb7
+decor-prologue-mare ciel 480 240 1 0 427dadf6
+decor-prologue-mare nuages 480 240 8 200 6a46a7f2 dd213405 a423677b 43026cf3 ab72bac2 066ac502 e35c85bf 5ffeff9d
+decor-prologue-mare lointains 480 240 8 200 4cb2fda4 6324cfc2 d48f576b 479c53e5 2bc8461c 0717d9fd 94bdf212 93caa2d8
+decor-prologue-mare moyen 480 240 8 200 d9601c7f 5649847e e3caef9e bce6984e 60f43735 ed1ab559 6e74eea2 630574ff
+decor-prologue-mare premier 480 240 8 200 00bc5a30 70e31897 65918574 ee2b9582 c37b6956 e4c59758 69138f74 1dbaadb8
+decor-prologue-pente ciel 480 240 1 0 5489b1f5
+decor-prologue-pente nuages 480 240 8 200 2dc6493f c42718de 8fe9aa10 20469848 474eb074 c032f298 eb525e80 44b0f893
+decor-prologue-pente lointains 480 240 8 200 77e73e0a 750c7876 d6ce3f47 33dda751 82653d97 54f41c8a a247a120 ac4988da
+decor-prologue-pente moyen 480 240 8 200 271afa4f 8e5ab4a7 3ffed8e7 271afa4f 8e5ab4a7 3ffed8e7 271afa4f 8e5ab4a7
+decor-prologue-pente premier 480 240 8 200 38547933 341d3ebe 2e1e5203 a180ed6c 04cde4e8 5761695f dfa38aae 05d7a1ee
+decor-prologue-pied-colline ciel 480 240 1 0 7e9d2867
+decor-prologue-pied-colline nuages 480 240 8 200 a799c7fc c881b9dc b92a80fd f49fd5c1 7e78f69a 9d18c856 49a55c73 9e001d6f
+decor-prologue-pied-colline lointains 480 240 8 200 c3025a91 94a80a91 1fe36b0d cf38a351 f5b1bfd1 e7c75611 6a299a4d c78cb591
+decor-prologue-pied-colline moyen 480 240 8 200 1aba9e33 234b2c97 308566f3 1aba9e33 234b2c97 308566f3 1aba9e33 234b2c97
+decor-prologue-pied-colline premier 480 240 8 200 c34aacb6 cf97d5a2 1cd677f1 f0fb92fa 8de882d7 043351be 69fd8ae9 4eb4f023
+decor-prologue-seuil ciel 480 240 1 0 aaf4ed42
+decor-prologue-seuil nuages 480 240 8 200 ec76cf59 e8f72bad 17d35b45 a9e4e3c5 f7e0d7b9 b3cca5b4 58299d76 59f1081e
+decor-prologue-seuil lointains 480 240 8 200 5ef7c630 5461bc70 7e2a1364 f430c696 3d8e19d0 44c92310 dd5bd8e4 df102276
+decor-prologue-seuil moyen 480 240 8 200 8480065b 8a756d90 84ffb24a 2723158b 088216d3 64a3a40e d0c7497a ab9aadbf
+decor-prologue-seuil premier 480 240 8 200 7533c1fb 77432730 877d3430 cfa3bbe4 b90cf34f 9e83acc8 b176bc68 a11cf2f3
+decor-prologue-sommet ciel 480 240 8 200 be231d52 396b3fc7 60f9bc7e 8d7e6ed2 96f2ad26 ee8ba5ca b624d10d 7e4192fa
+decor-prologue-sommet nuages 480 240 8 200 ca6154fc d8818caa 44e6eab1 70026fad 89cf198f c34f1485 12de8fee 5753aaff
+decor-prologue-sommet lointains 480 240 8 200 e9ffb2da c2c1e65b 75ff3c05 9392d5f2 4bd2d07d e1137618 3e2f05a2 92192cd9
+decor-prologue-sommet moyen 480 240 8 200 1742c969 fc9ec4bf 70caf206 88a1717f 851b1758 9c6b76ce 025f5d1d 7332cd5b
+decor-prologue-sommet premier 480 240 8 200 645ae15f 4146a397 baaaa91c 3d6ddd1d 2eee1383 db90ffcf cccff600 26d6e919

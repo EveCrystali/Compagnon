@@ -154,88 +154,27 @@ emblèmes de ton ont quatre silhouettes différentes), et par quatre poses de `r
 
 ## Décors haute définition (480 × 240)
 
-Décision d'Antoine du 28 novembre 2026 (étude `docs/maquettes/paysages/`, règle 9 de `CLAUDE.md`) : les décors passent
-à **480 × 240 au minimum**, 2 px d'écran par pixel (960 × 480), cadre 2:1.
-Ils sont peints par `outils/sprites/paysage.py` ([PEINTURE.md](PEINTURE.md)) et écrits par
-`py outils/sprites/decors_hd.py` (numpy et Pillow, donc hors de `generer.py`).
+Règle 9 de `CLAUDE.md` (Antoine, 28 novembre 2026) : les décors des campagnes se peignent à **480 × 240 au minimum**,
+2 px d'écran par pixel, cadre 2:1. Ils sont peints par `outils/sprites/paysage.py` ([PEINTURE.md](PEINTURE.md)) et
+écrits par `py outils/sprites/decors_hd.py` (numpy et Pillow, donc hors de `generer.py`).
 
-**Format provisoire.** La session du Théâtre écrit `docs/SCENES-HD.md` (tailles, plans de parallaxe, format, noms) :
-c'est lui qui fera foi, et les décors seront réexportés à son format. D'ici là, rien ne lit ces fichiers : les décors
-192 × 80 d'`assets/sprites2x` restent en service.
+**Le format fait foi dans [SCENES-HD.md](SCENES-HD.md) (§ 3)** : `assets/decors/decor-<campagne>-<décor>.txt`, des
+plans du fond vers l'avant (cinq au plus), chacun avec sa palette à lettres, ses images en plages `[n]c`, « . » pour un
+pixel inchangé depuis l'image précédente du même plan, « , » pour un pixel transparent. Le lecteur de référence est
+`decors_hd.decoder` ; la référence des tests est `outils/sprites/decors-hd-reference.txt` (une ligne par plan).
+
+Ce que la peinture écrit aujourd'hui :
 
 | | |
 |---|---|
-| Emplacement | `assets/decors/decor-<campagne>-<décor>.txt` : mêmes identifiants que les décors actuels |
-| Embarquement | Android : déjà pris (tout `assets/` est en ressources) ; PC : une ligne `EmbeddedResource` à ajouter |
-| Coordonnées | 2,5 × celles du décor fin actuel, plus 40 pixels de ciel en haut : pixel = (2,5 x, 2,5 y + 40) ; le sol vers y = 235 |
-| Référence | `outils/sprites/decors-hd-reference.txt` : `id largeur hauteur images duree` puis l'empreinte FNV-1a de chaque image (pixels ARGB `0xFFrrggbb`, rangée par rangée, même calcul que `theatre.fnv`) |
+| Plans | `ciel` 0, `nuages` 8, `lointains` 20, `moyen` 50, `premier` 100 (profondeur) ; tous `fond`, tous de 480 de large |
+| Fixe ou animé | un plan dont les huit images sont identiques n'en garde qu'une (`duree: 0`) : c'est le cas du ciel presque partout |
+| Boucle | 8 images à 200 ms pour les plans animés |
+| Poids mesuré | prologue (6 décors) : 1,2 Mo ; La Grande Panne (12) : 2,0 Mo ; 117 à 276 Ko par décor ; les 18 : 661 Ko compressés |
+| Extrapolé à 46 décors | ≈ 8 Mo de texte, ≈ 1,7 Mo compressés (les décors d'aujourd'hui : 4,3 Mo de texte) |
 
-**Format « décor compact »** (texte UTF-8, fins de ligne LF) :
-
-```
-# commentaire
-id: decor-prologue-mare
-taille: 480 240
-duree: 200                       ms par image
-palette: a=#5b6fc4 b=#7384d0 …   une lettre par couleur, 67 au plus, décor opaque
-images: 8
-12a3b.c200.                      puis images × hauteur lignes, sans séparateur
-```
-
-- Une ligne est une suite de plages `[n]c` : `n` décimal (absent : 1), `c` une lettre de palette, ou `.` pour « comme
-  le pixel de l'image précédente » (jamais dans la première image). La somme des `n` vaut la largeur.
-- Lettres permises : `a-z A-Z ! $ % & * + - / < > ? @ ^ _ ~`. Jamais un chiffre (ce sont les longueurs) ni `.`.
-- Le lecteur de référence est `decors_hd.decoder` (une trentaine de lignes) ; C# et Java le refont à l'identique, sans
-  bibliothèque.
-
-**Poids mesuré** sur les six décors du prologue (8 images chacun) : 81 à 161 Ko, 682 Ko en tout, contre 901 Ko
-*par décor* à une lettre par pixel (÷ 6 à 11) ; 256 Ko une fois compressés (APK). Extrapolé à 46 décors : ≈ 5,2 Mo
-(2 Mo compressés), à comparer aux 4,3 Mo des décors d'aujourd'hui.
-
-**Ce qui bouge.** D'une image à la suivante, 1,2 à 6 % des pixels changent (6 % : la mare et ses reflets) ; le « . »
-du format les isole, un moteur peut ne redessiner que les plages qui ne sont pas des « . ».
-
-## Personnages en haute définition
-
-Les personnages en pied des campagnes sont **redessinés** à l'unité de la scène HD (480 × 240 unités, 2 px d'écran par
-unité ; règle 9 de `CLAUDE.md`), jamais agrandis. Format et nommage : [SCENES-HD.md](SCENES-HD.md), § 6.
-
-| Module (`outils/sprites/`) | Rôle |
-|---|---|
-| `pinceau_hd.py` | la feuille et ses pinceaux, en Python pur : volumes éclairés d'en haut à gauche (`boule`, `tube`, `tour`, `poly`), rampes de trois à cinq tons, trame ordonnée seulement au passage d'un ton à l'autre, cerne teinté par matière, traits « pixel parfait » |
-| `personnages_hd.py` | le registre (`PERSOS`), l'état (`Etat`), le visage commun (`oeil`, `sourcil`, `bouche`), Grumeau, Lison, Brouillon le petit nuage |
-| `personnages_hd_panne.py` | les douze autres personnages de « La Grande Panne » |
-| `personnages_hd_phare.py` | les six adultes du « Phare éteint » : un corps commun (`jambes`, `manteau`, `poser_bras`, `tete`, `visage`), puis chacun ses traits |
-| `personnages_hd_export.py` | l'export `assets/sprites-hd/pied-*.txt` et la référence `personnages-hd-reference.txt` |
-| `planches_personnages_hd.py` | planches de contrôle et GIF (Pillow, outil de contrôle seulement) |
-
-```bash
-py outils/sprites/personnages_hd_export.py            # écrit assets/sprites-hd et la référence
-py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans docs/maquettes/personnages
-```
-
-- **État d'un dessin** : humeur, paupières (ouvertes, mi-closes, fermées), bouche (0 à 3), souffle, phase des petits
-  mouvements (sable, nattes, traîne, curseur). Chaque humeur change une forme (sourcils, paupières, bouche, bras,
-  goutte), pas seulement une couleur.
-- **Fichiers** : `pied-<campagne>-<id>.txt` (neutre) et `pied-<campagne>-<id>-<humeur>.txt`, cinq images (repos,
-  inspiré, yeux fermés, bouche entrouverte, bouche ouverte), même toile et même ancrage pour toutes les humeurs d'un
-  personnage. Ceux qui flottent ont leur vide sous eux dans la toile.
-- **Sens** : le fichier regarde vers la droite (SCENES-HD.md) ; c'est le miroir du dessin, pensé pour la place
-  habituelle (à droite de Pilou). Retourné par le moteur, le personnage retrouve sa lumière en haut à gauche et ses
-  inscriptions à l'endroit (« Ctrl », « 13 37 », « 404 »). Non retourné, elles sont à l'envers : au moteur de le savoir.
-- **Lisibilité** : chaque personnage se vérifie sur fond sombre, fond clair et décor (planche de groupe) ; une matière
-  sombre porte un liseré clair côté lumière (le chapeau du Balayeur).
-- **Toise** : une par campagne, sur la planche de groupe, Pilou fin pour repère.
-
-| Campagne | État | Planche de groupe |
-|---|---|---|
-| La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
-| Le phare éteint (7) | dessinés et exportés (17 fichiers) ; pas encore lus par le moteur | [groupe-phare-eteint.png](maquettes/personnages/groupe-phare-eteint.png) |
-| Petit Nuage (9) | Brouillon dessiné (essai) ; huit à faire | — |
-| Acteurs de scène | à faire | — |
-
-Planches par personnage (toutes les humeurs, sept images) et GIF : `docs/maquettes/personnages/<campagne>-<id>.png`
-et `.gif`.
+Limites connues : aucun plan n'est encore `devant` (les troncs et roseaux de premier plan passent derrière les
+personnages) ; les plans ne débordent pas des 480 unités (rien à faire glisser tant que la caméra reste à 0).
 
 ## Animations des campagnes
 

@@ -8,7 +8,7 @@ Cette page suffit pour peindre un lieu neuf au même niveau.
 | Fichier | Rôle |
 |---|---|
 | `outils/sprites/paysage.py` | le moteur : palette, peintre, plans, briques |
-| `outils/sprites/decors_hd_<campagne>.py` | les lieux d'une campagne (une fonction par lieu) |
+| `outils/sprites/decors_hd_<campagne>.py` | les lieux d'une campagne (une fonction par lieu) ; l'ajouter à `CAMPAGNES` dans `decors_hd.py` |
 | `outils/sprites/decors_hd.py` | registre, écriture d'`assets/decors/`, référence, planches |
 | `outils/sprites/paysages_etude.py` | l'étude d'origine, figée (ses montages PC et téléphone servent encore) |
 
@@ -62,9 +62,14 @@ large et 45 de haut. Pas de fleur vive ni de détail important derrière lui ni 
 | Premier plan | `sol`, `cailloux`, `touffes`, `fleurs`, `fleur`, `champignon`, `tronc`, `feuillage`, `lanterne`, `roseaux`, `lucioles` |
 | Pinceaux de `P` | `rampe`, `remplir`, `volumes`, `ell`, `rect`, `poly`, `trait`, `courbe`, `point`, `bloc`, `crete` |
 
-Une brique manque ? L'écrire dans le fichier de la campagne d'abord ; la monter dans `paysage.py` quand un second
-lieu s'en sert. Un lieu d'intérieur (La Grande Panne) se peint avec les pinceaux de `P` et ses propres briques : le
-moteur n'impose pas un paysage.
+Une brique manque ? L'écrire dans le fichier de la campagne d'abord ; la monter dans `paysage.py` quand une autre
+campagne s'en sert.
+
+**Intérieurs.** `decors_hd_grande_panne.py` en donne douze et leurs briques, à reprendre telles quelles : `dallage`
+(sol en perspective vers un point de fuite), `rai` (rai de lumière et sa poussière), `voile` et `halo` (lumière,
+ombre ou brume posées en trame), `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`, `affiche`
+(pictogramme sans texte), `cable`, `tickets`, `poussiere`, `roue` (engrenage), `tour_dossiers`. La profondeur d'un
+intérieur vient du point de fuite, des éclairages et d'un premier plan sombre ; le « ciel » est le mur ou le plafond.
 
 **`P.rampe(masque, valeur, rampe, trame)`** est le pinceau central : une valeur de 0 à 1 par pixel devient un ton de
 la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `trame=0` : aplats nets ; `0.7` : ciel.
@@ -105,7 +110,10 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 
 ## Ce qui sort
 
-`assets/decors/decor-<campagne>-<lieu>.txt`, au format « décor compact » (voir [SPRITES.md](SPRITES.md), « Décors haute
-définition »), et `outils/sprites/decors-hd-reference.txt`. Les plans restent séparés dans le moteur
-(`decors_hd.tableau(id, phase).plans`) : ils serviront à la parallaxe et au cadrage du téléphone ; aujourd'hui seule
-l'image composée est écrite.
+`assets/decors/decor-<campagne>-<lieu>.txt`, au format de [SCENES-HD.md](SCENES-HD.md) (§ 3), et
+`outils/sprites/decors-hd-reference.txt`. Chaque `tab.plan(nom, profondeur)` devient un plan du fichier (cinq au
+plus ; le premier doit couvrir tout le cadre). Un plan qui ne bouge pas n'est écrit qu'une fois : mettre ce qui
+bouge dans peu de plans allège le fichier et le travail du moteur.
+
+Par campagne : `docs/maquettes/paysages/<campagne>/planche.png` (tous les lieux), et les montages PC et téléphone de
+deux lieux (table `MONTAGES` de `decors_hd.py`).
