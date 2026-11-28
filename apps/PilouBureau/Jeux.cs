@@ -237,6 +237,8 @@ public sealed partial class FenetrePilou
         // --essai=mot, journal, complicite : la présence au quotidien, sur des données de démonstration (rien n'est écrit).
         if (nom is "mot" or "journal" or "complicite" or "traits") EssaiPresence(nom);
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
+        // --essai=fenetre:boutique… : une fenêtre sur le profil de démonstration, pour les captures (EssaiFenetres.cs).
+        if (nom.StartsWith("fenetre:")) EssaiFenetre(nom[8..]);
         // --essai=menu[:jouer|apparence/accessoire…][:clair|sombre][:moment] : le vrai menu clic droit ouvert (MenuEssai.cs).
         if (nom == "menu" || nom.StartsWith("menu:")) EssaiMenu(nom[4..]);
         // --essai=bienvenue (avec un dossier de données neuf) : la première minute en accéléré, pour la filmer.
