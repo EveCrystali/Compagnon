@@ -16,6 +16,9 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | PC avant / après à 100 % : boutique, journal, « Pilou et moi », expéditions | [boutique](captures/style/pc-boutique-avant-apres.png), [journal](captures/style/pc-journal-avant-apres.png), [« Pilou et moi »](captures/style/pc-traits-avant-apres.png), [expéditions](captures/style/pc-expeditions-avant-apres.png) |
 | Android avant / après : Accueil, Jouer, Boutique, Collection | [clair](captures/style/avant-apres-clair.png), [sombre](captures/style/avant-apres-sombre.png), [grande police](captures/style/avant-apres-grande-police.png) |
 | PC : titres-logos et en-tête commun, avant / après à 100 % | [captures/style/pc-titres-fins-avant-apres.png](captures/style/pc-titres-fins-avant-apres.png) |
+| PC : amis, avant / après à 100 % | [captures/style/pc-amis-avant-apres.png](captures/style/pc-amis-avant-apres.png) |
+| PC : connecteurs, avant / après à 100 % | [captures/style/pc-connecteurs-avant-apres.png](captures/style/pc-connecteurs-avant-apres.png) |
+| PC : bulle de l'invité (avant, après) et boîte « Renommer » | [captures/style/pc-invite-renommer.png](captures/style/pc-invite-renommer.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
 | Réglages (clair, sombre, grande police) et premier lancement | [captures/style/reglages-et-premier-lancement.png](captures/style/reglages-et-premier-lancement.png) |
 
@@ -224,6 +227,17 @@ Les états d'une chose (quête, session, objet) se disent par une **case** : un 
 | **Champ de saisie** | cadre plat dans le creux ; texte en police système (exception) | `Style.champ` |
 | **Message bref** | cadre plein de nuit, police pixel, en bas de l'écran ; jamais le toast gris du système | `Style.dire` |
 
+Sur le PC, les mêmes pièces vivent dans `ReglagesPixel.cs` :
+
+| Pièce | Classe | Règle |
+|---|---|---|
+| Case à cocher | `CasePixel` | carré de 16 au bord de 2 ; cochée, la coche seule à la couleur `coche` ; survol et clavier : orange ; fermée : éteinte |
+| Options exclusives | `OptionsPixel` | dans le creux ; la choisie a le cadre plat `coche` et « ● », les autres « ○ ». Elle remplace la liste déroulante du système |
+| Texte qui se déplie | `DepliantPixel` | « ▶ titre », puis « ▼ titre » et le texte dessous |
+| Champ de saisie | `ChampPixel.Habiller` | creux de nuit, bord carré de 2 ; texte en police système (exception) |
+
+![Amis, avant / après](captures/style/pc-amis-avant-apres.png)
+
 Jamais d'interrupteur à glissière du système : il dit son état par la couleur et par la position d'un rond lissé.
 Deux boutons dont les libellés ne tiennent pas côte à côte en grande police se posent l'un sous l'autre.
 
@@ -351,8 +365,8 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 | PC : titres-logos et en-tête commun | au pixel fin (28 novembre 2026) : boutique, journal, « Pilou et moi », expéditions, Aventure, menu, info-bulle |
 | PC : journal, prénom, « Pilou et moi » | au guide (28 novembre 2026) ; le champ du prénom garde la police du système (exception des champs de saisie) |
 | PC : expéditions | au guide (28 novembre 2026) |
-| PC : habillage commun des fenêtres | posé sur la boutique, le journal, le prénom, « Pilou et moi », les expéditions ; à brancher sur l'Aventure et la scène d'évolution (session « animations »), puis sur amis et connecteurs quand ils seront au guide |
-| PC : amis, connecteurs (fenêtres de formulaire au thème clair du système), invitation | à faire : il leur faut une case à cocher et une liste déroulante en pixels, et la palette claire de `CadrePixel` |
+| PC : habillage commun des fenêtres | posé sur la boutique, le journal, le prénom, « Pilou et moi », les expéditions , les amis, les connecteurs, la boîte « Renommer » ; à brancher sur l'Aventure et la scène d'évolution (session « animations ») |
+| PC : amis, connecteurs, boîte « Renommer », bulle de l'invité | au guide (28 novembre 2026), de nuit comme les autres fenêtres, avec l'habillage commun ; la question « Retirer cet ami ? » reste une boîte du système |
 | Téléphone : en-tête, barre du bas, Accueil (dont « Pilou et moi », ses traits, la ligne de premier lancement), Jouer, Boutique, Collection, Réglages, « Rangées débloquées », messages brefs | au guide (28 novembre 2026), gardé par `TextesSystemeTest` |
 | Téléphone : lecture de l'Aventure | au guide (chantier « style pixel de l'Aventure ») |
 | Téléphone : liste des aventures, épreuves, atelier, chasse aux bugs, installation, bulle flottante, widget | couleurs du guide ; cadres et police encore ceux du système |

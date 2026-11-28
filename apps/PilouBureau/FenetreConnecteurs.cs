@@ -201,44 +201,60 @@ public sealed partial class FenetrePilou
 
 // Fenêtre « Connecteurs » : chaque connecteur avec son interrupteur, son état, son dernier événement, ses
 // réglages typés et ses actions ; l'API locale (port, jeton à copier) ; le journal des 50 derniers événements.
+// Au guide de style (docs/STYLE.md) : thème de nuit, police pixel, cartes au cadre pixel, cases et options en pixels.
 internal sealed class FenetreDesConnecteurs : Window
 {
     private readonly FenetrePilou _pilou;
     private readonly Registre _r;
-    private readonly StackPanel _corps = new() { Margin = new Thickness(16) };
-    private static readonly Brush Bleu = Geler("#2f7ed8"), Orange = Geler("#c86a1c"), Argent = Geler("#57606a");
-
-    private static Brush Geler(string hex)
-    {
-        var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
-        b.Freeze();
-        return b;
-    }
+    private readonly StackPanel _corps = new() { Margin = new Thickness(20, 14, 20, 18) };
+    private static readonly Brush Fond = FenetreAventure.Gel("#0f1324"), Bleu = StylePixel.Coche, Orange = StylePixel.Orange,
+        Argent = CadrePixel.Pale;
 
     public FenetreDesConnecteurs(FenetrePilou pilou, Registre r)
     {
         _pilou = pilou;
         _r = r;
         Title = "Connecteurs de Pilou";
-        Width = 600;
-        Height = 720;
+        Width = 860;
+        Height = 780;
+        MinWidth = 700;
+        MinHeight = 420;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
-        Content = new ScrollViewer { Content = _corps, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
+        Background = Fond;
+        UseLayoutRounding = true;
+        Content = new ScrollViewer { Content = _corps, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, Focusable = false };
+        StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
+        PreviewKeyDown += (_, e) =>
+        {
+            if (e.Key == System.Windows.Input.Key.Escape) Close();
+        };
         Remplir();
     }
 
-    private static TextBlock Texte(string t, double taille = 12, Brush? couleur = null, bool gras = false) => new()
+    private static TextePixel Texte(string t, Brush? couleur = null, bool gras = false) =>
+        StylePixel.Texte(t, couleur ?? CadrePixel.Texte, StylePixel.Corps, gras);
+
+    // Titre de section : capitales violettes en « titre », taille « corps ».
+    private void Section(string titre)
     {
-        Text = t, FontSize = taille, TextWrapping = TextWrapping.Wrap, Foreground = couleur ?? Brushes.Black,
-        FontWeight = gras ? FontWeights.Bold : FontWeights.Normal,
-    };
+        var t = StylePixel.Texte(StylePixel.Capitales(titre), Bandeau.Violet, StylePixel.Corps, true);
+        t.Margin = new Thickness(0, 14, 0, 2);
+        _corps.Children.Add(t);
+    }
+
+    private static BoutonPixel Bouton(string texte) => new(texte, false, StylePixel.Corps) { Margin = new Thickness(0, 0, 8, 4) };
 
     private void Remplir()
     {
         _corps.Children.Clear();
+        var logo = StylePixel.Logo("CONNECTEURS");
+        logo.HorizontalAlignment = HorizontalAlignment.Center;
+        logo.Margin = new Thickness(0, 0, 0, 6);
+        _corps.Children.Add(logo);
         _corps.Children.Add(Texte("Chaque service branché sur Pilou est un connecteur : coche ceux que tu veux. " +
-            "Les jetons et mots de passe sont chiffrés sur ce PC (jamais dans reglages.json).", 12, Argent));
+            "Les jetons et mots de passe sont chiffrés sur ce PC (jamais dans reglages.json).", Argent));
         foreach (var c in _r.Liste) Carte(c);
         Api();
         Nouvelles();
@@ -247,27 +263,20 @@ internal sealed class FenetreDesConnecteurs : Window
 
     private static string NomEtat(EtatConnecteur e) => e switch
     {
-        EtatConnecteur.Actif => "● actif", EtatConnecteur.Erreur => "✕ en erreur", EtatConnecteur.AConfigurer => "◌ à régler",
+        EtatConnecteur.Actif => "● actif", EtatConnecteur.Erreur => "✗ en erreur", EtatConnecteur.AConfigurer => "◌ à régler",
         _ => "○ coupé",
     };
 
     private void Carte(Connecteur c)
     {
         var ctx = _r.Contexte(c);
-        var bord = new Border
-        {
-            BorderBrush = Geler("#d0d9e4"), BorderThickness = new Thickness(1), CornerRadius = new CornerRadius(8),
-            Padding = new Thickness(12), Margin = new Thickness(0, 10, 0, 0),
-        };
-        var pile = new StackPanel();
-        bord.Child = pile;
+        var pile = new StackPanel { Margin = new Thickness(12, 6, 12, 8) };
         var etat = _r.Etat(c);
         var titre = new DockPanel();
-        var actif = new CheckBox
+        var actif = new CasePixel("actif")
         {
             IsChecked = _r.Actif(c), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(8, 0, 0, 0),
             IsEnabled = c is not ConnecteurIntegre i || i.Basculable,
-            Content = "actif",
         };
         actif.Click += (_, _) =>
         {
@@ -276,43 +285,41 @@ internal sealed class FenetreDesConnecteurs : Window
         };
         DockPanel.SetDock(actif, Dock.Right);
         titre.Children.Add(actif);
-        var nom = Texte($"{c.Signe}  {c.Nom}", 14, null, true);
-        titre.Children.Add(nom);
+        // « ▣ » est le cadenas dans la police pixel (assets/signes.txt) : ici, l'œil de Pilou qui regarde l'appli.
+        titre.Children.Add(Texte($"{c.Signe.Replace('▣', '◉')} {c.Nom}", null, true));
         pile.Children.Add(titre);
-        pile.Children.Add(Texte(c.Description, 11, Argent));
-        if (c.Aide != "")
-            pile.Children.Add(new Expander
-            {
-                Header = Texte("Comment l'activer ?", 11, Bleu),
-                Content = Texte(c.Aide, 11),
-                Margin = new Thickness(0, 4, 0, 0),
-            });
+        var description = Texte(c.Description, Argent);
+        description.Margin = new Thickness(0, -4, 0, 0);
+        pile.Children.Add(description);
+        if (c.Aide != "") pile.Children.Add(new DepliantPixel("Comment l'activer ?", c.Aide));
         var ligneEtat = NomEtat(etat);
         if (etat == EtatConnecteur.AConfigurer && c.Manque(ctx) is { } manque) ligneEtat += " : " + manque;
         if (etat == EtatConnecteur.Erreur && _r.Erreur(c.Id) is { } err) ligneEtat += " : " + err;
-        if (_r.Dernier(c.Id) is { } d) ligneEtat += $"   · dernier : {d.Titre}";
-        pile.Children.Add(Texte(ligneEtat, 11, etat == EtatConnecteur.Erreur ? Orange : etat == EtatConnecteur.Actif ? Bleu : Argent));
+        if (_r.Dernier(c.Id) is { } d) ligneEtat += $" · dernier : {d.Titre}";
+        pile.Children.Add(Texte(ligneEtat, etat == EtatConnecteur.Erreur ? Orange : etat == EtatConnecteur.Actif ? Bleu : Argent));
 
         foreach (var reg in c.Reglages.Where(r => r.Visible)) pile.Children.Add(Reglage(ctx, reg));
         if (c.Actions.Count > 0)
         {
-            var actions = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
-            var retour = Texte("", 11, Argent);
+            var actions = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
+            var retour = Texte("", Argent);
+            retour.Visibility = Visibility.Collapsed;
             foreach (var a in c.Actions)
             {
-                var b = new Button { Content = a.Nom, Padding = new Thickness(10, 3, 10, 3), Margin = new Thickness(0, 0, 8, 4) };
+                var b = Bouton(a.Nom);
                 b.Click += async (_, _) =>
                 {
                     b.IsEnabled = false;
                     try
                     {
-                        retour.Text = await a.Faire(ctx, CancellationToken.None);
+                        retour.Texte = await a.Faire(ctx, CancellationToken.None);
                     }
                     catch (Exception e)
                     {
-                        retour.Text = e is System.Net.Http.HttpRequestException ? "service injoignable (réseau ?)" : e.Message;
+                        retour.Texte = e is System.Net.Http.HttpRequestException ? "service injoignable (réseau ?)" : e.Message;
                     }
                     b.IsEnabled = true;
+                    retour.Visibility = Visibility.Visible;
                     _r.Maintenant(c.Id);
                 };
                 actions.Children.Add(b);
@@ -320,33 +327,38 @@ internal sealed class FenetreDesConnecteurs : Window
             pile.Children.Add(actions);
             pile.Children.Add(retour);
         }
-        _corps.Children.Add(bord);
+        _corps.Children.Add(new CadrePixel { U = 2, Child = pile, Margin = new Thickness(0, 10, 0, 0) });
     }
 
     private UIElement Reglage(ContexteConnecteur ctx, ReglageConnecteur reg)
     {
         var ligne = new DockPanel { Margin = new Thickness(0, 6, 0, 0) };
-        var etiquette = Texte(reg.Nom, 12);
-        etiquette.Width = 170;
+        var etiquette = Texte(reg.Nom);
+        etiquette.Width = 300;
+        etiquette.Margin = new Thickness(0, 0, 12, 0);
         etiquette.VerticalAlignment = VerticalAlignment.Center;
         DockPanel.SetDock(etiquette, Dock.Left);
         ligne.Children.Add(etiquette);
         switch (reg.Type)
         {
             case TypeReglage.Case:
-                var cb = new CheckBox { IsChecked = ctx.Lire(reg.Cle) != "non", VerticalAlignment = VerticalAlignment.Center };
+                var cb = new CasePixel { IsChecked = ctx.Lire(reg.Cle) != "non", VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Left };
                 cb.Click += (_, _) => ctx.Ecrire(reg.Cle, cb.IsChecked == true ? "oui" : "non");
                 ligne.Children.Add(cb);
                 break;
             case TypeReglage.Liste:
-                var liste = new ComboBox { ItemsSource = reg.Choix ?? Array.Empty<string>(), SelectedItem = ctx.Lire(reg.Cle) };
-                liste.SelectionChanged += (_, _) => ctx.Ecrire(reg.Cle, liste.SelectedItem as string ?? "");
+                // Options exclusives en pixels, à la place de la liste déroulante du système.
+                var choix = reg.Choix ?? Array.Empty<string>();
+                var liste = new OptionsPixel(choix, Array.IndexOf(choix.ToArray(), ctx.Lire(reg.Cle)));
+                liste.Choisi += i => ctx.Ecrire(reg.Cle, choix[i]);
                 ligne.Children.Add(liste);
                 break;
             case TypeReglage.Secret:
-                var mdp = new PasswordBox { ToolTip = reg.Aide };
+                var mdp = ChampPixel.Habiller(new PasswordBox { ToolTip = reg.Aide });
                 bool connu = ctx.Lire(reg.Cle) != "";
-                var etat = Texte(connu ? "  ● enregistré (chiffré)" : "  ○ vide", 11, Argent);
+                var etat = Texte(connu ? "● enregistré (chiffré)" : "○ vide", Argent);
+                etat.Margin = new Thickness(10, 0, 0, 0);
+                etat.VerticalAlignment = VerticalAlignment.Center;
                 DockPanel.SetDock(etat, Dock.Right);
                 ligne.Children.Add(etat);
                 mdp.LostFocus += (_, _) =>
@@ -354,12 +366,12 @@ internal sealed class FenetreDesConnecteurs : Window
                     if (mdp.Password == "") return;
                     ctx.Ecrire(reg.Cle, mdp.Password);
                     mdp.Password = "";
-                    etat.Text = "  ● enregistré (chiffré)";
+                    etat.Texte = "● enregistré (chiffré)";
                 };
                 ligne.Children.Add(mdp);
                 break;
             default:
-                var champ = new TextBox { Text = ctx.Lire(reg.Cle), ToolTip = reg.Aide, Padding = new Thickness(3, 2, 3, 2) };
+                var champ = ChampPixel.Habiller(new TextBox { Text = ctx.Lire(reg.Cle), ToolTip = reg.Aide });
                 champ.LostFocus += (_, _) => ctx.Ecrire(reg.Cle, champ.Text.Trim());
                 ligne.Children.Add(champ);
                 break;
@@ -371,12 +383,12 @@ internal sealed class FenetreDesConnecteurs : Window
     private void Nouvelles()
     {
         var reglages = _pilou.ReglagesDesConnecteurs;
-        _corps.Children.Add(Texte("Téléphone : nouvelles", 14, null, true));
+        Section("Téléphone : nouvelles");
         _corps.Children.Add(Texte("Les 5 derniers messages et notifications des connecteurs, sur l'accueil de l'app " +
-            "(par le relais chiffré de bout en bout).", 11, Argent));
-        var rangee = new WrapPanel { Margin = new Thickness(0, 6, 0, 14) };
-        var envoyer = new CheckBox { Content = "Envoyer au téléphone", IsChecked = reglages.AnnoncesTelephone, Margin = new Thickness(0, 0, 12, 0) };
-        var masquer = new CheckBox { Content = "Titre seulement (sans le contenu)", IsChecked = reglages.AnnoncesSansContenu };
+            "(par le relais chiffré de bout en bout).", Argent));
+        var rangee = new WrapPanel { Margin = new Thickness(0, 4, 0, 4) };
+        var envoyer = new CasePixel("Envoyer au téléphone") { IsChecked = reglages.AnnoncesTelephone, Margin = new Thickness(0, 0, 24, 0) };
+        var masquer = new CasePixel("Titre seulement (sans le contenu)") { IsChecked = reglages.AnnoncesSansContenu };
         envoyer.Click += (_, _) =>
         {
             reglages.AnnoncesTelephone = envoyer.IsChecked == true;
@@ -395,14 +407,14 @@ internal sealed class FenetreDesConnecteurs : Window
     private void Api()
     {
         var reglages = _pilou.ReglagesDesConnecteurs;
-        _corps.Children.Add(Texte("API locale", 14, null, true));
+        Section("API locale");
         _corps.Children.Add(Texte("Pour tes scripts et applis : http://127.0.0.1:<port>/ (cette machine seulement), " +
-            "en-tête « Authorization: Bearer <jeton> ». Mode d'emploi : docs/API.md.", 11, Argent));
+            "en-tête « Authorization: Bearer <jeton> ». Mode d'emploi : docs/API.md.", Argent));
         var api = _pilou.Api;
-        _corps.Children.Add(Texte(api is null ? "○ coupée" : api.Erreur is { } e ? $"✕ {e}" : $"● en écoute sur le port {api.Port}", 11,
+        _corps.Children.Add(Texte(api is null ? "○ coupée" : api.Erreur is { } e ? $"✗ {e}" : $"● en écoute sur le port {api.Port}",
             api is null ? Argent : api.Erreur is null ? Bleu : Orange));
         var rangee = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
-        var actif = new CheckBox { Content = "API active", IsChecked = reglages.Api, Margin = new Thickness(0, 0, 12, 0), VerticalAlignment = VerticalAlignment.Center };
+        var actif = new CasePixel("API active") { IsChecked = reglages.Api, Margin = new Thickness(0, 0, 20, 0), VerticalAlignment = VerticalAlignment.Center };
         actif.Click += (_, _) =>
         {
             reglages.Api = actif.IsChecked == true;
@@ -411,7 +423,7 @@ internal sealed class FenetreDesConnecteurs : Window
             Remplir();
         };
         rangee.Children.Add(actif);
-        var port = new TextBox { Text = reglages.PortApi.ToString(), Width = 70, Margin = new Thickness(0, 0, 12, 0) };
+        var port = ChampPixel.Habiller(new TextBox { Text = reglages.PortApi.ToString(), Width = 90, Margin = new Thickness(8, 0, 16, 0) });
         port.LostFocus += (_, _) =>
         {
             if (!int.TryParse(port.Text, out var p) || p is < 1024 or > 65535 || p == reglages.PortApi) return;
@@ -420,16 +432,20 @@ internal sealed class FenetreDesConnecteurs : Window
             _pilou.RelancerApi();
             Remplir();
         };
-        rangee.Children.Add(Texte("port ", 12));
+        var motPort = Texte("port");
+        motPort.VerticalAlignment = VerticalAlignment.Center;
+        rangee.Children.Add(motPort);
         rangee.Children.Add(port);
-        var copier = new Button { Content = "Copier le jeton", Padding = new Thickness(10, 3, 10, 3), Margin = new Thickness(0, 0, 8, 0) };
+        var copier = Bouton("Copier le jeton");
+        copier.VerticalAlignment = VerticalAlignment.Center;
         copier.Click += (_, _) =>
         {
             Clipboard.SetText(_r.JetonApi());
-            copier.Content = "✓ copié";
+            copier.Libelle = "✓ copié";
         };
         rangee.Children.Add(copier);
-        var nouveau = new Button { Content = "Nouveau jeton", Padding = new Thickness(10, 3, 10, 3) };
+        var nouveau = Bouton("Nouveau jeton");
+        nouveau.VerticalAlignment = VerticalAlignment.Center;
         nouveau.Click += (_, _) =>
         {
             _r.NouveauJeton();
@@ -441,10 +457,10 @@ internal sealed class FenetreDesConnecteurs : Window
 
     private void Journal()
     {
-        _corps.Children.Add(new TextBlock { Text = "Journal (50 derniers)", FontSize = 14, FontWeight = FontWeights.Bold, Margin = new Thickness(0, 16, 0, 4) });
+        Section("Journal (50 derniers)");
         var lignes = _r.Journal();
-        if (lignes.Count == 0) _corps.Children.Add(Texte("rien encore", 11, Argent));
+        if (lignes.Count == 0) _corps.Children.Add(Texte("rien encore", Argent));
         foreach (var l in lignes)
-            _corps.Children.Add(Texte($"{l.T:HH:mm:ss}  {l.Connecteur}  ·  {l.Texte}", 11, Argent));
+            _corps.Children.Add(Texte($"{l.T:HH:mm:ss} · {l.Connecteur} · {l.Texte}", Argent));
     }
 }

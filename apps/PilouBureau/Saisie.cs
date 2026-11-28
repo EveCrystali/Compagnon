@@ -9,14 +9,15 @@ public static class Saisie
 {
     public static string? Demander(string titre, string explication, string valeur)
     {
-        var champ = new TextBox { Text = valeur, MinWidth = 420, Margin = new Thickness(0, 8, 0, 10), Padding = new Thickness(4, 3, 4, 3) };
-        var ok = new Button { Content = "OK", IsDefault = true, MinWidth = 80, Margin = new Thickness(0, 0, 8, 0) };
-        var annuler = new Button { Content = "Annuler", IsCancel = true, MinWidth = 80 };
+        // Au guide de style (docs/STYLE.md) : fond de nuit, texte en police pixel, champ carré, boutons au cadre pixel.
+        var champ = ChampPixel.Habiller(new TextBox { Text = valeur, MinWidth = 460, Margin = new Thickness(0, 8, 0, 12) });
+        var ok = new BoutonPixel("OK", true, StylePixel.Corps) { IsDefault = true, Margin = new Thickness(0, 0, 10, 0) };
+        var annuler = new BoutonPixel("Annuler", false, StylePixel.Corps) { IsCancel = true };
         var boutons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
         boutons.Children.Add(ok);
         boutons.Children.Add(annuler);
-        var pile = new StackPanel { Margin = new Thickness(14) };
-        pile.Children.Add(new TextBlock { Text = explication, TextWrapping = TextWrapping.Wrap, MaxWidth = 420, FontSize = 12 });
+        var pile = new StackPanel { Margin = new Thickness(20, 14, 20, 18) };
+        pile.Children.Add(new Border { MaxWidth = 460, HorizontalAlignment = HorizontalAlignment.Left, Child = StylePixel.Texte(explication, CadrePixel.Texte, StylePixel.Corps) });
         pile.Children.Add(champ);
         pile.Children.Add(boutons);
         var f = new Window
@@ -28,7 +29,10 @@ public static class Saisie
             WindowStartupLocation = WindowStartupLocation.CenterScreen,
             Topmost = true,
             ShowInTaskbar = true,
+            Background = FenetreAventure.Gel("#0f1324"),
+            UseLayoutRounding = true,
         };
+        HabillageFenetre.Poser(f);
         ok.Click += (_, _) => f.DialogResult = true;
         f.Loaded += (_, _) =>
         {
