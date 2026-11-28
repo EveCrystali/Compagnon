@@ -3,17 +3,17 @@ id: acteur-etincelle
 taille: 13 13
 ancre: 6 12
 duree: 80
-palette: a=#f69d50 b=#ffc89a c=#fff6cc d=#ffffff
+palette: a=#d9803a b=#f69d50 c=#fff6cc d=#ffffff e=#ffc89a
 images: 3
 13,
 5,a7,
 5,a7,
 5,a7,
-4,b,cb5,
+4,b,2b5,
 5,2c6,
-,3a2cd2c3a,
-4,b,cb5,
-6,c6,
+,3abcd2b3a,
+4,b,2b5,
+6,b6,
 6,a6,
 6,a6,
 6,a6,
@@ -22,11 +22,11 @@ images: 3
 5.,7.
 5.,7.
 5.,7.
-4.,.b,5.
-5.,7.
-.3,b3.b3,.
-4.,2.,5.
-6.b6.
+4.,.a,5.
+5.,e6.
+.3,ae.ea3,.
+4.,.e,5.
+6.a6.
 6.,6.
 6.,6.
 6.,6.

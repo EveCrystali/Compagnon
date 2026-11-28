@@ -54,6 +54,7 @@ def image(cle, e):
     p["dessin"](f, e)
     f.ox = f.oy = 0
     f.cerner()
+    f.sans_orphelins()
     return f
 
 
@@ -317,16 +318,22 @@ def lison(f, e):
     h = e.humeur
     sw = (0, 1, 0, -1)[e.t % 4]
     # Les jambes, puis les bottes jaunes bien trop grandes (la pointe vers la gauche : elle regarde Pilou).
+    # Son attitude : sur la pointe des pieds (plus haut encore quand elle est contente, à plat quand elle a peur).
+    tip = {"joie": 3, "peur": 0}.get(h, 2)
     for x in (a - 5.8, a + 5.8):
-        f.tube([(x, g - 22, 2.8), (x - 0.3, g - 13, 2.6)], ARDOISE)
+        f.tube([(x, g - 22 - tip, 2.8), (x - 0.3, g - 13 - tip, 2.6)], ARDOISE)
     for x in (a + 5.6, a - 6.0):
         b = f.boule(x - 2.6, g - 3.3, 6.4, 3.3, BOTTE)
-        b |= f.tube([(x, g - 12.5, 4.4), (x - 0.3, g - 5, 4.1)], BOTTE)
+        b |= f.tube([(x + tip * 0.3, g - 12.5 - tip, 4.4), (x - 0.3, g - 5, 4.1)], BOTTE)
+        if tip:                                                                  # le talon décolle
+            f.gommer({(X, Y) for (X, Y) in b if Y >= g - 1 - (X - x + 1.5) * tip / 4.0 and X > x - 1.5})
+            b = {(X, Y) for (X, Y) in b if f.c[Y][X] is not None}
         f.ourler(b, BOTTE[0], cotes=((0, 1),))                                   # la semelle
-        f.trait(x - 4, g - 16, x + 4, g - 16, BOTTE[3], dans=b)                # le revers de la tige
-        f.trait(x - 4, g - 15, x + 4, g - 15, BOTTE[1], dans=b)
+        f.trait(x - 4 + tip * 0.3, g - 16 - tip, x + 4 + tip * 0.3, g - 16 - tip, BOTTE[3], dans=b)    # le revers de la tige
+        f.trait(x - 4 + tip * 0.3, g - 15 - tip, x + 4 + tip * 0.3, g - 15 - tip, BOTTE[1], dans=b)
         f.px(x - 2.5, g - 11, BOTTE[4]); f.px(x - 2.5, g - 10, BOTTE[4]); f.px(x - 2.5, g - 9, BOTTE[4])   # ça brille
         f.px(x - 6.5, g - 4.5, BOTTE[4]); f.px(x - 5.5, g - 5.5, BOTTE[4])
+    g -= tip                                                                     # tout le reste monte avec elle
     # Le ciré : une cloche qui s'évase, la patte de boutonnage, trois brandebourgs, deux poches, l'ourlet.
     cire = f.poly([(a - 9.5, g - 47 + up), (a + 9.5, g - 47 + up), (a + 11.5, g - 37 + up), (a + 13.6, g - 22),
                    (a + 13.2, g - 19.6), (a - 13.2, g - 19.6), (a - 13.6, g - 22), (a - 11.5, g - 37 + up)], CIRE, rond=0.92, gain=0.56,
@@ -497,3 +504,4 @@ def etats_planche():
 # Les autres personnages, campagne par campagne (ils s'inscrivent dans PERSOS à l'import).
 import personnages_hd_panne  # noqa: E402,F401
 import personnages_hd_phare  # noqa: E402,F401
+import personnages_hd_nuage  # noqa: E402,F401

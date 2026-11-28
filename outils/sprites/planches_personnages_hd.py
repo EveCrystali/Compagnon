@@ -215,11 +215,86 @@ def groupe(campagne, z=2):
     return im, [(c[1], _boite(c)[1][3] - _boite(c)[1][1], P.PERSOS[c]["vol"]) for c in cles]
 
 
+def acteurs(z=4):
+    """La planche des acteurs : pour chacun, l'acteur d'aujourd'hui à sa taille d'écran (5 px par unité), le nouveau
+    à la sienne (2 px par unité), puis toutes ses images agrandies ; sur fond sombre, puis sur fond clair."""
+    import acteurs_hd as A
+    import planches as PL
+    import rendu
+    fins = rendu._dossier("sprites2x")
+    W = 1500
+    bandes = []
+    for fond in ((40, 48, 82), (226, 222, 206)):
+        o = Image.new("RGBA", (W, 4000), fond + (255,))
+        x, y, hmax = 6, 6, 0
+        for nom in A.ORDRE:
+            a = A.ACTEURS[nom]
+            # Un acteur né en HD (grenouille, canard, escargot) n'a pas d'ancienne version : sa case reste vide.
+            vieux = PL.sprite_image(fins["acteur-" + nom], 5, 0) if "acteur-" + nom in fins else \
+                Image.new("RGBA", (20, 20), (0, 0, 0, 0))
+            large = vieux.width + 8 + a["w"] * 2 + 14 + a["n"] * (a["w"] * z + 4) + 18
+            if x + large > W - 6:
+                x, y, hmax = 6, y + hmax + 12, 0
+            o.alpha_composite(vieux, (x, y))
+            x += vieux.width + 8
+            o.alpha_composite(en_image(A.image(nom, 0), 2), (x, y))
+            x += a["w"] * 2 + 14
+            for i in range(a["n"]):
+                o.alpha_composite(en_image(A.image(nom, i), z), (x, y))
+                x += a["w"] * z + 4
+            x += 18
+            hmax = max(hmax, a["h"] * z, vieux.height)
+        bandes.append(o.crop((0, 0, W, y + hmax + 8)))
+    im = Image.new("RGB", (W, sum(b.height for b in bandes)), FOND)
+    y = 0
+    for b in bandes:
+        im.paste(b.convert("RGB"), (0, y))
+        y += b.height
+    return im
+
+
+def petits_acteurs():
+    """Les acteurs de moins de 16 unités sur le décor HD le plus clair et le plus sombre (ciel, milieu, sol)."""
+    import acteurs_hd as A
+    import personnages_hd_export as X
+    dossier = os.path.normpath(os.path.join(ICI, "..", "..", "assets", "decors"))
+    decors = []
+    for nom in sorted(os.listdir(dossier)):
+        with open(os.path.join(dossier, nom), encoding="utf-8") as fh:
+            d = X.decoder(fh.read())
+        pal = {k: (int(v[1:3], 16), int(v[3:5], 16), int(v[5:7], 16)) for k, v in d["palette"].items()}
+        im = Image.new("RGB", (d["w"], d["h"]))
+        px = im.load()
+        total = 0
+        for y, rang in enumerate(d["images"][0]):
+            for x, ch in enumerate(rang):
+                px[x, y] = pal[ch]
+                total += pal[ch][0] * 3 + pal[ch][1] * 6 + pal[ch][2]
+        decors.append((total, im))
+    decors.sort(key=lambda t: t[0])
+    petits = [n for n in A.ORDRE if max(A.ACTEURS[n]["w"], A.ACTEURS[n]["h"]) <= 16]
+    planche = Image.new("RGB", (960, 968), FOND)
+    for j, (_, decor) in enumerate((decors[-1], decors[0])):
+        sc = decor.convert("RGBA")
+        for rang, y in enumerate((40, 120, 200)):
+            x = 16 + rang * 9
+            for n in petits:
+                sc.alpha_composite(en_image(A.image(n, 0)), (x, y - A.ACTEURS[n]["h"]))
+                x += A.ACTEURS[n]["w"] + 12
+        planche.paste(sc.resize((960, 480), Image.NEAREST).convert("RGB"), (0, j * 488))
+    return planche
+
+
 def main():
     os.makedirs(SORTIE, exist_ok=True)
     quoi = sys.argv[1] if len(sys.argv) > 1 else "tout"
     if quoi == "apercu":
         return apercu(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 6)
+    if quoi in ("tout", "acteurs"):
+        acteurs().save(os.path.join(SORTIE, "acteurs.png"))
+        petits_acteurs().save(os.path.join(SORTIE, "petits-acteurs.png"))
+    if quoi == "acteurs":
+        return
     if quoi in ("tout", "essai"):
         essai().save(os.path.join(SORTIE, "essai.png"))
     if quoi == "essai":
