@@ -32,7 +32,7 @@ Dernière mise à jour : 28 novembre 2026.
   dans `docs/maquettes/paysages/grande-panne/profondeur/`.
   Même passe sur Petit Nuage (session à part, par groupes de trois) : faits, le col blanc (le grand nuage endormi sur le
   col, la mer de brouillard, les six cairns), le Trou-qui-Siffle (galerie en perspective, neuf creux de chaque côté) et
-  le sentier des mélèzes (lacets, éboulis), le jardin lavé, le chemin creux, le Pré aux Draps, l'étang qui fume, le Plateau Râpé, la halte (9 sur 14) ; avant / après dans `docs/maquettes/paysages/petit-nuage/profondeur/` ;
+  le sentier des mélèzes (lacets, éboulis), le jardin lavé, le chemin creux, le Pré aux Draps, l'étang qui fume, le Plateau Râpé, la halte, le terrier, la Grande Salle, la fenêtre (12 sur 14) ; avant / après dans `docs/maquettes/paysages/petit-nuage/profondeur/` ;
   vus dans l'exe d'essai sur le PC d'Antoine (`--essai=lieu:petit-nuage:<lieu>`).
   Même passe en cours sur Le phare éteint (`decors_hd_phare_eteint.py`, lumière calculée et matières : bois veiné,
   granit appareillé, dalles mouillées) : faits, l'auberge, le quai de Trébrume, chez Pilou, le guet, le Passe-Pied, le pied du phare (6 sur 14) ; avant / après et
