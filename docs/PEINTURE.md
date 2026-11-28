@@ -140,6 +140,11 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 plus ; le premier doit couvrir tout le cadre). Un plan qui ne bouge pas n'est écrit qu'une fois : mettre ce qui
 bouge dans peu de plans allège le fichier et le travail du moteur.
 
+**Ne repeindre que ce qui change.** `py outils/sprites/decors_hd.py <campagne> <lieu> [<lieu>…]` repeint ces lieux
+(une à deux minutes chacun) et réécrit quand même toute la référence : les autres décors sont relus dans
+`assets/decors/`. Avant une PR : fusionner `main`, puis relancer cette commande sur les lieux touchés. Le lancement
+sans argument repeint tout (25 minutes) et ne sert plus qu'après un changement d'une brique de `paysage.py`.
+
 **Après tout changement d'un décor**, régénérer aussi la référence du Théâtre, qui porte l'empreinte de chaque plan :
 `py outils/sprites/theatre_hd.py` (réécrit `outils/sprites/theatre-hd-reference.txt` ; les tests du PC et du
 téléphone la comparent aux fichiers de `assets/decors/`). Sans cela, la CI échoue.
