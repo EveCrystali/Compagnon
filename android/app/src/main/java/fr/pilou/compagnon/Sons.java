@@ -270,8 +270,10 @@ final class Sons {
     private static final Map<String, AudioTrack> PILOU = new HashMap<>();
     private static Map<String, List<Note>> catalogue;
 
+    static final String DEFAUT = "normaux";
+
     static String niveau(Context c) {
-        return Prefs.de(c).getString("sons", "aucun");
+        return Prefs.de(c).getString("sons", DEFAUT);
     }
 
     /**

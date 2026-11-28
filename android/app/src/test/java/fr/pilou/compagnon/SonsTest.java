@@ -63,6 +63,11 @@ public class SonsTest {
     }
 
     @Test
+    public void normauxParDefautCommeLePc() {
+        assertEquals("normaux", Sons.DEFAUT);
+    }
+
+    @Test
     public void discretEstVraimentBas() {
         short[] d = Sons.adoucir(new short[]{16000, -16000, 1});
         assertEquals(3000, d[0]);

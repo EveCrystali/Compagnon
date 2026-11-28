@@ -34,7 +34,7 @@ Dernière mise à jour : 27 novembre 2026.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
-  téléphone et `outils/sons/sons.py` ; **coupés par défaut** (« Sons : aucun »), en attendant le choix d'Antoine.
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
 
 ## En cours
 
