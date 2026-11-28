@@ -5,6 +5,8 @@ Sert aux planches de contrôle (planches.py, planches_hd.py) et aux empreintes d
 import math
 import os
 
+import vie
+
 ICI = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.normpath(os.path.join(ICI, "..", "..", "assets"))
 
@@ -270,6 +272,13 @@ class Pose:
         self.stade = 2         # 1 Gouttelette, 2 Pilou, 3 Pilou Nimbus, 4 Pilou Astral
         self.evolution = 0.0    # 0..1 : animation d'évolution vers ce stade (0 ou 1 : aucune)
         self.reaction = ""      # "sueur" (gouttes) ; "danse" : le PC balance Pilou, les notes viennent de la tenue
+        # Vie du personnage (vie.py) : étirement du corps (−1 écrasé … 1 étiré), retard de l'antenne (−1 … 1, positif :
+        # pointe plus haute), ms depuis l'atterrissage (−1 : aucun), lumière du moment (« matin », « soir », « nuit »
+        # ou "") ; vie : animations complètes (ombre tramée en l'air, bouffées de poussière).
+        self.etire = self.antenne = 0.0
+        self.atterri = -1.0
+        self.lumiere = ""
+        self.vie = False
         self.__dict__.update(kw)
 
 
@@ -432,6 +441,8 @@ def rendre_stade(p, B, T, TEN, e=1):
 
     st = p.stade if p.stade in STADE_X else 2
     te = teinte_de(p, T)
+    if p.lumiere and p.expr != "inquiet":   # l'alerte garde sa couleur franche
+        te = [vie.eclairer(c, p.lumiere) for c in te]
     ref = {"@contour": te[0], "@ombre": te[1], "@base": te[2], "@clair": te[3]}
     t = p.t
     periode = 4200 if p.expr == "dort" else 1600 if p.expr in ("concentre", "attente") else 2600
@@ -443,6 +454,8 @@ def rendre_stade(p, B, T, TEN, e=1):
         rx, ry = rx + 0.6, ry - 0.9
     rx += 1.2 * p.chute + 0.7 * p.assis - 0.8 * p.suspendu
     ry -= 1.4 * p.chute + 0.8 * p.assis - 1.1 * p.suspendu
+    rx -= 0.9 * p.etire
+    ry += 1.1 * p.etire
     rx, ry = rx * STADE_X[st], ry * STADE_Y[st]
     cadence = 70 if p.course else 160
     marche = abs(math.sin(t / cadence)) * (1.3 if p.course else 0.8) if p.marche else 0
@@ -473,7 +486,7 @@ def rendre_stade(p, B, T, TEN, e=1):
     vitesse = 90 if (p.salue or p.expr == "fete") else 300 if p.expr == "concentre" else 650
     balance = 0 if p.expr == "dort" else max(-e, min(e, int(round(math.sin(t / vitesse) * 0.9 * e)) +
                                                      ((-e if p.regard > 0 else e if p.regard < 0 else 0) if p.marche else 0)))
-    haut_antenne = (3 if st == 1 else 6) * e
+    haut_antenne = max(2 * e, (3 if st == 1 else 6) * e + int(round(p.antenne * 2 * e)))
     ancres = {
         "tete": (c0 + dx, sommet), "yeux": (c0 + dxf, ey), "bouche": (c0 + dxf, ey + 9 * e),
         "cou": (c0 + dx, int(round(cy + ry * 0.45))), "corps": (c0 + dx, int(round(cy))),
@@ -530,17 +543,23 @@ def rendre_stade(p, B, T, TEN, e=1):
     # Ombre au sol.
     if p.suspendu < 0.1:
         demi = int(max(6, 15 * STADE_X[st] - p.saut * 2.8) * e)
+        # Vie : en l'air, l'ombre s'éclaircit en trame (d'abord le bas de l'ombre, puis toute l'ombre).
+        trame = (2 if p.saut >= 2.4 else 1 if p.saut >= 1.0 else 0) if p.vie else 0
+
+        def ombre(x, j, bas):
+            return trame == 0 or (trame == 1 and not bas) or (x + j) % 2 == 0
+
         if e == 1:
             for x in range(C - demi, C + demi):
-                if g[52][x] is None:
+                if g[52][x] is None and ombre(x, 0, False):
                     g[52][x] = OMBRE_SOL
-                if abs(x - C + 0.5) < demi - 3 and g[53][x] is None:
+                if abs(x - C + 0.5) < demi - 3 and g[53][x] is None and ombre(x, 1, True):
                     g[53][x] = OMBRE_SOL
         else:
             # Quatre lignes fines, bouts arrondis.
             for j, retrait in enumerate((2, 0, 3, 7)):
                 for x in range(c0 - demi + retrait, c0 + demi - retrait):
-                    if 0 <= x < w and g[104 + j][x] is None:
+                    if 0 <= x < w and g[104 + j][x] is None and ombre(x, j, j >= 2):
                         g[104 + j][x] = OMBRE_SOL
 
     # Corps : ombrage tramé, reflet ; Nimbus : volutes et bras ; puis cerne.
@@ -744,6 +763,31 @@ def rendre_stade(p, B, T, TEN, e=1):
                 px(x, y + 1, BLANC)
             else:
                 motif(x - 2, y - 2, SUEUR_FINE, {"g": GOUTTE, "c": GOUTTE_CLAIRE, "w": BLANC})
+
+    # Vie : bouffées de poussière au ras du sol (le pied arrière en marchant, les deux côtés à l'atterrissage), en
+    # blocs d'un pixel de la grille 1× ; posées seulement sur le vide ou l'ombre, jamais sur Pilou.
+    if p.vie and p.suspendu < 0.1 and p.assis <= 0.5:
+        pieds_x = ((C - 8) * e, (C + 3) * e) if st == 1 else ((C - 10) * e, (C + 4) * e)
+        largeur = (5 if st == 1 else 6) * e
+        bouffees = []
+        if p.marche and not p.course:
+            sens = 1 if p.regard >= 0 else -1
+            im_b = vie.bouffee(int(math.floor(t)), cadence, sens)
+            if im_b >= 0:
+                talon = pieds_x[0] + dx - e if sens > 0 else pieds_x[1] + dx + largeur
+                bouffees.append((talon, -sens, vie.BOUFFEES[im_b]))
+        im_a = vie.bouffee_atterrissage(int(math.floor(p.atterri))) if p.atterri >= 0 else -1
+        if im_a >= 0:
+            bouffees.append((pieds_x[0] + dx - e, -1, vie.BOUFFEES_ATTERRISSAGE[im_a]))
+            bouffees.append((pieds_x[1] + dx + largeur, 1, vie.BOUFFEES_ATTERRISSAGE[im_a]))
+        for x0, sg, points in bouffees:
+            for recul, haut, plein in points:
+                c = vie.POUSSIERE if plein else vie.POUSSIERE_LEGERE
+                for j in range(e):
+                    for i in range(e):
+                        x, y = x0 + sg * recul * e + i, pied + e + haut * e + j
+                        if 0 <= x < w and 0 <= y < h and g[y][x] in (None, OMBRE_SOL):
+                            g[y][x] = c
     return g
 
 
