@@ -5,14 +5,17 @@ acteur-aiguille 10 6 5 5 4 220 e628a62d d559a3fb 11dcaaab 63865535
 acteur-brume 56 14 28 13 4 600 05d15041 058e8439 e573fdcd f08152b5
 acteur-bulle 20 15 10 14 4 150 2e49a651 5f58e4fd c4cdf8ee 5f58e4fd
 acteur-bulle-marais 14 14 7 13 3 200 f3166a75 379c0726 8b2a69a0
+acteur-canard 24 19 12 18 4 300 2b2e65af 06e1520c 2b2e65af 06e1520c
 acteur-chat 28 23 14 22 4 260 79e13c2c 502836b4 93a0fe28 bedd5abc
 acteur-crabe 20 13 10 12 2 120 7e203725 bae7067a
 acteur-curseur 14 21 7 20 2 400 fcc52d65 fcc52d65
 acteur-eclats 35 31 17 30 5 70 3b0e4551 284ae591 cde94655 d5b2ffd5 efae7fb5
+acteur-escargot 19 13 9 12 4 500 808958f2 1918fe43 1048695f 1918fe43
 acteur-etincelle 13 13 6 12 3 80 f3762951 63a8ce81 3460a919
 acteur-feuille 11 10 5 9 4 160 d3ca7730 6a941ad3 47d8da84 7fdb8e00
 acteur-flocon 9 9 4 8 4 300 a0f30fa1 2f179171 5529aa61 2f179171
 acteur-graine 13 12 6 11 2 300 89874b83 4c0a1a40
+acteur-grenouille 20 15 10 14 4 400 b735fa92 0d7162d6 7bbadc21 7bbadc21
 acteur-libellule 22 14 11 13 2 50 8aaef69f a90e22e0
 acteur-mouette 26 16 13 15 4 140 678ae3f6 d9d2b561 5433bca3 d9d2b561
 acteur-note 11 15 5 14 2 180 897962ed 38f8449c

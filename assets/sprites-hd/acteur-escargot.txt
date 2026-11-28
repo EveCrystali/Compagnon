@@ -1,0 +1,59 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-escargot
+taille: 19 13
+ancre: 9 12
+duree: 500
+palette: a=#452a23 b=#ffe6b0 c=#f2bd6e d=#685d57 e=#e6cfa6 f=#8a4a1f g=#c8803a h=#4d3d37 i=#a07a52 j=#3a2a1c k=#c8a274 l=#6b4a2e
+images: 4
+6,3a10,
+4,2a2bc2a4,d,d,
+3,a5b2ca2,deded
+2,a3b3f2cga,hihih
+2,a2bfbcbfcfa,hihih
+2,abfbc2fcg2faj2ih,
+2,acbf4cfgfj2eij,
+2,a3cfcgf2gj2ekj2,
+2,2j3c2f2gf3eij2,
+,j3e4g2f3ekij2,
+j2eke9kilj2,
+,j12i2j3,
+2,12j5,
+19.
+15.,d2.
+14.,de2.
+14.,hi2.
+14.,hi2.
+14.h.jih
+13.aj.k2.
+13.j.eij.
+.j13.kij.
+je13.k3.
+14.k4.
+14.l4.
+14.j4.
+19.
+17.,.
+17.dh
+17.he
+17.hi
+14.,jiji
+16.ekj
+14.j.klj
+15.ek2.
+14.e.ij.
+15.2ij.
+ji14.j2.
+.j17.
+19.
+17.d.
+17.ed
+17.ih
+17.ih
+14.hijih
+16.kj,
+14.e.ij,
+15.ki2.
+14.k.j,.
+15.lj,.
+,j14.,2.
+.,17.
