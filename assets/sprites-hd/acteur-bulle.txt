@@ -1,0 +1,67 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-bulle
+taille: 20 15
+ancre: 10 14
+duree: 150
+palette: a=#7a6a50 b=#ffffff c=#efe0c0 d=#b9a98a
+images: 4
+20,
+20,
+20,
+20,
+20,
+20,
+9,a10,
+7,2ab2a8,
+6,a5ba7,
+5,a6bca6,
+5,a5b2ca6,
+5,acb4cda6,
+6,a4cda7,
+7,5a8,
+20,
+20.
+20.
+20.
+7.5a8.
+6.a5ba7.
+5.a7ba6.
+4.a8bca5.
+3.a5b.2b3ca4.
+3.a3b5.b2ca4.
+3.a2b4.2c.2ca4.
+3.a2b3.c3.2ca4.
+4.ac.c4.2ca5.
+5.a5.c.a6.
+20.
+20.
+5.9a6.
+3.2a9b2a4.
+2.a12bca3.
+.a12bcbca2.
+.a5b5.3b2ca2.
+a5b7.b4ca.
+a4b9.b3ca.
+a3b11.3ca.
+a3b7.c3.3ca.
+.acb2.c.c6.2ca2.
+2.ac.c.2c.c4.ca3.
+3.ac9.da4.
+4.a.c5.c.a5.
+6.a5.a7.
+20.
+5.9,6.
+3.13,4.
+2.15,3.
+.6,5a6,2.
+.5,a5.a5,2.
+5,a7.a5,.
+4,a9.a4,.
+3,a11.a3,.
+3,a7.b3.a3,.
+.2,a2.b.b6.a2,2.
+2.,a.b.2b.b4.a,3.
+3.,a9.a,4.
+4.,.a5.a.,5.
+6.,5.,7.
+20.

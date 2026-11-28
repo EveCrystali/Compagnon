@@ -119,6 +119,7 @@ internal sealed class FenetreBoutique : Window
         corps.Children.Add(droite);
         Content = racine;
         StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
 
         _essayer.Click += (_, _) =>
         {

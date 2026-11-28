@@ -1,0 +1,71 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-mouette
+taille: 26 16
+ancre: 13 15
+duree: 140
+palette: a=#3b4654 b=#f3f6fa c=#ffffff d=#d4dde6 e=#adbac7 f=#1c2128 g=#633f2e h=#f69d50 i=#d9803a j=#525563
+images: 4
+26,
+26,
+6a13,6a,
+b2ac2b2a9,2acbc2ada
+ad2b3cb2a5,2a2c3bdea,
+,2ad6ba3,a3c2bde2a2,
+3,2ad2bc2b3a2cb2ce2a4,
+5,ad5b6cfbg5,
+6,ad10cbhig4,
+7,j2cb3cbc2b2da5,
+6,j2e8be2a6,
+7,j3ade3dea8,
+11,6a9,
+26,
+26,
+26,
+26.
+26.
+6,13.6,.
+8,9.9,
+10,5.10,.
+3.7a5.7a4.
+a7c.2c5.c2.2cbcba.
+b2a4bc.2c9.2b2ada
+2a2dbd2b13.de2a.
+2.5ad13.2a3.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+.9,5.2,2.5,2.
+8,2a5.2a2.a5,.
+6,2ac11.g5,
+5,a2c13.g3,.
+2.,2.3c14.,3.
+.2a3cb11.4b2a2.
+aca3b2d9.2d3baba.
+cabde3a9.3a2dbada
+5a15.5a.
+26.
+26.
+26.
+26.
+26.
+26.
+26.
+.9a5.2a2.5a2.
+a9c5.2c2.2cbcba.
+b2a4bcb11.2b2ada
+2a2dbd2b13.de2a.
+2.a2.2ad14.a3.
+.5,j11.2a4,2.
+7,j9.a7,.
+8,9.9,
+5,15.5,.
+26.
+26.

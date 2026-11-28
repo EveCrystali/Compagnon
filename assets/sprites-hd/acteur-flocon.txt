@@ -1,0 +1,43 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-flocon
+taille: 9 9
+ancre: 4 8
+duree: 300
+palette: a=#9fb4d8 b=#ffffff c=#dbe6f6
+images: 4
+9,
+4,a4,
+4,b4,
+3,aba3,
+,a5ba,
+3,aba3,
+4,b4,
+4,a4,
+9,
+9.
+4.b4.
+4.c4.
+3.bcb3.
+.b2c.2cb.
+3.bcb3.
+4.c4.
+4.b4.
+9.
+9.
+4.,4.
+2.a.,.a2.
+4.,4.
+.3,.3,.
+4.,4.
+2.a.,.a2.
+4.,4.
+9.
+9.
+4.b4.
+2.,.c.,2.
+4.c4.
+.b2c.2cb.
+4.c4.
+2.,.c.,2.
+4.b4.
+9.
