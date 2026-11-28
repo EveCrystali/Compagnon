@@ -121,9 +121,11 @@ def ids_campagnes():
     import decors_campagnes
     import scene_pilou
     import acteurs_scenes
+    import pieds_campagnes
     import icones
     decors_campagnes.charger()
-    return sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS) + scene_pilou.IDS + acteurs_scenes.IDS + icones.IDS
+    return (sorted(decors_campagnes.DECORS) + list(campagnes_sprites.IDS) + scene_pilou.IDS + acteurs_scenes.IDS
+            + pieds_campagnes.ids() + icones.IDS)
 
 
 RETOUCHES = {}

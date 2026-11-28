@@ -485,15 +485,16 @@ public class CapturesCampagnesTest {
                 org.junit.Assert.assertTrue("fil calé : scrollY=" + y, cale);
                 // Pas de séparateur de chapitre en tête du fil visible : le bandeau dit déjà « CHAPITRE 1 / 2 ».
                 for (String s : AventureTest.textes(fil)) org.junit.Assert.assertFalse("séparateur en double : " + s, s.contains("CHAPITRE 1 - ") || s.contains("Chapitre 1 ·"));
-                // La puce de lieu tient dans la scène (192 u de large, centrée), à au moins 1 u de son bord droit et de son bord bas.
+                // La puce de lieu tient dans la scène (192 u de large, centrée), en haut à gauche à 1 u de ses bords (le bas à
+                // droite est la place du personnage en pied).
                 int k = l.unite(), W = m.widthPixels, scGauche = (W - 192 * k) / 2, scDroite = scGauche + 192 * k;
                 View puce = l.puceLieu();
                 int[] pp = position(puce, l);
                 int[] pt = position(l.tete(), l);
-                org.junit.Assert.assertEquals(scDroite - k, pp[0] + puce.getWidth());
-                org.junit.Assert.assertTrue(pp[0] >= scGauche + k);
-                org.junit.Assert.assertEquals(pt[1] + 80 * k - k, pp[1] + puce.getHeight());
-                org.junit.Assert.assertTrue(pp[1] >= pt[1]);
+                org.junit.Assert.assertEquals(scGauche + k, pp[0]);
+                org.junit.Assert.assertTrue(pp[0] + puce.getWidth() <= scDroite - k);
+                org.junit.Assert.assertEquals(pt[1] + k, pp[1]);
+                org.junit.Assert.assertTrue(pp[1] + puce.getHeight() <= pt[1] + 80 * k);
                 // La jauge : sous la scène, sur sa largeur exacte.
                 int[] pj = position(l.jaugeVue(), l);
                 org.junit.Assert.assertEquals(scGauche, pj[0]);
@@ -582,11 +583,17 @@ public class CapturesCampagnesTest {
             org.junit.Assert.assertEquals(View.VISIBLE, l.theatre().getVisibility());
             org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
             org.junit.Assert.assertEquals(k, l.theatre().echelleDessinee());
-            // Le portrait du personnage : 64k × 64k, k pixels d'écran par pixel fin.
-            org.junit.Assert.assertEquals(View.VISIBLE, l.portrait().getVisibility());
-            org.junit.Assert.assertEquals(64 * k, l.portrait().getWidth());
-            org.junit.Assert.assertEquals(64 * k, l.portrait().getHeight());
-            org.junit.Assert.assertEquals(k, l.portrait().echelle());
+            // Le personnage est dessiné en pied dans la scène (même pixel, celui du théâtre) : pas de portrait par-dessus.
+            // S'il n'était pas dessiné en pied, son portrait serait de 64k × 64k, k pixels d'écran par pixel fin.
+            if (l.theatre().aPerso()) {
+                org.junit.Assert.assertNotEquals(View.VISIBLE, l.portrait().getVisibility());
+            } else {
+                org.junit.Assert.assertEquals(View.VISIBLE, l.portrait().getVisibility());
+                org.junit.Assert.assertEquals(64 * k, l.portrait().getWidth());
+                org.junit.Assert.assertEquals(64 * k, l.portrait().getHeight());
+                org.junit.Assert.assertEquals(k, l.portrait().echelle());
+            }
+            org.junit.Assert.assertTrue("Grumeau en pied dans la scène", l.theatre().aPerso());
             // Le mini-Pilou de repli (jamais montré avec le théâtre, mais prêt) : même pixel fin.
             org.junit.Assert.assertEquals((float) k, l.pilouRepli().pixelFin(), 0.001f);
             ac[0].pause().stop().destroy();
@@ -601,6 +608,93 @@ public class CapturesCampagnesTest {
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");
+        }
+    }
+
+    /** Une partie vraiment jouée depuis le début (le fil garde tout ce qui a été dit), ouverte dans la lecture. */
+    private Lecture ouvrirPartieJouee(Campagnes.Campagne c, int bulles, ActivityController<Principale>[] ac) {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        appairer(ctx);
+        horloge[0] = 1_790_000_000_000L;
+        CampagnesTel.horloge = () -> horloge[0];
+        android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+        CampagnesTel.prechargerMaintenant();
+        org.junit.Assert.assertNull(CampagnesTel.demarrer(ctx, c.id, true));
+        for (int i = 0; i < 30; i++) {
+            Campagnes.Etat e = CampagnesTel.etat(ctx);
+            if (e.phase == Campagnes.Phase.Choix && CampagnesTel.fil(ctx, c.id).size() >= bulles + 1) break;
+            if (e.phase == Campagnes.Phase.Choix && !e.options.isEmpty()) org.junit.Assert.assertNull(CampagnesTel.choisir(ctx, e.options.get(0).id));
+            else if (e.phase == Campagnes.Phase.Depart) org.junit.Assert.assertNull(CampagnesTel.continuer(ctx));
+            else if (e.phase == Campagnes.Phase.Epreuve) org.junit.Assert.assertNull(CampagnesTel.epreuve(ctx, true));
+            else if (e.phase == Campagnes.Phase.Attente || e.phase == Campagnes.Phase.Repos) horloge[0] = e.fin + 1000;
+            else break;
+        }
+        System.out.println("PARTIE-JOUEE " + CampagnesTel.etat(ctx).phase + " " + CampagnesTel.etat(ctx).noeud + " fil=" + CampagnesTel.fil(ctx, c.id).size());
+        org.junit.Assert.assertEquals(Campagnes.Phase.Choix, CampagnesTel.etat(ctx).phase);
+        ac[0] = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = ac[0].get();
+        a.ouvrirLecture();
+        attendre();
+        Lecture l = ((PageAventure) a.page(Principale.AVENTURE)).lecture();
+        l.accelerer();
+        attendre();
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(4000));
+        attendre();
+        return l;
+    }
+
+    /**
+     * Deux captures du pilote (1078 x 2400, sombre) : une lecture avec au moins trois bulles d'historique au-dessus des
+     * choix (les précédentes remplissent l'espace, entières : le défilement tombe sur une bulle) ; et La Grande Panne avec
+     * Grumeau en pied dans le hall.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void historiqueEtPersonnageEnPiedSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        format = "jeu-telephone-portrait-sombre";
+        RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
+        RuntimeEnvironment.setFontScale(1f);
+        try {
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            Lecture l = ouvrirPartieJouee(pro, 4, ac);
+            Activity a = ac[0].get();
+            org.junit.Assert.assertEquals(1078, a.getResources().getDisplayMetrics().widthPixels);
+            org.junit.Assert.assertEquals(2400, a.getResources().getDisplayMetrics().heightPixels);
+            ecran(a, "historique");
+            // Les bulles visibles au-dessus des choix : au moins trois entières, aucune coupée par le bas du fil (celle qu entame le haut est masquée par Defil, la place reste vide).
+            android.widget.ScrollView defil = (android.widget.ScrollView) l.filVue().getParent();
+            android.view.ViewGroup fil = (android.view.ViewGroup) l.filVue();
+            int y = defil.getScrollY(), entieres = 0;
+            for (int i = 0; i < fil.getChildCount(); i++) {
+                View v = fil.getChildAt(i);
+                String d = v.getContentDescription() == null ? "" : v.getContentDescription().toString();
+                boolean bulle = false;
+                for (View w : toutes(v)) {
+                    String dw = w.getContentDescription() == null ? "" : w.getContentDescription().toString();
+                    if (w instanceof CadrePixel.Pave && (dw.startsWith("Pilou : ") || dw.startsWith("Toi : "))) bulle = true;
+                }
+                if (!bulle) continue;
+                boolean coupee = v.getTop() < y + defil.getHeight() && v.getBottom() > y + defil.getHeight();
+                org.junit.Assert.assertFalse("bulle coupée : " + d + " top=" + v.getTop() + " bas=" + v.getBottom() + " y=" + y, coupee);
+                if (v.getTop() >= y && v.getBottom() <= y + defil.getHeight()) entieres++;
+            }
+            org.junit.Assert.assertTrue("bulles entières visibles : " + entieres, entieres >= 3);
+            ac[0].pause().stop().destroy();
+
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            ac = new ActivityController[1];
+            Lecture lg = ouvrirLecture(gp, "ch1-reponse", ac);
+            org.junit.Assert.assertEquals(View.VISIBLE, lg.theatre().getVisibility());
+            ecran(ac[0].get(), "grande-panne-grumeau-en-pied");
+            ac[0].pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+            RuntimeEnvironment.setFontScale(1f);
         }
     }
 }

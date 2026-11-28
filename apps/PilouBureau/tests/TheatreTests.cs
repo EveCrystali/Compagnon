@@ -17,7 +17,7 @@ public class TheatreTests
     private static Theatre.Evenement Evenement(string[] p)
     {
         long t = long.Parse(p[1]);
-        return p[2] == "humeur" ? new Theatre.Evenement(t, "humeur", Humeur: p[3]) : new Theatre.Evenement(t, p[2], long.Parse(p[3]), long.Parse(p[4]));
+        return p[2] is "humeur" or "perso" ? new Theatre.Evenement(t, p[2], Humeur: p[3]) : new Theatre.Evenement(t, p[2], long.Parse(p[3]), long.Parse(p[4]));
     }
 
     [Fact]
@@ -59,6 +59,14 @@ public class TheatreTests
                     var e = Theatre.Pilou(cx!, evts, long.Parse(p[1]), regard, niveau);
                     Assert.True((e.X, e.Y, e.Image, e.Miroir, e.Visible) ==
                         (int.Parse(p[2]), int.Parse(p[3]), int.Parse(p[4]), p[5] == "1", p[6] == "1"), $"{nom} : {l} ≠ {e}");
+                    break;
+                }
+                case "perso":
+                {
+                    var q = Theatre.Perso(cx!, evts, long.Parse(p[1]), niveau);
+                    var attendu = p[2] == "-" ? "-" : string.Join(" ", p.Skip(2));
+                    var vu = q is { } v ? $"{v.Sprite} {v.Image} {v.X} {v.Y} {(v.Miroir ? 1 : 0)}" : "-";
+                    Assert.True(attendu == vu, $"{nom} : {l} ≠ {vu}");
                     break;
                 }
                 case "acteurs":
@@ -110,6 +118,7 @@ public class TheatreTests
                     Assert.Contains(a.Comportement, new[] { "vol", "traverse", "rond", "saut", "pose", "flotte", "chute" });
                 }
                 foreach (var s in sc.Sensibles) Assert.Contains(s.Reaction, new[] { "bulle", "rond", "graines" });
+                Assert.InRange(sc.Interlocuteur, 20, Theatre.W - 8);
                 n++;
             }
         }

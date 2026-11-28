@@ -122,6 +122,7 @@ internal sealed class VueTheatre : Border
         _decor = neuf;
         _cx = new Theatre.Contexte(SceneDe(campagne, decor), Anims(), id => Banque.Commune.Fins.GetValueOrDefault(id));
         _evts = new List<Theatre.Evenement>();
+        _perso = "";
         _debut = glisser ? now + Glisse : now;
         if (!glisser) _glisse = -1;
         if (Vif) _evts.Add(new Theatre.Evenement(0, "entree", glisser ? EntreeX : 0));
@@ -131,7 +132,7 @@ internal sealed class VueTheatre : Border
 
     private void Ajouter(Theatre.Evenement e)
     {
-        if (_cx is null || !Vif || _glisse >= 0) return;
+        if (_cx is null || !Vif) return;          // pendant un travelling, l'événement tombe au début de la nouvelle scène
         if (_evts.Count > 0 && e.T < _evts[^1].T) e = e with { T = _evts[^1].T };
         _evts.Add(e);
         _dernierPas = -1;
@@ -141,7 +142,24 @@ internal sealed class VueTheatre : Border
 
     public void Parle(double now, double fin) => Ajouter(new Theatre.Evenement(T(now), "parle", T(fin)));
 
-    public void Tait(double now) => Ajouter(new Theatre.Evenement(T(now), "parle", T(now)));
+    public void Tait(double now)
+    {
+        Ajouter(new Theatre.Evenement(T(now), "parle", T(now)));
+        if (_perso != "") Ajouter(new Theatre.Evenement(T(now), "parle-perso", T(now)));
+    }
+
+    // Le personnage en pied (pied-<campagne>-<personnage>) : il entre par la droite ; "" : il ressort.
+    private string _perso = "";
+
+    public void Perso(string sprite, double now)
+    {
+        if (sprite == _perso) return;
+        _perso = sprite;
+        Ajouter(new Theatre.Evenement(T(now), "perso", Humeur: sprite));
+    }
+
+    // Sa réplique : c'est lui qui parle, pas Pilou.
+    public void ParlePerso(double now, double fin) => Ajouter(new Theatre.Evenement(T(now), "parle-perso", T(fin)));
 
     // Il s'en va (un choix l'envoie en route) ; il revient s'il était parti et que l'histoire continue ici.
     public void Depart(double now) => Ajouter(new Theatre.Evenement(T(now), "depart", 1));

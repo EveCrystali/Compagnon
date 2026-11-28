@@ -81,11 +81,15 @@ Dernière mise à jour : 28 novembre 2026.
   ou une campagne finie, en plus du niveau (`"succes"`, `"campagnes"`, PC et Android, validateur) ; la Bibliothèque
   dit ce qui manque. L'aide du niveau en expédition se voit au départ et contre le boss. Testé (PC, CI) ; jamais vu
   sur un vrai téléphone.
-- **Style pixel de l'Aventure** (branche `claude/aventure-style-pixel`) : sous la scène, cadres pixel (bord, coins en
+- **Style pixel de l'Aventure** (PR #103 et #108) : sous la scène, cadres pixel (bord, coins en
   escalier, biseau, ombre, comme le menu « Sept portes ») et police pixel pour le récit, les choix, le bandeau et le lieu,
   sur PC et téléphone ; fil calé sur des bulles entières (plus de ligne tranchée). Captures téléphone sombre, clair,
-  grande police et PC à 100 % relues ; jamais vu sur un vrai téléphone. Reste en police système : les cartes d'attente,
-  d'épreuve, de fin et le menu ⋯ du téléphone.
+  grande police et PC à 100 % relues ; jamais vu sur un vrai téléphone. Seconde passe (#108) : cartes, menu ⋯ et fil « Relire »
+  au même style.
+- **Théâtre de « La Grande Panne »** (branche `claude/theatre-grande-panne`) : 12 scènes avec leurs acteurs (paquets de
+  données, curseur, tickets, bulles, étincelles), les 13 personnages en pied (repris de leurs portraits 1×, Mlle Renvoi
+  derrière un guichet), qui entrent, parlent leurs répliques et sautillent quand on les touche ; moteur commun étendu
+  (référence, C#, Java). Vu sur le PC d'Antoine (essai `personnage`) ; jamais sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 

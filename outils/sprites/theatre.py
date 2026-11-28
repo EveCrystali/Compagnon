@@ -15,8 +15,8 @@ de la même façon est ici, en arithmétique entière (pas de sinus de biblioth�
 
 Les événements (`evts`) sont des tuples (t, sorte, a, b), triés par t : « entree » (a : x de départ, 0 : le bord
 gauche), « depart » (a : +1 droite, -1 gauche), « humeur » (a : humeur du message), « parle » (a : fin de la réplique
-de Pilou ; une nouvelle réplique remplace la précédente, a = t la coupe), « clic » (a, b : point touché en pixels du
-décor). Ce qui dépend de la souris en continu (le regard) est un paramètre, pas un événement.
+de Pilou ; une nouvelle réplique remplace la précédente, a = t la coupe), « perso » (a : sprite du personnage en pied,
+"" : plus personne), « parle-perso » (a : fin de sa réplique), « clic » (a, b : point touché en pixels du décor). Ce qui dépend de la souris en continu (le regard) est un paramètre, pas un événement.
 
 `python3 outils/sprites/theatre.py` écrit assets/scenes/animations.txt et outils/sprites/theatre-reference.txt
 (relu par TheatreTests.cs et TheatreTest.java).
@@ -48,8 +48,16 @@ SINUS = [0, 195, 383, 556, 707, 831, 924, 981, 1000, 981, 924, 831, 707, 556, 38
 # Lissage (« smoothstep ») en millièmes, pour i = 0..16 sur 16.
 LISSE = [0, 11, 42, 89, 156, 229, 316, 410, 500, 590, 684, 771, 844, 911, 958, 989, 1000]
 
-# Rythme (ms par image) des sprites d'acteurs, rempli par charger() depuis la banque.
+# Rythme (ms par image) et taille (largeur, hauteur) des sprites, remplis par charger() depuis la banque.
 DUREES = {}
+TAILLES = {}
+
+# Le personnage en pied (pieds_campagnes.py) : il entre par la droite, se tient sur `interlocuteur`, respire, cligne,
+# parle pendant sa réplique, sautille quand on le touche (et de temps en temps), et ressort par la droite.
+VITESSE_PERSO = 48             # pixels fins par seconde
+ENTREE_PERSO = W + 18
+SAUT_PERSO = (0, -2, -4, -5, -4, -2, 0)   # le petit saut, une hauteur par pas de 83 ms
+PERSO_CYCLE, PERSO_SAUT = 8000, 5000
 
 HUMEURS = ("joie", "peur", "triste", "surpris", "determine", "fatigue", "tendre", "colere", "malice", "neutre")
 
@@ -223,7 +231,7 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
                 action = ("anim", e[0], nom, duree_anim(P[nom]))
             elif cible[0] == "sensible" and cible[2] == "bulle":
                 action = ("anim", e[0], "surpris", duree_anim(P["surpris"]) + 1200)
-            elif cible[0] in ("sensible", "acteur"):
+            elif cible[0] in ("sensible", "acteur", "perso"):
                 nom = "regard-d" if cible[3] >= x else "regard-g"
                 action = ("anim", e[0], nom, 900)
     action = fin_action(action, t)
@@ -254,6 +262,76 @@ def pilou(sc, A, evts, t, regard=0, niv=animations.COMPLETES):
         nom = "regard-g" if animations.hasard(c, 12, 3) < 5000 else "regard-d"
         return x, sol(sc, x), P[nom][0], False, True
     return x, sol(sc, x), image_anim(P[_face(humeur)], t), miroir, True
+
+
+# ---- Le personnage en pied
+
+def _x_entree(sc, t_in, t):
+    return max(sc.interlocuteur, ENTREE_PERSO - (t - t_in) * VITESSE_PERSO // 1000)
+
+
+def _etat_perso(sc, evts, t):
+    """(sprite courant, depuis quand, sortie (sprite, quand, x) de celui qui s'en va, répliques)."""
+    cur, t_in, sortie, paroles = "", 0, None, []
+    for e in evts:
+        if e[0] > t:
+            break
+        if e[1] == "perso":
+            sid = e[2] or ""
+            if sid == cur:
+                continue
+            # Remplacé par un autre : il s'efface ; plus personne : il ressort en marchant.
+            sortie = (cur, e[0], _x_entree(sc, t_in, e[0])) if cur and not sid else None
+            cur, t_in, paroles = sid, e[0], []
+        elif e[1] == "parle-perso":
+            paroles = [(e[0], e[2])]
+    return cur, t_in, sortie, paroles
+
+
+def perso(sc, A, evts, t, niv=animations.COMPLETES):
+    """(sprite, image, x, y, miroir) du personnage en pied, ou None. Il regarde vers la place de Pilou."""
+    cur, t_in, sortie, paroles = _etat_perso(sc, evts, t)
+    miroir = sc.place > sc.interlocuteur
+    if niv != animations.COMPLETES:
+        if not cur or cur not in A:
+            return None
+        a = A[cur]
+        im = a["cligne"][0] if niv == animations.REDUITES and animations.cligne(t + 1700) and "cligne" in a else a["repos"][0]
+        return cur, im, sc.interlocuteur, sol(sc, sc.interlocuteur), miroir
+    if not cur:
+        if sortie is None or sortie[0] not in A:
+            return None
+        sid, t_out, x_out = sortie
+        x = x_out + (t - t_out) * VITESSE_PERSO // 1000
+        if x > W + 30:
+            return None
+        k = (t // 166) % 2
+        return sid, image_anim(A[sid]["repos"], t), x, sol(sc, min(x, W)) - k, False
+    if cur not in A:
+        return None
+    a = A[cur]
+    x = _x_entree(sc, t_in, t)
+    y = sol(sc, x)
+    if x > sc.interlocuteur:
+        k = (t // 166) % 2                 # il trottine : un pixel de haut une image sur deux
+        return cur, image_anim(a["repos"], t), x, y - k, miroir
+    # Un saut quand on le touche, ou de temps en temps.
+    saut = -1
+    for k in _clics(evts):
+        tc = evts[k][0]
+        if t_in <= tc <= t and t - tc < len(SAUT_PERSO) * PAS and cible_clic(sc, A, evts, k)[0] == "perso":
+            saut = (t - tc) // PAS
+    c, u = t // PERSO_CYCLE, t % PERSO_CYCLE
+    if saut < 0 and t - t_in > PERSO_CYCLE and animations.hasard(c, 21, 7) < 3000 and PERSO_SAUT <= u < PERSO_SAUT + len(SAUT_PERSO) * PAS:
+        saut = (u - PERSO_SAUT) // PAS
+    if saut >= 0:
+        return cur, a["repos"][0], x, y + SAUT_PERSO[saut], miroir
+    for (t0, t1) in paroles:
+        if t0 <= t < t1 and "parle" in a:
+            return cur, image_anim(a["parle"], t - t0), x, y, miroir
+    if "cligne" in a and animations.cligne(t + 1700):
+        return cur, a["cligne"][0], x, y, miroir
+    return cur, image_anim(a["repos"], t), x, y, miroir
 
 
 # ---- Les acteurs
@@ -366,6 +444,11 @@ def _cible(sc, A, avant, tc, cx, cy):
     px, py, _, _, vis = pilou(sc, A, avant, tc)
     if vis and abs(cx - px) <= 10 and py - 22 <= cy <= py + 1:
         return ("pilou", 0, "", px)
+    pp = perso(sc, A, avant, tc)
+    if pp is not None:
+        w, h = TAILLES.get(pp[0], (24, 32))
+        if abs(cx - pp[2]) <= w // 2 and pp[3] - h < cy <= pp[3]:
+            return ("perso", 0, "", pp[2])
     for i, (sid, comp, p) in enumerate(sc.acteurs):
         if comp not in ("vol", "traverse"):
             continue
@@ -492,6 +575,9 @@ def composer(B, teinte, decor, sc, A, evts, t, regard=0, niv=animations.COMPLETE
         B2 = {"_decor": decor}
         poser(px, B2, "_decor", k, 0, 0, False, teinte, 0, 0)
     poses = [(y, 0, sid, im, x, m) for (sid, im, x, y, m) in acteurs(sc, A, B, evts, t, niv)]
+    pp = perso(sc, A, evts, t, niv)
+    if pp is not None and pp[0] in B:
+        poses.append((pp[3], 0, pp[0], pp[1], pp[2], pp[4]))
     x, y, im, m, vis = pilou(sc, A, evts, t, regard, niv)
     if vis:
         poses.append((y, 1, PILOU, im, x, m))
@@ -525,6 +611,12 @@ def ecrire_animations():
     for nom in scene_pilou.ORDRE:
         p, n, pas, mode = table[nom]
         lignes.append("%s %s %d %d %d %s" % (PILOU, nom, p, n, pas, mode))
+    # Les personnages en pied : l'ordre des images de leurs portraits (0 et 1 repos, 2 yeux fermés, 3 et 4 parole).
+    import pieds_campagnes
+    for sid in pieds_campagnes.ids():
+        lignes.append("%s repos 0 2 900 boucle" % sid)
+        lignes.append("%s cligne 2 1 150 tient" % sid)
+        lignes.append("%s parle 3 2 140 boucle" % sid)
     d = os.path.join(ASSETS, "scenes")
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, "animations.txt"), "w", encoding="utf-8", newline="\n") as f:
@@ -537,7 +629,7 @@ def charger():
     for nom in ("sprites2x",):
         d = os.path.join(ASSETS, nom)
         for f in sorted(os.listdir(d)):
-            if f.endswith(".txt") and (f.startswith("acteur-") or f.startswith("scene-") or f.startswith("decor-")):
+            if f.endswith(".txt") and (f.startswith("acteur-") or f.startswith("scene-") or f.startswith("decor-") or f.startswith("pied-")):
                 with open(os.path.join(d, f), encoding="utf-8") as fh:
                     s = rendu.lire(fh.read(), f[:-4])
                 B[s.id] = s
@@ -545,6 +637,7 @@ def charger():
         A = lire_animations(fh.read())
     for i, sp in B.items():
         DUREES[i] = sp.duree
+        TAILLES[i] = (sp.w, sp.h)
     return B, A
 
 
@@ -575,6 +668,13 @@ SCENARIOS = [
      [0, 1000, 4150, 4299, 8000]),
     ("mare-aucune", "prologue", "mare", "bleu", "aucune", 0, [(0, "entree", 0, 0)], [0, 4200, 9000]),
 ]
+SCENARIOS.append(("hall-grumeau", "grande-panne", "hall-pas-comptes", "bleu", "completes", 0,
+                  [(0, "entree", 0, 0), (800, "perso", "pied-grande-panne-grumeau", 0), (3500, "parle-perso", 5600, 0),
+                   (6500, "clic", 150, 70), (7400, "humeur", "joie", 0), (12000, "perso", "pied-grande-panne-tic-tac", 0),
+                   (15000, "perso", "", 0)],
+                  list(range(0, 19001, 250))))
+SCENARIOS.append(("hall-reduites", "grande-panne", "hall-pas-comptes", "bleu", "reduites", 0,
+                  [(0, "perso", "pied-grande-panne-grumeau", 0)], [0, 4150, 4299, 6000]))
 for _d in ("jardin", "pente", "pied-colline", "seuil", "sommet"):
     SCENARIOS.append((_d + "-vie", "prologue", _d, "bleu", "completes", 0, [(0, "entree", 0, 0)],
                       list(range(0, 20001, 500))))
@@ -602,6 +702,9 @@ def ecrire_reference():
         for t in instants:
             x, y, im, m, vis = pilou(sc, A, evts, t, regard, niv)
             lignes.append("pilou %d %d %d %d %d %d" % (t, x, y, im, int(m), int(vis)))
+            pp = perso(sc, A, evts, t, niv)
+            if pp is not None or any(e[1] == "perso" for e in evts):
+                lignes.append("perso %d %s" % (t, "%s %d %d %d %d" % (pp[0], pp[1], pp[2], pp[3], int(pp[4])) if pp else "-"))
             ac = acteurs(sc, A, B, evts, t, niv) + effets(sc, A, B, evts, t, niv)
             lignes.append("acteurs %d %s" % (t, " ".join("%s:%d:%d:%d:%d" % (s, i, ax, ay, int(am)) for (s, i, ax, ay, am) in ac) or "-"))
             if t % 1000 == 0 or nom == "mare-clics":

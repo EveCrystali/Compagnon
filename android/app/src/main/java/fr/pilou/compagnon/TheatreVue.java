@@ -49,6 +49,8 @@ final class TheatreVue extends View {
     private String niveau = Animations.COMPLETES;
     private long niveauLu = Long.MIN_VALUE;
     private String humeurVue = "";
+    private String persoVu = "";        // le sprite fin du personnage en pied qui est dans la scène ("" : personne)
+    private boolean persoParle;
     private boolean casse;
     private boolean actif;
     private int echelle = 1;
@@ -168,6 +170,8 @@ final class TheatreVue extends View {
         decor = neuf;
         evts = new ArrayList<>();
         humeurVue = "";
+        persoVu = "";
+        persoParle = false;
         debut = glisser ? now + GLISSE : now;
         if (!glisser) glisse = -1;
         if (vif()) evts.add(new Theatre.Evenement(0, "entree", glisser ? ENTREE_X : 0, 0));
@@ -177,7 +181,11 @@ final class TheatreVue extends View {
     }
 
     private boolean ajouter(Theatre.Evenement e) {
-        if (cx == null || !vif() || glisse >= 0) return false;
+        if (cx == null || !vif()) return false;          // pendant un travelling, l'événement tombe au début de la nouvelle scène
+        return pousser(e);
+    }
+
+    private boolean pousser(Theatre.Evenement e) {
         if (!evts.isEmpty() && e.t < evts.get(evts.size() - 1).t) {
             long dernier = evts.get(evts.size() - 1).t;
             e = new Theatre.Evenement(dernier, e.sorte, e.a, e.b, e.humeur);
@@ -201,9 +209,42 @@ final class TheatreVue extends View {
         ajouter(new Theatre.Evenement(t(now), "parle", t(now) + ms, 0));
     }
 
+    /** Le silence : Pilou et, s'il parlait, le personnage en pied se taisent (fin de l'écriture, ou texte accéléré). */
     void tait() {
         long n = t(maintenant());
         ajouter(new Theatre.Evenement(n, "parle", n, 0));
+        if (persoParle) {
+            persoParle = false;
+            if (cx != null) pousser(new Theatre.Evenement(n, "parle-perso", n, 0));
+        }
+    }
+
+    /**
+     * Le personnage en pied du message : son sprite fin « pied-campagne-personnage » s'il est dessiné, sinon plus
+     * personne. Un message sans personnage ne l'enlève pas (il reste tant qu'on est dans le même lieu ; un autre lieu
+     * repart sans lui). Il se pose aussi pendant un travelling ou à animations réduites : il entre quand la scène
+     * commence.
+     */
+    void personnage(String campagne, String personnage) {
+        if (cx == null || personnage == null || personnage.isEmpty()) return;
+        String sid = "pied-" + campagne + "-" + personnage;
+        if (fin(banque, sid) == null || !cx.anims.containsKey(sid)) sid = "";
+        if (sid.equals(persoVu)) return;
+        if (pousser(new Theatre.Evenement(t(maintenant()), "perso", 0, 0, sid))) persoVu = sid;
+        if (sid.isEmpty()) persoParle = false;
+    }
+
+    /** Y a-t-il un personnage en pied dans la scène ? */
+    boolean aPerso() {
+        return !persoVu.isEmpty();
+    }
+
+    /** Le personnage en pied dit sa réplique pendant ms millisecondes ; faux s'il n'y en a pas (Pilou parlera alors). */
+    boolean parlePerso(long ms) {
+        if (cx == null || persoVu.isEmpty()) return false;
+        long now = maintenant(), t0 = t(now), fin = (now - debut) + ms;   // pendant un travelling, la scène n'a pas commencé
+        if (fin > t0 && pousser(new Theatre.Evenement(t0, "parle-perso", fin, 0))) persoParle = true;
+        return true;
     }
 
     /** Il s'en va (un choix l'envoie en route). */
@@ -228,6 +269,8 @@ final class TheatreVue extends View {
         evts.add(new Theatre.Evenement(0, "entree", Theatre.SORTIE_D + 4, 0));
         evts.add(new Theatre.Evenement(0, "depart", 1, 0));
         humeurVue = "";
+        persoVu = "";
+        persoParle = false;
         glisse = -1;
         debut = maintenant();
         dernierPas = -1;

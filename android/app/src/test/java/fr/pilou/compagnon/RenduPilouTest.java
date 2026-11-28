@@ -144,7 +144,7 @@ public class RenduPilouTest {
         assertTrue(b.fins.size() + " sprites fins", b.fins.size() >= 100);
         for (Sprites.Sprite f : b.fins.values()) {
             // Les sprites du théâtre (docs/SCENES.md) n'existent qu'en dessin fin : la scène est toujours fine.
-            if (f.id.startsWith("scene-") || f.id.startsWith("acteur-")) {
+            if (f.id.startsWith("scene-") || f.id.startsWith("acteur-") || f.id.startsWith("pied-")) {
                 assertNull(f.id, b.get(f.id));
                 continue;
             }

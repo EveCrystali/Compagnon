@@ -30,6 +30,10 @@ public final class Theatre {
     private static final int REGARD_CYCLE = 7000, REGARD_DEBUT = 3000, REGARD_DUREE = 1200;
     private static final int VOL_CYCLE = 1700, VOL_POSE = 1190, FUITE_VOL = 1500, FUITE_ABSENT = 6000;
     public static final int CLICS_MAX = 24;
+    // Le personnage en pied : il entre par la droite, se tient sur `interlocuteur`, sautille quand on le touche.
+    private static final int VITESSE_PERSO = 48, PERSO_CYCLE = 8000, PERSO_SAUT = 5000;
+    private static final int ENTREE_PERSO = W + 18;
+    private static final int[] SAUT_PERSO = {0, -2, -4, -5, -4, -2, 0};
 
     private static final int[] SINUS = {
         0, 195, 383, 556, 707, 831, 924, 981, 1000, 981, 924, 831, 707, 556, 383, 195,
@@ -185,6 +189,7 @@ public final class Theatre {
     }
 
     // ---- Événements : entree, depart (a : +1 droite, -1 gauche), humeur (humeur), parle (a : fin de la réplique),
+    // perso (humeur : le sprite du personnage en pied, "" : plus personne), parle-perso (a : fin de sa réplique),
     // clic (a, b : point touché en pixels du décor). Toujours ajoutés dans l'ordre du temps.
 
     public static final class Evenement {
@@ -217,6 +222,7 @@ public final class Theatre {
     public static final class Contexte {
         public final Scene scene;
         public final Map<String, Anim> p;
+        public final Map<String, Map<String, Anim>> anims;
         public final Function<String, Sprite> sprites;
         private final Map<Integer, Cible> cibles = new HashMap<>();
         private int evtsVus = -1;
@@ -226,6 +232,7 @@ public final class Theatre {
             this.scene = scene;
             Map<String, Anim> pi = anims.get(ID_PILOU);
             this.p = pi != null ? pi : new HashMap<String, Anim>();
+            this.anims = anims;
             this.sprites = sprites;
         }
 
@@ -422,7 +429,7 @@ public final class Theatre {
                         m.action("anim", e.t, 0, 0, nom, P.get(nom).duree());
                     } else if (c.sorte.equals("sensible") && c.reaction.equals("bulle")) {
                         m.action("anim", e.t, 0, 0, "surpris", P.get("surpris").duree() + 1200);
-                    } else if (c.sorte.equals("sensible") || c.sorte.equals("acteur")) {
+                    } else if (c.sorte.equals("sensible") || c.sorte.equals("acteur") || c.sorte.equals("perso")) {
                         m.action("anim", e.t, 0, 0, c.x >= m.x ? "regard-d" : "regard-g", 900);
                     }
                     break;
@@ -457,6 +464,92 @@ public final class Theatre {
             return new EtatPilou(x, y, P.get(nom).premiere, false, true);
         }
         return new EtatPilou(x, y, P.get(face(humeur)).image(t), miroir, true);
+    }
+
+    // ---- Le personnage en pied
+
+    private static int xEntree(Scene sc, long tIn, long t) {
+        return (int) Math.max(sc.interlocuteur, ENTREE_PERSO - (t - tIn) * VITESSE_PERSO / 1000);
+    }
+
+    /** Ce que les événements « perso » et « parle-perso » ont fait jusqu'à t. */
+    private static final class EtatPerso {
+        String cur = "";
+        long tIn;
+        String sortieSid;      // celui qui s'en va (null : personne)
+        long sortieT;
+        int sortieX;
+        final List<long[]> paroles = new ArrayList<>();
+    }
+
+    private static EtatPerso etatPerso(Scene sc, List<Evenement> evts, long t) {
+        EtatPerso r = new EtatPerso();
+        for (Evenement e : evts) {
+            if (e.t > t) break;
+            if (e.sorte.equals("perso")) {
+                String sid = e.humeur == null ? "" : e.humeur;
+                if (sid.equals(r.cur)) continue;
+                // Remplacé par un autre : il s'efface ; plus personne : il ressort en marchant.
+                if (!r.cur.isEmpty() && sid.isEmpty()) {
+                    r.sortieSid = r.cur;
+                    r.sortieT = e.t;
+                    r.sortieX = xEntree(sc, r.tIn, e.t);
+                } else {
+                    r.sortieSid = null;
+                }
+                r.cur = sid;
+                r.tIn = e.t;
+                r.paroles.clear();
+            } else if (e.sorte.equals("parle-perso")) {
+                r.paroles.clear();
+                r.paroles.add(new long[]{e.t, e.a});
+            }
+        }
+        return r;
+    }
+
+    /** (sprite, image, x, y, miroir) du personnage en pied, ou null. Il regarde vers la place de Pilou. */
+    public static Pose perso(Contexte cx, List<Evenement> evts, long t, String niveau) {
+        Scene sc = cx.scene;
+        EtatPerso st = etatPerso(sc, evts, t);
+        boolean miroir = sc.place > sc.interlocuteur;
+        if (!niveau.equals(Animations.COMPLETES)) {
+            Map<String, Anim> ar = st.cur.isEmpty() ? null : cx.anims.get(st.cur);
+            if (ar == null) return null;
+            int im = niveau.equals(Animations.REDUITES) && Animations.cligne(t + 1700) && ar.containsKey("cligne") ? ar.get("cligne").premiere : ar.get("repos").premiere;
+            return new Pose(st.cur, im, sc.interlocuteur, sol(sc, sc.interlocuteur), miroir);
+        }
+        if (st.cur.isEmpty()) {
+            Map<String, Anim> a0 = st.sortieSid == null ? null : cx.anims.get(st.sortieSid);
+            if (a0 == null) return null;
+            long xs = st.sortieX + (t - st.sortieT) * VITESSE_PERSO / 1000;
+            if (xs > W + 30) return null;
+            int k0 = (int) (t / 166 % 2);
+            return new Pose(st.sortieSid, a0.get("repos").image(t), (int) xs, sol(sc, (int) Math.min(xs, W)) - k0, false);
+        }
+        Map<String, Anim> a = cx.anims.get(st.cur);
+        if (a == null) return null;
+        int x = xEntree(sc, st.tIn, t), y = sol(sc, x);
+        if (x > sc.interlocuteur) {
+            int k = (int) (t / 166 % 2);     // il trottine : un pixel de haut une image sur deux
+            return new Pose(st.cur, a.get("repos").image(t), x, y - k, miroir);
+        }
+        // Un saut quand on le touche, ou de temps en temps.
+        long saut = -1;
+        for (int k : clics(evts)) {
+            long tc = evts.get(k).t;
+            if (st.tIn <= tc && tc <= t && t - tc < SAUT_PERSO.length * PAS && cx.cibleDe(evts, k).sorte.equals("perso")) saut = (t - tc) / PAS;
+        }
+        long cy = t / PERSO_CYCLE, u = t % PERSO_CYCLE;
+        if (saut < 0 && t - st.tIn > PERSO_CYCLE && Animations.hasard(cy, 21, 7) < 3000 && u >= PERSO_SAUT && u < PERSO_SAUT + SAUT_PERSO.length * PAS)
+            saut = (u - PERSO_SAUT) / PAS;
+        if (saut >= 0) return new Pose(st.cur, a.get("repos").premiere, x, y + SAUT_PERSO[(int) saut], miroir);
+        Anim pa = a.get("parle");
+        for (long[] pr : st.paroles)
+            if (pr[0] <= t && t < pr[1] && pa != null) return new Pose(st.cur, pa.image(t - pr[0]), x, y, miroir);
+        Anim c2 = a.get("cligne");
+        if (c2 != null && Animations.cligne(t + 1700)) return new Pose(st.cur, c2.premiere, x, y, miroir);
+        return new Pose(st.cur, a.get("repos").image(t), x, y, miroir);
     }
 
     // ---- Les acteurs : (x au centre, y la ligne du bas, image ou -1 s'il est absent, miroir)
@@ -572,6 +665,12 @@ public final class Theatre {
         Scene sc = cx.scene;
         EtatPilou p = pilou(cx, avant, tc);
         if (p.visible && Math.abs(x - p.x) <= 10 && y >= p.y - 22 && y <= p.y + 1) return new Cible("pilou", 0, "", p.x);
+        Pose pp = perso(cx, avant, tc, Animations.COMPLETES);
+        if (pp != null) {
+            Sprite sp = cx.sprites.apply(pp.sprite);
+            int w = sp != null ? sp.w() : 24, h = sp != null ? sp.h() : 32;
+            if (Math.abs(x - pp.x) <= w / 2 && y > pp.y - h && y <= pp.y) return new Cible("perso", 0, "", pp.x);
+        }
         for (int i = 0; i < sc.acteurs.size(); i++) {
             String comp = sc.acteurs.get(i).comportement;
             if (!comp.equals("vol") && !comp.equals("traverse")) continue;
@@ -712,6 +811,8 @@ public final class Theatre {
         // Tri stable par (pieds, Pilou après les acteurs à égalité, ordre d'insertion), comme la référence.
         List<Object[]> poses = new ArrayList<>();
         for (Pose a : acteurs(cx, evts, t, niveau)) poses.add(new Object[]{a.y, 0, poses.size(), a});
+        Pose pp = perso(cx, evts, t, niveau);
+        if (pp != null && cx.sprites.apply(pp.sprite) != null) poses.add(new Object[]{pp.y, 0, poses.size(), pp});
         EtatPilou p = pilou(cx, evts, t, regard, niveau);
         if (p.visible && avecPilou) poses.add(new Object[]{p.y, 1, poses.size(), new Pose(ID_PILOU, p.image, p.x, p.y, p.miroir)});
         Collections.sort(poses, (u, v) -> {

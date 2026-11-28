@@ -28,6 +28,7 @@ import campagnes_sprites
 import portraits_campagnes
 import scene_pilou
 import acteurs_scenes
+import pieds_campagnes
 import icones
 import traits_sprites
 
@@ -1884,6 +1885,7 @@ def dessiner():
     portraits_campagnes.tout()
     scene_pilou.tout()
     acteurs_scenes.tout()
+    pieds_campagnes.tout()
     icones.tout()
     traits_sprites.tout()
 
