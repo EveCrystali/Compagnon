@@ -1,0 +1,130 @@
+# Scènes de « Petit Nuage » (docs/SCENES.md) : une section par décor (assets/sprites2x/decor-petit-nuage-<décor>).
+# Coordonnées en pixels du décor fin (192 × 80). Format : voir assets/scenes/prologue.txt et grande-panne.txt.
+# La montagne et le ciel : petits nuages qui passent, brume, vapeur, neige, aiguilles de mélèze. Rien de
+# semi-transparent : le léger se dit en trame (un pixel sur deux), comme dans les décors.
+
+scene jardin-lave
+sol 4 76 188 76
+place 40
+interlocuteur 178
+cle 118 54 166 74
+acteur nuage traverse 8 14 52000 0 5
+acteur nuage traverse 18 24 52000 26000 4
+acteur oiseau traverse 26 34 14000 3000 26
+acteur rond-trame rond 36 62 3600 0
+acteur rond-trame rond 150 64 4400 1900
+
+scene chemin-creux
+sol 4 76 188 76
+place 66
+interlocuteur 130
+acteur nuage traverse 6 14 48000 9000 5
+acteur oiseau traverse 20 30 13000 0 24
+acteur papillon vol 20 52 60 66 11
+acteur papillon vol 140 54 180 68 13
+
+scene pre-aux-draps
+sol 4 72 188 76
+place 70
+interlocuteur 150
+acteur nuage traverse 4 10 50000 20000 5
+acteur oiseau traverse 10 18 15000 6000 22
+acteur papillon vol 110 54 170 66 17
+
+scene etang-qui-fume
+sol 4 78 188 78
+place 40
+interlocuteur 136
+cle 124 2 170 60
+acteur brume traverse 46 50 30000 0 7
+acteur brume traverse 54 58 30000 15000 6
+acteur vapeur flotte 60 58 5000 0 1 -6
+acteur vapeur flotte 96 60 5000 0 -1 -6
+acteur rond-trame rond 56 70 4200 0
+acteur rond-trame rond 120 74 5200 2600
+
+scene plateau-rape
+sol 4 74 188 74
+place 40
+interlocuteur 150
+cle 92 24 108 58
+acteur rafale traverse 34 44 9000 0 48
+acteur rafale traverse 48 56 9000 4500 56
+acteur oiseau traverse 4 12 16000 2000 30
+acteur aiguille chute 98 30 7000 1000
+
+scene halte-girouette
+sol 4 74 188 74
+place 30
+interlocuteur 160
+cle 80 0 112 30
+acteur vapeur flotte 107 20 5000 0 2 -5
+acteur papillon-nuit vol 96 6 110 16 31
+acteur papillon-nuit vol 92 8 112 18 37
+
+scene sentier-des-melezes
+sol 4 74 188 74
+place 30
+interlocuteur 120
+acteur aiguille chute 12 40 6500 0
+acteur aiguille chute 42 44 6500 2200
+acteur aiguille chute 176 42 6500 4300
+acteur nuage traverse 4 10 50000 30000 4
+acteur oiseau traverse 8 16 14000 5000 24
+
+scene terrier-aux-bocaux
+sol 4 78 188 78
+place 30
+interlocuteur 160
+acteur poussiere vol 84 30 108 52 41
+acteur poussiere vol 86 34 106 56 43
+acteur poussiere vol 80 36 112 58 47
+
+scene col-blanc
+sol 4 74 188 74
+place 30
+interlocuteur 160
+acteur flocon chute 40 0 6000 0
+acteur flocon chute 92 0 6000 2000
+acteur flocon chute 150 0 6000 4000
+acteur flocon chute 120 0 6000 1000
+acteur brume traverse 30 38 26000 0 8
+acteur brume traverse 44 52 26000 13000 7
+
+scene trou-qui-siffle
+sol 4 77 188 77
+place 30
+interlocuteur 100
+acteur rafale traverse 20 30 7000 0 60
+acteur rafale traverse 36 46 7000 2300 66
+acteur rafale traverse 54 64 7000 4700 54
+
+scene grande-salle
+sol 4 74 188 74
+place 30
+interlocuteur 150
+acteur poussiere chute 128 8 6000 0
+acteur poussiere chute 124 8 6000 3000
+
+scene fenetre-maison
+sol 4 78 188 78
+place 40
+interlocuteur 150
+acteur poussiere vol 14 40 34 56 53
+
+scene abreuvoir
+sol 4 76 188 76
+place 40
+interlocuteur 150
+acteur rond-trame rond 70 64 4000 0
+acteur rond-trame rond 140 63 5000 2400
+acteur oiseau traverse 8 16 16000 4000 22
+
+scene abreuvoir-aube
+sol 4 76 188 76
+place 40
+interlocuteur 150
+acteur nuage traverse 6 14 46000 0 5
+acteur brume traverse 54 58 30000 12000 6
+acteur rond-trame rond 96 62 4600 1000
+acteur oiseau traverse 10 20 15000 7000 24

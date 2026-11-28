@@ -44,6 +44,34 @@ public class MusiqueTests
     }
 
     [Fact]
+    public void Chaque_scene_du_theatre_a_la_musique_de_son_ton()
+    {
+        // Une campagne passée au théâtre (assets/scenes/<campagne>.txt) : sa musique est celle de son ton (Petit Nuage :
+        // « emotion »), elle existe au catalogue ; chaque décor de scène a une ambiance connue ou aucune.
+        var c = Catalogue();
+        var dossier = Path.Combine(CampagnesVecteurs.Racine().FullName, "assets", "scenes");
+        int n = 0;
+        foreach (var f in Directory.EnumerateFiles(dossier, "*.txt").Where(f => Path.GetFileName(f) != "animations.txt"))
+        {
+            var id = Path.GetFileNameWithoutExtension(f);
+            var camp = Campagnes.Charger(id);
+            Assert.NotNull(camp);
+            var m = Musique.Pour(id, camp!.Ton);
+            Assert.NotNull(m);
+            Assert.True(c.Morceaux.ContainsKey(m!), $"{id} : {m}");
+            foreach (var (decor, _) in Theatre.LireScenes(File.ReadAllText(f)))
+            {
+                var a = c.Decors.GetValueOrDefault(decor);
+                Assert.True(a is null || c.Morceaux.ContainsKey(a), $"{id}/{decor} : {a}");
+                n++;
+            }
+        }
+        Assert.Equal("emotion", Musique.Pour("petit-nuage", Campagnes.Charger("petit-nuage")!.Ton));
+        Assert.Equal("vent", c.Decors["halte-girouette"]);
+        Assert.True(n >= 40, $"{n} scènes");
+    }
+
+    [Fact]
     public void Les_boucles_restent_basses_et_sans_saut()
     {
         foreach (var (id, m) in Catalogue().Morceaux)

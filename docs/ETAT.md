@@ -100,13 +100,18 @@ Dernière mise à jour : 28 novembre 2026.
   nuit, crabes), les 7 humains dessinés en pied (`humains_pied.py`). Sur PC, le panneau des choix se pose du côté
   opposé au personnage, sans couvrir l'accessoire clé (`cle`), la légende ni les boutons ; le paquet volant du hall des
   Pas Comptés est retiré. Rendus PC (essai) et capture téléphone Robolectric relus ; jamais sur un vrai téléphone.
+- **Théâtre de « Petit Nuage »** (branche `claude/theatre-petit-nuage`) : 14 scènes (petits nuages qui passent, brume,
+  vapeur, flocons, aiguilles de mélèze, rafales, ronds dans l'eau), tout en trame, sans alpha lissé ; les 9 personnages
+  en pied, les volants flottent au-dessus du sol. La musique du ton « émotion » et l'ambiance du décor sont visées dans
+  ces scènes (trace pendant l'essai PC ; test par scène). Sur PC, un choix trop long passe à la ligne au lieu d'être
+  coupé. Jamais sur un vrai téléphone ; le son lui-même n'a pas été écouté.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
-0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs de Petit Nuage, ses 9
-   personnages en pied, les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
+0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : les scènes d'évolution de Pilou (niveaux 10, 25, 40),
+   les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
    fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir
    [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage (Pilou 0.9.45, sans pêche, cuisine,
