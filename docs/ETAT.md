@@ -33,8 +33,8 @@ Dernière mise à jour : 28 novembre 2026.
   col, la mer de brouillard, les six cairns), le Trou-qui-Siffle (galerie en perspective, neuf creux de chaque côté) et
   le sentier des mélèzes (lacets, éboulis), le jardin lavé, le chemin creux, le Pré aux Draps, l'étang qui fume, le Plateau Râpé, la halte (9 sur 14) ; avant / après dans `docs/maquettes/paysages/petit-nuage/profondeur/` ;
   vus dans l'exe d'essai sur le PC d'Antoine (`--essai=lieu:petit-nuage:<lieu>`).
-  Même passe en cours sur Le phare éteint (`decors_hd_phare_eteint.py`, lumière calculée et matières : bois veiné,
-  granit appareillé, dalles mouillées) : faits, l'auberge, le quai de Trébrume, chez Pilou, le guet, le Passe-Pied, le pied du phare, la place, l'atelier, le sentier, le Souffleur, la cave, la chambre de veille (12 sur 14) ; avant / après et
+  Même passe faite sur Le phare éteint (`decors_hd_phare_eteint.py`, lumière calculée et matières : bois veiné,
+  granit appareillé, dalles mouillées) : faits, l'auberge, le quai de Trébrume, chez Pilou, le guet, le Passe-Pied, le pied du phare, la place, l'atelier, le sentier, le Souffleur, la cave, la chambre de veille, la lanterne, la jetée (14 sur 14, campagne terminée) ; avant / après et
   personnages posés dans `docs/maquettes/paysages/phare-eteint/profondeur/`.
 - **Personnages haute définition** (docs/SPRITES.md) : les 29 personnages en pied des trois campagnes sont redessinés
   à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, 69 fichiers, 438 Ko, format de docs/SCENES-HD.md, référence
