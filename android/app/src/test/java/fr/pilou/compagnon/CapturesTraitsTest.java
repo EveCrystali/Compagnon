@@ -111,14 +111,23 @@ public class CapturesTraitsTest {
         a.aller(Principale.ACCUEIL, false);
         shadowOf(Looper.getMainLooper()).idle();
         Page page = a.page(Principale.ACCUEIL);
-        mesurer(a);
+        int[] t = mesurer(a);
         View carte = trouver(page, PresenceVue.class);
-        if (carte != null) {
-            // La carte en haut de l'écran, comme après un défilement du doigt.
-            page.defile.scrollTo(0, Math.max(0, carte.getTop() - Ui.dp(a, 12)));
-            shadowOf(Looper.getMainLooper()).idle();
+        Bitmap b = Bitmap.createBitmap(t[0], t[1], Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(b);
+        int haut = carte == null ? 0 : Math.max(0, carte.getTop() - Ui.dp(a, 12));
+        // La carte en haut de l'écran, comme après un défilement du doigt.
+        page.defile.scrollTo(0, haut);
+        shadowOf(Looper.getMainLooper()).idle();
+        if (page.defile.getScrollY() > 0 || haut == 0) a.getWindow().getDecorView().draw(cv);
+        else {
+            // Le défilement n'a pas pris (rendu hors écran) : le contenu de la page, remonté d'autant, à la largeur du téléphone.
+            cv.drawColor(Ui.p(a).fond);
+            cv.translate(0, -haut);
+            page.corps.draw(cv);
+            System.out.println("CAPTURE-TRAITS " + nom + " : contenu de la page seul (sans en-tête ni barre du bas)");
         }
-        ecran(a, nom);
+        ecrire(b, nom);
         c.pause().stop().destroy();
     }
 
@@ -142,10 +151,8 @@ public class CapturesTraitsTest {
         return new int[]{w, h};
     }
 
-    private void ecran(Activity a, String nom) {
-        int[] t = mesurer(a);
-        Bitmap b = Bitmap.createBitmap(t[0], t[1], Bitmap.Config.ARGB_8888);
-        a.getWindow().getDecorView().draw(new Canvas(b));
+    private void ecrire(Bitmap b, String nom) {
+        int[] t = {b.getWidth(), b.getHeight()};
         File f = new File(dossier, "traits-" + nom + ".png");
         try (FileOutputStream o = new FileOutputStream(f)) {
             b.compress(Bitmap.CompressFormat.PNG, 100, o);
