@@ -29,17 +29,20 @@ REFERENCE = os.path.join(ICI, "decors-hd-reference.txt")
 PLANCHES = os.path.join(RACINE, "docs", "maquettes", "paysages")
 # Les lettres de palette : jamais un chiffre (ce sont les longueurs des plages), ni « . » (pixel inchangé).
 LETTRES = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&*+-/<>?@^_~"
-CAMPAGNES = ("prologue", "grande-panne", "phare-eteint")
+CAMPAGNES = ("prologue", "grande-panne", "phare-eteint", "petit-nuage")
 DECORS = {}
 # Les deux lieux par campagne qui ont leurs montages PC et téléphone (les autres : image, boucle, avant / après).
 MONTAGES = {"prologue": ("mare", "seuil"), "grande-panne": ("hall-pas-comptes", "horloge-systeme"),
-            "phare-eteint": ("port-trebrume", "lanterne-du-phare")}
+            "phare-eteint": ("port-trebrume", "lanterne-du-phare"), "petit-nuage": ("abreuvoir", "terrier-aux-bocaux")}
+MATIERES = {}       # id du décor → peint « en matière » (sans damier)
 LIEUX = {}          # id du décor → (campagne, lieu) : les deux peuvent contenir un trait d'union
 
 
-def decor(campagne, id_, soleil, tons, images=pg.IMAGES, duree=pg.DUREE, nom=""):
-    """Déclare un lieu : f(P, tab) peint ses plans. soleil : (x, y) de la lumière ; tons : paysage.Tons."""
+def decor(campagne, id_, soleil, tons, images=pg.IMAGES, duree=pg.DUREE, nom="", matiere=False):
+    """Déclare un lieu : f(P, tab) peint ses plans. soleil : (x, y) de la lumière ; tons : paysage.Tons.
+    matiere : les surfaces se peignent en tons pleins (voiles mélangés, trame réservée aux transitions étroites)."""
     def poser(f):
+        MATIERES["decor-%s-%s" % (campagne, id_)] = matiere
         DECORS["decor-%s-%s" % (campagne, id_)] = (f, soleil, tons, images, duree, nom or id_)
         LIEUX["decor-%s-%s" % (campagne, id_)] = (campagne, id_)
         return f
@@ -55,7 +58,9 @@ def tableau(sid, phase=0.0):
     """Le tableau d'une image de la boucle, plans séparés (pour la parallaxe ou le cadrage)."""
     f, soleil, tons, _, _, _ = DECORS[sid]
     pg.utiliser(tons)
+    pg.MATIERE = MATIERES[sid]
     P = pg.Peintre(soleil, phase)
+    P.tr = 0.4 if MATIERES[sid] else 1.0
     tab = pg.Tableau(P)
     f(P, tab)
     return tab
@@ -279,7 +284,15 @@ def planche_campagnes(premieres):
         planche = Image.new("RGB", (3 * 484 - 4, rangs * 244 - 4), (11, 14, 26))
         for i, s in enumerate(sids):
             planche.paste(pg.en_image(premieres[s]), ((i % 3) * 484, (i // 3) * 244))
-        planche.save(os.path.join(PLANCHES, campagne, "planche.png"))
+        chemin = os.path.join(PLANCHES, campagne, "planche.png")
+        avant = os.path.join(PLANCHES, campagne, "planche-passe-1.png")
+        if os.path.isfile(avant):                      # seconde passe : l'ancienne planche au-dessus, la nouvelle dessous
+            a = Image.open(avant).convert("RGB")
+            double = Image.new("RGB", (planche.width, a.height + 12 + planche.height), (246, 157, 80))
+            double.paste(a, (0, 0))
+            double.paste(planche, (0, a.height + 12))
+            double.save(os.path.join(PLANCHES, campagne, "planche-avant-apres.png"))
+        planche.save(chemin)
 
 
 def main():

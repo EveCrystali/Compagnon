@@ -69,7 +69,9 @@ campagne s'en sert.
 poussière), `voile` et `halo` (lumière, ombre ou brume posées en trame), `poussiere`, `roue` (engrenage). Dans
 `decors_hd_grande_panne.py` (douze intérieurs) : `neon`, `voyant`, `sept` (afficheur à sept segments), `papiers`,
 `affiche` (pictogramme sans texte), `cable`, `tickets`, `tour_dossiers`. Dans `decors_hd_phare_eteint.py` (nuit, brume,
-mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`. La profondeur d'un
+mer) : `brume`, `phare`, `bougie`, `fanal`, `goeland`, `barque_a_sec`, `casier`, `pierres_de_taille`, `bidon`, `pendule`.
+Dans `decors_hd_petit_nuage.py` (montagne, neige, ciels) : `sommets` (roche et neige en crête), `deux_dents`, `meleze`,
+`aiguilles`, `petit_nuage` (un nuage du troupeau, avec ses yeux), `flaque`, `cairn`, `bocal`, `brume_claire`. La profondeur d'un
 intérieur vient du point de fuite, des éclairages et d'un premier plan sombre ; le « ciel » est le mur ou le plafond.
 
 **`P.rampe(masque, valeur, rampe, trame)`** est le pinceau central : une valeur de 0 à 1 par pixel devient un ton de
@@ -104,7 +106,17 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 - **L'eau ne reflète que ce qui est déjà peint** : appeler `miroir` après les terres du même plan, avant ce qui flotte.
 - **Un pré sans limite descend jusqu'en bas** et couvre l'eau : lui donner `jusque=` (un masque).
 - **Les liserés continus font « pointillés »** : les rompre par un bruit lent, pas par un tirage par pixel.
-- **Trop de trame brouille** : sur les petites formes, `trame` de 0 à 0,5.
+- **Le damier n'est pas une matière.** À 2 px d'écran, une grande surface tramée se lit comme un grillage gris.
+  Déclarer le lieu `@decor(..., matiere=True)` : les voiles, halos et rais se mélangent alors en tons pleins
+  (`teinte`), et la trame de `rampe` ne sert plus qu'au passage étroit d'un ton au suivant. Une surface se peint en
+  matière : pierre appareillée, veines du bois, enduit taché, dallage, deux ou trois tons posés avec la lumière du lieu.
+- **Douze détails vivants au moins par décor**, dont trois qui racontent le texte de la scène : les lister dans la PR.
+  S'il en manque, le décor n'est pas fini. Les briques de « petite vie » aident (`papillon_de_nuit`, `araignee`,
+  `toile_araignee`, `goutte`, `souris`, `vapeur`, `avion_papier`, `etincelle`, `yeux`), mais un détail propre au lieu
+  vaut mieux qu'un détail passe-partout.
+- **Les bêtes qui réagissent sont des acteurs, pas du décor** : grenouille, canard, escargot (et ce que la scène rend
+  cliquable) sont dessinés par la session des personnages (`assets/sprites-hd/acteur-*.txt`) et posés par la scène.
+  Le décor peint leur place (le nénuphar, la feuille, l'eau) et la laisse vide.
 - **Contenu original** : aucune forme, aucun cadrage repris d'un jeu ou d'une image existante.
 - **Cohérence d'une campagne** : mêmes tons, mêmes repères (dans le prologue : la maison, la colline et son arbre),
   l'heure qui avance d'un lieu à l'autre.
