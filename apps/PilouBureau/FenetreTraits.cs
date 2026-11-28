@@ -110,6 +110,8 @@ internal sealed class FenetreTraits : Window
             Content = racine, Background = Fond, VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
         };
+        StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
 
         PreviewKeyDown += (_, e) =>
         {

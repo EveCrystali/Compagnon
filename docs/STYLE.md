@@ -251,6 +251,33 @@ python3 outils/sprites/icones.py      # planche de contrôle : outils/sprites/pl
 | Onglet ouvert | cadre plat à la couleur `coche` autour de l'icône, icône et libellé à la couleur `coche` |
 | Pastille « ! » | carré orange au cadre plat encre, en haut à droite de l'icône |
 
+## Fenêtres du PC : l'habillage commun
+
+Une fenêtre du jeu ne garde pas la barre de titre claire de Windows au-dessus d'un contenu en pixels. Elle prend
+l'habillage commun, `HabillageFenetre` :
+
+![Le journal dans l'habillage commun](captures/style/pc-habillage.png)
+
+| Pièce | Règle |
+|---|---|
+| Barre de titre | 30 unités de haut, fond `page` de nuit (`#0b0e1a`), liseré de 2 unités à la couleur `bord` dessous ; fenêtre inactive : fond `carte`, titre éteint, bord `#3a4270` |
+| Icône | celle de Pilou (la même que près de l'horloge), 16 × 16, sans lissage |
+| Titre | le `Title` de la fenêtre, police « titre », taille « corps », une ligne |
+| Boutons | « réduire » (si la fenêtre peut l'être) et « fermer » : carrés au cadre pixel, icône `ui-fermer` ; survol : fond d'accent et encre inversée ; appui : le cadre s'enfonce |
+| Cadre | 2 unités à la couleur `bord` tout autour |
+
+**Mode d'emploi** (trois lignes) :
+
+1. Construire la fenêtre comme d'habitude : `Title`, tailles, `ResizeMode`, `Content`.
+2. À la fin du constructeur : `HabillageFenetre.Poser(this);` (et `StylePixel.Defileur(this);` si elle défile).
+3. Retirer tout habillage local (`WindowStyle.None`, `DragMove`, ✕ dessiné à la main) : la pièce commune s'en charge.
+
+Ce que la pièce garde, parce qu'elle s'appuie sur le « chrome » de WPF (`WindowChrome`) et non sur une fenêtre sans
+bord : déplacement en tirant la barre, redimensionnement par les bords là où il existait, taille minimale, ancrage aux
+bords de l'écran, double clic qui agrandit, Alt+F4 et Alt+Espace, changement d'écran et d'échelle. Échap reste l'affaire
+de la fenêtre. Ne sont pas concernées : la fenêtre de Pilou (elle ne prend jamais le focus) et les bulles sans bord
+(« Rangées débloquées », invitation).
+
 ## Dans le code
 
 | | PC | Téléphone |
@@ -259,6 +286,7 @@ python3 outils/sprites/icones.py      # planche de contrôle : outils/sprites/pl
 | Texte | `TextePixel.cs` (`Centre`, signes dessinés par sprite), `StylePixel.Texte`, `StylePixel.Enseigne` | `Style.Texte` (un `TextView` dessiné en police pixel), `TextePixelVue` |
 | Palette | `MenuRetro.cs` (clés « Menu… »), `CadrePixel.cs` | `Style.CLAIRE`, `Style.SOMBRE`, `Style.NUIT` |
 | Pièces | `StylePixel.cs` : `BoutonPixel`, `IconePixel`, `Defileur` (barre de défilement en pixels, `StyleFenetres.xaml`) | `Style.carte`, `bouton`, `puce`, `caseSigne`, `titreSection`, `separateur`, `Barre`, `Icone`, `chevron`, `ligne`, `interrupteur`, `curseur`, `champ`, `dire` |
+| Habillage des fenêtres | `HabillageFenetre.Poser(fenêtre)` | — (une seule activité, bord à bord) |
 | Planche de contrôle | `--essai=menu`, `--essai=fenetre:<nom> --captures=<dossier>` (`EssaiFenetres.cs`) | `CapturesStyleTest` : `app/build/captures/style/` (1078 × 2400 à 440 dpi ; clair, sombre, grande police) |
 
 Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.arrondi`), plus d'ombre du système
@@ -272,6 +300,7 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 | PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) ; leur en-tête (`Bandeau.cs`, partagé avec le menu) reste en police système |
 | PC : journal, prénom, « Pilou et moi » | au guide (28 novembre 2026) ; le champ du prénom garde la police du système (exception des champs de saisie) |
 | PC : expéditions | au guide (28 novembre 2026) |
+| PC : habillage commun des fenêtres | posé sur la boutique, le journal, le prénom, « Pilou et moi », les expéditions ; à brancher sur l'Aventure et la scène d'évolution (session « animations »), puis sur amis et connecteurs quand ils seront au guide |
 | PC : amis, connecteurs (fenêtres de formulaire au thème clair du système), invitation | à faire : il leur faut une case à cocher et une liste déroulante en pixels, et la palette claire de `CadrePixel` |
 | Téléphone : en-tête, barre du bas, Accueil (dont « Pilou et moi », ses traits, la ligne de premier lancement), Jouer, Boutique, Collection, Réglages, « Rangées débloquées », messages brefs | au guide (28 novembre 2026), gardé par `TextesSystemeTest` |
 | Téléphone : lecture de l'Aventure | au guide (chantier « style pixel de l'Aventure ») |

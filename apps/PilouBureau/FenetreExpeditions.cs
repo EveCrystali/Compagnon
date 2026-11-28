@@ -94,6 +94,7 @@ internal sealed class FenetreExpeditions : Window
         racine.Children.Add(corps);
         Content = racine;
         StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
 
         _horloge.Tick += (_, _) => Rafraichir();
         Loaded += (_, _) =>
