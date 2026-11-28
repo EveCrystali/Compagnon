@@ -9,6 +9,7 @@ interlocuteur 375
 acteur papillon vol 175 115 425 185 3
 acteur oiseau traverse 60 95 17000 6000 65
 acteur abeille vol 250 170 375 205 9
+acteur escargot pose 235 200
 
 scene mare
 sol 10 235 470 235
@@ -19,8 +20,10 @@ acteur rond rond 175 210 2600 0
 acteur rond rond 312 220 3400 1300
 acteur poisson saut 280 210 11000 5000
 acteur oiseau traverse 55 80 23000 15000 75
-sensible grenouille 225 160 255 190 bulle 232 177
+sensible grenouille 228 176 252 197 bulle 240 186
 sensible eau 65 157 430 232 rond
+acteur grenouille pose 240 195
+acteur canard pose 190 180
 
 scene pente
 sol 15 232 465 102

@@ -41,6 +41,8 @@ acteur vapeur flotte 150 185 5000 0 2 -15
 acteur vapeur flotte 240 190 5000 0 -3 -15
 acteur rond-trame rond 140 215 4200 0
 acteur rond-trame rond 300 225 5200 2600
+acteur grenouille pose 195 228
+sensible grenouille 183 210 207 229 bulle 195 219
 
 scene plateau-rape
 sol 10 225 470 225

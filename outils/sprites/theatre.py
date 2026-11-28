@@ -68,6 +68,7 @@ LISSE = [0, 11, 42, 89, 156, 229, 316, 410, 500, 590, 684, 771, 844, 911, 958, 9
 DUREES = {}
 TAILLES = {}
 TAILLES_HD = {}                # sprites HD (assets/sprites-hd) : (largeur, hauteur), pour la cible du clic
+DUREES_HD = {}                 # sprites HD : durée d'une image (en HD, elle vient du sprite HD)
 
 # Le personnage en pied (pieds_campagnes.py) : il entre par la droite, se tient sur `interlocuteur`, respire, cligne,
 # parle pendant sa réplique, sautille quand on le touche (et de temps en temps), et ressort par la droite.
@@ -507,7 +508,7 @@ def _cible(sc, A, avant, tc, cx, cy):
     for i, (sid, comp, p) in enumerate(sc.acteurs):
         if comp not in ("vol", "traverse"):
             continue
-        ax, ay, im, _ = position_acteur(sc, A, avant, i, tc, DUREES.get(sid, 100))
+        ax, ay, im, _ = position_acteur(sc, A, avant, i, tc, (DUREES_HD if sc.d is HD else DUREES).get(sid, 100))
         if im >= 0 and abs(cx - ax) <= E(sc, 6) and ay - E(sc, 7) <= cy <= ay + E(sc, 2):
             return ("acteur", i, "", 0)
     for j, (nom, x0, y0, x1, y1, reaction, p) in enumerate(sc.sensibles):
@@ -522,7 +523,7 @@ def acteurs(sc, A, B, evts, t, niv=animations.COMPLETES):
         return []
     out = []
     for i, (sid, comp, p) in enumerate(sc.acteurs):
-        x, y, im, m = position_acteur(sc, A, evts, i, t, DUREES.get(sid, 100))
+        x, y, im, m = position_acteur(sc, A, evts, i, t, (DUREES_HD if sc.d is HD else DUREES).get(sid, 100))
         if im < 0 or sid not in B:
             continue
         out.append((sid, im % len(B[sid].images), x, y, m))

@@ -300,7 +300,12 @@ public final class Theatre {
             return hd != null ? hd.apply(sid) != null : sprites.apply(sid) != null;
         }
 
+        /** La durée d'une image du sprite : en HD, celle du sprite HD (comme le PC et la référence). */
         public int duree(String sid) {
+            if (hd != null) {
+                TheatreHd.SpriteHd h = hd.apply(sid);
+                return h != null ? h.duree : 100;
+            }
             Sprite s = sprites.apply(sid);
             return s != null ? s.duree : 100;
         }

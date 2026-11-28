@@ -126,6 +126,7 @@ def charger_sprites_hd():
                 s = lire_sprite_hd(fh.read())
             B[s.id] = s
             theatre.TAILLES_HD[s.id] = (s.w, s.h)
+            theatre.DUREES_HD[s.id] = s.duree
     return B
 
 
@@ -184,10 +185,23 @@ def _conv(vals, motif):
     return out
 
 
-# Ajustements après conversion, quand le tableau HD le demande (le Pilou fin est plus large que le mini-Pilou) :
-# {(campagne, décor): {champ: valeur}}.
+# Ajustements après conversion, quand le tableau HD le demande : {(campagne, décor): {champ: valeur}}. Un champ
+# (place, interlocuteur…) remplace la valeur convertie ; « sensible:<nom> » remplace cette ligne entière ; « + » ajoute
+# des lignes à la fin de la scène (les bêtes que les paysages HD ne peignent plus : elles deviennent des acteurs, posés
+# aux coordonnées données par la session « paysages »).
 AJUSTEMENTS = {
-    ("prologue", "mare"): {"place": 80},          # loin du tronc du grand arbre, à gauche
+    ("prologue", "mare"): {
+        "place": 80,                                # loin du tronc du grand arbre, à gauche
+        "sensible:grenouille": "sensible grenouille 228 176 252 197 bulle 240 186",
+        "+": ["acteur grenouille pose 240 195",       # sur le nénuphar du milieu
+              "acteur canard pose 190 180"],          # sur l'eau libre
+    },
+    ("prologue", "jardin"): {"+": ["acteur escargot pose 235 200"]},          # sur la grande feuille
+    ("grande-panne", "marais-majs"): {"+": ["acteur canard pose 355 200"]},
+    ("petit-nuage", "etang-qui-fume"): {
+        "+": ["acteur grenouille pose 195 228"],                              # sur la berge
+        "sensible:grenouille": "sensible grenouille 183 210 207 229 bulle 195 219",
+    },
 }
 
 
@@ -200,6 +214,18 @@ def convertir_scenes(campagne):
            "# assets/scenes/%s.txt, dans le repère des paysages (x × 2,5 ; y × 2,5 + 40). Ne pas modifier à la main :" % campagne,
            "# corriger la scène d'origine, ou le tableau."]
     nom = ""
+
+    def finir():
+        aj = AJUSTEMENTS.get((campagne, nom), {})
+        while out and out[-1] == "":
+            out.pop()
+        out.extend(aj.get("+", []))
+        # Une réaction demandée qui n'existait pas dans la scène d'origine.
+        for k, v in aj.items():
+            if k.startswith("sensible:") and v not in out:
+                out.append(v)
+        out.append("")
+
     for brut in texte.splitlines():
         l = brut.split("#", 1)[0].strip()
         if not l:
@@ -208,9 +234,13 @@ def convertir_scenes(campagne):
             continue
         m = l.split()
         if m[0] == "scene":
+            if nom:
+                finir()
             nom = m[1]
         aj = AJUSTEMENTS.get((campagne, nom), {})
-        if m[0] in aj:
+        if m[0] == "sensible" and "sensible:" + m[1] in aj:
+            out.append(aj["sensible:" + m[1]])
+        elif m[0] in aj:
             out.append("%s %s" % (m[0], aj[m[0]]))
         elif m[0] == "sol" or m[0] == "cle":
             v = [int(x) for x in m[1:5]]
@@ -227,6 +257,8 @@ def convertir_scenes(campagne):
                                                         "".join(" %d" % x for x in p)))
         else:
             out.append(l)
+    if nom:
+        finir()
     os.makedirs(os.path.join(ASSETS, "scenes-hd"), exist_ok=True)
     with open(os.path.join(ASSETS, "scenes-hd", campagne + ".txt"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(out).rstrip("\n") + "\n")
