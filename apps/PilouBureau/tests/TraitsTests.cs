@@ -403,7 +403,7 @@ public class TraitsTests
 //   cas <aujourd'hui> <acquis avant, hex> <journal : « jour faits|jour faits »> <mesures « n,n,… »> <acquis après, hex>
 //       <dominants « a,b,c »> <à annoncer, annoncés = acquis avant>
 //   etat <état de présence> <aujourd'hui> <acquis du groupe> <annoncés du groupe> <dominants> <état après Decouvrir>
-//   mot <moment> <date> <palier> <trait nouveau> <traits> <graine> <famille|id|texte>
+//   mot <moment> <date> <absence min> <présence du jour min> <séance min> <palier> <trait nouveau> <traits> <graine> <famille|id|texte>
 //   bits <hex lu> <hex relu>
 public static class TraitsVecteurs
 {
@@ -493,10 +493,12 @@ public static class TraitsVecteurs
             var dominants = string.Join(",", Enumerable.Range(0, h.Next(0, 4)).Select(_ => ids[h.Next(ids.Count)]).Distinct());
             int palier = h.Next(0, 5);
             var graine = Presence.JourTexte(d) + "|pc-" + h.Next(3) + "|" + h.Next(3);
-            var c = new Presence.Contexte(d, m, h.Next(0, 3000), h.Next(0, 600), h.Next(0, 400), "", "", palier, 2, "", "",
+            int absence = h.Next(0, 3000), presenceJour = h.Next(0, 600), seance = h.Next(0, 400);
+            var c = new Presence.Contexte(d, m, absence, presenceJour, seance, "", "", palier, 2, "", "",
                 TraitNouveau: nouveau, Traits: dominants);
             var choix = Presence.Mot(c, Presence.Banque, dits, graine);
-            Ligne("mot", m.ToString(), d.ToString("yyyy-MM-dd'T'HH:mm", Ci), palier.ToString(Ci), nouveau, dominants, graine,
+            Ligne("mot", m.ToString(), d.ToString("yyyy-MM-dd'T'HH:mm", Ci), absence.ToString(Ci), presenceJour.ToString(Ci),
+                seance.ToString(Ci), palier.ToString(Ci), nouveau, dominants, graine,
                 choix is null ? "-" : choix.Famille + "|" + choix.Ligne.Id + "|" + choix.Texte);
         }
 

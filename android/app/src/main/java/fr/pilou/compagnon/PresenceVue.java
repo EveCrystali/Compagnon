@@ -1,6 +1,11 @@
 package fr.pilou.compagnon;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -19,13 +24,15 @@ import java.util.Locale;
  * Sur l'Accueil, la carte « Pilou et moi » (docs/PRESENCE.md) : complicité (palier, jours ensemble, jauge vers le palier
  * suivant), la question du prénom (une seule fois, refuser aussi simple qu'accepter), et le journal de Pilou, feuilletable
  * jour par jour, avec un petit dessin de lui dans l'humeur du jour. Et, dans les Réglages, la section « Pilou et moi ».
+ * Entre les deux, ses traits de personnalité (docs/TRAITS.md) : les trois dominants, puis, dépliés d'un toucher, tous ses
+ * traits : les découverts avec leur icône, les autres en silhouette « ? », sans dire comment ils viennent.
  */
 final class PresenceVue extends LinearLayout {
     private final Principale app;
     private final TextView palier, jours, suite, date, humeur, texte, page;
     private final Ui.Barre jauge;
     private final ImageView dessin;
-    private final LinearLayout question, journal;
+    private final LinearLayout question, journal, traits;
     private final TextView avant, apres;
     private List<Presence.Entree> entrees = java.util.Collections.emptyList();
     private int i;
@@ -55,6 +62,11 @@ final class PresenceVue extends LinearLayout {
         suite = Ui.texte(a, "", Ui.T_ETIQUETTE, p.doux, false);
         suite.setPadding(0, Ui.dp(a, 4), 0, 0);
         addView(suite, Ui.large());
+
+        // Ses traits de personnalité (remplis par rafraichir).
+        traits = Ui.pile(a);
+        traits.setPadding(0, Ui.dp(a, 14), 0, 0);
+        addView(traits, Ui.large());
 
         // La question du prénom (seulement quand Pilou la pose : une fois).
         question = Ui.pile(a);
@@ -144,7 +156,8 @@ final class PresenceVue extends LinearLayout {
         try {
             Presence.Etat e = PresenceTel.etat(app);
             Presence.Totaux t = e.totaux();
-            String emp = t.points + "|" + t.jours + "|" + e.journal.size() + "|" + e.texte().hashCode() + "|" + i + "|" + PresenceTel.demanderPrenom(app);
+            String emp = t.points + "|" + t.jours + "|" + e.journal.size() + "|" + e.texte().hashCode() + "|" + i + "|" + PresenceTel.demanderPrenom(app)
+                    + "|" + Prefs.de(app).getBoolean("traitsOuverts", false);
             if (emp.equals(empreinte)) return;
             empreinte = emp;
             Ui.Palette p = Ui.p(app);
@@ -156,6 +169,7 @@ final class PresenceVue extends LinearLayout {
             suite.setText(haut ? "★ le plus haut palier : inséparables" : "vers « " + Presence.nomPalier(t.palier + 1) + " » — la complicité ne baisse jamais");
             setContentDescription("Pilou et moi : " + Presence.nomPalier(t.palier) + ", " + t.jours + " jours ensemble.");
             questionPrenom(p);
+            traits(p, e, t);
             entrees = e.entrees(Presence.gabarits());
             i = Math.min(i, Math.max(0, entrees.size() - 1));
             avant.setVisibility(i < entrees.size() - 1 ? VISIBLE : INVISIBLE);
@@ -180,6 +194,123 @@ final class PresenceVue extends LinearLayout {
         } catch (RuntimeException ex) {
             Journal.noter("présence : carte", ex);
         }
+    }
+
+    // ---- Les traits de personnalité
+
+    /** Colonnes de la grille de tous les traits (quatre : un nom de deux mots tient sur un petit téléphone). */
+    static final int COLONNES_TRAITS = 4;
+
+    private void traits(Ui.Palette p, Presence.Etat e, Presence.Totaux t) {
+        traits.removeAllViews();
+        List<Traits.Trait> tous = Traits.tous();
+        if (tous.isEmpty()) return;
+        List<Traits.Trait> dominants = Traits.dominants(e, Presence.jour(java.time.LocalDateTime.now()));
+        traits.addView(Ui.texte(app, "Ses traits", Ui.T_ETIQUETTE, p.doux, true), Ui.large());
+        if (dominants.isEmpty()) {
+            TextView rien = Ui.texte(app, "Pilou n'a pas encore de trait. Ça vient tout seul, à force de vivre ensemble.", Ui.T_DETAIL, p.doux, false);
+            rien.setPadding(0, Ui.dp(app, 4), 0, 0);
+            traits.addView(rien, Ui.large());
+        } else {
+            LinearLayout r = Ui.rangee(app);
+            r.setGravity(Gravity.TOP);
+            r.setPadding(0, Ui.dp(app, 8), 0, 0);
+            for (int k = 0; k < Traits.NOMBRE_DOMINANTS; k++)
+                r.addView(k < dominants.size() ? vignette(p, dominants.get(k), true, true, 48) : new View(app),
+                        new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
+            traits.addView(r, Ui.large());
+        }
+        int connus = 0;
+        for (Traits.Trait x : tous) if ((t.traits & x.bit()) != 0) connus++;
+        int reste = tous.size() - connus;
+        boolean ouvert = Prefs.de(app).getBoolean("traitsOuverts", false);
+        String compte = reste == 0 ? "★ Tous ses traits sont découverts"
+                : connus == 0 ? "Aucun trait découvert pour l'instant"
+                : connus + " trait" + (connus > 1 ? "s" : "") + " découvert" + (connus > 1 ? "s" : "") + " · " + reste + " encore à découvrir";
+        TextView bascule = Ui.texte(app, compte + (ouvert ? "  ▴" : "  ▾"), Ui.T_DETAIL, p.bleu, true);
+        bascule.setGravity(Gravity.CENTER);
+        bascule.setMinHeight(Ui.dp(app, 48));
+        bascule.setBackground(Ui.touchable(app, Ui.arrondi(app, 0x00000000, 14, 0), 14));
+        bascule.setContentDescription(compte + (ouvert ? ". Replier tous ses traits." : ". Voir tous ses traits."));
+        bascule.setOnClickListener(v -> {
+            Prefs.de(app).edit().putBoolean("traitsOuverts", !ouvert).apply();
+            rafraichir();
+        });
+        LayoutParams lb = Ui.large();
+        lb.topMargin = Ui.dp(app, 4);
+        traits.addView(bascule, lb);
+        if (!ouvert) return;
+        LinearLayout r = null;
+        for (int k = 0; k < tous.size(); k++) {
+            if (k % COLONNES_TRAITS == 0) {
+                r = Ui.rangee(app);
+                r.setGravity(Gravity.TOP);
+                r.setPadding(0, Ui.dp(app, 6), 0, 0);
+                traits.addView(r, Ui.large());
+            }
+            Traits.Trait x = tous.get(k);
+            r.addView(vignette(p, x, (t.traits & x.bit()) != 0, dominants.contains(x), 40), new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
+        }
+        for (int k = tous.size(); r != null && k % COLONNES_TRAITS != 0; k++) r.addView(new View(app), new LayoutParams(0, 1, 1));
+        TextView note = Ui.texte(app, "Pilou attrape ses traits à force de vivre avec toi. On ne les choisit pas, et un trait découvert reste.",
+                Ui.T_ETIQUETTE, p.doux, false);
+        note.setGravity(Gravity.CENTER);
+        note.setPadding(0, Ui.dp(app, 8), 0, 0);
+        traits.addView(note, Ui.large());
+    }
+
+    /**
+     * Un trait : son icône dans une case, son nom dessous. Jamais la couleur seule : un dominant a un cadre orange et une
+     * étoile devant son nom, un trait inconnu la silhouette « ? », un cadre pointillé et « ? ? ? ».
+     */
+    private LinearLayout vignette(Ui.Palette p, Traits.Trait x, boolean connu, boolean dominant, int tailleDp) {
+        LinearLayout c = Ui.pile(app);
+        c.setGravity(Gravity.CENTER_HORIZONTAL);
+        c.setPadding(Ui.dp(app, 2), 0, Ui.dp(app, 2), Ui.dp(app, 6));
+        ImageView im = new ImageView(app);
+        im.setScaleType(ImageView.ScaleType.CENTER);
+        im.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        Bitmap b = icone(app, connu ? x.sprite() : "trait-inconnu", tailleDp);
+        if (b != null) im.setImageBitmap(b);
+        GradientDrawable cadre = Ui.arrondi(app, p.surface2, 12, 0);
+        if (connu) cadre.setStroke(Ui.dp(app, dominant ? 2 : 1), dominant ? p.orange : p.bord);
+        else cadre.setStroke(Ui.dp(app, 1.5f), p.argent, Ui.dp(app, 4), Ui.dp(app, 3));
+        im.setBackground(cadre);
+        int cote = Ui.dp(app, tailleDp + 12);
+        c.addView(im, new LayoutParams(cote, cote));
+        TextView nom = Ui.texte(app, dominant ? "★ " + x.nom : connu ? x.nom : "? ? ?", Ui.T_ETIQUETTE,
+                dominant ? p.orange : connu ? p.texte : p.doux, connu);
+        nom.setGravity(Gravity.CENTER);
+        nom.setPadding(0, Ui.dp(app, 4), 0, 0);
+        c.addView(nom, Ui.large());
+        c.setContentDescription(connu ? x.nom + (dominant ? ", trait dominant" : "") : "Un trait que Pilou n'a pas encore");
+        return c;
+    }
+
+    /** L'icône d'un trait en dessin fin, à pixels entiers, d'environ tailleDp de côté ; null si le sprite manque. */
+    static Bitmap icone(Context ctx, String id, int tailleDp) {
+        Sprites.Sprite s = Sprites.banque().fin(id);
+        if (s == null) return null;
+        int w = s.w(), h = s.h();
+        if (w <= 0 || h <= 0) return null;
+        int px = Math.max(1, Math.round(Ui.dp(ctx, tailleDp) / (float) Math.max(w, h)));
+        int[] g = new int[w * h];
+        Sprites.dessiner((x0, y0, x1, y1, col) -> {
+            int x = Math.round(x0), y = Math.round(y0);
+            if (x >= 0 && y >= 0 && x < w && y < h) g[y * w + x] = col;
+        }, s, 0, 0, 1, 0, false);
+        Bitmap b = Bitmap.createBitmap(w * px, h * px, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(b);
+        Paint pt = new Paint();
+        pt.setAntiAlias(false);
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++) {
+                int col = g[y * w + x];
+                if ((col >>> 24) == 0) continue;
+                pt.setColor(col);
+                cv.drawRect(x * px, y * px, (x + 1) * px, (y + 1) * px, pt);
+            }
+        return b;
     }
 
     private void questionPrenom(Ui.Palette p) {
