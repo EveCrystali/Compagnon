@@ -36,8 +36,7 @@ internal sealed class FenetreBoutique : Window
     private readonly BoutonPixel _essayer = Bouton("Essayer"), _acheter = Bouton("Acheter", true), _porter = Bouton("Porter");
     private readonly DispatcherTimer _horloge = new() { Interval = TimeSpan.FromMilliseconds(140) };
     private readonly List<Pixels> _pieces = new();
-    private readonly Grid _enseigne;
-    private readonly TextePixel _enseigneTexte;
+    private readonly LogoPixel _enseigne;
     private List<(int[,] Motif, Brush?[] Palette)> _imagesPiece = new();
     private string _rayon = Vitrine;
     private Article? _choisi;
@@ -81,10 +80,9 @@ internal sealed class FenetreBoutique : Window
         UseLayoutRounding = true;
 
         // Enseigne néon « BOUTIQUE » : orange qui grésille doucement (immobile si les animations sont coupées).
-        _enseigne = StylePixel.Enseigne("BOUTIQUE", Neon, NeonViolet, 5);
+        _enseigne = StylePixel.Logo("BOUTIQUE", Neon, NeonViolet);
         _enseigne.HorizontalAlignment = HorizontalAlignment.Center;
         _enseigne.Margin = new Thickness(0, 0, 0, 4);
-        _enseigneTexte = (TextePixel)_enseigne.Children[^1];
         var sousTitre = Texte(11.5, Bandeau.Argent);
         sousTitre.Texte = "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.";
         sousTitre.HorizontalAlignment = HorizontalAlignment.Center;
@@ -94,7 +92,7 @@ internal sealed class FenetreBoutique : Window
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         racine.Children.Add(_bandeau);
-        var tete = new StackPanel { Margin = new Thickness(0, 4, 0, 8) };
+        var tete = new StackPanel { Margin = new Thickness(0, 8, 0, 8) };
         tete.Children.Add(_enseigne);
         tete.Children.Add(sousTitre);
         _collection.HorizontalAlignment = HorizontalAlignment.Center;
@@ -331,7 +329,7 @@ internal sealed class FenetreBoutique : Window
     {
         var (solde, inventaire, equipe) = _pilou.EtatBourse();
         int niveau = _pilou.NiveauActuel;
-        _bandeau.Mettre(niveau, _pilou.XpTotal, solde, _pilou.TitreAffiche(niveau), Bandeau.ProchaineRangee(niveau, _pilou.XpTotal));
+        _bandeau.Mettre(niveau, _pilou.XpTotal, solde, _pilou.TitreAffiche(niveau), Bandeau.ProchainesRangees(niveau, _pilou.XpTotal));
         _pieces.Clear();
         Onglets(niveau, inventaire);
         _etageres.Children.Clear();
@@ -753,7 +751,7 @@ internal sealed class FenetreBoutique : Window
             }
         }
         int k = (int)(_t / 140);
-        _enseigneTexte.Couleur = k % 37 == 0 || k % 37 == 2 ? NeonClair : Neon;
+        _enseigne.Couleur = k % 37 == 0 || k % 37 == 2 ? NeonClair : Neon;
         if (_pilouVu is not null && Apercu.ImageSiChange(AllureApercu(_choisi), ref _pilouPixels, fin: true) is { } image) _pilouVu.Source = image;
     }
 }

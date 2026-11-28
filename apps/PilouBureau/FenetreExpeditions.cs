@@ -73,7 +73,7 @@ internal sealed class FenetreExpeditions : Window
         DockPanel.SetDock(_bandeau, Dock.Top);
         racine.Children.Add(_bandeau);
         var tete = new StackPanel { Margin = new Thickness(0, 8, 0, 6) };
-        var enseigne = StylePixel.Enseigne("EXPÉDITIONS", Bandeau.OrangePo, Gel("#6a5acd"), 4);
+        var enseigne = StylePixel.Logo("EXPÉDITIONS");
         enseigne.HorizontalAlignment = HorizontalAlignment.Center;
         tete.Children.Add(enseigne);
         _etat.HorizontalAlignment = HorizontalAlignment.Center;

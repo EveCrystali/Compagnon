@@ -884,47 +884,70 @@ public sealed partial class FenetrePilou
 
 // Fenêtre « Amis de Pilou » : mon code (et son QR), ajouter un code, demandes reçues, liste d'amis
 // (niveau, stade, en ligne, cœurs d'amitié ; aller le voir, renommer, retirer), réglages des visites.
+// Au guide de style (docs/STYLE.md) : thème de nuit, police pixel, boutons, cases et options en pixels.
 internal sealed class FenetreListeAmis : Window
 {
     private readonly FenetrePilou _pilou;
-    private readonly StackPanel _corps = new() { Margin = new Thickness(16) };
-    private readonly TextBlock _message = new() { FontSize = 12, Margin = new Thickness(0, 4, 0, 4), TextWrapping = TextWrapping.Wrap };
-    private readonly TextBox _saisie = new() { FontFamily = new FontFamily("Consolas"), FontSize = 15, MinWidth = 220, Padding = new Thickness(4, 2, 4, 2) };
+    private readonly StackPanel _corps = new() { Margin = new Thickness(20, 14, 20, 18) };
+    private readonly TextePixel _message = StylePixel.Texte("", CadrePixel.Pale, StylePixel.Corps);
+    private readonly TextBox _saisie = ChampPixel.Habiller(new TextBox { FontFamily = new FontFamily("Consolas"), MinWidth = 260 });
     private readonly DispatcherTimer _minuteur;
 
-    private static readonly Brush Bleu = Geler("#2f7ed8"), Orange = Geler("#c86a1c"), Argent = Geler("#768390");
-
-    private static Brush Geler(string hex)
-    {
-        var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
-        b.Freeze();
-        return b;
-    }
+    private static readonly Brush Fond = FenetreAventure.Gel("#0f1324"), Bleu = StylePixel.Coche, Orange = StylePixel.Orange,
+        Argent = CadrePixel.Pale;
 
     public FenetreListeAmis(FenetrePilou pilou)
     {
         _pilou = pilou;
         Title = "Amis de Pilou";
-        Width = 560;
-        Height = 680;
+        Width = 800;
+        Height = 780;
+        MinWidth = 640;
+        MinHeight = 420;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
-        Content = new ScrollViewer { Content = _corps, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
+        Background = Fond;
+        UseLayoutRounding = true;
+        _message.Margin = new Thickness(0, 4, 0, 0);
+        Content = new ScrollViewer { Content = _corps, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, Focusable = false };
+        StylePixel.Defileur(this);
+        HabillageFenetre.Poser(this);
+        PreviewKeyDown += (_, e) =>
+        {
+            if (e.Key == System.Windows.Input.Key.Escape) Close();
+        };
         _minuteur = new DispatcherTimer(TimeSpan.FromSeconds(5), DispatcherPriority.Background, (_, _) => Remplir(), Dispatcher);
         _minuteur.Start();
         Closed += (_, _) => _minuteur.Stop();
         Remplir();
     }
 
-    private void Section(string titre) =>
-        _corps.Children.Add(new TextBlock { Text = titre, FontSize = 14, FontWeight = FontWeights.Bold, Margin = new Thickness(0, 14, 0, 4) });
-
-    private void Note(string texte) =>
-        _corps.Children.Add(new TextBlock { Text = texte, FontSize = 11.5, Foreground = Argent, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 4) });
-
-    private static Button Bouton(string texte, Action action, bool actif = true)
+    // Titre de section : capitales violettes en « titre », taille « corps ».
+    private void Section(string titre)
     {
-        var b = new Button { Content = texte, Padding = new Thickness(8, 2, 8, 2), Margin = new Thickness(6, 0, 0, 0), IsEnabled = actif };
+        var t = StylePixel.Texte(StylePixel.Capitales(titre), Bandeau.Violet, StylePixel.Corps, true);
+        t.Margin = new Thickness(0, 12, 0, 2);
+        _corps.Children.Add(t);
+    }
+
+    private void Note(string texte)
+    {
+        var t = StylePixel.Texte(texte, Argent, StylePixel.Corps);
+        t.Margin = new Thickness(0, 2, 0, 2);
+        _corps.Children.Add(t);
+    }
+
+    // Le message sous la saisie : « ✓ … » en bleu, « ✗ … » en orange (le signe dit l'état, pas la seule couleur).
+    private void Dire(string texte)
+    {
+        _message.Texte = texte;
+        _message.Couleur = texte.StartsWith('✓') ? Bleu : texte.StartsWith('✗') ? Orange : Argent;
+    }
+
+    private static BoutonPixel Bouton(string texte, Action action, bool actif = true, bool principal = false)
+    {
+        var b = new BoutonPixel(texte, principal, StylePixel.Corps)
+            { Margin = new Thickness(8, 0, 0, 0), IsEnabled = actif, VerticalAlignment = VerticalAlignment.Center };
         b.Click += (_, _) => action();
         return b;
     }
@@ -935,20 +958,21 @@ internal sealed class FenetreListeAmis : Window
         double maintenant = _pilou.EpoqueAmis;
         // Garder ce qu'on était en train de taper.
         var saisie = _saisie.Text;
+        (_message.Parent as Panel)?.Children.Remove(_message);
         _corps.Children.Clear();
+
+        var logo = StylePixel.Logo("AMIS");
+        logo.HorizontalAlignment = HorizontalAlignment.Center;
+        _corps.Children.Add(logo);
 
         Section("Ton code ami");
         var rangee = new StackPanel { Orientation = Orientation.Horizontal };
         var code = Amis.Formater(c.Moi.Code);
-        rangee.Children.Add(new TextBox
-        {
-            Text = code, IsReadOnly = true, FontFamily = new FontFamily("Consolas"), FontSize = 20, BorderThickness = new Thickness(0),
-            VerticalAlignment = VerticalAlignment.Center,
-        });
+        rangee.Children.Add(new LogoPixel(code, Bandeau.ArgentClair, Bandeau.Encre) { VerticalAlignment = VerticalAlignment.Center });
         rangee.Children.Add(Bouton("Copier", () =>
         {
             Clipboard.SetText(code);
-            _message.Text = "✓ code copié : envoie-le à ton ami (il le tape dans « Ajouter un ami »).";
+            Dire("✓ code copié : envoie-le à ton ami (il le tape dans « Ajouter un ami »).");
         }));
         _corps.Children.Add(rangee);
         try
@@ -959,7 +983,14 @@ internal sealed class FenetreListeAmis : Window
             image.StreamSource = new MemoryStream(png);
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.EndInit();
-            _corps.Children.Add(new Image { Source = image, Width = 120, Height = 120, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 6, 0, 0) });
+            // Le QR reste noir sur blanc (il doit se lire à l'appareil photo), dans un cadre carré à la couleur du bord.
+            var qr = new Image { Source = image, Width = 120, Height = 120 };
+            RenderOptions.SetBitmapScalingMode(qr, BitmapScalingMode.NearestNeighbor);
+            _corps.Children.Add(new Border
+            {
+                Child = qr, Background = Brushes.White, BorderBrush = CadrePixel.Bord, BorderThickness = new Thickness(2),
+                HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 8, 0, 6),
+            });
         }
         catch (Exception)
         {
@@ -978,10 +1009,10 @@ internal sealed class FenetreListeAmis : Window
         ajout.Children.Add(Bouton("Ajouter", () =>
         {
             var refus = _pilou.Ajouter(_saisie.Text);
-            _message.Text = refus is null ? "✓ demande envoyée : elle sera acceptée dès que ton ami t'ajoute aussi." : $"✕ {refus}";
+            Dire(refus is null ? "✓ demande envoyée : elle sera acceptée dès que ton ami t'ajoute aussi." : $"✗ {refus}");
             if (refus is null) _saisie.Text = "";
             Remplir();
-        }));
+        }, principal: true));
         _corps.Children.Add(ajout);
         _corps.Children.Add(_message);
 
@@ -990,8 +1021,8 @@ internal sealed class FenetreListeAmis : Window
         {
             Section("✉ Demandes reçues");
             foreach (var a in recues)
-                Ligne(a, $"✉ {a.Nom}", $"niveau {a.Pilou.Niveau} · {Amis.Formater(a.Code)}", Orange,
-                    Bouton("Accepter", () => { _pilou.Accepter(a.Code); Remplir(); }),
+                Ligne($"✉ {a.Nom}", $"niveau {a.Pilou.Niveau} · {Amis.Formater(a.Code)}", Orange,
+                    Bouton("Accepter", () => { _pilou.Accepter(a.Code); Remplir(); }, principal: true),
                     Bouton("Refuser", () => { _pilou.Retirer(a.Code); Remplir(); }));
         }
 
@@ -1007,7 +1038,7 @@ internal sealed class FenetreListeAmis : Window
                 ? $"{Amis.Formater(a.Code)} · {Amis.VuIlYa(a, maintenant)}"
                 : $"niveau {a.Pilou.Niveau} · {Amis.NomStade(a.Pilou.Stade)} · {Amis.VuIlYa(a, maintenant)}{coeurs}"
                   + (enLigne && !a.Pilou.Accepte ? " · ne reçoit pas" : enLigne && !a.Pilou.Libre ? " · occupé" : "");
-            var boutons = new List<Button>();
+            var boutons = new List<BoutonPixel>();
             if (a.Etat == EtatAmi.Actif)
             {
                 bool chez = _pilou.EnVisiteChez(a.Code);
@@ -1028,7 +1059,7 @@ internal sealed class FenetreListeAmis : Window
                 _pilou.Retirer(a.Code);
                 Remplir();
             }));
-            Ligne(a, $"{signe} {a.Nom}", detail, couleur, boutons.ToArray());
+            Ligne($"{signe} {a.Nom}", detail, couleur, boutons.ToArray());
         }
 
         Section("Visites");
@@ -1036,13 +1067,16 @@ internal sealed class FenetreListeAmis : Window
         Case("Accepter les visites", r.AccepterVisites, v => _pilou.ReglerAmis(x => x.AccepterVisites = v));
         Case("Mon Pilou peut partir en visite (de lui-même, deux fois par jour au plus)", r.PartirEnVisite, v => _pilou.ReglerAmis(x => x.PartirEnVisite = v));
         Case("Partager mes anecdotes (plus belle prise, dernier plat, quête, succès, météo)", r.PartagerAnecdotes, v => _pilou.ReglerAmis(x => x.PartagerAnecdotes = v));
-        var calme = new ComboBox { Margin = new Thickness(0, 4, 0, 0), HorizontalAlignment = HorizontalAlignment.Left, MinWidth = 260 };
-        var choix = new[] { ("Heures calmes : 22 h – 8 h", 22, 8), ("Heures calmes : 21 h – 9 h", 21, 9), ("Heures calmes : 20 h – 8 h", 20, 8), ("Pas d'heures calmes", 0, 0) };
-        foreach (var (texte, _, _) in choix) calme.Items.Add(texte);
-        calme.SelectedIndex = Math.Max(0, Array.FindIndex(choix, x => x.Item2 == r.CalmeDebut && x.Item3 == r.CalmeFin));
-        calme.SelectionChanged += (_, _) =>
+        // Heures calmes : des options exclusives en pixels, à la place de la liste déroulante du système.
+        var choix = new[] { ("22 h – 8 h", 22, 8), ("21 h – 9 h", 21, 9), ("20 h – 8 h", 20, 8), ("aucune", 0, 0) };
+        var titreCalme = StylePixel.Texte("Heures calmes", CadrePixel.Texte, StylePixel.Corps);
+        titreCalme.Margin = new Thickness(0, 6, 0, 2);
+        _corps.Children.Add(titreCalme);
+        var calme = new OptionsPixel(choix.Select(x => x.Item1).ToList(),
+            Math.Max(0, Array.FindIndex(choix, x => x.Item2 == r.CalmeDebut && x.Item3 == r.CalmeFin))) { Margin = new Thickness(0, 0, 0, 8) };
+        calme.Choisi += i =>
         {
-            var (_, d, f) = choix[Math.Max(0, calme.SelectedIndex)];
+            var (_, d, f) = choix[i];
             _pilou.ReglerAmis(x => { x.CalmeDebut = d; x.CalmeFin = f; });
         };
         _corps.Children.Add(calme);
@@ -1053,23 +1087,25 @@ internal sealed class FenetreListeAmis : Window
 
     private void Case(string texte, bool valeur, Action<bool> changer)
     {
-        var cb = new CheckBox { Content = texte, IsChecked = valeur, Margin = new Thickness(0, 2, 0, 2) };
+        var cb = new CasePixel(texte) { IsChecked = valeur, Margin = new Thickness(0, 1, 0, 1), HorizontalAlignment = HorizontalAlignment.Left };
         cb.Click += (_, _) => changer(cb.IsChecked == true);
         _corps.Children.Add(cb);
     }
 
-    private void Ligne(Ami a, string titre, string detail, Brush couleur, params Button[] boutons)
+    // Un ami : une carte au cadre pixel, son nom et son signe d'état à gauche, ses boutons à droite.
+    private void Ligne(string titre, string detail, Brush couleur, params BoutonPixel[] boutons)
     {
-        var rangee = new DockPanel { Margin = new Thickness(0, 3, 0, 3) };
+        var rangee = new DockPanel { Margin = new Thickness(10, 4, 8, 6) };
         var droite = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
         foreach (var b in boutons) droite.Children.Add(b);
         DockPanel.SetDock(droite, Dock.Right);
         rangee.Children.Add(droite);
-        var texte = new TextBlock { VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap };
-        texte.Inlines.Add(new System.Windows.Documents.Run(titre) { FontWeight = FontWeights.SemiBold, Foreground = couleur });
-        texte.Inlines.Add(new System.Windows.Documents.LineBreak());
-        texte.Inlines.Add(new System.Windows.Documents.Run(detail) { Foreground = Argent, FontSize = 11.5 });
+        var texte = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+        texte.Children.Add(StylePixel.Texte(titre, couleur, StylePixel.Corps, true));
+        var d = StylePixel.Texte(detail, Argent, StylePixel.Corps);
+        d.Margin = new Thickness(0, -4, 0, 0);
+        texte.Children.Add(d);
         rangee.Children.Add(texte);
-        _corps.Children.Add(rangee);
+        _corps.Children.Add(new CadrePixel { U = 2, Child = rangee, Margin = new Thickness(0, 0, 0, 6) });
     }
 }

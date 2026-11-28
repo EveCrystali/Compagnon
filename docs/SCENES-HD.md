@@ -7,9 +7,9 @@ Les sessions « paysages » et « personnages HD » produisent à ce format ; le
 [SCENES.md](SCENES.md) ; il reste en service pendant la migration.
 
 Statut : **moteur écrit et branché** sur PC et téléphone (branche `claude/theatre-hd`) : le prologue, La Grande Panne
-et Le phare éteint se jouent en HD (leurs décors HD existent) ; Petit Nuage et les scènes d'évolution restent à
-l'ancienne définition tant que leurs décors HD manquent. Captures : `docs/maquettes/animations/pc-prologue-hd-six-lieux.png`,
-`tel-prologue-mare-hd.png`, `pc-aventure-hd-zones.png`, `cadres-avant-apres-hd.png`.
+et Le phare éteint se jouent en HD (leurs décors HD existent), Petit Nuage et les trois scènes d'évolution aussi
+(fond du jardin matin, soir, nuit). Captures : `docs/maquettes/animations/pc-prologue-hd-six-lieux.png`,
+`tel-prologue-mare-hd.png`, `pc-aventure-hd-zones.png`, `cadres-avant-apres-hd.png`, `pc-metamorphose-hd.png`.
 
 ## 1. L'unité et le cadre
 
@@ -155,8 +155,12 @@ acteurs qui réagissent (vol, traverse, rond…).
   la neutre (PC et téléphone).
 - **Essai** `--essai=lieu:<campagne>:<décor>` : la vue de scène seule ; elle écrit son rendu dans
   `%TEMP%\pilou-lieu-<campagne>-<décor>.png` au bout de 4 s (captures).
-- **Scènes d'évolution** : la métamorphose est prête (Pilou entre sous son ancienne forme, le bureau fond l'ancienne forme
-  dans la nouvelle, puis il parle) ; elle se jouera quand les décors HD du fond du jardin existeront.
+- **Scènes d'évolution** (fond du jardin HD) : sur PC comme sur le téléphone, Pilou entre de près (x 150) sous son ancienne forme, s'arrête à
+  sa place (250), le bureau fond l'ancienne forme dans la nouvelle (2,2 s après l'ouverture, 4,2 s de fondu), puis il
+  parle (toucher la boîte le fait parler plus tôt sur le téléphone). Sur PC, la fenêtre s'élargit à 960 × 480 sans
+  dépasser la zone de travail ; sur le téléphone, la scène prend 240 unités de haut à ×2. Planches :
+  `pc-metamorphose-hd.png` (stades 2, 3 et 4, cinq instants chacun), `tel-metamorphose-hd.png` (fondu, puis forme
+  finale). Test Android : `TheatreVueTest.laMetamorphoseFondLAncienneFormeDansLaNouvelle`.
 
 ## 9. Nommage et outils
 

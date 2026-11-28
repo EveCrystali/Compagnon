@@ -263,7 +263,7 @@ internal sealed class FenetreAventure : Window
         racine.Children.Add(_bandeau);
         var tete = new Grid { Margin = new Thickness(0, 10, 0, 10) };
         var titre = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
-        titre.Children.Add(new Pixels(Police.Texte("AVENTURE"), new Brush?[] { null, Bandeau.OrangePo }, Gel("#6a5acd"), 5) { VerticalAlignment = VerticalAlignment.Center });
+        titre.Children.Add(new LogoPixel("AVENTURE", Bandeau.OrangePo) { VerticalAlignment = VerticalAlignment.Center });
         titre.Children.Add(new TextBlock
         {
             Text = "Pilou t'écrit, tu choisis, il part pour de vrai.", Foreground = Bandeau.Argent, FontSize = 12, FontFamily = new FontFamily("Segoe UI"),
@@ -1176,8 +1176,32 @@ internal sealed class FenetreAventure : Window
     private void Portrait(double now)
     {
         var humeur = _enCours?.Humeur ?? _humeurMontree;
+        bool parle = _enCours is { } ec && ec.Sorte == Aventure.Sorte.Pilou;
+        if (_theatre.Hd)
+        {
+            // En HD : le Pilou fin et le buste du personnage, au pixel de la scène (une seule taille de pixel).
+            int k = Math.Max(1, _theatre.Echelle);
+            if (_theatre.VisageHd(humeur, parle, now) is { } fin)
+            {
+                _portrait.Source = fin;
+                _portrait.Width = fin.PixelWidth * k;
+                _portrait.Height = fin.PixelHeight * k;
+            }
+            if (_theatre.BusteHd(_enCours is { } ep && AnimationsCampagne.Parle(ep.Texte), now, _persoImage.Visibility != Visibility.Visible) is { } buste)
+            {
+                _persoImage.Source = buste;
+                _persoImage.Width = buste.PixelWidth * k;
+                _persoImage.Height = buste.PixelHeight * k;
+                _persoImage.Visibility = Visibility.Visible;
+            }
+        }
         // Le mini-Pilou de la scène, en plus grand (×2, entier) : un seul dessin de Pilou dans la fenêtre.
-        if (_theatre.Visage(humeur, _enCours is { } ec && ec.Sorte == Aventure.Sorte.Pilou, now) is { } im) _portrait.Source = im;
+        else if (_theatre.Visage(humeur, parle, now) is { } im)
+        {
+            _portrait.Source = im;
+            _portrait.Width = VueTheatre.VisageW * 2;
+            _portrait.Height = VueTheatre.VisageH * 2;
+        }
         _humeur.Text = NomHumeur(humeur);
     }
 
@@ -1419,7 +1443,7 @@ internal sealed class FenetreAventure : Window
             _choixScene.U = _etat is { Phase: Phase.Fin } ? _theatre.Echelle : Math.Max(2, Math.Round(_theatre.Echelle * 0.6));
             _choixScene.Retrait = 1;
             _choixScene.Visibility = Visibility.Visible;
-            _choixScene.MaxWidth = _etat is { Phase: Phase.Fin } ? 760 : 520;
+            _choixScene.MaxWidth = _etat is { Phase: Phase.Fin } ? 760 : _theatre.Hd ? 370 : 520;   // en HD : 185 unités, de quoi se ranger à côté d'un accessoire central
             // La fin se centre. Les choix et le départ se posent du côté opposé au personnage, sans couvrir l'accessoire
             // dont parle le texte (champ « cle » de la scène), ni le personnage, ni Pilou (Theatre.PlacerPanneau).
             if (_etat is { Phase: Phase.Fin })
@@ -1735,7 +1759,8 @@ internal sealed class FenetreAventure : Window
                 nom = NomPersonnage(pe.Personnage);
             }
             _persoNom.Texte = nom;
-            _anims.Personnage(_persoImage, s, false, now);
+            // En HD, le buste vient du sprite en pied (Portrait, plus haut) : l'ancien portrait ne s'anime pas par-dessus.
+            _anims.Personnage(_persoImage, _theatre.Hd && _theatre.BusteHd(false, now, true) is not null ? null : s, false, now);
             // En pied dans la scène s'il est dessiné (un message sans personnage ne le renvoie pas).
             if (el is not null && _campagne is { } c2 && AnimationsCampagne.PersonnageDe(_pilou.CarnetCampagnes, c2, cle) is { } p2)
             {

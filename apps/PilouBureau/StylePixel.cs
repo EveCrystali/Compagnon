@@ -64,6 +64,21 @@ internal static class StylePixel
         return g;
     }
 
+    // Le titre-logo d'une fenêtre, au pixel fin (LogoPixel.cs) : orange, relief, cerne, ombre à la couleur du bord.
+    public static LogoPixel Logo(string texte, Brush? couleur = null, Brush? ombre = null) => new(texte, couleur ?? Orange, ombre);
+
+    // La première forme qui tient dans la largeur donnée (unités WPF), de la plus longue à la plus courte ; la
+    // dernière sinon. Un texte qui ne tient pas se reformule, il ne se tronque pas (comme Style.choisir sur le téléphone).
+    public static string Choisir(double largeur, double taille, bool gras, Visual pour, params string[] formes)
+    {
+        var police = gras ? PolicePixel.Titre : PolicePixel.Texte;
+        if (police is null) return formes[0];
+        double ppu = Math.Max(0.1, Physique(pour)), unite = PolicePixel.PixelsPhysiques(taille, ppu) / ppu;
+        foreach (var f in formes)
+            if (police.Largeur(PolicePixel.Preparer(Preparer(f))) * unite <= largeur) return f;
+        return formes[^1];
+    }
+
     // ---- Signes : code d'un caractère → sprite 7 × 7 (assets/signes.txt, écrit par outils/sprites/icones.py).
 
     private static Dictionary<int, string>? _signes;

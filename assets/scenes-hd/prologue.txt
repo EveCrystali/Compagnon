@@ -15,7 +15,7 @@ scene mare
 sol 10 235 470 235
 place 80
 interlocuteur 420
-acteur libellule vol 150 140 400 185 7
+acteur libellule vol 150 105 400 150 7
 acteur rond rond 175 210 2600 0
 acteur rond rond 312 220 3400 1300
 acteur poisson saut 280 210 11000 5000

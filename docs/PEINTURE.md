@@ -114,6 +114,17 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
   S'il en manque, le décor n'est pas fini. Les briques de « petite vie » aident (`papillon_de_nuit`, `araignee`,
   `toile_araignee`, `goutte`, `souris`, `vapeur`, `avion_papier`, `etincelle`, `yeux`), mais un détail propre au lieu
   vaut mieux qu'un détail passe-partout.
+- **Un décor se peint en profondeur, pas en aplats avec des objets posés.** L'étalon est `prologue/mare.png`. Ouvrir
+  le décor à côté, en taille réelle ; écrire cinq faiblesses précises ; corriger ; recommencer au moins trois fois.
+  Les critères : aucune zone de plus de 40 × 40 unités sans matière ni variation de ton ; une source de lumière, avec
+  ses ombres portées, ses liserés éclairés et ses reflets ; les lointains pâlissent et bleuissent ; un élément de premier
+  plan cadre ; six détails vivants au moins sont animés. Pour un intérieur : poser la géométrie d'abord (point de fuite,
+  profondeur de chaque pixel), puis peindre chaque surface selon sa profondeur et son angle au jour (voir `hall` dans
+  `decors_hd_grande_panne.py`).
+- **Un sol poli reflète** : `reflet(P, masque, tab.derriere(), axe)` mélange à chaque pixel du sol la couleur qui se
+  trouve à la même distance au-dessus de la ligne `axe`. Il ne voit que les plans déjà terminés (`tab.derriere()`), pas
+  le plan en cours. Une lumière colorée dans un sol clair ne se lit pas en mélange (`voile` retombe sur le beige) : la
+  poser en traînées de ton franc (`P.remplir` sur un tirage `hz` par ligne).
 - **Les bêtes qui réagissent sont des acteurs, pas du décor** : grenouille, canard, escargot (et ce que la scène rend
   cliquable) sont dessinés par la session des personnages (`assets/sprites-hd/acteur-*.txt`) et posés par la scène.
   Le décor peint leur place (le nénuphar, la feuille, l'eau) et la laisse vide.
@@ -127,6 +138,10 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 `outils/sprites/decors-hd-reference.txt`. Chaque `tab.plan(nom, profondeur)` devient un plan du fichier (cinq au
 plus ; le premier doit couvrir tout le cadre). Un plan qui ne bouge pas n'est écrit qu'une fois : mettre ce qui
 bouge dans peu de plans allège le fichier et le travail du moteur.
+
+**Après tout changement d'un décor**, régénérer aussi la référence du Théâtre, qui porte l'empreinte de chaque plan :
+`py outils/sprites/theatre_hd.py` (réécrit `outils/sprites/theatre-hd-reference.txt` ; les tests du PC et du
+téléphone la comparent aux fichiers de `assets/decors/`). Sans cela, la CI échoue.
 
 Par campagne : `docs/maquettes/paysages/<campagne>/planche.png` (tous les lieux), et les montages PC et téléphone de
 deux lieux (table `MONTAGES` de `decors_hd.py`).
