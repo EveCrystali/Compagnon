@@ -237,21 +237,33 @@ final class ScenesAnimees {
     // ---- Écriture lettre à lettre (le texte est posé en entier, la fin reste invisible : la bulle ne bouge pas)
 
     static final class Ecriture implements Runnable {
-        private final TextView vue;
+        private final View vue;
+        private final TextView tv;          // texte système (autres écrans)
+        private final TextePixelVue pv;     // texte en police pixel (la lecture)
         private final String texte;
         private final ForegroundColorSpan cache = new ForegroundColorSpan(Color.TRANSPARENT);
-        private final Spannable s;
         private final long debut = SystemClock.uptimeMillis();
         private final Runnable fini;
         private boolean termine;
 
         Ecriture(TextView vue, String texte, Runnable fini) {
-            this.vue = vue;
+            this.vue = tv = vue;
+            pv = null;
             this.texte = texte;
             this.fini = fini;
-            s = new SpannableString(texte);
+            Spannable s = new SpannableString(texte);
             s.setSpan(cache, 0, texte.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             vue.setText(s, TextView.BufferType.SPANNABLE);
+            vue.post(this);
+        }
+
+        /** Le texte est déjà posé dans la vue (elle garde sa taille) : on n'en montre qu'une part qui grandit. */
+        Ecriture(TextePixelVue vue, String texte, Runnable fini) {
+            this.vue = pv = vue;
+            tv = null;
+            this.texte = texte;
+            this.fini = fini;
+            vue.revele(0f);
             vue.post(this);
         }
 
@@ -263,8 +275,8 @@ final class ScenesAnimees {
                 terminer();
                 return;
             }
-            Spannable sp = (Spannable) vue.getText();
-            sp.setSpan(cache, n, texte.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (pv != null) pv.revele(n / (float) Math.max(1, texte.length()));
+            else ((Spannable) tv.getText()).setSpan(cache, n, texte.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             vue.postDelayed(this, 33);
         }
 
@@ -273,7 +285,8 @@ final class ScenesAnimees {
             if (termine) return;
             termine = true;
             vue.removeCallbacks(this);
-            if (vue.getText() instanceof Spannable) ((Spannable) vue.getText()).removeSpan(cache);
+            if (pv != null) pv.revele(1f);
+            else if (tv.getText() instanceof Spannable) ((Spannable) tv.getText()).removeSpan(cache);
             if (fini != null) fini.run();
         }
 

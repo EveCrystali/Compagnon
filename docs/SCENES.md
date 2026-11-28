@@ -92,6 +92,23 @@ Un décor sans section garde une scène par défaut (sol à 77, place 30, sans a
 `theatre-<campagne>-<décor>.gif` (Pilou entre, on le touche, on touche chaque chose sensible, il s'en va) et une
 planche d'images clés.
 
+## Style : la main de Pilou sous la scène
+
+Tout ce qui se lit et se touche autour de la scène est en pixels, à l'image du menu « Sept portes »
+(`MenuRetro.xaml`) : `CadrePixel` (PC, `CadrePixel.cs` ; téléphone, `CadrePixel.java`) et la police pixel
+(`TextePixel`, `TextePixelVue`, docs/POLICE.md). Mesures, en unités U = le pixel de la scène (5 unités WPF sur le PC
+à ×5 ; k pixels d'écran sur le téléphone, 5 à 1078 px de large) :
+
+| Élément | Mesure |
+|---|---|
+| Cadre | ombre portée 1 U (bas, droite), bord 1 U, biseau 1 U (clair haut et gauche, sombre bas et droite), retrait du contenu 1 U ; coins en escalier (le pixel de coin de chaque couche est retiré) |
+| Appuyé | fond de survol, plus d'ombre, contenu décalé de 1 U |
+| Couleurs (sombre / clair) | fond #151a2e / #fbf3e4, texte #e6ecf2 / #1c2128, bord #6a5acd / #2f7ed8, biseau #3a4270 et #0b0e1a / #ffffff et #d9c7a3, ombre #0b0e1a / #1c2128, survol #f69d50 / #1f5fae, titres #9b8cff / #6a4fc8 |
+| Choix | un cadre par choix, puce « ▶ » en pixels (3 × 5) à la couleur du bord, 2 U entre deux choix |
+| Réplique (PC) | police pixel, 2 unités WPF par pixel de police (police fine à 100 %), ligne de 12 pixels de police ; cinq lignes visibles, le défilement tombe sur une ligne entière |
+| Nom de qui parle (PC) | police titre, même taille ; nom du personnage sous son portrait en police pixel |
+| Lieu | petit cadre sans ombre, retrait 0,6 U |
+
 ## Sur Windows
 
 `VueTheatre.cs` affiche (image 192 × 80 réécrite seulement quand elle change, agrandie d'un facteur entier sans
