@@ -142,17 +142,22 @@ public static class Sons
     private static readonly Dictionary<(Son, bool), GCHandle> Prets = new();
     private static readonly object Verrou = new();
     private static Func<string> _niveau = () => "aucun";
+    private static Func<string> _musique = () => "aucune";
     private static Func<bool> _cache = () => true, _saisie = () => false;
     private static readonly GardeSons Garde = new();
 
     // Branché une fois au démarrage : le réglage, « Pilou est caché » (plein écran, présentation, visio, caché à la
-    // main) et « on tape ».
-    public static void Brancher(Func<string> niveau, Func<bool> cache, Func<bool> saisie)
+    // main), « on tape » et le réglage de la musique (Musique.cs).
+    public static void Brancher(Func<string> niveau, Func<bool> cache, Func<bool> saisie, Func<string>? musique = null)
     {
         _niveau = niveau;
         _cache = cache;
         _saisie = saisie;
+        if (musique is not null) _musique = musique;
     }
+
+    internal static bool Cache() => _cache();
+    internal static string NiveauMusique() => _musique();
 
     public static void Jouer(Son son)
     {

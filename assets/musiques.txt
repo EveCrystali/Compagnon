@@ -1,0 +1,187 @@
+# Musiques et ambiances de Pilou (docs/SONS.md) : boucles synthétisées par outils/sons/sons.py, Sons.cs et
+# Sons.java, mêmes échantillons partout (outils/sons/musiques-reference.txt). Tout est original.
+#
+# morceau | id | ms par pas | pas | filtre (passe-bas, sur 256)
+# voix | onde | volume | attaque ms | relâche ms | déclin (sur 4096) | tenue max ms (0 : la note entière) | jetons
+# + | suite des jetons de la voix précédente
+# Un jeton par pas : note (C4, F#3…), fréquence en Hz (bruit), de>à (glissé), « - » tient, « . » se tait.
+# Une voix plus courte que le morceau se répète. Ce qui dépasse la fin repart au début : la boucle n'a pas de bord.
+# decors | ambiance | décors des campagnes qui la portent
+
+# La colline d'en face : un matin léger, on part à pied. Do majeur, 120 à la noire.
+morceau | prologue | 250 | 128 | 120
+# mélodie
+voix | tri | 30 | 6 | 90 | 1024 | 0 | E5 - G5 - A5 G5 E5 -   D5 - - . B4 D5 G5 -   C5 - E5 - A5 - G5 E5   A5 - - - C5 - . .
++ | E5 G5 C6 - G5 - E5 -   D5 - B4 - D5 E5 D5 -   C5 - A4 - C5 D5 C5 A4   G4 - - - . . D5 E5
++ | A5 - - E5 G5 - E5 D5   C5 - - . A4 C5 D5 -   E5 - G5 E5 D5 C5 D5 E5   G5 - - - D5 - . .
++ | A5 G5 A5 C6 A5 - G5 -   E5 - - G5 E5 D5 C5 -   D5 E5 G5 - E5 - D5 -   D5 - - - . . . .
+# basse
+voix | puls | 14 | 4 | 80 | 1024 | 0 | C3 - . . G3 - . .   G2 - . . D3 - . .   A2 - . . E3 - . .   F2 - . . C3 - . .
++ | C3 - . . G3 - . .   G2 - . . D3 - . .   F2 - . . C3 - . .   G2 - . . D3 - . .
++ | A2 - . . E3 - . .   F2 - . . C3 - . .   C3 - . . G3 - . .   G2 - . . D3 - . .
++ | F2 - . . C3 - . .   C3 - . . G3 - . .   C3 - . . G3 - . .   G2 - . . D3 - . .
+# accords en contretemps
+voix | tri | 12 | 4 | 60 | 2048 | 160 | . E4 . G4 . E4 . G4   . B3 . D4 . B3 . D4   . C4 . E4 . C4 . E4   . A3 . C4 . A3 . C4
++ | . E4 . G4 . E4 . G4   . B3 . D4 . B3 . D4   . A3 . C4 . A3 . C4   . B3 . D4 . B3 . D4
++ | . C4 . E4 . C4 . E4   . A3 . C4 . A3 . C4   . E4 . G4 . E4 . G4   . B3 . D4 . B3 . D4
++ | . A3 . C4 . A3 . C4   . E4 . G4 . E4 . G4   . E4 . G4 . E4 . G4   . B3 . D4 . B3 . D4
+# petit grelot
+voix | bruit | 10 | 1 | 20 | 4096 | 45 | . . 7000 . . . 7000 .
+
+# Humour (La Grande Panne) : sautillant, piqué, un peu de travers. Do majeur, 135 à la noire.
+morceau | humour | 222 | 160 | 130
+# mélodie piquée
+voix | tri | 36 | 4 | 50 | 1536 | 150 | C5 . E5 . G5 . E5 .   C6 . . G5 A5 G5 E5 .   F5 . A5 . C6 . A5 .   G5 . E5 . C5 . . .
++ | D5 . G5 . B5 . G5 .   A5 G5 F5 E5 D5 . . .   E5 . C5 . G4 . C5 .   E5 . G5 . C6 . . .
++ | A5 . . A5 G5 . E5 .   C5 . E5 . A5 . . .   F5 . . F5 E5 . D5 .   C5 . A4 . C5 . D5 .
++ | E5 . G5 E5 . G5 C6 .   B5 . G5 . D5 . . .   C5 C5 . E5 G5 . E5 .   G5 . . . C6 . . .
++ | A5 . C6 . A5 . F5 .   G5 . B5 . D6 . B5 .   C6 . G5 . E5 . C5 .   D5 . E5 . F5 . G5 .
+# basse « poum »
+voix | puls | 16 | 3 | 50 | 1024 | 170 | C3 . . . G3 . . .   C3 . . . G3 . . .   F2 . . . C3 . . .   C3 . . . G3 . . .
++ | G2 . . . D3 . . .   G2 . . . D3 . . .   C3 . . . G3 . . .   C3 . . . G3 . . .
++ | A2 . . . E3 . . .   A2 . . . E3 . . .   F2 . . . C3 . . .   F2 . . . C3 . . .
++ | C3 . . . G3 . . .   G2 . . . D3 . . .   C3 . . . G3 . . .   C3 . . . G3 . . .
++ | F2 . . . C3 . . .   G2 . . . D3 . . .   C3 . . . G3 . . .   G2 . . . D3 . . .
+# « tchac », note haute
+voix | tri | 10 | 3 | 40 | 2048 | 100 | . . E4 . . . E4 .   . . E4 . . . E4 .   . . A3 . . . A3 .   . . E4 . . . E4 .
++ | . . B3 . . . B3 .   . . B3 . . . B3 .   . . E4 . . . E4 .   . . E4 . . . E4 .
++ | . . C4 . . . C4 .   . . C4 . . . C4 .   . . A3 . . . A3 .   . . A3 . . . A3 .
++ | . . E4 . . . E4 .   . . B3 . . . B3 .   . . E4 . . . E4 .   . . E4 . . . E4 .
++ | . . A3 . . . A3 .   . . B3 . . . B3 .   . . E4 . . . E4 .   . . B3 . . . B3 .
+# « tchac », note basse
+voix | tri | 10 | 3 | 40 | 2048 | 100 | . . G4 . . . G4 .   . . G4 . . . G4 .   . . C4 . . . C4 .   . . G4 . . . G4 .
++ | . . D4 . . . D4 .   . . D4 . . . D4 .   . . G4 . . . G4 .   . . G4 . . . G4 .
++ | . . E4 . . . E4 .   . . E4 . . . E4 .   . . C4 . . . C4 .   . . C4 . . . C4 .
++ | . . G4 . . . G4 .   . . D4 . . . D4 .   . . G4 . . . G4 .   . . G4 . . . G4 .
++ | . . C4 . . . C4 .   . . D4 . . . D4 .   . . G4 . . . G4 .   . . D4 . . . D4 .
+# bloc de bois
+voix | bruit | 8 | 1 | 15 | 4096 | 30 | . . . 9000 . . . 9000
+
+# Mystère (Le phare éteint) : brume, une cloche au loin, une phrase qui se pose des questions. La mineur, lent.
+morceau | mystere | 400 | 112 | 100
+# la phrase
+voix | tri | 22 | 40 | 1500 | 1024 | 0 | E5 - - - - - D5 -   C5 - - - A4 - - -   . . . . . . . .   C5 - D5 - E5 - - -
++ | - - - - G5 - E5 -   D5 - - - - - . .   . . . . . . . .   A4 - C5 - D5 - - -
++ | E5 - - - D5 - C5 -   D5 - - - - - . .   . . . . G4 - A4 -   B4 - - - - - G4 -
++ | E4 - - - - - - -   . . . . . . . .
+# nappe, première voix
+voix | tri | 16 | 2400 | 2400 | 0 | 0 | A2 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - . . . . . .   . . . . . . . .   . . . . . . . .   G2 - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - . . . . . .
++ | . . . . . . . .   . . . . . . . .
+# nappe, seconde voix
+voix | tri | 16 | 2400 | 2400 | 0 | 0 | - - - - - - . .   . . . . . . . .   . . . . . . . .   . . . . F2 - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - . .
++ | . . . . . . . .   . . . . . . . .   . . . . E2 - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -
+# cloche de brume
+voix | tri | 12 | 5 | 3000 | 4096 | 0 | A3 - - - - - - -   - - . . . . . .   . . . . . . . .   . . . . F3 - - -
++ | - - - - - - . .   . . . . . . . .   . . . . . . . .   G3 - - - - - - -
++ | - - . . . . . .   . . . . . . . .   . . . . E3 - - -   - - - - - - . .
++ | . . . . . . . .   . . . . . . . .
+# houle
+voix | bruit | 14 | 2500 | 3000 | 0 | 0 | . . . . . . . .   . . 900>1300 - - - - -   - - - - - - - -   - - . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . 1100>800 - - - - -   - - - - - - - -   - - - - . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .
+
+# Émotion (Petit Nuage) : une boîte à musique, une voix qui chante bas. Do majeur, 80 à la noire.
+morceau | emotion | 375 | 128 | 110
+# la voix
+voix | tri | 24 | 30 | 260 | 1024 | 0 | . . . . E5 - G5 -   D5 - - - - - B4 -   C5 - - - E5 - A5 -   G5 - - - - - . .
++ | A5 - - - G5 - F5 -   E5 - - - G5 - - -   F5 - E5 - D5 - - -   D5 - - - - - . .
++ | . . . . E5 - G5 -   B5 - - - A5 - G5 -   A5 - - - C6 - - -   B5 - - - G5 - - -
++ | A5 - - - C6 - A5 -   G5 - - - D5 - - -   E5 - - - - - D5 -   D5 - - - - - . .
+# boîte à musique
+voix | tri | 10 | 4 | 300 | 2048 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4   A3 E4 C5 E4 A4 E4 C5 E4   E3 B3 G4 B3 E4 B3 G4 B3
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   D3 A3 F4 A3 D4 A3 F4 A3   G3 D4 B4 D4 G4 D4 B4 D4
++ | C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4   A3 E4 C5 E4 A4 E4 C5 E4   E3 B3 G4 B3 E4 B3 G4 B3
++ | F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4
+# basse tenue
+voix | tri | 16 | 40 | 500 | 1024 | 0 | C3 - - - - - - -   G2 - - - - - - -   A2 - - - - - - -   E2 - - - - - - -
++ | F2 - - - - - - -   C3 - - - - - - -   D3 - - - - - - -   G2 - - - - - - -
++ | C3 - - - - - - -   G2 - - - - - - -   A2 - - - - - - -   E2 - - - - - - -
++ | F2 - - - - - - -   G2 - - - - - - -   C3 - - - - - - -   G2 - - - - - - -
+
+# Ambiance vent : des rafales qui se relaient, un sifflement à peine.
+morceau | vent | 250 | 160 | 70
+# rafales, première voix
+voix | bruit | 26 | 3000 | 4000 | 0 | 0 | 500>1100 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   700>450 - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
+# rafales, seconde voix
+voix | bruit | 26 | 3000 | 4000 | 0 | 0 | - - - - - - . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   650>1300 - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   900>500 - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
+# sifflement
+voix | tri | 3 | 4000 | 4000 | 0 | 0 | . . . . . . . .   . . . . . . . .   . . . . 660>740 - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . 740>620 - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
+
+# Ambiance pluie : un fond de pluie continu, quelques gouttes.
+morceau | pluie | 250 | 128 | 190
+# pluie fine (tout le morceau)
+voix | bruit | 14 | 0 | 0 | 0 | 0 | 11000 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# pluie sur le toit (décalée : les deux fonds ne repartent pas ensemble)
+voix | bruit | 11 | 0 | 0 | 0 | 0 | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | 3000 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
+# gouttes
+voix | tri | 4 | 1 | 25 | 4096 | 35 | . . . D6 . . . .   . . . A5 . . . .   . . C6 . . . . .   . . . . . G5 . .
++ | . . . . . D6 . .   . . . . A5 . . .   . . . . . . . .   . . C6 . . . . G5
++ | . . . . . . . .   . . . D6 . . . .   . . C6 . . . . .   . . . A5 . . . .
++ | . . . . . . . G5   . . . . . . D6 .   . . . . . . . .   . C6 . . . . . .
+
+# Ambiance hall : une grande salle vide, un bourdon, des pas qui résonnent loin.
+morceau | hall | 250 | 144 | 90
+# souffle de la salle (tout le morceau)
+voix | bruit | 16 | 0 | 0 | 0 | 0 | 500 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# bourdon, première voix
+voix | tri | 7 | 3000 | 3000 | 0 | 0 | G2 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .
+# bourdon, seconde voix
+voix | tri | 7 | 3000 | 3000 | 0 | 0 | - - - - - - - -   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .   D3 - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -
+# pas lointains et leur écho
+voix | tri | 4 | 5 | 1800 | 4096 | 0 | . . . . . . . .   . . . . . . . .   . E4 - - - - - E4   - - - - - - - .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . . G4 - -
++ | - - - G4 - - - -   - - - . . . . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . D4   - - - - - D4 - -   - - - - - . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .
+
+# Ambiance mer : des vagues qui montent et se retirent, un fond de ressac.
+morceau | mer | 250 | 168 | 100
+# ressac (tout le morceau)
+voix | bruit | 8 | 0 | 0 | 0 | 0 | 700 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# vagues, première voix
+voix | bruit | 26 | 1500 | 3500 | 0 | 0 | 2400>900 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - . .
++ | . . . . . . . .   . . . . . . . .   . . . . . . . .   2200>800 - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - - - . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   2600>900 - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - . .   . . . . . . . .   . . . . . . . .
++ | . . . . . . . .
+# vagues, seconde voix
+voix | bruit | 22 | 1500 | 3500 | 0 | 0 | . . . . . . . .   . . . . . . . .   . . . . . . . .   . . . . 2000>800 - - -
++ | - - - - - - - -   - - - - - - - -   - - - - - - - -   . . . . . . . .
++ | . . . . . . . .   . . . . . . . .   . . . . 2400>850 - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - - -   - - . . . . . .   . . . . . . . .
++ | . . . . . . . .   . . . . 2100>800 - - -   - - - - - - - -   - - - - - - - -
++ | - - - - - - - -
+
+decors | vent | pre-aux-draps plateau-rape col-blanc trou-qui-siffle grande-salle abreuvoir abreuvoir-aube sentier-des-melezes halte-girouette pente sommet lanterne-du-phare citadelle-nuage
+decors | pluie | jardin-lave place-mairie fenetre-maison
+decors | hall | hall-pas-comptes tour-tampon etage-guichets bureau-echeance horloge-systeme caverne-cables dossier-temp file-impression cave-du-phare
+decors | mer | port-trebrume passe-pied pied-du-phare sentier-douaniers grotte-souffleur jetee-nuit jetee-brouillard guet-de-nuit

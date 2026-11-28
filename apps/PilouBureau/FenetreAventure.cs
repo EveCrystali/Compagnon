@@ -212,6 +212,7 @@ internal sealed class FenetreAventure : Window
     public FenetreAventure(FenetrePilou pilou)
     {
         _pilou = pilou;
+        Musique.Suivre(this, () => _campagne?.Id, () => _campagne?.Ton, () => _decorMontre.Split('|')[0]); // docs/SONS.md
         _anims = new ScenesAnimees(pilou);
         Title = "Aventure de Pilou";
         Width = 1020;

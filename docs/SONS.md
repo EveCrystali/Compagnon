@@ -61,3 +61,52 @@ py outils/sons/sons.py --reference   # après un changement voulu de sons.txt
 ```
 
 `ecoute/` n'est pas versionné. Les sons de la Chasse aux bugs (téléphone) restent à part, avec leur propre case.
+
+## Musiques et ambiances de l'Aventure
+
+Huit boucles synthétisées de la même manière que les sons, décrites dans **`assets/musiques.txt`** (aucun fichier audio
+importé, mélodies originales), mêmes échantillons sur PC (`Musique.cs`), téléphone (`Musique.java`) et
+`outils/sons/sons.py` ; empreintes dans **`outils/sons/musiques-reference.txt`**, testées par `MusiqueTests.cs` et
+`MusiqueTest.java`.
+
+| Boucle | Quand | Durée | Caractère |
+|---|---|---|---|
+| `prologue` | La colline d'en face | 32 s | do majeur, 120 à la noire, mélodie, basse, grelot |
+| `humour` | campagnes au ton « humour » (La Grande Panne) | 35,5 s | piqué, basse « poum-tchac », bloc de bois |
+| `mystere` | ton « mystère » (Le phare éteint) | 44,8 s | la mineur lent, nappe qui se relaie, cloche de brume, houle |
+| `emotion` | ton « émotion » (Petit Nuage) | 48 s | boîte à musique, voix basse, basse tenue |
+| `vent` | décors de plein air, de col, de sommet | 40 s | rafales de souffle qui se relaient, sifflement à peine |
+| `pluie` | jardin après l'orage, place sous la pluie, vitre embuée | 32 s | deux fonds de pluie, quelques gouttes |
+| `hall` | halls, tours, archives, caves | 36 s | souffle grave, bourdon, pas lointains et leur écho |
+| `mer` | ports, jetées, grèves, falaises | 42 s | ressac continu, vagues qui montent et se retirent |
+
+La musique suit la campagne ouverte (le prologue a la sienne, les autres celle de leur ton ; un ton sans boucle reste
+muet) et l'ambiance suit le décor (lignes `decors` du fichier ; un décor non cité n'a pas d'ambiance). Les deux jouent
+ensemble ; changer de décor croise les ambiances.
+
+Règles :
+
+- **réglage séparé** « Musique : aucune / discrète / normale », **« discrète » par défaut** (× 3/8 à la lecture,
+  environ -8,5 dB) ; un réglage déjà enregistré garde son choix ;
+- **seulement dans l'Aventure** : la fenêtre Aventure au premier plan (PC), la lecture d'une campagne à l'écran avec le
+  focus (téléphone) ; perdre le premier plan, réduire, fermer coupe en fondu ;
+- **jamais quand Pilou est caché** : plein écran, présentation, visio (PC) ; appel, visio, silencieux ou vibreur
+  (téléphone) ;
+- **très bas** : crête au plus 6000 (-14,7 dBFS) au réglage « normale », de -19 à -26 dBFS en pratique, RMS vers
+  -30 dBFS ; les sons de Pilou restent devant ;
+- **fondus** : entrée en 1,5 s, sortie en 1 s ;
+- **boucle sans clic** : les notes qui dépassent la fin repartent au début, et le passe-bas tourne en anneau (un tour de
+  mise en régime, puis la sortie) ; `--verifier` exige que le saut entre le dernier et le premier échantillon ne
+  dépasse pas le 99ᵉ centile des sauts dans la boucle.
+
+Format d'une boucle : `morceau | id | ms par pas | pas | filtre`, puis ses voix
+`voix | onde | volume | attaque ms | relâche ms | déclin | tenue max ms | jetons`, une ligne `+ | jetons` continue la
+voix précédente. Un jeton par pas : une note (`C4`, `F#3`), une cadence de bruit en Hz, un glissé `de>à`, `-` tient,
+`.` se tait ; une voix plus courte que le morceau se répète.
+
+Lecture : PC par `waveOut` de Windows (winmm, sans bibliothèque ; `PlaySound` ne joue qu'un son à la fois), quatre
+tampons de 100 ms remplis par la table de mixage `Melangeur` ; téléphone par un `AudioTrack` en flux, même table. La
+sortie audio est rendue dès que tout s'est éteint.
+
+`py outils/sons/sons.py` écrit aussi, dans `ecoute/`, chaque boucle (normale, discrète) et sa **jonction** (4 dernières
+secondes puis 4 premières, pour entendre le passage), et la page d'écoute montre crête, RMS, saut et spectre par bande.
