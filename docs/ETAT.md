@@ -73,6 +73,9 @@ Dernière mise à jour : 28 novembre 2026.
   Amis, connecteurs, boîte « Renommer » et bulle de l'invité au guide (`ReglagesPixel.cs` : case à cocher, options,
   dépliant, champ) : de nuit, en police pixel, sous l'habillage commun. Vu dans l'exe d'essai à 100 % ; les clics réels
   dans ces deux fenêtres ne sont pas essayés.
+  Téléphone : le nombre du niveau et les grands titres (« BOUTIQUE », « NIVEAU 12 ! ») sont des titres-logos au dessin
+  fin (`Style.logo`), « NIV » et la pièce d'or aussi ; vu sur captures Robolectric (clair, sombre, grande police), jamais
+  sur un vrai téléphone.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant

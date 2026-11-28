@@ -264,6 +264,86 @@ final class Style {
         }
     }
 
+    // ------------------------------------------------------------------------------------------------- Titre-logo
+
+    /**
+     * La grille d'un titre-logo au pixel fin (le pendant de LogoPixel.cs, docs/STYLE.md « Titres-logos ») : les lettres
+     * de la police « titre » en dessin fin (capitales de 14 pixels), une arête claire en haut de chaque trait, une
+     * arête sombre en bas, un cerne d'un pixel et une ombre portée d'un pixel en bas à droite. Seule la boîte de
+     * l'encre est gardée. Valeurs : 0 vide, 1 ombre, 2 cerne, 3 corps, 4 arête claire, 5 arête sombre.
+     */
+    static byte[][] grilleLogo(String texte) {
+        PolicePixel d = PolicePixel.ressource("titre2x");
+        if (d == null) d = PolicePixel.ressource("titre");
+        if (d == null) return new byte[0][0];
+        int f = 2 / d.echelle;
+        List<String> lignes = Collections.singletonList(PolicePixel.preparer(preparer(texte)));
+        int largeur = d.largeur(lignes.get(0)) * 2 + 2, hauteur = d.ligne * 2;
+        boolean[][] encre = new boolean[hauteur][largeur];
+        int haut = Integer.MAX_VALUE, bas = -1, droite = 0;
+        for (PolicePixel.Pose pose : d.poser(lignes)) {
+            if (pose.dessin == null) continue;
+            String[] rangs = pose.dessin.rangs;
+            for (int r = 0; r < rangs.length; r++)
+                for (int k = 0; k < rangs[r].length(); k++) {
+                    if (rangs[r].charAt(k) != '#') continue;
+                    for (int dy = 0; dy < f; dy++)
+                        for (int dx = 0; dx < f; dx++) {
+                            int x = pose.x * 2 + k * f + dx, y = pose.y * 2 + (pose.dessin.haut + r) * f + dy;
+                            if (y < 0 || y >= hauteur || x < 0 || x >= largeur) continue;
+                            encre[y][x] = true;
+                            haut = Math.min(haut, y);
+                            bas = Math.max(bas, y);
+                            droite = Math.max(droite, x);
+                        }
+                }
+        }
+        if (bas < 0) return new byte[0][0];
+        int w = droite + 4, h = bas - haut + 4;
+        byte[][] g = new byte[h][w];
+        for (int y = -1; y < h - 1; y++)
+            for (int x = -1; x < w - 1; x++) {
+                byte v = 0;
+                if (encreLogo(encre, haut, bas, droite, y, x))
+                    v = !encreLogo(encre, haut, bas, droite, y - 1, x) ? (byte) 4 : !encreLogo(encre, haut, bas, droite, y + 1, x) ? (byte) 5 : (byte) 3;
+                else if (pleinLogo(encre, haut, bas, droite, y, x)) v = 2;
+                else if (pleinLogo(encre, haut, bas, droite, y - 1, x - 1)) v = 1;
+                g[y + 1][x + 1] = v;
+            }
+        return g;
+    }
+
+    private static boolean encreLogo(boolean[][] e, int haut, int bas, int droite, int y, int x) {
+        return y >= 0 && y <= bas - haut && x >= 0 && x <= droite && e[y + haut][x];
+    }
+
+    private static boolean pleinLogo(boolean[][] e, int haut, int bas, int droite, int y, int x) {
+        for (int dy = -1; dy <= 1; dy++)
+            for (int dx = -1; dx <= 1; dx++)
+                if (encreLogo(e, haut, bas, droite, y + dy, x + dx)) return true;
+        return false;
+    }
+
+    /** Dessine un titre-logo : (x, y) son coin haut-gauche, fin : pixels de l'écran par pixel du logo. */
+    static void logo(Canvas c, byte[][] g, float x, float y, int fin, int couleur, int ombre, int cerne, Paint pt) {
+        int clair = melange(couleur, 0xffffffff, 0.45f), sombre = melange(couleur, 0xff2a1a3a, 0.38f);
+        pt.setAntiAlias(false);
+        pt.setStyle(Paint.Style.FILL);
+        for (int j = 0; j < g.length; j++) {
+            int i = 0;
+            while (i < g[j].length) {
+                byte v = g[j][i];
+                int k = i;
+                while (k < g[j].length && g[j][k] == v) k++;
+                if (v != 0) {
+                    pt.setColor(v == 1 ? ombre : v == 2 ? cerne : v == 4 ? clair : v == 5 ? sombre : couleur);
+                    c.drawRect(x + i * fin, y + j * fin, x + k * fin, y + (j + 1) * fin, pt);
+                }
+                i = k;
+            }
+        }
+    }
+
     private static final int ENCRE_ICONE = 0xff1c2128;
 
     /** Dessine une icône : son encre prend la couleur donnée, son accent orange reste. pas : pixels d'écran par pixel du sprite. */

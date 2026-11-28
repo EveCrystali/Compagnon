@@ -19,6 +19,7 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | PC : amis, avant / après à 100 % | [captures/style/pc-amis-avant-apres.png](captures/style/pc-amis-avant-apres.png) |
 | PC : connecteurs, avant / après à 100 % | [captures/style/pc-connecteurs-avant-apres.png](captures/style/pc-connecteurs-avant-apres.png) |
 | PC : bulle de l'invité (avant, après) et boîte « Renommer » | [captures/style/pc-invite-renommer.png](captures/style/pc-invite-renommer.png) |
+| Téléphone : en-tête et titre « BOUTIQUE » au dessin fin, avant / après (sombre, clair, grande police) | [captures/style/android-titres-fins-avant-apres.png](captures/style/android-titres-fins-avant-apres.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
 | Réglages (clair, sombre, grande police) et premier lancement | [captures/style/reglages-et-premier-lancement.png](captures/style/reglages-et-premier-lancement.png) |
 
@@ -51,9 +52,12 @@ prend son pixel, jamais un pixel plus gros (règle 9 de `CLAUDE.md` : le pixel a
 définition, et cela vaut pour l'habillage). **La police, elle, garde son plancher de lisibilité** : quand le pixel
 s'affine, le texte ne rapetisse pas, il est dessiné plus fin (police « 2× »).
 
-Sur le téléphone, l'interface a une seule taille de pixel, celle de l'ancienne scène de l'Aventure (largeur ÷ 192). La
-scène en haute définition y est plus fine (2 px par unité sur un écran de 1078 px) : l'en-tête et la barre du bas sont
-donc à reprendre au pixel fin, comme sur le PC (second temps, pas encore fait).
+Sur le téléphone, les cadres de l'interface gardent une seule taille de pixel, celle des pages qu'ils entourent
+(largeur ÷ 192, 5 px sur un écran de 1078 px) : l'en-tête et la barre du bas encadrent des pages à ce pixel. Ce qui
+était un **dessin grossi** est passé au fin (28 novembre 2026) : le nombre du niveau et les grands titres sont des
+titres-logos (`Style.logo`), « NIV » et la pièce d'or sont au dessin fin ; les textes et les icônes de la barre
+l'étaient déjà. La scène en haute définition (2 px par unité) reste plus fine que ses cadres dans l'onglet Aventure :
+à trancher avec le chantier des animations.
 
 ## Palette
 
@@ -315,6 +319,12 @@ Deux lignes se **reformulent** au lieu de se tronquer, de la plus longue à la p
 
 Reste dans la fenêtre Aventure (session « animations ») : le sous-titre en italique système à côté du logo.
 
+**Sur le téléphone** (`Style.grilleLogo`, `Style.logo`, même grille que `LogoPixel.cs`) : un grand titre de
+`Vitrine.Pixel` (taille 4 ou plus : « BOUTIQUE », « NIVEAU 12 ! », l'issue d'une épreuve) est un titre-logo dont le
+pixel vaut la moitié de l'ancien (4 px au lieu de 9 sur un écran de 1078 px) ; le nombre du niveau de l'en-tête aussi.
+
+![Téléphone : en-tête et titre, avant / après](captures/style/android-titres-fins-avant-apres.png)
+
 ## Fenêtres du PC : l'habillage commun
 
 Une fenêtre du jeu ne garde pas la barre de titre claire de Windows au-dessus d'un contenu en pixels. Elle prend
@@ -363,6 +373,7 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 | PC : menu « Sept portes », bulle, fenêtre Aventure | au guide |
 | PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) |
 | PC : titres-logos et en-tête commun | au pixel fin (28 novembre 2026) : boutique, journal, « Pilou et moi », expéditions, Aventure, menu, info-bulle |
+| Téléphone : nombre du niveau, grands titres, « NIV », pièce d'or | au dessin fin (28 novembre 2026) ; les cadres gardent le module des pages |
 | PC : journal, prénom, « Pilou et moi » | au guide (28 novembre 2026) ; le champ du prénom garde la police du système (exception des champs de saisie) |
 | PC : expéditions | au guide (28 novembre 2026) |
 | PC : habillage commun des fenêtres | posé sur la boutique, le journal, le prénom, « Pilou et moi », les expéditions , les amis, les connecteurs, la boîte « Renommer » ; à brancher sur l'Aventure et la scène d'évolution (session « animations ») |
