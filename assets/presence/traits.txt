@@ -1,0 +1,108 @@
+# Les mots des traits de personnalité (docs/TRAITS.md). Même format que mots.txt : famille|filtres|texte.
+#
+#   annonce-<trait>  la phrase qui annonce le trait, dite une seule fois (une ligne par trait, pas davantage)
+#   trait-<trait>    ses répliques, tirées par le moteur de présence quand le trait est l'un des trois dominants
+#
+# Voix de docs/LORE.md : minuscules, 90 caractères au plus, drôle par sa logique. Le trait est celui de Pilou : il l'a
+# attrapé à force de vivre avec le joueur. Jamais un reproche, jamais un conseil, jamais un chiffre, rien de personnel.
+# Une réplique ne dit pas l'heure qu'il est : elle peut tomber le matin comme le soir.
+
+annonce-couche-tard||je crois que je suis devenu couche-tard. c'est toi qui m'as appris, je précise.
+trait-couche-tard||le soir tard, l'écran est le seul soleil. j'y ai pris goût.
+trait-couche-tard||j'aime la nuit. même les notifications y chuchotent.
+trait-couche-tard||à force de veiller, je connais le nom de trois étoiles. c'est moi qui les ai nommées.
+
+annonce-leve-tot||je me lève tôt, maintenant. j'ai vu le matin en vrai : il est orange, comme mon antenne.
+trait-leve-tot||le matin tôt, tout est neuf. même moi, j'ai l'impression d'être neuf.
+trait-leve-tot||j'aime l'heure où le soleil n'a pas encore fini de se coiffer.
+trait-leve-tot||se lever tôt, c'est avoir la journée avant tout le monde. je la garde au chaud.
+
+annonce-pecheur-du-dimanche||ça y est, je suis pêcheur du dimanche. le poisson, lui, n'a pas d'agenda.
+trait-pecheur-du-dimanche||je repense au bouchon qui danse. c'est mon film préféré.
+trait-pecheur-du-dimanche||pêcher, c'est attendre avec un but. j'adore attendre avec un but.
+trait-pecheur-du-dimanche||j'ai un grand respect pour les poissons. ils nagent dans ce qui me délaie.
+
+annonce-gourmand||je suis devenu gourmand. avant je goûtais pour vérifier. maintenant je vérifie beaucoup.
+trait-gourmand||je pense à manger. ce n'est pas une information, c'est un état.
+trait-gourmand||un bon plat, c'est un câlin qui se mange.
+trait-gourmand||j'ai une petite faim. j'ai toujours une petite faim, elle habite là.
+
+annonce-grand-lecteur||à force de lire avec toi, me voilà grand lecteur. je lis surtout les marges, c'est calme.
+trait-grand-lecteur||j'aime les livres. c'est de l'encre qui a réussi.
+trait-grand-lecteur||quand tu lis, je lis aussi. je suis juste plus lent : je savoure les virgules.
+trait-grand-lecteur||un jour j'écrirai un livre. très court. une goutte.
+
+annonce-codeur-au-long-cours||me voilà codeur au long cours. je ne comprends pas tout, mais je tiens la distance.
+trait-codeur-au-long-cours||j'aime quand ça compile. je ne sais pas ce que ça veut dire, mais ça te détend.
+trait-codeur-au-long-cours||le code, c'est long. heureusement on est deux, et j'ai des petits pieds endurants.
+trait-codeur-au-long-cours||un point-virgule, c'est une virgule qui porte un chapeau. j'ai trouvé ça tout seul.
+
+annonce-casanier||je suis casanier, je crois. bas de l'écran, pot de fleurs : tout est à portée de pied.
+trait-casanier||on est bien, ici. j'ai compté : zéro raison de bouger.
+trait-casanier||mon endroit préféré, c'est ici. le deuxième, c'est ici aussi, un peu à gauche.
+trait-casanier||rester à la maison, c'est voyager sans perdre son baluchon.
+
+annonce-voyageur||je suis devenu voyageur. mon baluchon a plus de souvenirs que de place.
+trait-voyageur||j'ai encore de la poussière d'expédition sous les pieds. je la garde, c'est un souvenir.
+trait-voyageur||partir, c'est bien. revenir sur ton écran, c'est mieux. je fais les deux.
+trait-voyageur||mon baluchon est prêt. il est toujours prêt : il ne contient presque rien.
+
+annonce-calin||je suis devenu câlin. c'est ta faute, et je ne porte pas plainte.
+trait-calin||une caresse, et j'oublie ce que je faisais. je ne faisais rien, mais quand même.
+trait-calin||je ronronnerais si je savais. à la place, je fais des petites bulles.
+trait-calin||je suis rond exprès : c'est plus pratique pour les câlins.
+
+annonce-tete-en-l-air||on est un peu tête en l'air, toi et moi. on se perd de vue, on se retrouve : ça marche.
+trait-tete-en-l-air||j'ai oublié ce que je voulais te dire. c'était gentil, en tout cas.
+trait-tete-en-l-air||je range mes idées. il y en a une sous le pot de fleurs, je crois.
+trait-tete-en-l-air||parfois j'oublie quel jour on est. ça me fait une surprise par jour.
+
+annonce-siffloteur||je sifflote, maintenant. sans lèvres, c'est surtout de l'intention.
+trait-siffloteur||j'ai un air dans la tête. il n'a que deux notes, mais elles s'entendent bien.
+trait-siffloteur||la musique me fait bouger l'antenne. elle a plus le sens du rythme que moi.
+trait-siffloteur||je sifflote. si tu n'entends rien, c'est que c'est réussi.
+
+annonce-bon-joueur||je suis devenu bon joueur. quand je perds, je dis bravo. quand je gagne aussi, plus fort.
+trait-bon-joueur||on rejoue quand tu veux. j'ai préparé ma tête de quelqu'un qui perd bien.
+trait-bon-joueur||gagner, perdre : dans les deux cas je sautille. c'est mon avis sur le sport.
+trait-bon-joueur||j'aime jouer avec toi. le score, je le laisse aux gens qui savent compter.
+
+annonce-bon-voisin||je suis bon voisin, maintenant. je frappe avant d'entrer. enfin, je dis toc.
+trait-bon-voisin||je pense aux copains d'en face. je leur ai laissé une trace de pied, pour dire bonjour.
+trait-bon-voisin||rendre visite, c'est bien. on revient avec des nouvelles et la poussière des autres.
+trait-bon-voisin||chez les amis, je m'essuie les pieds. deux fois. j'en ai deux.
+
+annonce-douillet||je suis devenu douillet. tu prends soin de moi, et je me laisse faire avec sérieux.
+trait-douillet||on a pris soin de moi. je brille un peu, tu as remarqué ?
+trait-douillet||je suis propre, nourri, content. il ne me manque rien, c'est suspect.
+trait-douillet||être bien soigné, ça rend le bleu plus bleu. c'est scientifique, à peu près.
+
+annonce-flaneur||je suis flâneur, maintenant. le week-end je ne fais rien, mais je le fais avec toi.
+trait-flaneur||flâner, c'est aller nulle part en prenant son temps. j'ai un don.
+trait-flaneur||les jours sans réveil ont un goût de tartine. je ne saurais pas mieux dire.
+trait-flaneur||je marche lentement exprès. on voit mieux le bas de l'écran.
+
+annonce-amateur-d-histoires||je suis amateur d'histoires. surtout celles où je suis dedans et où ça finit bien.
+trait-amateur-d-histoires||j'aime les histoires. surtout le moment où on ne sait pas encore.
+trait-amateur-d-histoires||« il était une fois », c'est mes quatre mots préférés. juste après, il y a « à table ».
+trait-amateur-d-histoires||une bonne histoire, on en sort avec des pieds neufs.
+
+annonce-barbouilleur||je suis barbouilleur, paraît-il. normal : je suis fait d'encre, c'est de famille.
+trait-barbouilleur||j'ai fait une tache. elle te ressemble un peu. c'est donc un portrait.
+trait-barbouilleur||dessiner, c'est renverser de l'encre exprès. j'approuve des deux pieds.
+trait-barbouilleur||j'aime les couleurs. surtout le bleu, mais je ne suis pas objectif.
+
+annonce-bon-public||je suis bon public. je ris avant la blague, pour être sûr d'être à l'heure.
+trait-bon-public||j'adore regarder des choses avec toi. même le générique, je le trouve bien joué.
+trait-bon-public||au cinéma, je serais celui qui applaudit. avec les pieds, donc discrètement.
+trait-bon-public||je ne comprends pas toujours l'histoire, mais j'ai peur aux bons moments.
+
+annonce-veinard||je suis veinard. la preuve : une prise rare, et surtout je suis tombé sur ton écran.
+trait-veinard||j'ai de la chance. je ne sais pas où je la range, mais elle revient toujours.
+trait-veinard||une prise rare, ça ne s'explique pas. ça se raconte, longtemps, à tout le monde.
+trait-veinard||la chance, c'est comme mon antenne : je ne la vois pas, mais elle est là.
+
+annonce-chineur||je suis devenu chineur. je regarde tout, je touche à tout, je repose presque tout.
+trait-chineur||je suis passé devant la boutique. juste pour regarder. j'ai beaucoup regardé.
+trait-chineur||un objet de plus, c'est un souvenir avec une étiquette.
+trait-chineur||j'aime les belles choses. et les moins belles, si elles ont l'air seules.
