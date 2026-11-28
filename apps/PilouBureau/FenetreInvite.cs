@@ -15,14 +15,9 @@ public sealed class FenetreInvite : Window
 
     private readonly Scene _scene = new();
     private readonly Border _bulle;
-    private readonly TextBlock _texte = new()
-    {
-        FontFamily = new FontFamily("Segoe UI"),
-        FontSize = 12.5,
-        FontStyle = FontStyles.Italic,
-        TextWrapping = TextWrapping.Wrap,
-    };
-    private readonly TextBlock _nom = new() { FontFamily = new FontFamily("Segoe UI"), FontSize = 11, FontWeight = FontWeights.SemiBold };
+    // Le nom et la phrase de l'invité, dans la police pixel de Pilou (la même taille que sa bulle : BullePixel.cs).
+    private readonly TextePixel _texte = new("", Brushes.Black) { MaxLignes = 4, Margin = new Thickness(0, 0, 0, 2) };
+    private readonly TextePixel _nom = new("", Brushes.Black) { Titre = true, MaxLignes = 1 };
     private readonly double _k;
     private double _bulleJusque = -1e12;
 
@@ -43,9 +38,9 @@ public sealed class FenetreInvite : Window
         // Bulle de l'invité : bord orange (celle de Pilou est bleue), nom en tête.
         var fond = Gel(sombre ? "#2d333b" : "#f6f8fa");
         var texte = Gel(sombre ? "#cdd9e5" : "#1c2128");
-        _texte.Foreground = texte;
-        _nom.Foreground = Gel(sombre ? "#f69d50" : "#c86a1c");
-        _nom.Text = nom;
+        _texte.Couleur = texte;
+        _nom.Couleur = Gel(sombre ? "#f69d50" : "#9c4a0a");
+        _nom.Texte = nom;
         var pile = new StackPanel();
         pile.Children.Add(_nom);
         pile.Children.Add(_texte);
@@ -95,7 +90,7 @@ public sealed class FenetreInvite : Window
 
     public void Dire(string texte, double maintenant, double ms = 4500)
     {
-        _texte.Text = texte;
+        _texte.Texte = texte;
         _bulleJusque = maintenant + ms;
         _bulle.Visibility = Visibility.Visible;
     }

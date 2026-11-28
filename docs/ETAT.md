@@ -70,6 +70,9 @@ Dernière mise à jour : 28 novembre 2026.
   Titres-logos et en-tête commun du PC au pixel fin (`LogoPixel`, `Bandeau`) : le pixel des titres passe de 4 ou 5 px
   à 2 px, celui de la scène en haute définition ; l'en-tête (niveau, XP, pièces) quitte la police système. Vu dans l'exe
   d'essai à 100 % (boutique, journal, « Pilou et moi », expéditions, Aventure, menu). Reste : le téléphone.
+  Amis, connecteurs, boîte « Renommer » et bulle de l'invité au guide (`ReglagesPixel.cs` : case à cocher, options,
+  dépliant, champ) : de nuit, en police pixel, sous l'habillage commun. Vu dans l'exe d'essai à 100 % ; les clics réels
+  dans ces deux fenêtres ne sont pas essayés.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
