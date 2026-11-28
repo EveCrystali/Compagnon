@@ -247,131 +247,7 @@ public sealed partial class FenetrePilou : Window
         return _pinceaux[hex] = br;
     }
 
-    // ---- Options (clic droit)
-
-    private void Remplir(ContextMenu menu)
-    {
-        menu.Items.Clear();
-        // En tête : le bandeau (niveau, XP, po) et la boutique, mise en avant.
-        menu.Items.Add(BandeauMenu());
-        int neufs = NouveautesBoutique();
-        menu.Items.Add(Entree(neufs > 0 ? $"🛒 Boutique ({neufs} nouveauté{(neufs > 1 ? "s" : "")})" : "🛒 Boutique", OuvrirBoutique));
-        menu.Items.Add(Prudemment(MenuAventure, Entree("✉ Aventure…", OuvrirAventure)));
-        menu.Items.Add(new Separator());
-        menu.Items.Add(Entree("♥ Caresser", Caresser));
-        menu.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
-        menu.Items.Add(MenuSoins());
-        menu.Items.Add(MenuPilouEtMoi());
-        menu.Items.Add(Entree("Afficher Claude", () => Natif.Activer(Natif.TrouverClaude())));
-        menu.Items.Add(new Separator());
-        menu.Items.Add(Choix("Taille", new[] { ("Petit", 0.75), ("Normal", 1.0), ("Grand", 1.3) }, _reglages.Taille,
-            v => { _reglages.Taille = v; AppliquerTaille(); }));
-        var fin = Case("Dessin fin", _reglages.DessinFin, v =>
-        {
-            _reglages.DessinFin = v;
-            if (_jeuEnCours != Jeu.Aucun) Arreter(""); // ce qui est posé autour de Pilou a été mesuré pour l'autre dessin
-            AppliquerTaille();
-        });
-        fin.ToolTip = "Pilou dessiné deux fois plus fin, en pixels nets à toutes les mises à l'échelle. Décoché : le dessin d'origine.\n"
-                      + MesuresDessin();
-        menu.Items.Add(fin);
-        menu.Items.Add(Choix("Bulle", new[] { ("Détaillée", ModeBulle.Detaillee), ("Compacte (détail au survol)", ModeBulle.Compacte), ("Seulement quand on t'attend", ModeBulle.Masquee) },
-            _reglages.Bulle, v => _reglages.Bulle = v));
-        menu.Items.Add(Choix("Thème de la bulle", new[] { ("Comme Windows", ThemeBulle.Auto), ("Clair", ThemeBulle.Clair), ("Sombre", ThemeBulle.Sombre) },
-            _reglages.Theme, v => { _reglages.Theme = v; _themeLu = -1e9; }));
-        menu.Items.Add(Choix("Sons", new[] { ("Aucun", "aucun"), ("Discrets", "discrets"), ("Normaux", "normaux") }, _reglages.Sons, v => { _reglages.Sons = v; Sons.Jouer(Son.Caresse); }));
-        var accessoires = new MenuItem { Header = "Accessoire" };
-        foreach (var a in new[] { Accessoire.Saison, Accessoire.Aucun, Accessoire.Feuille, Accessoire.Noeud, Accessoire.Casque,
-                     Accessoire.Bonnet, Accessoire.Lunettes, Accessoire.Couronne, Accessoire.ChapeauPeche, Accessoire.Toque,
-                     Accessoire.Tablier, Accessoire.EtoileMer })
-        {
-            bool possede = a is Accessoire.Saison or Accessoire.Aucun || Possede(Recompenses.IdAccessoire(a));
-            var m = new MenuItem
-            {
-                Header = possede ? Nom(a) : $"{Nom(a)} — boutique",
-                IsCheckable = true,
-                IsChecked = _reglages.Accessoire == a,
-                IsEnabled = possede,
-            };
-            m.Click += (_, _) =>
-            {
-                _reglages.Accessoire = a;
-                _reglages.Ecrire(_dossier);
-            };
-            accessoires.Items.Add(m);
-        }
-        menu.Items.Add(accessoires);
-
-        // Couleur : celles qu'on possède (boutique) ; le bleu de base est toujours là.
-        var couleurs = new MenuItem { Header = "Couleur" };
-        var porteeCouleur = EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Couleur, "");
-        var bleu = new MenuItem { Header = "Bleu ciel", IsCheckable = true, IsChecked = porteeCouleur == "" };
-        bleu.Click += (_, _) => Equiper(PilouBureau.Boutique.Couleur, "");
-        couleurs.Items.Add(bleu);
-        foreach (var a in PilouBureau.Boutique.Catalogue.Where(a => a.Slot == PilouBureau.Boutique.Couleur && Possede(a.Id)))
-        {
-            var m = new MenuItem { Header = a.Nom, IsCheckable = true, IsChecked = porteeCouleur == a.Id };
-            m.Click += (_, _) => Equiper(PilouBureau.Boutique.Couleur, a.Id);
-            couleurs.Items.Add(m);
-        }
-        couleurs.Items.Add(new Separator());
-        couleurs.Items.Add(Entree("D'autres couleurs à la boutique…", () => OuvrirBoutique(PilouBureau.Boutique.Couleur)));
-        menu.Items.Add(couleurs);
-        // Ce qu'il porte : un clic retire l'objet (parapluie compris), sans passer par la boutique.
-        var portes = EquipeCourant()
-            .Where(kv => kv.Value != "" && PilouBureau.Boutique.SurPilou(kv.Key) && kv.Key != PilouBureau.Boutique.Effet)
-            .OrderBy(kv => kv.Key).ToList();
-        if (portes.Count > 0)
-        {
-            var garde = new MenuItem { Header = $"Ce qu'il porte ({portes.Count})" };
-            foreach (var (slot, id) in portes)
-            {
-                var nom = PilouBureau.Boutique.Trouver(id)?.Nom ?? id;
-                garde.Items.Add(Entree($"✕ Retirer : {nom}", () => { Equiper(slot, ""); Dire($"{nom} rangé", 2500); }));
-            }
-            if (portes.Count > 1)
-            {
-                garde.Items.Add(new Separator());
-                garde.Items.Add(Entree("✕ Tout retirer", () =>
-                {
-                    foreach (var (slot, _) in portes) Equiper(slot, "");
-                    Dire("tout est rangé", 2500);
-                }));
-            }
-            menu.Items.Add(garde);
-        }
-        if (Possede(PilouBureau.Boutique.TraineeEtoiles))
-            menu.Items.Add(Case("Traînée d'étoiles", EquipeCourant().GetValueOrDefault(PilouBureau.Boutique.Effet) == PilouBureau.Boutique.TraineeEtoiles,
-                v => Equiper(PilouBureau.Boutique.Effet, v ? PilouBureau.Boutique.TraineeEtoiles : "")));
-
-        menu.Items.Add(MenuNiveaux());
-        menu.Items.Add(MenuEvolution());
-        menu.Items.Add(Case("Se promène", _reglages.Promenade, v => _reglages.Promenade = v));
-        menu.Items.Add(Case("Suit la souris du regard", _reglages.SuitSouris, v => _reglages.SuitSouris = v));
-        menu.Items.Add(Case("Petits jeux (de temps en temps)", _reglages.Jeux, v => _reglages.Jeux = v));
-        menu.Items.Add(MenuJouer());
-        foreach (var m in MenusPeche()) menu.Items.Add(m);
-        menu.Items.Add(MenuExpedition());
-        menu.Items.Add(new Separator());
-        menu.Items.Add(Entree(string.IsNullOrWhiteSpace(_reglages.DossierPartage) ? "Partager l'XP entre PC… (choisir un dossier)" : $"XP partagée : {_reglages.DossierPartage}", ChoisirPartage));
-        menu.Items.Add(Case("Démarrer avec Windows", Demarrage.Actif(), Demarrage.Regler));
-        menu.Items.Add(Case("Icône près de l'horloge", _reglages.IconeNotification, v =>
-        {
-            _reglages.IconeNotification = v;
-            if (_zoneNotif is not null) _zoneNotif.IconeVisible = v;
-        }));
-        menu.Items.Add(MenuQuetes());
-        foreach (var m in MenusAmis()) menu.Items.Add(m);
-        menu.Items.Add(MenuIntegrations());
-        menu.Items.Add(MenuConnecteurs());
-        menu.Items.Add(MenuActivites());
-        menu.Items.Add(MenuGestes());
-        menu.Items.Add(MenuVersion());
-        menu.Items.Add(new Separator());
-        menu.Items.Add(Entree("Se cacher 10 min", () => _cacheJusque = Maintenant + 10 * 60_000));
-        menu.Items.Add(Entree("Redémarrer Pilou", Redemarrer));
-        menu.Items.Add(Entree("Quitter (revient à la prochaine session)", () => Application.Current.Shutdown()));
-    }
+    // ---- Options (clic droit) : le menu lui-même est construit dans MenuPortes.cs
 
     // Dossier de partage (OneDrive commun à tes PC, partage réseau…) : chaque PC y dépose son profil.
     private void ChoisirPartage()
@@ -398,7 +274,7 @@ public sealed partial class FenetrePilou : Window
         var parent = new MenuItem { Header = titre };
         foreach (var (nom, valeur) in options)
         {
-            var m = new MenuItem { Header = nom, IsCheckable = true, IsChecked = EqualityComparer<T>.Default.Equals(valeur, actuel) };
+            var m = new MenuItem { Header = nom, IsCheckable = true, IsChecked = EqualityComparer<T>.Default.Equals(valeur, actuel), Tag = "rond" };
             m.Click += (_, _) =>
             {
                 choisir(valeur);

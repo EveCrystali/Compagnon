@@ -69,7 +69,7 @@ public sealed partial class FenetrePilou
             _profil.Bourse.Consommables[PilouBureau.Boutique.PierreCalme]--;
             ev.Retenue = true;
             _profil.Ecrire(DossierPartage);
-            Dire("la pierre de calme retient l'évolution (clic droit → Évolution pour la laisser faire)", 5000);
+            Dire("la pierre de calme retient l'évolution (clic droit → Progrès → Évolution pour la laisser faire)", 5000);
             return;
         }
         DemarrerEvolution(Acces.Stade(n));
@@ -189,17 +189,7 @@ public sealed partial class FenetrePilou
             }));
         int pierres = _profil.Bourse.Consommables.GetValueOrDefault(PilouBureau.Boutique.PierreCalme);
         m.Items.Add(new MenuItem { Header = $"Pierres de calme : {pierres}", IsEnabled = false });
-        m.Items.Add(new Separator());
-        m.Items.Add(new MenuItem { Header = "Forme affichée", IsEnabled = false });
-        var auto = new MenuItem { Header = "La plus grande atteinte", IsCheckable = true, IsChecked = ev.StadeAffiche == 0 };
-        auto.Click += (_, _) => ChoisirForme(0);
-        m.Items.Add(auto);
-        foreach (var s in Acces.Stades.Where(s => s.Stade <= atteint))
-        {
-            var f = new MenuItem { Header = s.Nom, IsCheckable = true, IsChecked = ev.StadeAffiche == s.Stade };
-            f.Click += (_, _) => ChoisirForme(s.Stade);
-            m.Items.Add(f);
-        }
+        m.Items.Add(Info("La forme montrée : Apparence ▸ Forme affichée"));
         return m;
     }
 

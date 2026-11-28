@@ -174,7 +174,7 @@ internal sealed class FenetreJournal : Window
             _humeur.Text = "";
             _texte.Text = _pilou.Pres.JournalActif
                 ? "Pilou n'a encore rien écrit. Ce soir, s'il s'est passé quelque chose, il prendra sa plume."
-                : "Le journal est en pause (clic droit sur Pilou → Pilou et moi). Les pages déjà écrites restent ici.";
+                : "Le journal est en pause (clic droit sur Pilou → Réglages → Tenir son journal). Les pages déjà écrites restent ici.";
             _page.Text = "";
             Dessiner("repos");
             return;
@@ -231,7 +231,7 @@ internal sealed class FenetrePrenom : Window
         p.Children.Add(new TextBlock
         {
             Text = "Un prénom ou un surnom. Il reste entre tes appareils (dans le groupe chiffré), jamais chez tes amis. "
-                   + "Tu peux le changer ou l'effacer quand tu veux (Pilou et moi).",
+                   + "Tu peux le changer ou l'effacer quand tu veux (clic droit → Réglages).",
             Foreground = Bandeau.Argent, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 10),
             FontFamily = new FontFamily("Segoe UI"),
         });

@@ -344,27 +344,4 @@ public sealed partial class FenetrePilou
         SoinsChanges();
     }
 
-    private MenuItem MenuSoins()
-    {
-        var e = SoinsMaintenant();
-        var m = new MenuItem
-        {
-            Header = Soins.Amadoue(e) ? "Soins · il se laisse amadouer ☁ (gains ×0,6)"
-                : Soins.Boudeur(e) ? "Soins · il boude ☁ (gains ×0,6)"
-                : Soins.Rayonnant(e) ? "Soins · il rayonne ✧ (gains ×1,2)"
-                : Soins.Manques(e).Count > 0 ? "Soins · il a besoin de toi" : "Soins · tout va bien",
-        };
-        m.Items.Add(new MenuItem { Header = Soins.Resume(e), IsEnabled = false });
-        m.Items.Add(Entree("♥ Prendre soin de Pilou", PrendreSoin));
-        m.Items.Add(new Separator());
-        m.Items.Add(Case("Vacances (tout est figé)", e.Vacances, v => FaireSoin("vacances", v ? "1" : "0")));
-        if (_profil.Evolution.Variantes.Count > 0)
-            m.Items.Add(new MenuItem
-            {
-                Header = "Variantes : " + string.Join(", ", _profil.Evolution.Variantes.OrderBy(kv => kv.Key)
-                    .Select(kv => $"{Acces.NomStade(kv.Key)} {Soins.NomVariante(kv.Value)}")),
-                IsEnabled = false,
-            });
-        return m;
-    }
 }

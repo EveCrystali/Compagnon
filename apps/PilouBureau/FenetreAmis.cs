@@ -821,13 +821,6 @@ public sealed partial class FenetrePilou
 
     // ---- Menu et fenêtre « Amis »
 
-    private IEnumerable<MenuItem> MenusAmis()
-    {
-        yield return Entree("Amis…", OuvrirAmis);
-        if (_visites.Sortie is { Etape: Etape.Depart or Etape.Absent } s)
-            yield return Entree($"Rappeler Pilou (parti chez {MesAmis.Trouver(s.Ami)?.Nom ?? "un ami"})", Rappeler);
-    }
-
     private void OuvrirAmis()
     {
         if (_fenetreAmis is { IsVisible: true })

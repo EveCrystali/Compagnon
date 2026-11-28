@@ -372,61 +372,6 @@ public sealed partial class FenetrePilou
         return false;
     }
 
-    // ---- Menu « Pilou et moi »
-
-    private MenuItem MenuPilouEtMoi()
-    {
-        var m = new MenuItem { Header = "♥ Pilou et moi" };
-        try
-        {
-            var e = Pres;
-            var t = e.Totaux();
-            int suivant = t.Palier + 1 < Presence.Seuils.Length ? Presence.Seuils[t.Palier + 1] : -1;
-            m.Items.Add(new MenuItem
-            {
-                Header = $"Complicité : {Presence.NomPalier(t.Palier)} · {t.Jours} jour{(t.Jours > 1 ? "s" : "")} ensemble"
-                         + (suivant > 0 ? $" · {JaugeComplicite(t.Points, Presence.Seuils[t.Palier], suivant)}" : " · ★"),
-                IsEnabled = false,
-            });
-            m.Items.Add(Entree("📖 Journal de Pilou…", () => OuvrirJournal()));
-            m.Items.Add(new Separator());
-            m.Items.Add(Choix("Pilou me parle", new[] { ("Peu (un mot par jour)", "peu"), ("Normalement (trois mots par jour au plus)", "normal"), ("Jamais", "jamais") },
-                e.Parle, v =>
-                {
-                    e.Parle = v;
-                    _presenceChange = true;
-                    EcrirePresence();
-                }));
-            m.Items.Add(Case("Tenir son journal (les faits du jour, rien de personnel)", e.JournalActif, v =>
-            {
-                e.JournalActif = v;
-                EcrirePresence();
-            }));
-            m.Items.Add(Case("Petits gestes de complicité (signe, clin d'œil, sieste tardive)", e.Gestes, v =>
-            {
-                e.Gestes = v;
-                EcrirePresence();
-            }));
-            m.Items.Add(new Separator());
-            var prenom = e.Prenom;
-            m.Items.Add(Entree(prenom == "" ? "Lui dire comment je m'appelle…" : $"Mon prénom pour Pilou : {prenom} — changer…", DemanderPrenom));
-            if (prenom != "")
-                m.Items.Add(Entree("Oublier mon prénom", () => Quotidien(() =>
-                {
-                    e.ChoisirPrenom("", (long)Epoque);
-                    _presenceUrgent = true;
-                    EcrirePresence();
-                    Dire("c'est oublié. tu restes « toi », c'est très bien", 4000);
-                })));
-            m.Items.Add(new MenuItem { Header = "Le prénom reste entre tes appareils (groupe chiffré), jamais chez tes amis", IsEnabled = false });
-        }
-        catch (Exception x) when (x is not OutOfMemoryException)
-        {
-            _presenceErreurs++;
-        }
-        return m;
-    }
-
     // Une petite jauge de signes (jamais de rouge ni de vert) : ■■■□□.
     internal static string JaugeComplicite(int points, int bas, int haut)
     {

@@ -497,9 +497,9 @@ public sealed partial class FenetrePilou
             menu.Placement = PlacementMode.MousePoint;
             menu.IsOpen = true;
         });
-        Plus(1200, () => Survoler(EntreeMenu(menu, "🛒 Boutique")));
+        Plus(1200, () => Survoler(EntreeMenu(menu, PlanMenu.Soin.Titre)));
         double t = 1900;
-        foreach (var (nom, enfants) in new[] { ("Couleur", 2), ("Intégrations", 2) })
+        foreach (var (nom, enfants) in new[] { (PlanMenu.Jouer.Titre, 2), (PlanMenu.Apparence.Titre, 2) })
         {
             SousMenu(menu, nom, t, enfants);
             t += 1000 + enfants * 650;
