@@ -99,6 +99,7 @@ internal sealed class FenetreAventure : Window
     private VueEpreuve? _epreuve;
     // Animations (ScenesAnimees.cs) : décor en boucle et ses transitions, portrait du personnage, fond, vignettes.
     private readonly ScenesAnimees _anims;
+    private Action? _miseEnPage;          // la mise en page de la lecture, refaite quand la scène change de définition
     private readonly Image _persoImage = new() { Width = 104, Height = 104, Stretch = Stretch.Uniform, Visibility = Visibility.Collapsed };
     private readonly TextePixel _persoNom = new("", CadrePixel.Titre) { Taille = 1.5 };
     private readonly StackPanel _perso = new() { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 16, 4), IsHitTestVisible = false };
@@ -218,7 +219,7 @@ internal sealed class FenetreAventure : Window
         _anims = new ScenesAnimees(pilou);
         Title = "Aventure de Pilou";
         Width = 1020;
-        Height = 800;
+        Height = 880;                          // la scène HD (480 × 240 à ×2) gagne 80 px sur l’ancienne (80 × 5)
         MinWidth = 840;
         MinHeight = 560;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -228,7 +229,9 @@ internal sealed class FenetreAventure : Window
         SnapsToDevicePixels = true;
         if (StyleBarre() is { } sb) Resources[typeof(ScrollBar)] = sb;
         RenderOptions.SetBitmapScalingMode(_portrait, BitmapScalingMode.NearestNeighbor);
-        _theatre = new VueTheatre(() => _anims.Niveau, () => _teinte.Length == 4 ? _teinte : _teinte = RenduPilou.Teinte(_pilou.AllurePortrait("repos", 0), Banque.Commune));
+        // En HD (docs/SCENES-HD.md), le Pilou de scène est le Pilou fin du bureau : il prend l'allure du joueur.
+        _theatre = new VueTheatre(() => _anims.Niveau, () => _teinte.Length == 4 ? _teinte : _teinte = RenduPilou.Teinte(_pilou.AllurePortrait("repos", 0), Banque.Commune),
+            () => _pilou.AllurePortrait("repos", 0));
         _boite.MouseLeftButtonDown += (_, _) => Sur(Accelerer);
         RenderOptions.SetBitmapScalingMode(_persoImage, BitmapScalingMode.NearestNeighbor);
         _persoNom.HorizontalAlignment = HorizontalAlignment.Center;
@@ -902,14 +905,18 @@ internal sealed class FenetreAventure : Window
         g.Children.Add(bas);
 
         // La scène prend la plus grande échelle entière qui laisse au moins 192 px à la boîte ; les cadres pixel ont pour
-        // unité le pixel de la scène.
-        g.SizeChanged += (_, _) => Sur(() =>
+        // unité le pixel de la scène. Un lieu HD (480 × 240, docs/SCENES-HD.md) refait ce calcul quand il arrive.
+        void Mettre() => Sur(() =>
         {
             _theatre.Ajuster(g.ActualWidth, Math.Max(160, g.ActualHeight - 200));
-            _planche.Height = Theatre.H * _theatre.Echelle;
+            _planche.Height = _theatre.HauteurScene * _theatre.Echelle;
             foreach (var cp in Cadres(g).Where(c => c.Tag as string == "cadre")) cp.U = _theatre.Echelle;
             _repliqueDefile.MaxHeight = 5 * LigneEcran();
         });
+        g.SizeChanged += (_, _) => Mettre();
+        _theatre.Redimensionne -= _miseEnPage;
+        _miseEnPage = Mettre;
+        _theatre.Redimensionne += _miseEnPage;
         _persoCle = "\u0001";
         _dernierPilou = null;
         _corps.Children.Add(g);
@@ -919,11 +926,11 @@ internal sealed class FenetreAventure : Window
     private void PlacerChoix()
     {
         int k = Math.Max(1, _theatre.Echelle);
-        double l = _planche.ActualWidth > 0 ? _planche.ActualWidth : Theatre.W * k, h = _planche.ActualHeight > 0 ? _planche.ActualHeight : Theatre.H * k;
+        double l = _planche.ActualWidth > 0 ? _planche.ActualWidth : _theatre.LargeurScene * k, h = _planche.ActualHeight > 0 ? _planche.ActualHeight : _theatre.HauteurScene * k;
         _choixScene.Margin = new Thickness(0);
         _choixScene.Measure(new Size(Math.Min(l, _choixScene.MaxWidth), h));
         var d = _choixScene.DesiredSize;
-        double ox = Math.Max(0, (l - Theatre.W * k) / 2);
+        double ox = Math.Max(0, (l - _theatre.LargeurScene * k) / 2);
         // La légende du lieu et les boutons, en pixels de scène (arrondis vers l'extérieur) : le panneau ne les couvre pas.
         var gene = new List<(int, int, int, int)>();
         foreach (var e in new FrameworkElement?[] { _legende, _outils })

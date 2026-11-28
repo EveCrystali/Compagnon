@@ -397,14 +397,16 @@ public static class Theatre
     public static (int X, int Y) PlacerPanneau(Scene sc, int w, int h, int pilouX, bool perso, (int L, int H)? taille = null,
         IReadOnlyList<(int X0, int Y0, int X1, int Y1)>? gene = null)
     {
-        const int marge = 2, pas = 2;
-        int haut = gene is null ? 9 : marge;
+        // Les marges et le pas à l'échelle de la scène (ancienne définition ou HD : docs/SCENES-HD.md).
+        int W = sc.D.W, H = sc.D.H, marge = E(sc, 2), pas = E(sc, 2);
+        int haut = gene is null ? E(sc, 9) : marge;
         w = Math.Min(w, W - 2 * marge);
         h = Math.Min(h, H - haut - marge);
         int sp = Sol(sc, sc.Interlocuteur), sx = Sol(sc, pilouX);
-        var (pl, ph) = taille ?? (26, 33);
+        var (pl, ph) = taille ?? (E(sc, 26), E(sc, 33));
         var persoR = (sc.Interlocuteur - pl / 2 - 1, sp - ph, sc.Interlocuteur + pl / 2 + 1, sp + 1);
-        var pilouR = (pilouX - 11, sx - 23, pilouX + 11, sx + 1);
+        // Pilou : le mini-Pilou (22 × 24) ou, en HD, le Pilou fin du bureau (62 × 87 au stade Pilou).
+        var pilouR = sc.D == Hd ? (pilouX - 31, sx - 87, pilouX + 31, sx + 1) : (pilouX - 11, sx - 23, pilouX + 11, sx + 1);
         (int, int) meilleur = (marge, haut);
         long note = long.MaxValue;
         for (int x = marge; x <= W - w - marge; x += pas)
