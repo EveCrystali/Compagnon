@@ -1134,7 +1134,7 @@ def f_dents_sentier(x):
     return 46.0 - np.maximum(np.maximum(hl, hr), selle) - rug
 
 
-def massif(P, f, pics, roche, neige_l, neige_o, liseré, graine, brume=None, arete=0.42, selle=None):
+def massif(P, f, pics, roche, neige_l, neige_o, liseré, graine, brume=None, arete=0.42, selle=None, droite=False):
     """Une montagne d'ardoise et de neige sous la courbe f : couloirs dans la pente, névés sur les vires, une arête par
     pic (face au soleil à gauche, d'ombre à droite). pics : [(x, y du sommet)]. Renvoie le masque."""
     X, Y = P.X, P.Y
@@ -1142,13 +1142,19 @@ def massif(P, f, pics, roche, neige_l, neige_o, liseré, graine, brume=None, are
     m = Y > fx
     prof = Y - fx
     ip = np.argmin(np.stack([np.abs(X - px) for px, _ in pics]), axis=0)
+    if selle is not None and len(pics) == 2:                             # le partage entre les deux pics : au col
+        ip = (X > selle).astype(int)
     cx = np.array([px for px, _ in pics])[ip]
     hy = np.array([py for _, py in pics])[ip]
     ar = cx + arete * (Y - hy)
     s_ = np.sign(X - ar)
     flanc = -np.tanh((X - ar) / 2.5)
+    if droite:                                                         # la lumière vient de la droite
+        ar = cx - arete * (Y - hy)
+        flanc = np.tanh((X - ar) / 2.5)
     if selle is not None:
-        flanc = np.where(np.abs(X - selle) < 14.0, 0.35 * np.tanh((selle - X) / 8.0), flanc)
+        w_ = np.clip(1.4 - np.abs(X - selle) / 12.0, 0, 1)
+        flanc = w_ * 0.35 * np.tanh((selle - X) / 8.0) + (1 - w_) * flanc
     trav = X - cx - s_ * 0.75 * (Y - hy)
 
     def ride(t, y):
@@ -2224,8 +2230,20 @@ def _lac(P, tab, aube):
             petit_nuage(P, x, y, 16 - 9 * u, 5.0 - 2.6 * u, 990 + i, tons=[T.CIEL[4], T.CIEL[7], T.CIEL[9], T.CIEL[11], BLANC])
     tab.plan("lointains", 0.2)
     roches = [T.L0, T.L1, T.L2, T.L3] if not aube else [T.L1, T.L2, T.L3, T.L4]
-    sommets(P, lambda x: dents(x, cx=92.0, k=1.15, base=43.0, miroir=True), roches, neige=11.0, graine=7, limite=28.0, bas=43.0)   # l'autre versant
-    sommets(P, lambda x: pg.profil(x, 40.0, 16.0, 30.0, 981), roches, neige=5.0, graine=8, bas=43.0)
+    # Les deux Dents vues de l'autre versant (en miroir), et la couronne de sommets autour du lac : roche, névés, arêtes ;
+    # le soir, la lumière dorée vient de la gauche ; à l'aube, la lumière rose vient de la droite.
+    xs = np.arange(-6.0, 198.0, 0.25)
+    fd = lambda x: np.minimum(dents(x, cx=92.0, k=1.15, base=43.0, miroir=True), pg.profil(x, 40.0, 16.0, 30.0, 981))
+    fv = fd(xs)
+    pics = [(float(xs[np.argmin(np.where(xs < 92, fv, 99))]), float(np.min(np.where(xs < 92, fv, 99)))),
+            (float(xs[np.argmin(np.where(xs >= 92, fv, 99))]), float(np.min(np.where(xs >= 92, fv, 99))))]
+    neige_l = [T.L4, NE2, NE3, NE4, CREME] if not aube else [T.L4, NE2, NE3, NE4, BLANC]
+    massif(P, fd, pics, roches, neige_l, [T.L2, T.L3, T.L4, NE2], OR_N if not aube else T.CIEL[11], 1380,
+           brume=(T.CIEL[9], 30.0, 14.0), droite=aube, selle=float(xs[np.argmax(np.where((xs > pics[0][0]) & (xs < pics[1][0]), fv, -99))]))
+    for (sx, sy) in pics:                                              # le vent tire la neige des pointes
+        u = (X - sx) / 16.0
+        pan = (u > 0) & (u < 1) & (np.abs(Y - sy - 1.0 - 2.0 * u - 0.6 * np.sin(u * 7 + p * 6.283)) < 0.4 + 1.6 * u)
+        voile(P, pan & (pg.fbm((X - 20 * p) / 2.4, Y / 1.2, 3, 1381) > 0.45 + 0.4 * u), NE4, 0.6 * (1 - u))
     brume_claire(P, 40.0, 3.0, 50, T.CIEL[9], 0.4)
     tab.plan("moyen", 0.5)
     f_rive = lambda x: 42.6 + 0.4 * np.sin(_a(x) / 9.0)
