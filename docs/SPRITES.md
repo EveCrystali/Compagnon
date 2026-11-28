@@ -195,6 +195,47 @@ images: 8
 **Ce qui bouge.** D'une image à la suivante, 1,2 à 6 % des pixels changent (6 % : la mare et ses reflets) ; le « . »
 du format les isole, un moteur peut ne redessiner que les plages qui ne sont pas des « . ».
 
+## Personnages en haute définition
+
+Les personnages en pied des campagnes sont **redessinés** à l'unité de la scène HD (480 × 240 unités, 2 px d'écran par
+unité ; règle 9 de `CLAUDE.md`), jamais agrandis. Format et nommage : [SCENES-HD.md](SCENES-HD.md), § 6.
+
+| Module (`outils/sprites/`) | Rôle |
+|---|---|
+| `pinceau_hd.py` | la feuille et ses pinceaux, en Python pur : volumes éclairés d'en haut à gauche (`boule`, `tube`, `tour`, `poly`), rampes de trois à cinq tons, trame ordonnée seulement au passage d'un ton à l'autre, cerne teinté par matière, traits « pixel parfait » |
+| `personnages_hd.py` | le registre (`PERSOS`), l'état (`Etat`), le visage commun (`oeil`, `sourcil`, `bouche`), Grumeau, Lison, Brouillon le petit nuage |
+| `personnages_hd_panne.py` | les douze autres personnages de « La Grande Panne » |
+| `personnages_hd_export.py` | l'export `assets/sprites-hd/pied-*.txt` et la référence `personnages-hd-reference.txt` |
+| `planches_personnages_hd.py` | planches de contrôle et GIF (Pillow, outil de contrôle seulement) |
+
+```bash
+py outils/sprites/personnages_hd_export.py            # écrit assets/sprites-hd et la référence
+py outils/sprites/planches_personnages_hd.py          # planches et GIF, dans docs/maquettes/personnages
+```
+
+- **État d'un dessin** : humeur, paupières (ouvertes, mi-closes, fermées), bouche (0 à 3), souffle, phase des petits
+  mouvements (sable, nattes, traîne, curseur). Chaque humeur change une forme (sourcils, paupières, bouche, bras,
+  goutte), pas seulement une couleur.
+- **Fichiers** : `pied-<campagne>-<id>.txt` (neutre) et `pied-<campagne>-<id>-<humeur>.txt`, cinq images (repos,
+  inspiré, yeux fermés, bouche entrouverte, bouche ouverte), même toile et même ancrage pour toutes les humeurs d'un
+  personnage. Ceux qui flottent ont leur vide sous eux dans la toile.
+- **Sens** : le fichier regarde vers la droite (SCENES-HD.md) ; c'est le miroir du dessin, pensé pour la place
+  habituelle (à droite de Pilou). Retourné par le moteur, le personnage retrouve sa lumière en haut à gauche et ses
+  inscriptions à l'endroit (« Ctrl », « 13 37 », « 404 »). Non retourné, elles sont à l'envers : au moteur de le savoir.
+- **Lisibilité** : chaque personnage se vérifie sur fond sombre, fond clair et décor (planche de groupe) ; une matière
+  sombre porte un liseré clair côté lumière (le chapeau du Balayeur).
+- **Toise** : une par campagne, sur la planche de groupe, Pilou fin pour repère.
+
+| Campagne | État | Planche de groupe |
+|---|---|---|
+| La Grande Panne (13) | dessinés et exportés (33 fichiers, 194 Ko) ; pas encore lus par le moteur | [groupe-grande-panne.png](maquettes/personnages/groupe-grande-panne.png) |
+| Le phare éteint (7) | Lison dessinée (essai) ; six à faire | — |
+| Petit Nuage (9) | Brouillon dessiné (essai) ; huit à faire | — |
+| Acteurs de scène | à faire | — |
+
+Planches par personnage (toutes les humeurs, sept images) et GIF : `docs/maquettes/personnages/<campagne>-<id>.png`
+et `.gif`.
+
 ## Animations des campagnes
 
 Les campagnes vivent : décors en boucle, portraits des personnages, écriture lettre à lettre, transitions, fond qui

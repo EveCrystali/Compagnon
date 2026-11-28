@@ -1,0 +1,35 @@
+# Personnages en pied HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images duree, puis
+# l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000, rangée par rangée).
+pied-grande-panne-balayeur 42 103 20 102 5 150 bd6d7b8a ac344de3 f16f858c 6926dd1a b8e8d2cf
+pied-grande-panne-balayeur-triste 42 103 20 102 5 150 dcfb7b68 f768a1a9 b520ee3a 988f2bfc 95928549
+pied-grande-panne-brouillon 38 62 19 61 5 150 ee8a1147 048c9677 d0971fcc 3f47d294 fa4ac7f1
+pied-grande-panne-brouillon-joie 38 62 19 61 5 150 65c85337 e76635e7 65c85337 59ab3f6c 6d3a7eac
+pied-grande-panne-brouillon-peur 38 62 19 61 5 150 1ec9631a 526e533a 7b537b51 fa0f7dfd c32ead37
+pied-grande-panne-brouillon-tendre 38 62 19 61 5 150 a6837b8c af59c9cc dfd14a6f 03158b2b 20a92f4f
+pied-grande-panne-dateur 57 91 28 90 5 150 a207a67d 401ec81d 2c7ff4fd a6a33715 ad4e96f4
+pied-grande-panne-dateur-joie 57 91 28 90 5 150 3c55525c 99a6352c 3c55525c 1e7dd34d 64b157cf
+pied-grande-panne-dateur-triste 57 91 28 90 5 150 796b8866 1b6e2ed6 bc9fad4a 92572563 409731f6
+pied-grande-panne-golem 85 96 41 95 5 150 991c8329 d8031e20 0d89af64 d5e830ed 40fae88c
+pied-grande-panne-golem-colere 85 96 41 95 5 150 6c216266 503df855 53f9f74d 2ad76ecb ea2df36b
+pied-grande-panne-grumeau 52 88 25 87 5 150 347b2453 f64169b2 fb6ad6f3 e7e06323 5f1e9ffe
+pied-grande-panne-grumeau-colere 52 88 25 87 5 150 4caf4c01 76f1b1c6 2dacd866 fe188880 35d37225
+pied-grande-panne-grumeau-surpris 52 88 25 87 5 150 d250c7af 3f3cb8da 3d1b82c9 0ccd3ff7 4c1e6582
+pied-grande-panne-grumeau-tendre 52 88 25 87 5 150 e313d76a ae88111a 59d286f8 9cbf6812 27f62ab3
+pied-grande-panne-imprimante 82 81 40 80 5 150 9e1c2d07 6d9066ff 4c5c0a93 496f110f 3b0d9f2b
+pied-grande-panne-imprimante-colere 82 81 40 80 5 150 81f5cf8e 7eaf50ee 8a312459 07379ede aa62df4a
+pied-grande-panne-le-rond 58 67 28 66 5 150 f55c578f 71596c9e 1bc464d8 5690489f f15c5c8e
+pied-grande-panne-le-rond-surpris 58 67 28 66 5 150 1c752256 e31d9b2f 2dafed8e 94964176 d8fc6f6f
+pied-grande-panne-mlle-renvoi 48 108 31 107 5 150 671f0f46 a9cd8727 e0e3833b 25744061 20dedfa1
+pied-grande-panne-mlle-renvoi-colere 48 108 31 107 5 150 dcd32850 ca105bb5 109abb7c 743a4fc0 f08af23c
+pied-grande-panne-mlle-renvoi-joie 48 108 31 107 5 150 170b2ab8 514675f1 170b2ab8 11dcc1a4 0327cc52
+pied-grande-panne-mme-echeance 43 111 22 110 5 150 09d7e76b b6d6a18c 40bf5a57 dfd6fc63 0202fb83
+pied-grande-panne-mme-echeance-malice 43 111 22 110 5 150 0bce5b6e 51ae6225 81b1a572 6ecf0496 294c3d76
+pied-grande-panne-raccourcis 97 59 48 58 5 150 5b41650e f86ac686 4d3798ea 40e567ee 5bd65f66
+pied-grande-panne-raccourcis-peur 97 59 48 58 5 150 888bec64 b0c0942c 103e421c 5eedd17b f4509523
+pied-grande-panne-spectre-404 36 71 17 70 5 150 05e0e17f 58dcf6d4 5f8782fb 4675b047 0b821646
+pied-grande-panne-spectre-404-triste 36 71 17 70 5 150 5cd7a81f c3162ecb 6a38861e e7b1d75f a2403201
+pied-grande-panne-tic-tac 34 77 16 76 5 150 cd2e021a 4a8545f1 86e9a031 803eef74 c753e0b8
+pied-grande-panne-tic-tac-joie 34 77 16 76 5 150 f01cf29d 6a1df4a2 f01cf29d 2d436853 201a131d
+pied-grande-panne-tic-tac-triste 34 77 16 76 5 150 a2091234 bb1bdaaf 330e8b80 af8c4815 eede91cd
+pied-grande-panne-touche-s 32 38 15 37 5 150 c2e046bd 27b5b47b 57905e87 380c5f41 1be3c9ef
+pied-grande-panne-touche-s-joie 32 38 15 37 5 150 ae14d6ff ddc66b85 ae14d6ff d55b84ea 6ef6471b
