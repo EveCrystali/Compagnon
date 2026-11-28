@@ -81,6 +81,10 @@ public static class PlanMenu
     // Lignes stables du premier niveau, bandeau compris (sans titres ni zone « En ce moment »).
     public static int LignesStables => 1 + Blocs.Sum(b => b.Count);
 
+    // La ligne stable « Prendre soin » dit l'état, sauf quand la zone « En ce moment » le dit déjà juste au-dessus
+    // (« Il a faim : prendre soin ») : pas deux fois la même phrase à deux lignes d'écart.
+    public static string TitreSoin(string etat, bool dansLeMoment) => dansLeMoment ? Soin.Titre : $"{Soin.Titre} · {etat}";
+
     // L'état des soins dit en clair, à la suite de « Prendre soin » (« Prendre soin · il a faim »).
     public static string EtatSoins(bool vacances, bool boude, bool amadoue, bool rayonne, string? manque) =>
         vacances ? "en vacances"

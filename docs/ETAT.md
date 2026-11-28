@@ -35,6 +35,10 @@ Dernière mise à jour : 28 novembre 2026.
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
   téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
+- **Première minute et mode d'emploi** : au tout premier lancement, trois bulles de Pilou qui passent seules (il
+  s'installe ; clic gauche, clic droit ; l'Aventure), jamais pendant la saisie, une seule fois ; sur Android, une ligne
+  discrète sur l'Accueil, qui part à la première caresse. Page joueur [MODE-EMPLOI.md](MODE-EMPLOI.md), rangée comme
+  le menu, liée du README et de *Réglages ▸ Mode d'emploi…*. Film : `docs/maquettes/premiere-minute/`.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
@@ -90,6 +94,8 @@ Dernière mise à jour : 28 novembre 2026.
 
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
+- **Menu clic droit au clavier** : les flèches, Entrée et Échap vont à l'appli au premier plan, pas au menu (Pilou
+  ne prend jamais le premier plan, règle 8). Souris seulement ; voir `AUDIT-MENU.md`.
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.
 - L'exe pèse 128 Mo (.NET embarqué) ; la compression le ramènerait vers 60–70 Mo, non faite.
 - Lancer une expédition depuis le téléphone n'est pas possible (lecture seule, voir `EXPEDITIONS.md`) ; seule la

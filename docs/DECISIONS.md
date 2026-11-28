@@ -47,6 +47,21 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
 - **Entre appareils** : XP, pièces, objets, métiers et succès s'additionnent ou s'unissent par
   compteurs qui ne font que monter ; un gain n'est crédité qu'une fois.
 
+## Lien avec le joueur (Antoine, 28 novembre 2026)
+
+- **Pilou évolue à travers le joueur, jamais sans lui.** Ce que le joueur fait nourrit Pilou (des heures de code
+  font monter le métier et ses hauts faits) : cette logique est la bonne. Le jeu « idle » ne devient pas le centre.
+- **Aucun mode automatique** : Pilou ne fait jamais un choix à la place du joueur. On ne perd pas le lien.
+- **Pas de gros didacticiel.** Au premier lancement, au plus quelques bulles d'information très courtes, qui
+  n'obligent ni à cliquer ni à faire une action. Un mode d'emploi vit dans le dépôt (`docs/MODE-EMPLOI.md`).
+- **RPG de personnalité** : des traits nés des habitudes réelles, découverts et non choisis. Pas de statistiques à
+  optimiser ni d'arbre de compétences.
+- **Le niveau aide en expédition** (plus de chances contre un boss) et cela se voit au départ.
+- **Campagnes ajoutées au fil du temps** ; certaines s'ouvrent par un niveau ou par un haut fait.
+- **Après le niveau 50** : nouvelles campagnes, peut-être un deuxième personnage. Plus tard, rien à construire avant.
+- **Une seule écriture visuelle** : les bulles de récit et les choix de l'Aventure, comme toutes les fenêtres,
+  suivent le pixel art de Pilou (cadres en pixels, police pixel), pas le style du système (`docs/STYLE.md`).
+
 ## Dessin
 
 - **Pixel art original**, grille 48 × 56, plus un **dessin fin 2×** (96 × 112) activé par défaut, y

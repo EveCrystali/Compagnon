@@ -22,6 +22,15 @@ public final class Prefs {
         return de(c).getString("relais", RELAIS_DEFAUT);
     }
 
+    /** Premier lancement : la ligne de bienvenue de l'Accueil n'a encore jamais été montrée. */
+    public static boolean bienvenueVue(Context c) {
+        return de(c).getBoolean("bienvenueVue", false);
+    }
+
+    public static void marquerBienvenue(Context c) {
+        de(c).edit().putBoolean("bienvenueVue", true).apply();
+    }
+
     public static boolean bulle(Context c) {
         return de(c).getBoolean("bulle", true);
     }

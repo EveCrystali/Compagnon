@@ -23,7 +23,7 @@ public sealed partial class FenetrePilou
             menu.Items.Add(Titre(PlanMenu.TitreToujours));
         }
 
-        menu.Items.Add(PorteSoin());
+        menu.Items.Add(PorteSoin(moments.Contains(EnCeMoment.Soin)));
         menu.Items.Add(PorteAventure());
         menu.Items.Add(PorteExpedition());
         menu.Items.Add(PorteJouer());
@@ -179,10 +179,10 @@ public sealed partial class FenetrePilou
         return PlanMenu.EtatSoins(e.Vacances, Soins.Boudeur(e), Soins.Amadoue(e), Soins.Rayonnant(e), Soins.Manques(e).FirstOrDefault());
     }
 
-    private MenuItem PorteSoin()
+    private MenuItem PorteSoin(bool dansLeMoment)
     {
         var e = SoinsMaintenant();
-        var m = Signe(Entree($"{PlanMenu.Soin.Titre} · {EtatSoinsCourt()}", PrendreSoin), PlanMenu.Soin.Signe);
+        var m = Signe(Entree(PlanMenu.TitreSoin(EtatSoinsCourt(), dansLeMoment), PrendreSoin), PlanMenu.Soin.Signe);
         m.ToolTip = Soins.Resume(e) + "\nUn clic : repas, toilette et câlin. Pour une caresse : un clic sur Pilou.";
         return m;
     }
@@ -501,6 +501,9 @@ public sealed partial class FenetrePilou
 
     // ---- ⚙ Réglages
 
+    // Une page pour le joueur, rangée comme ce menu (docs/MODE-EMPLOI.md).
+    private const string ModeEmploi = "https://github.com/EveCrystali/Compagnon/blob/main/docs/MODE-EMPLOI.md";
+
     private MenuItem PorteReglages()
     {
         var m = Signe(new MenuItem { Header = PlanMenu.Reglages.Titre }, PlanMenu.Reglages.Signe);
@@ -554,6 +557,8 @@ public sealed partial class FenetrePilou
             ? "Un dossier commun à tes PC (OneDrive, partage réseau…). Pour un code entre appareils : Amis et appareils ▸ Groupe d'appareils."
             : $"Dossier : {_reglages.DossierPartage}";
         m.Items.Add(partage);
+        m.Items.Add(new Separator());
+        m.Items.Add(Entree("Mode d'emploi…", () => Ouvrir(ModeEmploi)));
         m.Items.Add(MenuVersion());
         m.Items.Add(Entree("Redémarrer Pilou", Redemarrer));
         return m;
