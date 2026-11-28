@@ -630,7 +630,8 @@ public sealed partial class FenetrePilou : Window
         if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
         bool fatigue = (_suivi.Courant?.Fatigue ?? false) || TenueAffichee == "nuit";
         _inactif = Natif.InactifMs();
-        if (EssaiEveille) _inactif = 0; // essai « vie » : il reste éveillé, même devant un écran délaissé
+        if (EssaiEveille) _inactif = 0;
+        if (_essaiInactif is { } inactifEssai) _inactif = inactifEssai; // essai « eveil » : une absence fixée // essai « vie » : il reste éveillé, même devant un écran délaissé
         Observer(t);
         expr = Sommeil(expr, t);
         expr = NuitTardive(expr, t);

@@ -188,8 +188,15 @@ public final class PilouVue extends View {
             java.util.List<String> portes = new java.util.ArrayList<>();
             for (String v : equipe.values()) if (v != null && !v.isEmpty()) portes.add(v);
             String main = equipe.get(Boutique.MAIN), compagnon = equipe.get(Boutique.COMPAGNON);
+            // Traits dominants (Traits.java) : ils changent les poids, rien d'autre.
+            java.util.List<String> traits = new java.util.ArrayList<>();
+            try {
+                for (Traits.Trait x : PresenceTel.traitsDominants(getContext())) traits.add(x.id);
+            } catch (RuntimeException ignore) {
+                // présence illisible : tirage sans traits
+            }
             Saynetes.Contexte c = new Saynetes.Contexte(heure, java.util.Calendar.getInstance().get(java.util.Calendar.MONTH) + 1,
-                    stade, portes, compagnon != null && !compagnon.isEmpty(), main == null || main.isEmpty(), false);
+                    stade, portes, compagnon != null && !compagnon.isEmpty(), main == null || main.isEmpty(), false, traits);
             java.util.List<Saynetes.Saynete> banque = Saynetes.commune();
             saynete = Saynetes.trouver(banque, Saynetes.tirer(banque, hasardSaynete.nextInt(10_000), c, sayneteDerniere));
             sayneteDebut = t;

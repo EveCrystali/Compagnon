@@ -19,6 +19,18 @@ public sealed partial class FenetrePilou
 
     private bool EssaiEveille => _essaiVie || _essaiSaynete is not null;
 
+    // Essai « eveil » (--essai=eveil:<secondes>[:<heure>]) : l'absence vue par Pilou est fixée, pour voir quand il dort
+    // (Saynetes.Endormi) sans dépendre de qui est devant le PC.
+    private double? _essaiInactif;
+
+    private void EssaiEveil(string nom)
+    {
+        var parts = nom.Split(':');
+        _essaiInactif = parts.Length > 1 && double.TryParse(parts[1], out var s) ? s * 1000 : 0;
+        if (parts.Length > 2 && int.TryParse(parts[2], out var h)) _essaiHeure = h;
+        _dortBureau = false; // les premières images ont pu voir la vraie absence : on repart éveillé
+    }
+
     // ---- Réactions au monde (saynètes de poids 0 : jamais tirées au sort)
     private bool _lache, _survolReagi;
 
@@ -60,7 +72,9 @@ public sealed partial class FenetrePilou
         var maintenant = DateTime.Now;
         return new Saynetes.Contexte(_essaiHeure ?? maintenant.Hour, maintenant.Month, stade, portes,
             !string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Compagnon)),
-            string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Main)), travail);
+            string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Main)), travail,
+            // Traits dominants (Traits.cs) : ils changent les poids, rien d'autre.
+            TraitsDominants().Select(x => x.Id).ToList());
     }
 
     // Au calme, à la place d'une occupation : peut-être une saynète. Vrai si elle commence.

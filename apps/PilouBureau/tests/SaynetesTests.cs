@@ -58,6 +58,18 @@ public class SaynetesTests
         Assert.True(ecarts.Count == 0, string.Join('\n', ecarts.Take(10)));
     }
 
+    // Un compagnon de tout : sans aucune session d'IA, Pilou est éveillé ; il ne dort que si on s'absente, ou la nuit.
+    [Fact]
+    public void Sans_ia_il_est_eveille()
+    {
+        var suivi = new Suivi();
+        suivi.Observer(Array.Empty<EtatSession>(), 1_000_000);
+        Assert.Equal(Expr.Repos, suivi.Expression(1_000_000, -1e12));
+        Assert.False(Saynetes.Endormi(15, 3 * 60_000));
+        Assert.True(Saynetes.Endormi(3, 3 * 60_000));
+        Assert.True(Saynetes.Endormi(15, 11 * 60_000));
+    }
+
     [Fact]
     public void Aucune_coupe_tout_et_les_rares_restent_rares()
     {
