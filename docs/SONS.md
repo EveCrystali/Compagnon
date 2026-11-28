@@ -1,7 +1,7 @@
 # Les sons de Pilou
 
-Une petite identité sonore 8 bits, discrète, la même sur PC et sur téléphone. **Coupée par défaut** (réglage
-« Sons : aucun ») en attendant qu'Antoine tranche.
+Une petite identité sonore 8 bits, discrète, la même sur PC et sur téléphone. Réglage « Sons » sur
+**normaux par défaut** (Antoine, 28 novembre 2026) ; « discrets » et « aucun » restent au choix.
 
 ## Les sons
 
@@ -25,7 +25,7 @@ d'une seconde (la plus longue, `palier`, fait 840 ms).
 
 `GardeSons` (PC) et `Sons.Garde` (téléphone), mêmes règles, mêmes tests :
 
-- jamais si le réglage est « aucun » (défaut) ;
+- jamais si le réglage est « aucun » ;
 - jamais quand Pilou est caché : plein écran, présentation, visio, caché à la main (PC) ; appel, visio (mode audio de
   communication), silencieux ou vibreur (téléphone) ;
 - les sons **spontanés** (`mot`, `expedition`, `campagne`, `palier`, `succes`) jamais pendant la saisie, et **six par

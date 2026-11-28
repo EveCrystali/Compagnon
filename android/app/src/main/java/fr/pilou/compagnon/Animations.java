@@ -17,10 +17,10 @@ final class Animations {
     static final int TRANSITION = 360, VOLET_BLOC = 8;
 
     /** Le niveau effectif : celui du réglage, ou « aucune » si le système demande moins d'animations. */
+    // Le réglage du joueur décide ; tant qu'il n'a rien choisi (réglage vide), le système donne la valeur de départ.
     static String niveau(String reglage, boolean systeme) {
-        String r = COMPLETES;
-        for (String n : NIVEAUX) if (n.equals(reglage)) r = n;
-        return systeme ? r : AUCUNE;
+        for (String n : NIVEAUX) if (n.equals(reglage)) return n;
+        return systeme ? COMPLETES : AUCUNE;
     }
 
     static long imageDecor(int n, int duree, long t, String niveau) {

@@ -1,7 +1,7 @@
 # État du travail
 
 À mettre à jour à la fin de chaque session : ce qui est fait, ce qui est en cours, ce qui attend.
-Dernière mise à jour : 27 novembre 2026.
+Dernière mise à jour : 28 novembre 2026.
 
 ## En ligne (v0.9.75 et suivantes)
 
@@ -34,7 +34,7 @@ Dernière mise à jour : 27 novembre 2026.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
-  téléphone et `outils/sons/sons.py` ; **coupés par défaut** (« Sons : aucun »), en attendant le choix d'Antoine.
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
@@ -43,11 +43,21 @@ Dernière mise à jour : 27 novembre 2026.
 
 ## En cours
 
-Aucune branche : tout est fusionné dans `main`. La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la
-pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la complicité et le Journal.
+- **Le théâtre des campagnes** (PR #95, fusion automatique à CI verte ; docs/SCENES.md) : la lecture de l'Aventure
+  devient une scène vivante. Fait et testé : le moteur commun (référence Python, C#, Java, qui retombent sur les mêmes
+  pixels), le mini-Pilou de scène (taille M), 13 acteurs et effets, les six scènes du prologue (acteurs et réactions aux
+  clics) ; sur PC, la fenêtre en « Théâtre » (scène ×5, boîte de dialogue, choix sur la scène, travelling, départ en
+  route, absence pendant l'attente), vue en essai sur le PC d'Antoine ; sur téléphone, la scène en haut de la lecture à
+  une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli, bandeau au-dessus
+  (captures Robolectric 1078 × 2400 relues). Le réglage « ✧ » décide désormais des animations (chez Antoine, Windows a
+  « Afficher les animations » coupé : tout était figé). Jamais vu sur un vrai téléphone.
+- La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
+  épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
+0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs des trois grandes campagnes, les 29
+   personnages en pied, les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
    fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir
    [VIDEO.md](VIDEO.md)). L'outil n'a été essayé que sur l'ancien tournage (Pilou 0.9.45, sans pêche, cuisine,
@@ -72,6 +82,7 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
   sortie audio) ; sur téléphone, aucune lecture réelle.
 
 ## Points connus
+
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.

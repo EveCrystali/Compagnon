@@ -1,0 +1,17 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-graine
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 300
+palette: a=#fff8e1 b=#d9c9a0 c=#8a6e4b
+images:
+a.a.a.
+.aaa..
+..b...
+..c...
+---
+.a.a..
+aaaaa.
+..b...
+..c...

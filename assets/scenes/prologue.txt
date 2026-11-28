@@ -1,0 +1,63 @@
+# Scènes de « La colline d'en face » (docs/SCENES.md) : une section par décor (assets/sprites2x/decor-prologue-<décor>).
+# Coordonnées en pixels du décor fin (192 × 80). Lu par theatre.py (référence), Theatre.cs et Theatre.java.
+#   sol x0 y0 x1 y1                     la ligne où marche Pilou (ses pieds)
+#   place x                             où il se tient
+#   interlocuteur x                     où se tient un personnage en pied
+#   acteur <nom> <comportement> …       acteur-<nom> : vol x0 y0 x1 y1 graine | traverse y0 y1 période décalage vitesse
+#                                       | rond x y période décalage | saut x y période décalage | pose x y
+#                                       | flotte x y période décalage vx vy | chute x y période décalage
+#   sensible <nom> x0 y0 x1 y1 <réaction> …   ce qui répond au clic : bulle x y | rond | graines x y
+
+scene jardin
+sol 4 78 188 78
+place 40
+interlocuteur 150
+acteur papillon vol 70 30 170 58 3
+acteur oiseau traverse 8 22 17000 6000 26
+acteur abeille vol 100 52 150 66 9
+
+scene mare
+sol 4 78 188 78
+place 18
+interlocuteur 168
+acteur libellule vol 60 40 160 58 7
+acteur rond rond 70 68 2600 0
+acteur rond rond 125 72 3400 1300
+acteur poisson saut 112 68 11000 5000
+acteur oiseau traverse 6 16 23000 15000 30
+sensible grenouille 90 48 102 60 bulle 93 55
+sensible eau 26 47 172 77 rond
+
+scene pente
+sol 6 77 186 25
+place 34
+interlocuteur 120
+acteur graine flotte 158 34 9000 0 -14 -3
+acteur graine flotte 161 31 9000 4500 -11 -4
+acteur papillon vol 40 20 120 46 5
+sensible pissenlit 152 22 172 42 graines 160 33
+
+scene pied-colline
+sol 4 75 188 75
+place 36
+interlocuteur 150
+acteur oiseau traverse 4 18 15000 2000 28
+acteur oiseau traverse 6 20 15000 9000 22
+acteur papillon vol 10 50 90 66 11
+
+scene seuil
+sol 6 76 128 76
+place 30
+interlocuteur 100
+acteur papillon vol 4 34 40 54 13
+acteur abeille vol 6 40 34 56 17
+acteur oiseau traverse 10 30 19000 4000 24
+
+scene sommet
+sol 4 78 188 78
+place 70
+interlocuteur 150
+acteur feuille chute 34 26 8000 2000
+acteur feuille chute 44 24 8000 6000
+acteur oiseau traverse 10 26 14000 0 20
+acteur oiseau traverse 14 30 14000 5000 25

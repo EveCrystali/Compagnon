@@ -1,0 +1,27 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-papillon
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 120
+palette: a=#f69d50 b=#ffe1a0 c=#3b2a3e d=#d9803a
+images:
+aa.aa.
+abaca.
+.dcd..
+..c...
+---
+.a.a..
+.acb..
+.dcd..
+..c...
+---
+..c...
+..c...
+..c...
+..c...
+---
+.a.a..
+.acb..
+.dcd..
+..c...

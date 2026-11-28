@@ -298,7 +298,7 @@ final class PageReglages extends Page {
         plantage.setText(pl.length() > 1200 ? pl.substring(0, 1200) + "…" : pl);
     }
 
-    // Sons de Pilou (docs/SONS.md) : aucun (par défaut), discrets, normaux ; le choix fait entendre le « pouic ».
+    // Sons de Pilou (docs/SONS.md) : aucun, discrets, normaux (par défaut) ; le choix fait entendre le « pouic ».
     private static LinearLayout choixSons(Principale a) {
         Ui.Palette p = Ui.p(a);
         String[] noms = {"Aucun", "Discrets", "Normaux"};

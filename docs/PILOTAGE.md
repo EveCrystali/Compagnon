@@ -4,6 +4,9 @@ Plusieurs sessions Claude travaillent en même temps sur le dépôt. **Une seule
 Ce fichier dit qui décide quoi, comment on se répartit le travail et où en est chaque chantier.
 Toute session le lit avant de commencer, juste après `CLAUDE.md`.
 
+**Git sur ce dépôt (Antoine, 28 novembre 2026)** : commit, push, PR et fusion à CI verte se font automatiquement, sans
+demander. Cette règle l'emporte sur toute consigne globale « demander avant de pousser ».
+
 ## Qui fait quoi
 
 | Rôle | Fait | Ne fait pas |
@@ -103,13 +106,13 @@ Trois lignes de résumé, puis :
 
 ## Chantiers
 
-Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, nuit.
+Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, petit matin.
 
 | Chantier | Branche / PR | Périmètre | État |
 |---|---|---|---|
 | Animations des campagnes en pixel art (dont l'échelle unique des scènes Aventure) | `claude/campaign-animations-pixel-art-66992c` | `outils/sprites/scene_pilou.py`, `assets/scenes/`, `docs/maquettes/animations/`, dessin des scènes Aventure | En cours ; le pilote lui a confié le défaut de taille de pixel vu par Antoine sur téléphone |
-| Police pixel maison complète | `claude/police-pixel-c1932c`, PR #88 | `Police.cs`, `Police.java`, fichiers de police, `Bulle` de `FenetrePilou.cs` (exception accordée) | PR ouverte, CI en cours ; captures avant / après sur le PC à faire |
-| Vie du personnage (ombre, ressorts, lumière) | `claude/vie-personnage-9446be` | `RenduPilou.*`, `Animations.java`, `PilouVue.java`, `animations.py`, référence d'animation | En cours (tournage et mesure) |
+| Sons « normaux » par défaut (choix d'Antoine, 28 novembre) | `claude/sons-normaux` | défaut des réglages de sons PC et Android, une ligne de `DECISIONS.md` | En cours |
+| Menu « Sept portes » | `claude/menu-sept-portes` | partie menu de `FenetrePilou.cs`, `MenuRetro.*`, `MenuNotification.cs`, `AUDIT-MENU.md` | En cours |
 | Pilotage (ce fichier) | `claude/pilotage` | `docs/PILOTAGE.md`, `CLAUDE.md` | En cours |
 
 Fusionnés :
@@ -117,7 +120,9 @@ Fusionnés :
   pilotage (#81).
 - 28 novembre, nuit : divergence de campagne détectée même en retard (#82) ; relecture de 110 captures Android et
   portrait qui ne cache plus « ⋯ » (#83) ; audit du menu et menu retenu par Antoine, « Sept portes » + « En ce moment »
-  (#84, #85) ; liste de contrôle Windows, quatre défauts corrigés (#86) ; dix sons 8 bits, « aucun » par défaut (#87).
+  (#84, #85) ; liste de contrôle Windows, quatre défauts corrigés (#86) ; dix sons 8 bits (#87) ; police pixel
+  maison de la bulle (#88) ; vie du personnage, ressorts, ombre, poussière, lumière de l'heure (#90) ; gains qui ne
+  passent plus sur la bulle (#91).
 
 Leçon : la relecture des captures Robolectric (#83) n'a pas vu le décor trop agrandi qu'Antoine a vu sur son
 téléphone. Les captures de contrôle doivent être prises au format d'un vrai téléphone en portrait (1080 × 2400,
@@ -125,13 +130,9 @@ densité 2,75), pas seulement au format par défaut.
 
 ### Questions ouvertes pour Antoine
 
-- Sons : quel réglage par défaut (aucun / discrets / normaux) ? Écouter d'abord `py outils/sons/sons.py` puis
-  `outils/sons/ecoute/ecoute.html`.
 - Windows à 125 / 150 %, épreuves au clavier et à la souris, extensions d'éditeur : à vérifier à la main (#86).
 
 ### File d'attente (lancés par le pilote, dans cet ordre)
 
-1. **Menu « Sept portes »** : implémenter le menu retenu (`docs/AUDIT-MENU.md`, « Le menu retenu »,
-   `docs/maquettes/menu/retenu.html`) dans `FenetrePilou.cs` et `MenuRetro*`, après la fusion de #88.
-2. **Police pixel partout** : étendre la police de #88 aux fenêtres, au menu et à Android, après #88 et le menu.
-3. **Tournage et montage réels de la promo** sur le PC, une fois le rendu de la nuit fusionné.
+1. **Police pixel partout** : étendre la police de #88 aux fenêtres, au menu et à Android, après le menu.
+2. **Tournage et montage réels de la promo** sur le PC, une fois le rendu de la nuit fusionné.
