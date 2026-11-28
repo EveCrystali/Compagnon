@@ -44,6 +44,7 @@ public class TheatreTest {
 
     private static Theatre.Evenement evenement(String[] p) {
         long t = Long.parseLong(p[1]);
+        if (p[2].equals("perso")) return new Theatre.Evenement(t, "perso", 0, 0, p[3]);
         return p[2].equals("humeur") ? Theatre.Evenement.humeur(t, p[3])
                 : new Theatre.Evenement(t, p[2], Long.parseLong(p[3]), Long.parseLong(p[4]));
     }
@@ -83,6 +84,13 @@ public class TheatreTest {
                     Theatre.EtatPilou attendu = new Theatre.EtatPilou(Integer.parseInt(p[2]), Integer.parseInt(p[3]),
                             Integer.parseInt(p[4]), p[5].equals("1"), p[6].equals("1"));
                     assertEquals(nom + " : " + l, attendu, e);
+                    break;
+                }
+                case "perso": {
+                    Theatre.Pose q = Theatre.perso(cx, evts, Long.parseLong(p[1]), niveau);
+                    String attendu = p[2].equals("-") ? "-" : String.join(" ", Arrays.copyOfRange(p, 2, p.length));
+                    String vu = q == null ? "-" : q.sprite + " " + q.image + " " + q.x + " " + q.y + " " + (q.miroir ? 1 : 0);
+                    assertEquals(nom + " : " + l, attendu, vu);
                     break;
                 }
                 case "acteurs": {
@@ -128,6 +136,7 @@ public class TheatreTest {
                 Theatre.Scene sc = e.getValue();
                 assertNotNull(fin(b, "decor-" + campagne + "-" + e.getKey()));
                 assertTrue(sc.place >= 8 && sc.place <= Theatre.W - 8);
+                assertTrue(sc.interlocuteur >= 20 && sc.interlocuteur <= Theatre.W - 8);
                 assertTrue(sc.sol[1] >= 30 && sc.sol[1] <= Theatre.H);
                 assertTrue(sc.sol[3] >= 20 && sc.sol[3] <= Theatre.H);
                 for (Theatre.Acteur a : sc.acteurs) {

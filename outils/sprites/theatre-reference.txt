@@ -531,6 +531,281 @@ acteurs 4200 -
 pilou 9000 18 78 0 0 1
 acteurs 9000 -
 image 9000 287368121
+scenario hall-grumeau grande-panne hall-pas-comptes bleu completes 0
+evenement 0 entree 0 0
+evenement 800 perso pied-grande-panne-grumeau 0
+evenement 3500 parle-perso 5600 0
+evenement 6500 clic 150 70
+evenement 7400 humeur joie 0
+evenement 12000 perso pied-grande-panne-tic-tac 0
+evenement 15000 perso  0
+pilou 0 -14 78 41 0 1
+perso 0 -
+acteurs 0 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0 acteur-paquet:0:168:5:0
+image 0 1944140103
+pilou 250 -8 78 44 0 1
+perso 250 -
+acteurs 250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0 acteur-paquet:2:175:5:0
+pilou 500 -2 78 47 0 1
+perso 500 -
+acteurs 500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0 acteur-paquet:0:183:5:0
+pilou 750 4 78 42 0 1
+perso 750 -
+acteurs 750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0 acteur-paquet:2:190:5:0
+pilou 1000 10 78 45 0 1
+perso 1000 pied-grande-panne-grumeau 1 201 78 0
+acteurs 1000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0 acteur-paquet:0:198:6:0
+image 1000 3074458650
+pilou 1250 16 78 48 0 1
+perso 1250 pied-grande-panne-grumeau 1 189 77 0
+acteurs 1250 acteur-ticket:3:108:29:0 acteur-ticket:1:120:80:0
+pilou 1500 22 78 43 0 1
+perso 1500 pied-grande-panne-grumeau 1 177 77 0
+acteurs 1500 acteur-ticket:1:107:33:0 acteur-ticket:3:120:84:0
+pilou 1750 28 78 46 0 1
+perso 1750 pied-grande-panne-grumeau 1 165 78 0
+acteurs 1750 acteur-ticket:2:107:36:0
+pilou 2000 34 78 41 0 1
+perso 2000 pied-grande-panne-grumeau 0 153 78 0
+acteurs 2000 acteur-ticket:0:106:40:0
+image 2000 2610098204
+pilou 2250 40 78 44 0 1
+perso 2250 pied-grande-panne-grumeau 0 148 78 0
+acteurs 2250 acteur-ticket:2:104:43:0
+pilou 2500 46 78 3 0 1
+perso 2500 pied-grande-panne-grumeau 2 148 78 0
+acteurs 2500 acteur-ticket:3:104:47:0
+pilou 2750 46 78 0 0 1
+perso 2750 pied-grande-panne-grumeau 1 148 78 0
+acteurs 2750 acteur-ticket:1:103:50:0
+pilou 3000 46 78 1 0 1
+perso 3000 pied-grande-panne-grumeau 1 148 78 0
+acteurs 3000 acteur-ticket:2:102:54:0
+image 3000 669610417
+pilou 3250 46 78 2 0 1
+perso 3250 pied-grande-panne-grumeau 1 148 78 0
+acteurs 3250 acteur-ticket:0:101:57:0
+pilou 3500 46 78 3 0 1
+perso 3500 pied-grande-panne-grumeau 3 148 78 0
+acteurs 3500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0
+pilou 3750 46 78 1 0 1
+perso 3750 pied-grande-panne-grumeau 4 148 78 0
+acteurs 3750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0
+pilou 4000 46 78 2 0 1
+perso 4000 pied-grande-panne-grumeau 4 148 78 0
+acteurs 4000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0
+image 4000 1992516411
+pilou 4250 46 78 40 0 1
+perso 4250 pied-grande-panne-grumeau 4 148 78 0
+acteurs 4250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0
+pilou 4500 46 78 0 0 1
+perso 4500 pied-grande-panne-grumeau 4 148 78 0
+acteurs 4500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0
+pilou 4750 46 78 1 0 1
+perso 4750 pied-grande-panne-grumeau 3 148 78 0
+acteurs 4750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0
+pilou 5000 46 78 2 0 1
+perso 5000 pied-grande-panne-grumeau 3 148 78 0
+acteurs 5000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:1:-12:9:0
+image 5000 3535194336
+pilou 5250 46 78 3 0 1
+perso 5250 pied-grande-panne-grumeau 3 148 78 0
+acteurs 5250 acteur-ticket:2:123:38:0 acteur-paquet:3:-5:9:0
+pilou 5500 46 78 1 0 1
+perso 5500 pied-grande-panne-grumeau 3 148 78 0
+acteurs 5500 acteur-ticket:0:122:42:0 acteur-paquet:1:3:9:0
+pilou 5750 46 78 2 0 1
+perso 5750 pied-grande-panne-grumeau 0 148 78 0
+acteurs 5750 acteur-ticket:2:120:45:0 acteur-paquet:3:10:9:0
+pilou 6000 46 78 3 0 1
+perso 6000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 6000 acteur-ticket:3:120:49:0 acteur-paquet:2:18:10:0
+image 6000 2260157270
+pilou 6250 46 78 0 0 1
+perso 6250 pied-grande-panne-grumeau 0 148 78 0
+acteurs 6250 acteur-ticket:1:119:52:0 acteur-paquet:0:25:10:0
+pilou 6500 46 78 64 0 1
+perso 6500 pied-grande-panne-grumeau 0 148 78 0
+acteurs 6500 acteur-ticket:2:118:56:0 acteur-paquet:2:33:10:0
+pilou 6750 46 78 64 0 1
+perso 6750 pied-grande-panne-grumeau 0 148 73 0
+acteurs 6750 acteur-ticket:0:117:59:0 acteur-paquet:0:40:10:0
+pilou 7000 46 78 64 0 1
+perso 7000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 7000 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0 acteur-paquet:2:48:10:0
+image 7000 647494152
+pilou 7250 46 78 64 0 1
+perso 7250 pied-grande-panne-grumeau 0 148 78 0
+acteurs 7250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0 acteur-paquet:0:55:9:0
+pilou 7500 46 78 50 0 1
+perso 7500 pied-grande-panne-grumeau 0 148 78 0
+acteurs 7500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0 acteur-paquet:2:63:9:0
+pilou 7750 46 78 53 0 1
+perso 7750 pied-grande-panne-grumeau 0 148 78 0
+acteurs 7750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0 acteur-paquet:0:70:9:0
+pilou 8000 46 78 56 0 1
+perso 8000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 8000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0 acteur-paquet:2:78:9:0
+image 8000 2397762496
+pilou 8250 46 78 5 0 1
+perso 8250 pied-grande-panne-grumeau 1 148 78 0
+acteurs 8250 acteur-ticket:3:108:29:0 acteur-ticket:1:120:80:0 acteur-paquet:0:85:9:0
+pilou 8500 46 78 40 0 1
+perso 8500 pied-grande-panne-grumeau 1 148 78 0
+acteurs 8500 acteur-ticket:1:107:33:0 acteur-ticket:3:120:84:0 acteur-paquet:2:93:8:0
+pilou 8750 46 78 7 0 1
+perso 8750 pied-grande-panne-grumeau 1 148 78 0
+acteurs 8750 acteur-ticket:2:107:36:0 acteur-paquet:0:100:8:0
+pilou 9000 46 78 4 0 1
+perso 9000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 9000 acteur-ticket:0:106:40:0 acteur-paquet:3:108:8:0
+image 9000 2631359285
+pilou 9250 46 78 6 0 1
+perso 9250 pied-grande-panne-grumeau 0 148 78 0
+acteurs 9250 acteur-ticket:2:104:43:0 acteur-paquet:1:115:8:0
+pilou 9500 46 78 7 0 1
+perso 9500 pied-grande-panne-grumeau 0 148 78 0
+acteurs 9500 acteur-ticket:3:104:47:0 acteur-paquet:3:123:8:0
+pilou 9750 46 78 4 0 1
+perso 9750 pied-grande-panne-grumeau 0 148 78 0
+acteurs 9750 acteur-ticket:1:103:50:0 acteur-paquet:1:130:9:0
+pilou 10000 46 78 63 0 1
+perso 10000 pied-grande-panne-grumeau 1 148 78 0
+acteurs 10000 acteur-ticket:2:102:54:0 acteur-paquet:3:138:9:0
+image 10000 2581110322
+pilou 10250 46 78 63 0 1
+perso 10250 pied-grande-panne-grumeau 1 148 78 0
+acteurs 10250 acteur-ticket:0:101:57:0 acteur-paquet:1:145:9:0
+pilou 10500 46 78 63 0 1
+perso 10500 pied-grande-panne-grumeau 1 148 78 0
+acteurs 10500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0 acteur-paquet:3:153:9:0
+pilou 10750 46 78 63 0 1
+perso 10750 pied-grande-panne-grumeau 1 148 78 0
+acteurs 10750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0 acteur-paquet:1:160:9:0
+pilou 11000 46 78 63 0 1
+perso 11000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 11000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0 acteur-paquet:3:168:9:0
+image 11000 2566060873
+pilou 11250 46 78 7 0 1
+perso 11250 pied-grande-panne-grumeau 0 148 78 0
+acteurs 11250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0 acteur-paquet:1:175:10:0
+pilou 11500 46 78 4 0 1
+perso 11500 pied-grande-panne-grumeau 0 148 78 0
+acteurs 11500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0 acteur-paquet:3:183:10:0
+pilou 11750 46 78 5 0 1
+perso 11750 pied-grande-panne-grumeau 1 148 78 0
+acteurs 11750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0 acteur-paquet:1:190:10:0
+pilou 12000 46 78 6 0 1
+perso 12000 pied-grande-panne-tic-tac 1 210 78 0
+acteurs 12000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:0:198:10:0
+image 12000 4204917277
+pilou 12250 46 78 7 0 1
+perso 12250 pied-grande-panne-tic-tac 1 198 77 0
+acteurs 12250 acteur-ticket:2:123:38:0
+pilou 12500 46 78 4 0 1
+perso 12500 pied-grande-panne-tic-tac 1 186 77 0
+acteurs 12500 acteur-ticket:0:122:42:0
+pilou 12750 46 78 40 0 1
+perso 12750 pied-grande-panne-tic-tac 0 174 78 0
+acteurs 12750 acteur-ticket:2:120:45:0
+pilou 13000 46 78 7 0 1
+perso 13000 pied-grande-panne-tic-tac 0 162 78 0
+acteurs 13000 acteur-ticket:3:120:49:0
+image 13000 1608016482
+pilou 13250 46 78 4 0 1
+perso 13250 pied-grande-panne-tic-tac 0 150 77 0
+acteurs 13250 acteur-ticket:1:119:52:0
+pilou 13500 46 78 5 0 1
+perso 13500 pied-grande-panne-tic-tac 1 148 78 0
+acteurs 13500 acteur-ticket:2:118:56:0
+pilou 13750 46 78 6 0 1
+perso 13750 pied-grande-panne-tic-tac 1 148 78 0
+acteurs 13750 acteur-ticket:0:117:59:0
+pilou 14000 46 78 7 0 1
+perso 14000 pied-grande-panne-tic-tac 1 148 78 0
+acteurs 14000 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0
+image 14000 2228375621
+pilou 14250 46 78 4 0 1
+perso 14250 pied-grande-panne-tic-tac 1 148 78 0
+acteurs 14250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0
+pilou 14500 46 78 5 0 1
+perso 14500 pied-grande-panne-tic-tac 0 148 78 0
+acteurs 14500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0
+pilou 14750 46 78 7 0 1
+perso 14750 pied-grande-panne-tic-tac 0 148 78 0
+acteurs 14750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0
+pilou 15000 46 78 4 0 1
+perso 15000 pied-grande-panne-tic-tac 0 148 78 0
+acteurs 15000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0
+image 15000 3949764435
+pilou 15250 46 78 5 0 1
+perso 15250 pied-grande-panne-tic-tac 0 160 77 0
+acteurs 15250 acteur-ticket:3:108:29:0 acteur-ticket:1:120:80:0
+pilou 15500 46 78 6 0 1
+perso 15500 pied-grande-panne-tic-tac 1 172 77 0
+acteurs 15500 acteur-ticket:1:107:33:0 acteur-ticket:3:120:84:0
+pilou 15750 46 78 7 0 1
+perso 15750 pied-grande-panne-tic-tac 1 184 78 0
+acteurs 15750 acteur-ticket:2:107:36:0
+pilou 16000 46 78 4 0 1
+perso 16000 pied-grande-panne-tic-tac 1 196 78 0
+acteurs 16000 acteur-ticket:0:106:40:0 acteur-paquet:1:-12:9:0
+image 16000 1461590756
+pilou 16250 46 78 5 0 1
+perso 16250 pied-grande-panne-tic-tac 0 208 77 0
+acteurs 16250 acteur-ticket:2:104:43:0 acteur-paquet:3:-5:10:0
+pilou 16500 46 78 7 0 1
+perso 16500 pied-grande-panne-tic-tac 0 220 77 0
+acteurs 16500 acteur-ticket:3:104:47:0 acteur-paquet:1:3:10:0
+pilou 16750 46 78 4 0 1
+perso 16750 -
+acteurs 16750 acteur-ticket:1:103:50:0 acteur-paquet:3:10:10:0
+pilou 17000 46 78 5 0 1
+perso 17000 -
+acteurs 17000 acteur-ticket:2:102:54:0 acteur-paquet:1:18:10:0
+image 17000 333014979
+pilou 17250 46 78 6 0 1
+perso 17250 -
+acteurs 17250 acteur-ticket:0:101:57:0 acteur-paquet:3:25:10:0
+pilou 17500 46 78 7 0 1
+perso 17500 -
+acteurs 17500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0 acteur-paquet:1:33:9:0
+pilou 17750 46 78 4 0 1
+perso 17750 -
+acteurs 17750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0 acteur-paquet:3:40:9:0
+pilou 18000 46 78 5 0 1
+perso 18000 -
+acteurs 18000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0 acteur-paquet:2:48:9:0
+image 18000 192798354
+pilou 18250 46 78 6 0 1
+perso 18250 -
+acteurs 18250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0 acteur-paquet:0:55:9:0
+pilou 18500 46 78 4 0 1
+perso 18500 -
+acteurs 18500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0 acteur-paquet:2:63:9:0
+pilou 18750 46 78 5 0 1
+perso 18750 -
+acteurs 18750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0 acteur-paquet:0:70:8:0
+pilou 19000 46 78 6 0 1
+perso 19000 -
+acteurs 19000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:2:78:8:0
+image 19000 1103309801
+scenario hall-reduites grande-panne hall-pas-comptes bleu reduites 0
+evenement 0 perso pied-grande-panne-grumeau 0
+pilou 0 46 78 0 0 1
+perso 0 pied-grande-panne-grumeau 0 148 78 0
+acteurs 0 -
+image 0 4200521937
+pilou 4150 46 78 40 0 1
+perso 4150 pied-grande-panne-grumeau 0 148 78 0
+acteurs 4150 -
+pilou 4299 46 78 40 0 1
+perso 4299 pied-grande-panne-grumeau 0 148 78 0
+acteurs 4299 -
+pilou 6000 46 78 0 0 1
+perso 6000 pied-grande-panne-grumeau 0 148 78 0
+acteurs 6000 -
+image 6000 4200521937
 scenario jardin-vie prologue jardin bleu completes 0
 evenement 0 entree 0 0
 pilou 0 -14 78 41 0 1

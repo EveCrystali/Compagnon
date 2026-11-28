@@ -58,6 +58,35 @@ acteur("poisson", 233, {"o": "#f69d50", "c": "#ffc89a", "d": "#d9803a", "e": "#1
        [".....", "doooe", ".occ.", "....."],
        [".....", "do...", ".ocoe", "..oo."])
 
+
+# ---- La Grande Panne (l'intérieur de l'ordinateur : néons cyan et orange, plastique beige)
+
+acteur("paquet", 120, {"k": "#1c2128", "c": "#4fd8ff", "w": "#e8fbff", "o": "#f69d50"},
+       ["kkkkk", "kcwck", "kwcwk", "kkkkk"],
+       ["kkkkk", "kwcwk", "kcwck", "kkkkk"],
+       ["kkkkk", "kcwck", "kwcwk", "kkkko"],
+       ["kkkkk", "kwcwk", "kcwck", "okkkk"])
+
+acteur("curseur", 400, {"k": "#1c2128", "w": "#ffffff"},
+       ["k....", "kk...", "kwk..", "kwwk.", "kwwwk", "kwkk.", "k.k..", "...k."],
+       ["k....", "kk...", "kwk..", "kwwk.", "kwwwk", "kwkk.", "k.k..", "...k."])
+
+acteur("ticket", 160, {"w": "#fbf3e4", "g": "#d9c7a3", "o": "#f69d50", "k": "#5a4a40"},
+       ["wwww", "wkkw", "wwow", "gggg"],
+       [".ww.", "wkkw", "wwow", ".gg."],
+       ["..w.", ".wk.", ".wo.", "..g."],
+       [".ww.", "wkkw", "wwow", ".gg."])
+
+acteur("bulle-marais", 200, {"c": "#a9c8ee", "w": "#ffffff"},
+       [".c.", "cwc", ".c."],
+       [".cc.", "cw.c", "c..c", ".cc."],
+       ["..c..", ".c.c.", "cw..c", ".c.c.", "..c.."])
+
+acteur("etincelle", 80, {"o": "#f69d50", "c": "#ffc89a", "w": "#fff6cc"},
+       ["..o..", ".ccc.", "ocwco", ".ccc.", "..o.."],
+       [".....", "..c..", ".cwc.", "..c..", "....."],
+       ["o...o", ".c.c.", "..w..", ".c.c.", "o...o"])
+
 # ---- Eau
 
 def _rond(r, a):
