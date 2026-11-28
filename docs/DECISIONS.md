@@ -68,6 +68,12 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
 - **Pixel art original**, grille 48 × 56, plus un **dessin fin 2×** (96 × 112) activé par défaut, y
   compris sur le bureau. Un pixel fin tombe sur un nombre entier de pixels d'écran ; un réglage revient
   au dessin d'origine.
+- **Haute définition (Antoine, 28 novembre 2026)** : « Pixel art ne doit pas rimer avec baisse de qualité /
+  définition, c'est une règle à figer. » Après l'étude `docs/maquettes/paysages/` (quatre directions), Antoine a
+  choisi **C au minimum** : paysages de campagne à 480 × 240 unités, 2 px d'écran par unité, cadre 2:1, grands
+  paysages peints, fourmillant de détails animés. Conséquences acceptées : les 46 décors, le Pilou de scène, les
+  29 personnages en pied et les acteurs sont redessinés à cette unité ; les scènes sont replacées ; le format des
+  ressources devient plus compact. Les cadres et la police de l'habillage s'affinent ensuite pour ne pas jurer.
 - Les sprites de la Chasse aux bugs d'origine sont ceux qu'Antoine préfère : ne pas les « moderniser ».
 - **Sous la scène de l'Aventure, tout a la main de Pilou** (28 novembre 2026) : cadres en pixels (bord d'un pixel de
   scène, coins en escalier, biseau, ombre portée, comme le menu « Sept portes ») et police pixel (docs/POLICE.md)
