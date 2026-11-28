@@ -541,20 +541,20 @@ evenement 12000 perso pied-grande-panne-tic-tac 0
 evenement 15000 perso  0
 pilou 0 -14 78 41 0 1
 perso 0 -
-acteurs 0 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0 acteur-paquet:0:168:5:0
-image 0 1944140103
+acteurs 0 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0
+image 0 2091483573
 pilou 250 -8 78 44 0 1
 perso 250 -
-acteurs 250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0 acteur-paquet:2:175:5:0
+acteurs 250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0
 pilou 500 -2 78 47 0 1
 perso 500 -
-acteurs 500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0 acteur-paquet:0:183:5:0
+acteurs 500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0
 pilou 750 4 78 42 0 1
 perso 750 -
-acteurs 750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0 acteur-paquet:2:190:5:0
+acteurs 750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0
 pilou 1000 10 78 45 0 1
 perso 1000 pied-grande-panne-grumeau 1 201 78 0
-acteurs 1000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0 acteur-paquet:0:198:6:0
+acteurs 1000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0
 image 1000 3074458650
 pilou 1250 16 78 48 0 1
 perso 1250 pied-grande-panne-grumeau 1 189 77 0
@@ -606,98 +606,98 @@ perso 4750 pied-grande-panne-grumeau 3 148 78 0
 acteurs 4750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0
 pilou 5000 46 78 2 0 1
 perso 5000 pied-grande-panne-grumeau 3 148 78 0
-acteurs 5000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:1:-12:9:0
+acteurs 5000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0
 image 5000 3535194336
 pilou 5250 46 78 3 0 1
 perso 5250 pied-grande-panne-grumeau 3 148 78 0
-acteurs 5250 acteur-ticket:2:123:38:0 acteur-paquet:3:-5:9:0
+acteurs 5250 acteur-ticket:2:123:38:0
 pilou 5500 46 78 1 0 1
 perso 5500 pied-grande-panne-grumeau 3 148 78 0
-acteurs 5500 acteur-ticket:0:122:42:0 acteur-paquet:1:3:9:0
+acteurs 5500 acteur-ticket:0:122:42:0
 pilou 5750 46 78 2 0 1
 perso 5750 pied-grande-panne-grumeau 0 148 78 0
-acteurs 5750 acteur-ticket:2:120:45:0 acteur-paquet:3:10:9:0
+acteurs 5750 acteur-ticket:2:120:45:0
 pilou 6000 46 78 3 0 1
 perso 6000 pied-grande-panne-grumeau 0 148 78 0
-acteurs 6000 acteur-ticket:3:120:49:0 acteur-paquet:2:18:10:0
-image 6000 2260157270
+acteurs 6000 acteur-ticket:3:120:49:0
+image 6000 4174027686
 pilou 6250 46 78 0 0 1
 perso 6250 pied-grande-panne-grumeau 0 148 78 0
-acteurs 6250 acteur-ticket:1:119:52:0 acteur-paquet:0:25:10:0
+acteurs 6250 acteur-ticket:1:119:52:0
 pilou 6500 46 78 64 0 1
 perso 6500 pied-grande-panne-grumeau 0 148 78 0
-acteurs 6500 acteur-ticket:2:118:56:0 acteur-paquet:2:33:10:0
+acteurs 6500 acteur-ticket:2:118:56:0
 pilou 6750 46 78 64 0 1
 perso 6750 pied-grande-panne-grumeau 0 148 73 0
-acteurs 6750 acteur-ticket:0:117:59:0 acteur-paquet:0:40:10:0
+acteurs 6750 acteur-ticket:0:117:59:0
 pilou 7000 46 78 64 0 1
 perso 7000 pied-grande-panne-grumeau 0 148 78 0
-acteurs 7000 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0 acteur-paquet:2:48:10:0
-image 7000 647494152
+acteurs 7000 acteur-ticket:0:104:12:0 acteur-ticket:1:117:63:0
+image 7000 3757608172
 pilou 7250 46 78 64 0 1
 perso 7250 pied-grande-panne-grumeau 0 148 78 0
-acteurs 7250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0 acteur-paquet:0:55:9:0
+acteurs 7250 acteur-ticket:1:104:15:0 acteur-ticket:3:117:66:0
 pilou 7500 46 78 50 0 1
 perso 7500 pied-grande-panne-grumeau 0 148 78 0
-acteurs 7500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0 acteur-paquet:2:63:9:0
+acteurs 7500 acteur-ticket:3:106:19:0 acteur-ticket:1:117:70:0
 pilou 7750 46 78 53 0 1
 perso 7750 pied-grande-panne-grumeau 0 148 78 0
-acteurs 7750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0 acteur-paquet:0:70:9:0
+acteurs 7750 acteur-ticket:0:107:22:0 acteur-ticket:2:118:73:0
 pilou 8000 46 78 56 0 1
 perso 8000 pied-grande-panne-grumeau 0 148 78 0
-acteurs 8000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0 acteur-paquet:2:78:9:0
-image 8000 2397762496
+acteurs 8000 acteur-ticket:2:107:26:0 acteur-ticket:0:119:77:0
+image 8000 2555114908
 pilou 8250 46 78 5 0 1
 perso 8250 pied-grande-panne-grumeau 1 148 78 0
-acteurs 8250 acteur-ticket:3:108:29:0 acteur-ticket:1:120:80:0 acteur-paquet:0:85:9:0
+acteurs 8250 acteur-ticket:3:108:29:0 acteur-ticket:1:120:80:0
 pilou 8500 46 78 40 0 1
 perso 8500 pied-grande-panne-grumeau 1 148 78 0
-acteurs 8500 acteur-ticket:1:107:33:0 acteur-ticket:3:120:84:0 acteur-paquet:2:93:8:0
+acteurs 8500 acteur-ticket:1:107:33:0 acteur-ticket:3:120:84:0
 pilou 8750 46 78 7 0 1
 perso 8750 pied-grande-panne-grumeau 1 148 78 0
-acteurs 8750 acteur-ticket:2:107:36:0 acteur-paquet:0:100:8:0
+acteurs 8750 acteur-ticket:2:107:36:0
 pilou 9000 46 78 4 0 1
 perso 9000 pied-grande-panne-grumeau 0 148 78 0
-acteurs 9000 acteur-ticket:0:106:40:0 acteur-paquet:3:108:8:0
-image 9000 2631359285
+acteurs 9000 acteur-ticket:0:106:40:0
+image 9000 3170011165
 pilou 9250 46 78 6 0 1
 perso 9250 pied-grande-panne-grumeau 0 148 78 0
-acteurs 9250 acteur-ticket:2:104:43:0 acteur-paquet:1:115:8:0
+acteurs 9250 acteur-ticket:2:104:43:0
 pilou 9500 46 78 7 0 1
 perso 9500 pied-grande-panne-grumeau 0 148 78 0
-acteurs 9500 acteur-ticket:3:104:47:0 acteur-paquet:3:123:8:0
+acteurs 9500 acteur-ticket:3:104:47:0
 pilou 9750 46 78 4 0 1
 perso 9750 pied-grande-panne-grumeau 0 148 78 0
-acteurs 9750 acteur-ticket:1:103:50:0 acteur-paquet:1:130:9:0
+acteurs 9750 acteur-ticket:1:103:50:0
 pilou 10000 46 78 63 0 1
 perso 10000 pied-grande-panne-grumeau 1 148 78 0
-acteurs 10000 acteur-ticket:2:102:54:0 acteur-paquet:3:138:9:0
-image 10000 2581110322
+acteurs 10000 acteur-ticket:2:102:54:0
+image 10000 4262994658
 pilou 10250 46 78 63 0 1
 perso 10250 pied-grande-panne-grumeau 1 148 78 0
-acteurs 10250 acteur-ticket:0:101:57:0 acteur-paquet:1:145:9:0
+acteurs 10250 acteur-ticket:0:101:57:0
 pilou 10500 46 78 63 0 1
 perso 10500 pied-grande-panne-grumeau 1 148 78 0
-acteurs 10500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0 acteur-paquet:3:153:9:0
+acteurs 10500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0
 pilou 10750 46 78 63 0 1
 perso 10750 pied-grande-panne-grumeau 1 148 78 0
-acteurs 10750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0 acteur-paquet:1:160:9:0
+acteurs 10750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0
 pilou 11000 46 78 63 0 1
 perso 11000 pied-grande-panne-grumeau 0 148 78 0
-acteurs 11000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0 acteur-paquet:3:168:9:0
-image 11000 2566060873
+acteurs 11000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0
+image 11000 2452756609
 pilou 11250 46 78 7 0 1
 perso 11250 pied-grande-panne-grumeau 0 148 78 0
-acteurs 11250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0 acteur-paquet:1:175:10:0
+acteurs 11250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0
 pilou 11500 46 78 4 0 1
 perso 11500 pied-grande-panne-grumeau 0 148 78 0
-acteurs 11500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0 acteur-paquet:3:183:10:0
+acteurs 11500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0
 pilou 11750 46 78 5 0 1
 perso 11750 pied-grande-panne-grumeau 1 148 78 0
-acteurs 11750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0 acteur-paquet:1:190:10:0
+acteurs 11750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0
 pilou 12000 46 78 6 0 1
 perso 12000 pied-grande-panne-tic-tac 1 210 78 0
-acteurs 12000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:0:198:10:0
+acteurs 12000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0
 image 12000 4204917277
 pilou 12250 46 78 7 0 1
 perso 12250 pied-grande-panne-tic-tac 1 198 77 0
@@ -749,47 +749,47 @@ perso 15750 pied-grande-panne-tic-tac 1 184 78 0
 acteurs 15750 acteur-ticket:2:107:36:0
 pilou 16000 46 78 4 0 1
 perso 16000 pied-grande-panne-tic-tac 1 196 78 0
-acteurs 16000 acteur-ticket:0:106:40:0 acteur-paquet:1:-12:9:0
+acteurs 16000 acteur-ticket:0:106:40:0
 image 16000 1461590756
 pilou 16250 46 78 5 0 1
 perso 16250 pied-grande-panne-tic-tac 0 208 77 0
-acteurs 16250 acteur-ticket:2:104:43:0 acteur-paquet:3:-5:10:0
+acteurs 16250 acteur-ticket:2:104:43:0
 pilou 16500 46 78 7 0 1
 perso 16500 pied-grande-panne-tic-tac 0 220 77 0
-acteurs 16500 acteur-ticket:3:104:47:0 acteur-paquet:1:3:10:0
+acteurs 16500 acteur-ticket:3:104:47:0
 pilou 16750 46 78 4 0 1
 perso 16750 -
-acteurs 16750 acteur-ticket:1:103:50:0 acteur-paquet:3:10:10:0
+acteurs 16750 acteur-ticket:1:103:50:0
 pilou 17000 46 78 5 0 1
 perso 17000 -
-acteurs 17000 acteur-ticket:2:102:54:0 acteur-paquet:1:18:10:0
-image 17000 333014979
+acteurs 17000 acteur-ticket:2:102:54:0
+image 17000 1815786469
 pilou 17250 46 78 6 0 1
 perso 17250 -
-acteurs 17250 acteur-ticket:0:101:57:0 acteur-paquet:3:25:10:0
+acteurs 17250 acteur-ticket:0:101:57:0
 pilou 17500 46 78 7 0 1
 perso 17500 -
-acteurs 17500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0 acteur-paquet:1:33:9:0
+acteurs 17500 acteur-ticket:1:101:61:0 acteur-ticket:0:120:14:0
 pilou 17750 46 78 4 0 1
 perso 17750 -
-acteurs 17750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0 acteur-paquet:3:40:9:0
+acteurs 17750 acteur-ticket:3:101:64:0 acteur-ticket:1:120:17:0
 pilou 18000 46 78 5 0 1
 perso 18000 -
-acteurs 18000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0 acteur-paquet:2:48:9:0
-image 18000 192798354
+acteurs 18000 acteur-ticket:1:101:68:0 acteur-ticket:3:122:21:0
+image 18000 2185816814
 pilou 18250 46 78 6 0 1
 perso 18250 -
-acteurs 18250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0 acteur-paquet:0:55:9:0
+acteurs 18250 acteur-ticket:2:102:71:0 acteur-ticket:0:123:24:0
 pilou 18500 46 78 4 0 1
 perso 18500 -
-acteurs 18500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0 acteur-paquet:2:63:9:0
+acteurs 18500 acteur-ticket:0:103:75:0 acteur-ticket:2:123:28:0
 pilou 18750 46 78 5 0 1
 perso 18750 -
-acteurs 18750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0 acteur-paquet:0:70:8:0
+acteurs 18750 acteur-ticket:1:104:78:0 acteur-ticket:3:124:31:0
 pilou 19000 46 78 6 0 1
 perso 19000 -
-acteurs 19000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0 acteur-paquet:2:78:8:0
-image 19000 1103309801
+acteurs 19000 acteur-ticket:3:104:82:0 acteur-ticket:1:123:35:0
+image 19000 4204917277
 scenario hall-reduites grande-panne hall-pas-comptes bleu reduites 0
 evenement 0 perso pied-grande-panne-grumeau 0
 pilou 0 46 78 0 0 1

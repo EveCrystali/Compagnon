@@ -43,8 +43,9 @@ Dernière mise à jour : 28 novembre 2026.
   de soin, messages brefs ; `TextesSystemeTest` échoue dès qu'un texte de ces écrans est écrit en police système.
   **Jamais vu sur un vrai téléphone.** Restent en style système : liste des aventures, épreuves, atelier, chasse aux
   bugs, installation, bulle flottante. PC : la boutique et « Rangées débloquées » sont au guide (`StylePixel.cs` :
-  texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom et « Pilou et moi » aussi, vus dans l'exe d'essai à
-  100 % ; restent amis, invitation, connecteurs, expéditions, et l'en-tête commun (`Bandeau.cs`).
+  texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom, « Pilou et moi » et les expéditions aussi, vus dans l'exe
+  d'essai à 100 % ; restent amis et connecteurs (formulaires au thème clair du système), l'invitation, et l'en-tête
+  commun (`Bandeau.cs`).
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
@@ -93,12 +94,16 @@ Dernière mise à jour : 28 novembre 2026.
   données, curseur, tickets, bulles, étincelles), les 13 personnages en pied (repris de leurs portraits 1×, Mlle Renvoi
   derrière un guichet), qui entrent, parlent leurs répliques et sautillent quand on les touche ; moteur commun étendu
   (référence, C#, Java). Vu sur le PC d'Antoine (essai `personnage`) ; jamais sur un vrai téléphone.
+- **Théâtre du « Phare éteint »** (branche `claude/theatre-phare-eteint`) : 14 scènes (mouettes, chat, papillons de
+  nuit, crabes), les 7 humains dessinés en pied (`humains_pied.py`). Sur PC, le panneau des choix se pose du côté
+  opposé au personnage, sans couvrir l'accessoire clé (`cle`), la légende ni les boutons ; le paquet volant du hall des
+  Pas Comptés est retiré. Rendus PC (essai) et capture téléphone Robolectric relus ; jamais sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
-0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs des trois grandes campagnes, les 29
+0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs de Petit Nuage, ses 9
    personnages en pied, les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
    fictif), puis monter avec `outils/video/monter.py` (plan de montage `outils/video/montage.json`, voir

@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-mme-echeance
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : mme-echeance
 id: pied-grande-panne-mme-echeance
 slot: objet
 ancre: aucun

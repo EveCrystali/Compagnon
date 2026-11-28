@@ -87,6 +87,29 @@ acteur("etincelle", 80, {"o": "#f69d50", "c": "#ffc89a", "w": "#fff6cc"},
        [".....", "..c..", ".cwc.", "..c..", "....."],
        ["o...o", ".c.c.", "..w..", ".c.c.", "o...o"])
 
+
+# ---- Le phare éteint (la côte : nuit bleue, brume, granit, lanternes orange)
+
+acteur("mouette", 140, {"w": "#e6ecf2", "g": "#adbac7", "d": "#3b4654", "o": "#f2a94e"},
+       ["d.......d", ".g.....g.", "..gwwwg..", "...wwwo..", "........."],
+       [".........", "dg.....gd", "..gwwwg..", "...wwwo..", "........."],
+       [".........", ".........", "..gwwwg..", ".g.wwwog.", "d.......d"],
+       [".........", "dg.....gd", "..gwwwg..", "...wwwo..", "........."])
+
+acteur("chat", 260, {"n": "#141a2e", "o": "#f2a94e"},
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn.....", ".nnnnn....", ".nnnnn.nn.", "nnnnnnnnn."],
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn.....", ".nnnnn.n..", ".nnnnn.n..", "nnnnnnnn.."],
+       [".n..n.....", ".nnnn.....", ".nono.....", ".nnnn.....", "..nnn...n.", ".nnnnn..n.", ".nnnnn.n..", "nnnnnnnn.."],
+       [".n..n.....", ".nnnn.....", ".nnnn.....", ".nnnn.....", "..nnn.....", ".nnnnn.n..", ".nnnnn.n..", "nnnnnnnn.."])
+
+acteur("papillon-nuit", 70, {"w": "#ffe8bf", "g": "#d9c9a0"},
+       ["w.w", ".g."],
+       ["...", "wgw"])
+
+acteur("crabe", 120, {"o": "#d0662e", "c": "#f69d50", "k": "#1c2128"},
+       [".k...k.", "oo.o.oo", ".ocooo.", "o.o.o.o"],
+       [".k...k.", "oo.o.oo", ".ocooo.", ".o.o.o."])
+
 # ---- Eau
 
 def _rond(r, a):

@@ -1,4 +1,4 @@
-# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) d'après portrait-grande-panne-brouillon
+# Personnage en pied (pieds_campagnes.py, docs/SCENES.md) : brouillon
 id: pied-grande-panne-brouillon
 slot: objet
 ancre: aucun

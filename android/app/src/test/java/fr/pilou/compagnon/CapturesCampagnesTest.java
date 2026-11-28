@@ -691,6 +691,15 @@ public class CapturesCampagnesTest {
             org.junit.Assert.assertEquals(View.VISIBLE, lg.theatre().getVisibility());
             ecran(ac[0].get(), "grande-panne-grumeau-en-pied");
             ac[0].pause().stop().destroy();
+
+            // Le phare éteint : les humains sont dessinés en pied (Perrine, à l'auberge du Bigorneau).
+            Campagnes.Campagne pe = Campagnes.charger("phare-eteint");
+            ac = new ActivityController[1];
+            Lecture lp = ouvrirLecture(pe, "ch2-soupe", ac);
+            org.junit.Assert.assertEquals(View.VISIBLE, lp.theatre().getVisibility());
+            org.junit.Assert.assertTrue(lp.theatre().aPerso());
+            ecran(ac[0].get(), "phare-eteint-perrine-en-pied");
+            ac[0].pause().stop().destroy();
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");
