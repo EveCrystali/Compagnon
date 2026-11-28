@@ -115,18 +115,15 @@ public class CapturesTraitsTest {
         View carte = trouver(page, PresenceVue.class);
         Bitmap b = Bitmap.createBitmap(t[0], t[1], Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(b);
-        int haut = carte == null ? 0 : Math.max(0, carte.getTop() - Ui.dp(a, 12));
-        // La carte en haut de l'écran, comme après un défilement du doigt.
-        page.defile.scrollTo(0, haut);
-        shadowOf(Looper.getMainLooper()).idle();
-        if (page.defile.getScrollY() > 0 || haut == 0) a.getWindow().getDecorView().draw(cv);
-        else {
-            // Le défilement n'a pas pris (rendu hors écran) : le contenu de la page, remonté d'autant, à la largeur du téléphone.
-            cv.drawColor(Ui.p(a).fond);
-            cv.translate(0, -haut);
-            page.corps.draw(cv);
-            System.out.println("CAPTURE-TRAITS " + nom + " : contenu de la page seul (sans en-tête ni barre du bas)");
-        }
+        // La carte en haut de l'image : le contenu de la page, remonté jusqu'à elle, à la largeur exacte du téléphone
+        // (sans l'en-tête ni la barre du bas, qui ne sont pas le sujet ; le défilement réel ne prend pas hors écran).
+        int haut = 0;
+        for (View v = carte; v != null && v != page.corps && v.getParent() instanceof View; v = (View) v.getParent()) haut += v.getTop();
+        haut = Math.max(0, haut - Ui.dp(a, 12));
+        cv.drawColor(Ui.p(a).fond);
+        cv.translate(0, -haut);
+        page.corps.draw(cv);
+        System.out.println("CAPTURE-TRAITS " + nom + " carte=" + (carte != null) + " haut=" + haut + " contenu=" + page.corps.getHeight());
         ecrire(b, nom);
         c.pause().stop().destroy();
     }
