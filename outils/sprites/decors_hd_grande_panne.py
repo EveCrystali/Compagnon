@@ -1721,27 +1721,59 @@ def marais_majs(P, tab):
     X, Y = P.X, P.Y
     tab.plan("ciel", 0.0)
     pg.ciel(P, horizon=50.0, haut=0.16, halo=0.22, disque=0)
+    tout = np.ones(X.shape, dtype=bool)
+    dgl = np.hypot((X - 63.0) / 70.0, (Y - 12.0) / 40.0)
+    voile(P, tout & (dgl < 1.0), C2, 0.4 * (1 - dgl), lumiere=True)              # la lueur de la partie pleine
+    for k in range(6):                                          # ses rais, qui descendent dans la brume
+        x0 = 46.0 + k * 6.6
+        pente = (k - 2.5) * 0.14
+        m = tout & (Y > 19.0) & (Y < 52.0) & (np.abs(X - x0 - (Y - 19.0) * pente) < 1.2 + (Y - 19.0) * 0.07)
+        voile(P, m, C3, (0.2 + 0.06 * onde(p, 0.15 * k)) * np.clip(1 - (Y - 19.0) / 40.0, 0, 1), lumiere=True)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=-6.0, epais=9.0, seuil=0.52, graine=301)
-    pg.voiles(P, y=30.0, epais=7.0, seuil=0.56, graine=302)
+    pg.cumulus(P, [(28, -8, 84, 10.0, 340, 10, 0.0), (152, -6, 92, 11.0, 341, 11, 0.3), (10, 34, 62, 6.0, 342, 7, 0.8),
+                   (182, 36, 64, 6.5, 343, 7, 0.5)], dessous=-0.5)
+    pg.voiles(P, y=-6.0, epais=9.0, seuil=0.56, graine=301)
+    pg.voiles(P, y=30.0, epais=7.0, seuil=0.58, graine=302)
     # ---- La barre de chargement, immense, à la place du soleil : 37 %, et ses petits carreaux qui hésitent.
     bx, by, bw, bh = 44.0, 6.0, 104.0, 13.0
     halo(P, bx + bw * 0.2, by + bh / 2, 60, C1, 0.34, ry=26)
     P.rect(bx - 1.6, by - 1.6, bw + 3.2, bh + 3.2, T.CIEL[2])
     P.rect(bx - 1.6, by - 1.6, bw + 3.2, 0.6, T.CIEL[6])
+    P.rect(bx - 1.6, by + bh + 1.0, bw + 3.2, 0.6, ENCRE)
+    P.rect(bx - 1.6, by - 1.6, 0.6, bh + 3.2, T.CIEL[5])
     P.rect(bx, by, bw, bh, N0)
     plein = bw * 0.37
+    P.rampe((X > bx + plein) & (X < bx + bw) & (Y > by) & (Y < by + bh), 0.3 + 0.2 * (pg.fbm(X / 9.0, Y / 3.0, 2, 344) - 0.5) + 0.02 * (Y - by), [ENCRE, N0, N1], 0.4)
+    for k in range(1, 27):                                      # les carreaux vides, en filigrane
+        if bx + k * 3.84 > bx + plein + 12.0:
+            P.rect(bx + k * 3.84, by + 1.6, 0.4, bh - 3.2, N1)
     P.rampe((X > bx) & (X < bx + plein) & (Y > by) & (Y < by + bh), 0.3 + 0.5 * (by + bh - Y) / bh + 0.25 * np.sin((X - bx) * 1.2 - p * 6.283),
             [C1, C2, C3], 0.5)
     for i in range(3):                                        # les trois carreaux suivants essaient, et renoncent
         if (int(p * 8) + i) % 4 == 0:
             P.rect(bx + plein + 1.2 + i * 3.6, by + 1.6, 2.6, bh - 3.2, C1)
+    P.remplir((X > bx) & (X < bx + plein) & (Y > by) & (Y < by + 1.0), BLANC)       # le reflet du haut de la vitre
+    for (x0, y0) in ((bx - 1.6, by + bh + 1.6), (bx + bw + 0.6, by + bh + 1.6)):       # elle pend à deux câbles ; des gouttes y perlent
+        P.trait(x0 + 0.5, -16.0, x0 + 0.5, by - 1.6, T.CIEL[2])
     sept(P, bx + bw + 4.0, by + 2.0, "37", T.CIEL[8], l=4.0, h=8.0, ep=P.ep(0.7), pas=6.2)
     P.ell(bx + bw + 17.4, by + 3.2, 1.0, 1.0, T.CIEL[8])
     P.ell(bx + bw + 20.4, by + 9.0, 1.0, 1.0, T.CIEL[8])
     P.trait(bx + bw + 21.0, by + 2.0, bx + bw + 17.0, by + 10.0, T.CIEL[8])
     tab.plan("lointains", 0.2)
-    pg.crete(P, lambda x: pg.profil(x, 49.0, 7.0, 30.0, 303), [T.CIEL[4], T.CIEL[5], T.CIEL[6], T.CIEL[7]], 0.6)
+    pg.crete(P, lambda x: pg.profil(x, 45.0, 10.0, 52.0, 345), [T.CIEL[7], T.CIEL[8], T.CIEL[9], T.CIEL[10]], 0.4)
+    pg.crete(P, lambda x: pg.profil(x, 47.5, 8.0, 38.0, 346), [T.CIEL[6], T.CIEL[7], T.CIEL[8], T.CIEL[9]], 0.4)
+    voile(P, (P.a >= 0) & (np.abs(Y - 46.0 - np.sin(X / 15.0)) < 1.6 * pg.fbm((X + 3.0 * onde(p)) / 20.0, Y / 2.0, 2, 347)), T.CIEL[10], 0.6)
+    for i in range(5):                                          # une ligne de pylônes s'éloigne ; ses fils pendent
+        x, h = 14.0 + i * 42.0, 13.0 - i * 1.4
+        P.trait(x - 1.4, 49.0, x, 49.0 - h, T.CIEL[5])
+        P.trait(x + 1.4, 49.0, x, 49.0 - h, T.CIEL[5])
+        P.trait(x - 2.6, 49.0 - h + 2.0, x + 2.6, 49.0 - h + 2.0, T.CIEL[5])
+        P.trait(x - 1.8, 49.0 - h + 4.4, x + 1.8, 49.0 - h + 4.4, T.CIEL[5])
+        if i < 4:
+            P.courbe([(x + 2.6, 49.0 - h + 2.0), (x + 21.0, 49.0 - h + 6.6), (x + 39.4, 49.0 - h + 3.4)], T.CIEL[6], 1)
+        if (p + 0.2 * i) % 1.0 < 0.5:
+            P.point(x, 49.0 - h - 0.6, O3)
+    pg.crete(P, lambda x: pg.profil(x, 49.0, 7.0, 30.0, 303), [T.CIEL[4], T.CIEL[5], T.CIEL[6], T.CIEL[7]], 0.4)
     for i in range(14):                                       # des pylônes et des arbres morts, loin, dans la brume
         x = 4 + 14 * i + 6 * hz(i, 1, 304)
         h = 5 + 9 * hz(i, 2, 304)
@@ -1754,6 +1786,14 @@ def marais_majs(P, tab):
     pg.rive(P, f_rive, epais=1.8, joncs=170, graine=305)
     f_berge = lambda x: 73.0 + 1.0 * np.sin(_a(x) / 21.0) + 0.4 * np.sin(_a(x) / 5.0)
     pg.miroir(P, tab.derriere(), 51.0, ronds=((60.0, 62.0, 0.0), (130.0, 66.0, 0.5)), fonce=(60.0, 16.0), eclats=0.5, rides=0.07, graine=306)
+    eau = (Y > 51.6) & (Y < 73.0) & (P.a >= 0)
+    colonne = eau & (np.abs(X - 63.0) < 19.0 + (Y - 51.0) * 0.3)
+    P.remplir(colonne & (hz(P.YI, (P.XI + int(p * 8) * (P.YI % 2)) // 4, 348) < 0.34), C2)
+    P.remplir(colonne & (np.abs(X - 63.0) < 12.0) & (hz(P.YI, (P.XI + int(p * 8)) // 3, 349) < 0.22), C3)
+    P.remplir(colonne & (np.abs(X - 63.0) < 5.0) & (hz(P.YI, (P.XI + int(p * 8)) // 2, 350) < 0.12), BLANC)
+    ombre_b = eau & (X > 84.0) & (X < 150.0) & (Y > 55.0) & (Y < 64.0) & (hz(P.YI, P.XI // 7, 351) < 0.4)
+    voile(P, ombre_b, N1, 0.45)
+    voile(P, eau & (Y > 66.0), T.EAU[1], np.clip((Y - 66.0) / 14.0, 0, 0.45))    # l'eau fonce en venant vers nous
     # Des îlots de roseaux qui clignotent : chaque quenouille est un voyant.
     for k, (ix, iy, n) in enumerate(((18, 58, 9), (46, 55, 6), (150, 57, 10), (176, 61, 8), (112, 54, 5), (84, 66, 7))):
         P.ell(ix, iy + 0.6, 2.2 + n * 0.6, 0.9, T.EAU[0])
@@ -1793,8 +1833,23 @@ def marais_majs(P, tab):
         P.rect(x, 71.0, 1.4, 6.0, B1)
         P.point(x + 0.3, 71.0, B3)
     pg.touffes(P, f_berge, n=120, haut=3.0, graine=310)
-    pg.roseaux(P, -6.0, 14.0, n=10, haut=(14.0, 34.0), penche=1.0, graine=311)
-    pg.roseaux(P, 178.0, 198.0, n=10, haut=(14.0, 36.0), penche=-1.0, graine=312)
+    crete_b = (np.abs(Y - (73.0 + 1.0 * np.sin(X / 21.0) + 0.4 * np.sin(X / 5.0)) - 0.4) < 0.5) & (np.abs(X - 63.0) < 34.0)
+    P.remplir(crete_b & (hz(P.XI // 3, 0, 352) < 0.7), C1)       # la lueur de la barre accroche le bord de la berge
+    pg.roseaux(P, -6.0, 20.0, n=20, haut=(14.0, 40.0), penche=1.0, graine=311)
+    pg.roseaux(P, 174.0, 198.0, n=20, haut=(14.0, 42.0), penche=-1.0, graine=312)
+    br = [(-8.0, -6.0), (8.0, -9.0), (24.0, -5.0), (40.0, -10.0), (52.0, -7.0)]                 # une branche morte, à contre-jour
+    P.courbe(br, ENCRE, P.ep(2.2))
+    P.courbe([(x, y - 0.8) for x, y in br[1:]], C1, 1)
+    for (x0, y0, x1, y1) in ((12.0, -8.6, 18.0, -15.0), (24.0, -5.0, 30.0, 0.0), (36.0, -9.0, 44.0, -16.0), (44.0, -9.6, 50.0, -3.0), (8.0, -9.0, 4.0, -1.0)):
+        P.courbe([(x0, y0), ((x0 + x1) / 2 + 1.0, (y0 + y1) / 2), (x1, y1)], ENCRE, P.ep(0.8))
+    for i, (x, l) in enumerate(((16.0, 9.0), (30.0, 13.0), (46.0, 7.0))):                       # des lambeaux de mousse y pendent
+        bal = 0.6 * onde(p, 0.2 * i)
+        P.courbe([(x, -6.0), (x + bal * 0.5, -6.0 + l * 0.5), (x + bal, -6.0 + l)], T.N1, 1)
+        P.courbe([(x + 1.0, -6.4), (x + 1.0 + bal * 0.5, -6.0 + l * 0.4), (x + 1.2 + bal, -6.0 + l * 0.7)], T.N2, 1)
+    P.ell(38.0, -11.6, 1.8, 1.4, ENCRE)                         # un corbeau y attend la fin de la mise à jour
+    P.ell(39.6, -13.0 - (0.4 if int(p * 8) % 5 == 0 else 0), 1.0, 0.9, ENCRE)
+    P.trait(40.4, -13.0, 41.6, -12.6, G2)
+    P.point(39.8, -13.2, C3)
     for i, (x, y) in enumerate(((4.0, 52.0), (11.0, 46.0), (186.0, 50.0), (192.0, 58.0), (180.0, 44.0))):
         voyant(P, x, y, C3, T.N1, d=0.2 * i, part=0.4, r=0.6)
     pg.lucioles(P, [(30.0, 70.0), (150.0, 71.0), (60.0, 77.0), (120.0, 78.0)], graine=313)
@@ -1856,6 +1911,25 @@ def file_impression(P, tab):
     X, Y = P.X, P.Y
     tab.plan("ciel", 0.0)
     P.rampe(np.ones(X.shape, dtype=bool), 0.42 + 0.0035 * (Y + 16) + 0.18 * (pg.fbm(X / 14.0, Y / 9.0, 3, 320) - 0.5), [G0, G1, G2, G3], 0.7)
+    tout = np.ones(X.shape, dtype=bool)
+    rg = np.floor((Y + 16.0) / 4.0)
+    joint = (((Y + 16.0) % 4.0) < 0.4) | ((((X + 4.0 * (rg % 2)) % 8.0) < 0.4) & (((Y + 16.0) % 4.0) >= 0.4))
+    voile(P, tout & joint, G0, 0.45)                             # les joints des parpaings
+    voile(P, tout & (hz(rg, np.floor((X + 4.0 * (rg % 2)) / 8.0), 360) > 0.75), G1, 0.3)
+    voile(P, tout & (pg.fbm(X / 6.0, Y / 16.0, 3, 361) > 0.64), G0, 0.3)          # des coulures
+    for (lx_, ly_, rx_, ry_, c0, f_) in ((60.0, 20.0, 60.0, 60.0, E5, 0.4), (152.0, 14.0, 52.0, 50.0, J3, 0.45)):
+        dl = np.hypot((X - lx_) / rx_, (Y - ly_) / ry_)
+        voile(P, tout & (dl < 1.0), c0, f_ * (1 - dl), lumiere=True)
+    voile(P, tout & (Y < -4.0), ENCRE, np.clip((-4.0 - Y) / 16.0, 0, 0.6))       # le plafond se perd dans le noir
+    for k, (yt, ept, c0, c1) in enumerate(((-13.0, 2.2, G1, G3), (-9.4, 1.2, K1, K2))):   # deux tuyaux courent sous le plafond
+        P.rect(-6.0, yt, 204.0, ept, c0)
+        P.rect(-6.0, yt, 204.0, 0.5, c1)
+        for x in range(8, 196, 34):
+            P.rect(x + k * 9.0, yt - 0.4, 1.6, ept + 0.8, G0)
+    P.rect(170.0, -6.0, 14.0, 9.0, G0)                          # une bouche d'aération ; un ruban y flotte
+    for j in range(4):
+        P.rect(171.0, -5.0 + j * 2.0, 12.0, 1.0, G2)
+    P.trait(176.0, 3.0, 175.0 + 1.2 * onde(p), 8.0, O2)
     tab.plan("lointains", 0.2)
     # ---- Le fond de la réserve : étagères métalliques en fuite, cartons, ramettes, cartouches ; un néon qui grésille.
     for j, y in enumerate((-12.0, 4.0, 20.0, 36.0)):
@@ -1880,21 +1954,55 @@ def file_impression(P, tab):
             i += 1
     for x in (-2.0, 34.0, 70.0, 104.0):
         P.rect(x, -16.0, 1.2, 68.0, G0)
-    voile(P, (X < 108) & (Y < 52), G0, np.clip(0.5 - (X + 6) / 200.0, 0, 0.5))
+    eta = (X < 106.0) & (Y < 52.0) & (P.a >= 0)
+    for y in (-12.0, 4.0, 20.0, 36.0):
+        P.rect(-6.0, y + 12.0, 112.0, 0.4, G3)                  # le chant de la tablette
+        voile(P, eta & (Y > y + 13.0) & (Y < y + 15.6), ENCRE, 0.5)   # son ombre sur ce qu'elle abrite
+    for x in (-2.0, 34.0, 70.0, 104.0):
+        P.rect(x, -16.0, 0.4, 68.0, G3)
+        for y in range(-12, 50, 6):
+            P.point(x + 0.7, y, ENCRE)                          # les trous de la cornière
+    voile(P, eta, G0, np.clip(0.5 - (X + 6) / 200.0, 0, 0.5))
+    voile(P, eta, ENCRE, np.clip((Y - 10.0) / 90.0, 0, 0.4))                     # plus on descend, moins le néon porte
+    voile(P, eta & (np.hypot((X - 45.0) / 40.0, (Y + 8.0) / 16.0) < 1.0), C2, 0.3, lumiere=True)
     neon(P, 20.0, 70.0, -11.0, C2, C3, vacille=0.14, lueur=9.0)
     tab.plan("moyen", 0.5)
     # ---- L'estrade et l'imprimante : énorme, beige, un seul voyant orange, une feuille coincée à mi-chemin.
     ex0 = 112.0
     P.rect(ex0, 50.0, 86.0, 30.0, B1)
     P.rampe((X > ex0) & (Y > 50) & (Y < 80), 0.4 + 0.3 * (pg.fbm(X / 1.4, Y / 16.0, 2, 323) - 0.5) + 0.01 * (X - ex0), [B1, B2, B3], 0.6)
+    est = (X > ex0) & (Y > 50.4) & (Y < 80.0)
+    pl_ = np.floor((X - ex0) / 4.4)
+    P.rampe(est, 0.5 + 0.3 * (hz(pl_, 0, 362) - 0.5) + 0.2 * (pg.fbm(X / 1.2, Y / 12.0, 2, 363) - 0.5) - 0.012 * (Y - 50.0), [B1, B2, B3], 0.4)
+    P.remplir(est & (((X - ex0) % 4.4) < 0.4), B1)              # les joints des planches
+    voile(P, est & (Y < 54.6), ENCRE, 0.5)                      # l'ombre du nez de l'estrade
+    P.rect(ex0, 58.0, 86.0, 0.8, B1)
+    P.rect(ex0, 58.8, 86.0, 0.4, E3)
+    for i in range(9):                                          # une rampe de petites lampes ; elles courent
+        voyant(P, ex0 + 22.0 + i * 7.0, 56.4, J3, B1, d=i / 9.0, part=0.35, r=0.6)
     P.rect(ex0 - 1.5, 48.6, 90.0, 1.8, B3)
+    P.rect(ex0 - 1.5, 48.6, 90.0, 0.5, E5)
     for j in range(3):                                        # les marches
         P.rect(ex0 - 16 + j * 5.4, 70.0 - j * 7.0 + 8, 16.0 - j * 5.4, 7.0, B2)
         P.rect(ex0 - 16 + j * 5.4, 70.0 - j * 7.0 + 8, 16.0 - j * 5.4, 0.8, B3)
+        P.rect(ex0 - 16 + j * 5.4, 70.0 - j * 7.0 + 8.8, 16.0 - j * 5.4, 1.6, B1)                 # l'ombre sous le nez de marche
+        P.rect(ex0 - 12 + j * 5.4, 70.0 - j * 7.0 + 8, 6.0, 0.8, V3)                             # le tapis
+        P.rect(ex0 - 12 + j * 5.4, 70.0 - j * 7.0 + 8.8, 6.0, 6.2, V2 if j % 2 else V1)
     ix0, iy0, iw, ih = 120.0, 10.0, 68.0, 38.6
     corps = (X > ix0) & (X < ix0 + iw) & (Y > iy0) & (Y < iy0 + ih)
     P.rampe(corps, 0.55 - 0.3 * (X - ix0 - iw * 0.3) / iw + 0.012 * (iy0 + ih / 2 - Y) + 0.1 * (pg.fbm(X / 7.0, Y / 5.0, 2, 324) - 0.5),
             [E1, E2, E3, E4, E5], 0.6)
+    voile(P, corps & (Y > iy0 + ih - 6.0), E1, np.clip((Y - iy0 - ih + 6.0) / 8.0, 0, 0.5))
+    voile(P, corps & (X > ix0 + iw - 5.0), E1, 0.4)             # le flanc droit, à l'ombre
+    P.remplir(corps & (X < ix0 + 0.8), BLANC)                   # l'arête que la lampe accroche
+    P.rect(ix0 - 3.0, iy0 + ih, iw + 8.0, 1.6, ENCRE)           # son ombre, posée sur l'estrade
+    for xp in (ix0 + 4.0, ix0 + iw - 8.0):                      # ses pieds
+        P.rect(xp, iy0 + ih - 0.4, 4.0, 1.0, G0)
+    P.poly([(ix0 + 8.0, iy0 + 20.0), (ix0 + 12.6, iy0 + 20.0), (ix0 + 10.3, iy0 + 16.4)], J2)    # l'étiquette : attention, ça pince
+    P.rect(ix0 + 10.0, iy0 + 17.6, 0.6, 1.4, ENCRE)
+    P.ell(ix0 + iw - 5.0, iy0 + 20.0, 2.2, 2.2, E2)             # la molette d'avance du papier
+    a_m = 2 * math.pi * onde(p) * 0.08
+    P.trait(ix0 + iw - 5.0, iy0 + 20.0, ix0 + iw - 5.0 + 1.8 * math.cos(a_m), iy0 + 20.0 + 1.8 * math.sin(a_m), E5)
     P.rect(ix0 - 2.0, iy0 - 3.0, iw + 4.0, 4.0, E4)             # le capot
     P.rect(ix0 - 2.0, iy0 - 3.0, iw + 4.0, 0.8, E5)
     P.rect(ix0 - 2.0, iy0 + 0.6, iw + 4.0, 0.5, E2)
@@ -1918,13 +2026,22 @@ def file_impression(P, tab):
     for i in range(5):                                        # la grille d'aération : un souffle de papier
         P.rect(ix0 + 6, iy0 + 4.0 + i * 1.6, 18.0, 0.6, E1)
     cable(P, [(ix0 + iw, iy0 + 30), (ix0 + iw + 8, iy0 + 40), (ix0 + iw + 6, 49.0)], 1.2, G0, G2, None)
-    rai(P, 60.0, -16.0, 78.0, 22.0, 0.5, BLANC, 0.3, 26, 326)
+    rai(P, 60.0, -7.0, 78.0, 34.0, 0.0, E5, 0.34, 30, 326)       # la lampe de la réserve, droit sur la file
+    rai(P, 188.0, -16.0, 48.0, 22.0, -0.55, J3, 0.4, 22, 364)   # le projecteur de l'estrade, sur l'imprimante
     # ---- Le quai : des rames de papier empilées en dalles ; les feuilles jaunies qui attendent debout, en rang.
     sol = Y > 62.0
     quai = sol & (X < ex0 - 1.5)
     dallage(P, quai, 150.0, 46.0, E5, E4, larg=7.0, prof=1.0, joint=E2)
     P.remplir(quai & (((Y - 62) % 3.0) < 0.5) & (P.T < 0.5), E3)
     P.rect(-6.0, 61.0, ex0 - 10, 1.2, E3)
+    dq = np.hypot((X - 60.0) / 44.0, (Y - 70.0) / 12.0)
+    voile(P, quai & (dq < 1.0), BLANC, 0.5 * (1 - dq), lumiere=True)
+    voile(P, quai & (dq > 0.8), E2, np.clip((dq - 0.8) / 1.2, 0, 0.5))           # hors de la flaque, le quai s'assombrit
+    voile(P, quai & (X > ex0 - 26.0 - (Y - 62.0) * 0.5), B1, 0.35)               # l'ombre de l'estrade
+    for i in range(7):                                          # des feuilles tombées de la file
+        x, y = 10.0 + 12.0 * i + 5.0 * hz(i, 0, 365), 72.0 + 6.0 * hz(i, 1, 365)
+        P.poly([(x, y), (x + 3.4, y - 0.4), (x + 4.4, y + 1.0), (x + 1.0, y + 1.4)], BLANC if i % 2 else E5)
+        P.trait(x + 1.2, y + 0.4, x + 3.2, y + 0.2, G3)
     for rang, (yq, k) in enumerate(((64.5, 0.8), (68.5, 1.0))):
         for i in range(13 - rang * 2):
             x = 6 + i * (7.6 + rang * 1.6) + rang * 3
@@ -1933,7 +2050,8 @@ def file_impression(P, tab):
             hgt = (7.0 + 1.6 * hz(i, rang, 327)) * k
             dy = 0.4 * k if int(p * 8 + i * 3 + rang) % 7 == 0 else 0.0
             penche = (hz(i, rang + 5, 327) - 0.5) * 1.2
-            P.ell(x + 1.6 * k, yq + 0.3, 2.4 * k, 0.5 * k, E2)
+            cote_o = 1 if x > 60.0 else -1                    # l'ombre s'écarte de la lampe
+            P.poly([(x, yq), (x + 3.4 * k, yq), (x + 3.4 * k + cote_o * 3.0 * k, yq + 1.6 * k), (x + cote_o * 3.0 * k, yq + 1.6 * k)], E2)
             P.poly([(x, yq), (x + 3.4 * k, yq), (x + 3.4 * k + penche, yq - hgt - dy), (x + penche, yq - hgt - dy)], (J3, E5, E4)[(i + rang) % 3])
             P.trait(x + 3.4 * k, yq, x + 3.4 * k + penche, yq - hgt - dy, E3)
             for j in range(3):
@@ -1950,6 +2068,18 @@ def file_impression(P, tab):
             papiers(P, -5.0 + i * 9.0 + (j % 2) * -3.0, 70.0 - j * 8.0, 8.4, 9, 328 + i + j * 4)
             P.rect(-5.0 + i * 9.0 + (j % 2) * -3.0, 70.0 - j * 8.0 - 4.6, 8.4, 1.6, (C2, O2, V4)[(i + j) % 3])
     voile(P, (X < 22) & (Y > 36), N0, 0.35)
+    lbx = 60.0 + 0.3 * onde(p, 0.2)
+    P.trait(60.0, -16.0, lbx, -12.0, ENCRE)
+    P.poly([(lbx - 9.0, -7.0), (lbx + 9.0, -7.0), (lbx + 3.0, -12.4), (lbx - 3.0, -12.4)], ENCRE)
+    P.poly([(lbx - 9.0, -7.0), (lbx - 3.0, -12.4), (lbx - 1.6, -12.4), (lbx - 6.6, -7.0)], G2)
+    P.rect(lbx - 8.0, -7.0, 16.0, 0.8, BLANC if int(p * 8) % 7 else E5)
+    P.ell(lbx, -5.8, 2.0, 1.2, BLANC)
+    for k, (bx_, by_, bw, bh) in enumerate(((176.0, 68.0, 18.0, 12.0), (182.0, 59.0, 12.0, 9.0))):
+        P.rect(bx_, by_, bw, bh, ENCRE)
+        P.rect(bx_, by_, bw, 1.0, B1)
+        P.rect(bx_, by_, 0.6, bh, B2)
+        P.rect(bx_ + bw * 0.3, by_ + bh * 0.4, bw * 0.4, 2.2, G1)
+        P.point(bx_ + bw * 0.4, by_ + bh * 0.4 + 1.0, O2)
     tickets(P, 100.0, 20.0, 60.0, 5, 329, coul=BLANC)
     voile(P, Y > 77.0, G0, 0.25)
     poussiere(P, 30, -10, 150, 60, 28, BLANC, 330)
@@ -1994,13 +2124,20 @@ def citadelle_nuage(P, tab):
             if (int(x * 3) + int(p * 8)) % 5:
                 P.point(x + j * 1.3, y, J2 if j % 2 else O2)
     tab.plan("nuages", 0.08)
-    pg.cumulus(P, [(150, 16, 50, 9.0, 342, 9, 0.0), (60, 30, 36, 6.0, 343, 7, 0.4), (176, -6, 30, 5.0, 344, 6, 0.7)], dessous=-0.6)
+    pg.cumulus(P, [(150, 16, 50, 9.0, 342, 9, 0.0), (60, 30, 36, 6.0, 343, 7, 0.4), (176, -6, 30, 5.0, 344, 6, 0.7),
+                   (84, 4, 44, 6.0, 370, 8, 0.2), (20, 22, 40, 5.0, 371, 7, 0.6), (128, 40, 70, 7.0, 372, 9, 0.5),
+                   (40, 50, 90, 8.0, 373, 10, 0.1), (170, 52, 80, 8.0, 374, 10, 0.8)], dessous=-0.6)
+    for k in range(4):                                          # des filets de nuages passent devant la lune
+        m = (np.abs(Y - (-2.0 + k * 3.0) - 1.0 * np.sin(X / 14.0 + k)) < 0.3 + 0.8 * (pg.fbm((X + 4.0 * onde(p, 0.2 * k)) / 16.0, Y / 2.0, 2, 375 + k) - 0.4)) & (X < 90.0)
+        P.remplir(m, T.CIEL[7] if k % 2 else T.CIEL[8])
     tab.plan("lointains", 0.2)
     # ---- La mer de brume : des bancs qui roulent lentement, avec des trouées sur la ville.
     for g, (y0, ep, c0) in enumerate(((58.0, 5.0, T.CIEL[6]), (63.0, 4.0, T.CIEL[8]), (69.0, 4.0, T.CIEL[9]), (76.0, 5.0, T.CIEL[10]))):
         d = pg.fbm((X + 2.5 * onde(p, 0.2 * g)) / 24.0, Y / 6.0, 3, 345 + g)
         m = (Y > y0 - ep * d * 1.6) & (d > 0.5 - 0.03 * g) & (Y > 54)
-        P.rampe(m, 0.3 + 1.6 * (d - 0.5) - 0.04 * (Y - y0), [T.CIEL[3], T.CIEL[5], T.CIEL[7], c0], 0.7)
+        P.rampe(m, 0.3 + 1.6 * (d - 0.5) - 0.04 * (Y - y0) - 0.0015 * (X - 30.0), [T.CIEL[3], T.CIEL[5], T.CIEL[7], c0], 0.5)
+        bord = m & ~np.roll(m, 1, axis=0)                     # la crête de chaque banc prend la lune
+        P.remplir(bord & (X < 150.0), BLANC if g > 1 else T.CIEL[10])
     # D'autres tours de la citadelle, loin, sur leurs propres nuages.
     for i, (x, w, top) in enumerate(((158.0, 9.0, 34.0), (176.0, 6.0, 42.0), (18.0, 7.0, 44.0))):
         P.rampe((np.abs(X - x) < w / 2) & (Y > top) & (Y < 60), 0.5 + 0.4 * (X - x) / w, [T.CIEL[6], T.CIEL[8], T.CIEL[10]], 0.5)
@@ -2013,9 +2150,24 @@ def citadelle_nuage(P, tab):
     dx, dw, dtop, dbas = 108.0, 34.0, 4.0, 66.0
     don = (np.abs(X - dx) < dw / 2) & (Y > dtop) & (Y < dbas)
     u = (X - dx) / (dw / 2)
-    P.rampe(don, 0.72 - 0.34 * u + 0.12 * (pg.fbm(X / 3.0, Y / 2.0, 3, 349) - 0.5), [T.CIEL[5], T.CIEL[7], T.CIEL[9], T.CIEL[11], BLANC], 0.6)
-    P.remplir(don & (((Y - dtop) % 4.0) < 0.4), T.CIEL[7])
-    P.remplir(don & ((((X - dx) / 5.0 + np.floor((Y - dtop) / 4.0) * 0.5) % 1.0) < 0.08), T.CIEL[7])
+    uc = np.clip(u, -1, 1)
+    rond = np.sqrt(1 - uc * uc)
+    jour = np.clip(-0.7 * uc + 0.72 * rond, 0, 1)
+    yc_ = Y + 0.035 * (70.0 - Y) * rond                         # les assises se cintrent
+    ass = np.floor((yc_ - dtop) / 4.0)
+    col_ = np.floor(np.arcsin(uc) / 0.3 + 0.5 * (ass % 2))
+    P.rampe(don, 0.1 + 0.8 * jour + 0.1 * (pg.fbm(X / 3.0, Y / 2.0, 3, 349) - 0.5) + 0.1 * (hz(ass, col_, 376) - 0.5) + 0.08 * (uc > 0.9),
+            [T.CIEL[2], T.CIEL[4], T.CIEL[6], T.CIEL[8], T.CIEL[10], T.CIEL[11], BLANC], 0.4)
+    jh = ((yc_ - dtop) % 4.0) < 0.4
+    jv = (np.abs((np.arcsin(uc) / 0.3 + 0.5 * (ass % 2)) % 1.0) < 0.08) & ~jh
+    voile(P, don & (jh | jv), T.CIEL[3], 0.45)
+    P.remplir(don & (uc < -0.94), BLANC)                        # le liseré de lune
+    voile(P, don & (Y < dtop + 5.0), T.CIEL[2], np.clip((dtop + 5.0 - Y) / 5.0, 0, 0.55))       # l'ombre des mâchicoulis
+    for k in range(-4, 5):                                      # les corbeaux de pierre qui portent le chemin de ronde
+        a = k * 0.33
+        P.rect(dx + (dw / 2) * math.sin(a) - 0.7, dtop + 1.6, 1.4, 2.4, T.CIEL[9] if k < 0 else T.CIEL[5])
+    voile(P, don & (pg.fbm(X / 4.0, Y / 10.0, 3, 377) > 0.64) & (uc > -0.5), T.CIEL[4], 0.3)    # des coulures de pluie ancienne
+    voile(P, don & (np.abs(Y - 30.0 - (X - dx + 17.0) * 0.5) < 2.2) & (X < dx - 4.0) & (X > dx - 17.0), T.CIEL[3], 0.45)   # l'ombre de la gargouille
     for k in range(7):                                        # créneaux
         P.rect(dx - dw / 2 - 1.5 + k * 5.4, dtop - 4.0, 3.4, 4.4, BLANC if k < 4 else T.CIEL[9])
     P.rect(dx - dw / 2 - 1.5, dtop, dw + 3.0, 1.6, T.CIEL[8])
@@ -2034,11 +2186,21 @@ def citadelle_nuage(P, tab):
         P.ell(wx_, wy_ + 0.4, 1.5, 1.9, J3 if vif else J1, cond=Y < wy_ + 0.8)
         P.rect(wx_ - 1.5, wy_ + 0.4, 3.0, 5.0, J3 if vif else J1)
         P.rect(wx_ - 0.2, wy_ - 1.2, 0.4, 6.6, N0)
+        P.rect(wx_ - 3.0, wy_ + 6.0, 6.0, 0.8, T.CIEL[10])          # l'appui
+        if vif:
+            halo(P, wx_, wy_ + 3.0, 6.0, J2, 0.35)
     P.ell(dx, 60.0, 5.0, 6.0, N0, cond=Y < 60.5)                # la porte
     P.rect(dx - 5.0, 60.0, 10.0, 6.0, N0)
     P.ell(dx, 60.5, 4.0, 5.0, B2, cond=Y < 61)
     P.rect(dx - 4.0, 60.5, 8.0, 5.5, B2)
     P.rect(dx - 0.2, 56.0, 0.4, 10.0, B1)
+    P.rect(dx - 4.0, 62.0, 8.0, 0.5, G1)                        # une penture
+    lant = dx + 7.4 + 0.3 * onde(p)                             # une lanterne à la porte
+    P.trait(dx + 6.0, 54.0, dx + 7.4, 54.0, N0)
+    P.trait(dx + 7.4, 54.0, lant, 56.0, N0)
+    P.rect(lant - 1.0, 56.0, 2.0, 2.6, J3 if int(p * 8) % 6 else J2)
+    P.rect(lant - 1.2, 55.6, 2.4, 0.5, N0)
+    halo(P, lant, 57.0, 9.0, J2, 0.4)
     # La gargouille de pierre grise, au bord du vide : elle crache un filet de brume, sa queue remue.
     gx, gy = dx - dw / 2 - 1.0, 26.0
     P.poly([(gx + 2, gy - 2.0), (gx - 10, gy - 3.4), (gx - 15, gy - 1.0), (gx - 10, gy + 1.6), (gx + 2, gy + 2.0)], G2)
@@ -2066,6 +2228,16 @@ def citadelle_nuage(P, tab):
     P.remplir(rem & (((Y - 66) % 3.6) < 0.4), T.CIEL[6])
     P.remplir(rem & ((((X) / 6.0 + np.floor((Y - 66) / 3.6) * 0.5) % 1.0) < 0.07), T.CIEL[6])
     P.remplir((Y > 66.0) & (Y < 66.7), BLANC)
+    chemin = rem & (Y > 66.7) & (Y < 71.0)
+    P.rampe(chemin, 0.6 + 0.2 * (pg.fbm(X / 5.0, Y, 2, 378) - 0.5), [T.CIEL[8], T.CIEL[10], T.CIEL[11], BLANC], 0.4)
+    P.remplir(chemin & (((X + (Y - 66.0) * 1.5) % 9.0) < 0.4), T.CIEL[8])        # les dalles
+    voile(P, chemin & ((((X - (Y - 66.0) * 1.6) - 0.0) % 9.0) < 5.0) & (np.abs(X - dx) > dw / 2 + 2), T.CIEL[5], 0.4)   # l'ombre de chaque créneau
+    voile(P, rem & (Y > 66.7) & (X > dx - dw / 2 + (Y - 66.0) * 1.6) & (X < dx + dw / 2 + 14.0 + (Y - 66.0) * 1.6), T.CIEL[3], 0.5)   # l'ombre du donjon
+    P.remplir(rem & (np.abs(Y - 71.0) < 0.3), T.CIEL[11])        # l'arête du chemin
+    voile(P, rem & (Y > 71.3), T.CIEL[3], np.clip((Y - 71.3) / 10.0, 0, 0.5))    # la face du rempart plonge dans l'ombre
+    for bx_ in (20.0, 178.0):
+        db = np.hypot((X - bx_) / 16.0, (Y - 62.0) / 10.0)
+        voile(P, (P.a >= 0) & (db < 1.0) & (Y > 56.0), C2, 0.45 * (1 - db), lumiere=True)
     for x in np.arange(-6.0, 198.0, 9.0):                       # les créneaux du parapet, derrière le chemin
         if abs(x + 2.5 - dx) > dw / 2 + 2:
             P.rect(x, 60.6, 5.0, 5.6, T.CIEL[9])
@@ -2096,8 +2268,17 @@ def citadelle_nuage(P, tab):
             continue
         P.rect(x, 74.0, 8.0, 3.4, N1)
         P.rect(x, 74.0, 8.0, 0.6, T.CIEL[5])
+    for (x0, x1) in ((-6.0, 17.0), (175.0, 198.0)):
+        mer = (X > x0) & (X < x1) & (Y > 58.0)
+        P.rampe(mer, 0.3 + 0.3 * (pg.fbm(X / 3.0, Y / 2.0, 3, 379) - 0.5) - 0.01 * (Y - 58.0), [ENCRE, N0, N1, N2], 0.4)
+        P.remplir(mer & (((Y - 58.0) % 4.4) < 0.4), ENCRE)
+        P.remplir(mer & ((((X - x0) / 6.0 + np.floor((Y - 58.0) / 4.4) * 0.5) % 1.0) < 0.07), ENCRE)
+        P.remplir(mer & (Y < 58.8), BLANC)                      # le givre sur l'arête, sous la lune
+        P.remplir(mer & (Y >= 58.8) & (Y < 59.6) & (hz(P.XI // 2, 0, 380) < 0.5), T.CIEL[9])
+        P.remplir(mer & (np.abs(X - (x1 if x0 < 0 else x0)) < 0.5), T.CIEL[6])
     for (x, cote) in ((6.0, 1), (188.0, -1)):
         P.rect(x - 0.6, 20.0, 1.2, 60.0, N0)
+        P.rect(x - 0.6 if cote > 0 else x + 0.3, 20.0, 0.3, 38.0, T.CIEL[9])
         P.poly([(x, 20.0), (x + cote * 9.0, 22.0 + v), (x + cote * 15.0, 20.6 - v), (x + cote * 9.0, 26.0 + v), (x, 27.0)], V3)
         P.poly([(x, 20.0), (x + cote * 9.0, 22.0 + v), (x + cote * 9.0, 24.0 + v), (x, 23.6)], V4)
     d = pg.fbm((X + 3.0 * onde(p)) / 18.0, Y / 4.0, 3, 352)
