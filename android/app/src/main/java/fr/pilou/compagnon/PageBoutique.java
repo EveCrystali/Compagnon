@@ -630,21 +630,21 @@ final class PageBoutique extends Page {
         r.setGravity(Gravity.CENTER);
         Style.fond(r, cadre(app, Vitrine.ENCRE, bord, 1));
         r.setPadding(Ui.dp(app, 6), Ui.dp(app, 2), Ui.dp(app, 6), Ui.dp(app, 2));
-        if (a.recompense && !possede) r.addView(Style.texte(app, "▣ à gagner", 12, Vitrine.ARGENT, true));
+        if (a.recompense && !possede) r.addView(Style.etiquette(app, "▣ à gagner", Vitrine.ARGENT));
         else if (!ouvert) {
             ImageView cad = new ImageView(app);
             Bitmap b = Vitrine.sprite("cadenas", Ui.dp(app, 1), 0, false);
             if (b != null) cad.setImageBitmap(b);
             cad.setPadding(0, 0, Ui.dp(app, 4), 0);
             r.addView(cad);
-            r.addView(Style.texte(app, "NIV " + a.niveauMin, 12, Vitrine.ARGENT, true));
-        } else if (porteIci) r.addView(Style.texte(app, "★ porté", 12, Vitrine.ORANGE, true));
-        else if (possede) r.addView(Style.texte(app, a.recompense ? "✓ gagné" : "✓ à toi", 12, Vitrine.VIOLET, true));
-        else if (enRoute) r.addView(Style.texte(app, "⇢ en route", 12, Vitrine.BLEU_CLAIR, true));
+            r.addView(Style.etiquette(app, "NIV " + a.niveauMin, Vitrine.ARGENT));
+        } else if (porteIci) r.addView(Style.etiquette(app, "★ porté", Vitrine.ORANGE));
+        else if (possede) r.addView(Style.etiquette(app, a.recompense ? "✓ gagné" : "✓ à toi", Vitrine.VIOLET));
+        else if (enRoute) r.addView(Style.etiquette(app, "⇢ en route", Vitrine.BLEU_CLAIR));
         else if (!dispo) {
             LocalDate d = Boutique.prochainPassage(a, jour());
-            r.addView(Style.texte(app, a.passage ? (d == null ? "✧ vitrine" : "✧ " + d.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", Locale.FRENCH)))
-                    : "⌛ " + Boutique.nomSaison(a.saison), 12, Vitrine.ARGENT, true));
+            r.addView(Style.etiquette(app, a.passage ? (d == null ? "✧ vitrine" : "✧ " + d.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", Locale.FRENCH)))
+                    : "⌛ " + Boutique.nomSaison(a.saison), Vitrine.ARGENT));
         }
         else {
             Vitrine.Piece pc = new Vitrine.Piece(app, 1.1f);
@@ -652,7 +652,7 @@ final class PageBoutique extends Page {
             lp.rightMargin = Ui.dp(app, 4);
             r.addView(pc, lp);
             boolean assez = connu && solde >= prix;
-            r.addView(Style.texte(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), 12, assez ? Vitrine.ORANGE : Vitrine.ARGENT, true));
+            r.addView(Style.etiquette(app, prix + (prix < a.prix ? " (" + a.prix + ")" : "") + (assez ? "" : " ◌"), assez ? Vitrine.ORANGE : Vitrine.ARGENT));
         }
         LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         l.topMargin = Ui.dp(app, 4);

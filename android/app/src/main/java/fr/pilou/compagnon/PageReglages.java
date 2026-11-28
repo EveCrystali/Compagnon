@@ -326,7 +326,7 @@ final class PageReglages extends Page {
             }
         };
         for (int k = 0; k < noms.length; k++) {
-            TextView x = new Style.Texte(a, noms[k], Style.pixelOptions(a, noms), p.doux, true, true);
+            TextView x = new Style.Texte(a, noms[k], Style.pixelOptions(a, noms), p.doux, false, true);
             x.setSingleLine(true);
             x.setGravity(Gravity.CENTER);
             x.setMinHeight(Ui.dp(a, 40));

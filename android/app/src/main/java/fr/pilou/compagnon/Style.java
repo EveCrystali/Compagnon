@@ -97,7 +97,9 @@ final class Style {
 
     /** La taille (dp par pixel de police) qui rend une taille de texte du système (sp). */
     static float taille(float sp) {
-        return sp >= 24 ? PAGE : sp >= 13 ? CORPS : PETIT;
+        // Plancher de lisibilité (docs/STYLE.md) : un texte en minuscules ne descend jamais sous le corps. « Petit » est
+        // réservé aux étiquettes en capitales (titres de section, « NIV ») : il se demande explicitement.
+        return sp >= 24 ? PAGE : CORPS;
     }
 
     // ---------------------------------------------------------------------------------------------------- Texte
@@ -165,8 +167,9 @@ final class Style {
      * chaque nom dans sa case : des libellés voisins ne se touchent jamais, même en grande police.
      */
     static int pixelQuiTient(Context c, String[] noms, float tailleDp, boolean gras, int largeurCase) {
-        int px = pixel(c, tailleDp);
-        for (; px > 1; px--) {
+        // Jamais sous la taille « petit » : en dessous, on ne lit plus.
+        int px = pixel(c, tailleDp), plancher = Math.min(px, pixel(c, PETIT));
+        for (; px > plancher; px--) {
             boolean tient = true;
             for (String n : noms) tient &= largeur(n, px, gras) <= largeurCase;
             if (tient) break;
@@ -182,7 +185,7 @@ final class Style {
         String[] avec = new String[noms.length];
         for (int i = 0; i < noms.length; i++) avec[i] = "● " + noms[i];
         int dedans = c.getResources().getDisplayMetrics().widthPixels - Ui.dp(c, 36 + 24 + 16) - 5 * u(c);
-        return pixelQuiTient(c, avec, PETIT, true, dedans / noms.length - 4 * u(c));
+        return pixelQuiTient(c, avec, CORPS, false, dedans / noms.length - 4 * u(c));
     }
 
     /** Le premier texte de la liste qui tient dans la largeur (le dernier sinon) : du plus long au plus court. */
@@ -404,7 +407,7 @@ final class Style {
     }
 
     static Texte sousTitre(Context c, String s) {
-        Texte t = new Texte(c, s, PETIT, p(c).pale, false);
+        Texte t = new Texte(c, s, CORPS, p(c).pale, false);
         t.setPadding(0, 0, 0, Ui.dp(c, 14));
         return t;
     }
@@ -628,9 +631,20 @@ final class Style {
         return b;
     }
 
+    /**
+     * Étiquette d'un ou deux mots (prix, « NIV 15 », « À TOI ») : capitales, police « titre », taille « petit ». C'est la
+     * seule place de la taille « petit » avec les titres de section : en capitales, sa hauteur de lettre vaut celle
+     * d'un texte courant (docs/STYLE.md, « Plancher de lisibilité »).
+     */
+    static Texte etiquette(Context c, String s, int couleur) {
+        Texte t = new Texte(c, s.toUpperCase(Locale.FRENCH), PETIT, couleur, true);
+        t.setSingleLine(true);
+        return t;
+    }
+
     /** Puce : un mot dans un cadre plat (état, étiquette). La couleur borde et écrit ; le fond reste celui de la carte. */
     static Texte puce(Context c, String s, int couleur) {
-        Texte t = new Texte(c, s, PETIT, couleur, true);
+        Texte t = new Texte(c, s, CORPS, couleur, true);
         puce(t, couleur);
         t.setSingleLine(true);
         return t;

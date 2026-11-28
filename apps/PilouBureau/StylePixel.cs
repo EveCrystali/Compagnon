@@ -18,7 +18,17 @@ namespace PilouBureau;
 internal static class StylePixel
 {
     // Tailles d'un pixel de police, en unités WPF (docs/STYLE.md, « Texte ») : 1, 2 et 3 pixels physiques à 100 %.
+    // Plancher de lisibilité : un texte en minuscules ne descend jamais sous « Corps » (hauteur d'x de 10 px à 100 % ;
+    // le menu « Sept portes », qui se lit bien, en fait 7). « Petit » (hauteur d'x de 5 px) est réservé aux
+    // étiquettes en capitales et aux nombres, dont la hauteur fait 7 px : StylePixel.Etiquette.
     public const double Petit = 1.3, Corps = 2, Grand = 3;
+
+    private static readonly System.Globalization.CultureInfo Francais = new("fr-FR");
+
+    public static string Capitales(string s) => s.ToUpper(Francais);
+
+    // Étiquette d'un ou deux mots : capitales, police « titre », taille « petit » (la seule place de cette taille).
+    public static TextePixel Etiquette(string texte, Brush couleur) => Texte(Capitales(texte), couleur, Petit, true);
 
     public static readonly Brush Eteint = FenetreAventure.Gel("#7d8796"), Creux = FenetreAventure.Gel("#2a3156"),
         Coche = FenetreAventure.Gel("#6cb6ff"), Orange = FenetreAventure.Gel("#f69d50"), Page = FenetreAventure.Gel("#0b0e1a");

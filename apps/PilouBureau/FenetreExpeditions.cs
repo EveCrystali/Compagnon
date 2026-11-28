@@ -33,7 +33,7 @@ internal sealed class FenetreExpeditions : Window
     // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (détails), « corps »
     // (à partir de 14) ou « grand » (à partir de 20, un signe seul) ; gras : la police « titre ».
     private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
-        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
+        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : StylePixel.Corps, gras);
 
     private static TextePixel Texte(string texte, double taille, Brush couleur, bool gras = false)
     {
@@ -44,7 +44,7 @@ internal sealed class FenetreExpeditions : Window
 
     private static BoutonPixel Bouton(string texte, bool principal, Action action)
     {
-        var b = new BoutonPixel(texte, principal, StylePixel.Petit) { VerticalAlignment = VerticalAlignment.Center };
+        var b = new BoutonPixel(texte, principal, StylePixel.Corps) { VerticalAlignment = VerticalAlignment.Center };
         b.Click += (_, _) => action();
         return b;
     }
@@ -60,10 +60,10 @@ internal sealed class FenetreExpeditions : Window
     {
         _pilou = pilou;
         Title = "Expéditions de Pilou";
-        Width = 860;
-        Height = 640;
-        MinWidth = 700;
-        MinHeight = 480;
+        Width = 1100;
+        Height = 760;
+        MinWidth = 900;
+        MinHeight = 600;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
         Background = Fond;

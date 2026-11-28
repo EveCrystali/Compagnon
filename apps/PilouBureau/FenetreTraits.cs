@@ -24,7 +24,7 @@ internal sealed class FenetreTraits : Window
         Eteint = Gel("#566273"), Discret = Gel("#768390");
 
     private const int Colonnes = 5;
-    private const double LargeurCase = 104, LargeurCarte = 244, Boite = 76;
+    private const double LargeurCase = 132, LargeurCarte = 260, Boite = 76;
 
     private static Brush Gel(string hex)
     {
@@ -36,7 +36,7 @@ internal sealed class FenetreTraits : Window
     // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (détails) ou
     // « corps » (à partir de 14) ; gras : la police « titre ».
     private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
-        StylePixel.Texte("", couleur, taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
+        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : StylePixel.Corps, gras);
 
     // La police pixel de Pilou (docs/POLICE.md), aux pixels entiers de cette fenêtre-ci.
     private TextePixel Pixel(string texte, Brush couleur, double taille) => new(texte, couleur)
@@ -56,8 +56,8 @@ internal sealed class FenetreTraits : Window
     {
         _pilou = pilou;
         Title = "Pilou et moi";
-        Width = 890;
-        Height = 724;
+        Width = 1060;
+        Height = 860;
         ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
@@ -201,11 +201,12 @@ internal sealed class FenetreTraits : Window
             });
         if (Icone(connu ? t.Sprite : "trait-inconnu", 3) is { } icone) dessin.Children.Add(icone);
         p.Children.Add(dessin);
-        var nom = Texte(11.5, dominant ? Bandeau.OrangePo : connu ? Bandeau.ArgentClair : Discret, connu);
+        var nom = Texte(11.5, dominant ? Bandeau.OrangePo : connu ? Bandeau.ArgentClair : Discret);
+        nom.MaxLignes = 2;
         nom.Texte = dominant ? "★ " + t.Nom : connu ? t.Nom : "? ? ?";
         nom.Centre = true;
         nom.Margin = new Thickness(2, 4, 2, 0);
-        nom.MinHeight = 32;
+        nom.MinHeight = 48; // deux lignes de « corps »
         p.Children.Add(nom);
         p.ToolTip = connu ? t.Nom + (dominant ? " (trait dominant)" : "") : "Un trait que Pilou n'a pas encore";
         return p;
