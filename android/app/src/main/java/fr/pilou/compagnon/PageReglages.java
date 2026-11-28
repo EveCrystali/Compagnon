@@ -42,7 +42,7 @@ final class PageReglages extends Page {
         LinearLayout c = Ui.carte(a);
         statut = Ui.texte(a, "", Ui.T_CORPS, p.texte, true);
         c.addView(statut);
-        TextView aide = Ui.texte(a, "Sur le PC : clic droit sur Pilou → Intégrations → Android : appairer. Vise le QR code avec l'appareil photo, "
+        TextView aide = Ui.texte(a, "Sur le PC : clic droit sur Pilou → Amis et appareils → Groupe d'appareils → Partager l'XP entre mes appareils. Vise le QR code avec l'appareil photo, "
                 + "ou tape le code ici. Le même code relie tous tes appareils (XP partagée).", Ui.T_DETAIL, p.doux, false);
         aide.setPadding(0, Ui.dp(a, 6), 0, Ui.dp(a, 6));
         c.addView(aide);

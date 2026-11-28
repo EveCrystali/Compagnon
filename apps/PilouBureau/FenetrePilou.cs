@@ -474,17 +474,38 @@ public sealed partial class FenetrePilou : Window
     }
 
     // Tout premier lancement : un mot de bienvenue, une seule fois (noté aussitôt dans reglages.json).
+    // --essai=bienvenue : la même séquence, en accéléré (×5), pour la filmer en 30 s.
+    private double _bienvenueVite = 1;
+    private bool _bienvenueEnCours;
+
     private void Bienvenue()
     {
         if (_demo || _reglages.BienvenueFaite) return;
+        // Marqué tout de suite : même si Pilou est fermé au milieu, la bienvenue ne revient jamais.
         _reglages.BienvenueFaite = true;
         _reglages.Ecrire(_dossier);
-        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromSeconds(4) };
+        // Trois bulles au plus (PremiereMinute.cs), qui passent seules ; chacune attend un moment calme.
+        int prochaine = 0;
+        double depuis = Maintenant;
+        _bienvenueEnCours = true;
+        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromSeconds(1) };
         t.Tick += (_, _) =>
         {
-            t.Stop();
-            Dosage.Noter(Maintenant);
-            Dire(Reglages.MotBienvenue, 9000);
+            bool libre = !EnSaisie && !_discret && Maintenant >= _cacheJusque && !CampagneOccupe && _jeuEnCours == Jeu.Aucun;
+            switch (PremiereMinute.Decider(prochaine, (Maintenant - depuis) * _bienvenueVite, libre))
+            {
+                case PremiereMinute.Decision.Dire:
+                    var mot = PremiereMinute.Mots[prochaine];
+                    Dosage.Noter(Maintenant);
+                    Dire(mot.Texte, _bienvenueVite > 1 ? Math.Min(mot.DureeMs, mot.Texte.Length * 70) : mot.DureeMs);
+                    prochaine++;
+                    depuis = Maintenant;
+                    break;
+                case PremiereMinute.Decision.Abandonner:
+                    t.Stop();
+                    _bienvenueEnCours = false;
+                    break;
+            }
         };
         t.Start();
     }
@@ -614,6 +635,7 @@ public sealed partial class FenetrePilou : Window
         expr = Sommeil(expr, t);
         expr = NuitTardive(expr, t);
         if (_essaiVie && expr == Expr.Dort) expr = Expr.Repos; // essai « vie » : sans session, il ne dort pas
+        if (_bienvenueEnCours && expr == Expr.Dort) expr = Expr.Repos; // il ne se présente pas en dormant
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
