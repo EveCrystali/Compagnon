@@ -12,7 +12,7 @@ tout autre logiciel peut en écrire aussi, de trois façons, de la plus simple �
 
 ## 1. Codex : déjà fait
 
-Clic droit sur Pilou → **Intégrations → Codex : brancher** (ou l'installateur, qui le fait tout seul).
+Clic droit sur Pilou → **Amis et appareils → Intégrations → Codex : brancher** (ou l'installateur, qui le fait tout seul).
 Pilou ajoute à `~/.codex/hooks.json` une commande par événement (`SessionStart`, `UserPromptSubmit`,
 `PreToolUse`, `PermissionRequest`, `PostToolUse`, `Stop`, `SessionEnd`), asynchrone : Codex n'attend
 jamais Pilou. Les hooks qui étaient déjà là restent ; une copie de l'ancien fichier est gardée dans
@@ -97,12 +97,12 @@ Supprimer le fichier retire la session de la bulle.
 
 ## Sortir de l'écran
 
-- **Discord, statut** : Intégrations → *Discord : statut « Joue à Pilou »*. Il faut l'identifiant
+- **Discord, statut** : Amis et appareils → Intégrations → *Discord : statut « Joue à Pilou »*. Il faut l'identifiant
   d'une application Discord (discord.com/developers → New Application, nommée « Pilou », avec une
   image `pilou` dans Rich Presence → Art Assets). Un seul identifiant sert à tout le monde : le mettre
   dans `Reglages.DiscordAppParDefaut` pour que les autres n'aient rien à faire. Rien ne sort de la
   machine sauf vers l'app Discord locale ; les noms de sessions ne sont montrés que si on coche l'option.
-- **Téléphone** : Intégrations → *Me prévenir sur mon téléphone…* : un webhook Discord (salon à soi),
+- **Téléphone** : Amis et appareils → Intégrations → *Me prévenir sur mon téléphone…* : un webhook Discord (salon à soi),
   Slack, ou `https://ntfy.sh/<sujet>`. Un message quand une IA attend depuis 30 s, ou a fini un travail
   de plus de 2 min — par défaut seulement si tu n'as pas touché au PC depuis 30 s.
 

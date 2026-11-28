@@ -22,6 +22,9 @@ final class PageAccueil extends Page {
     private final TextView salut, nom, niveau, xp, etatPc;
     private final Style.TitreSection titreSessions;
     private final TextePixelVue motDuJour;
+    /** Premier lancement : une ligne de Pilou, discrète, sous le mot du jour ; rien à toucher, elle part à la première caresse. */
+    static final String BIENVENUE = "coucou ! touche-moi : une caresse. le reste est en bas, et je t'écris dans Aventure ✉";
+    private TextView bienvenue;
     private final PresenceVue presence;
     private final Style.Barre barre;
     private final PilouVue pilou;
@@ -74,6 +77,12 @@ final class PageAccueil extends Page {
         // Le mot du jour, en tête : le même que celui du soir, du widget et de la bulle.
         motDuJour = PresenceVue.motTete(a);
         corps.addView(motDuJour, Ui.large(a, 14));
+        if (!Prefs.bienvenueVue(a)) {
+            Prefs.marquerBienvenue(a); // une seule fois : au prochain lancement, elle ne revient pas
+            bienvenue = Ui.texte(a, BIENVENUE, Ui.T_DETAIL, p.doux, false);
+            bienvenue.setPadding(Ui.dp(a, 2), 0, 0, 0);
+            corps.addView(bienvenue, Ui.large(a, 14));
+        }
 
         // L'aventure en cours, en tête : il t'attend, ou il revient à telle heure.
         carteAventure = Ui.pile(a);
@@ -167,7 +176,7 @@ final class PageAccueil extends Page {
         TextView relier = Style.texte(a, "Pour le retrouver ici, relie-le à ton PC :", Ui.T_CORPS, p.texte, true);
         relier.setPadding(0, Ui.dp(a, 12), 0, 0);
         guide.addView(relier, Ui.large());
-        String[] etapes = {"Sur le PC, clic droit sur Pilou → Intégrations → Android : appairer.",
+        String[] etapes = {"Sur le PC, clic droit sur Pilou → Amis et appareils → Groupe d'appareils → Partager l'XP entre mes appareils.",
                 "Vise le QR code avec l'appareil photo du téléphone : l'app s'ouvre et s'appaire.",
                 "Ou tape le code de 16 caractères dans Réglages → Appairage."};
         for (int i = 0; i < etapes.length; i++) {
@@ -386,6 +395,9 @@ final class PageAccueil extends Page {
     }
 
     private void caresser() {
+        if (bienvenue != null) {
+            bienvenue.animate().alpha(0).setDuration(600).withEndAction(() -> bienvenue.setVisibility(View.GONE)).start();
+        }
         pilou.jouer("caresse", 2400);
         Sons.jouer(app, Sons.CARESSE);
         coeur.setAlpha(1);

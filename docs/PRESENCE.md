@@ -28,7 +28,7 @@ flottante, et dans la notification du soir.
 
 ## Les petits mots
 
-`assets/presence/mots.txt`, commun au PC et à l'app (573 lignes au départ, 90 caractères au plus, minuscules, voix de
+`assets/presence/mots.txt`, commun au PC et à l'app (573 mots ; les 636 lignes du fichier comptent aussi ses commentaires et lignes vides ; 90 caractères au plus, minuscules, voix de
 `docs/LORE.md`). Une ligne : `famille|filtres|texte`.
 
 - **Filtres** : `c1`…`c4` (palier de complicité minimal : les familles deviennent plus personnelles), `s1`, `s4`,
@@ -83,7 +83,7 @@ Une jauge qui **monte lentement et ne baisse jamais**. Points du groupe :
   semaine n'est plus fêtée (on ne célèbre pas en retard). L'adoption est le premier jour ensemble connu du groupe (pour
   qui avait déjà Pilou, le jour où cette version est arrivée).
 
-Où la voir : PC, clic droit → **Pilou et moi** (palier, jours ensemble, jauge de signes ■■■□□) et le pied du Journal ;
+Où la voir : PC, clic droit → **Progrès** (palier, jours ensemble, jauge de signes ■■■□□) et le pied du Journal ;
 téléphone, la carte **Pilou et moi** de l'Accueil (barre bleue vers le palier suivant).
 
 ## Le journal de Pilou
@@ -106,7 +106,7 @@ métier monté, expédition, objet acheté. Jamais de titre, de fichier, de vill
   L'entrée ne dépend que du jour et des faits fusionnés : le PC et le téléphone écrivent mot pour mot la même chose.
 - **Conservation** : les 14 derniers jours restent ouverts (un appareil en retard peut encore compléter) ; ensuite le
   jour est figé. 400 jours gardés.
-- **Où le lire** : PC, clic droit → Pilou et moi → **Journal de Pilou…** (fenêtre rétro, ◀ ▶ ou flèches du clavier) ;
+- **Où le lire** : PC, clic droit → **📖 Journal…** (fenêtre rétro, ◀ ▶ ou flèches du clavier) ;
   téléphone, la carte **Pilou et moi** de l'Accueil (◀ ▶).
 - Réglage « Tenir son journal » : coupé, plus aucun fait n'est noté ; les pages déjà écrites restent.
 
@@ -121,7 +121,7 @@ préfère ne pas dire ». Il ne redemande jamais.
   chiffré** de tes appareils. **Jamais envoyé aux amis** : il n'entre ni dans la vitrine, ni dans les messages entre
   Pilou, ni dans le message du téléphone, ni dans le compteur du groupe (test
   `Le_prenom_reste_dans_le_groupe_chiffre…`).
-- 16 caractères au plus, nettoyé. Modifiable et effaçable (PC : Pilou et moi ; téléphone : Réglages → Pilou et moi).
+- 16 caractères au plus, nettoyé. Modifiable et effaçable (PC : Réglages ; téléphone : Réglages → Pilou et moi).
   Le choix le plus récent l'emporte dans tout le groupe (effacer compris).
 - Utilisé avec parcimonie dans les petits mots (voir plus haut).
 
@@ -152,7 +152,7 @@ changement, au plus une fois par quart d'heure (tout de suite pour le prénom, u
 |---|---|
 | `apps/PilouBureau/Presence.cs`, `EtatPresence.cs` | le moteur (sans WPF) : banque, choix, cadence, complicité, faits, journal, message, état |
 | `android/.../Presence.java` | sa copie exacte, sans dépendance Android |
-| `apps/PilouBureau/FenetrePresence.cs` | sur l'overlay : observation, petits mots, gestes, menu Pilou et moi, synchronisation |
+| `apps/PilouBureau/FenetrePresence.cs` | sur l'overlay : observation, petits mots, gestes, synchronisation (le menu est dans `MenuPortes.cs`) |
 | `apps/PilouBureau/FenetreJournal.cs` | la fenêtre Journal et la petite fenêtre du prénom |
 | `android/.../PresenceTel.java`, `PresenceVue.java`, `MotDuSoir.java` | état, carte de l'Accueil, réglages, notification du soir |
 | `assets/presence/mots.txt`, `journal.txt` | les textes, communs |

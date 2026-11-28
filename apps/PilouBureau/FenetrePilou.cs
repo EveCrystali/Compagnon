@@ -19,7 +19,7 @@ public sealed partial class FenetrePilou : Window
     private const double LargeurBase = Placement.LargeurBase;
     private const double HauteurBulle = Placement.HauteurBulle;
 
-    private enum Geste { Rien, Marche, Assis, Baille, Ballon, SauteSouris }
+    private enum Geste { Rien, Marche, Assis, Baille, Ballon, SauteSouris, Saynete }
 
     private sealed record Palette(Brush Fond, Brush Bord, Brush Texte, Brush Pale, Brush Bleu, Brush Orange);
 
@@ -474,17 +474,38 @@ public sealed partial class FenetrePilou : Window
     }
 
     // Tout premier lancement : un mot de bienvenue, une seule fois (noté aussitôt dans reglages.json).
+    // --essai=bienvenue : la même séquence, en accéléré (×5), pour la filmer en 30 s.
+    private double _bienvenueVite = 1;
+    private bool _bienvenueEnCours;
+
     private void Bienvenue()
     {
         if (_demo || _reglages.BienvenueFaite) return;
+        // Marqué tout de suite : même si Pilou est fermé au milieu, la bienvenue ne revient jamais.
         _reglages.BienvenueFaite = true;
         _reglages.Ecrire(_dossier);
-        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromSeconds(4) };
+        // Trois bulles au plus (PremiereMinute.cs), qui passent seules ; chacune attend un moment calme.
+        int prochaine = 0;
+        double depuis = Maintenant;
+        _bienvenueEnCours = true;
+        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromSeconds(1) };
         t.Tick += (_, _) =>
         {
-            t.Stop();
-            Dosage.Noter(Maintenant);
-            Dire(Reglages.MotBienvenue, 9000);
+            bool libre = !EnSaisie && !_discret && Maintenant >= _cacheJusque && !CampagneOccupe && _jeuEnCours == Jeu.Aucun;
+            switch (PremiereMinute.Decider(prochaine, (Maintenant - depuis) * _bienvenueVite, libre))
+            {
+                case PremiereMinute.Decision.Dire:
+                    var mot = PremiereMinute.Mots[prochaine];
+                    Dosage.Noter(Maintenant);
+                    Dire(mot.Texte, _bienvenueVite > 1 ? Math.Min(mot.DureeMs, mot.Texte.Length * 70) : mot.DureeMs);
+                    prochaine++;
+                    depuis = Maintenant;
+                    break;
+                case PremiereMinute.Decision.Abandonner:
+                    t.Stop();
+                    _bienvenueEnCours = false;
+                    break;
+            }
         };
         t.Start();
     }
@@ -609,11 +630,12 @@ public sealed partial class FenetrePilou : Window
         if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
         bool fatigue = (_suivi.Courant?.Fatigue ?? false) || TenueAffichee == "nuit";
         _inactif = Natif.InactifMs();
-        if (_essaiVie) _inactif = 0; // essai « vie » : il reste éveillé, même devant un écran délaissé
+        if (EssaiEveille) _inactif = 0; // essai « vie » : il reste éveillé, même devant un écran délaissé
         Observer(t);
         expr = Sommeil(expr, t);
         expr = NuitTardive(expr, t);
-        if (_essaiVie && expr == Expr.Dort) expr = Expr.Repos; // essai « vie » : sans session, il ne dort pas
+        if (EssaiEveille && expr == Expr.Dort) expr = Expr.Repos; // essai « vie » : sans session, il ne dort pas
+        if (_bienvenueEnCours && expr == Expr.Dort) expr = Expr.Repos; // il ne se présente pas en dormant
         var stadePose = _essaiStade > 0 ? _essaiStade : StadeAffiche();
         var (objetsSoins, boude, dosTourne) = PoseSoins(stadePose, t);
         _exprCourante = expr;
@@ -759,6 +781,7 @@ public sealed partial class FenetrePilou : Window
         HabillerGestes(_scene.Pose, t);
         HabillerCampagne(_scene.Pose);
         HabillerVie(_scene.Pose, mouvement, niveauVie);
+        HabillerSaynete(_scene.Pose, t);
         _scene.InvalidateVisual();
         AnimerInvite(t);
         AnimerJeux(t);
@@ -767,6 +790,7 @@ public sealed partial class FenetrePilou : Window
         AnimerExpedition(t);
         AnimerRetour(t);
         AnimerEssaiVie(t);
+        AnimerEssaiSaynete(t);
         if (t < _alerteJusque) Peindre();
 
         bool gauche = Placement.AGauche(_x, _zone.Left, _zone.Right);
@@ -841,7 +865,7 @@ public sealed partial class FenetrePilou : Window
         bool travail = AuTravail;
         double pause = travail ? 2 : 1.3;
         bool assisPermis = expr is Expr.Repos or Expr.Concentre or Expr.Attente;
-        if (!assisPermis || (_geste is Geste.Marche or Geste.Baille or Geste.Ballon && !calme)) _geste = Geste.Rien;
+        if (!assisPermis || (_geste is Geste.Marche or Geste.Baille or Geste.Ballon or Geste.Saynete && !calme)) _geste = Geste.Rien;
 
         switch (_geste)
         {
@@ -884,6 +908,9 @@ public sealed partial class FenetrePilou : Window
                 _balleRot += _sens * (v * dt + (coup > 0 ? 4 * dt * K : 0)) / (2.2 * Scene.PA * K);
                 return true;
             }
+            case Geste.Saynete:
+                AvancerSaynete(t, pause);
+                return false;
             case Geste.Assis or Geste.Baille when t >= _gesteFin:
                 _geste = Geste.Rien;
                 _pauseJusque = t + (2000 + _hasard.NextDouble() * 5000) * pause;
@@ -894,6 +921,8 @@ public sealed partial class FenetrePilou : Window
                 double tirage = _hasard.NextDouble();
                 if (_inactif > 180_000 && _hasard.NextDouble() < 0.35 && PreparerSaut(t))
                     return false;
+                // Une saynète de repos (SaynetesFenetre.cs), sous sa propre retenue.
+                if (TenterSaynete(t, travail, min, max)) return false;
                 if (_reglages.Promenade && !travail && ennui > 60_000 && _hasard.NextDouble() < 0.12)
                 {
                     _geste = Geste.Ballon;

@@ -126,6 +126,17 @@ POSES = [
     "expr=dort t=2100 lumiere=nuit stade=3",
     "expr=inquiet t=320 lumiere=soir",
     "expr=repos t=0 lumiere=nuit couleur=sable objets=chapeau-explorateur",
+    # Saynètes de repos (saynetes.py) : leurs accessoires, assis, penché, en l'air.
+    "expr=neutre t=0 assis=1 regard=1 regard_y=1 objets=sc-pieces-3 vie=1",
+    "expr=neutre t=600 assis=1 regard_y=1 objets=tenue-lecture-livre vie=1 stade=3",
+    "expr=malice t=0 saut=1.1 etire=0.2 regard=-1 objets=sc-etincelle-2 vie=1",
+    "expr=fete t=0 objets=sc-etincelle-6 vie=1 stade=4",
+    "expr=malice t=0 etire=-0.4 tremble=0.5 objets=sc-encre-2 vie=1",
+    "expr=neutre t=0 tremble=2.3 regard=1 regard_y=1 vie=1 stade=1",
+    "expr=neutre t=0 regard_y=0 objets=sc-flocon-4 vie=1",
+    "expr=neutre t=0 objets=sc-feuille-4 vie=1 stade=3",
+    "expr=joie t=0 cligne=1 objets=sc-papillon-5 vie=1",
+    "expr=tendre t=0 regard=1 regard_y=-1 objets=sc-papillon-4,sc-encre-4 vie=1 stade=2",
 ]
 
 
@@ -195,6 +206,9 @@ def main():
     # Vie du personnage : les règles communes (vie.py) ; relues par le PC et le téléphone.
     import vie
     vie.ecrire_reference()
+    # Saynètes de repos : la banque (assets/saynetes.txt) et ses tirages et poses ; relus par le PC et le téléphone.
+    import saynetes
+    saynetes.ecrire_reference()
     # Le théâtre (docs/SCENES.md) : animations nommées des sprites de scène, et la référence des scènes.
     import theatre
     theatre.ecrire_animations()

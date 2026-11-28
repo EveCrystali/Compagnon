@@ -63,8 +63,9 @@ def vide(c, largeur):
 
 LARGEURS_VIDES = {}
 
-# ---- Capitales : 5 de large, coins adoucis (Pilou est tout rond), I et L plus étroits.
-g("A", CAP, ".###. #...# #...# ##### #...# #...# #...#")
+# ---- Capitales : 5 de large, coins adoucis (Pilou est tout rond), I et L plus étroits ; le A pointu (rond, il
+# se lisait H à la taille texte).
+g("A", CAP, "..#.. .#.#. #...# #...# ##### #...# #...#")
 g("B", CAP, "####. #...# #...# ####. #...# #...# ####.")
 g("C", CAP, ".###. #...# #.... #.... #.... #...# .###.")
 g("D", CAP, "###.. #..#. #...# #...# #...# #..#. ###..")
@@ -93,7 +94,7 @@ g("Z", CAP, "##### ....# ...#. ..#.. .#... #.... #####")
 g("Œ", CAP, ".###### #..#... #..#... #..#### #..#... #..#... .######")
 g("Æ", CAP, "..##### .#.#... #..#... ####### #..#... #..#... #..####")
 
-# ---- Minuscules : œil de 5, 4 de large (m et w 5, i 1, l 2, f t r 3).
+# ---- Minuscules : œil de 5, 4 de large (m w v x 5, i 1, j l 2, f t r 3).
 g("a", XH, ".##. ...# .### #..# .###")
 g("b", CAP, "#... #... ###. #..# #..# #..# ###.")
 g("c", XH, ".### #... #... #... .###")
@@ -104,8 +105,8 @@ g("g", XH, ".### #..# #..# #..# .### ...# ###.")
 g("h", CAP, "#... #... ###. #..# #..# #..# #..#")
 g("i", CAP, "# . # # # # #")
 g("ı", XH, "# # # # #")
-g("j", CAP, "..# ... ..# ..# ..# ..# ..# ..# ##.")
-g("ȷ", XH, "..# ..# ..# ..# ..# ..# ##.")
+g("j", CAP, ".# .. .# .# .# .# .# .# #.")
+g("ȷ", XH, ".# .# .# .# .# .# #.")
 g("k", CAP, "#... #... #..# #.#. ##.. #.#. #..#")
 g("l", CAP, "#. #. #. #. #. #. .#")
 g("m", XH, "####. #.#.# #.#.# #.#.# #.#.#")
@@ -119,7 +120,7 @@ g("t", CAP + 1, "#.. ### #.. #.. #.. .##")
 g("u", XH, "#..# #..# #..# #..# .###")
 g("v", XH, "#...# #...# .#.#. .#.#. ..#..")
 g("w", XH, "#...# #...# #.#.# #.#.# .#.#.")
-g("x", XH, "#..# #..# .##. #..# #..#")
+g("x", XH, "#...# .#.#. ..#.. .#.#. #...#")
 g("y", XH, "#..# #..# #..# #..# .### ...# ###.")
 g("z", XH, "#### ...# .##. #... ####")
 g("œ", XH, ".##.##. #..#..# #..#### #..#... .##.###")
@@ -358,6 +359,12 @@ creneau("«‹", "  ", 0)
 creneau("  ", "»›", 0)
 creneau("lLdDjJ", "’'", 0)
 creneau("’'", "aeiouyàâéèêëîïôûhAEIOUYÀÂÉÈÊÎÔ", 0)
+# Le crochet du j passe sous la lettre d'avant : « déjà », « toujours » gardent l'écart d'un pixel des autres
+# lettres. Sauf après une espace, et après ce qui a de l'encre en bas à droite (q, virgule…) : les deux se
+# toucheraient.
+creneau([c for c, (haut, rangs) in G.items() if rangs and c not in LARGEURS_VIDES
+         and not any(rangs[r - haut][-1] == "#" for r in (BASE, BASE + 1) if 0 <= r - haut < len(rangs))],
+        "jȷ", -1)
 
 # Signes qui ne peuvent pas ouvrir une ligne (« bonjour ! » ne se coupe pas devant « ! »), et la typographie
 # française : une espace fine insécable avant ! ? ; : » et après «.
@@ -638,6 +645,7 @@ PANGRAMMES = [
     "Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis.",
     "Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d'exquis rôtis de bœuf au kir à l'aÿ d'âge mûr.",
     "ÂME ÉPRISE, ŒIL VIF : ÇA DÉCOIFFE À L'ÎLE DU NORD ! « ÊTRE OU NE PAS ÊTRE ? »",
+    "Deuxième jour : déjà joyeux, Alexis jongle avec six kiwis ! « Alors, on y va ? »",
 ]
 
 PHRASES_BULLE = [
