@@ -222,83 +222,83 @@ evenement 6000 humeur surpris 0
 evenement 7000 depart 1 0
 pilou 0 -35 235 marche 0 0 1 neutre
 pose 0 expr=repos marche=1 t=0
-acteur 0 acteur-libellule 0 224 175 0
+acteur 0 acteur-libellule 0 224 140 0
 acteur 0 acteur-rond 0 175 210 0
 acteur 0 acteur-rond 4 312 220 0
 acteur 0 acteur-grenouille 0 240 195 0
 acteur 0 acteur-canard 0 190 180 0
-image 0 426885213
+image 0 100476689
 pilou 1000 25 235 marche 1000 0 1 neutre
 pose 1000 expr=repos marche=1 t=1000
-acteur 1000 acteur-libellule 0 224 178 0
+acteur 1000 acteur-libellule 0 224 143 0
 acteur 1000 acteur-rond 3 175 210 0
 acteur 1000 acteur-grenouille 2 240 195 0
 acteur 1000 acteur-canard 3 190 180 0
-image 1000 3169282499
+image 1000 3931449724
 pilou 2600 80 235 joie 0 0 1 joie
 pose 2600 expr=joie saut=0.0 t=2600
-acteur 2600 acteur-libellule 0 279 154 1
+acteur 2600 acteur-libellule 0 279 119 1
 acteur 2600 acteur-rond 0 175 210 0
 acteur 2600 acteur-rond 1 312 220 0
 acteur 2600 acteur-grenouille 2 240 195 0
 acteur 2600 acteur-canard 0 190 180 0
-image 2600 2485871013
+image 2600 3765392099
 pilou 3100 80 235 joie 500 0 1 joie
 pose 3100 expr=joie saut=2.45 t=3100
-acteur 3100 acteur-libellule 0 263 159 1
+acteur 3100 acteur-libellule 0 263 124 1
 acteur 3100 acteur-rond 1 175 210 0
 acteur 3100 acteur-rond 3 312 220 0
 acteur 3100 acteur-grenouille 3 240 195 0
 acteur 3100 acteur-canard 2 190 180 0
-image 3100 813431767
+image 3100 3718666466
 pilou 3240 80 235 joie 640 0 1 joie
 pose 3240 expr=joie saut=0.943 t=3240
-acteur 3240 acteur-libellule 0 245 168 1
+acteur 3240 acteur-libellule 0 245 133 1
 acteur 3240 acteur-rond 2 175 210 0
 acteur 3240 acteur-rond 4 312 220 0
 acteur 3240 acteur-grenouille 0 240 195 0
 acteur 3240 acteur-canard 2 190 180 0
-image 3240 2422370211
+image 3240 1840795544
 pilou 5100 80 235 regard-d -1 0 1 joie
 pose 5100 expr=joie regard=1 t=5100
-acteur 5100 acteur-libellule 0 154 171 0
+acteur 5100 acteur-libellule 0 154 136 0
 acteur 5100 acteur-grenouille 0 240 195 0
 acteur 5100 acteur-canard 1 190 180 0
 acteur 5100 acteur-rond 0 187 220 0
-image 5100 309277257
+image 5100 2402611697
 pilou 5400 80 235 regard-d -1 0 1 joie
 pose 5400 expr=joie regard=1 t=5400
-acteur 5400 acteur-libellule 0 154 172 0
+acteur 5400 acteur-libellule 0 154 137 0
 acteur 5400 acteur-rond 0 175 210 0
 acteur 5400 acteur-grenouille 1 240 195 0
 acteur 5400 acteur-canard 2 190 180 0
 acteur 5400 acteur-rond 1 187 220 0
-image 5400 192200556
+image 5400 1737847989
 pilou 6100 80 235 surpris 100 0 1 surpris
 pose 6100 expr=surpris saut=1.5 t=6100
-acteur 6100 acteur-libellule 0 154 171 0
+acteur 6100 acteur-libellule 0 154 136 0
 acteur 6100 acteur-rond 3 175 210 0
 acteur 6100 acteur-rond 2 312 220 0
 acteur 6100 acteur-poisson 0 287 196 0
 acteur 6100 acteur-grenouille 3 240 195 0
 acteur 6100 acteur-canard 0 190 180 0
 acteur 6100 acteur-rond 3 187 220 0
-image 6100 3298396863
+image 6100 3548616820
 pilou 8000 140 235 marche 1000 0 1 surpris
 pose 8000 expr=surpris marche=1 t=8000
-acteur 8000 acteur-libellule 0 279 171 1
+acteur 8000 acteur-libellule 0 279 136 1
 acteur 8000 acteur-rond 0 175 210 0
 acteur 8000 acteur-oiseau 1 -30 75 0
 acteur 8000 acteur-grenouille 0 240 195 0
 acteur 8000 acteur-canard 2 190 180 0
-image 8000 1207722918
+image 8000 216147654
 pilou 12000 380 235 marche 5000 0 1 surpris
 pose 12000 expr=surpris marche=1 t=12000
-acteur 12000 acteur-libellule 0 308 175 0
+acteur 12000 acteur-libellule 0 308 140 0
 acteur 12000 acteur-oiseau 1 270 78 0
 acteur 12000 acteur-grenouille 2 240 195 0
 acteur 12000 acteur-canard 0 190 180 0
-image 12000 2470186518
+image 12000 1595008013
 scenario seuil-hd-reduites prologue seuil reduites 0
 evenement 0 entree 0 0
 pilou 0 75 230 repos -1 0 1 neutre
@@ -316,43 +316,51 @@ evenement 4000 clic 240 175
 evenement 5200 clic 150 215
 evenement 5600 clic 160 214
 evenement 6000 clic 170 216
-pilou 4100 80 235 regard-g -1 0 1 neutre
-pose 4100 expr=repos regard=-1 t=4100
-acteur 4100 acteur-libellule 0 206 170 1
+pilou 4100 80 235 regard-d -1 0 1 neutre
+pose 4100 expr=repos regard=1 t=4100
+acteur 4100 acteur-libellule 0 228 143 1
 acteur 4100 acteur-grenouille 2 240 195 0
 acteur 4100 acteur-canard 1 190 180 0
-image 4100 4049940686
-pilou 4400 80 235 regard-g -1 0 1 neutre
-pose 4400 expr=repos regard=-1 t=4400
-acteur 4400 acteur-libellule 0 138 147 1
+acteur 4100 acteur-rond 0 240 180 0
+image 4100 648023889
+pilou 4400 80 235 regard-d -1 0 1 neutre
+pose 4400 expr=repos regard=1 t=4400
+acteur 4400 acteur-libellule 0 228 144 1
 acteur 4400 acteur-grenouille 3 240 195 0
 acteur 4400 acteur-canard 2 190 180 0
-image 4400 3886014289
+acteur 4400 acteur-rond 1 240 180 0
+image 4400 1362334497
 pilou 5000 80 235 repos 5000 0 1 neutre
 pose 5000 expr=repos t=5000
-acteur 5000 acteur-libellule 0 3 102 1
+acteur 5000 acteur-libellule 0 166 137 1
 acteur 5000 acteur-grenouille 0 240 195 0
 acteur 5000 acteur-canard 0 190 180 0
-image 5000 4159302675
+acteur 5000 acteur-rond 3 240 180 0
+image 5000 276108955
 pilou 5300 80 235 regard-d -1 0 1 neutre
 pose 5300 expr=repos regard=1 t=5300
-acteur 5300 acteur-libellule 0 -64 80 1
+acteur 5300 acteur-libellule 0 154 136 0
 acteur 5300 acteur-rond 0 175 210 0
 acteur 5300 acteur-grenouille 1 240 195 0
 acteur 5300 acteur-canard 1 190 180 0
+acteur 5300 acteur-rond 4 240 180 0
 acteur 5300 acteur-rond 0 150 220 0
-image 5300 1862999063
+image 5300 2857214374
 pilou 5800 80 235 regard-d -1 0 1 neutre
 pose 5800 expr=repos regard=1 t=5800
+acteur 5800 acteur-libellule 0 154 137 0
 acteur 5800 acteur-rond 2 175 210 0
 acteur 5800 acteur-rond 1 312 220 0
 acteur 5800 acteur-grenouille 2 240 195 0
 acteur 5800 acteur-canard 3 190 180 0
 acteur 5800 acteur-rond 2 150 220 0
 acteur 5800 acteur-rond 0 160 219 0
-image 5800 554122229
+acteur 5800 acteur-poisson 0 174 190 0
+acteur 5800 acteur-plouf 2 160 214 0
+image 5800 3793887391
 pilou 6100 80 235 regard-d -1 0 1 neutre
 pose 6100 expr=repos regard=1 t=6100
+acteur 6100 acteur-libellule 0 154 136 0
 acteur 6100 acteur-rond 3 175 210 0
 acteur 6100 acteur-rond 2 312 220 0
 acteur 6100 acteur-poisson 0 287 196 0
@@ -360,12 +368,12 @@ acteur 6100 acteur-grenouille 3 240 195 0
 acteur 6100 acteur-canard 0 190 180 0
 acteur 6100 acteur-rond 3 150 220 0
 acteur 6100 acteur-rond 1 160 219 0
+acteur 6100 acteur-poisson 2 195 190 0
 acteur 6100 acteur-rond 0 170 221 0
-acteur 6100 acteur-poisson 0 177 202 0
-acteur 6100 acteur-plouf 1 170 216 0
-image 6100 3423595365
+image 6100 3744867671
 pilou 6400 80 235 regard-d -1 0 1 neutre
 pose 6400 expr=repos regard=1 t=6400
+acteur 6400 acteur-libellule 0 165 135 0
 acteur 6400 acteur-rond 4 175 210 0
 acteur 6400 acteur-rond 3 312 220 0
 acteur 6400 acteur-poisson 1 308 181 0
@@ -373,16 +381,16 @@ acteur 6400 acteur-grenouille 0 240 195 0
 acteur 6400 acteur-canard 1 190 180 0
 acteur 6400 acteur-rond 4 150 220 0
 acteur 6400 acteur-rond 2 160 219 0
+acteur 6400 acteur-plouf 1 210 214 0
 acteur 6400 acteur-rond 1 170 221 0
-acteur 6400 acteur-poisson 1 198 187 0
-image 6400 1895504506
+image 6400 1960109958
 pilou 7000 80 235 repos 7000 0 1 neutre
 pose 7000 expr=repos t=7000
+acteur 7000 acteur-libellule 0 279 138 1
 acteur 7000 acteur-grenouille 1 240 195 0
 acteur 7000 acteur-canard 3 190 180 0
 acteur 7000 acteur-rond 3 170 221 0
-acteur 7000 acteur-plouf 3 220 216 0
-image 7000 802432110
+image 7000 4266738895
 scenario hall-hd-perso grande-panne hall-pas-comptes completes 0
 evenement 0 entree 0 0
 evenement 800 perso pied-grande-panne-raccourcis 0

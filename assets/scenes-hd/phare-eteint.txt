@@ -31,7 +31,7 @@ scene guet-de-nuit
 sol 10 235 470 235
 place 100
 interlocuteur 390
-cle 110 40 370 185
+cle 240 50 300 145
 
 scene passe-pied
 sol 10 235 470 235
