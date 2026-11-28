@@ -222,6 +222,9 @@ def main():
     # Les scènes d'évolution (assets/evolutions.txt) : répliques par variante et par choix.
     import evolutions
     evolutions.ecrire_reference()
+    # Le Théâtre HD (docs/SCENES-HD.md) : décors à plans, Pilou fin dans la scène, images composées.
+    import theatre_hd
+    theatre_hd.ecrire_reference()
     print(len(POSES), "poses, deux échelles ;", len(B), "sprites agrandis ; animations-reference.txt ; vie-reference.txt ; "
           "police-reference.txt ; theatre-reference.txt")
 

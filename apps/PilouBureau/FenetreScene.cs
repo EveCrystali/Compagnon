@@ -123,7 +123,14 @@ internal sealed class FenetreScene : Window
         _minuterie.Tick += (_, _) => Avancer();
         _minuterie.Start();
         Closed += (_, _) => _minuterie.Stop();
-        Dire(0, T + 900);                                 // le temps que Pilou entre dans la scène
+        // En HD, Pilou est le Pilou fin du bureau : il entre sous son ancienne forme, puis la métamorphose se joue (le bureau
+        // fond l'ancienne forme dans la nouvelle), puis il parle. À l'ancienne définition, il parle dès son entrée.
+        if (_theatre.Hd)
+        {
+            _theatre.Metamorphose(sc.Stade - 1, sc.Stade, T + 1500);
+            Dire(0, T + 1500 + VueTheatre.DureeMetamorphose + 400);
+        }
+        else Dire(0, T + 900);                            // le temps que Pilou entre dans la scène
     }
 
     // La réplique i commence à l'instant donné.
@@ -232,5 +239,47 @@ internal sealed class FenetreScene : Window
             Close();
         };
         _options.Children.Add(cadre);
+    }
+}
+
+// Essai --essai=lieu:<campagne>:<décor> (captures, docs/SCENES-HD.md) : la vue de scène seule, à son unité entière, avec
+// Pilou qui entre, se réjouit puis parle. Rien n'est écrit.
+internal sealed class FenetreLieu : Window
+{
+    private readonly VueTheatre _theatre;
+    private readonly System.Diagnostics.Stopwatch _chrono = System.Diagnostics.Stopwatch.StartNew();
+
+    public FenetreLieu(FenetrePilou pilou, string campagne, string decor)
+    {
+        Title = "Pilou · lieu " + campagne + " " + decor;
+        Background = FenetreAventure.Gel("#0f1324");
+        SizeToContent = SizeToContent.WidthAndHeight;
+        ResizeMode = ResizeMode.CanMinimize;
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        UseLayoutRounding = true;
+        _theatre = new VueTheatre(() => AnimationsCampagne.Niveau(pilou.AnimationsCampagnes, Bandeau.Anime),
+            () => RenduPilou.Teinte(pilou.AllurePortrait("repos", 0), Banque.Commune), () => pilou.AllurePortrait("repos", 0));
+        _theatre.Lieu(campagne, decor, 0, glisser: false);
+        _theatre.Ajuster(Theatre.Hd.W * 2, Theatre.Hd.H * 2);
+        _theatre.Humeur("joie", 2600);
+        _theatre.Parle(3200, 6400);
+        Content = new Border { Padding = new Thickness(12), Child = _theatre };
+        var m = new DispatcherTimer(DispatcherPriority.Render, Dispatcher) { Interval = TimeSpan.FromMilliseconds(30) };
+        bool ecrit = false;
+        m.Tick += (_, _) =>
+        {
+            _theatre.Avancer(_chrono.Elapsed.TotalMilliseconds);
+            // Au bout de 4 s (Pilou entré, il parle) : le rendu de la scène en PNG, %TEMP%\pilou-lieu-<campagne>-<décor>.png.
+            if (ecrit || _chrono.ElapsedMilliseconds < 4000 || Content is not FrameworkElement c || c.ActualWidth <= 0) return;
+            ecrit = true;
+            var rtb = new System.Windows.Media.Imaging.RenderTargetBitmap((int)c.ActualWidth, (int)c.ActualHeight, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
+            rtb.Render(c);
+            var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+            enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rtb));
+            using var fs = System.IO.File.Create(System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"pilou-lieu-{campagne}-{decor}.png"));
+            enc.Save(fs);
+        };
+        m.Start();
+        Closed += (_, _) => m.Stop();
     }
 }

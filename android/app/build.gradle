@@ -57,6 +57,9 @@ android {
             // au lieu d'être téléchargé à chaque test depuis Maven Central (qui répond parfois 429).
             all {
                 dependsOn 'preparerRobolectric'
+                // Les captures ouvrent des dizaines d'activités que Robolectric garde vivantes, chacune avec son décor HD
+                // (docs/SCENES-HD.md) : 512 Mo ne suffisent plus. Un vrai téléphone n'en ouvre qu'une à la fois.
+                maxHeapSize = '1536m'
                 systemProperty 'robolectric.offline', 'true'
                 systemProperty 'robolectric.dependency.dir', layout.buildDirectory.dir('robolectric').get().asFile.absolutePath
                 testLogging {

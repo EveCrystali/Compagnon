@@ -46,6 +46,10 @@
     <EmbeddedResource Include="..\..\assets\police\*.txt" LogicalName="police:%(Filename)%(Extension)" />
     <!-- Scènes du théâtre des campagnes (docs/SCENES.md) : assets/scenes/*.txt, communes avec l'app Android. -->
     <EmbeddedResource Include="..\..\assets\scenes\*.txt" LogicalName="scene:%(Filename)%(Extension)" />
+    <!-- Théâtre en haute définition (docs/SCENES-HD.md) : décors à plans, scènes HD, sprites HD des acteurs et personnages. -->
+    <EmbeddedResource Include="..\..\assets\decors\*.txt" LogicalName="decor:%(Filename)" />
+    <EmbeddedResource Include="..\..\assets\scenes-hd\*.txt" LogicalName="scenehd:%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\assets\sprites-hd\*.txt" LogicalName="spritehd:%(Filename)" />
     <!-- Règles d'activités par défaut (la personne peut les compléter dans ~/.claude/compagnon/activites.json). -->
     <EmbeddedResource Include="activites.json" LogicalName="PilouBureau.activites.json" />
     <!-- Icône de Pilou (16 à 48 px), tirée de son rendu (Icone.cs) : zone de notification. -->

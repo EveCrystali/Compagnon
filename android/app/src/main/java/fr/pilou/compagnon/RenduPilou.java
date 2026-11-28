@@ -45,6 +45,8 @@ public final class RenduPilou {
         public double t, saut, chute, assis, suspendu, tremble, evolution;
         public List<String> objets = Collections.emptyList();
         public boolean cligne, clin, marche, course, baille, etourdi, fatigue, salue;
+        /** Bouche ouverte : le Théâtre HD fait parler le Pilou du bureau (docs/SCENES-HD.md). */
+        public boolean parle;
         /** Il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage). */
         public boolean boude, dos;
         public int regard, regardY, stade = 2;
@@ -609,7 +611,7 @@ public final class RenduPilou {
             if (sdd != null) to.poser(sdd, false, (C + 4 - ecart) * ec + dxf + sdd.dx, ey + sdd.dy, null);
             else if (sd != null) to.poser(sd, true, (C + 10 - ecart) * ec + dxf - sd.dx - sd.w(), ey + sd.dy, null);
         }
-        Sprites.Sprite bo = a.dos ? null : b.get(a.baille ? "bouche-baille" : moue ? "bouche-boude" : "bouche-" + a.expr, ec);
+        Sprites.Sprite bo = a.dos ? null : b.get(a.baille ? "bouche-baille" : a.parle ? "bouche-surpris" : moue ? "bouche-boude" : "bouche-" + a.expr, ec);
         if (bo == null && !a.dos) bo = b.get("bouche-repos", ec);
         if (bo != null) to.poser(bo, false, c0 - bo.w() / 2 + dxf, ey + 9 * ec + bo.dy, null);
         if (!a.dos && (a.expr.equals("fete") || a.expr.equals("caresse") || a.expr.equals("joie") || a.expr.equals("tendre"))) {

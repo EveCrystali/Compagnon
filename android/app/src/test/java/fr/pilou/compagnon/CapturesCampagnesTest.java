@@ -579,10 +579,12 @@ public class CapturesCampagnesTest {
             int k = l.unite();
             org.junit.Assert.assertEquals(Math.max(1, largeur / 192), k);
             org.junit.Assert.assertEquals(5, k);
-            // La scène : 192k × 80k, le décor entier ; Pilou y est à l'échelle du décor (même grille fine).
+            // La scène : le décor entier, à une unité entière ; ancien lieu 192k × 80k, lieu HD 480 × 240 à ×2
+            // (docs/SCENES-HD.md). Pilou y est à l'échelle du décor (même grille).
             org.junit.Assert.assertEquals(View.VISIBLE, l.theatre().getVisibility());
-            org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
-            org.junit.Assert.assertEquals(k, l.theatre().echelleDessinee());
+            int kScene = l.theatre().hd() ? 2 : k;
+            org.junit.Assert.assertEquals((l.theatre().hd() ? 240 : 80) * kScene, l.theatre().getHeight());
+            org.junit.Assert.assertEquals(kScene, l.theatre().echelleDessinee());
             // Le personnage est dessiné en pied dans la scène (même pixel, celui du théâtre) : pas de portrait par-dessus.
             // S'il n'était pas dessiné en pied, son portrait serait de 64k × 64k, k pixels d'écran par pixel fin.
             if (l.theatre().aPerso()) {
@@ -603,7 +605,9 @@ public class CapturesCampagnesTest {
             l = ouvrirLecture(pro, pro.depart, ac);
             ecran(ac[0].get(), "prologue");
             org.junit.Assert.assertEquals(k, l.unite());
-            org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
+            // Le prologue est en HD : 240 unités à 2 pixels d'écran (480 px sur 1078), pas 80 × k ; l'unité du reste de l'écran ne bouge pas.
+            org.junit.Assert.assertTrue(l.theatre().hd());
+            org.junit.Assert.assertEquals(2 * 240, l.theatre().getHeight());
             ac[0].pause().stop().destroy();
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
@@ -739,6 +743,58 @@ public class CapturesCampagnesTest {
 
             // Les scènes d'évolution (stades 2, 3, 4), avancées jusqu'à la question : options visibles.
             for (int stade = 2; stade <= 4; stade++) evolutionJusquaLaQuestion(stade);
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+            RuntimeEnvironment.setFontScale(1f);
+        }
+    }
+
+    /**
+     * Théâtre HD (docs/SCENES-HD.md) sur un téléphone de 1078 × 2400, sombre : la mare du prologue est en HD (scène de
+     * 480 × 240 unités à 2 pixels d'écran, 960 × 480 px, 59 px de marge de chaque côté, rien de coupé) ; un lieu de
+     * Petit Nuage, sans décor HD, reste en ancien (192 × 80 à ×5). La puce du lieu reste dans la partie visible.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void lieuHdEtLieuAncienSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        format = "jeu-telephone-portrait-sombre";
+        RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
+        RuntimeEnvironment.setFontScale(1f);
+        try {
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            Lecture l = ouvrirLecture(pro, "p1-mare", ac);
+            Activity a = ac[0].get();
+            org.junit.Assert.assertEquals(1078, a.getResources().getDisplayMetrics().widthPixels);
+            TheatreVue t = l.theatre();
+            org.junit.Assert.assertEquals(View.VISIBLE, t.getVisibility());
+            org.junit.Assert.assertTrue(t.hd());
+            org.junit.Assert.assertEquals(480, t.largeurBitmap());
+            org.junit.Assert.assertEquals(240, t.hauteurBitmap());
+            org.junit.Assert.assertEquals(480, t.getHeight());
+            org.junit.Assert.assertEquals(480, l.tete().getHeight());
+            // La puce du lieu : dans la partie visible (960 px, centrée), pas dans la marge.
+            View puce = l.puceLieu();
+            org.junit.Assert.assertTrue("puce à gauche : " + puce.getLeft(), puce.getLeft() >= 59);
+            org.junit.Assert.assertTrue("puce à droite : " + puce.getRight(), puce.getRight() <= 1078 - 59);
+            ecran(a, "prologue-mare-hd");
+            org.junit.Assert.assertEquals(2, t.echelleDessinee());
+            ac[0].pause().stop().destroy();
+
+            Campagnes.Campagne pn = Campagnes.charger("petit-nuage");
+            ac = new ActivityController[1];
+            Lecture ln = ouvrirLecture(pn, "ch1-orage", ac);
+            org.junit.Assert.assertEquals(View.VISIBLE, ln.theatre().getVisibility());
+            // Petit Nuage a aussi ses décors HD : le jardin lavé se joue en 480 × 240 (seules les scènes d'évolution
+            // restent à l'ancienne définition, voir TheatreVueTest).
+            org.junit.Assert.assertTrue(ln.theatre().hd());
+            org.junit.Assert.assertEquals(480, ln.theatre().largeurBitmap());
+            org.junit.Assert.assertEquals(240, ln.theatre().hauteurBitmap());
+            ecran(ac[0].get(), "petit-nuage-jardin-hd");
+            ac[0].pause().stop().destroy();
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;
             RuntimeEnvironment.setQualifiers("");
