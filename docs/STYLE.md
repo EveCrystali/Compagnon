@@ -11,6 +11,7 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | Toutes les pièces, dessinées par le vrai code de l'app (clair) | [captures/style/planche-clair.png](captures/style/planche-clair.png) |
 | Les mêmes, de nuit | [captures/style/planche-sombre.png](captures/style/planche-sombre.png) |
 | Le jeu d'icônes (1×, à l'écran, dessin fin) | [captures/style/icones.png](captures/style/icones.png) |
+| PC avant / après à 100 % : boutique | [captures/style/pc-boutique-avant-apres.png](captures/style/pc-boutique-avant-apres.png) |
 | Android avant / après : Accueil, Jouer, Boutique, Collection | [clair](captures/style/avant-apres-clair.png), [sombre](captures/style/avant-apres-sombre.png), [grande police](captures/style/avant-apres-grande-police.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
 | Réglages (clair, sombre, grande police) et premier lancement | [captures/style/reglages-et-premier-lancement.png](captures/style/reglages-et-premier-lancement.png) |
@@ -219,11 +220,11 @@ python3 outils/sprites/icones.py      # planche de contrôle : outils/sprites/pl
 
 | | PC | Téléphone |
 |---|---|---|
-| Cadre | `CadrePixel.cs`, `MenuRetro.xaml` | `Style.Cadre` (`plein`, `fin`, `plat`, `pointille`), `CadrePixel.java` sous la scène |
-| Texte | `TextePixel.cs` | `Style.Texte` (un `TextView` dessiné en police pixel), `TextePixelVue` |
+| Cadre | `CadrePixel.cs` (`Pointille` pour ce qui est fermé), `MenuRetro.xaml` | `Style.Cadre` (`plein`, `fin`, `plat`, `pointille`), `CadrePixel.java` sous la scène |
+| Texte | `TextePixel.cs` (`Centre`, signes dessinés par sprite), `StylePixel.Texte`, `StylePixel.Enseigne` | `Style.Texte` (un `TextView` dessiné en police pixel), `TextePixelVue` |
 | Palette | `MenuRetro.cs` (clés « Menu… »), `CadrePixel.cs` | `Style.CLAIRE`, `Style.SOMBRE`, `Style.NUIT` |
-| Pièces | — | `Style.carte`, `bouton`, `puce`, `caseSigne`, `titreSection`, `separateur`, `Barre`, `Icone`, `chevron`, `ligne`, `interrupteur`, `curseur`, `champ`, `dire` |
-| Planche de contrôle | `--essai=menu` | `CapturesStyleTest` : `app/build/captures/style/` (1078 × 2400 à 440 dpi ; clair, sombre, grande police) |
+| Pièces | `StylePixel.cs` : `BoutonPixel`, `IconePixel`, `Defileur` (barre de défilement en pixels, `StyleFenetres.xaml`) | `Style.carte`, `bouton`, `puce`, `caseSigne`, `titreSection`, `separateur`, `Barre`, `Icone`, `chevron`, `ligne`, `interrupteur`, `curseur`, `champ`, `dire` |
+| Planche de contrôle | `--essai=menu`, `--essai=fenetre:<nom> --captures=<dossier>` (`EssaiFenetres.cs`) | `CapturesStyleTest` : `app/build/captures/style/` (1078 × 2400 à 440 dpi ; clair, sombre, grande police) |
 
 Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.arrondi`), plus d'ombre du système
 (`setElevation`), plus d'onde au toucher (`RippleDrawable`), plus d'agrandissement non entier sous le doigt.
@@ -233,7 +234,8 @@ Sur le téléphone, on ne crée plus de fond arrondi (`GradientDrawable`, `Ui.ar
 | Écran | État |
 |---|---|
 | PC : menu « Sept portes », bulle, fenêtre Aventure | au guide |
-| PC : boutique, soins, réglages, journal, les autres fenêtres | à faire (chantier suivant) |
+| PC : boutique et « Rangées débloquées » | au guide (28 novembre 2026) ; leur en-tête (`Bandeau.cs`, partagé avec le menu) reste en police système |
+| PC : journal, prénom, « Pilou et moi », amis, invitation, connecteurs, expéditions | à faire (chantier en cours, `claude/style-fenetres-pc`) |
 | Téléphone : en-tête, barre du bas, Accueil (dont « Pilou et moi », ses traits, la ligne de premier lancement), Jouer, Boutique, Collection, Réglages, « Rangées débloquées », messages brefs | au guide (28 novembre 2026), gardé par `TextesSystemeTest` |
 | Téléphone : lecture de l'Aventure | au guide (chantier « style pixel de l'Aventure ») |
 | Téléphone : liste des aventures, épreuves, atelier, chasse aux bugs, installation, bulle flottante, widget | couleurs du guide ; cadres et police encore ceux du système |

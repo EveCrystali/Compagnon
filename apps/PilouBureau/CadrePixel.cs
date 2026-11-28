@@ -42,6 +42,8 @@ internal sealed class CadrePixel : Decorator
     public Brush Fond { get; set; } = FondNuit;
     public Brush Couleur { get; set; } = Bord;
     public bool AvecOmbre { get; set; } = true;
+    // Fermé (docs/STYLE.md, « États ») : bord en pointillés (1 U allumé, 1 U éteint), ni biseau ni ombre portée.
+    public bool Pointille { get; set; }
     // Retrait du contenu dans le fond, en unités U.
     public double Retrait { get; set; } = 1;
 
@@ -105,6 +107,21 @@ internal sealed class CadrePixel : Decorator
         double u = _u, o = Ombre_, W = ActualWidth - o, H = ActualHeight - o;
         if (W <= 2 * u || H <= 2 * u) return;
         double dx = _enfonce ? o : 0;
+        if (Pointille)
+        {
+            dc.DrawRectangle(Fond, null, new Rect(u, u, W - 2 * u, H - 2 * u));
+            for (double px = u; px + u <= W - u; px += 2 * u)
+            {
+                dc.DrawRectangle(Couleur, null, new Rect(px, 0, u, u));
+                dc.DrawRectangle(Couleur, null, new Rect(px, H - u, u, u));
+            }
+            for (double py = u; py + u <= H - u; py += 2 * u)
+            {
+                dc.DrawRectangle(Couleur, null, new Rect(0, py, u, u));
+                dc.DrawRectangle(Couleur, null, new Rect(W - u, py, u, u));
+            }
+            return;
+        }
         // L'ombre portée (absente quand on appuie : le cadre descend dessus).
         if (o > 0 && !_enfonce) Escalier(dc, Ombre, o, o, W, H);
         // Le bord, puis le biseau et le fond.
