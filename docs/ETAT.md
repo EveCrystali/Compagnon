@@ -24,6 +24,8 @@ Dernière mise à jour : 28 novembre 2026.
   prologue (6), La Grande Panne (12), Le phare éteint (14), Petit Nuage (14) ; planches dans
   `docs/maquettes/paysages/<campagne>/`. Pas encore affichés dans l'app (le Théâtre HD est un autre chantier) ; les
   anciens décors 192 × 80 restent en service jusqu'à la bascule. Jamais vus sur un vrai Windows ni un vrai téléphone.
+  Seconde passe faite sur les trois grandes campagnes (matière au lieu du damier, douze détails vivants au moins par
+  décor, les deux pics de Petit Nuage en fil du voyage) ; le prologue n'a pas eu de seconde passe.
 - **Personnages haute définition** (docs/SPRITES.md) : les 29 personnages en pied des trois campagnes sont redessinés
   à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, 69 fichiers, 438 Ko, format de docs/SCENES-HD.md, référence
   `personnages-hd-reference.txt`). Pas encore affichés dans l'app (le Théâtre HD ne les lit pas encore) ; jamais vus
