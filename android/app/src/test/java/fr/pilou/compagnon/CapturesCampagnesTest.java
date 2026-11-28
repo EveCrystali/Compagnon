@@ -347,6 +347,90 @@ public class CapturesCampagnesTest {
         return l;
     }
 
+    private static void pixels(View v, List<TextePixelVue> l) {
+        if (v.getVisibility() != View.VISIBLE) return;
+        if (v instanceof TextePixelVue) l.add((TextePixelVue) v);
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) pixels(((android.view.ViewGroup) v).getChildAt(i), l);
+    }
+
+    private static void systemes(View v, List<String> l) {
+        if (v.getVisibility() != View.VISIBLE) return;
+        if (v instanceof android.widget.TextView && ((android.widget.TextView) v).getText().length() > 0) l.add(((android.widget.TextView) v).getText().toString());
+        if (v instanceof android.view.ViewGroup)
+            for (int i = 0; i < ((android.view.ViewGroup) v).getChildCount(); i++) systemes(((android.view.ViewGroup) v).getChildAt(i), l);
+    }
+
+    /**
+     * La lecture « main de Pilou » (cadres et police pixel) sur un téléphone 1078 × 2400 (392 × 873 dp, 440 dpi, densité 2,75) :
+     * le prologue à son premier choix en sombre, en clair, en grande police (× 1,3, sombre), et La Grande Panne avec son
+     * personnage en sombre. Images dans build/captures (jeu-telephone-portrait-*).
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void lecturePixelSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        String[][] cas = {
+                {"sombre", "w392dp-h873dp-night-440dpi", "1", "4"},
+                {"clair", "w392dp-h873dp-notnight-440dpi", "1", "4"},
+                {"grandepolice-sombre", "w392dp-h873dp-night-440dpi", "1.3", "5"},
+        };
+        try {
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            for (String[] c : cas) {
+                format = "jeu-telephone-portrait-" + c[0];
+                RuntimeEnvironment.setQualifiers(c[1]);
+                RuntimeEnvironment.setFontScale(Float.parseFloat(c[2]));
+                ActivityController<Principale>[] ac = new ActivityController[1];
+                Lecture l = ouvrirLecture(pro, "p1-sac", ac);
+                Activity a = ac[0].get();
+                ecran(a, "prologue-choix");
+                android.util.DisplayMetrics m = a.getResources().getDisplayMetrics();
+                org.junit.Assert.assertEquals(1078, m.widthPixels);
+                org.junit.Assert.assertEquals(5, l.unite());
+                // Le texte du récit et des choix : police pixel entière (4 pixels d'écran, 5 en grande police), jamais la police système.
+                List<TextePixelVue> pv = new ArrayList<>();
+                pixels(l, pv);
+                int choix = 0;
+                List<TextePixelVue> bulles = new ArrayList<>();
+                pixels(l.filVue(), bulles);
+                org.junit.Assert.assertFalse(bulles.isEmpty());
+                for (TextePixelVue t : bulles) org.junit.Assert.assertEquals(Integer.parseInt(c[3]), t.pixel());
+                for (Campagnes.OptionVue o : CampagnesTel.etat(RuntimeEnvironment.getApplication()).options)
+                    for (TextePixelVue t : pv) if (t.texte().equals(o.libelle)) {
+                        choix++;
+                        org.junit.Assert.assertEquals(Integer.parseInt(c[3]), t.pixel());
+                    }
+                org.junit.Assert.assertTrue("choix en police pixel", choix > 0);
+                List<String> sys = new ArrayList<>();
+                systemes(l, sys);
+                for (String s : sys) org.junit.Assert.assertFalse("texte système sous la scène : " + s, s.contains("CHAPITRE") || s.contains("Devant"));
+                // Le fil est calé sur une bulle entière : son haut tombe sur le haut d'une bulle (moins 2 u) ou sur 0.
+                android.widget.ScrollView defil = (android.widget.ScrollView) l.filVue().getParent();
+                int y = defil.getScrollY();
+                boolean cale = y == 0;
+                for (int i = 0; i < ((android.view.ViewGroup) l.filVue()).getChildCount(); i++)
+                    if (((android.view.ViewGroup) l.filVue()).getChildAt(i).getTop() - 2 * l.unite() == y) cale = true;
+                org.junit.Assert.assertTrue("fil calé sur une bulle : scrollY=" + y, cale);
+                ac[0].pause().stop().destroy();
+            }
+            // La Grande Panne avec personnage, en sombre.
+            format = "jeu-telephone-portrait-sombre";
+            RuntimeEnvironment.setQualifiers("w392dp-h873dp-night-440dpi");
+            RuntimeEnvironment.setFontScale(1f);
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            ouvrirLecture(gp, noeudAvecPersonnage(gp), ac);
+            ecran(ac[0].get(), "grande-panne-personnage-pixel");
+            ac[0].pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+            RuntimeEnvironment.setFontScale(1f);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     public void uneSeuleUniteDePixelSurTelephonePortrait() {

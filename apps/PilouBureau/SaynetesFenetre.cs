@@ -35,7 +35,7 @@ public sealed partial class FenetrePilou
     // Au calme, à la place d'une occupation : peut-être une saynète. Vrai si elle commence.
     private bool TenterSaynete(double t, bool travail, double min, double max)
     {
-        if (_essaiSaynete is not null || EnSaisie || t < _sayneteProchaine) return false;
+        if (_essaiSaynete is not null || _bienvenueEnCours || EnSaisie || t < _sayneteProchaine) return false;
         string niveau = NiveauSaynete;
         if (niveau == AnimationsCampagne.Aucune) return false;
         if (_hasard.NextDouble() >= (travail ? 0.15 : 0.3)) return false;

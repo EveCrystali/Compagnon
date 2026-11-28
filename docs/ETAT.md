@@ -40,15 +40,20 @@ Dernière mise à jour : 28 novembre 2026.
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
   téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
+- **Première minute et mode d'emploi** : au tout premier lancement, trois bulles de Pilou qui passent seules (il
+  s'installe ; clic gauche, clic droit ; l'Aventure), jamais pendant la saisie, une seule fois ; sur Android, une ligne
+  discrète sur l'Accueil, qui part à la première caresse. Page joueur [MODE-EMPLOI.md](MODE-EMPLOI.md), rangée comme
+  le menu, liée du README et de *Réglages ▸ Mode d'emploi…*. Film : `docs/maquettes/premiere-minute/`.
 - **Menu clic droit « Sept portes »** (Windows, docs/AUDIT-MENU.md) : 14 lignes stables au premier niveau au lieu de 39
   (sept portes par intention, un signe de forme chacune), une zone « En ce moment » de deux lignes au plus, titres de
   section, rond pour les choix exclusifs et carré pour les cases. Rien n'est perdu (table ancien → nouveau dans la PR).
-  Vu au vrai clic droit sur le PC d'Antoine, clair et sombre, à 100 % ; 125 et 150 % en rendu WPF seulement
+  **Thème sombre par défaut sur PC** (bulle, menu, fenêtre d'invitation : un seul réglage ; un choix déjà enregistré
+  est gardé). Vu au vrai clic droit sur le PC d'Antoine, clair et sombre, à 100 % ; 125 et 150 % en rendu WPF seulement
   (`--essai=menu[:porte][:clair|sombre][:moment][:joueur]`, planche `docs/maquettes/menu/captures/sept-portes.png`).
 
 ## En cours
 
-- **Le théâtre des campagnes** (PR #95, fusion automatique à CI verte ; docs/SCENES.md) : la lecture de l'Aventure
+- **Le théâtre des campagnes** (PR #95 fusionnée ; docs/SCENES.md) : la lecture de l'Aventure
   devient une scène vivante. Fait et testé : le moteur commun (référence Python, C#, Java, qui retombent sur les mêmes
   pixels), le mini-Pilou de scène (taille M), 13 acteurs et effets, les six scènes du prologue (acteurs et réactions aux
   clics) ; sur PC, la fenêtre en « Théâtre » (scène ×5, boîte de dialogue, choix sur la scène, travelling, départ en
@@ -56,6 +61,11 @@ Dernière mise à jour : 28 novembre 2026.
   une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli, bandeau au-dessus
   (captures Robolectric 1078 × 2400 relues). Le réglage « ✧ » décide désormais des animations (chez Antoine, Windows a
   « Afficher les animations » coupé : tout était figé). Jamais vu sur un vrai téléphone.
+- **Style pixel de l'Aventure** (branche `claude/aventure-style-pixel`) : sous la scène, cadres pixel (bord, coins en
+  escalier, biseau, ombre, comme le menu « Sept portes ») et police pixel pour le récit, les choix, le bandeau et le lieu,
+  sur PC et téléphone ; fil calé sur des bulles entières (plus de ligne tranchée). Captures téléphone sombre, clair,
+  grande police et PC à 100 % relues ; jamais vu sur un vrai téléphone. Reste en police système : les cartes d'attente,
+  d'épreuve, de fin et le menu ⋯ du téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
@@ -90,6 +100,8 @@ Dernière mise à jour : 28 novembre 2026.
 
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
+- **Menu clic droit au clavier** : les flèches, Entrée et Échap vont à l'appli au premier plan, pas au menu (Pilou
+  ne prend jamais le premier plan, règle 8). Souris seulement ; voir `AUDIT-MENU.md`.
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.
 - L'exe pèse 128 Mo (.NET embarqué) ; la compression le ramènerait vers 60–70 Mo, non faite.
 - Lancer une expédition depuis le téléphone n'est pas possible (lecture seule, voir `EXPEDITIONS.md`) ; seule la

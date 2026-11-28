@@ -238,6 +238,8 @@ public sealed partial class FenetrePilou
         if (nom.StartsWith("soins:")) EssaiSoins(nom[6..]);
         // --essai=menu[:jouer|apparence/accessoire…][:clair|sombre][:moment] : le vrai menu clic droit ouvert (MenuEssai.cs).
         if (nom == "menu" || nom.StartsWith("menu:")) EssaiMenu(nom[4..]);
+        // --essai=bienvenue (avec un dossier de données neuf) : la première minute en accéléré, pour la filmer.
+        if (nom == "bienvenue") _bienvenueVite = 5;
         // --essai=visite:depart|arrivee|jeu|retour : une visite chez un ami « Léo », sans réseau.
         if (nom.StartsWith("visite:")) EssaiVisite(nom[7..]);
         // --essai=expedition:depart|absent|retour|defaite|journal : une expédition sans attendre (rien n'est écrit).

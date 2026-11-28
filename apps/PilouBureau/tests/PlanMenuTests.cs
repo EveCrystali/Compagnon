@@ -65,6 +65,13 @@ public class PlanMenuTests
     }
 
     [Fact]
+    public void PasDeuxFoisLEtatDesSoins()
+    {
+        Assert.Equal("Prendre soin · tout va bien", PlanMenu.TitreSoin("tout va bien", dansLeMoment: false));
+        Assert.Equal("Prendre soin", PlanMenu.TitreSoin("il a faim", dansLeMoment: true));
+    }
+
+    [Fact]
     public void EtatDesSoinsEnClair()
     {
         Assert.Equal("tout va bien", PlanMenu.EtatSoins(false, false, false, false, null));
