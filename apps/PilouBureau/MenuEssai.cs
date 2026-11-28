@@ -42,7 +42,20 @@ public sealed partial class FenetrePilou
             if (!joueur) EssaiExpedition("absent"); // en expédition, Pilou n'est pas là pour recevoir le clic
             EssaiSoins(Soins.Faim);
         }
-        _reglages.Promenade = false; // il reste sous le curseur (en mémoire : l'essai n'écrit rien)
+        // Il reste sous le curseur jusqu'au clic (en mémoire) ; le menu, lui, montre le vrai réglage.
+        if (joueur)
+        {
+            bool promenade = _reglages.Promenade;
+            _reglages.Promenade = false;
+            void Rendre(object? s, ContextMenuEventArgs e)
+            {
+                _scene.ContextMenuOpening -= Rendre;
+                _bulle.ContextMenuOpening -= Rendre;
+                _reglages.Promenade = promenade;
+            }
+            _scene.ContextMenuOpening += Rendre;
+            _bulle.ContextMenuOpening += Rendre;
+        }
         if (_scene.ContextMenu is not { } menu) return;
         var mots = chemin.Split('/', StringSplitOptions.RemoveEmptyEntries);
         var dossier = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("--captures=", StringComparison.Ordinal))?["--captures=".Length..]?.Trim('"');
@@ -61,6 +74,7 @@ public sealed partial class FenetrePilou
             {
                 menu.Opened -= UneFois;
                 Ouvert();
+                if (dossier is not null) JournalClavier(menu, Path.Combine(dossier, "clavier.txt"));
             }
             menu.Opened += UneFois;
             if (dossier is not null)
@@ -92,6 +106,35 @@ public sealed partial class FenetrePilou
             m.UpdateLayout();
             Survoler(m, mots, i + 1);
         });
+    }
+
+    // Essai du clavier (mode joueur) : toutes les 100 ms, ce qui a le focus, ce qui est surligné, les sous-menus ouverts,
+    // et si la fenêtre de Pilou ou une autre appli a le premier plan ; une ligne à chaque changement.
+    private void JournalClavier(ContextMenu menu, string fichier)
+    {
+        string avant = "";
+        var t = new DispatcherTimer(DispatcherPriority.Background, Dispatcher) { Interval = TimeSpan.FromMilliseconds(100) };
+        t.Tick += (_, _) =>
+        {
+            string Nom(object? o) => o is MenuItem { Header: string h } ? h : o is MenuItem ? "(bandeau)" : o?.GetType().Name ?? "rien";
+            var surlignes = new List<string>();
+            void Parcourir(ItemsControl c)
+            {
+                foreach (var m in c.Items.OfType<MenuItem>())
+                {
+                    if (m.IsHighlighted) surlignes.Add(Nom(m));
+                    if (m.IsSubmenuOpen) { surlignes.Add("▸"); Parcourir(m); }
+                }
+            }
+            Parcourir(menu);
+            var ligne = menu.IsOpen
+                ? $"focus={Nom(System.Windows.Input.Keyboard.FocusedElement)} · surligné={string.Join(" / ", surlignes)} · Pilou actif={IsActive} · premier plan={(Natif.DeNotreProcessus(Natif.AuPremierPlan()) ? "Pilou" : "autre appli")}"
+                : "menu fermé";
+            if (ligne != avant) File.AppendAllText(fichier, $"{DateTime.Now:HH:mm:ss.f} {ligne}{Environment.NewLine}");
+            avant = ligne;
+            if (!menu.IsOpen) t.Stop();
+        };
+        t.Start();
     }
 
     private void Apres(double ms, Action faire)

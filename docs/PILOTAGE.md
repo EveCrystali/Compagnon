@@ -52,8 +52,9 @@ Priorités de vérification, en parallèle :
    appareils, deux écrans à échelles différentes, poids de l'exe.
 5. **Seuils de complicité** : pas avant le 4 décembre 2026 (une semaine d'usage réel), et sur les retours d'Antoine.
 
-Hors cap tant que le pilote ne l'a pas rouvert : les petits jeux de `IDEES.md`, toute nouvelle campagne, tout nouveau
-connecteur. Une session qui pense qu'il faut en sortir le dit dans son compte rendu ; elle ne s'y lance pas.
+Rouvert par Antoine le 28 novembre : les traits de personnalité, la première minute, l'ouverture de campagnes par
+un haut fait. Hors cap tant que le pilote ne l'a pas rouvert : les petits jeux de `IDEES.md`, toute nouvelle campagne,
+tout nouveau connecteur, tout gain passif sans le joueur. Une session qui pense qu'il faut en sortir le dit dans son compte rendu ; elle ne s'y lance pas.
 
 ## Règles d'orchestration
 
@@ -114,8 +115,13 @@ Tenu par le pilote. Dernière mise à jour : 28 novembre 2026, matin.
 
 | Chantier | Branche / PR | Périmètre | État |
 |---|---|---|---|
-| Théâtre de « La Grande Panne » (suite des animations, une campagne par PR) | `claude/theatre-grande-panne` | scènes, acteurs en pied, `assets/scenes/`, dessin des scènes Aventure PC et Android | En cours |
-| Menu « Sept portes » | `claude/menu-sept-portes` | partie menu de `FenetrePilou.cs`, `MenuRetro.*`, `MenuNotification.cs`, `AUDIT-MENU.md` | En cours |
+| Style pixel de l'Aventure (bulles de récit, choix, bandeau, puce de lieu), puis théâtre de « La Grande Panne » | `claude/aventure-style-pixel`, puis `claude/theatre-grande-panne` | lecture de l'Aventure PC et Android (`Lecture.java`, `PageAventure.java`, `FenetreAventure.cs`, `Theatre*`), `assets/scenes/` | En cours (prioritaire : vu par Antoine sur son téléphone) |
+| Guide de style et écrans Android hors Aventure | `claude/guide-style` | `docs/STYLE.md`, icônes pixel, en-tête, barre du bas, Accueil, Jouer, Boutique, Collection (Android) | En cours |
+| Menu : finition, puis première minute et mode d'emploi | `claude/menu-finition` (#98), puis `claude/premiere-minute` | `MenuPortes.cs`, `MenuRetro.*`, bienvenue de `FenetrePilou.cs`, `docs/MODE-EMPLOI.md`, premier lancement Android | En cours |
+| Saynètes de repos et réactions au monde | `claude/saynetes-repos` | `RenduPilou.*`, gestes de `FenetrePilou.cs`, `animations.py`, `Animations.java`, `PilouVue.java` | En cours |
+| Musiques et ambiances synthétisées | `claude/musiques` | `outils/sons/`, `assets/sons.txt`, `Sons.cs`, `Sons.java` | En cours |
+| Traits de personnalité | `claude/traits` | nouveaux `Traits.cs` / `Traits.java` et leur référence, « Pilou et moi » (`FenetrePresence.cs`), `assets/presence/` | En cours |
+| Progression : campagnes ouvertes par un haut fait, avantage du niveau visible en expédition | `claude/progression-campagnes` | `Campagnes.cs` et son pendant Android, `valider.py`, `CAMPAGNES.md`, affichage du départ d'expédition | En cours |
 | Pilotage (ce fichier) | `claude/pilotage` | `docs/PILOTAGE.md`, `CLAUDE.md` | En cours |
 
 Fusionnés :
@@ -127,7 +133,7 @@ Fusionnés :
   maison de la bulle (#88) ; vie du personnage, ressorts, ombre, poussière, lumière de l'heure (#90) ; gains qui ne
   passent plus sur la bulle (#91).
 - 28 novembre, matin : sons « normaux » par défaut (#93) ; théâtre des campagnes, prologue mis en scène, une seule
-  unité de pixel sur téléphone, bandeau au-dessus de la scène (#95).
+  unité de pixel sur téléphone, bandeau au-dessus de la scène (#95) ; audit large avant la v1 (#96) ; menu « Sept portes » (#97).
 
 Leçon : la relecture des captures Robolectric (#83) n'a pas vu le décor trop agrandi qu'Antoine a vu sur son
 téléphone. Les captures de contrôle doivent être prises au format d'un vrai téléphone en portrait (1080 × 2400,
@@ -135,11 +141,12 @@ densité 2,75), pas seulement au format par défaut.
 
 ### Questions ouvertes pour Antoine
 
-- Les cinq questions de la fin de [AUDIT-V1.md](AUDIT-V1.md) (idle, questions de Pilou, RPG, public de la v1,
-  après le niveau 50).
+- Reste de [AUDIT-V1.md](AUDIT-V1.md) : Pilou peut-il poser de rares questions à deux réponses ? Public de la v1
+  (toi et tes amis, ou diffusion publique) ?
+- Menu : « Caresser » est sorti du menu (c'est le clic gauche). D'accord ?
 - Windows à 125 / 150 %, épreuves au clavier et à la souris, extensions d'éditeur : à vérifier à la main (#86).
 
 ### File d'attente (lancés par le pilote, dans cet ordre)
 
-1. **Police pixel partout** : étendre la police de #88 aux fenêtres, au menu et à Android, après le menu.
+1. **Fenêtres PC hors Aventure et menu** (boutique, soins, réglages, journal) au guide de style, après `docs/STYLE.md`.
 2. **Tournage et montage réels de la promo** sur le PC, une fois le rendu de la nuit fusionné.
