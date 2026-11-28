@@ -128,24 +128,13 @@ decor-petit-nuage-terrier-aux-bocaux ciel 480 240 8 200 64938257 ad7b3fb3 a5dc8f
 decor-petit-nuage-terrier-aux-bocaux lointains 480 240 8 200 98dcb54d f798b132 337925e1 bfca7818 16c4cc40 138c25d8 43a2816b c1e0d9db
 decor-petit-nuage-terrier-aux-bocaux moyen 480 240 8 200 5d9d60a2 ab387dda eb2a69ad 9953313a 2e1e523a ceb6f426 ee024db4 9d6e8e28
 decor-petit-nuage-terrier-aux-bocaux premier 480 240 8 200 14e867ee f7849dc0 dad0c5b0 2f68a5f2 906571c4 92df8c78 7b0c0599 1739c053
-<<<<<<< HEAD
-decor-petit-nuage-trou-qui-siffle ciel 480 240 1 0 77c97bd5
-decor-petit-nuage-trou-qui-siffle lointains 480 240 1 0 a5626523
-decor-petit-nuage-trou-qui-siffle moyen 480 240 8 200 f7aafeba 382fd58f e1ff024b 1bf0587f 4f735899 887a777f fe55dea8 d71541f9
-decor-petit-nuage-trou-qui-siffle premier 480 240 8 200 20e3c970 bf5bf49e 41a1dda8 35e6aaa5 ac94db6d 2ac7851b 1e9b20f9 d2792e66
-decor-phare-eteint-atelier-basile ciel 480 240 8 200 152dacd8 6ebc3572 9d8a5a2c f336a8b0 b84fa2de a05dccb4 4a39119f a89b775f
-decor-phare-eteint-atelier-basile moyen 480 240 8 200 ef198774 64157fae 1fb59e7e b231d2f9 1a2a7912 24ed81ca d70dfb22 6f7bf8c8
-decor-phare-eteint-atelier-basile premier 480 240 8 200 314516ff 55449b3c c91b2113 54740507 b87ba99a 1f18db6d 485585d7 b73ce49d
-=======
 decor-petit-nuage-trou-qui-siffle fond 480 240 1 0 d872c18c
 decor-petit-nuage-trou-qui-siffle galerie 480 240 8 200 2e1004e0 1b6781d2 cf91bd91 d66a423c f7709c8b a0506688 a21e8128 5edf1ee9
 decor-petit-nuage-trou-qui-siffle vent 480 240 8 200 80f38a00 8bc751b2 69f166b7 bc2de96d 51f1a022 13b9a2bb a52df520 f4a47e7c
 decor-petit-nuage-trou-qui-siffle premier 480 240 8 200 451cb275 cbe7524e ac12ad1c f524f13c 687f5cd0 c90ea2b9 95a3a96b 5b0a78ca
-decor-phare-eteint-atelier-basile ciel 480 240 1 0 298f491f
-decor-phare-eteint-atelier-basile lointains 480 240 8 200 c82e3348 e9fc794c 636abcc9 f8590e96 77775a03 7925a571 dd8416d8 f7adb24c
-decor-phare-eteint-atelier-basile moyen 480 240 8 200 32778d3e 69eec7fb 663cc303 db343c0b b376eaeb b8d448ca 44511633 2836a0b2
-decor-phare-eteint-atelier-basile premier 480 240 8 200 caff6d39 3014247d d3038a36 9725abf3 4a94d66c e2591039 59f658a5 c2b467ec
->>>>>>> origin/main
+decor-phare-eteint-atelier-basile ciel 480 240 8 200 152dacd8 6ebc3572 9d8a5a2c f336a8b0 b84fa2de a05dccb4 4a39119f a89b775f
+decor-phare-eteint-atelier-basile moyen 480 240 8 200 ef198774 64157fae 1fb59e7e b231d2f9 1a2a7912 24ed81ca d70dfb22 6f7bf8c8
+decor-phare-eteint-atelier-basile premier 480 240 8 200 314516ff 55449b3c c91b2113 54740507 b87ba99a 1f18db6d 485585d7 b73ce49d
 decor-phare-eteint-auberge-bigorneau ciel 480 240 8 200 55f9c5ae 70786e04 2ebc2125 f1736900 68100d85 07d805a0 7c4d6cd9 5b28dee8
 decor-phare-eteint-auberge-bigorneau lointains 480 240 8 200 10f42e38 37f94532 8796bd00 1a2957e2 89dd8656 89c8b143 8103e050 275ad622
 decor-phare-eteint-auberge-bigorneau moyen 480 240 8 200 c954a87b 817e3e63 9bb21fa6 28df1980 443d1631 be9eacc1 729096fd b1ee3cb3
