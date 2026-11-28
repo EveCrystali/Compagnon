@@ -16,6 +16,7 @@
     "ch1-ronces": {
       "type": "choix",
       "lieu": "Les ronces",
+      "personnage": "brouillon",
       "humeur": "peur",
       "texte": [
         "Je me suis approché à dix pas. C'est pris dans les épines, de travers, et ça tremble. Ça n'a pas d'yeux, mais je te jure que ça m'a vu : le pff s'est arrêté net. On se regarde. Enfin, moi, je regarde. J'ai le cœur qui tape jusque dans l'antenne. Qu'est-ce que je fais ?"

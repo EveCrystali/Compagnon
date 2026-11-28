@@ -168,7 +168,7 @@ decor-petit-nuage-etang-qui-fume | ed932d599aed584c9c1de1dc7eec212b943c4ca3b0dd1
 decor-petit-nuage-fenetre-maison | f48ebcd419108b80651754a271d15e52ff9e144d8fefe369ffb51b5cea9a1315
 decor-petit-nuage-grande-salle | 683839fbccb79c038e58300157db8dd27d0a5a3943bd5649b18efb32aa6627ab
 decor-petit-nuage-halte-girouette | 44a0c48d0d315989e4687e9dcb39c8ad7a42e895eb8e762645da2bea00a3db90
-decor-petit-nuage-jardin-lave | c5b48247077f59d49bc944c5d703f76474b4a2fef262280c5b17d923525ac95c
+decor-petit-nuage-jardin-lave | 3372f08877bf36e837c58822fdcec9cf8e15d6e9feb6112590ec450be4297f70
 decor-petit-nuage-plateau-rape | 3562aec8a200092a4ae73664b408e965127defe92054d9b5843c0882d0208a30
 decor-petit-nuage-pre-aux-draps | b8fbff8a03cbfd63aff71059e13948fb44be78e18248351353e38ce054a1986d
 decor-petit-nuage-sentier-des-melezes | ae37288fba46b64074256f0458b0afafeff2280f2b876cd5f2beb38b2d26c238
