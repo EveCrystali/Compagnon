@@ -32,8 +32,14 @@ rangée  0-1   accents des capitales      É Ê À Ç…
         10-11 jambages (g j p q y), virgule, cédille
 ```
 
-- **Chasse variable** : capitales et chiffres 5 de large (I, 1 : 3 ; L : 4 ; Œ Æ : 7), minuscules 4 (i 1, l 2,
-  f r t 3, m w v 5). Un pixel entre deux glyphes, une espace normale de 2 (4 pixels entre deux mots).
+- **Chasse variable** : capitales et chiffres 5 de large (I, 1 : 3 ; L : 4 ; Œ Æ : 7), minuscules 4 (i 1, j l 2,
+  f r t 3, m w v x 5). Un pixel entre deux glyphes, une espace normale de 2 (4 pixels entre deux mots).
+- **Crénage** : quelques paires se rapprochent d'un pixel (T F P V Y devant une ronde, L devant T V Y ’, r f
+  devant un point). Le crochet du **j** passe sous la lettre d'avant : « déjà » garde l'écart d'un pixel des autres
+  lettres (sauf après une espace, ou après q , ; dont l'encre toucherait le crochet). Une ligne qui commence par
+  « je » a son crochet au bord, le fût un pixel plus loin.
+- **Formes choisies pour la lecture** : **A** pointu (rond, il se lisait H à la taille texte), **x** en croix de 5
+  (en 4 de large, il ressemblait à un н).
 - **Interligne** : 12 pixels (texte), 13 (titre).
 - **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes.
 - **Accents** : composés (lettre nue + signe centré), pour que toutes les lettres accentuées aient le même accent.

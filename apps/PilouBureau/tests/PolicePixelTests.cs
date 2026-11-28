@@ -88,6 +88,24 @@ public class PolicePixelTests
             Assert.True(p.Connu(c), $"« {c} » sans dessin");
     }
 
+    // « déjà », « toujours » : le j laisse le même blanc qu'un i après la lettre d'avant (son crochet passe dessous).
+    [Fact]
+    public void Le_j_ne_laisse_pas_plus_de_blanc_qu_un_i()
+    {
+        foreach (var police in new[] { PolicePixel.Texte!, PolicePixel.Titre! })
+            foreach (char c in "aeéouàdnstxzr")
+                Assert.True(Blanc(police, c, 'i') == Blanc(police, c, 'j'), $"« {c}j » ({police.Ligne})");
+    }
+
+    // Colonnes vides entre la lettre a et l'œil de la lettre b (rangées 5 à 10, sans point ni crochet).
+    private static int Blanc(PolicePixel p, char a, char b)
+    {
+        var seul = p.Pixels(new[] { a.ToString() }).ToHashSet();
+        int droite = seul.Max(q => q.X);
+        int gauche = p.Pixels(new[] { $"{a}{b}" }).Where(q => !seul.Contains(q) && q.Y >= 5 && q.Y <= 10).Min(q => q.X);
+        return gauche - droite - 1;
+    }
+
     [Fact]
     public void Typographie_francaise_espaces_fines_et_apostrophe()
     {
