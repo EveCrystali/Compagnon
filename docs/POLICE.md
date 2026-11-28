@@ -43,8 +43,6 @@ rangée  0-1   accents des capitales      É Ê À Ç…
 - **Interligne** : 12 pixels (texte), 13 (titre).
 - **Titre** : le dessin du texte épaissi d'un pixel vers la droite (gras), mêmes formes. Cinq glyphes dont
   l'épaississement bouchait les creux sont redessinés à la main (`GRAS_MAIN` : m, w, M, W, #).
-- **Crénage** : quelques paires se rapprochent d'un pixel (T, F, P, V, Y, L, r, f ; et le « j » après une lettre sans
-  jambage).
 - **Accents** : composés (lettre nue + signe centré), pour que toutes les lettres accentuées aient le même accent.
 - **Signes** : ♥ ♡ ✓ ✗ ✧ ✦ ★ → ← ↑ ↓ ♪ ♫ ☁ ☀ ☾ ☂ ❄ ⚡ ☺ ▼ ▲ ▶ ◀ ● ○ ■ □ ◆, et `¤` dessiné comme une pièce
   (« po »).

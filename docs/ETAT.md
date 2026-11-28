@@ -19,15 +19,15 @@ Dernière mise à jour : 28 novembre 2026.
 - **Illustrations** : 46 décors animés en boucle, 69 portraits animés de 29 personnages (champs `personnage` et
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
-- **Dessin fin 2× sur les 643 sprites** (dont les 54 icônes d'interface, docs/STYLE.md) : plus aucun n'est agrandi automatiquement (`python3 outils/sprites/fin.py` :
-  « Encore agrandis automatiquement : 0 »).
+- **Dessin fin 2×** : 643 sprites redessinés sur 672, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
+  automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
 - **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
   titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
   (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Depuis le guide de style : tout
   l'Accueil, Jouer, la Boutique, la Collection, l'en-tête et la barre du bas du téléphone. « m », « w », « M », « W »
-  et « # » gras redessinés (le « m » gras était un pavé plein) ; « j » rapproché d'un pixel (« bonjour »).
+  et « # » gras redessinés (le « m » gras était un pavé plein).
 - **Guide de style** (docs/STYLE.md, 28 novembre 2026) : la main de Pilou écrite et mesurée sur le menu « Sept
   portes », la bulle et le cadre de l'Aventure : palette nommée (clair, sombre), module, cadre en pixels (bord, biseau,
   ombre portée, coins en escalier), tailles de police, états des boutons, titres de section, pointillés, puces ;

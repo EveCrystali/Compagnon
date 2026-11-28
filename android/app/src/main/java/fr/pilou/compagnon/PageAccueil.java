@@ -278,11 +278,12 @@ final class PageAccueil extends Page {
         // Pilou en tenue de voyage pendant l'attente ; la légende dit où il en est.
         if (c != null && e.phase == Campagnes.Phase.Attente) {
             pilou.tenue("voyage-" + e.tenue);
-            legende.setText("⟶  " + (e.pendant.isEmpty() ? "en route" : e.pendant) + " · retour vers " + CampagnesTel.heure(e.fin));
+            // Ce qu'il fait est dit par la carte Aventure, juste au-dessus : la légende tient en une ligne courte.
+            legende.setText("→ en route · retour vers " + CampagnesTel.heure(e.fin));
             legende.setVisibility(View.VISIBLE);
         } else if (c != null && e.phase == Campagnes.Phase.Repos) {
             pilou.tenue("voyage-nuit");
-            legende.setText("☾  il se repose · reprise vers " + CampagnesTel.heure(e.fin));
+            legende.setText("☾ au repos · reprise vers " + CampagnesTel.heure(e.fin));
             legende.setVisibility(View.VISIBLE);
         } else {
             pilou.tenue("");
@@ -335,10 +336,15 @@ final class PageAccueil extends Page {
         Aventure.Scene sc = new Aventure.Scene(app);
         sc.regler(c.id, c.ton, e.decor);
         bande.addView(sc, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        TextView etiquette = Ui.puceScene(app, Aventure.signeTon(c.ton) + "  " + c.titre + (e.chapitreTotal > 0 ? "  ·  " + e.chapitreNumero + "/" + e.chapitreTotal : ""));
+        // Étiquette posée sur le décor : cadre plat de nuit, police pixel (une ligne ; un titre trop long finit par « … »).
+        Style.Texte etiquette = new Style.Texte(app, Aventure.signeTon(c.ton) + " " + c.titre + (e.chapitreTotal > 0 ? " · " + e.chapitreNumero + "/" + e.chapitreTotal : ""),
+                Style.PETIT, Vitrine.ARGENT_CLAIR, true);
+        etiquette.setSingleLine(true);
+        etiquette.setBackground(Style.plat(app, 0xe6151a2e, Vitrine.VIOLET_FONCE));
+        etiquette.setPadding(Style.u(app) + Ui.dp(app, 6), Style.u(app) + Ui.dp(app, 1), Style.u(app) + Ui.dp(app, 6), Style.u(app) + Ui.dp(app, 1));
         FrameLayout.LayoutParams le = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
         le.setMargins(Ui.dp(app, 12), Ui.dp(app, 10), Ui.dp(app, 12), 0);
-        etiquette.setMaxWidth(Ui.dp(app, 230));
+        etiquette.setMaxWidth(Ui.dp(app, 260));
         bande.addView(etiquette, le);
         PilouVue pv = new PilouVue(app, Aventure.pixelPour(app, 66), true);
         pv.equipe(Gains.porte(app, pc));

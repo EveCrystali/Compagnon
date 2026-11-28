@@ -197,7 +197,7 @@ final class Vitrine {
             u = Style.u(c);
             pp = Style.pixel(c, Style.PETIT);
             pc = Math.max(pp, Style.pixel(c, Style.CORPS));
-            reserve = Ui.dp(c, 50);
+            reserve = Ui.dp(c, 58);
             setClickable(true);
             setFocusable(true);
         }

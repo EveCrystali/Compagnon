@@ -352,9 +352,6 @@ creneau("Y", RONDES + ".,…", -1)
 creneau("L", "TVY’'", -1)
 creneau("r", ".,…", -1)
 creneau("f", ".,…", -1)
-# Le « j » garde deux colonnes vides à gauche de sa hampe (son crochet part sous la ligne) : après une lettre sans
-# jambage, il se rapproche d'un pixel (« bonjour » ne s'écrit plus « bon jour »).
-creneau("abcdehiklmnorstuvwxzàâäéèêëîïôöùûüçœæ", "j", -1)
 creneau("«‹", "  ", 0)
 creneau("  ", "»›", 0)
 creneau("lLdDjJ", "’'", 0)
