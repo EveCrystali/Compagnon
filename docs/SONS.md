@@ -64,7 +64,7 @@ py outils/sons/sons.py --reference   # après un changement voulu de sons.txt
 
 ## Musiques et ambiances de l'Aventure
 
-Huit boucles synthétisées de la même manière que les sons, décrites dans **`assets/musiques.txt`** (aucun fichier audio
+Des boucles et des motifs synthétisés de la même manière que les sons, décrites dans **`assets/musiques.txt`** (aucun fichier audio
 importé, mélodies originales), mêmes échantillons sur PC (`Musique.cs`), téléphone (`Musique.java`) et
 `outils/sons/sons.py` ; empreintes dans **`outils/sons/musiques-reference.txt`**, testées par `MusiqueTests.cs` et
 `MusiqueTest.java`.
@@ -99,7 +99,43 @@ Règles :
   mise en régime, puis la sortie) ; `--verifier` exige que le saut entre le dernier et le premier échantillon ne
   dépasse pas le 99ᵉ centile des sauts dans la boucle.
 
-Format d'une boucle : `morceau | id | ms par pas | pas | filtre`, puis ses voix
+### Second lot : le thème de Pilou, calme et tension, les fins
+
+Étalon : `emotion` (boîte à musique, voix basse, 80 à la noire), la boucle qu'Antoine a aimée dans la scène d'évolution
+« Trop grand pour mon pot ». Le second lot est écrit dans la même main : mélodie simple et chantante, timbre doux, tempo
+posé, tendre et un peu drôle.
+
+| Morceau | Genre | Durée | En une phrase |
+|---|---|---|---|
+| `pilou-10` | boucle | 42,6 s | Le thème de Pilou à la boîte à musique seule, pour la scène du niveau 10. |
+| `pilou-25` | boucle | 42,6 s | Le même thème, avec une seconde voix liée dessous et une basse douce (niveau 25). |
+| `pilou-40` | boucle | 42,6 s | Le petit ensemble : thème doublé à l'octave, seconde voix, basse qui marche, grelot (niveau 40). |
+| `pilou-court` | motif | 4 s | La tête du thème, proposée pour le retour d'aventure et le palier (rien n'est remplacé). |
+| `humour-calme` | boucle | 38,4 s | L'après-midi au bureau : une mélodie qui flâne et se rattrape d'un petit sol-sol. |
+| `humour-tension` | boucle | 34,2 s | La pendule tourne, il faut choisir : notes répétées, basse piquée, tic-tac, rien de grave. |
+| `mystere-calme` | boucle | 41,3 s | Une berceuse au phare : boîte à musique lente et houle au loin. |
+| `mystere-tension` | boucle | 38,4 s | Un cœur qui bat un peu plus vite, l'horloge, une phrase qui interroge. |
+| `emotion-calme` | boucle | 41,3 s | Encore plus doux que l'étalon : on se pose, la voix fredonne. |
+| `emotion-tension` | boucle | 41 s | Le petit trac du bon choix : la mélodie monte jusqu'au ré aigu et se pose. |
+| `fin-bonne` | motif | 6 s | La mélodie monte et se pose sur le do aigu, un grelot. |
+| `fin-douce-amere` | motif | 7,2 s | La phrase descend, puis un dernier accord qui garde un peu d'espoir. |
+| `fin-mauvaise` | motif | 5 s | Un « oups » gentil qui dégringole, rien qui fasse peur. |
+| `fin-secrete` | motif | 7 s | Des arpèges qui montent comme des étincelles, puis le do majeur tout en haut. |
+
+Le **thème de Pilou** a la même mélodie, le même tempo (90 à la noire) et la même grille dans ses trois versions : il
+grandit avec Pilou sans changer d'air.
+
+**Choisir le morceau** : le champ facultatif **`musique`** d'une scène ou d'un nœud vaut soit l'identifiant d'un
+morceau (`pilou-25`, `fin-secrete`…), soit `calme` ou `tension` (la variante du ton de la campagne : `mystere-tension`
+au phare). Sans champ, ou s'il nomme un morceau absent, c'est la boucle du ton. `Musique.Pour(campagne, ton, musique)`
+(PC) et `Musique.pour(…)` (téléphone) font ce choix ; `Musique.Suivre` / `suivre` prennent la valeur du champ par un
+dernier argument facultatif. Le prologue n'a pas de variante : `calme` ou `tension` y gardent sa boucle.
+
+**Motifs** (genre `motif` sur la ligne `morceau`) : joués une fois, sans boucle (une queue de 20 ms, un fondu final,
+ils commencent et finissent à zéro ; de 3 à 8,5 s). Le motif part tout de suite à son niveau, la boucle en cours
+s'efface en 1 s, puis le silence ; il ne rejoue qu'après qu'un autre morceau a été demandé.
+
+Format d'une boucle : `morceau | id | ms par pas | pas | filtre [| motif]`, puis ses voix
 `voix | onde | volume | attaque ms | relâche ms | déclin | tenue max ms | jetons`, une ligne `+ | jetons` continue la
 voix précédente. Un jeton par pas : une note (`C4`, `F#3`), une cadence de bruit en Hz, un glissé `de>à`, `-` tient,
 `.` se tait ; une voix plus courte que le morceau se répète.

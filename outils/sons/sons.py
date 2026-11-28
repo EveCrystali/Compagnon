@@ -149,29 +149,46 @@ def ecrire_wav(chemin, s):
 
 def page(sons, toutes, boucles=None):
     boucles = boucles or {}
-    musique = []
-    for nom, m in boucles.items():
+    def ligne_boucle(nom, m):
+        me = m["mesures"]
         barres = "".join(
             f"<span class=\"barre\" title=\"{lo}–{hi} Hz : {pc} %\"><i style=\"width:{max(1, round(pc))}%\"></i>"
             f"<small>{lo if lo < 1000 else str(lo // 1000) + ' k'}</small></span>"
-            for (lo, hi), pc in zip(BANDES, m["spectre"]))
-        musique.append(
-            f"<tr><td><b>{nom}</b>{' (ambiance)' if nom not in TONS else ''}</td>"
-            f"<td><button onclick=\"boucler('{nom}')\">▶ normale</button> "
-            f"<button onclick=\"boucler('{nom}-discrete')\">▷ discrète</button> "
-            f"<button class=\"jonction\" onclick=\"jouer('{nom}-jonction')\">⇄ jonction</button></td>"
-            f"<td>{m['duree_ms'] / 1000:.1f} s</td><td>{m['crete_db']} dBFS</td><td>{m['rms_db']} dBFS</td>"
-            f"<td>{m['jonction']} / {m['p99']}</td><td class=\"spectre\">{barres}</td></tr>")
+            for (lo, hi), pc in zip(BANDES, me["spectre"]))
+        if m["motif"]:
+            ecouter = (f"<button onclick=\"jouer('{nom}')\">▶ normale</button> "
+                       f"<button onclick=\"jouer('{nom}-discrete')\">▷ discrète</button>")
+            saut = f"bords {me['debut']}, {me['fin']}"
+        else:
+            ecouter = (f"<button onclick=\"boucler('{nom}')\">▶ normale</button> "
+                       f"<button onclick=\"boucler('{nom}-discrete')\">▷ discrète</button> "
+                       f"<button class=\"jonction\" onclick=\"jouer('{nom}-jonction')\">⇄ jonction</button>")
+            saut = f"{me['jonction']} / {me['p99']}"
+        etalon = " <span class=\"etalon\">◆ étalon</span>" if nom == "emotion" else ""
+        return (f"<tr><td><b>{nom}</b>{etalon}<br><small>{m['description']}</small></td><td>{ecouter}</td>"
+                f"<td>{me['duree_ms'] / 1000:.1f} s</td><td>{me['crete_db']} dBFS</td><td>{me['rms_db']} dBFS</td>"
+                f"<td>{saut}</td><td class=\"spectre\">{barres}</td></tr>")
+
+    ambiances = {n for n, m in boucles.items() if m.get("ambiance")}
+    groupes = [
+        ("Le thème de Pilou", [n for n in boucles if n.startswith("pilou-")]),
+        ("Les campagnes", [n for n in boucles if not n.startswith(("pilou-", "fin-")) and n not in ambiances]),
+        ("Les fins (jouées une fois)", [n for n in boucles if n.startswith("fin-")]),
+        ("Les ambiances (selon le décor)", [n for n in boucles if n in ambiances]),
+    ]
+    entete = ("<div class=\"tableau\"><table><tr><th>Morceau</th><th>Écouter</th><th>Durée</th><th>Crête</th><th>RMS</th>"
+              "<th>Saut / p99</th><th>Spectre</th></tr>")
+    blocs = "".join(f"<h3>{titre}</h3>{entete}{''.join(ligne_boucle(n, boucles[n]) for n in noms)}</table></div>"
+                    for titre, noms in groupes if noms)
     bloc_musique = "" if not boucles else f"""
 <h2>Musiques et ambiances</h2>
-<p>Boucles de <code>assets/musiques.txt</code>, lues en boucle comme dans l'Aventure (fondu d'entrée et de sortie
-à la lecture). « Jonction » fait entendre les 4 dernières secondes suivies des 4 premières : on ne doit rien entendre
-au passage. Saut : écart entre le dernier et le premier échantillon, comparé au 99ᵉ centile des écarts dans la boucle.
-Spectre : part d'énergie par bande (Hz).</p>
+<p>Morceaux de <code>assets/musiques.txt</code>. Les boucles se lisent en boucle comme dans l'Aventure (fondu d'entrée
+et de sortie à la lecture) ; « jonction » fait entendre leurs 4 dernières secondes suivies des 4 premières : on ne doit
+rien entendre au passage. Les motifs de fin et le thème court se jouent une fois. ◆ <code>emotion</code> est l'étalon :
+la boucle qu'Antoine a aimée dans « Trop grand pour mon pot ». Saut : écart entre le dernier et le premier échantillon,
+comparé au 99ᵉ centile des écarts dans la boucle. Spectre : part d'énergie par bande (Hz).</p>
 <p><button onclick="arreter()">⏹ arrêter</button></p>
-<div class="tableau"><table><tr><th>Boucle</th><th>Écouter</th><th>Durée</th><th>Crête</th><th>RMS</th><th>Saut / p99</th><th>Spectre</th></tr>
-{''.join(musique)}
-</table></div>"""
+{blocs}"""
     lignes = []
     for nom, m in toutes.items():
         lignes.append(
@@ -198,6 +215,8 @@ button.jonction {{ border-style:dotted; }}
 .barre {{ display:inline-block; width:54px; margin-right:4px; vertical-align:middle; }}
 .barre i {{ display:block; height:8px; background:var(--bleu); border-radius:2px; }}
 .barre small {{ font-size:11px; opacity:.75; }}
+td small {{ opacity:.8; }}
+.etalon {{ color:var(--orange); font-weight:600; }}
 </style></head><body><main>
 <h1>Sons de Pilou</h1>
 <p>Synthétisés depuis <code>assets/sons.txt</code> par <code>outils/sons/sons.py</code> ; le PC et le téléphone
@@ -258,7 +277,10 @@ def verifier(sons):
 
 MUSIQUES = RACINE / "assets" / "musiques.txt"
 REFERENCE_MUSIQUES = Path(__file__).resolve().parent / "musiques-reference.txt"
-TONS = ("prologue", "humour", "mystere", "emotion")   # une boucle par ton, plus le prologue ; le reste : ambiances
+TONS = ("prologue", "humour", "mystere", "emotion")   # une boucle par ton, plus le prologue
+THEME = ("pilou-10", "pilou-25", "pilou-40")          # le thème de Pilou, un par scène d'évolution
+FINS = ("fin-bonne", "fin-douce-amere", "fin-mauvaise", "fin-secrete")
+DUREE_MOTIF_MS = (3000, 8500)
 DISCRETE = 3           # « discrète » : × 3 / 8 à la lecture (environ -8,5 dB)
 CRETE_BOUCLE_MAX = 6000                # -14,7 dBFS : la musique reste bien sous les sons
 DUREE_BOUCLE_MS = (30000, 60000)
@@ -281,14 +303,18 @@ def frequence(jeton):
 
 def lire_musiques(chemin=MUSIQUES):
     """Renvoie ({id: morceau}, {décor: ambiance}). Un morceau : dict(ms, pas, filtre, voix=[...])."""
-    morceaux, decors, voix, courant = {}, {}, None, None
+    morceaux, decors, voix, courant, note = {}, {}, None, None, ""
     for n, ligne in enumerate(chemin.read_text(encoding="utf-8").splitlines(), 1):
         ligne = ligne.strip()
-        if not ligne or ligne.startswith("#"):
+        if ligne.startswith("#"):
+            note = ligne.lstrip("# ")                 # le commentaire juste au-dessus d'un morceau le décrit
+            continue
+        if not ligne:
             continue
         p = [x.strip() for x in ligne.split("|")]
         if p[0] == "morceau":
-            courant = morceaux[p[1]] = {"ms": int(p[2]), "pas": int(p[3]), "filtre": int(p[4]), "voix": []}
+            courant = morceaux[p[1]] = {"ms": int(p[2]), "pas": int(p[3]), "filtre": int(p[4]), "voix": [],
+                                        "motif": len(p) > 5 and p[5] == "motif", "description": note}
         elif p[0] == "voix":
             if p[1] not in ("tri", "puls", "bruit"):
                 raise ValueError(f"musiques.txt:{n} : onde inconnue {p[1]}")
@@ -305,15 +331,16 @@ def lire_musiques(chemin=MUSIQUES):
     return morceaux, decors
 
 
-def notes_voix(jetons, pas):
-    """[(pas de départ, longueur en pas, f0, f1)] ; la suite se répète, une note tenue au bout repart au début."""
+def notes_voix(jetons, pas, boucle=True):
+    """[(pas de départ, longueur en pas, f0, f1)] ; la suite se répète ; dans une boucle, une note tenue au bout
+    repart au début (dans un motif, elle s'arrête au bout)."""
     e = [jetons[k % len(jetons)] for k in range(pas)]
     notes = []
     for k, j in enumerate(e):
         if j in ("-", "."):
             continue
         longueur = 1
-        while longueur < pas and e[(k + longueur) % pas] == "-":
+        while longueur < pas and (boucle or k + longueur < pas) and e[(k + longueur) % pas] == "-":
             longueur += 1
         f = j.split(">")
         notes.append((k, longueur, frequence(f[0]), frequence(f[-1])))
@@ -321,13 +348,15 @@ def notes_voix(jetons, pas):
 
 
 def synthetiser_boucle(m):
-    """Échantillons 16 bits de la boucle, au réglage « normale ». Le dernier échantillon enchaîne sur le premier."""
+    """Échantillons 16 bits de la boucle, au réglage « normale ». Le dernier échantillon enchaîne sur le premier.
+    Un motif (joué une fois) a une queue de 20 ms, un seul tour de filtre et un fondu final : il finit à zéro."""
     pas_ech = TAUX * m["ms"] // 1000
-    total = pas_ech * m["pas"]
+    motif = m["motif"]
+    total = pas_ech * m["pas"] + (TAUX * QUEUE_MS // 1000 if motif else 0)
     acc = [0] * total
     for v in m["voix"]:
         onde, volume, d = v["onde"], v["volume"], v["declin"]
-        for k, longueur, f0, f1 in notes_voix(v["jetons"], m["pas"]):
+        for k, longueur, f0, f1 in notes_voix(v["jetons"], m["pas"], not motif):
             s0 = k * pas_ech
             n = longueur * pas_ech
             if v["tenue"] > 0:
@@ -365,12 +394,17 @@ def synthetiser_boucle(m):
     f = m["filtre"]
     sortie = [0] * total
     y1 = y2 = 0
-    for tour in range(2):
+    for tour in range(1 if motif else 2):
         for i in range(total):
             y1 += (((acc[i] << 8) - y1) * f) >> 8
             y2 += ((y1 - y2) * f) >> 8
-            if tour:
+            if tour or motif:
                 sortie[i] = max(-32767, min(32767, y2 >> 8))
+    if motif:
+        q = TAUX * FONDU_MS // 1000
+        for i in range(total - q, total):
+            g = ((total - 1 - i) << 16) // q
+            sortie[i] = (sortie[i] * g) >> 16
     return sortie
 
 
@@ -426,7 +460,7 @@ def verifier_musiques(morceaux, decors):
             attendu[p[0]] = p
     if set(attendu) != set(morceaux):
         erreurs.append(f"référence des musiques : {sorted(set(attendu) ^ set(morceaux))} manquants ou en trop")
-    for t in TONS:
+    for t in TONS + THEME + FINS + tuple(f"{t}-{v}" for t in TONS[1:] for v in ("calme", "tension")):
         if t not in morceaux:
             erreurs.append(f"musique « {t} » absente")
     for a in set(decors.values()):
@@ -439,16 +473,20 @@ def verifier_musiques(morceaux, decors):
             erreurs.append(f"{nom} : empreinte différente de la référence")
         if me["crete"] > CRETE_BOUCLE_MAX:
             erreurs.append(f"{nom} : crête {me['crete']} > {CRETE_BOUCLE_MAX}")
-        lo, hi = DUREE_BOUCLE_MS if nom in TONS else DUREE_AMBIANCE_MS
+        ambiances = set(decors.values())
+        lo, hi = DUREE_MOTIF_MS if m["motif"] else DUREE_AMBIANCE_MS if nom in ambiances else DUREE_BOUCLE_MS
         if not lo <= me["duree_ms"] <= hi:
             erreurs.append(f"{nom} : {me['duree_ms']} ms hors de {lo}–{hi}")
-        if me["jonction"] > me["p99"]:
+        if m["motif"]:
+            if me["debut"] > BORD_MAX or me["fin"] > BORD_MAX:
+                erreurs.append(f"{nom} : bords du motif non nuls ({me['debut']}, {me['fin']})")
+        elif me["jonction"] > me["p99"]:
             erreurs.append(f"{nom} : saut à la jonction {me['jonction']} > p99 {me['p99']} (clic de boucle)")
         for v in m["voix"]:
             if len(v["jetons"]) > m["pas"] or m["pas"] % len(v["jetons"]):
                 erreurs.append(f"{nom} : une voix a {len(v['jetons'])} jetons pour {m['pas']} pas")
             if v["onde"] != "bruit":
-                for _, _, f0, f1 in notes_voix(v["jetons"], m["pas"]):
+                for _, _, f0, f1 in notes_voix(v["jetons"], m["pas"], not m["motif"]):
                     if max(f0, f1) > NOTE_MAX_BOUCLE_HZ * 1000:
                         erreurs.append(f"{nom} : note à {max(f0, f1) // 1000} Hz > {NOTE_MAX_BOUCLE_HZ}")
     return erreurs
@@ -493,9 +531,11 @@ def main():
         s = synthetiser_boucle(m)
         ecrire_wav(ECOUTE / f"{nom}.wav", s)
         ecrire_wav(ECOUTE / f"{nom}-discrete.wav", discrete(s))
-        q = TAUX * 4
-        ecrire_wav(ECOUTE / f"{nom}-jonction.wav", s[-q:] + s[:q])
-        me = boucles[nom] = mesures_boucle(s)
+        if not m["motif"]:
+            q = TAUX * 4
+            ecrire_wav(ECOUTE / f"{nom}-jonction.wav", s[-q:] + s[:q])
+        me = mesures_boucle(s)
+        boucles[nom] = dict(m, mesures=me, ambiance=nom in set(decors.values()))
         print(f"{nom:<12}{me['duree_ms'] / 1000:>6.1f}s{me['crete_db']:>7}dB{me['rms_db']:>6}dB{me['jonction']:>7}"
               f"{me['p99']:>6}  {me['spectre']}")
     (ECOUTE / "ecoute.html").write_text(page(sons, toutes, boucles), encoding="utf-8")

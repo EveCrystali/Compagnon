@@ -52,6 +52,45 @@ public class MusiqueTest {
     }
 
     @Test
+    public void leChampMusiqueChoisitLeMorceau() {
+        for (String t : new String[]{"humour", "mystere", "emotion"}) {
+            assertEquals(t + "-tension", Musique.pour("x", t, "tension"));
+            assertEquals(t + "-calme", Musique.pour("x", t, "calme"));
+        }
+        assertEquals("pilou-25", Musique.pour("evolution", "emotion", "pilou-25"));
+        assertEquals("fin-secrete", Musique.pour("phare-eteint", "mystere", "fin-secrete"));
+        assertEquals("prologue", Musique.pour("prologue", "humour", "calme"));
+        assertEquals("mystere", Musique.pour("phare-eteint", "mystere", "inconnu"));
+        assertTrue(Musique.estMotif("fin-bonne") && Musique.estMotif("pilou-court") && !Musique.estMotif("pilou-10"));
+    }
+
+    @Test
+    public void unMotifJoueUneFoisPuisLeSilence() {
+        short[] motif = new short[Musique.TAUX / 5];
+        Arrays.fill(motif, (short) 5000);
+        short[] boucle = new short[1000];
+        Arrays.fill(boucle, (short) 2000);
+        Musique.Melangeur t = new Musique.Melangeur(id -> id.equals("fin") ? motif : boucle, id -> id.equals("fin"));
+        short[] bloc = new short[Musique.TAUX / 10];
+        t.viser("emotion", null, 65536);
+        for (int i = 0; i < 20; i++) t.remplir(bloc);
+        assertEquals(2000, bloc[bloc.length - 1]);
+        t.viser("fin", null, 65536);
+        t.remplir(bloc);
+        assertTrue(bloc[0] > 5000);
+        for (int i = 0; i < 15; i++) {
+            t.viser("fin", null, 65536);
+            t.remplir(bloc);
+        }
+        assertEquals(0, bloc[bloc.length - 1]);
+        assertTrue(t.silencieux());
+        t.viser("emotion", null, 65536);
+        t.viser("fin", null, 65536);
+        t.remplir(bloc);
+        assertTrue(bloc[0] > 4000);
+    }
+
+    @Test
     public void fonduEntreeEtSortie() {
         short[] boucle = new short[1000];
         Arrays.fill(boucle, (short) 8000);

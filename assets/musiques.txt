@@ -1,12 +1,14 @@
 # Musiques et ambiances de Pilou (docs/SONS.md) : boucles synthétisées par outils/sons/sons.py, Sons.cs et
 # Sons.java, mêmes échantillons partout (outils/sons/musiques-reference.txt). Tout est original.
 #
-# morceau | id | ms par pas | pas | filtre (passe-bas, sur 256)
+# morceau | id | ms par pas | pas | filtre (passe-bas, sur 256) [| motif : joué une fois, sans boucle]
 # voix | onde | volume | attaque ms | relâche ms | déclin (sur 4096) | tenue max ms (0 : la note entière) | jetons
 # + | suite des jetons de la voix précédente
 # Un jeton par pas : note (C4, F#3…), fréquence en Hz (bruit), de>à (glissé), « - » tient, « . » se tait.
 # Une voix plus courte que le morceau se répète. Ce qui dépasse la fin repart au début : la boucle n'a pas de bord.
 # decors | ambiance | décors des campagnes qui la portent
+# Choix : le champ facultatif « musique » d'une scène ou d'un nœud nomme un morceau, ou « calme » / « tension »
+# (la variante du ton de la campagne) ; sans champ, la boucle du ton.
 
 # La colline d'en face : un matin léger, on part à pied. Do majeur, 120 à la noire.
 morceau | prologue | 250 | 128 | 120
@@ -180,6 +182,237 @@ voix | bruit | 22 | 1500 | 3500 | 0 | 0 | . . . . . . . .   . . . . . . . .   . 
 + | - - - - - - - -   - - - - - - - -   - - . . . . . .   . . . . . . . .
 + | . . . . . . . .   . . . . 2100>800 - - -   - - - - - - - -   - - - - - - - -
 + | - - - - - - - -
+
+# Le thème de Pilou, qui grandit avec lui (scènes d'évolution). Même mélodie, même tempo (90 à la noire).
+# Niveau 10 : la boîte à musique seule.
+morceau | pilou-10 | 333 | 128 | 110
+# la mélodie, pincée comme une lame de boîte à musique
+voix | tri | 28 | 3 | 500 | 3000 | 0 | E5 - - G5 E5 - C5 -   A4 - C5 - E5 - - -   F5 - E5 - D5 - C5 -   D5 - - - G4 - . .
++ | E5 - - G5 E5 - C5 -   A5 - G5 - E5 - - -   F5 - E5 - D5 - B4 -   C5 - - - - - . .
++ | A5 - - - G5 - F5 -   E5 - - - C5 - E5 -   F5 - A5 - C6 - A5 -   G5 - - - - - D5 -
++ | E5 - G5 - B5 - G5 -   A5 - - - E5 - C5 -   D5 - F5 - A5 - F5 -   G5 - - - D5 E5 F5 -
+# l'arpège de la boîte
+voix | tri | 10 | 3 | 350 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 G3 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | E3 B3 G4 B3 E4 B3 G4 B3   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 D4 A3 F4 A3   G3 D4 B4 D4 G4 D4 B4 D4
+
+# Niveau 25 : une seconde voix chante dessous, une basse douce arrive.
+morceau | pilou-25 | 333 | 128 | 110
+# la mélodie
+voix | tri | 22 | 3 | 500 | 3000 | 0 | E5 - - G5 E5 - C5 -   A4 - C5 - E5 - - -   F5 - E5 - D5 - C5 -   D5 - - - G4 - . .
++ | E5 - - G5 E5 - C5 -   A5 - G5 - E5 - - -   F5 - E5 - D5 - B4 -   C5 - - - - - . .
++ | A5 - - - G5 - F5 -   E5 - - - C5 - E5 -   F5 - A5 - C6 - A5 -   G5 - - - - - D5 -
++ | E5 - G5 - B5 - G5 -   A5 - - - E5 - C5 -   D5 - F5 - A5 - F5 -   G5 - - - D5 E5 F5 -
+# l'arpège
+voix | tri | 7 | 3 | 350 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 G3 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | E3 B3 G4 B3 E4 B3 G4 B3   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 D4 A3 F4 A3   G3 D4 B4 D4 G4 D4 B4 D4
+# la seconde voix, liée
+voix | tri | 12 | 50 | 300 | 1024 | 0 | C5 - - - G4 - - -   E4 - - - A4 - - -   A4 - - - F4 - - -   B4 - - - D4 - - -
++ | C5 - - - G4 - - -   C5 - - - A4 - - -   A4 - - - G4 - - -   E4 - - - - - - -
++ | C5 - - - A4 - - -   G4 - - - E4 - - -   A4 - - - C5 - - -   D5 - - - B4 - - -
++ | G4 - - - B4 - - -   C5 - - - A4 - - -   F4 - - - A4 - - -   B4 - - - D5 - - -
+# la basse tenue
+voix | tri | 12 | 40 | 500 | 1024 | 0 | C3 - - - - - - -   A2 - - - - - - -   F2 - - - - - - -   G2 - - - - - - -
++ | C3 - - - - - - -   A2 - - - - - - -   D3 - - - G2 - - -   C3 - - - - - - -
++ | F2 - - - - - - -   C3 - - - - - - -   F2 - - - - - - -   G2 - - - - - - -
++ | E2 - - - - - - -   A2 - - - - - - -   D3 - - - - - - -   G2 - - - - - - -
+
+# Niveau 40 : le petit ensemble (la mélodie doublée plus bas, une basse qui marche, un grelot).
+morceau | pilou-40 | 333 | 128 | 110
+# la mélodie
+voix | tri | 20 | 3 | 500 | 3000 | 0 | E5 - - G5 E5 - C5 -   A4 - C5 - E5 - - -   F5 - E5 - D5 - C5 -   D5 - - - G4 - . .
++ | E5 - - G5 E5 - C5 -   A5 - G5 - E5 - - -   F5 - E5 - D5 - B4 -   C5 - - - - - . .
++ | A5 - - - G5 - F5 -   E5 - - - C5 - E5 -   F5 - A5 - C6 - A5 -   G5 - - - - - D5 -
++ | E5 - G5 - B5 - G5 -   A5 - - - E5 - C5 -   D5 - F5 - A5 - F5 -   G5 - - - D5 E5 F5 -
+# la mélodie doublée à l'octave du dessous, liée
+voix | tri | 8 | 30 | 200 | 1024 | 0 | E4 - - G4 E4 - C4 -   A3 - C4 - E4 - - -   F4 - E4 - D4 - C4 -   D4 - - - G3 - . .
++ | E4 - - G4 E4 - C4 -   A4 - G4 - E4 - - -   F4 - E4 - D4 - B3 -   C4 - - - - - . .
++ | A4 - - - G4 - F4 -   E4 - - - C4 - E4 -   F4 - A4 - C5 - A4 -   G4 - - - - - D4 -
++ | E4 - G4 - B4 - G4 -   A4 - - - E4 - C4 -   D4 - F4 - A4 - F4 -   G4 - - - D4 E4 F4 -
+# l'arpège
+voix | tri | 6 | 3 | 350 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | C4 G4 E5 G4 C5 G4 E5 G4   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 G3 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4
++ | E3 B3 G4 B3 E4 B3 G4 B3   A3 E4 C5 E4 A4 E4 C5 E4   D3 A3 F4 A3 D4 A3 F4 A3   G3 D4 B4 D4 G4 D4 B4 D4
+# la seconde voix
+voix | tri | 10 | 50 | 300 | 1024 | 0 | C5 - - - G4 - - -   E4 - - - A4 - - -   A4 - - - F4 - - -   B4 - - - D4 - - -
++ | C5 - - - G4 - - -   C5 - - - A4 - - -   A4 - - - G4 - - -   E4 - - - - - - -
++ | C5 - - - A4 - - -   G4 - - - E4 - - -   A4 - - - C5 - - -   D5 - - - B4 - - -
++ | G4 - - - B4 - - -   C5 - - - A4 - - -   F4 - - - A4 - - -   B4 - - - D5 - - -
+# la basse qui marche
+voix | puls | 7 | 4 | 80 | 1024 | 0 | C3 - . . G3 - . .   A2 - . . E3 - . .   F2 - . . C3 - . .   G2 - . . D3 - . .
++ | C3 - . . G3 - . .   A2 - . . E3 - . .   D3 - . . G2 - . .   C3 - . . G3 - . .
++ | F2 - . . C3 - . .   C3 - . . G3 - . .   F2 - . . C3 - . .   G2 - . . D3 - . .
++ | E2 - . . B2 - . .   A2 - . . E3 - . .   D3 - . . A3 - . .   G2 - . . D3 - . .
+# le grelot
+voix | bruit | 5 | 1 | 20 | 4096 | 40 | . . 7000 . . . 7000 .
+
+# Le thème en très court (4 s) : proposé pour le retour d'aventure et le palier de complicité.
+morceau | pilou-court | 250 | 16 | 110 | motif
+# la tête du thème
+voix | tri | 28 | 3 | 500 | 3000 | 0 | E5 - - G5 E5 - C5 -   D5 - G4 - C5 - - -
+# l'arpège
+voix | tri | 10 | 3 | 350 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 C4 G4 C5 -
+
+# Humour, calme : l'après-midi au bureau, une mélodie qui flâne et se rattrape. 100 à la noire.
+morceau | humour-calme | 300 | 128 | 120
+# la mélodie qui flâne
+voix | tri | 22 | 20 | 200 | 1024 | 0 | G4 - C5 - - - E5 D5   C5 - - - A4 - - .   G4 - C5 - E5 - G5 -   F5 - E5 - D5 - - .
++ | E5 - - C5 A4 - - -   . . C5 - D5 - E5 -   D5 - B4 - G4 - - .   C5 - - - . . G4 G4
++ | C5 - - - E5 - D5 C5   A4 - - - C5 - F5 -   E5 - - - G5 - E5 -   D5 - - - - - . .
++ | C5 - E5 - A5 - G5 -   F5 - - - E5 - D5 -   D5 - E5 - D5 - B4 -   C5 - - - - - . .
+# la basse
+voix | tri | 13 | 20 | 200 | 1024 | 0 | C3 - - - G3 - - -   F2 - - - C3 - - -   C3 - - - G3 - - -   G2 - - - D3 - - -
++ | A2 - - - E3 - - -   F2 - - - C3 - - -   G2 - - - D3 - - -   C3 - - - G3 - - -
++ | C3 - - - G3 - - -   F2 - - - C3 - - -   C3 - - - G3 - - -   G2 - - - D3 - - -
++ | A2 - - - E3 - - -   F2 - - - C3 - - -   G2 - - - D3 - - -   C3 - - - G3 - - -
+# le petit « tchac »
+voix | tri | 6 | 3 | 40 | 2048 | 120 | . . E4 . . . E4 .   . . A3 . . . A3 .   . . E4 . . . E4 .   . . B3 . . . B3 .
++ | . . C4 . . . C4 .   . . A3 . . . A3 .   . . B3 . . . B3 .   . . E4 . . . E4 .
++ | . . E4 . . . E4 .   . . A3 . . . A3 .   . . E4 . . . E4 .   . . B3 . . . B3 .
++ | . . C4 . . . C4 .   . . A3 . . . A3 .   . . B3 . . . B3 .   . . E4 . . . E4 .
+
+# Humour, tension légère : la pendule tourne, il faut choisir vite (mais rien de grave). 140 à la noire.
+morceau | humour-tension | 214 | 160 | 130
+# la mélodie qui se répète, comme on tapote
+voix | tri | 30 | 4 | 50 | 1536 | 160 | E5 . E5 . E5 . D5 .   C5 . . . A4 . . .   F5 . F5 . F5 . E5 .   D5 . . . C5 . . .
++ | D5 . D5 . G5 . F5 .   E5 . D5 . B4 . . .   C5 . E5 . A5 . G5 .   E5 . . . . . . .
++ | G5 . G5 . G5 . E5 .   C6 . . . G5 . . .   A5 . A5 . A5 . G5 .   F5 . . . C5 . . .
++ | D5 . F5 . A5 . F5 .   D5 . . . . . . .   G4 . B4 . D5 . G5 .   B5 . . . D6 . . .
++ | C6 . . . A5 . . .   A5 . G5 . F5 . . .   D5 . E5 . F5 . G5 .   B4 . . . D5 . . .
+# la basse piquée
+voix | puls | 15 | 3 | 40 | 1024 | 110 | A2 . A2 . E3 . A2 .   A2 . A2 . E3 . A2 .   F2 . F2 . C3 . F2 .   F2 . F2 . C3 . F2 .
++ | G2 . G2 . D3 . G2 .   G2 . G2 . D3 . G2 .   A2 . A2 . E3 . A2 .   A2 . A2 . E3 . A2 .
++ | C3 . C3 . G3 . C3 .   C3 . C3 . G3 . C3 .   F2 . F2 . C3 . F2 .   F2 . F2 . C3 . F2 .
++ | D3 . D3 . A3 . D3 .   D3 . D3 . A3 . D3 .   G2 . G2 . D3 . G2 .   G2 . G2 . D3 . G2 .
++ | A2 . A2 . E3 . A2 .   F2 . F2 . C3 . F2 .   G2 . G2 . D3 . G2 .   G2 . G2 . D3 . G2 .
+# les accords en contretemps
+voix | tri | 7 | 3 | 40 | 2048 | 90 | . . C4 . . . C4 .   . . C4 . . . C4 .   . . A3 . . . A3 .   . . A3 . . . A3 .
++ | . . B3 . . . B3 .   . . B3 . . . B3 .   . . C4 . . . C4 .   . . C4 . . . C4 .
++ | . . E4 . . . E4 .   . . E4 . . . E4 .   . . A3 . . . A3 .   . . A3 . . . A3 .
++ | . . F4 . . . F4 .   . . F4 . . . F4 .   . . B3 . . . B3 .   . . B3 . . . B3 .
++ | . . C4 . . . C4 .   . . A3 . . . A3 .   . . B3 . . . B3 .   . . B3 . . . B3 .
+# tic, tac
+voix | bruit | 4 | 1 | 15 | 4096 | 25 | 9000 . 6000 . 9000 . 6000 .
+
+# Mystère, calme : une berceuse au phare, la boîte à musique et la houle. 70 à la noire.
+morceau | mystere-calme | 430 | 96 | 100
+# la mélodie, à la boîte à musique
+voix | tri | 18 | 3 | 600 | 3000 | 0 | . . . . E5 - - -   C5 - - - A4 - - -   G4 - - - C5 - E5 -   D5 - - - - - . .
++ | . . . . A4 - C5 -   E5 - - - D5 - C5 -   B4 - - - G4 - - -   A4 - - - - - . .
++ | . . . . C5 - F5 -   E5 - - - G5 - - -   D5 - - - B4 - D5 -   C5 - - - A4 - - -
+# l'arpège lent
+voix | tri | 9 | 3 | 400 | 3000 | 0 | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4
++ | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   A3 E4 C5 E4 A4 E4 C5 E4
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4   A3 E4 C5 E4 A4 E4 C5 E4
+# la basse tenue
+voix | tri | 10 | 40 | 600 | 1024 | 0 | A2 - - - - - - -   F2 - - - - - - -   C3 - - - - - - -   G2 - - - - - - -
++ | A2 - - - - - - -   F2 - - - - - - -   G2 - - - - - - -   A2 - - - - - - -
++ | F2 - - - - - - -   C3 - - - - - - -   G2 - - - - - - -   A2 - - - - - - -
+# la houle, au loin
+voix | bruit | 8 | 2500 | 3000 | 0 | 0 | 900>1200 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - . .
++ | . . . . . . . .   . . . . . . . .   1100>850 - - - - - - -   - - - - - - - -
++ | - - - - - - - -   - - - - - - . .   . . . . . . . .   . . . . . . . .
+
+# Mystère, tension légère : un cœur qui bat un peu plus vite, l'horloge, des questions. 100 à la noire.
+morceau | mystere-tension | 300 | 128 | 100
+# la phrase qui interroge
+voix | tri | 18 | 30 | 600 | 1024 | 0 | E5 - - - - - . .   . . . . D5 - E5 -   C5 - - - - - . .   . . . . A4 - C5 -
++ | D5 - - - - - . .   . . . . B4 - D5 -   E5 - - - - - - -   . . . . . . . .
++ | F5 - - - - - E5 -   D5 - - - - - . .   . . . . C5 - A4 -   C5 - - - - - . .
++ | E5 - - - G5 - - -   D5 - - - B4 - - -   C5 - - - A4 - - -   . . . . . . . .
+# le cœur : poum-poum
+voix | tri | 14 | 5 | 120 | 2048 | 200 | A2 A2 . . . . . .   A2 A2 . . . . . .   F2 F2 . . . . . .   F2 F2 . . . . . .
++ | G2 G2 . . . . . .   G2 G2 . . . . . .   A2 A2 . . . . . .   A2 A2 . . . . . .
++ | D3 D3 . . . . . .   D3 D3 . . . . . .   F2 F2 . . . . . .   F2 F2 . . . . . .
++ | C3 C3 . . . . . .   G2 G2 . . . . . .   A2 A2 . . . . . .   A2 A2 . . . . . .
+# nappe, première voix
+voix | tri | 12 | 2400 | 2400 | 0 | 0 | A2 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | F2 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
+# nappe, seconde voix
+voix | tri | 12 | 2400 | 2400 | 0 | 0 | - - - - . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | C3 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
++ | - - - - . . . .   . . . . . . . .   . . . . . . . .   . . . . . . . .
++ | E2 - - - - - - -   - - - - - - - -   - - - - - - - -   - - - - - - - -
+# l'horloge
+voix | bruit | 3 | 1 | 15 | 4096 | 20 | 5000 . 5000 . 5000 . 5000 .
+
+# Émotion, calme : encore plus doux que la boucle du ton, on se pose. 70 à la noire.
+morceau | emotion-calme | 430 | 96 | 110
+# la voix qui fredonne
+voix | tri | 16 | 30 | 300 | 1024 | 0 | . . . . G4 - C5 -   B4 - - - G4 - - -   A4 - - - C5 - F5 -   E5 - - - - - . .
++ | . . . . E5 - D5 -   C5 - - - A4 - C5 -   D5 - - - B4 - G4 -   C5 - - - - - . .
++ | . . . . A4 - C5 -   E5 - - - G5 - E5 -   D5 - - - F5 - A4 -   B4 - - - - - . .
+# la boîte à musique
+voix | tri | 8 | 3 | 400 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   E3 B3 G4 B3 E4 B3 G4 B3   F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4
++ | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4
++ | F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   D3 A3 F4 A3 D4 A3 F4 A3   G3 D4 B4 D4 G4 D4 B4 D4
+# la basse tenue
+voix | tri | 12 | 40 | 600 | 1024 | 0 | C3 - - - - - - -   E2 - - - - - - -   F2 - - - - - - -   C3 - - - - - - -
++ | A2 - - - - - - -   F2 - - - - - - -   G2 - - - - - - -   C3 - - - - - - -
++ | F2 - - - - - - -   C3 - - - - - - -   D3 - - - - - - -   G2 - - - - - - -
+
+# Émotion, tension légère : le petit trac du bon choix, la mélodie monte et se pose. 94 à la noire.
+morceau | emotion-tension | 320 | 128 | 110
+# la voix
+voix | tri | 20 | 20 | 250 | 1024 | 0 | C5 - - - E5 - - -   A5 - - - G5 - F5 -   E5 - - - G5 - - -   D5 - - - - - . .
++ | C5 - E5 - A5 - - -   A5 - C6 - A5 - - -   G5 - - - B5 - - -   D6 - - - - - . .
++ | C6 - - - A5 - F5 -   D5 - - - G5 - - -   E5 - G5 - B5 - - -   A5 - - - - - . .
++ | F5 - A5 - C6 - - -   B5 - - - G5 - D5 -   E5 - - - - - D5 -   D5 - - - - - . .
+# l'arpège, un peu pressé
+voix | tri | 8 | 3 | 200 | 2048 | 0 | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4
++ | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   G3 D4 B4 D4 G4 D4 B4 D4
++ | F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   E3 B3 G4 B3 E4 B3 G4 B3   A3 E4 C5 E4 A4 E4 C5 E4
++ | F3 C4 A4 C4 F4 C4 A4 C4   G3 D4 B4 D4 G4 D4 B4 D4   C4 G4 E5 G4 C5 G4 E5 G4   G3 D4 B4 D4 G4 D4 B4 D4
+# le cœur
+voix | tri | 12 | 5 | 150 | 2048 | 220 | A2 A2 . . . . . .   F2 F2 . . . . . .   C3 C3 . . . . . .   G2 G2 . . . . . .
++ | A2 A2 . . . . . .   F2 F2 . . . . . .   G2 G2 . . . . . .   G2 G2 . . . . . .
++ | F2 F2 . . . . . .   G2 G2 . . . . . .   E2 E2 . . . . . .   A2 A2 . . . . . .
++ | F2 F2 . . . . . .   G2 G2 . . . . . .   C3 C3 . . . . . .   G2 G2 . . . . . .
+
+# Motifs de fin (une seule fois, 5 à 7 s) : la musique s'efface et le motif dit comment ça finit.
+# Bonne fin : la mélodie monte et se pose sur le do aigu, un grelot.
+morceau | fin-bonne | 250 | 24 | 110 | motif
+# la mélodie
+voix | tri | 22 | 3 | 500 | 3000 | 0 | E5 - G5 - C6 - - -   A5 G5 F5 - D5 - G5 -   C6 - - - - - - -
+# l'arpège
+voix | tri | 8 | 3 | 350 | 3000 | 0 | C4 G4 E5 G4 C5 G4 E5 G4   F3 C4 A4 C4 G3 D4 B4 D4   C4 G4 C5 E5 G5 - - -
+# la basse
+voix | tri | 12 | 30 | 400 | 1024 | 0 | C3 - - - - - - -   F2 - - - G2 - - -   C3 - - - - - - -
+# le grelot
+voix | bruit | 5 | 1 | 20 | 4096 | 40 | . . . . . . . .   . . . . . . . .   7000 . 7000 . 7000 . . .
+
+# Fin douce-amère : la phrase descend, puis un dernier accord qui garde un peu d'espoir.
+morceau | fin-douce-amere | 300 | 24 | 110 | motif
+# la phrase
+voix | tri | 20 | 20 | 400 | 1024 | 0 | E5 - - - D5 C5 A4 -   C5 - - - G4 - - -   E5 - - - - - - -
+# l'arpège
+voix | tri | 8 | 3 | 400 | 3000 | 0 | A3 E4 C5 E4 A4 E4 C5 E4   F3 C4 A4 C4 F4 C4 A4 C4   C4 G4 E5 - - - - -
+# la basse
+voix | tri | 12 | 40 | 500 | 1024 | 0 | A2 - - - - - - -   F2 - - - - - - -   C3 - - - - - - -
+
+# Mauvaise fin : un « oups » gentil qui dégringole, rien qui fasse peur.
+morceau | fin-mauvaise | 250 | 20 | 110 | motif
+# la dégringolade
+voix | tri | 22 | 4 | 300 | 1024 | 0 | G5 . E5 . C5 . . .   D5 - C5 - A4 - - .   G4>C4 - - -
+# la basse
+voix | puls | 10 | 4 | 100 | 1024 | 0 | C3 . . . . . . .   F2 - - - - - - .   C3 - - -
+
+# Fin secrète : des arpèges qui montent comme des étincelles, puis le do majeur tout en haut.
+morceau | fin-secrete | 250 | 28 | 110 | motif
+# les étincelles
+voix | tri | 12 | 3 | 400 | 3000 | 0 | C5 E5 G5 C6 A4 C5 E5 A5   F4 A4 C5 F5 G4 B4 D5 G5   C5 E5 G5 C6 - - - -   - - - -
+# la voix
+voix | tri | 10 | 60 | 600 | 1024 | 0 | E5 - - - C5 - - -   A4 - - - B4 - - -   C5 - - - - - - -   - - - -
+# la basse
+voix | tri | 11 | 40 | 600 | 1024 | 0 | C3 - - - A2 - - -   F2 - - - G2 - - -   C3 - - - - - - -   - - - -
+# les scintillements
+voix | bruit | 4 | 1 | 20 | 4096 | 30 | . . 9000 . . . . 9000   . . . 9000 . . . .   . 9000 . 9000 . . . .   . . . .
 
 decors | vent | pre-aux-draps plateau-rape col-blanc trou-qui-siffle grande-salle abreuvoir abreuvoir-aube sentier-des-melezes halte-girouette pente sommet lanterne-du-phare citadelle-nuage
 decors | pluie | jardin-lave place-mairie fenetre-maison

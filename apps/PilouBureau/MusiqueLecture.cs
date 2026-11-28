@@ -10,12 +10,13 @@ namespace PilouBureau;
 // par la table de mixage (Melangeur, Musique.cs).
 public static partial class Musique
 {
-    private static readonly Melangeur Table = new(Boucle);
+    private static readonly Melangeur Table = new(Boucle, EstMotif);
     private static Thread? _fil;
 
     // Une ligne dans la fenêtre Aventure : la musique suit la campagne ouverte et l'ambiance suit le décor, seulement
     // tant que la fenêtre est au premier plan et que Pilou n'est pas caché (plein écran, présentation, visio).
-    public static void Suivre(Window w, Func<string?> campagne, Func<string?> ton, Func<string?> decor)
+    // `demande` : le champ facultatif « musique » de la scène ou du nœud en cours (voir Pour).
+    public static void Suivre(Window w, Func<string?> campagne, Func<string?> ton, Func<string?> decor, Func<string?>? demande = null)
     {
         var minuteur = new DispatcherTimer(DispatcherPriority.Background, w.Dispatcher) { Interval = TimeSpan.FromMilliseconds(250) };
         minuteur.Tick += (_, _) =>
@@ -24,7 +25,7 @@ public static partial class Musique
             {
                 int gain = Gain(Sons.NiveauMusique());
                 bool actif = gain > 0 && w.IsActive && w.WindowState != WindowState.Minimized && !Sons.Cache();
-                Viser(actif ? Pour(campagne(), ton()) : null, actif ? Ambiance(decor()) : null, gain);
+                Viser(actif ? Pour(campagne(), ton(), demande?.Invoke()) : null, actif ? Ambiance(decor()) : null, gain);
             }
             catch (Exception e) when (e is InvalidOperationException or IOException)
             {

@@ -65,7 +65,7 @@ Dernière mise à jour : 28 novembre 2026.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
-  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets. Musiques et ambiances de l'Aventure : 4 boucles (prologue, humour, mystère, émotion) et 4 ambiances (vent, pluie, hall, mer), réglage « Musique » à part, « discrète » par défaut.
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets. Musiques et ambiances de l'Aventure : 4 boucles (prologue, humour, mystère, émotion) et 4 ambiances (vent, pluie, hall, mer), réglage « Musique » à part, « discrète » par défaut. Second lot : le thème de Pilou en trois versions (niveaux 10, 25, 40) et en motif court, une boucle calme et une de tension légère par ton, quatre motifs de fin ; choix par le champ facultatif « musique ».
 - **Première minute et mode d'emploi** : au tout premier lancement, trois bulles de Pilou qui passent seules (il
   s'installe ; clic gauche, clic droit ; l'Aventure), jamais pendant la saisie, une seule fois ; sur Android, une ligne
   discrète sur l'Accueil, qui part à la première caresse. Page joueur [MODE-EMPLOI.md](MODE-EMPLOI.md), rangée comme
@@ -141,7 +141,7 @@ Dernière mise à jour : 28 novembre 2026.
 - Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
   sortie audio) ; sur téléphone, aucune lecture réelle.
 - Les musiques : écoutées par personne. Sur PC, la boucle du prologue joue dans l'exe d'essai (session audio active, crête
-  mesurée vers -30 dBFS) et se coupe quand la fenêtre est réduite ; les autres boucles et le téléphone : jamais lus en vrai.
+  mesurée vers -30 dBFS) et se coupe quand la fenêtre est réduite ; les autres boucles et le téléphone : jamais lus en vrai. Second lot : jamais lu dans l'exe.
 
 ## Points connus
 

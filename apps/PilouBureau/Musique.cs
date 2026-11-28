@@ -16,7 +16,7 @@ public static partial class Musique
     public static readonly string[] Tons = { "prologue", "humour", "mystere", "emotion" };
 
     public sealed record Voix(string Onde, int Volume, int Attaque, int Relache, int Declin, int Tenue, List<string> Jetons);
-    public sealed record Morceau(int Ms, int Pas, int Filtre, List<Voix> Voix);
+    public sealed record Morceau(int Ms, int Pas, int Filtre, List<Voix> Voix, bool Motif = false);
     public readonly record struct NoteBoucle(int Pas, int Longueur, long F0, long F1);
 
     private static readonly long[] Gamme = { 261626, 277183, 293665, 311127, 329628, 349228, 369994, 391995, 415305, 440000, 466164, 493883 };
@@ -46,7 +46,7 @@ public static partial class Musique
             switch (p[0])
             {
                 case "morceau":
-                    morceaux[p[1]] = courant = new Morceau(int.Parse(p[2]), int.Parse(p[3]), int.Parse(p[4]), new());
+                    morceaux[p[1]] = courant = new Morceau(int.Parse(p[2]), int.Parse(p[3]), int.Parse(p[4]), new(), p.Length > 5 && p[5] == "motif");
                     break;
                 case "voix":
                     voix = new Voix(p[1], int.Parse(p[2]), int.Parse(p[3]), int.Parse(p[4]), int.Parse(p[5]), int.Parse(p[6]), jetons.ToList());
@@ -63,8 +63,9 @@ public static partial class Musique
         return (morceaux, decors);
     }
 
-    // La suite se répète jusqu'au bout du morceau ; une note tenue au bout repart au début.
-    public static List<NoteBoucle> Notes(IReadOnlyList<string> jetons, int pas)
+    // La suite se répète jusqu'au bout du morceau ; dans une boucle, une note tenue au bout repart au début (dans un
+    // motif, elle s'arrête au bout).
+    public static List<NoteBoucle> Notes(IReadOnlyList<string> jetons, int pas, bool boucle = true)
     {
         var e = new string[pas];
         for (int k = 0; k < pas; k++) e[k] = jetons[k % jetons.Count];
@@ -73,21 +74,22 @@ public static partial class Musique
         {
             if (e[k] is "-" or ".") continue;
             int longueur = 1;
-            while (longueur < pas && e[(k + longueur) % pas] == "-") longueur++;
+            while (longueur < pas && (boucle || k + longueur < pas) && e[(k + longueur) % pas] == "-") longueur++;
             var f = e[k].Split('>');
             notes.Add(new NoteBoucle(k, longueur, Frequence(f[0]), Frequence(f[^1])));
         }
         return notes;
     }
 
-    // Échantillons 16 bits de la boucle au réglage « normale » ; le dernier enchaîne sur le premier.
+    // Échantillons 16 bits de la boucle au réglage « normale » ; le dernier enchaîne sur le premier. Un motif (joué une
+    // fois) a une queue de 20 ms, un seul tour de filtre et un fondu final de 8 ms : il finit à zéro.
     public static short[] Synthetiser(Morceau m)
     {
-        int pasEch = Taux * m.Ms / 1000, total = pasEch * m.Pas;
+        int pasEch = Taux * m.Ms / 1000, total = pasEch * m.Pas + (m.Motif ? Taux * 20 / 1000 : 0);
         var acc = new long[total];
         foreach (var v in m.Voix)
         {
-            foreach (var note in Notes(v.Jetons, m.Pas))
+            foreach (var note in Notes(v.Jetons, m.Pas, !m.Motif))
             {
                 int s0 = note.Pas * pasEch, n = note.Longueur * pasEch;
                 if (v.Tenue > 0) n = Math.Min(n, Taux * v.Tenue / 1000);
@@ -132,19 +134,38 @@ public static partial class Musique
         // Passe-bas en anneau : un tour pour mettre le filtre en régime, le second donne la sortie.
         var sortie = new short[total];
         long y1 = 0, y2 = 0;
-        for (int tour = 0; tour < 2; tour++)
+        for (int tour = 0; tour < (m.Motif ? 1 : 2); tour++)
             for (int i = 0; i < total; i++)
             {
                 y1 += (((acc[i] << 8) - y1) * m.Filtre) >> 8;
                 y2 += ((y1 - y2) * m.Filtre) >> 8;
-                if (tour == 1) sortie[i] = (short)Math.Clamp(y2 >> 8, -32767, 32767);
+                if (tour == 1 || m.Motif) sortie[i] = (short)Math.Clamp(y2 >> 8, -32767, 32767);
             }
+        if (m.Motif)
+        {
+            int q = Taux * 8 / 1000;
+            for (int i = total - q; i < total; i++)
+            {
+                long g = ((long)(total - 1 - i) << 16) / q;
+                sortie[i] = (short)((sortie[i] * g) >> 16);
+            }
+        }
         return sortie;
     }
 
-    // Quelle musique pour quelle campagne : le prologue a la sienne, les autres celle de leur ton.
-    public static string? Pour(string? campagne, string? ton) =>
-        campagne == "prologue" ? "prologue" : ton is "humour" or "mystere" or "emotion" ? ton : null;
+    // Quelle musique : le champ facultatif « musique » d'une scène ou d'un nœud (`demande`) nomme un morceau, ou
+    // « calme » / « tension », la variante de la boucle du moment ; sans champ, le prologue a la sienne et les autres
+    // campagnes celle de leur ton.
+    public static string? Pour(string? campagne, string? ton, string? demande = null)
+    {
+        var base_ = campagne == "prologue" ? "prologue" : ton is "humour" or "mystere" or "emotion" ? ton : null;
+        if (string.IsNullOrEmpty(demande)) return base_;
+        var c = Catalogue().Morceaux;
+        if (c.ContainsKey(demande)) return demande;
+        return base_ is not null && c.ContainsKey($"{base_}-{demande}") ? $"{base_}-{demande}" : base_;
+    }
+
+    public static bool EstMotif(string id) => Catalogue().Morceaux.TryGetValue(id, out var m) && m.Motif;
 
     public static string? Ambiance(string? decor) =>
         decor is not null && Catalogue().Decors.TryGetValue(decor, out var a) ? a : null;
@@ -192,7 +213,8 @@ public static partial class Musique
 }
 
 // La table de mixage (sans audio : testable) : une couche par boucle, chacune avec son gain qui glisse vers sa cible.
-// Fondu d'entrée de 1,5 s, de sortie de 1 s ; changer de musique ou de décor croise les deux boucles.
+// Fondu d'entrée de 1,5 s, de sortie de 1 s ; changer de musique ou de décor croise les deux boucles. Un motif (une fin)
+// part tout de suite à son niveau, joue une fois et laisse le silence ; il ne rejoue qu'après un autre morceau.
 public sealed class Melangeur
 {
     public const int Entree = Musique.Taux * 3 / 2, Sortie = Musique.Taux;
@@ -202,13 +224,20 @@ public sealed class Melangeur
         public required string Id;
         public required bool EstMusique;
         public required short[] S;
+        public bool Unique;
         public int Pos, Gain, Cible;
     }
 
     private readonly Func<string, short[]?> _boucle;
+    private readonly Func<string, bool> _motif;
     private readonly List<Couche> _couches = new();
+    private string? _dernierMotif;
 
-    public Melangeur(Func<string, short[]?> boucle) => _boucle = boucle;
+    public Melangeur(Func<string, short[]?> boucle, Func<string, bool>? motif = null)
+    {
+        _boucle = boucle;
+        _motif = motif ?? (_ => false);
+    }
 
     public bool Silencieux { get { lock (_couches) return _couches.Count == 0; } }
 
@@ -230,8 +259,12 @@ public sealed class Melangeur
             c.Cible = garde ? gain : 0;
             present |= garde;
         }
-        if (present || id is null || gain <= 0) return;
-        if (_boucle(id) is { Length: > 0 } s) _couches.Add(new Couche { Id = id, EstMusique = estMusique, S = s, Cible = gain });
+        bool motif = id is not null && estMusique && _motif(id);
+        if (estMusique && !motif && id is not null) _dernierMotif = null;
+        if (present || id is null || gain <= 0 || (motif && _dernierMotif == id)) return;
+        if (_boucle(id) is not { Length: > 0 } s) return;
+        _couches.Add(new Couche { Id = id, EstMusique = estMusique, S = s, Cible = gain, Unique = motif, Gain = motif ? gain : 0 });
+        if (motif) _dernierMotif = id;
     }
 
     public void Remplir(short[] bloc)
@@ -248,7 +281,11 @@ public sealed class Melangeur
                     if (c.Gain < c.Cible) c.Gain = Math.Min(c.Cible, c.Gain + monte);
                     else if (c.Gain > c.Cible) c.Gain = Math.Max(c.Cible, c.Gain - descend);
                     somme[i] += ((long)c.S[c.Pos] * c.Gain) >> 16;
-                    if (++c.Pos == c.S.Length) c.Pos = 0;
+                    if (++c.Pos < c.S.Length) continue;
+                    c.Pos = 0;
+                    if (!c.Unique) continue;
+                    c.Gain = c.Cible = 0;
+                    break;
                 }
             }
             for (int i = 0; i < bloc.Length; i++) bloc[i] = (short)Math.Clamp(somme[i], -32767, 32767);
