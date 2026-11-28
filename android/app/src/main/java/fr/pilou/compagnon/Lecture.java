@@ -36,10 +36,16 @@ final class Lecture extends FrameLayout {
     private String lieuTheatre = "";
     /** Pilou est parti en route (attente, repos) : la scène montre le lieu sans lui jusqu'à son retour. */
     private boolean enRoute;
-    private final TextView numero, chapitre, lieu;
+    private final TextePixelVue numero, chapitre, lieu;
     private final View jauge, jaugeVide;
-    private final ScrollView defil;
-    private final LinearLayout fil, dock;
+    private final Defil defil;
+    private final Fil fil;
+    private final LinearLayout dock;
+    /** Les couleurs du cadre pixel selon le thème ; celles du bandeau (toujours sombre : son fond l'est). */
+    private final CadrePixel.Couleurs cp, cpBandeau = CadrePixel.SOMBRE;
+    private final float pixelRecit;
+    /** u : le pixel de la scène en pixels d'écran, calculé dès la construction (les cadres en ont besoin avant la première mesure). */
+    private final int u;
     private final FrameLayout couche;
 
     private Campagnes.Campagne campagne;
@@ -69,6 +75,9 @@ final class Lecture extends FrameLayout {
         p = Ui.p(a);
         d = a.getResources().getDisplayMetrics().density;
         largeurBulle = Math.round(a.getResources().getDisplayMetrics().widthPixels * 0.82f);
+        u = uniteEcran(a);
+        cp =CadrePixel.de(a);
+        pixelRecit = CadrePixel.policeDp(a);
         setBackgroundColor(p.fond);
         setClickable(true);
 
@@ -103,23 +112,26 @@ final class Lecture extends FrameLayout {
         LinearLayout barreHaut = Ui.rangee(a);
         barreHaut.setGravity(Gravity.CENTER_VERTICAL);
         barreHaut.setBackgroundColor(0xff0a0d1a);
-        TextView retour = bouton("‹", "Retour aux aventures");
+        TextePixelVue fleche = pixelFixe("◀", 4, false);
+        View retour = bouton(fleche, cp.texte, "Retour aux aventures");
         retour.setOnClickListener(v -> page.fermerLecture());
         barreHaut.addView(retour);
         LinearLayout titres = Ui.pile(a);
         titres.setGravity(Gravity.CENTER);
-        numero = Ui.texte(a, "", Ui.T_ETIQUETTE, Vitrine.ARGENT_CLAIR, true);
-        numero.setLetterSpacing(0.12f);
-        numero.setGravity(Gravity.CENTER);
-        numero.setSingleLine(true);
+        // Texte clair sur le fond sombre du bandeau, quel que soit le thème. Numéro en police titre (3 pixels d'écran par
+        // pixel de police), titre du chapitre en police texte (4), une seule ligne chacun.
+        numero = pixelFixe("", 3, true);
+        numero.couleur(cpBandeau.pale);
+        numero.centre(true);
+        numero.maxLignes(1);
         titres.addView(numero, Ui.large());
-        chapitre = Ui.texte(a, "", 15, 0xffffffff, true);
-        chapitre.setGravity(Gravity.CENTER);
-        chapitre.setSingleLine(true);
-        chapitre.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        chapitre = pixelFixe("", 4, false);
+        chapitre.couleur(cpBandeau.texte);
+        chapitre.centre(true);
+        chapitre.maxLignes(1);
         titres.addView(chapitre, Ui.large());
         barreHaut.addView(titres, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        TextView menu = bouton("⋯", "Plus : carnet, mettre de côté");
+        View menu = bouton(new CadrePixel.TroisPoints(a, cp.texte, u), cp.texte, "Plus : carnet, mettre de côté");
         menu.setOnClickListener(v -> menu());
         barreHaut.addView(menu);
         colonne.addView(barreHaut, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, BANDEAU_DP)));
@@ -134,12 +146,18 @@ final class Lecture extends FrameLayout {
         // Sur un petit écran, la scène rapetisse et le portrait remonte jusqu'à la barre : boutons et titre restent devant.
         barreHaut.bringToFront();
 
-        lieu = Ui.puceScene(a, "");
+        // Le lieu : un petit cadre pixel sans ombre, texte en police pixel (4 pixels d'écran par pixel de police).
+        CadrePixel.Pave puceLieu = new CadrePixel.Pave(a, cp, u, false);
+        puceLieu.air(u, u);
+        lieu = pixelFixe("", 4, false);
+        lieu.maxLignes(1);
+        lieu.maxLargeur(Ui.dp(a, 190) - 4 * u - 2 * u);
+        puceLieu.encre(lieu, cp.texte);
+        puceLieu.addView(lieu);
         LayoutParams ll = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.END);
-        ll.rightMargin = Ui.dp(a, 12);
-        ll.bottomMargin = Ui.dp(a, 14);
-        lieu.setMaxWidth(Ui.dp(a, 190));
-        tete.addView(lieu, ll);
+        ll.rightMargin = 3 * u;
+        ll.bottomMargin = 3 * u;
+        tete.addView(puceLieu, ll);
 
         // Avancement dans la campagne (chapitres) : un trait fin au pied de la scène.
         LinearLayout avance = Ui.rangee(a);
@@ -152,19 +170,14 @@ final class Lecture extends FrameLayout {
         colonne.addView(tete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 184)));
 
         // ---- Le fil.
-        // Un fondu sous la scène (bord haut seulement) : aucune ligne du fil n apparaît tranchée net par le bord de la scène.
-        defil = new ScrollView(a) {
-            @Override
-            protected float getBottomFadingEdgeStrength() {
-                return 0;
-            }
-        };
-        defil.setVerticalFadingEdgeEnabled(true);
-        defil.setFadingEdgeLength(Ui.dp(a, 40));
+        // Pas de fondu : le défilement se cale sur une bulle entière (Defil), donc aucune ligne n'est tranchée au repos
+        // par le bord de la scène.
+        fil = new Fil(a);
+        fil.setOrientation(LinearLayout.VERTICAL);
+        fil.setPadding(3 * u, 2 * u, 3 * u, 4 * u);
+        defil = new Defil(a, fil);
         defil.setVerticalScrollBarEnabled(false);
         defil.setClipToPadding(false);
-        fil = Ui.pile(a);
-        fil.setPadding(Ui.dp(a, 14), Ui.dp(a, 12), Ui.dp(a, 14), Ui.dp(a, 20));
         defil.addView(fil);
         // Un toucher sur le fil : Pilou écrit plus vite (le reste du message arrive tout de suite).
         fil.setOnClickListener(v -> accelerer());
@@ -172,13 +185,14 @@ final class Lecture extends FrameLayout {
 
         // ---- Ce que le joueur peut faire.
         dock = Ui.pile(a);
-        dock.setPadding(Ui.dp(a, 16), Ui.dp(a, 14), Ui.dp(a, 16), Ui.dp(a, 14));
+        dock.setPadding(3 * u, 3 * u, 3 * u, 3 * u);
         dock.setVisibility(View.GONE);
         // Quatre options de deux lignes (ou une grande police) ne tiennent pas toujours sous la scène d'un petit
         // téléphone : le bas défile alors, borné pour que le fil reste lisible, au lieu de cacher les dernières options.
         DockDefilant cadreDock = new DockDefilant(a, tete);
-        cadreDock.setBackground(Ui.coins(a, p.surface, 20, 20, 0, 0, p.bord));
-        cadreDock.setElevation(Ui.dp(a, 10));
+        // Le pied : un grand cadre pixel sans ombre (ni coins arrondis, ni élévation).
+        cadreDock.setBackground(new CadrePixel(cp, u, false));
+        cadreDock.setPadding(2 * u, 2 * u, 2 * u, 2 * u);
         cadreDock.addView(dock, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         colonne.addView(cadreDock, Ui.large());
 
@@ -255,17 +269,193 @@ final class Lecture extends FrameLayout {
         super.onMeasure(largeur, hauteur);
     }
 
-    private TextView bouton(String signe, String description) {
-        TextView t = Ui.texte(app, signe, 24, 0xffffffff, true);
-        t.setGravity(Gravity.CENTER);
-        t.setContentDescription(description);
-        t.setBackground(Ui.touchable(app, Ui.arrondi(app, 0x33ffffff, 24, 0), 24));
-        LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(Ui.dp(app, 40), Ui.dp(app, 40));
-        l.setMargins(Ui.dp(app, 8), 0, Ui.dp(app, 8), 0);
-        t.setLayoutParams(l);
-        t.setMinWidth(Ui.dp(app, 40));
-        t.setPadding(0, 0, 0, Ui.dp(app, 3));
+    /** Le pixel de la scène pour cet écran : comme onMeasure (le plus grand entier qui tient dans la largeur, borné par la hauteur). */
+    static int uniteEcran(android.content.Context c) {
+        android.util.DisplayMetrics m = c.getResources().getDisplayMetrics();
+        return Math.max(1, Math.min(Aventure.unite(m.widthPixels), m.heightPixels * 42 / 100 / Theatre.H));
+    }
+
+    /** Le signe du ton pour la police pixel : « ☼ » n'y est pas dessiné, « ☀ » oui. */
+    static String signe(String ton) {
+        String s = Aventure.signeTon(ton);
+        return s.equals("☼") ? "☀" : s;
+    }
+
+    /** Un texte pixel d'une taille exacte : px pixels d'écran par pixel de police (pas d'échelle de police du système). */
+    private TextePixelVue pixelFixe(String texte, int px, boolean titre) {
+        TextePixelVue t = new TextePixelVue(app, px / d, 0xffffffff);
+        t.titre(titre);
+        t.texte(texte);
         return t;
+    }
+
+    /** Un texte pixel du récit ou d'un choix : 4 pixels d'écran à 2,75 de densité, fois l'échelle de police. */
+    private TextePixelVue pixelRecit(String texte, int couleur) {
+        TextePixelVue t = new TextePixelVue(app, pixelRecit, couleur);
+        t.texte(texte);
+        return t;
+    }
+
+    /**
+     * Bouton carré du bandeau : un cadre pixel de 13 u × 13 u (ombre comprise) au milieu d'une zone tactile d'au moins 48 dp
+     * de large sur toute la hauteur du bandeau. Le glyphe est un texte pixel ou une vue de pixels.
+     */
+    private View bouton(View glyphe, int couleur, String description) {
+        FrameLayout zone = new FrameLayout(app);
+        zone.setClickable(true);
+        zone.setContentDescription(description);
+        CadrePixel.Pave pave = new CadrePixel.Pave(app, cp, u, true);
+        pave.setGravity(Gravity.CENTER);
+        pave.air(0, 0);
+        if (glyphe instanceof TextePixelVue) pave.encre((TextePixelVue) glyphe, couleur);
+        pave.addView(glyphe, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        zone.addView(pave, new FrameLayout.LayoutParams(13 * u, 13 * u, Gravity.CENTER));
+        zone.setLayoutParams(new LinearLayout.LayoutParams(Math.max(Ui.dp(app, 48), 13 * u), ViewGroup.LayoutParams.MATCH_PARENT));
+        return zone;
+    }
+
+    /**
+     * Le fil des messages. Il se mesure à la hauteur visible du défilement et prolonge son contenu d'un vide en bas quand
+     * il le faut, pour que le calage en bas (le haut de la plus ancienne bulle telle que toutes les suivantes tiennent)
+     * soit toujours possible.
+     */
+    static final class Fil extends LinearLayout {
+        private int visible, marge, cible;
+
+        Fil(android.content.Context c) {
+            super(c);
+        }
+
+        void regler(int visible, int marge) {
+            this.visible = visible;
+            this.marge = marge;
+        }
+
+        /** Le haut du fil, en pixels, tel que le calage en bas le place. */
+        int cible() {
+            return cible;
+        }
+
+        /** Les hauts de bulles (moins la marge) où le défilement peut se caler. */
+        int[] hauts() {
+            int[] h = new int[getChildCount()];
+            for (int i = 0; i < h.length; i++) h[i] = Math.max(0, getChildAt(i).getTop() - marge);
+            return h;
+        }
+
+        @Override
+        protected void onMeasure(int mw, int mh) {
+            super.onMeasure(mw, mh);
+            int n = getChildCount();
+            cible = 0;
+            if (visible <= 0 || n == 0) return;
+            int[] tops = new int[n];
+            int y = getPaddingTop();
+            for (int i = 0; i < n; i++) {
+                View v = getChildAt(i);
+                LayoutParams lp = (LayoutParams) v.getLayoutParams();
+                tops[i] = y + lp.topMargin;
+                y = tops[i] + v.getMeasuredHeight() + lp.bottomMargin;
+            }
+            cible = cibleBas(tops, y + getPaddingBottom(), visible, marge);
+            if (cible + visible > getMeasuredHeight()) setMeasuredDimension(getMeasuredWidth(), cible + visible);
+        }
+
+        /**
+         * Le haut à viser quand le fil est calé en bas : celui de la plus ancienne bulle (moins marge) telle que tout ce qui
+         * la suit tient dans la hauteur visible ; à défaut (la dernière bulle est plus haute que l'écran), le haut de la dernière.
+         */
+        static int cibleBas(int[] tops, int fin, int visible, int marge) {
+            if (tops.length == 0) return 0;
+            for (int top : tops) {
+                int t = Math.max(0, top - marge);
+                if (fin - t <= visible) return t;
+            }
+            return Math.max(0, tops[tops.length - 1] - marge);
+        }
+    }
+
+    /** Le défilement du fil : calé sur une bulle entière en bas, et, quand l'utilisateur lâche, sur la bulle la plus proche. */
+    final class Defil extends ScrollView {
+        private final Fil contenu;
+        private boolean suivre, doux, doigt;
+        private int dernier = -1;
+        private final Runnable caler = this::calerSurBulle;
+
+        Defil(android.content.Context c, Fil contenu) {
+            super(c);
+            this.contenu = contenu;
+        }
+
+        /** Cale le fil en bas (au prochain passage de mise en page) ; doux : en glissant, sinon d'un coup. */
+        void calerEnBas(boolean doux) {
+            suivre = true;
+            this.doux = doux;
+            dernier = -1;
+            requestLayout();
+        }
+
+        @Override
+        protected void onMeasure(int largeur, int hauteur) {
+            contenu.regler(MeasureSpec.getMode(hauteur) == MeasureSpec.UNSPECIFIED ? 0 : MeasureSpec.getSize(hauteur) - getPaddingTop() - getPaddingBottom(), 2 * u);
+            super.onMeasure(largeur, hauteur);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            super.onLayout(changed, l, t, r, b);
+            if (!suivre) return;
+            int y = Math.max(0, Math.min(contenu.cible(), contenu.getHeight() - getHeight()));
+            if (getScrollY() == y) {
+                dernier = y;
+                return;
+            }
+            if (doux && Vitrine.anime(app)) {
+                if (y != dernier) smoothScrollTo(0, y);   // une seule fois : les passages de mise en page suivants ne la relancent pas
+            } else scrollTo(0, y);
+            dernier = y;
+        }
+
+        @Override
+        public boolean dispatchTouchEvent(android.view.MotionEvent e) {
+            switch (e.getActionMasked()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    suivre = false;
+                    doigt = true;
+                    removeCallbacks(caler);
+                    break;
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    doigt = false;
+                    postDelayed(caler, 140);
+                    break;
+                default:
+                    break;
+            }
+            return super.dispatchTouchEvent(e);
+        }
+
+        @Override
+        protected void onScrollChanged(int l, int t, int ol, int ot) {
+            super.onScrollChanged(l, t, ol, ot);
+            if (doigt || suivre) return;
+            removeCallbacks(caler);
+            postDelayed(caler, 140);   // à l'arrêt (fin d'un coup de pouce) : on cale
+        }
+
+        /** À l'arrêt : le haut de la bulle la plus proche (ou la position du calage en bas). */
+        void calerSurBulle() {
+            if (doigt || suivre) return;
+            int max = Math.max(0, contenu.getHeight() - getHeight());
+            int meilleur = Math.max(0, Math.min(contenu.cible(), max)), y = getScrollY();
+            for (int h : contenu.hauts()) {
+                h = Math.min(h, max);
+                if (Math.abs(h - y) < Math.abs(meilleur - y)) meilleur = h;
+            }
+            if (meilleur == y) return;
+            if (Vitrine.anime(app)) smoothScrollTo(0, meilleur);
+            else scrollTo(0, meilleur);
+        }
     }
 
     // ---- Ouverture, rafraîchissement
@@ -291,7 +481,7 @@ final class Lecture extends FrameLayout {
         campagne = null;
         Retour.effacer(app);
         rafraichir();
-        defil.post(() -> defil.fullScroll(View.FOCUS_DOWN));
+        defil.calerEnBas(false);
     }
 
     void rafraichir() {
@@ -351,10 +541,10 @@ final class Lecture extends FrameLayout {
     }
 
     private void entete() {
-        numero.setText(etat.chapitreTotal > 0 ? ("CHAPITRE " + etat.chapitreNumero + " / " + etat.chapitreTotal) : campagne.titre.toUpperCase(java.util.Locale.FRENCH));
-        chapitre.setText(etat.chapitreTitre.isEmpty() ? campagne.titre : etat.chapitreTitre);
+        numero.texte(etat.chapitreTotal > 0 ? ("CHAPITRE " + etat.chapitreNumero + " / " + etat.chapitreTotal) : campagne.titre.toUpperCase(java.util.Locale.FRENCH));
+        chapitre.texte(etat.chapitreTitre.isEmpty() ? campagne.titre : etat.chapitreTitre);
         String l = etat.lieu.isEmpty() ? campagne.titre : etat.lieu;
-        lieu.setText(Aventure.signeTon(campagne.ton) + "  " + l);
+        lieu.texte(signe(campagne.ton) + "  " + l);
         lieu.setContentDescription("Lieu : " + l);
         scene.regler(campagne.id, campagne.ton, etat.decor);
         fond.ton(campagne.ton);
@@ -423,7 +613,7 @@ final class Lecture extends FrameLayout {
         }
         if (!aEcrire.isEmpty() && !ecrit) ecrire();
         else if (aEcrire.isEmpty() && !ecrit) toutLu();
-        if (premier) defil.post(() -> defil.fullScroll(View.FOCUS_DOWN));
+        if (premier) defil.calerEnBas(false);
     }
 
     private void toutLu() {
@@ -460,12 +650,11 @@ final class Lecture extends FrameLayout {
         // Les points « … », puis le message.
         dividers(m);
         LinearLayout r = rangee(false);
-        LinearLayout b = new LinearLayout(app);
-        b.setBackground(Ui.coins(app, p.surface, 6, 18, 18, 18, p.bord));
-        b.setPadding(Ui.dp(app, 14), Ui.dp(app, 12), Ui.dp(app, 14), Ui.dp(app, 12));
-        b.addView(new Aventure.Points(app, p.doux));
+        CadrePixel.Pave b = new CadrePixel.Pave(app, cp, u, true);
+        b.air(2 * u, 2 * u);
+        b.addView(new Aventure.Points(app, cp.pale));
         r.addView(b);
-        fil.addView(r, Ui.large(app, 8));
+        fil.addView(r, bas(3 * u));
         points = r;
         apparaitre(r, false);
         defiler();
@@ -475,7 +664,7 @@ final class Lecture extends FrameLayout {
             points = null;
             Campagnes.Message x = aEcrire.pollFirst();
             // Un message nouveau, écrit lettre à lettre : le lieu arrive en travelling (au rattrapage, d'un coup).
-            TextView t = x != null ? ajouter(x, true, !vite && x.qui.equals("pilou")) : null;
+            TextePixelVue t = x != null ? ajouter(x, true, !vite && x.qui.equals("pilou")) : null;
             Runnable suite = () -> postDelayed(() -> {
                 if (g == gen) ecrire();
             }, vite ? 40 : 420);
@@ -532,7 +721,7 @@ final class Lecture extends FrameLayout {
     }
 
     private void defiler() {
-        defil.post(() -> defil.smoothScrollTo(0, Math.max(0, fil.getBottom() - defil.getHeight() + Ui.dp(app, 8))));
+        defil.calerEnBas(true);
     }
 
     // ---- Les messages
@@ -564,18 +753,19 @@ final class Lecture extends FrameLayout {
             chapitreVu = ch;
         }
         if (m.reprise && !repriseVue) {
-            TextView t = Ui.puceTexte(app, "↺  On reprend au dernier check-point", p.orange);
-            t.setSingleLine(false);
+            TextePixelVue t = pixelRecit("◀  On reprend au dernier check-point", p.orange);
+            t.maxLargeur(Math.round(largeurBulle * 0.9f));
+            t.centre(true);
             LinearLayout r = Ui.rangee(app);
             r.setGravity(Gravity.CENTER);
             r.addView(t);
-            fil.addView(r, Ui.large(app, 10));
+            fil.addView(r, bas(3 * u));
             repriseVue = true;
         } else if (!m.reprise) repriseVue = false;
         if (dernierT > 0 && m.t - dernierT > 10 * 60_000L) separateur(quand(m.t), false);
         dernierT = m.t;
         if (!m.lieu.isEmpty() && !m.lieu.equals(lieuVu)) {
-            if (!lieuVu.isEmpty()) separateur(Aventure.signeTon(campagne.ton) + "  " + m.lieu, false);
+            if (!lieuVu.isEmpty()) separateur(signe(campagne.ton) + "  " + m.lieu, false);
             lieuVu = m.lieu;
         }
     }
@@ -591,40 +781,48 @@ final class Lecture extends FrameLayout {
     }
 
     private void separateur(String texte, boolean fort) {
+        // Deux traits en pointillés de pixels (1 u tous les 2 u) de part et d'autre du texte en police pixel.
         LinearLayout r = Ui.rangee(app);
-        r.setPadding(0, Ui.dp(app, fort ? 14 : 6), 0, Ui.dp(app, fort ? 10 : 6));
-        View g = new View(app), dr = new View(app);
-        g.setBackgroundColor(p.bord);
-        dr.setBackgroundColor(p.bord);
-        TextView t = Ui.texte(app, texte, Ui.T_ETIQUETTE, fort ? p.texte : p.doux, fort);
-        if (fort) t.setLetterSpacing(0.08f);
-        t.setGravity(Gravity.CENTER);
-        t.setPadding(Ui.dp(app, 10), 0, Ui.dp(app, 10), 0);
-        t.setMaxWidth(Math.round(largeurBulle * 0.9f));
-        r.addView(g, new LinearLayout.LayoutParams(0, Math.max(1, Ui.dp(app, 1)), 1));
+        r.setGravity(Gravity.CENTER_VERTICAL);
+        View g = new CadrePixel.Pointilles(app, cp.pointilles, u), dr = new CadrePixel.Pointilles(app, cp.pointilles, u);
+        TextePixelVue t = pixelRecit(texte, fort ? cp.titre : p.doux);
+        t.titre(fort);
+        t.maxLargeur(Math.round(largeurBulle * 0.9f));
+        t.setPadding(2 * u, 0, 2 * u, 0);
+        r.addView(g, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         r.addView(t);
-        r.addView(dr, new LinearLayout.LayoutParams(0, Math.max(1, Ui.dp(app, 1)), 1));
-        fil.addView(r, Ui.large());
+        r.addView(dr, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        LinearLayout.LayoutParams lp = bas((fort ? 3 : 2) * u);
+        lp.topMargin = (fort ? 3 : 1) * u;
+        fil.addView(r, lp);
     }
 
-    private TextView ajouter(Campagnes.Message m, boolean anime, boolean nouveau) {
+    private LinearLayout.LayoutParams bas(int px) {
+        LinearLayout.LayoutParams l = Ui.large();
+        l.bottomMargin = px;
+        return l;
+    }
+
+    private TextePixelVue ajouter(Campagnes.Message m, boolean anime, boolean nouveau) {
         boolean joueur = m.qui.equals("joueur");
         if (!joueur) {
             dividers(m);
             lieuTheatre(m.decor, nouveau);
         }
         LinearLayout r = rangee(joueur);
-        TextView t = Ui.texte(app, m.texte, 16, joueur ? p.surAccent : p.texte, joueur);
-        t.setLineSpacing(0, 1.28f);
-        t.setMaxWidth(largeurBulle);
-        t.setPadding(Ui.dp(app, 14), Ui.dp(app, 10), Ui.dp(app, 14), Ui.dp(app, 11));
-        t.setBackground(joueur ? Ui.coins(app, p.bleu, 18, 6, 18, 18, 0) : Ui.coins(app, p.surface, 6, 18, 18, 18, p.bord));
-        t.setTextIsSelectable(false);
-        if (m.reprise) t.setAlpha(0.62f);
-        t.setContentDescription((joueur ? "Toi : " : "Pilou : ") + m.texte);
-        r.addView(t);
-        LinearLayout.LayoutParams lp = Ui.large(app, joueur ? 12 : 8);
-        if (joueur) lp.topMargin = Ui.dp(app, 4);
+        // La bulle : un cadre pixel (Pilou : fond du cadre ; le joueur : les couleurs « appuyé », orange ou bleu, et à droite).
+        CadrePixel.Couleurs c = joueur ? CadrePixel.joueur(cp) : cp;
+        CadrePixel.Pave bulle = new CadrePixel.Pave(app, c, u, true);
+        bulle.air(2 * u, 2 * u);
+        TextePixelVue t = pixelRecit(m.texte, c.texte);
+        t.maxLargeur(largeurBulle - 2 * bulle.cadre().dedans() - 4 * u - bulle.cadre().ombre());
+        t.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        bulle.addView(t);
+        bulle.setContentDescription((joueur ? "Toi : " : "Pilou : ") + m.texte);
+        if (m.reprise) bulle.setAlpha(0.62f);
+        r.addView(bulle);
+        LinearLayout.LayoutParams lp = bas(3 * u);
+        if (joueur) lp.topMargin = u;
         fil.addView(r, lp);
         if (!joueur) {
             humeur = humeurPilou(m.humeur);
@@ -707,7 +905,7 @@ final class Lecture extends FrameLayout {
         for (Campagnes.OptionVue o : etat.options) {
             View b = option(o, i, bloque);
             LinearLayout.LayoutParams l = Ui.large();
-            if (i > 0) l.topMargin = Ui.dp(app, 8);
+            if (i > 0) l.topMargin = 2 * u;
             dock.addView(b, l);
             if (Vitrine.anime(app)) {
                 b.setAlpha(0);
@@ -718,24 +916,25 @@ final class Lecture extends FrameLayout {
         }
     }
 
-    private static final String[] SIGNES = {"▸", "▸", "▸", "▸"};
-
+    /** Un choix : un cadre pixel avec son ombre, la puce « ▶ » à la couleur du bord, le libellé en police pixel. */
     private View option(Campagnes.OptionVue o, int rang, boolean bloque) {
-        LinearLayout r = Ui.rangee(app);
-        r.setMinimumHeight(Ui.dp(app, 56));
-        r.setPadding(Ui.dp(app, 14), Ui.dp(app, 10), Ui.dp(app, 14), Ui.dp(app, 10));
-        r.setBackground(Ui.touchable(app, Ui.arrondi(app, p.surface2, 14, p.bord), 14));
-        TextView s = Ui.texte(app, SIGNES[Math.min(rang, 3)], 18, Aventure.accentTon(app, campagne.ton), true);
+        CadrePixel.Pave r = new CadrePixel.Pave(app, cp, u, true);
+        r.setOrientation(LinearLayout.HORIZONTAL);
+        r.setGravity(Gravity.CENTER_VERTICAL);
+        r.air(2 * u, 2 * u);
+        r.setMinimumHeight(Ui.dp(app, 48) + u);   // la cible tactile fait au moins 48 dp (l'ombre d'1 u en plus)
+        TextePixelVue s = pixelRecit("▶", cp.bord);
         s.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        r.encre(s, cp.bord);
         r.addView(s);
-        TextView t = Ui.texte(app, o.libelle, Ui.T_CORPS, p.texte, true);
-        t.setMaxLines(2);
-        t.setEllipsize(android.text.TextUtils.TruncateAt.END);
-        t.setPadding(Ui.dp(app, 12), 0, 0, 0);
+        TextePixelVue t = pixelRecit(o.libelle, cp.texte);
+        t.setPadding(2 * u, 0, 0, 0);
+        t.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        r.encre(t, cp.texte);
         r.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         r.setContentDescription("Choisir : " + o.libelle);
         r.setEnabled(!bloque);
-        Ui.enfoncer(r);
+        r.setClickable(true);
         r.setOnClickListener(v -> choisir(o, r));
         return r;
     }
@@ -747,7 +946,7 @@ final class Lecture extends FrameLayout {
             v.setEnabled(false);
             if (v != choisie) v.animate().alpha(0.25f).setDuration(140).start();
         }
-        choisie.setBackground(Ui.arrondi(app, p.bleu, 14, 0));
+        if (choisie instanceof CadrePixel.Pave) ((CadrePixel.Pave) choisie).forcer(true);   // le choix s'enfonce : fond « appuyé »
         Ui.vibrer(app, 8);
         Sons.jouer(app, Sons.CHOIX);
         postDelayed(() -> decider(() -> CampagnesTel.choisir(app, o.id)), Vitrine.anime(app) ? 170 : 0);

@@ -16,6 +16,9 @@ dans son coin sans te déranger (jamais pendant que tu tapes), joue, mange, pêc
 au fil de tes journées. Tout le reste est optionnel : de quoi le personnaliser et le faire vivre.
 Gratuit, sur Windows et Android, avec une progression partagée entre PC et téléphone.
 
+**Pour s'en servir** : clic gauche, une caresse ; clic droit, tout le reste. Le
+[mode d'emploi](docs/MODE-EMPLOI.md) suit le menu, porte par porte.
+
 - **vit en bas de l'écran sans déranger** : petites réactions discrètes, il bouge moins quand tu travailles ;
 - **un petit ami qui te suit, sur PC et dans la poche** : quelques mots rares et justes (trois par jour au plus sur
   PC, un le soir sur le téléphone, jamais pendant que tu tapes), une complicité qui grandit et ne baisse jamais, des
@@ -58,7 +61,7 @@ claude plugin install compagnon@pilou --scope user
 PC, sessions), **Jouer** (le jeu de tir **Chasse aux bugs**, pêche, cuisine, petits jeux),
 **Collection** (carnet, recettes, récompenses, style) et **Réglages** — plus la notification
 permanente, le widget et Pilou flottant par-dessus les applis. Les gains des jeux sont crédités au PC. Appairage par QR code depuis le PC (clic
-droit → Intégrations → Android), échanges chiffrés de bout en bout. Détails et tableau de ce qui est
+droit → Amis et appareils → Groupe d'appareils), échanges chiffrés de bout en bout. Détails et tableau de ce qui est
 sur le téléphone : [docs/ANDROID.md](docs/ANDROID.md).
 
 ## Le petit plus : il se branche à tes applis
@@ -143,7 +146,7 @@ vent fort ≈, chaleur ☼ (plus de 28 °C), froid ✻ (moins de 3 °C).
 
 ## Clavier, captures d'écran, notifications
 
-Clic droit → **Clavier, photo, notifications** (trois cases) :
+Clic droit → **Réglages** (clavier, appareil photo) et **Amis et appareils → Notifications Windows** :
 
 - **Tu tapes en rafale** : pouf de fumée, Pilou tourne lentement sur lui-même et réapparaît assis devant un mini
   clavier ; il tape avec toi, puis range tout après quelques secondes de calme, et se repose 10 min avant la
@@ -157,6 +160,9 @@ Clic droit → **Clavier, photo, notifications** (trois cases) :
 Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `notif:masque`).
 
 ## Clic droit sur Pilou
+
+Le menu est rangé en sept portes par intention ; le [mode d'emploi](docs/MODE-EMPLOI.md) dit où est chaque chose.
+Le détail de ce qu'on y trouve :
 
 - **Réglages** : taille, bulle détaillée ou compacte, thème, accessoire, couleur, promenade, jeux ;
 - **Pêcher, Cuisiner, Carnet de pêche, Livre de recettes** : clique sur le bouchon quand ça mord
@@ -183,7 +189,7 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   (pêche, cuisine, jeux, caresses, présence, et, une fois vus : tours Claude/Codex, commits, tests,
   score de Chasse aux bugs, activités). Elles rapportent des **pièces d'or (po)** et un peu d'XP ; les
   trois du jour ouvrent un coffre, les jours d'affilée font une série. `apps/PilouBureau/Quetes.cs` ;
-- **🛒 Boutique** (en tête du menu, gratuite, aucune vraie monnaie) : une boutique rétro rangée par
+- **Boutique** (clic sur le bandeau en tête du menu, gratuite, aucune vraie monnaie) : une boutique rétro rangée par
   **rayons** (Tête, Yeux, Cou, Dos, Main, Pieds, Compagnons, Effets, Couleurs, Décors, Bulles, Spéciaux),
   chaque rayon en **rangées de niveau** (1, 5, 10, 15, 20, 30, 40, 50) : le niveau ouvre la rangée, les
   pièces d'or achètent. 245 articles à collectionner (chapeaux, lunettes, sac à dos, ailes, jetpack, guitare,
@@ -194,14 +200,14 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   (⌛ jours restants ; hors saison, ils reviennent l'année suivante) et **de passage** (✧ trois jours par mois en
   vitrine), un **compteur de collection** dont les paliers offrent titres et cadres. Tout avoir demande des mois
   (environ un an de jeu régulier) ; un petit achat reste possible tous les jours ou deux. Vitrine d'offres du
-  jour (une à -25 %, la même sur le PC et le téléphone), cabine d'essayage (*Essayer / Acheter / Porter*). Le menu affiche « Boutique (N nouveautés) », un petit
+  jour (une à -25 %, la même sur le PC et le téléphone), cabine d'essayage (*Essayer / Acheter / Porter*). Le menu affiche « ✦ N nouveautés à la boutique » sous le bandeau, un petit
   sac apparaît près de Pilou quand une rangée s'ouvre ou qu'une offre attend, et le passage d'un palier
   ouvre « Rangées débloquées → Voir en boutique ». Un **bandeau** niveau / XP / po est en tête du menu,
   de la boutique et de l'info-bulle de Pilou. Rien de ce qui était déjà gagné n'est perdu ; pièces, objets
   et tenue sont partagés dans le groupe d'appareils. `apps/PilouBureau/Boutique.cs`, `FenetreBoutique.cs` ;
-- **Partager l'XP entre PC…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
+- **Réglages → Partager l'XP par un dossier…** : un dossier commun (OneDrive, partage réseau) ; chaque PC y écrit son
   fichier, le total fait les niveaux ;
-- **Intégrations → Partager l'XP entre mes appareils** (sans dossier commun : PC perso et PC de
+- **Amis et appareils → Groupe d'appareils → Partager l'XP entre mes appareils** (sans dossier commun : PC perso et PC de
   travail, téléphone) : un code de groupe de 16 caractères, le même que celui du téléphone. Sur un
   autre PC : *Rejoindre un groupe* et taper le code. Chaque appareil publie son propre compteur d'XP,
   chiffré, sur le relais ntfy (à chaque gain, au démarrage, puis toutes les heures) et garde la plus
@@ -226,9 +232,9 @@ Essayer : `PilouBureau.exe --devant --essai=clavier` (ou `photo`, `notif`, `noti
   son allure, son niveau et quelques anecdotes (cochable) ; tout est chiffré. Voir
   [docs/AMIS.md](docs/AMIS.md) ;
 - **Connecteurs…** : voir plus haut (météo, services, API locale) ;
-- **♥ Pilou et moi** : complicité (palier, jours ensemble), **Journal de Pilou** (une page par jour, feuilletable),
-  « Pilou me parle » (peu, normalement, jamais), tenir son journal, petits gestes de complicité, ton prénom ou un
-  surnom (facultatif, entre tes appareils seulement, jamais chez tes amis) ;
+- **Ce qui était « Pilou et moi »** : complicité (Progrès), **📖 Journal…** (une page par jour, feuilletable),
+  « Il me parle » (peu, normalement, jamais) et petits gestes de complicité (Il se montre), tenir son journal et ton
+  prénom ou un surnom (Réglages ; facultatif, entre tes appareils seulement, jamais chez tes amis) ;
 - **Démarrer avec Windows**, icône près de l'horloge, se cacher 10 min, redémarrer, quitter.
 
 Pilou vit sans Claude : il garde son XP lui-même et joue même si aucune IA ne tourne.

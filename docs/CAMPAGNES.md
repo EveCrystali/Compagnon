@@ -463,6 +463,11 @@ avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
 
 ## Les campagnes
 
-| Id | Titre | Ton | Niveau |
-|---|---|---|---|
-| `prologue` | La colline d'en face | humour | 1 |
+| Id | Titre | Ton | Niveau | Durée | Chapitres |
+|---|---|---|---|---|---|
+| `prologue` | La colline d'en face | humour | 1 | ≈ 15 minutes (court) | 2 |
+| `grande-panne` | La Grande Panne | humour | 3 | ≈ 8 jours | 10 |
+| `petit-nuage` | Petit Nuage | émotion | 5 | ≈ 10 jours | 12 |
+| `phare-eteint` | Le phare éteint | mystère | 8 | ≈ 10 jours | 12 |
+
+Source : le `campagne.json` de chaque dossier de `assets/campagnes/` (champs `niveau`, `duree`, `chapitres`).
