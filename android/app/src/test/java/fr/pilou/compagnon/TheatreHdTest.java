@@ -57,10 +57,10 @@ public class TheatreHdTest {
             assertNotNull(l, plan);
             assertEquals(l, Integer.parseInt(p[3]), d.w);
             assertEquals(l, Integer.parseInt(p[4]), d.h);
-            assertEquals(l, Integer.parseInt(p[5]), plan.images.length);
+            assertEquals(l, Integer.parseInt(p[5]), plan.nbImages());
             assertEquals(l, Integer.parseInt(p[6]), plan.duree);
-            for (int i = 0; i < plan.images.length; i++)
-                assertEquals(p[1] + " image " + i, Long.parseLong(p[7 + i]), Theatre.fnv(plan.images[i]));
+            for (int i = 0; i < plan.nbImages(); i++)
+                assertEquals(p[1] + " image " + i, Long.parseLong(p[7 + i]), Theatre.fnv(plan.image(i)));
             n++;
         }
         assertTrue(n + " décors", n >= 6);

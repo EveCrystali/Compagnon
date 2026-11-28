@@ -293,12 +293,29 @@ internal sealed class VueTheatre : Border
 
     // ---- Chaque image (la minuterie de la fenêtre)
 
+    // L'allure de base du Pilou fin : celle du joueur, relue toutes les cinq secondes ; le rendeur la copie à chaque image,
+    // donc la métamorphose peut changer son stade et son évolution d'une image à l'autre.
+    private Allure? _base;
+    private (int Avant, int Apres, double Debut)? _metamorphose;
+    public const double DureeMetamorphose = 4200;              // la même que l'évolution du bureau
+
+    // La métamorphose (scènes d'évolution, docs/SCENES.md) : Pilou garde son ancien stade jusqu'à debut, puis le bureau
+    // fond l'ancienne forme dans la nouvelle (Allure.Evolution de 0 à 1), puis il reste au nouveau stade.
+    public void Metamorphose(int avant, int apres, double debut) => _metamorphose = (avant, apres, debut);
+
     private Func<PoseHd, uint[]> RendrePilou(double now)
     {
         if (_rendre is null || now - _allureLue > 5000)
         {
             _allureLue = now;
-            _rendre = TheatreHd.RendeurPilou(Banque.Commune, _allure?.Invoke());
+            _base = _allure?.Invoke().Copie() ?? new Allure();
+            _rendre = TheatreHd.RendeurPilou(Banque.Commune, _base);
+        }
+        if (_metamorphose is { } m && _base is not null)
+        {
+            double f = (now - m.Debut) / DureeMetamorphose;
+            _base.Stade = f < 0 ? m.Avant : m.Apres;
+            _base.Evolution = f is > 0 and < 1 ? Math.Max(0.001, f) : 0;
         }
         return _rendre;
     }

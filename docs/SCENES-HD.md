@@ -6,8 +6,10 @@ Les sessions « paysages » et « personnages HD » produisent à ce format ; le
 `Theatre.cs`, `Theatre.java`) les lit à l'identique. Le format d'aujourd'hui (192 × 80) est décrit dans
 [SCENES.md](SCENES.md) ; il reste en service pendant la migration.
 
-Statut : **format décidé ; moteur de référence écrit** (`outils/sprites/theatre_hd.py`, branche `claude/theatre-hd`) ;
-PC et téléphone en cours.
+Statut : **moteur écrit et branché** sur PC et téléphone (branche `claude/theatre-hd`) : le prologue, La Grande Panne
+et Le phare éteint se jouent en HD (leurs décors HD existent) ; Petit Nuage et les scènes d'évolution restent à
+l'ancienne définition tant que leurs décors HD manquent. Captures : `docs/maquettes/animations/pc-prologue-hd-six-lieux.png`,
+`tel-prologue-mare-hd.png`, `pc-aventure-hd-zones.png`, `cadres-avant-apres-hd.png`.
 
 ## 1. L'unité et le cadre
 
@@ -134,6 +136,27 @@ acteurs qui réagissent (vol, traverse, rond…).
   Pilou, effets. Les plans fixes sont aplatis une fois.
 - Mesures à donner (avant / après, PC et test Java) : temps de chargement d'un décor, temps de composition d'une image,
   processeur du PC pendant une lecture.
+
+## 8 bis. Ce qui est mesuré, et la fenêtre
+
+| Mesure | Avant (192 × 80) | Après (HD 480 × 240) |
+|---|---|---|
+| Composer une image (test PC, Debug) | 0,08 ms | 0,16 ms avec le cache des plans de fond (0,53 ms sans) |
+| Composer une image (test Java sur le PC) | 0,14 ms | 0,18 ms |
+| Charger un décor (PC / Java) | — | 4 ms / 8 ms |
+| Processeur du PC, Aventure ouverte 20 s, processus entier | 12,5 à 13,2 % d'un cœur | 10,5 à 11,3 % d'un cœur |
+
+- **Mémoire** : un décor HD est gardé en indices de palette (un octet par pixel) sur le téléphone, au plus trois décors
+  et seize fonds aplatis en cache ; même borne de trois décors sur le PC.
+- **Fenêtre Aventure (PC)** : 1020 × 880 au plus, jamais plus grande que la zone de travail de l'écran. Quand la hauteur
+  manque, la boîte de dialogue passe de cinq à trois lignes, puis la scène est cadrée par le haut (le ciel est caché, le
+  sol et Pilou restent), à la même unité entière. `PILOU_ZONE_ESSAI=1366x728` simule une zone de travail.
+- **Personnages** : la variante de l'humeur du message (`pied-<campagne>-<id>-<humeur>`) quand elle est dessinée, sinon
+  la neutre (PC et téléphone).
+- **Essai** `--essai=lieu:<campagne>:<décor>` : la vue de scène seule ; elle écrit son rendu dans
+  `%TEMP%\pilou-lieu-<campagne>-<décor>.png` au bout de 4 s (captures).
+- **Scènes d'évolution** : la métamorphose est prête (Pilou entre sous son ancienne forme, le bureau fond l'ancienne forme
+  dans la nouvelle, puis il parle) ; elle se jouera quand les décors HD du fond du jardin existeront.
 
 ## 9. Nommage et outils
 

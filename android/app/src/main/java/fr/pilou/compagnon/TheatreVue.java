@@ -271,7 +271,7 @@ final class TheatreVue extends View {
         glisser = glisser && avait && vif() && !casse && hdNeuf == hd();
         try {
             Theatre.Contexte nouveau = hdNeuf
-                    ? new Theatre.Contexte(sceneHdNeuve, anims(), id -> fin(banque, id), TheatreHd::spriteHd)
+                    ? new Theatre.Contexte(sceneHdNeuve, anims(), id -> fin(banque, id), this::spriteHd)
                     : new Theatre.Contexte(sceneDe(campagne, decorId), anims(), id -> fin(banque, id));
             if (glisser) {
                 // Travelling : l'ancien lieu (sans Pilou) est gardé tel quel pour glisser.
@@ -362,6 +362,23 @@ final class TheatreVue extends View {
      * repart sans lui). Il se pose aussi pendant un travelling ou à animations réduites : il entre quand la scène
      * commence.
      */
+    /** L'humeur du message du personnage : en HD, il prend la variante dessinée pour elle (pied-<campagne>-<id>-<humeur>,
+     *  même toile et même ancre), sinon sa version neutre. Comme VueTheatre.SpriteHd (PC). */
+    private String persoHumeur = "";
+
+    private TheatreHd.SpriteHd spriteHd(String id) {
+        if (id.equals(persoVu) && !persoHumeur.isEmpty()) {
+            TheatreHd.SpriteHd v = TheatreHd.spriteHd(id + "-" + persoHumeur);
+            if (v != null) return v;
+        }
+        return TheatreHd.spriteHd(id);
+    }
+
+    void personnage(String campagne, String personnage, String humeur) {
+        persoHumeur = humeur == null ? "" : humeur;
+        personnage(campagne, personnage);
+    }
+
     void personnage(String campagne, String personnage) {
         if (cx == null || personnage == null || personnage.isEmpty()) return;
         String sid = "pied-" + campagne + "-" + personnage;

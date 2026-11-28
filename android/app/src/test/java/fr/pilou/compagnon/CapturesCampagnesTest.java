@@ -579,10 +579,12 @@ public class CapturesCampagnesTest {
             int k = l.unite();
             org.junit.Assert.assertEquals(Math.max(1, largeur / 192), k);
             org.junit.Assert.assertEquals(5, k);
-            // La scène : 192k × 80k, le décor entier ; Pilou y est à l'échelle du décor (même grille fine).
+            // La scène : le décor entier, à une unité entière ; ancien lieu 192k × 80k, lieu HD 480 × 240 à ×2
+            // (docs/SCENES-HD.md). Pilou y est à l'échelle du décor (même grille).
             org.junit.Assert.assertEquals(View.VISIBLE, l.theatre().getVisibility());
-            org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
-            org.junit.Assert.assertEquals(k, l.theatre().echelleDessinee());
+            int kScene = l.theatre().hd() ? 2 : k;
+            org.junit.Assert.assertEquals((l.theatre().hd() ? 240 : 80) * kScene, l.theatre().getHeight());
+            org.junit.Assert.assertEquals(kScene, l.theatre().echelleDessinee());
             // Le personnage est dessiné en pied dans la scène (même pixel, celui du théâtre) : pas de portrait par-dessus.
             // S'il n'était pas dessiné en pied, son portrait serait de 64k × 64k, k pixels d'écran par pixel fin.
             if (l.theatre().aPerso()) {

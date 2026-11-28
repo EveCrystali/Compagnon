@@ -209,6 +209,8 @@ public static class TheatreHd
         {
             if (Decors.TryGetValue(id, out var d)) return d;
             var t = Ressource("decor:" + id);
+            // Au plus trois décors gardés (≈ 18 Mo chacun en HD) : on repart de zéro au-delà.
+            if (Decors.Count >= 3) Decors.Clear();
             return Decors[id] = t is null ? null : LireDecorHd(t);
         }
     }

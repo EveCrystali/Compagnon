@@ -388,7 +388,18 @@ def _texte(v):
     return str(v)
 
 
+def campagnes_hd():
+    """Les campagnes qui ont au moins un décor HD et une fiche de scènes : on convertit leurs scènes."""
+    ids = set()
+    for f in os.listdir(os.path.join(ASSETS, "decors")):
+        for c in os.listdir(os.path.join(ASSETS, "scenes")):
+            c = c[:-4]
+            if f.startswith("decor-" + c + "-") and c != "animations":
+                ids.add(c)
+    return sorted(ids)
+
+
 if __name__ == "__main__":
-    for c in ("prologue", "grande-panne"):
+    for c in campagnes_hd():
         convertir_scenes(c)
     print(ecrire_reference(), "lignes dans theatre-hd-reference.txt")

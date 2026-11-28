@@ -21,18 +21,46 @@ public final class TheatreHd {
     public static final int PILOU_X = 48, PILOU_Y = 107, PILOU_W = 96, PILOU_H = 112;
 
     /** Un plan du décor : « fond » (sous les personnages) ou « devant » (par-dessus), animé sur `duree` ms par image. */
+    /** Un plan : ses images gardées en indices de palette (un octet par pixel, 0 = transparent) et non en couleurs, pour
+     *  la mémoire du téléphone (un décor HD à cinq plans de huit images : ≈ 4,6 Mo au lieu de ≈ 18 Mo). */
     public static final class Plan {
         public final String nom;
         public final int profondeur, duree;
         public final boolean devant;
-        public final int[][] images;
+        /** pal[0] = 0 (transparent) ; pal[i] : ARGB de l'indice i. */
+        final int[] pal;
+        final byte[][] ind;
 
-        Plan(String nom, int profondeur, boolean devant, int duree, int[][] images) {
+        Plan(String nom, int profondeur, boolean devant, int duree, int[] pal, byte[][] ind) {
             this.nom = nom;
             this.profondeur = profondeur;
             this.devant = devant;
             this.duree = duree;
-            this.images = images;
+            this.pal = pal;
+            this.ind = ind;
+        }
+
+        public int nbImages() {
+            return ind.length;
+        }
+
+        /** L'image k en ARGB à plat (0 : transparent), recalculée à chaque appel. */
+        public int[] image(int k) {
+            byte[] b = ind[k];
+            int[] im = new int[b.length];
+            for (int i = 0; i < b.length; i++) im[i] = pal[b[i] & 255];
+            return im;
+        }
+
+        /** Pose l'image k sur px (mélange alpha entier), sans la recopier. */
+        void calquer(int[] px, int k) {
+            byte[] b = ind[k];
+            for (int i = 0; i < b.length; i++) {
+                int c = pal[b[i] & 255];
+                if (c == 0) continue;
+                if ((c >>> 24) == 255) px[i] = c;
+                else melanger(px, i, c);
+            }
         }
     }
 
@@ -42,7 +70,13 @@ public final class TheatreHd {
         public final int w, h;
         public final List<Plan> plans;
         private final List<Plan> fonds = new ArrayList<>(), devants = new ArrayList<>();
-        private final Map<Long, int[]> aplatis = new HashMap<>();
+        // Au plus 16 fonds aplatis gardés (≈ 7 Mo en 480 × 240) : les plus anciens s'en vont.
+        private final Map<Long, int[]> aplatis = new LinkedHashMap<Long, int[]>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Long, int[]> e) {
+                return size() > 16;
+            }
+        };
 
         /** Ancre « ancre: x y » (sprites HD), ou null. */
         public final int[] ancre;
@@ -63,14 +97,14 @@ public final class TheatreHd {
             int[] idx = new int[fonds.size()];
             for (int i = 0; i < idx.length; i++) {
                 Plan p = fonds.get(i);
-                idx[i] = (int) Animations.imageDecor(p.images.length, p.duree, t, niveau);
+                idx[i] = (int) Animations.imageDecor(p.nbImages(), p.duree, t, niveau);
                 cle = cle * 64 + idx[i];
             }
             int[] f = cachable ? aplatis.get(cle) : null;
             if (f != null) return f;
             f = new int[w * h];
             Arrays.fill(f, 0xFF000000);
-            for (int i = 0; i < idx.length; i++) calque(f, fonds.get(i).images[idx[i]]);
+            for (int i = 0; i < idx.length; i++) fonds.get(i).calquer(f, idx[i]);
             if (cachable) aplatis.put(cle, f);
             return f;
         }
@@ -99,7 +133,7 @@ public final class TheatreHd {
         String nom = "";
         int prof = 0, duree = 0;
         Map<Character, Integer> palette = new HashMap<>();
-        List<int[]> images = new ArrayList<>();
+        List<byte[]> images = new ArrayList<>();
         int i = 0;
         while (i < lignes.length) {
             String l = lignes[i++];
@@ -110,7 +144,7 @@ public final class TheatreHd {
             if (cle.equals("id")) {
                 id = val;
             } else if (cle.equals("ancre")) {
-                String[] v = val.split("\s+");
+                String[] v = val.split("\\s+");
                 ancre = new int[]{Integer.parseInt(v[0]), Integer.parseInt(v[1])};
             } else if (cle.equals("taille")) {
                 String[] v = val.split("\\s+");
@@ -137,6 +171,7 @@ public final class TheatreHd {
             } else if (cle.equals("duree")) {
                 duree = Integer.parseInt(val);
             } else if (cle.equals("palette")) {
+                // La palette d'un plan : lettre → indice (1, 2, …) ; l'indice 0 est le transparent.
                 if (!val.isEmpty())
                     for (String paire : val.split("\\s+")) {
                         int eg = paire.indexOf('=');
@@ -144,9 +179,16 @@ public final class TheatreHd {
                     }
             } else if (cle.equals("images")) {
                 int n = Integer.parseInt(val);
-                int[] prec = null;
+                java.util.List<Character> lettres = new ArrayList<>(palette.keySet());
+                int[] pal = new int[lettres.size() + 1];
+                Map<Character, Integer> indice = new HashMap<>();
+                for (int q = 0; q < lettres.size(); q++) {
+                    pal[q + 1] = palette.get(lettres.get(q));
+                    indice.put(lettres.get(q), q + 1);
+                }
+                byte[] prec = null;
                 for (int k = 0; k < n; k++) {
-                    int[] im = new int[w * h];
+                    byte[] im = new byte[w * h];
                     for (int y = 0; y < h; y++) {
                         int x = 0, nb = 0, o = y * w;
                         String ligne = lignes[i];
@@ -160,9 +202,9 @@ public final class TheatreHd {
                             if (ch == '.') {
                                 System.arraycopy(prec, o + x, im, o + x, nb);
                             } else if (ch != ',') {
-                                Integer pc = palette.get(ch);
+                                Integer pc = indice.get(ch);
                                 if (pc == null) throw new IllegalArgumentException(id + " : couleur « " + ch + " » inconnue");
-                                Arrays.fill(im, o + x, o + x + nb, pc);
+                                Arrays.fill(im, o + x, o + x + nb, (byte) (int) pc);
                             }
                             x += nb;
                             nb = 0;
@@ -173,14 +215,21 @@ public final class TheatreHd {
                     images.add(im);
                     prec = im;
                 }
-                plans.add(new Plan(nom, prof, devant, duree, images.toArray(new int[0][])));
+                plans.add(new Plan(nom, prof, devant, duree, pal, images.toArray(new byte[0][])));
                 enPlan = false;
             }
         }
         return new Decor(id, w, h, plans, ancre);
     }
 
-    private static final Map<String, Decor> DECORS = new HashMap<>();
+    // Au plus trois décors décodés gardés (un décor HD à cinq plans de huit images pèse ≈ 18 Mo) : le lieu courant, le
+    // précédent (travelling) et un de plus ; les plus anciens s'en vont.
+    private static final Map<String, Decor> DECORS = new LinkedHashMap<String, Decor>(4, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, Decor> e) {
+            return size() > 3;
+        }
+    };
 
     /** Le décor assets/decors/decor-<campagne>-<décor>.txt, décodé une seule fois ; null s'il n'existe pas. */
     public static synchronized Decor decor(String campagne, String decor) {
@@ -212,7 +261,9 @@ public final class TheatreHd {
             ax = d.ancre != null ? d.ancre[0] : d.w / 2;
             ay = d.ancre != null ? d.ancre[1] : d.h - 1;
             duree = d.plans.get(0).duree;
-            images = d.plans.get(0).images;
+            Plan p0 = d.plans.get(0);
+            images = new int[p0.nbImages()][];
+            for (int k = 0; k < images.length; k++) images[k] = p0.image(k);
         }
     }
 
@@ -375,7 +426,7 @@ public final class TheatreHd {
             }
         }
         if (decor != null)
-            for (Plan p : decor.devants) calque(px, p.images[(int) Animations.imageDecor(p.images.length, p.duree, t, niveau)]);
+            for (Plan p : decor.devants) p.calquer(px, (int) Animations.imageDecor(p.nbImages(), p.duree, t, niveau));
         for (Theatre.Pose q : Theatre.effets(cx, evts, t, niveau))
             poserHd(px, w, h, cx.hd.apply(q.sprite), q.image, q.x, q.y, q.miroir);
         return px;

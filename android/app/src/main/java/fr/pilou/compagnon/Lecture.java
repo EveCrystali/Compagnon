@@ -980,7 +980,7 @@ final class Lecture extends FrameLayout {
         try {
             Campagnes.Noeud n = campagne == null ? null : campagne.noeud(m.noeud);
             Sprites.Sprite s = n == null ? null : Animations.portrait(Sprites.banque(), campagne.id, n.personnage, n.expression, 2);
-            if (n != null) theatre.personnage(campagne.id, n.personnage);
+            if (n != null) theatre.personnage(campagne.id, n.personnage, n.expression);
             // Dessiné en pied dans la scène : pas de portrait par-dessus (il le cacherait) ; sinon le portrait reste.
             if (theatre.aPerso()) s = null;
             perso.montrer(s, s == null ? "" : ScenesAnimees.nomPersonnage(n.personnage));
