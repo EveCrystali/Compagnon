@@ -47,9 +47,11 @@ final class SceneEvolution extends FrameLayout {
         return "evolution.garde." + stade;
     }
 
-    /** L'id de ce que Pilou a gardé à ce stade, ou null si la scène n'a jamais été jouée jusqu'au choix. */
+    /** L'id de ce que Pilou a gardé à ce stade, ou null si la scène n'a jamais été jouée jusqu'au choix : celui que
+     *  le PC connaît d'abord (synchronisé, il ne change plus), sinon celui fait ici et pas encore reçu par le PC. */
     static String garde(android.content.Context c, int stade) {
-        return Prefs.de(c).getString(cle(stade), null);
+        String pc = Prefs.etat(c).gardes.get(stade);
+        return pc != null ? pc : Prefs.de(c).getString(cle(stade), null);
     }
 
     /** La variante du stade venue du PC (calin | espiegle), sinon « calin ». */
@@ -71,7 +73,7 @@ final class SceneEvolution extends FrameLayout {
         setBackgroundColor(p.fond);
         setClickable(true);
         setContentDescription("Évolution de Pilou : " + sc.titre);
-        Musique.suivre(this, () -> "evolution", () -> "emotion", () -> sc.decor);   // docs/SONS.md
+        Musique.suivre(this, () -> "evolution", () -> "emotion", () -> sc.decor, () -> sc.musique.isEmpty() ? null : sc.musique);   // docs/SONS.md
 
         LinearLayout colonne = Ui.pile(a);
         addView(colonne, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -295,7 +297,10 @@ final class SceneEvolution extends FrameLayout {
         Ui.vibrer(app, 8);
         Sons.jouer(app, Sons.CHOIX);
         // La première fois seulement : ce que Pilou garde ne change plus ensuite.
-        if (garde(app, sc.stade) == null) Prefs.de(app).edit().putString(cle(sc.stade), o.id).apply();
+        if (garde(app, sc.stade) == null) {
+            Prefs.de(app).edit().putString(cle(sc.stade), o.id).apply();
+            Gains.garde(app, sc.stade, o.id);      // il part au PC, qui le partage avec les autres appareils
+        }
         List<Evolutions.Replique> toutes = Evolutions.deroule(sc, variante, o.id);
         int deja = repliques.size() - 1;   // la question n'est pas dans le déroulé complet
         repliques = new ArrayList<>(toutes.subList(Math.min(deja, toutes.size()), toutes.size()));

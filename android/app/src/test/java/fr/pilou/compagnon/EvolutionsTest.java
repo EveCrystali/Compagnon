@@ -31,7 +31,7 @@ public class EvolutionsTest {
     private static List<String> recalculer(Map<Integer, Evolutions.Scene> scenes) {
         List<String> l = new ArrayList<>();
         for (Evolutions.Scene sc : scenes.values()) {
-            l.add("scene " + sc.stade + " " + sc.decor + " | " + sc.titre + " | " + sc.question);
+            l.add("scene " + sc.stade + " " + sc.decor + " | " + sc.titre + " | " + sc.question + " | " + (sc.musique.isEmpty() ? "-" : sc.musique));
             for (Evolutions.Option o : sc.options) l.add("option " + o.id + " " + o.libelle);
             List<String> variantes = new ArrayList<>(java.util.Arrays.asList(Evolutions.VARIANTES));
             variantes.add("autre");

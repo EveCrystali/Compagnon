@@ -54,6 +54,8 @@ final class Evolutions {
     static final class Scene {
         final int stade;
         String titre = "", decor = "", question = "";
+        /** Morceau de assets/musiques.txt (docs/SONS.md) ; vide : la boucle du ton « émotion ». */
+        String musique = "";
         final List<Option> options = new ArrayList<>();
         final List<Element> elements = new ArrayList<>();
 
@@ -92,6 +94,8 @@ final class Evolutions {
                 sc.titre = reste;
             } else if (mot.equals("decor")) {
                 sc.decor = reste;
+            } else if (mot.equals("musique")) {
+                sc.musique = reste;
             } else if (mot.equals("pilou") || mot.equals("calin") || mot.equals("espiegle")) {
                 String[] ht = partager(reste);
                 sc.elements.add(new Element(mot, "", ht[0], ht[1]));

@@ -32,7 +32,8 @@ public static class Groupe
         string ExpJour = "", int ExpNombre = 0, double ExpLibre = 0,
         IReadOnlyDictionary<string, long>? Secondes = null, IReadOnlyList<string>? SuccesObtenus = null,
         IReadOnlyDictionary<string, int>? MetiersPayes = null,
-        int Clavier = 0, int Captures = 0, int Presentations = 0, int DefRecord = 0, int DefVague = 0, int DefBoss = 0)
+        int Clavier = 0, int Captures = 0, int Presentations = 0, int DefRecord = 0, int DefVague = 0, int DefBoss = 0,
+        IReadOnlyDictionary<int, string>? GardesEvolution = null)
     {
         public IReadOnlyDictionary<string, long> Temps => Secondes ?? new Dictionary<string, long>();
         public IReadOnlyList<string> Succes => SuccesObtenus ?? Array.Empty<string>();
@@ -53,6 +54,8 @@ public static class Groupe
         };
         public IReadOnlyList<ActionSoin> Actions => SoinsActions ?? Array.Empty<ActionSoin>();
         public IReadOnlyDictionary<int, string> Formes => Variantes ?? new Dictionary<int, string>();
+        // Ce que Pilou a gardé à chaque évolution (scènes d'évolution) : le premier choix l'emporte, partout pareil.
+        public IReadOnlyDictionary<int, string> Gardes => GardesEvolution ?? new Dictionary<int, string>();
         public IReadOnlyList<string> Objets => Inventaire ?? Array.Empty<string>();
         public IReadOnlyDictionary<string, Port> Porte => Equipe ?? new Dictionary<string, Port>();
     }
@@ -129,6 +132,7 @@ public static class Groupe
                 SoinsActions = avant.Actions.Concat(c.Actions).GroupBy(a => a.Id).Select(g => g.First())
                     .OrderByDescending(a => a.T).Take(40).ToList(),
                 Variantes = FusionVariantes(new[] { avant.Formes, c.Formes }),
+                GardesEvolution = FusionGardes(new[] { avant.Gardes, c.Gardes }),
                 // Expéditions : départs du jour le plus récent (au maximum), fin de repos la plus tardive.
                 ExpJour = string.CompareOrdinal(c.ExpJour, avant.ExpJour) > 0 ? c.ExpJour : avant.ExpJour,
                 ExpNombre = c.ExpJour == avant.ExpJour ? Math.Max(c.ExpNombre, avant.ExpNombre)
@@ -139,7 +143,7 @@ public static class Groupe
                           || fusion.PoGagnes != avant.PoGagnes || fusion.PoDepenses != avant.PoDepenses || fusion.PoDepTel != avant.PoDepTel
                           || fusion.Objets.Count != avant.Objets.Count || fusion.NiveauAcquis != avant.NiveauAcquis
                           || fusion.Prises.Count != avant.Prises.Count || fusion.Plats.Count != avant.Plats.Count || fusion.Nom != avant.Nom
-                          || fusion.Actions.Count != avant.Actions.Count || fusion.Formes.Count != avant.Formes.Count
+                          || fusion.Actions.Count != avant.Actions.Count || fusion.Formes.Count != avant.Formes.Count || fusion.Gardes.Count != avant.Gardes.Count
                           || (fusion.SoinsBase?.T ?? 0) != (avant.SoinsBase?.T ?? 0)
                           || fusion.ExpJour != avant.ExpJour || fusion.ExpNombre != avant.ExpNombre || fusion.ExpLibre != avant.ExpLibre
                           || !MemesValeurs(fusion.Temps, avant.Temps) || fusion.Succes.Count != avant.Succes.Count
@@ -182,6 +186,36 @@ public static class Groupe
         return r;
     }
 
+    // Choix gardés des scènes d'évolution : le premier enregistré ne change plus. Deux choix différents au même stade
+    // (deux appareils hors ligne en même temps) se départagent par l'ordre alphabétique, partout pareil. Ids bornés.
+    public static Dictionary<int, string> FusionGardes(IEnumerable<IReadOnlyDictionary<int, string>> toutes)
+    {
+        var r = new Dictionary<int, string>();
+        foreach (var v in toutes)
+            foreach (var (stade, id) in v)
+                if (GardeValide(stade, id) && (!r.TryGetValue(stade, out var avant) || string.CompareOrdinal(id, avant) < 0))
+                    r[stade] = id;
+        return r;
+    }
+
+    public static bool GardeValide(int stade, string? id) =>
+        stade is >= 2 and <= 4 && id is { Length: > 0 and <= 24 } && id.All(ch => ch is >= 'a' and <= 'z' or '-');
+
+    // Lecture d'un objet JSON { "2": "tache", … } (compteur du groupe, gain du téléphone).
+    public static Dictionary<int, string> LireGardes(JsonElement r)
+    {
+        var g = new Dictionary<int, string>();
+        if (!r.TryGetProperty("gardes", out var ga) || ga.ValueKind != JsonValueKind.Object) return g;
+        foreach (var x in ga.EnumerateObject())
+            if (int.TryParse(x.Name, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var st)
+                && x.Value.ValueKind == JsonValueKind.String && GardeValide(st, x.Value.GetString()))
+                g[st] = x.Value.GetString()!;
+        return g;
+    }
+
+    public static Dictionary<string, string> JsonGardes(IReadOnlyDictionary<int, string> g) =>
+        g.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value);
+
     public static Compteur Moi(Profil p, string appareil, string nom) => new(
         appareil, nom, p.Machine, p.Xp, p.XpTelephone, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
         p.Carnet.Where(kv => kv.Value > 0).Select(kv => kv.Key).OrderBy(x => x).ToList(),
@@ -192,7 +226,8 @@ public static class Groupe
         p.Expedition.Jour, p.Expedition.Nombre, p.Expedition.Libre,
         new Dictionary<string, long>(p.Activites.Where(kv => kv.Value > 0)), p.Succes.Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList(),
         new Dictionary<string, int>(p.MetiersPayes.Where(kv => kv.Value > 0)),
-        p.SeancesClavier, p.Captures, p.Presentations, p.Defense.Meilleur, p.Defense.MeilleureVague, p.Defense.Boss);
+        p.SeancesClavier, p.Captures, p.Presentations, p.Defense.Meilleur, p.Defense.MeilleureVague, p.Defense.Boss,
+        new Dictionary<int, string>(p.Evolution.Gardes));
 
     // JSON du compteur, au plus : chiffré (nonce et étiquette, puis base64), il reste sous Telephone.TailleMax
     // (4 × (2 750 + 28) / 3 ≈ 3 704 octets). Le JSON n'a que des caractères ASCII (accents échappés).
@@ -218,6 +253,7 @@ public static class Groupe
         },
         ["exp"] = new Dictionary<string, object> { ["j"] = c.ExpJour, ["n"] = c.ExpNombre, ["l"] = c.ExpLibre },
         ["formes"] = c.Formes.ToDictionary(kv => kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture), kv => kv.Value),
+        ["gardes"] = JsonGardes(c.Gardes),
         ["v"] = 1, ["appareil"] = c.Appareil, ["nom"] = c.Nom, ["machine"] = c.Machine, ["xp"] = c.Xp,
         ["xpTel"] = c.XpTelephone, ["t"] = c.T, ["prises"] = c.Prises, ["plats"] = c.Plats,
         ["po"] = c.PoGagnes, ["poDep"] = c.PoDepenses, ["poDepTel"] = c.PoDepTel, ["objets"] = Boutique.HorsGarde(c.Objets), ["garde"] = Boutique.Garde(c.Objets), ["nivPaye"] = c.NiveauPaye, ["nivAcquis"] = c.NiveauAcquis,
@@ -306,7 +342,7 @@ public static class Groupe
                 N("po"), N("poDep"), N("poDepTel"), L("objets", 300).Concat(Boutique.Deplier(S("garde"))).Distinct()
                     .Where(x => Boutique.Trouver(x) is not null).ToList(), equipe, N("nivPaye"), Math.Min(200, N("nivAcquis")),
                 soinsBase, origine, actions, formes, expJour, expNombre, expLibre,
-                secondes, succes, payes, cpt[0], cpt[1], cpt[2], cpt[3], cpt[4], cpt[5]);
+                secondes, succes, payes, cpt[0], cpt[1], cpt[2], cpt[3], cpt[4], cpt[5], LireGardes(r));
         }
         catch (JsonException)
         {

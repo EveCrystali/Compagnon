@@ -216,6 +216,7 @@ public sealed partial class FenetrePilou
             {
                 change |= Soins.Fusionner(_profil.Soins, autre.Soins.Base, autre.Soins.Origine, autre.Soins.Actions);
                 change |= FusionnerVariantes(autre.Evolution.Variantes);
+                change |= FusionnerGardes(autre.Evolution.Gardes);
             }
             if (change)
             {
@@ -236,6 +237,16 @@ public sealed partial class FenetrePilou
         return true;
     }
 
+    // Les choix gardés des scènes d'évolution (autres PC du dossier, groupe) : le premier l'emporte.
+    private bool FusionnerGardes(IReadOnlyDictionary<int, string> autres)
+    {
+        var avant = _profil.Evolution.Gardes;
+        var fusion = Groupe.FusionGardes(new[] { (IReadOnlyDictionary<int, string>)avant, autres });
+        if (fusion.Count == avant.Count && fusion.All(kv => avant.GetValueOrDefault(kv.Key) == kv.Value)) return false;
+        _profil.Evolution.Gardes = fusion;
+        return true;
+    }
+
     // Un compteur du groupe reçu : ses soins et ses variantes rejoignent les nôtres.
     private void RecevoirSoinsGroupe(IEnumerable<Groupe.Compteur> compteurs)
     {
@@ -244,6 +255,7 @@ public sealed partial class FenetrePilou
         {
             change |= Soins.Fusionner(_profil.Soins, c.SoinsBase, c.SoinsOrigine, c.Actions);
             change |= FusionnerVariantes(c.Formes);
+            change |= FusionnerGardes(c.Gardes);
         }
         if (!change) return;
         SoinsChanges();

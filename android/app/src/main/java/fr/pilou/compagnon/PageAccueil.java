@@ -463,6 +463,8 @@ final class PageAccueil extends Page {
     /** Une fois l'animation finie, l'étiquette « tu veux voir ? » (une seule fois par évolution vue) ; rien ne s'ouvre tout seul. */
     private void proposerEvolution(int stade) {
         if (Evolutions.scenes().get(stade) == null) return;
+        // Déjà vue (ici ou sur le PC) : son choix est connu, on ne la propose plus (elle reste au Carnet).
+        if (SceneEvolution.garde(app, stade) != null) return;
         evolutionStade = stade;
         pilou.postDelayed(() -> {
             if (evolutionStade != stade) return;

@@ -110,4 +110,27 @@ public class SceneEvolutionTest {
         assertEquals("espiegle", SceneEvolution.varianteDe(ctx, 2));
         assertEquals("calin", SceneEvolution.varianteDe(ctx, 3));
     }
+
+    @Test
+    public void leChoixDuPcPrimeEtCeluiDuTelephonePartAuPc() throws Exception {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        // Le téléphone choisit : gardé ici, et mis dans la file des gains pour le PC.
+        Gains.garde(ctx, 3, "etincelle");
+        Gains.garde(ctx, 9, "x");                       // stade inconnu : rien
+        org.json.JSONArray f = new org.json.JSONArray(Prefs.de(ctx).getString("gains", "[]"));
+        assertEquals("etincelle", f.getJSONObject(f.length() - 1).getJSONObject("gardes").getString("3"));
+        assertEquals(1, f.getJSONObject(f.length() - 1).getJSONObject("gardes").length());
+        Prefs.de(ctx).edit().putString(SceneEvolution.cle(2), "tache").commit();
+        assertEquals("tache", SceneEvolution.garde(ctx, 2));
+        // Le PC connaît un autre choix (fait ailleurs avant) : c'est lui qui compte, partout.
+        long t = System.currentTimeMillis();
+        String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"x\",\"couleur\":\"bleu\",\"humeur\":\"repos\","
+                + "\"calmes\":0,\"sessions\":[],\"xp\":3900,\"accessoire\":\"\",\"carnet\":[],\"plats\":[],\"recus\":[],\"po\":0,"
+                + "\"objets\":[],\"porte\":{},\"stade\":3,\"gardes\":{\"2\":\"ploc\",\"4\":\"Mauvais!\"}}";
+        Prefs.de(ctx).edit().putString("etat", etat).putLong("recu", t).commit();
+        assertEquals("ploc", SceneEvolution.garde(ctx, 2));
+        assertEquals(null, SceneEvolution.garde(ctx, 4));
+        assertEquals(null, SceneEvolution.garde(ctx, 3));   // choisi ici mais pas encore pris dans la scène : rien de gardé
+    }
 }

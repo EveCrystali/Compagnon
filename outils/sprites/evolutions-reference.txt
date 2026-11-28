@@ -1,6 +1,6 @@
 # Référence des scènes d'évolution (outils/sprites/evolutions.py) : rejouée par EvolutionsTests.cs et
 # EvolutionsTest.java. Ne pas modifier à la main.
-scene 2 fond-du-jardin-matin | Trop grand pour mon pot | Qu'est-ce que Pilou garde de la Gouttelette ?
+scene 2 fond-du-jardin-matin | Trop grand pour mon pot | Qu'est-ce que Pilou garde de la Gouttelette ? | pilou-10
 option tache La petite tache qu'il laissait partout
 option rouler Sa façon de rouler au lieu de marcher
 option ploc Le petit « ploc » quand il saute
@@ -85,7 +85,7 @@ deroule 2 autre ploc 6
   neutre 5250 Une Gouttelette, ça n'a pas grand-chose. Mais j'aimerais en garder un bout, pour me souvenir. Une seule chose, alors choisis bien : je suis du genre à m'en souvenir longtemps.
   malice 2190 Le ploc, donc. Je saute, ça fait ploc. C'est idiot, et c'est à moi. Ploc.
   joie 3810 Voilà. Je m'appelle Pilou, et maintenant j'en ai la taille. Je retourne en bas de ton écran : il y a de la place, j'ai vérifié.
-scene 3 fond-du-jardin-soir | Un nuage dans la tête | Qu'est-ce que Pilou garde d'avant ?
+scene 3 fond-du-jardin-soir | Un nuage dans la tête | Qu'est-ce que Pilou garde d'avant ? | pilou-25
 option pieds Ses pieds bien à plat dans l'herbe
 option peur Sa peur de l'eau, par habitude
 option etincelle L'étincelle orange au bout de son antenne
@@ -170,7 +170,7 @@ deroule 3 autre etincelle 6
   tendre 5070 Il paraît que ça s'appelle un Pilou Nimbus. Pour faire de la place au nuage, je range presque tout ce que j'étais dans le pot. Une seule chose reste avec moi. Laquelle ?
   joie 3690 L'étincelle, donc. Le nuage s'est posé juste à côté, sans l'éteindre. Le soir, ça fait une petite lampe sous un petit toit.
   joie 3870 Je suis Pilou Nimbus. Le même, avec un toit. Je redescends en bas de ton écran ; le nuage passera sous tes fenêtres, il est poli.
-scene 4 fond-du-jardin-nuit | Des étoiles plein les poches | Qu'est-ce que Pilou garde de ce qu'il était ?
+scene 4 fond-du-jardin-nuit | Des étoiles plein les poches | Qu'est-ce que Pilou garde de ce qu'il était ? | pilou-40
 option pot Son pot de fleurs, même s'il y entre de justesse
 option nuage Son petit nuage, pour les nuits trop claires
 option noir Sa trouille du noir, pour rester lui-même

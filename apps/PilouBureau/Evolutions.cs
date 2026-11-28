@@ -20,6 +20,8 @@ public static class Evolutions
         public int Stade { get; init; }
         public string Titre { get; set; } = "";
         public string Decor { get; set; } = "";
+        // Morceau de assets/musiques.txt (docs/SONS.md) ; vide : la boucle du ton « émotion ».
+        public string Musique { get; set; } = "";
         public string Question { get; set; } = "";
         public List<(string Id, string Libelle)> Options { get; } = new();
         public List<Element> Elements { get; } = new();
@@ -49,6 +51,9 @@ public static class Evolutions
                     break;
                 case "decor":
                     sc.Decor = reste;
+                    break;
+                case "musique":
+                    sc.Musique = reste;
                     break;
                 case "pilou" or "calin" or "espiegle":
                 {
