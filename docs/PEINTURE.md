@@ -126,6 +126,14 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
   trouve à la même distance au-dessus de la ligne `axe`. Il ne voit que les plans déjà terminés (`tab.derriere()`), pas
   le plan en cours. Une lumière colorée dans un sol clair ne se lit pas en mélange (`voile` retombe sur le beige) : la
   poser en traînées de ton franc (`P.remplir` sur un tirage `hz` par ligne).
+- **Une lumière calculée plutôt que posée après coup** (`decors_hd_phare_eteint.py`, troisième passe) :
+  `lumiere(P, sources)` donne à chaque pixel sa part de lumière, et chaque surface se peint par
+  `P.rampe(masque, teinte × lumière, rampe)` avec une rampe qui va de l'ombre froide à la lumière chaude (`R_BOIS`,
+  `R_GRANIT`, `R_PLATRE`, `R_FROID`…). Une ombre portée se retire de la lumière avant de peindre le sol. Les matières :
+  `lames` (planches veinées, nœuds, joints), `appareil` (pierres de taille au biseau éclairé), `enduit`, `plancher`,
+  `paves` (dalles mouillées, lune et feux), `flammes`, `fumerolle`, `boule_verre`, `cylindre`, `lisere`. Piège :
+  `voile` et `teinte` choisissent le ton le plus proche parmi tous les tons du décor, herbe comprise ; sur un mur gris
+  ou une brume, ils tirent vers le sarcelle. Peindre alors la brume en tons pleins (`nappe` dans `port_trebrume`).
 - **Les bêtes qui réagissent sont des acteurs, pas du décor** : grenouille, canard, escargot (et ce que la scène rend
   cliquable) sont dessinés par la session des personnages (`assets/sprites-hd/acteur-*.txt`) et posés par la scène.
   Le décor peint leur place (le nénuphar, la feuille, l'eau) et la laisse vide.
