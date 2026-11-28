@@ -18,7 +18,7 @@ public class EvolutionsTests
         var obtenu = new List<string>();
         foreach (var (stade, sc) in scenes)
         {
-            obtenu.Add($"scene {stade} {sc.Decor} | {sc.Titre} | {sc.Question}");
+            obtenu.Add($"scene {stade} {sc.Decor} | {sc.Titre} | {sc.Question} | {(sc.Musique == "" ? "-" : sc.Musique)}");
             foreach (var (id, lib) in sc.Options) obtenu.Add($"option {id} {lib}");
             foreach (var v in new[] { "calin", "espiegle", "autre" })
             foreach (var choix in new string?[] { null }.Concat(sc.Options.Select(o => o.Id)))

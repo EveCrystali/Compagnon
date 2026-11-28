@@ -43,13 +43,19 @@ internal sealed class FenetreScene : Window
         // La scène à ×4 (768 × 320) : la fenêtre tient sur un écran de portable à 125 % ; sa taille ne bouge pas d'une
         // réplique à l'autre (la boîte prend la place qui reste).
         Width = 830;
-        Height = 670;
+        Height = 640;
         ResizeMode = ResizeMode.CanMinimize;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Background = Fond;
         UseLayoutRounding = true;
         SnapsToDevicePixels = true;
         ShowInTaskbar = true;
+        // Habillage maison : pas de barre de titre Windows (claire, système) au-dessus du pixel sombre ; la tête de la
+        // fenêtre est dessinée ici (titre, ✕), on la déplace en la tirant, Échap ferme.
+        WindowStyle = WindowStyle.None;
+        ResizeMode = ResizeMode.NoResize;
+        BorderBrush = Bandeau.Bord;
+        BorderThickness = new Thickness(2);
 
         _theatre = new VueTheatre(() => AnimationsCampagne.Niveau(pilou.AnimationsCampagnes, Bandeau.Anime),
             () => RenduPilou.Teinte(pilou.AllurePortrait("repos", 0), Banque.Commune));
@@ -61,8 +67,27 @@ internal sealed class FenetreScene : Window
         racine.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         racine.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-        var titre = new TextePixel(sc.Titre, Bandeau.OrangePo) { Taille = 3, Titre = true, Margin = new Thickness(0, 0, 0, 10) };
-        racine.Children.Add(titre);
+        var tete = new Grid { Margin = new Thickness(0, 0, 0, 10), Background = Brushes.Transparent, Cursor = Cursors.SizeAll };
+        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        tete.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        tete.Children.Add(new TextePixel(sc.Titre, Bandeau.OrangePo) { Taille = 3, Titre = true, VerticalAlignment = VerticalAlignment.Center });
+        var croix = new TextePixel("✕", CadrePixel.Texte) { Taille = 2 };
+        var fermer = new CadrePixel { U = 2, Child = croix, Cursor = Cursors.Hand, VerticalAlignment = VerticalAlignment.Center, ToolTip = "Fermer (Échap)" };
+        fermer.Change += () => croix.Couleur = fermer.Survol ? CadrePixel.SurvolTexte : CadrePixel.Texte;
+        fermer.MouseEnter += (_, _) => fermer.Survol = true;
+        fermer.MouseLeave += (_, _) => fermer.Survol = false;
+        fermer.MouseLeftButtonDown += (_, e) =>
+        {
+            e.Handled = true;
+            Close();
+        };
+        Grid.SetColumn(fermer, 1);
+        tete.Children.Add(fermer);
+        tete.MouseLeftButtonDown += (_, e) =>
+        {
+            if (e.ButtonState == MouseButtonState.Pressed) DragMove();
+        };
+        racine.Children.Add(tete);
 
         var scene = new Border { BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(2), HorizontalAlignment = HorizontalAlignment.Center, Child = _theatre };
         Grid.SetRow(scene, 1);
@@ -92,7 +117,8 @@ internal sealed class FenetreScene : Window
             else if (e.Key is >= Key.D1 and <= Key.D3 && _options.Children.Count > 0) Choisir(e.Key - Key.D1);
             else if (e.Key is >= Key.NumPad1 and <= Key.NumPad3 && _options.Children.Count > 0) Choisir(e.Key - Key.NumPad1);
         };
-        Musique.Suivre(this, () => "evolution", () => "emotion", () => _sc.Decor); // docs/SONS.md : la musique du ton « émotion »
+        // docs/SONS.md : le thème de Pilou de ce stade (champ « musique »), sinon la boucle du ton « émotion ».
+        Musique.Suivre(this, () => "evolution", () => "emotion", () => _sc.Decor, () => _sc.Musique == "" ? null : _sc.Musique);
         _minuterie = new DispatcherTimer(DispatcherPriority.Render, Dispatcher) { Interval = TimeSpan.FromMilliseconds(30) };
         _minuterie.Tick += (_, _) => Avancer();
         _minuterie.Start();

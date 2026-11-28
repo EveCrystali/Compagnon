@@ -73,7 +73,7 @@ final class SceneEvolution extends FrameLayout {
         setBackgroundColor(p.fond);
         setClickable(true);
         setContentDescription("Évolution de Pilou : " + sc.titre);
-        Musique.suivre(this, () -> "evolution", () -> "emotion", () -> sc.decor);   // docs/SONS.md
+        Musique.suivre(this, () -> "evolution", () -> "emotion", () -> sc.decor, () -> sc.musique.isEmpty() ? null : sc.musique);   // docs/SONS.md
 
         LinearLayout colonne = Ui.pile(a);
         addView(colonne, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
