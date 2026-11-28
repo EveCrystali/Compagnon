@@ -94,7 +94,7 @@ Sur le téléphone : l'Accueil (Pilou, ses soins, l'état du PC), **Aventure**, 
 ## Le reste
 
 **⚙ Réglages ▸** : ton prénom (facultatif, il reste entre tes appareils), les activités que Pilou reconnaît, il tape
-avec toi au clavier, appareil photo à chaque capture, thème de la bulle, démarrer avec Windows, icône près de
+avec toi au clavier, appareil photo à chaque capture, thème de la bulle et du menu (sombre par défaut), démarrer avec Windows, icône près de
 l'horloge, partager l'XP par un dossier, version et mises à jour, redémarrer, et ce mode d'emploi.
 
 Si Pilou ne répond plus : clic droit sur son icône près de l'horloge (*Afficher / ramener Pilou*, *Redémarrer*).
