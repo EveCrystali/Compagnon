@@ -92,14 +92,15 @@ class Feuille:
             return r.t[i + 1]
         return r.t[i + 1] if (fr - lo) / (hi - lo) > seuil(X - self.ox, Y - self.oy) else r.t[i]
 
-    def forme(self, dedans, boite, matiere, val=None, ton=None, trame=0.22, dans=None, hors=None, densite=None):
+    def forme(self, dedans, boite, matiere, val=None, ton=None, trame=0.22, dans=None, hors=None, densite=None,
+              cerne=None):
         """Peint les pixels où `dedans(x, y)` ; `val(x, y)` (0 sombre … 1 clair) choisit le ton de la rampe.
         `dans` / `hors` : ensembles de pixels déjà peints qui limitent la forme. `densite` : transparence en trame.
         Renvoie l'ensemble des pixels peints."""
         x0, y0, x1, y1 = boite
         fait = set()
         plat = isinstance(matiere, str)
-        k = None if plat else matiere.cerne
+        k = cerne if cerne is not None else (None if plat else matiere.cerne)
         for Y in range(max(0, int(math.floor(y0)) + self.oy), min(self.h, int(math.ceil(y1)) + self.oy + 1)):
             y = Y + 0.5 - self.oy
             for X in range(max(0, int(math.floor(x0)) + self.ox), min(self.w, int(math.ceil(x1)) + self.ox + 1)):
@@ -121,9 +122,18 @@ class Feuille:
                 else:
                     c = self._ton(matiere, val(x, y), X, Y, trame)
                 self.c[Y][X] = c
-                self.k[Y][X] = k or mix(c, CERNE, 0.62)
+                self.k[Y][X] = k if k is not None else mix(c, CERNE, 0.62)
                 fait.add((X, Y))
         return fait
+
+    def gommer(self, pixels, garde=None):
+        """Efface des pixels (garde(X, Y) vrai : le pixel reste, mais ne sera pas cerné)."""
+        for (X, Y) in pixels:
+            if garde is not None and garde(X, Y):
+                self.k[Y][X] = ""
+            else:
+                self.c[Y][X] = None
+                self.k[Y][X] = None
 
     # ---- volumes
     def boule(self, cx, cy, rx, ry, matiere, gain=0.625, biais=0.375, cond=None, **kw):
