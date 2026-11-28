@@ -46,7 +46,7 @@ session qui se met à attendre le fait sursauter et la bordure de la bulle clign
 **Options** : clic droit sur Pilou, sept portes rangées par intention (gardées dans
 `~/.claude/compagnon/reglages.json`) ; le détail est dans le [mode d'emploi](../../docs/MODE-EMPLOI.md). Pour la
 bulle : détaillée, compacte (urgences + résumé « ◐ 2 en cours · ✓ 3 finies », détail au survol) ou seulement quand
-Claude attend (*Il se montre ▸ Bulle*) ; thème Windows, clair ou sombre (*Réglages ▸ Thème de la bulle*).
+Claude attend (*Il se montre ▸ Bulle*) ; thème sombre par défaut, ou clair, ou comme Windows (*Réglages ▸ Thème de la bulle*, qui vaut aussi pour le menu).
 Clic sur la bulle : met Claude au premier plan et range la bulle (« lu ») ; clic sur Pilou : caresse et « lu ». La bulle revient au prochain changement ; le survol remontre tout.
 
 **Activités** (`Activites.cs`, `Sondes.cs`, `Metiers.cs`, règles `activites.json`) : toutes les 2 s,
