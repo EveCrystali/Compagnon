@@ -168,7 +168,7 @@ def pierres_de_taille(P, masque, coul, joint, lh=3.4, lw=7.0, dx=0.0, dy=0.0):
 # Chez Pilou : un coin de bureau en bois au petit matin. Un encrier ouvert, une bougie, une enveloppe sans timbre
 # appuyée contre l'encrier (la clé) ; lumière dorée et calme. On est si petit que le plateau du bureau est le sol (y = 52).
 # =====================================================================================================================
-@decor("phare-eteint", "chez-pilou", soleil=(30.0, -6.0), tons=AUBE, nom="Chez Pilou")
+@decor("phare-eteint", "chez-pilou", soleil=(30.0, -6.0), tons=AUBE, nom="Chez Pilou", matiere=True)
 def chez_pilou(P, tab):
     T = pg.T
     p = P.p
@@ -275,13 +275,27 @@ def chez_pilou(P, tab):
     P.rect(-6.0, 64.0, 16.0, 1.0, LAITON)
     voile(P, Y > 77.6, BO1, 0.4)
     poussiere(P, 40, -10, 150, 50, 30, LU5, 516)
+    # ---- Seconde passe : la vie du bureau, au petit matin.
+    pg.papillon_de_nuit(P, 98.0, 40.0, 5.0, coul=BLANC)                       # il tourne autour de la bougie
+    pg.araignee(P, 190.0, 15.6, 9.0, d=0.3)
+    pg.toile_araignee(P, 188.0, 2.0, 8.0, sens=(-1, 1), coul=BM4)
+    for i in range(3):                                          # des oiseaux passent derrière la fenêtre
+        t = (p + i / 3.0) % 1.0
+        P.trait(8 + 36 * t, -2.0 + i * 3 + 2 * math.sin(t * 9), 9.6 + 36 * t, -2.6 + i * 3 + 2 * math.sin(t * 9), NU2)
+    P.poly([(28.0, 50.0), (36.0, 49.0), (37.0, 52.0 + 0.4 * onde(p)), (29.0, 53.0)], LU4)        # un timbre posé à côté : pas encore collé
+    P.rect(30.0, 50.4, 4.0, 1.6, VOLET)
+    P.ell(160.0, 62.0, 3.0, 1.0, NU2)                            # une tache d'encre fraîche, qui brille
+    P.point(159.0, 61.6, BM3)
+    pg.goutte(P, 76.0, 34.0, 51.0, coul=NU1, d=0.5)              # la plume goutte
+    ombre_portee(P, (np.hypot((X - 70.0) / 12.0, (Y - 53.0) / 1.6) < 1.0), 0.5)
+    ombre_portee(P, (np.hypot((X - 104.0) / 8.0, (Y - 52.6) / 1.2) < 1.0), 0.4)
 
 
 # =====================================================================================================================
 # Le quai de Trébrume : un petit quai de pierre au crépuscule, dans une brume épaisse. Barques tirées au sec, casiers à
 # homards, filets ; au large, la silhouette noire d'un phare éteint sur son rocher (la clé). Le quai est le sol (y = 66).
 # =====================================================================================================================
-@decor("phare-eteint", "port-trebrume", soleil=(143.0, 30.0), tons=PHARE, nom="Le quai de Trébrume")
+@decor("phare-eteint", "port-trebrume", soleil=(143.0, 30.0), tons=PHARE, nom="Le quai de Trébrume", matiere=True)
 def port_trebrume(P, tab):
     T = pg.T
     p = P.p
@@ -370,13 +384,35 @@ def port_trebrume(P, tab):
     for r in (5.0, 3.6, 2.2):
         P.ell(178.0, 76.0, r, r * 0.4, GO1 if r != 3.6 else GO2)
     brume(P, 72.0, 3.0, 5, T.CIEL[6], 0.35)
+    # ---- Seconde passe : la vie du quai.
+    pg.papillon_de_nuit(P, 133.0, 44.0, 5.0, coul=BLANC)
+    chat(P, 78.0, 60.4, coul=GR1)                                 # le chat du port, sur les casiers
+    for i in range(6):                                          # le clapot au pied du quai
+        t = (p + i / 6.0) % 1.0
+        P.trait(120.0 + i * 3.0, 70.0 + i * 1.6, 124.0 + i * 3.0 + 2 * t, 70.0 + i * 1.6, BM3 if t < 0.5 else BM1)
+    pg.fumee(P, 26.0, 16.6, p)
+    pg.fumee(P, 64.0, 18.6, (p + 0.4) % 1.0)
+    v = onde(p)                                                 # un pavillon mouillé au mât d'une barque
+    P.poly([(96.0, 41.0), (101.0, 42.0 + 0.5 * v), (96.0, 44.0)], LU2)
+    bal = 0.6 * onde(p, 0.2)                                    # une cloche de brume sur son poteau
+    P.rect(150.0, 48.0, 1.2, 12.0, ENCRE)
+    P.trait(150.6, 48.0, 155.0, 48.0, ENCRE)
+    P.poly([(153.0 + bal, 48.6), (157.0 + bal, 48.6), (158.0 + bal, 53.0), (152.0 + bal, 53.0)], LAITON)
+    P.point(155.0 + bal * 1.6, 53.6, LAITON2)
+    pg.yeux(P, 6.0, 58.0, coul=LU4, d=0.4)                        # un homard, dans un casier
+    pg.goutte(P, 20.0, 58.0, 62.0, coul=BM3, d=0.2)              # le filet s'égoutte
+    P.rect(34.0, 56.0, 7.0, 6.0, BO2)                             # un tonneau, une caisse de poisson
+    P.rect(34.0, 57.4, 7.0, 0.8, GR3)
+    P.rect(34.0, 60.2, 7.0, 0.8, GR3)
+    for i in range(4):
+        P.ell(64.0 + i * 1.8, 59.6 - (i % 2) * 0.6, 1.2, 0.5, BM3)
 
 
 # =====================================================================================================================
 # Le Bigorneau Qui Tousse : la salle basse d'une auberge de pêcheurs. Poutres, comptoir, marmite de soupe fumante, la
 # grande horloge (la clé), fenêtres jaunes embuées, un ciré jaune pendu à une patère.
 # =====================================================================================================================
-@decor("phare-eteint", "auberge-bigorneau", soleil=(150.0, 40.0), tons=PHARE, nom="Le Bigorneau Qui Tousse")
+@decor("phare-eteint", "auberge-bigorneau", soleil=(150.0, 40.0), tons=PHARE, nom="Le Bigorneau Qui Tousse", matiere=True)
 def auberge_bigorneau(P, tab):
     T = pg.T
     p = P.p
@@ -514,13 +550,32 @@ def auberge_bigorneau(P, tab):
         P.rect(181.0, y, 17.0, 1.0, GR2)
     voile(P, Y > 77.6, ENCRE, 0.3)
     poussiere(P, 60, 0, 170, 60, 20, LU4, 535)
+    # ---- Seconde passe : la vie de la salle.
+    chat(P, 124.0, 66.0, coul=LU1)                                # le chat de l'auberge, devant l'âtre
+    ombre_portee(P, (np.hypot((X - 112.0) / 14.0, (Y - 67.6) / 1.4) < 1.0), 0.4)
+    pg.papillon_de_nuit(P, 89.0, 60.0, 4.0, coul=BLANC)
+    for i in range(5):                                          # les braises qui montent dans la cheminée
+        t = (p + i / 5.0) % 1.0
+        P.point(138 + 6 * i + 2 * math.sin(t * 7 + i), 58 - 20 * t, LU4 if t < 0.5 else LU2)
+    pg.goutte(P, 100.0, 14.0, 24.0, coul=BM3, d=0.3)              # la buée ruisselle
+    P.rect(70.0, 40.0, 10.0, 12.0, CREME)                         # l'ardoise du jour : une soupe, dessinée
+    P.rect(70.0, 40.0, 10.0, 12.0, NU0)
+    P.ell(75.0, 47.0, 3.0, 1.6, BM3)
+    P.trait(73.0, 44.0, 73.6, 42.6, BM3)
+    P.trait(76.0, 44.0, 76.6, 42.6, BM3)
+    P.rect(69.4, 39.4, 11.2, 0.8, BO3)
+    pg.souris(P, 174.0, 64.0, sens=-1, coul=GR3)
+    P.poly([(20.0, 46.0), (30.0, 46.0), (29.0, 44.0), (21.0, 44.0)], CREME)                       # un torchon sur le comptoir
+    bal = 0.5 * onde(p, 0.4)                                    # une louche pendue qui se balance
+    P.trait(176.0, 28.0, 176.0 + bal, 36.0, GR3)
+    P.ell(176.0 + bal, 37.4, 1.6, 1.4, GR3)
 
 
 # =====================================================================================================================
 # Le guet : vu de nuit, à travers un petit carreau (la clé). Au premier plan le rebord et une bougie éteinte ; dehors la
 # brume bleu sombre et, très loin, une minuscule lueur à une fenêtre du phare noir.
 # =====================================================================================================================
-@decor("phare-eteint", "guet-de-nuit", soleil=(112.0, 22.0), tons=PHARE, nom="Le guet")
+@decor("phare-eteint", "guet-de-nuit", soleil=(112.0, 22.0), tons=PHARE, nom="Le guet", matiere=True)
 def guet_de_nuit(P, tab):
     T = pg.T
     p = P.p
@@ -594,13 +649,51 @@ def guet_de_nuit(P, tab):
         P.rect(172.0, y, 20.0, 2.4, ENCRE)
         P.rect(172.0, y, 20.0, 0.5, NU1)
     poussiere(P, 60, 0, 140, 50, 8, T.CIEL[6], 545)
+    # ---- Seconde passe : le guet se peuple, et prend une lumière.
+    # Une lampe-tempête, hors champ à gauche, réchauffe le rebord : on veille, on n'a pas tout éteint.
+    halo(P, 34.0, 56.0, 44.0, LU1, 0.5, ry=20)
+    halo(P, 34.0, 58.0, 20.0, LU2, 0.45, ry=9)
+    # Un feu de navire passe au large, lentement, et se reflète.
+    nx = 52.0 + 88.0 * p
+    if 52 < nx < 138 and not (86 < nx < 90 or 108 < nx < 112):
+        P.point(nx, 41.6, LU4)
+        P.point(nx, 43.4, LU2)
+    # Le chat de la maison, en boule sur le rebord ; un bol de soupe qui fume ; le carnet de guet et son crayon.
+    chat(P, 104.0, 56.6, coul=GR2)
+    P.ell(80.0, 55.6, 3.6, 1.2, CREME)
+    P.ell(80.0, 55.2, 2.8, 0.8, LU2)
+    pg.vapeur(P, 80.0, 54.0, coul=BM2, h=9.0)
+    P.poly([(58.0, 59.0), (70.0, 58.4), (71.0, 62.6), (59.0, 63.4)], CREME)
+    for j in range(3):
+        P.trait(60.0, 60.0 + j * 1.0, 68.0 - j * 2, 59.6 + j * 1.0, NU2)
+    P.trait(70.0, 63.0, 76.0, 61.0, LAITON)
+    # Au mur : un trousseau de clés qui se balance, une pendulette, une carte du large ; une toile dans l'embrasure.
+    bal = 0.6 * onde(p)
+    P.point(160.0, 20.0, GR4)
+    P.trait(160.0, 20.0, 160.0 + bal, 26.0, GR3)
+    for q in range(3):
+        P.trait(160.0 + bal, 26.0, 159.0 + bal + q * 1.0, 30.0 + q * 0.6, LAITON2 if q % 2 else LAITON)
+    pendule(P, 172.0, 6.0, 4.0, d=0.2, coul=BO2, heure=0.94, balancier=7.0)
+    P.rect(20.0, 4.0, 18.0, 13.0, BM2)
+    P.courbe([(22.0, 13.0), (28.0, 8.0), (34.0, 11.0), (37.0, 7.0)], NU1, 1)
+    P.ell(33.0, 9.0, 0.9, 0.9, LU2)
+    pg.toile_araignee(P, 52.0, -2.0, 9.0, sens=(1, 1), coul=BM2)
+    pg.araignee(P, 140.0, -2.0, 7.0, d=0.6)
+    pg.papillon_de_nuit(P, 96.0, 20.0, 12.0, coul=BM3, d=0.2)     # il se cogne au carreau
+    for k in range(3):                                          # la pluie fine sur la vitre
+        t = (p + k / 3.0 + 0.5) % 1.0
+        P.trait(62.0 + k * 30, 0.0 + 44 * t, 62.4 + k * 30, 2.0 + 44 * t, BM2)
+    P.rect(4.0, 60.0, 9.0, 12.0, BO1)                             # des bottes au pied du mur, un ciré plié
+    P.rect(4.0, 60.0, 9.0, 1.4, BO3)
+    P.rect(140.0, 64.0, 16.0, 5.0, CIRE)
+    P.rect(140.0, 64.0, 16.0, 1.0, CIRE2)
 
 
 # =====================================================================================================================
 # Le Passe-Pied : une chaussée de pierres claires et de goémon à marée basse, entre des flaques et de la vase luisante,
 # qui file dans la brume de l'aube vers un rocher surmonté d'un phare (la clé, en haut à droite).
 # =====================================================================================================================
-@decor("phare-eteint", "passe-pied", soleil=(60.0, 26.0), tons=AUBE, nom="Le Passe-Pied")
+@decor("phare-eteint", "passe-pied", soleil=(60.0, 26.0), tons=AUBE, nom="Le Passe-Pied", matiere=True)
 def passe_pied(P, tab):
     T = pg.T
     p = P.p
@@ -680,13 +773,34 @@ def passe_pied(P, tab):
     P.poly([(bx_ - 2.4, 39.0), (bx_ + 2.4, 39.0), (bx_, 35.0)], LU2)
     goeland(P, bx_, 32.0, sens=-1)
     pg.roseaux(P, -6.0, 8.0, n=5, haut=(8.0, 18.0), penche=1.0, graine=562)
+    # ---- Seconde passe : la vie de l'estran.
+    for i in range(3):                                          # des crabes, qui filent de travers
+        t = (p + i / 3.0) % 1.0
+        cx_ = 60.0 + 30 * i + 6 * (t if i % 2 else 1 - t)
+        P.ell(cx_, 71.0 + i * 1.2, 1.6, 0.9, LU2)
+        P.trait(cx_ - 1.6, 71.0 + i * 1.2, cx_ - 2.6, 70.2 + i * 1.2 - 0.3 * onde(p * 2), LU2)
+        P.trait(cx_ + 1.6, 71.0 + i * 1.2, cx_ + 2.6, 70.2 + i * 1.2 - 0.3 * onde(p * 2, 0.5), LU2)
+    for i in range(5):                                          # les trous des coques : un jet d'eau, de temps en temps
+        if (p + 0.2 * i) % 1.0 < 0.2:
+            P.trait(20.0 + i * 34, 62.0 + (i % 2) * 6, 20.0 + i * 34, 60.0 + (i % 2) * 6, BM4)
+    v = onde(p)                                                 # un fanion sur la balise
+    P.poly([(184.0, 32.0), (190.0, 30.6 + 0.6 * v), (184.0, 29.0)], LU2)
+    pg.goutte(P, 120.0, 62.0, 62.0, coul=BM4, d=0.3, flaque=BM4)  # la pluie fine, sur une flaque
+    pg.goutte(P, 70.0, 58.0, 58.0, coul=BM4, d=0.7, flaque=BM4)
+    P.courbe([(100.0, 76.0), (108.0, 74.0), (116.0, 76.4)], GO2, 1)                               # un cordage échoué, une bouteille
+    P.rect(122.0, 75.0, 4.0, 1.6, T.S2)
+    P.rect(126.0, 75.4, 1.4, 0.8, T.S3)
+    for i in range(4):                                          # des bécasseaux courent au bord de l'eau
+        t = (p + i / 4.0) % 1.0
+        P.ell(130 + 10 * i + 4 * t, 46.0 + (i % 2), 0.9, 0.7, GR2)
+        P.trait(130 + 10 * i + 4 * t, 46.6 + (i % 2), 130 + 10 * i + 4 * t, 47.6 + (i % 2), LU2)
 
 
 # =====================================================================================================================
 # Au pied de la Dent-Creuse : le bas de la tour de granit, vue de tout près. Une lourde porte cloutée sans poignée (la
 # clé), des marches mouillées, des traces de goudron ; la mer remonte autour du rocher. Le sol est à y = 68.
 # =====================================================================================================================
-@decor("phare-eteint", "pied-du-phare", soleil=(20.0, 6.0), tons=PHARE, nom="Au pied de la Dent-Creuse")
+@decor("phare-eteint", "pied-du-phare", soleil=(20.0, 6.0), tons=PHARE, nom="Au pied de la Dent-Creuse", matiere=True)
 def pied_du_phare(P, tab):
     T = pg.T
     p = P.p
@@ -792,13 +906,28 @@ def pied_du_phare(P, tab):
                 P.point(x + cote * 6 * t, y, BM4 if t < 0.5 else BM2, 2 if t < 0.3 else 1)
     voile(P, Y > 78.0, ENCRE, 0.4)
     brume(P, 70.0, 2.4, 23, T.CIEL[5], 0.3)
+    # ---- Seconde passe : la vie au pied de la tour.
+    goeland(P, 60.0, -0.8, sens=1)
+    goeland(P, 134.0, -0.8, sens=-1)
+    pg.goutte(P, 86.0, 1.8, 61.0, coul=BM3, d=0.2)                # le bandeau goutte
+    pg.goutte(P, 118.0, 1.8, 61.0, coul=BM3, d=0.7)
+    pg.yeux(P, 76.0, -4.0, coul=LU4, d=0.3, ecart=1.2)            # une lueur, là-haut, derrière la meurtrière : quelqu'un ?
+    for i in range(3):                                          # des bernacles et des moules sur le rocher, une étoile de mer
+        P.ell(60.0 + i * 3.0, 70.0 + (i % 2), 1.0, 0.7, NU1)
+    P.poly([(126.0, 72.0), (128.0, 70.6), (130.0, 72.0), (129.2, 74.0), (126.8, 74.0)], LU2)
+    P.courbe([(140.0, 64.0), (146.0, 62.0 + 0.4 * onde(p)), (152.0, 64.0)], GO2, 1)             # une algue prise dans la chaîne
+    bal = 0.5 * onde(p, 0.3)                                    # un écriteau de bois cloué de travers : une tête de mort ? non, un poisson
+    P.rect(128.0, 40.0, 10.0, 6.0, BO2)
+    P.ell(133.0, 43.0, 2.6, 1.2, BM3)
+    P.poly([(135.4, 43.0), (137.0, 41.8), (137.0, 44.2)], BM3)
+    pg.papillon_de_nuit(P, 100.0, 34.0, 5.0, coul=BM4, d=0.5)
 
 
 # =====================================================================================================================
 # La place de Trébrume : une placette pavée par temps gris. Une mairie minuscule à volets bleus et drapeau mouillé (la
 # clé), un panneau d'affichage, une fontaine, un banc, des goélands sur le toit.
 # =====================================================================================================================
-@decor("phare-eteint", "place-mairie", soleil=(40.0, -10.0), tons=AUBE, nom="La place de Trébrume")
+@decor("phare-eteint", "place-mairie", soleil=(40.0, -10.0), tons=AUBE, nom="La place de Trébrume", matiere=True)
 def place_mairie(P, tab):
     T = pg.T
     p = P.p
@@ -929,6 +1058,40 @@ def place_mairie(P, tab):
         P.point(x + 0.3 * onde(p, 0.1 * i), 72.0 - h, T.VIOLET if i % 2 else VI2, 2)
     voile(P, Y > 78.0, ENCRE, 0.35)
     brume(P, 56.0, 3.0, 32, T.CIEL[10], 0.3)
+    # ---- Seconde passe : la vie de la place.
+    chat(P, 56.0, 61.0, coul=GR2)                                 # sur le banc
+    pg.souris(P, 118.0, 77.0, sens=1, coul=GR3)
+    pg.goutte(P, 100.0, 13.0, 60.0, coul=BM2, d=0.4)              # la gouttière de la mairie
+    pg.papillon_de_nuit(P, 128.0, 28.0, 4.0, coul=BLANC)
+    for i in range(3):                                          # des feuilles mortes que le vent promène
+        t = (p + i / 3.0) % 1.0
+        P.rect(30 + 40 * i + 14 * t, 70.0 + 3 * math.sin(t * 6.283 + i), 1.4, 0.8, LU2 if i % 2 else GO2)
+    P.rect(72.0, 54.0, 5.0, 8.0, VOLET)                           # la boîte aux lettres : la lettre de Pilou est partie d'une pareille
+    P.rect(72.0, 54.0, 5.0, 1.2, VOLET2)
+    P.rect(73.0, 56.4, 3.0, 0.6, ENCRE)
+    P.rect(74.0, 62.0, 1.0, 4.0, GR1)
+    P.trait(160.0, 72.0, 160.0, 62.0, GR1)                        # un vélo contre le bac à fleurs ? un parapluie oublié, ouvert, qui roule
+    par = 1.0 * onde(p)
+    P.ell(146.0 + par, 74.0, 4.0, 2.0, NU2, cond=Y < 74.6)
+    P.trait(146.0 + par, 74.0, 147.0 + par, 78.0, GR1)
+
+
+def chat(P, x, y, coul=None, sens=1):
+    """Un chat endormi en boule : il respire, sa queue bat de temps en temps, une oreille frémit."""
+    coul = GR2 if coul is None else coul
+    s = 0.3 * onde(P.p)
+    P.ell(x, y - 2.0 - s * 0.5, 4.6, 2.4 + s * 0.5, coul)
+    P.ell(x + sens * 3.4, y - 2.2, 2.0, 1.8, coul)
+    P.poly([(x + sens * 2.6, y - 3.6), (x + sens * 3.0, y - 5.2 - (0.4 if int(P.p * 8) % 6 == 0 else 0)), (x + sens * 3.8, y - 3.8)], coul)
+    P.poly([(x + sens * 4.0, y - 3.6), (x + sens * 4.8, y - 5.0), (x + sens * 5.0, y - 3.4)], coul)
+    P.trait(x + sens * 3.0, y - 2.2, x + sens * 4.2, y - 2.2, ENCRE)
+    P.courbe([(x - sens * 4.0, y - 1.0), (x - sens * 6.0, y - 0.4), (x - sens * 7.0, y - 1.6 - 1.0 * max(0.0, onde(P.p, 0.3)))], coul, P.ep(0.7))
+    P.ell(x - sens * 1.0, y - 3.4, 2.0, 0.8, BM1)
+
+
+def ombre_portee(P, masque, force=0.5):
+    """L'ombre d'un objet, portée par la lanterne : un ton plus sombre, posé en matière."""
+    voile(P, masque & (P.a >= 0), ENCRE, force)
 
 
 def bidon(P, x, y, k=1.0, coul=None):
@@ -965,7 +1128,7 @@ def pendule(P, x, y, r, d=0.0, coul=None, heure=0.0, balancier=0.0):
 # L'atelier de Basile : une boutique d'horloger encombrée. Des dizaines de pendules qui n'indiquent pas la même heure,
 # un établi avec loupe et limes, de la poussière dorée de laiton, une forme sous un drap.
 # =====================================================================================================================
-@decor("phare-eteint", "atelier-basile", soleil=(150.0, -10.0), tons=PHARE, nom="L'atelier de Basile")
+@decor("phare-eteint", "atelier-basile", soleil=(150.0, -10.0), tons=PHARE, nom="L'atelier de Basile", matiere=True)
 def atelier_basile(P, tab):
     T = pg.T
     p = P.p
@@ -1075,13 +1238,29 @@ def atelier_basile(P, tab):
     pendule(P, 182.0, 57.0, 3.0, coul=LAITON, heure=0.3)
     voile(P, Y > 77.6, ENCRE, 0.3)
     poussiere(P, 30, -8, 170, 64, 40, LAITON2, 606)
+    # ---- Seconde passe : la vie de l'atelier.
+    chat(P, 134.0, 64.0, coul=BO2)                                # le chat de Basile, dans le rai de soleil
+    pg.souris(P, 60.0, 77.0, sens=1, coul=GR3)
+    pg.araignee(P, 138.0, -8.0, 8.0, d=0.4)
+    t = (p * 1.0) % 1.0                                         # un coucou sort, salue, rentre
+    if t < 0.3:
+        P.rect(92.0, 20.0, 3.0, 1.6, CREME)
+        P.point(95.0, 20.4, LU2)
+    for i in range(4):                                          # des copeaux de laiton qui tombent de l'établi
+        u = (p + i / 4.0) % 1.0
+        P.point(50 + 6 * i, 61.0 + 14 * u * u, LAITON2)
+    ombre_portee(P, (np.hypot((X - 106.0) / 20.0, (Y - 65.0) / 1.8) < 1.0), 0.45)
+    pg.vapeur(P, 36.0, 55.0, coul=BM3, h=8.0)                     # la tasse de Basile
+    P.rect(34.6, 55.0, 3.0, 2.6, VOLET2)
+    v = onde(p)                                                 # le drap respire : il y a de l'air là-dessous
+    P.courbe([(92.0, 62.0 + 0.4 * v), (104.0, 63.6), (118.0, 62.0 - 0.4 * v)], BM4, 1)
 
 
 # =====================================================================================================================
 # Le sentier des douaniers : un sentier étroit en haut d'une falaise, dans le brouillard. Ajoncs, bord incertain, une
 # cabane de guet en planches grises avec une petite fenêtre tournée vers le phare. Le sol : y = 64, de x = 4 à 130.
 # =====================================================================================================================
-@decor("phare-eteint", "sentier-douaniers", soleil=(170.0, 0.0), tons=AUBE, nom="Le sentier des douaniers")
+@decor("phare-eteint", "sentier-douaniers", soleil=(170.0, 0.0), tons=AUBE, nom="Le sentier des douaniers", matiere=True)
 def sentier_douaniers(P, tab):
     T = pg.T
     p = P.p
@@ -1175,13 +1354,35 @@ def sentier_douaniers(P, tab):
         pg.fleur(P, x, float(f_sol(x)) + 1.5, 2.0 + hz(i, 2, 642), T.VIOLET if i % 2 else CIRE2, CREME)
     brume(P, 74.0, 3.0, 46, T.CIEL[10], 0.35, x0=110)
     brume(P, 60.0, 3.0, 47, T.CIEL[10], 0.3, x0=120)
+    # ---- Seconde passe : la vie de la lande.
+    for i in range(3):                                          # des lapins dans la lande : l'un se dresse
+        x = 12.0 + i * 16.0
+        y = 52.0 + i * 3.0
+        debout = (i == 1 and int(p * 8) % 8 < 3)
+        P.ell(x, y - (1.0 if debout else 0), 1.6, 1.2 + (0.8 if debout else 0), GO2)
+        P.trait(x + 0.6, y - 1.6 - (1.6 if debout else 0), x + 0.6, y - 3.4 - (1.6 if debout else 0), GO2)
+        P.point(x - 1.4, y, BLANC)
+    pg.papillon_de_nuit(P, 44.0, 44.0, 5.0, coul=BLANC)
+    P.trait(88.0, 50.0, 88.0, 40.0, BO1)                          # une manche à air en haut d'un mât
+    v = onde(p)
+    P.poly([(88.0, 40.0), (96.0, 40.6 + 0.8 * v), (96.0, 42.6 + 0.8 * v), (88.0, 43.0)], LU2)
+    P.poly([(91.0, 40.2 + 0.3 * v), (93.0, 40.4 + 0.5 * v), (93.0, 42.8 + 0.5 * v), (91.0, 42.9 + 0.3 * v)], CREME)
+    for i in range(5):                                          # des cailloux roulent du bord, de loin en loin
+        t = (p + i / 5.0) % 1.0
+        if i == 2:
+            P.point(126.0 + 3 * t, 66.0 + 12 * t * t, GR3)
+    P.rect(40.0, 58.0, 6.0, 4.0, BO2)                             # un panier de pêche oublié près de la cabane, une gaffe
+    P.trait(48.0, 62.0, 56.0, 46.0, BO3)
+    pg.goutte(P, 66.0, 40.0, 60.0, coul=BM4, d=0.6)               # la tôle du toit goutte
+    for i in range(6):                                          # la bruyère
+        P.point(100.0 + i * 4.0, 68.0 + (i % 2) * 1.6, T.VIOLET, 2)
 
 
 # =====================================================================================================================
 # Le Souffleur : une grotte marine à marée basse. Sable mouillé, goémon, une barque à sec, des bidons alignés, une
 # lanterne posée sur un rocher, un conduit sombre qui monte dans la pierre.
 # =====================================================================================================================
-@decor("phare-eteint", "grotte-souffleur", soleil=(52.0, 30.0), tons=PHARE, nom="Le Souffleur")
+@decor("phare-eteint", "grotte-souffleur", soleil=(52.0, 30.0), tons=PHARE, nom="Le Souffleur", matiere=True)
 def grotte_souffleur(P, tab):
     T = pg.T
     p = P.p
@@ -1262,13 +1463,30 @@ def grotte_souffleur(P, tab):
             P.trait(124.0 - j, 76.4 + j * 0.5, 130.0 + j, 76.4 + j * 0.5, LU2)
     voile(P, Y > 78.0, ENCRE, 0.4)
     poussiere(P, 100, 0, 190, 60, 14, BM3, 659)
+    # ---- Seconde passe : la vie de la grotte.
+    for i in range(3):
+        t = (p + i / 3.0) % 1.0                                   # des crabes
+        cx_ = 70.0 + 26 * i + 5 * (t if i % 2 else 1 - t)
+        P.ell(cx_, 75.0 + i * 0.8, 1.5, 0.8, LU2)
+        P.trait(cx_ - 1.5, 75.0 + i * 0.8, cx_ - 2.4, 74.2 + i * 0.8, LU2)
+        P.trait(cx_ + 1.5, 75.0 + i * 0.8, cx_ + 2.4, 74.2 + i * 0.8, LU2)
+    pg.yeux(P, 150.0, 6.0, coul=LU4, d=0.2, ecart=1.6)            # quelqu'un, en haut du conduit ?
+    pg.papillon_de_nuit(P, 136.0, 58.0, 5.0, coul=BM4)
+    pg.goutte(P, 120.0, -4.0, 77.0, coul=BM3, d=0.5, flaque=LU2)
+    ombre_portee(P, (np.hypot((X - 160.0) / 22.0, (Y - 70.0) / 2.0) < 1.0), 0.4)                  # l'ombre des bidons
+    for i in range(8):                                          # des anatifes sur la paroi, des moules
+        P.ell(100.0 + i * 3.0, 20.0 + (i % 3) * 2.0, 0.9, 1.2, NU1)
+    v = onde(p)                                                 # des algues qui pendent de la voûte et se balancent
+    for i in range(7):
+        x = 84.0 + i * 13.0
+        P.courbe([(x, -6.0 + (i % 3) * 3), (x + 0.6 * v, 2.0 + (i % 3) * 3), (x + 1.2 * v, 8.0 + (i % 2) * 6)], GO1 if i % 2 else GO2, 1)
 
 
 # =====================================================================================================================
 # La cave du phare : le sous-sol rond, à la lueur d'une lanterne. Un tas de charbon, des rangées de bidons d'huile, un
 # panier pendu à une poulie (la clé), un escalier de pierre en colimaçon qui monte dans le noir. Le sol : y = 76.
 # =====================================================================================================================
-@decor("phare-eteint", "cave-du-phare", soleil=(60.0, 40.0), tons=PHARE, nom="La cave du phare")
+@decor("phare-eteint", "cave-du-phare", soleil=(60.0, 40.0), tons=PHARE, nom="La cave du phare", matiere=True)
 def cave_du_phare(P, tab):
     T = pg.T
     p = P.p
@@ -1344,13 +1562,37 @@ def cave_du_phare(P, tab):
         P.trait(190.0 - i * 5.0, 47.0 + i * 6.0, 190.0 - i * 5.0, 80.0, ENCRE, P.ep(0.6))
     voile(P, Y > 78.0, ENCRE, 0.4)
     poussiere(P, 30, 10, 130, 62, 16, LU4, 663)
+    # ---- Seconde passe : les ombres portées, et la vie de la cave.
+    # La lanterne est à gauche : tout projette son ombre vers la droite, longue, sur les dalles et sur le mur.
+    ombre_portee(P, (Y > 66.0) & (Y < 71.0) & (X > 144.0) & (X < 176.0 + (Y - 66) * 2), 0.5)      # les bidons
+    ombre_portee(P, (np.hypot((X - 112.0) / 16.0, (Y - 75.0) / 1.6) < 1.0), 0.55)                 # le panier
+    ombre_portee(P, (np.abs(X - 130.0 - (Y - 20) * 0.5) < 2.0) & (Y > 20) & (Y < 60), 0.4)       # sa corde, sur le mur
+    ombre_portee(P, (X > 36.0) & (X < 52.0) & (Y > 66.0) & (Y < 70.0), 0.5)                       # le tas de charbon
+    # Là-haut, dans l'escalier : une lueur qui descend, puis remonte. Quelqu'un tient la corde.
+    lu = 0.5 + 0.5 * onde(p)
+    halo(P, 166.0, 6.0 + 4 * lu, 12.0 + 4 * lu, LU1, 0.5)
+    halo(P, 166.0, 6.0 + 4 * lu, 5.0, LU3, 0.5)
+    pg.papillon_de_nuit(P, 60.0, 38.0, 6.0, coul=BLANC)
+    pg.souris(P, 124.0, 75.6, sens=-1, coul=GR3)
+    pg.goutte(P, 20.0, -10.0, 60.0, coul=BM2, d=0.3)
+    pg.goutte(P, 134.0, -10.0, 74.0, coul=BM2, d=0.8, flaque=BM1)
+    pg.toile_araignee(P, 146.0, 40.0, 9.0, sens=(-1, 1), coul=BM2)
+    pg.araignee(P, 78.0, -16.0, 10.0, d=0.5)
+    for i in range(6):                                          # les éclats du charbon, qui accrochent la flamme
+        if (p + 0.17 * i) % 1.0 < 0.4:
+            P.point(6 + 30 * hz(i, 1, 664), 60 + 7 * hz(i, 2, 664), LU3)
+    P.rect(76.0, 60.0, 12.0, 6.0, BO2)                            # une caisse marquée d'un poisson, un entonnoir, des chiffons
+    P.rect(76.0, 60.0, 12.0, 1.0, BO4)
+    P.ell(82.0, 63.4, 2.6, 1.0, BM2)
+    P.poly([(90.0, 62.0), (96.0, 62.0), (94.0, 65.0), (93.6, 67.0), (92.4, 67.0), (92.0, 65.0)], GR3)
+    pg.goutte(P, 93.0, 67.0, 70.0, coul=LU2, d=0.1)               # l'huile, goutte à goutte
 
 
 # =====================================================================================================================
 # La chambre de veille : une pièce ronde et chaude dans le phare. Poêle, lit étroit, fauteuil, table avec un gros carnet
 # relié et une boîte en fer, une corne de brume à soufflet, une bougie, la nuit derrière la meurtrière.
 # =====================================================================================================================
-@decor("phare-eteint", "chambre-de-veille", soleil=(160.0, 50.0), tons=PHARE, nom="La chambre de veille")
+@decor("phare-eteint", "chambre-de-veille", soleil=(160.0, 50.0), tons=PHARE, nom="La chambre de veille", matiere=True)
 def chambre_de_veille(P, tab):
     T = pg.T
     p = P.p
@@ -1463,13 +1705,29 @@ def chambre_de_veille(P, tab):
         P.ell(x - 1.0, 77.0, 1.6, 0.8, ENCRE)
     voile(P, Y > 78.0, ENCRE, 0.35)
     poussiere(P, 100, 10, 190, 62, 16, LU4, 674)
+    # ---- Seconde passe : la vie de la chambre.
+    chat(P, 62.0, 56.6, coul=GR2)                                 # sur le fauteuil
+    ombre_portee(P, (np.hypot((X - 116.0) / 22.0, (Y - 74.0) / 1.6) < 1.0), 0.4)
+    ombre_portee(P, (np.hypot((X - 60.0) / 14.0, (Y - 67.0) / 1.4) < 1.0), 0.4)
+    pg.papillon_de_nuit(P, 132.0, 50.0, 5.0, coul=BLANC)
+    pg.araignee(P, 76.0, 4.0, 8.0, d=0.2)
+    pg.souris(P, 140.0, 77.6, sens=-1, coul=GR3)
+    t = int(p * 8)                                              # une page du carnet se soulève toute seule
+    P.poly([(108.0, 52.6), (116.0, 52.6), (115.0 - (t % 4), 50.0 - (t % 4) * 0.4)], CREME)
+    for i in range(4):                                          # le linge qui sèche près du poêle
+        bal = 0.3 * onde(p, 0.2 * i)
+        P.rect(176.0 + i * 4.0 + bal, 20.0, 3.0, 6.0 + (i % 2) * 2, (CREME, VOLET2, BM3, LU2)[i])
+    P.trait(174.0, 19.6, 194.0, 19.6, GO2)
+    bal = 0.5 * onde(p, 0.6)                                    # un ciré pendu, qui goutte encore
+    P.poly([(8.0, 14.0), (16.0, 14.0), (18.0 + bal, 36.0), (6.0 + bal, 36.0)], CIRE)
+    pg.goutte(P, 12.0, 36.0, 49.0, coul=BM3, d=0.4)
 
 
 # =====================================================================================================================
 # La lanterne : le sommet du phare. Une grande lentille de verre à échelons (la clé), une machine d'horlogerie en laiton
 # avec cadran et manivelle, un poids au bout de sa chaîne, des vitres tout autour ouvertes sur la brume. Le sol : y = 76.
 # =====================================================================================================================
-@decor("phare-eteint", "lanterne-du-phare", soleil=(96.0, 20.0), tons=PHARE, nom="La lanterne")
+@decor("phare-eteint", "lanterne-du-phare", soleil=(96.0, 20.0), tons=PHARE, nom="La lanterne", matiere=True)
 def lanterne_du_phare(P, tab):
     T = pg.T
     p = P.p
@@ -1572,6 +1830,25 @@ def lanterne_du_phare(P, tab):
         P.rect(180.0, -12.0 + j * 8.0, 11.4, 0.4, GR1)
     voile(P, Y > 78.4, ENCRE, 0.4)
     poussiere(P, 60, 0, 140, 60, 10, BM2, 685)
+    # ---- Seconde passe : la vie de la lanterne.
+    pg.papillon_de_nuit(P, 46.0, 64.0, 6.0, coul=BLANC)
+    pg.papillon_de_nuit(P, 96.0, 24.0, 28.0, coul=BM4, d=0.4)     # il cherche la lumière qui n'est plus là
+    for i in range(4):                                          # des oiseaux de mer se cognent aux vitres, puis repartent
+        t = (p + i / 4.0) % 1.0
+        x, y = 6 + 180 * ((hz(i, 1, 686) + t * 0.4) % 1.0), 4 + 20 * hz(i, 2, 686) + 3 * math.sin(t * 9)
+        a = onde(p * 2, 0.2 * i)
+        P.trait(x - 2.0, y - 0.8 * a, x, y, BM3)
+        P.trait(x, y, x + 2.0, y - 0.8 * a, BM3)
+    pg.goutte(P, 120.0, -6.0, 70.0, coul=BM2, d=0.3, flaque=BM1)  # le dôme fuit
+    pg.araignee(P, 150.0, -6.0, 9.0, d=0.6)
+    pg.toile_araignee(P, 21.0, -6.0, 9.0, sens=(1, 1), coul=BM2)
+    P.poly([(108.0, 71.0), (120.0, 70.0), (121.0, 74.0), (109.0, 75.0)], CREME)                   # le registre du gardien, ouvert
+    for j in range(3):
+        P.trait(110.0, 72.0 + j * 0.9, 118.0 - j * 2, 71.6 + j * 0.9, NU2)
+    ombre_portee(P, (np.hypot((X - 70.0) / 9.0, (Y - 74.0) / 1.2) < 1.0), 0.5)
+    v = onde(p)                                                 # un chiffon noué à la manivelle, qui bat
+    P.poly([(165.0, 62.0), (169.0, 63.0 + 0.6 * v), (166.0, 66.0)], LU2)
+    pg.etincelle(P, 143.4, 52.0, coul=LAITON2, d=0.5)             # la machine cherche encore à partir
 
 
 # =====================================================================================================================
@@ -1579,7 +1856,7 @@ def lanterne_du_phare(P, tab):
 # feux de mât flous qui approchent sur l'eau noire, le phare au loin (la clé, en haut à droite) : rallumé.
 # Le sol monte un peu : de (4, 61) à (64, 66).
 # =====================================================================================================================
-@decor("phare-eteint", "jetee-nuit", soleil=(174.0, 6.0), tons=PHARE, nom="La jetée, la nuit")
+@decor("phare-eteint", "jetee-nuit", soleil=(174.0, 6.0), tons=PHARE, nom="La jetée, la nuit", matiere=True)
 def jetee_nuit(P, tab):
     T = pg.T
     p = P.p
@@ -1665,3 +1942,43 @@ def jetee_nuit(P, tab):
     goeland(P, 178.0, 67.6, sens=-1)
     voile(P, Y > 78.4, ENCRE, 0.4)
     brume(P, 72.0, 3.0, 76, T.CIEL[3], 0.3, x0=96)
+    # ---- Seconde passe : la jetée se peuple.
+    # Le faisceau, cette fois bien lisible : deux pinceaux pleins qui tournent.
+    for cote in (0, 1):
+        ang = p * math.pi + cote * math.pi
+        dx_, dy_ = X - 174.0, (Y - (40.0 - 36.0 * 0.87)) * 2.2
+        along = dx_ * math.cos(ang) + dy_ * math.sin(ang)
+        across = -dx_ * math.sin(ang) + dy_ * math.cos(ang)
+        voile(P, (along > 2) & (np.abs(across) < 0.6 + along * 0.12) & (Y < 44), LU4, 0.7, lumiere=True)
+    # Le premier rang : trois silhouettes plus proches, de dos, sur le musoir ; un chien assis qui remue la queue.
+    for i, (x, hgt, larg) in enumerate(((104.0, 20.0, 5.0), (114.0, 24.0, 5.6), (124.0, 17.0, 4.6))):
+        y = 78.0
+        P.poly([(x - larg, y), (x + larg, y), (x + larg * 0.7, y - hgt * 0.7), (x - larg * 0.7, y - hgt * 0.7)], ENCRE)
+        P.ell(x, y - hgt * 0.82, larg * 0.62, hgt * 0.15, ENCRE)
+        P.trait(x - larg * 0.7, y - hgt * 0.7, x + larg * 0.7, y - hgt * 0.7, NU2)
+        if i == 1:                                              # celui du milieu lève sa lanterne et l'agite
+            bal = 1.0 * onde(p)
+            P.trait(x + larg * 0.7, y - hgt * 0.6, x + larg * 1.5 + bal, y - hgt * 1.05, ENCRE, P.ep(0.7))
+            fanal(P, x + larg * 1.5 + bal, y - hgt * 1.05 + 5.0, 1.0, lueur=14.0)
+        if i == 2:
+            P.poly([(x - larg, y - hgt * 0.6), (x - larg * 1.3, y - hgt * 0.1), (x - larg * 0.5, y - hgt * 0.2)], CIRE)
+    P.ell(136.0, 77.0, 2.6, 2.0, ENCRE)
+    P.ell(137.6, 74.6, 1.4, 1.3, ENCRE)
+    P.courbe([(134.0, 77.6), (131.6, 77.0), (130.6, 75.6 - 1.0 * abs(onde(p * 2)))], ENCRE, P.ep(0.6))
+    # Le clapot contre la jetée, l'écume ; une cloche de brume ; une bouée qui clignote au large.
+    for i in range(8):
+        t = (p + i / 8.0) % 1.0
+        P.trait(60.0 + i * 5.0, 70.0 + (i % 3) * 2.4, 64.0 + i * 5.0 + 2 * t, 70.0 + (i % 3) * 2.4, BM2 if t < 0.5 else NU4)
+    bal = 0.7 * onde(p, 0.2)
+    P.rect(46.0, 46.0, 1.2, 16.0, ENCRE)
+    P.trait(46.6, 46.0, 52.0, 46.0, ENCRE)
+    P.poly([(49.6 + bal, 46.6), (54.0 + bal, 46.6), (55.0 + bal, 51.4), (48.6 + bal, 51.4)], LAITON)
+    if (p * 2) % 1.0 < 0.5:
+        P.point(110.0, 47.0, LU4, 2)
+        halo(P, 110.4, 47.4, 4.0, LU2, 0.5)
+    pg.papillon_de_nuit(P, 120.0, 52.0, 5.0, coul=BM4, d=0.3)
+    P.poly([(10.0, 56.0), (22.0, 56.0), (21.0, 61.0), (11.0, 61.0)], BO2)                         # des caisses, un filet, sur la jetée
+    P.rect(10.0, 56.0, 12.0, 1.0, BO4)
+    # Une étoile filante au-dessus du phare.
+    if int(p * 8) in (5, 6):
+        P.trait(120.0 + int(p * 8) * 3, -8.0, 114.0 + int(p * 8) * 3, -10.0, BLANC)

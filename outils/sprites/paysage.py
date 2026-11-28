@@ -922,10 +922,12 @@ def _tons_en_cours():
     return out
 
 
-def teinte(P, masque, coul, force, niveaux=5):
+def teinte(P, masque, coul, force, niveaux=5, lumiere=False):
     """Mélange une couleur à ce qui est peint, en tons pleins : chaque couleur déjà posée glisse vers `coul` selon la
     force (0..1), et prend le ton le plus proche parmi ceux du décor. Pas de damier : une lumière, une ombre ou une
-    brume se lisent comme une matière. Là où le plan est encore vide, la couleur se pose franchement (bord tramé)."""
+    brume se lisent comme une matière. Là où le plan est encore vide, la couleur se pose franchement.
+    lumiere : la couleur s'ajoute au lieu de se mélanger (une lueur chaude sur un mur froid l'éclaire et le réchauffe,
+    elle ne le grise pas) ; elle ne touche alors que ce qui est déjà peint."""
     f = np.broadcast_to(np.asarray(force, dtype=float), P.a.shape)
     plein = masque & (P.a >= 0)
     if plein.any():
@@ -937,7 +939,11 @@ def teinte(P, masque, coul, force, niveaux=5):
         poids = np.array([1.0, 1.2, 0.8])
         for n in range(niveaux + 1):
             for s in src:
-                cible = np.array(rvb(PAL[s]), dtype=float) * (1 - n / niveaux) + but * (n / niveaux)
+                base = np.array(rvb(PAL[s]), dtype=float)
+                if lumiere:
+                    cible = np.minimum(255.0, base + but * (0.62 * n / niveaux))
+                else:
+                    cible = base * (1 - n / niveaux) + but * (n / niveaux)
                 lut[n, s] = cand[int(np.argmin((((rgb - cible) ** 2) * poids).sum(axis=1)))]
         # la trame ne sert qu'à passer d'un niveau au suivant, sur un tiers du palier
         g = f * niveaux
@@ -946,15 +952,15 @@ def teinte(P, masque, coul, force, niveaux=5):
         niv = np.clip(niv, 0, niveaux).astype(np.int64)
         P.a[plein] = lut[niv, np.maximum(P.a, 0)][plein]
     vide = masque & (P.a < 0)
-    if vide.any():
-        P.remplir(vide & (np.clip((f - 0.56) / 0.1 + 0.5, 0, 1) > P.T), coul)
+    if vide.any() and not lumiere:
+        P.remplir(vide & (f >= 0.3), coul)
 
 
-def voile(P, masque, coul, force):
+def voile(P, masque, coul, force, lumiere=False):
     """Pose une couleur par-dessus ce qui est peint (lumière, ombre, brume) : force 0..1, nombre ou grille. En trame
     par défaut ; en tons pleins (`teinte`) quand le décor est déclaré matiere=True."""
     if MATIERE:
-        teinte(P, masque, coul, force)
+        teinte(P, masque, coul, force, lumiere=lumiere)
         return
     P.remplir(masque & (P.T < force), coul)
 
@@ -962,7 +968,7 @@ def voile(P, masque, coul, force):
 def halo(P, x, y, r, coul, force=0.6, ry=None):
     """Une lueur ronde tramée, plus dense au centre."""
     d = np.hypot(P.X - x, (P.Y - y) * (r / (ry or r)))
-    voile(P, d < r, coul, force * (1 - d / r))
+    voile(P, d < r, coul, force * (1 - d / r), lumiere=True)
 
 
 def dallage(P, masque, fx, yh, a, b, larg=5.0, prof=1.6, joint=None):
@@ -985,7 +991,7 @@ def rai(P, x, y0, y1, largeur, pente, coul, force=0.45, grains=18, graine=0, mas
     m = (P.Y >= y0) & (P.Y <= y1) & (np.abs(P.X - cx) < largeur / 2 * (1 + (P.Y - y0) / 60.0))
     if masque is not None:
         m &= masque
-    voile(P, m, coul, force * (1 - 0.6 * np.abs(P.X - cx) / (largeur / 2 * (1 + (P.Y - y0) / 60.0))))
+    voile(P, m, coul, force * (1 - 0.6 * np.abs(P.X - cx) / (largeur / 2 * (1 + (P.Y - y0) / 60.0))), lumiere=True)
     for i in range(grains):
         t = (P.p * 0.5 + hz(i, 1, graine)) % 1.0
         y = y0 + (y1 - y0) * ((hz(i, 2, graine) + t * 0.25) % 1.0)
