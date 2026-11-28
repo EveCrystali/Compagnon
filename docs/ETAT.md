@@ -61,6 +61,10 @@ Dernière mise à jour : 28 novembre 2026.
   une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli, bandeau au-dessus
   (captures Robolectric 1078 × 2400 relues). Le réglage « ✧ » décide désormais des animations (chez Antoine, Windows a
   « Afficher les animations » coupé : tout était figé). Jamais vu sur un vrai téléphone.
+- **Progression et campagnes** (branche `claude/progression-campagnes`) : une campagne peut s'ouvrir par un haut fait
+  ou une campagne finie, en plus du niveau (`"succes"`, `"campagnes"`, PC et Android, validateur) ; la Bibliothèque
+  dit ce qui manque. L'aide du niveau en expédition se voit au départ et contre le boss. Testé (PC, CI) ; jamais vu
+  sur un vrai téléphone.
 - **Style pixel de l'Aventure** (branche `claude/aventure-style-pixel`) : sous la scène, cadres pixel (bord, coins en
   escalier, biseau, ombre, comme le menu « Sept portes ») et police pixel pour le récit, les choix, le bandeau et le lieu,
   sur PC et téléphone ; fil calé sur des bulles entières (plus de ligne tranchée). Captures téléphone sombre, clair,

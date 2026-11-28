@@ -19,6 +19,8 @@ namespace PilouBureau;
 //   --essai=campagne:<id>        déroule la campagne en accéléré dans la bulle (rien n'est écrit, rien n'est publié)
 //   --essai=campagne:lecture|attente|retour|epreuve|fin : la fenêtre Aventure et Pilou sur une partie de démonstration
 //                                (le prologue, en mémoire : le profil n'est ni lu pour elle ni écrit)
+//   --essai=campagne:bibliotheque : la bibliothèque à carnet vide, plus la campagne d'essai fermée par un haut fait
+//                                (lue dans le dépôt : android/app/src/test/resources/campagnes-essai/haut-fait)
 public sealed partial class FenetrePilou
 {
     private Campagnes.Carnet? _essaiCamp;
@@ -198,7 +200,13 @@ public sealed partial class FenetrePilou
     }
 
     internal string? CampagneDemarrer(string id, bool neuf = false) =>
-        DeciderCampagne((k, c, t) => Campagnes.Demarrer(k, c, _essaiCamp is not null ? int.MaxValue : Niveau, t, IdAppareil, Campagnes.Charger, null, neuf), id);
+        DeciderCampagne((k, c, t) => Campagnes.Demarrer(k, c, _essaiCamp is not null ? int.MaxValue : Niveau, t, IdAppareil, Campagnes.Charger, null, neuf,
+            _essaiCamp is not null ? null : _profil.Succes), id);
+
+    // Hauts faits qui ouvrent des campagnes (aucun pendant un essai) ; campagnes ajoutées à la bibliothèque par un essai.
+    internal IReadOnlyCollection<string> SuccesAventure => _essaiCamp is not null ? Array.Empty<string>() : _profil.Succes;
+    private readonly List<Campagnes.Campagne> _campagnesEnPlus = new();
+    internal IReadOnlyList<Campagnes.Campagne> CampagnesEnPlus => _campagnesEnPlus;
 
     internal string? CampagneChoisir(string option) => DeciderCampagne((k, c, t) => Campagnes.Choisir(k, c, t, IdAppareil, option));
 
@@ -323,8 +331,36 @@ public sealed partial class FenetrePilou
         k.Fil.AddRange(_essaiMessages);
     }
 
+    // Essai « bibliotheque » : rien de joué, la bibliothèque telle qu'un nouveau venu la voit, avec en plus la campagne
+    // d'essai fermée par un haut fait (« Plume ») et par le prologue, pour voir la ligne de ce qu'il manque.
+    private void EssaiBibliotheque() => Prudemment(() =>
+    {
+        var dir = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+        const string rel = "android/app/src/test/resources/campagnes-essai/haut-fait";
+        while (dir is not null && !System.IO.File.Exists(System.IO.Path.Combine(dir.FullName, rel, "campagne.json"))) dir = dir.Parent;
+        if (dir is not null)
+        {
+            var dossier = System.IO.Path.Combine(dir.FullName, rel);
+            if (Campagnes.Lire(System.IO.File.ReadAllText(System.IO.Path.Combine(dossier, "campagne.json")),
+                    f => System.IO.File.Exists(System.IO.Path.Combine(dossier, f)) ? System.IO.File.ReadAllText(System.IO.Path.Combine(dossier, f)) : null) is { } c)
+                _campagnesEnPlus.Add(c);
+        }
+        else Dire("la campagne d'essai fermée est introuvable (exe hors du dépôt) : la bibliothèque seule", 6000);
+        _essaiCamp = new Campagnes.Carnet();
+        _essaiCampRapide = false;
+        _essaiAnnoncee = "";
+        _campEtat = null;
+        _campVu = -1e12;
+        OuvrirAventure();
+    });
+
     private void EssaiCampagne(string id)
     {
+        if (id == "bibliotheque")
+        {
+            EssaiBibliotheque();
+            return;
+        }
         if (Array.IndexOf(EssaisAventure, id) >= 0)
         {
             EssaiAventure(id);

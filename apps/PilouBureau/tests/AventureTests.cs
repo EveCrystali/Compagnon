@@ -375,4 +375,42 @@ public class AventureTests
         Assert.Equal(de, tirage.Final <= e.Chance);
         _ = k;
     }
+
+    // Une campagne fermée par un haut fait et par une autre campagne : la bibliothèque dit ce qui manque (une ligne, le
+    // signe ▣), le démarrage est refusé avec le même texte, puis tout s'ouvre une fois le haut fait obtenu et le prologue fini.
+    [Fact]
+    public void Une_campagne_s_ouvre_par_un_haut_fait_et_une_campagne_finie()
+    {
+        var hf = CampagnesVecteurs.HautFait();
+        Assert.Equal(new[] { "plume" }, hf.Succes);
+        Assert.Equal(new[] { "prologue" }, hf.Apres);
+        var toutes = new[] { Prologue, hf };
+        var k = new Carnet();
+        var f = Aventure.Bibliotheque(k, toutes, 2, null, T0, new[] { "marathon" }).Single(x => x.Id == hf.Id);
+        Assert.Equal(Aventure.Statut.Verrouillee, f.Statut);
+        Assert.Equal("▣", Aventure.SigneStatut(f.Statut));
+        Assert.Equal("s'ouvre avec le haut fait « Plume » et après « La colline d'en face »", f.Detail);
+        Assert.Equal("haut fait", f.Verrou);
+        Assert.Equal("niveau 2", Aventure.Bibliotheque(k, toutes, 1, null, T0).Single(x => x.Id == hf.Id).Verrou);
+        Assert.Equal(f.Detail, Demarrer(k, hf, 2, T0, "pc", CampagnesVecteurs.Biblio, "g", false, new[] { "marathon" }));
+        Assert.Null(Demarrer(k, hf, 2, T0, "pc", CampagnesVecteurs.Biblio, "g")); // sans liste de hauts faits : pas vérifié (essai)
+        var k2 = new Carnet();
+        Recevoir(k2, "{\"v\":1,\"a\":\"pc-z\",\"k\":\"pc\",\"h\":{\"prologue\":[1,1,{\"" + Code("fin-x") + "\":1790000000},\"\"]}}", "pc", CampagnesVecteurs.Biblio, T0);
+        var ouverte = Aventure.Bibliotheque(k2, toutes, 2, null, T0, new[] { "plume" }).Single(x => x.Id == hf.Id);
+        Assert.Equal(Aventure.Statut.Nouvelle, ouverte.Statut);
+        Assert.Null(Demarrer(k2, hf, 2, T0, "pc", CampagnesVecteurs.Biblio, "g", false, new[] { "plume" }));
+    }
+
+    // Aucune des campagnes embarquées ne s'ouvre par un haut fait ni par une autre campagne (pas encore) : seul le niveau.
+    [Fact]
+    public void Les_campagnes_embarquees_ne_demandent_que_le_niveau()
+    {
+        foreach (var id in Disponibles())
+        {
+            var c = Charger(id)!;
+            Assert.Empty(c.Succes);
+            Assert.Empty(c.Apres);
+            Assert.Equal(c.Niveau <= 1 ? "" : $"s'ouvre au niveau {c.Niveau}", Manque(new Carnet(), c, 1, Array.Empty<string>(), Charger));
+        }
+    }
 }
