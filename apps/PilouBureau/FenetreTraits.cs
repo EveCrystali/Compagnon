@@ -5,25 +5,26 @@ using System.Windows.Media;
 
 namespace PilouBureau;
 
-// « Pilou et moi » (docs/TRAITS.md) : la complicité, les trois traits dominants de Pilou, puis tous ses traits : ceux
-// qu'on a découverts avec leur icône et leur nom, les autres en silhouette « ? », sans dire comment ils viennent.
-// Aucun chiffre : un trait ne donne rien, il dit seulement qui Pilou est devenu. Habit du Journal (nuit, argent,
-// violet, orange) ; un trait dominant porte une étoile et un cadre orange plein, un trait inconnu un cadre pointillé.
+// « Pilou et moi » (docs/TRAITS.md) : la complicité, les trois traits dominants de Pilou (à gauche), puis tous ses
+// traits (à droite) : ceux qu'on a découverts avec leur icône et leur nom, les autres en silhouette « ? », sans dire
+// comment ils viennent. Aucun chiffre : un trait ne donne rien, il dit seulement qui Pilou est devenu.
+// Habit du Journal (nuit, argent, violet, orange). Un état ne tient jamais à la seule couleur : un trait dominant
+// porte une étoile et un cadre orange plein, un trait inconnu un « ? » et un cadre pointillé.
 internal sealed class FenetreTraits : Window
 {
     private readonly FenetrePilou _pilou;
     private readonly TextBlock _complicite = Texte(12.5, Bandeau.ArgentClair, true);
     private readonly TextBlock _jauge = Texte(12.5, Bandeau.OrangePo);
-    private readonly StackPanel _dominants = new() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
+    private readonly StackPanel _dominants = new();
     private readonly TextBlock _aucun = Texte(12.5, Bandeau.Argent);
-    private readonly WrapPanel _tous = new() { HorizontalAlignment = HorizontalAlignment.Center };
+    private readonly WrapPanel _tous = new();
     private readonly TextBlock _compte = Texte(11.5, Bandeau.Argent);
 
     private static readonly Brush Fond = Gel("#0f1324"), Feuille = Gel("#1f2540"), Case = Gel("#151a2e"), Liseré = Gel("#6a5acd"),
-        Eteint = Gel("#3b4654");
+        Eteint = Gel("#566273"), Discret = Gel("#768390");
 
     private const int Colonnes = 5;
-    private const double LargeurCase = 112;
+    private const double LargeurCase = 104, LargeurCarte = 244, Boite = 76;
 
     private static Brush Gel(string hex)
     {
@@ -47,8 +48,8 @@ internal sealed class FenetreTraits : Window
     private FrameworkElement Titre(string texte)
     {
         var t = Pixel(texte, Bandeau.Violet, 2);
-        t.HorizontalAlignment = HorizontalAlignment.Center;
-        t.Margin = new Thickness(0, 14, 0, 8);
+        t.HorizontalAlignment = HorizontalAlignment.Left;
+        t.Margin = new Thickness(0, 0, 0, 10);
         return t;
     }
 
@@ -56,15 +57,15 @@ internal sealed class FenetreTraits : Window
     {
         _pilou = pilou;
         Title = "Pilou et moi";
-        Width = 640;
-        SizeToContent = SizeToContent.Height;
-        ResizeMode = ResizeMode.CanMinimize;
+        Width = 890;
+        Height = 724;
+        ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Topmost = true;
         Background = Fond;
         UseLayoutRounding = true;
 
-        var racine = new StackPanel { Margin = new Thickness(18, 12, 18, 16) };
+        var racine = new StackPanel { Margin = new Thickness(20, 12, 20, 14) };
         racine.Children.Add(new Pixels(Pixels.Texte("PILOU ET MOI"), new Brush?[] { null, Bandeau.OrangePo }, Bandeau.Violet, 5)
             { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 6) });
         var lien = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
@@ -73,28 +74,41 @@ internal sealed class FenetreTraits : Window
         lien.Children.Add(_jauge);
         racine.Children.Add(lien);
 
-        racine.Children.Add(Titre("En ce moment, il est"));
-        racine.Children.Add(_dominants);
-        _aucun.TextAlignment = TextAlignment.Center;
+        // Deux colonnes, comme une fiche de personnage : qui il est en ce moment, puis tout ce qu'il peut devenir.
+        var fiche = new Grid { Margin = new Thickness(0, 18, 0, 0), HorizontalAlignment = HorizontalAlignment.Center };
+        fiche.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(LargeurCarte + 24) });
+        fiche.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        var gauche = new StackPanel { Margin = new Thickness(0, 0, 24, 0) };
+        gauche.Children.Add(Titre("En ce moment"));
+        gauche.Children.Add(_dominants);
         _aucun.Text = "Pilou n'a pas encore de trait. Ça vient tout seul, à force de vivre ensemble.";
-        racine.Children.Add(_aucun);
-
-        racine.Children.Add(Titre("Tous ses traits"));
+        gauche.Children.Add(_aucun);
+        fiche.Children.Add(gauche);
+        var droite = new StackPanel();
+        droite.Children.Add(Titre("Tous ses traits"));
         _tous.Width = Colonnes * LargeurCase;
-        racine.Children.Add(new Border
+        droite.Children.Add(new Border
         {
-            Background = Feuille, BorderBrush = Liseré, BorderThickness = new Thickness(2), Padding = new Thickness(10, 12, 10, 4),
-            HorizontalAlignment = HorizontalAlignment.Center, Child = _tous,
+            Background = Feuille, BorderBrush = Liseré, BorderThickness = new Thickness(2), Padding = new Thickness(8, 12, 8, 2), Child = _tous,
         });
+        Grid.SetColumn(droite, 1);
+        fiche.Children.Add(droite);
+        racine.Children.Add(fiche);
+
         _compte.TextAlignment = TextAlignment.Center;
-        _compte.Margin = new Thickness(0, 10, 0, 0);
+        _compte.Margin = new Thickness(0, 12, 0, 0);
         racine.Children.Add(_compte);
         var note = Texte(11.5, Bandeau.Argent);
         note.Text = "Pilou attrape ses traits à force de vivre avec toi. On ne les choisit pas, et un trait découvert reste.";
         note.TextAlignment = TextAlignment.Center;
         note.Margin = new Thickness(0, 2, 0, 0);
         racine.Children.Add(note);
-        Content = racine;
+        // Sur un petit écran (ou une grande échelle Windows), la fenêtre rétrécit et le contenu défile.
+        Content = new ScrollViewer
+        {
+            Content = racine, Background = Fond, VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+        };
 
         PreviewKeyDown += (_, e) =>
         {
@@ -138,61 +152,56 @@ internal sealed class FenetreTraits : Window
         }
     }
 
-    // Un trait dominant : grande icône, étoile, nom en police pixel, cadre orange plein.
+    private static FrameworkElement? Icone(string sprite, double taille)
+    {
+        if (Pixels.Sprite(sprite, taille, dansPilou: false) is not { } icone) return null;
+        icone.HorizontalAlignment = HorizontalAlignment.Center;
+        icone.VerticalAlignment = VerticalAlignment.Center;
+        return icone;
+    }
+
+    // Un trait dominant : icône, nom en police pixel, étoile dans le coin, cadre orange plein.
     private FrameworkElement Carte(Traits.Trait t)
     {
-        var p = new StackPanel { Width = 168 };
-        var haut = new Grid { Height = 72 };
-        if (Pixels.Sprite(t.Sprite, 4, dansPilou: false) is { } icone)
+        var p = new DockPanel { LastChildFill = true };
+        if (Icone(t.Sprite, 3) is { } icone)
         {
-            icone.HorizontalAlignment = HorizontalAlignment.Center;
-            icone.VerticalAlignment = VerticalAlignment.Center;
-            haut.Children.Add(icone);
+            DockPanel.SetDock(icone, Dock.Left);
+            p.Children.Add(icone);
         }
         var etoile = Pixel("★", Bandeau.OrangePo, 2);
-        etoile.HorizontalAlignment = HorizontalAlignment.Right;
         etoile.VerticalAlignment = VerticalAlignment.Top;
-        haut.Children.Add(etoile);
-        p.Children.Add(haut);
+        etoile.Margin = new Thickness(4, 4, 0, 0);
+        DockPanel.SetDock(etoile, Dock.Right);
+        p.Children.Add(etoile);
         var nom = Pixel(t.Nom, Bandeau.ArgentClair, 2);
-        nom.HorizontalAlignment = HorizontalAlignment.Center;
-        nom.Margin = new Thickness(0, 6, 0, 0);
+        nom.VerticalAlignment = VerticalAlignment.Center;
+        nom.HorizontalAlignment = HorizontalAlignment.Left;
+        nom.Margin = new Thickness(8, 0, 0, 0);
         p.Children.Add(nom);
         return new Border
         {
-            Background = Feuille, BorderBrush = Bandeau.OrangePo, BorderThickness = new Thickness(2), Padding = new Thickness(8, 8, 8, 10),
-            Margin = new Thickness(6, 0, 6, 0), Child = p, ToolTip = t.Nom + " (trait dominant)",
+            Width = LargeurCarte, MinHeight = Boite + 8, Background = Feuille, BorderBrush = Bandeau.OrangePo, BorderThickness = new Thickness(2),
+            Padding = new Thickness(6, 4, 8, 4), Margin = new Thickness(0, 0, 0, 10), Child = p, ToolTip = t.Nom + " (trait dominant)",
         };
     }
 
-    // Un trait dans la grille : découvert (icône, nom), dominant (étoile en plus), ou inconnu (« ? », cadre pointillé).
+    // Un trait dans la grille : découvert (icône, nom), dominant (cadre orange, « ★ » devant le nom), ou inconnu
+    // (« ? », cadre pointillé).
     private FrameworkElement Vignette(Traits.Trait t, bool connu, bool dominant)
     {
-        var p = new StackPanel { Width = LargeurCase, Margin = new Thickness(0, 0, 0, 10) };
-        var dessin = new Grid { Width = 60, Height = 60 };
+        var p = new StackPanel { Width = LargeurCase, Margin = new Thickness(0, 0, 0, 8) };
+        var dessin = new Grid { Width = Boite, Height = Boite };
         dessin.Children.Add(connu
             ? new Border { Background = Case, BorderBrush = dominant ? Bandeau.OrangePo : Liseré, BorderThickness = new Thickness(2) }
             : new System.Windows.Shapes.Rectangle
             {
                 Fill = Case, Stroke = Eteint, StrokeThickness = 2, StrokeDashArray = new DoubleCollection { 2, 2 }, SnapsToDevicePixels = true,
             });
-        if (Pixels.Sprite(connu ? t.Sprite : "trait-inconnu", 3, dansPilou: false) is { } icone)
-        {
-            icone.HorizontalAlignment = HorizontalAlignment.Center;
-            icone.VerticalAlignment = VerticalAlignment.Center;
-            dessin.Children.Add(icone);
-        }
-        if (dominant)
-        {
-            var etoile = Pixel("★", Bandeau.OrangePo, 1);
-            etoile.HorizontalAlignment = HorizontalAlignment.Right;
-            etoile.VerticalAlignment = VerticalAlignment.Top;
-            etoile.Margin = new Thickness(0, 4, 5, 0);
-            dessin.Children.Add(etoile);
-        }
+        if (Icone(connu ? t.Sprite : "trait-inconnu", 3) is { } icone) dessin.Children.Add(icone);
         p.Children.Add(dessin);
-        var nom = Texte(11.5, connu ? Bandeau.ArgentClair : Eteint, connu);
-        nom.Text = connu ? t.Nom : "? ? ?";
+        var nom = Texte(11.5, dominant ? Bandeau.OrangePo : connu ? Bandeau.ArgentClair : Discret, connu);
+        nom.Text = dominant ? "★ " + t.Nom : connu ? t.Nom : "? ? ?";
         nom.TextAlignment = TextAlignment.Center;
         nom.Margin = new Thickness(2, 4, 2, 0);
         nom.MinHeight = 32;
