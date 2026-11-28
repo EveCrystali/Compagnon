@@ -924,7 +924,7 @@ def marais_majs(P, tab):
     P.trait(qx + 6.0, qy - 2.0, qx + 6.0, qy - 8.0, B1)
     pg.lanterne(P, qx + 6.0, qy - 8.2, corde=2.6)
     P.trait(qx - 6.0, qy - 2.4, qx - 13.0, qy + 3.0, B3)        # la perche
-    pg.canard(P, 142.0 + 0.8 * onde(p, 0.3), 63.0, sens=-1)
+    # (un canard peut passer ici, vers (142, 64) : c'est un acteur de la scène, pas du décor)
     # Brume froide au ras de l'eau.
     for g, (y0, ep) in enumerate(((52.5, 2.2), (57.0, 1.6), (66.0, 1.8))):
         voile(P, np.abs(Y - y0 - np.sin(X / 19.0 + g)) < ep * (0.4 + pg.fbm((X + 3.0 * onde(p, 0.2 * g)) / 22.0, Y / 3.0, 3, 308 + g)),

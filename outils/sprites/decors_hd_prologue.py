@@ -133,8 +133,7 @@ def mare(P, tab):
         pg.nenuphar(P, x, y + 0.12 * onde(p, 0.13 * i), r, 200 + i, fl)
     for i, x in enumerate((62.0, 96.0, 130.0)):                                      # les trois nénuphars, en ligne
         pg.nenuphar(P, x, 61.0 + (i % 2) * 1.2, 7.4, 300 + i, T.CREME if i == 2 else None)
-    pg.grenouille(P, 96.0, 60.0, p)
-    pg.canard(P, 76.0 + 0.6 * onde(p, 0.2), 55.2, sens=1)
+    # La grenouille (sur le nénuphar du milieu) et le canard (sur l'eau, vers (76, 56)) sont des acteurs de la scène.
     pg.libellule(P, 119.0, 53.4)
     for (x, y, r) in ((39.0, 69.6, 2.0), (45.5, 71.0, 1.4), (151.0, 70.2, 1.8), (157.0, 71.6, 1.2), (99.0, 73.4, 1.6)):
         pg.pierre(P, x, y, r)
@@ -499,7 +498,7 @@ def jardin(P, tab):
         for (ax, ay) in ((1, -1), (-1, -1), (0, -2), (2, 0), (-2, 0)):
             P.bloc(P.px(x) + ax, P.py(y) + ay, T.CREME if u < 0.5 else T.BLANC)
         P.trait(x, y + 0.6, x - 0.3, y + 2.0, T.M4)
-    # ---- Premier plan : la terre, les brins géants, la grande feuille et l'escargot.
+    # ---- Premier plan : la terre, les brins géants, la grande feuille (celle de l'escargot).
     tab.plan("premier", 1.0)
     f_sol = lambda x: 76.2 + 0.6 * np.sin(_a(x) / 9.0)
     pg.sol(P, f_sol, [T.S0, T.S1, T.S2, T.S3], chemin=78.4, graine=61, lisere=0.52)
@@ -520,24 +519,7 @@ def jardin(P, tab):
         P.trait(79 + i * 7, 72.9 - i * 1.5, 82 + i * 7, 78.0 - i * 1.4, T.S3)
     P.ell(112.0, 64.2, 1.3, 1.0, T.EAU[6])
     P.point(111.6, 63.8, T.BLANC)
-    # L'escargot : coquille en spirale orange, corps crème, cornes qui saluent.
-    ex, ey = 94.0, 58.6
-    P.ell(ex - 1.5, ey + 4.6, 8.5, 1.5, T.CREME, cond=Y > ey + 3.8)
-    P.ell(ex - 8.0, ey + 3.4, 2.8, 2.2, T.CREME)
-    P.ell(ex - 1.5, ey + 5.6, 8.0, 0.7, T.M3, cond=Y > ey + 5.2)
-    for (r, coul) in ((5.6, T.BR2), (5.0, T.O2), (3.9, T.O3), (2.7, T.O2), (1.6, T.O3), (0.7, T.LUM)):
-        P.ell(ex + 0.6 * (5.6 - r) * 0.3, ey - 0.2 + (5.6 - r) * 0.12, r, r, coul)
-    P.ell(ex - 1.6, ey - 2.4, 1.8, 1.0, T.LUM)
-    salut = 0.7 * onde(p * 2)
-    P.trait(ex - 9.0, ey + 2.0, ex - 10.6 + 0.3 * salut, ey - 2.2, T.CREME)
-    P.trait(ex - 7.6, ey + 1.8, ex - 7.6 + salut, ey - 2.6, T.CREME)
-    P.point(ex - 10.6 + 0.3 * salut, ey - 2.6, T.ENCRE)
-    P.point(ex - 7.6 + salut, ey - 3.0, T.ENCRE)
-    P.point(ex - 9.4, ey + 3.8, T.ENCRE)
-    # Sa trace brillante sur la feuille.
-    for i in range(7):
-        if (i + int(p * 8)) % 4:
-            P.point(ex + 8 + i * 2.6, ey + 5.0 - i * 0.36, T.CREME)
+    # L'escargot du texte est un acteur de la scène (acteur-escargot) : la feuille l'attend, vers (94, 64).
     # Une coccinelle (orange, pas rouge) qui grimpe sur un brin, deux fourmis sur le sol, trèfles et champignon.
     cy = 44.0 - 3.0 * abs(onde(p * 0.5))
     P.ell(172.6, cy, 1.5, 1.3, T.O3)

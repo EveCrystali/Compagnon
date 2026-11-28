@@ -237,7 +237,7 @@ def jardin_lave(P, tab):
     P.trait(54.0, 58.0, 76.0, 54.0, BO2, P.ep(0.6))               # le râteau
     for i in range(5):
         P.trait(52.0 + i * 0.9, 56.0 + i * 0.9, 51.4 + i * 0.9, 58.4 + i * 0.9, R2)
-    for i in range(3):                                          # des vers sortis de terre, un escargot
+    for i in range(3):                                          # des vers sortis de terre
         P.courbe([(116 + i * 22, 75.0 + i), (118 + i * 22, 74.2 + i + 0.3 * onde(p, 0.3 * i)), (120.4 + i * 22, 75.0 + i)], LA1, 1)
     tab.plan("premier", 1.0)
     # ---- Premier plan : de grandes feuilles lourdes d'eau, à gauche et à droite ; les gouttes qui s'en détachent.
@@ -474,7 +474,7 @@ def etang_qui_fume(P, tab):
     pg.touffes(P, f_berge, graine=837)
     pg.roseaux(P, -6.0, 16.0, n=12, haut=(14.0, 36.0), penche=1.0, graine=838)
     pg.roseaux(P, 100.0, 124.0, n=6, haut=(8.0, 16.0), penche=-1.0, graine=839)
-    pg.grenouille(P, 78.0, 73.4, p)
+    # (une grenouille peut se tenir sur la berge, vers (78, 75) : c'est un acteur de la scène, pas du décor)
     pg.libellule(P, 96.0, 60.0)
     pg.lucioles(P, [(10.0, 60.0), (24.0, 70.0), (176.0, 74.0), (120.0, 76.0)], graine=840)
 
