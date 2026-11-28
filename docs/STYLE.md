@@ -11,6 +11,8 @@ les mesure et les écrit. Toute interface nouvelle s'y tient ; tout écart se di
 | Toutes les pièces, dessinées par le vrai code de l'app (clair) | [captures/style/planche-clair.png](captures/style/planche-clair.png) |
 | Les mêmes, de nuit | [captures/style/planche-sombre.png](captures/style/planche-sombre.png) |
 | Le jeu d'icônes (1×, à l'écran, dessin fin) | [captures/style/icones.png](captures/style/icones.png) |
+| PC, taille réelle à 100 % : système, pixel « petit », pixel au plancher de lisibilité | [boutique](captures/style/pc-boutique-lisibilite.png), [« Pilou et moi »](captures/style/pc-traits-lisibilite.png) |
+| Téléphone, avant / après le plancher de lisibilité | [boutique](captures/style/android-lisibilite-boutique.png), [collection](captures/style/android-lisibilite-collection.png) |
 | PC avant / après à 100 % : boutique, journal, « Pilou et moi », expéditions | [boutique](captures/style/pc-boutique-avant-apres.png), [journal](captures/style/pc-journal-avant-apres.png), [« Pilou et moi »](captures/style/pc-traits-avant-apres.png), [expéditions](captures/style/pc-expeditions-avant-apres.png) |
 | Android avant / après : Accueil, Jouer, Boutique, Collection | [clair](captures/style/avant-apres-clair.png), [sombre](captures/style/avant-apres-sombre.png), [grande police](captures/style/avant-apres-grande-police.png) |
 | En-tête et barre du bas en grande police, avant / après | [captures/style/entete-barre-grande-police.png](captures/style/entete-barre-grande-police.png) |
@@ -103,8 +105,8 @@ choisi quand un pixel de police tombe sur un nombre pair de pixels de l'écran.
 
 | Taille | Téléphone (dp par pixel de police) | Sur 1078 × 2400 | PC | Sert à |
 |---|---|---|---|---|
-| **Petit** | 1,25 | 3 px | 1,3 unité (bulle) | étiquettes, chiffres, légendes, titres de section, onglets |
-| **Corps** | 1,45 (4 ÷ 2,75) | 4 px | 2 unités (réplique de l'Aventure) | phrases, récit, choix, boutons, titres de carte (en « titre ») |
+| **Petit** | 1,25 | 3 px | 1,3 unité (1 px à 100 %) | **capitales et nombres seulement** : étiquettes, prix, titres de section, « NIV » (voir « Plancher de lisibilité ») |
+| **Corps** | 1,45 (4 ÷ 2,75) | 4 px | 2 unités (2 px à 100 %) | tout texte en minuscules : phrases, détails, légendes, récit, choix, boutons, titres de carte (en « titre ») |
 | **Page** | 2,4 | 7 px | — | titre de page, nombre du niveau |
 
 - La taille suit **la taille de police du système** (× 1,3 en « grande police »), puis s'arrondit au pixel entier.
@@ -116,6 +118,39 @@ choisi quand un pixel de police tombe sur un nombre pair de pixels de l'écran.
   « ▲ Niveau 15 : Tête, Yeux, Cou +9 · encore 1000 xp » → « ▲ Niveau 15 : Tête, Yeux, Cou +9 » → « ▲ Niveau 15 : 12 rangées ».
 - Capitales : seulement les titres de section et les enseignes (« BOUTIQUE »). Le gras (« titre ») : titres et boutons.
 - Enseigne : police « titre », ombre d'un pixel de police en bas à droite, dans la couleur du bord.
+
+### Plancher de lisibilité
+
+Un texte en pixels n'a pas de demi-taille : il fait 1, 2 ou 3 pixels d'écran par pixel de police. La plus petite taille
+ne sert donc pas au texte courant. Mesuré à 100 % sur ce qui se lit bien :
+
+| Référence | Police | Hauteur d'x (minuscules) | Hauteur des capitales |
+|---|---|---|---|
+| Menu « Sept portes » | Consolas 12,5 | 7 px | 9 px |
+| Bulle du bureau | police pixel, 1 px par pixel | 5 px | 7 px |
+| Police pixel « petit » (1 px par pixel) | — | 5 px | 7 px |
+| Police pixel « corps » (2 px par pixel) | — | 10 px | 14 px |
+
+**La règle, sur le PC** : aucun texte courant sous **7 px de hauteur d'x** à 100 % (celle du menu). En police pixel :
+
+- tout texte qui contient des minuscules est en **« corps »** au moins (hauteur d'x 10 px) ;
+- **« petit » est réservé aux étiquettes en capitales et aux nombres** (prix, « NIV 15 », « À TOI », onglets, titres de
+  section, enseignes secondaires) : en capitales, il fait 7 px de haut, la hauteur d'x du menu. `StylePixel.Etiquette`
+  met en capitales et en police « titre » ;
+- une fenêtre grandit avec son texte : on élargit les cases et la fenêtre, on ne rapetisse pas la police.
+
+**La règle, sur le téléphone** : aucun texte en minuscules sous le **« corps »** (hauteur d'x de 20 px sur un écran de
+1078 × 2400, soit 7,3 dp ; « petit » n'en fait que 15, soit 5,5 dp). « Petit » y est réservé de la même façon aux
+capitales (`Style.etiquette`, titres de section, « NIV »). Des libellés rangés côte à côte qui ne tiennent pas au corps
+passent en police « texte » plutôt qu'en « titre » (plus étroite) avant de rapetisser, et jamais sous « petit ».
+
+**Un bouton fermé reste lisible** : son texte éteint (`#7d8796`) tient **4,7:1** de contraste sur le fond de nuit
+(`#151a2e`), au-dessus du seuil de 4,5:1 ; il garde la taille du bouton ouvert. Le bord en pointillés dit l'état, la
+couleur ne fait que l'accompagner. En thème clair, l'éteint `#767c84` ne fait que 3,8:1 sur la carte crème : un texte
+fermé y prend la couleur `pâle` (`#57606a`) et garde ses pointillés.
+
+À trancher : **la bulle du bureau est sous ce plancher** à 100 % (hauteur d'x de 5 px). Elle se lit parce que ses
+phrases sont courtes et isolées ; la passer à 2 px par pixel doublerait sa taille à l'écran.
 
 ### Où la police système reste permise
 
@@ -144,7 +179,7 @@ Un écran tactile n'a pas de survol : l'appui le remplace.
 | **Repos** | fond d'accent, texte inversé, biseau en relief | fond de carte, cadre fin (ou plein pour une carte) | texte pâle, sans cadre | — |
 | **Survol** (PC) / **appui** | le biseau s'inverse : le bouton s'enfonce | fond d'accent, texte inversé, plus d'ombre portée | idem | biseau inversé, curseur ▶ sur le PC |
 | **Choisi** | — | bord à la couleur `coche` | cadre plat à la couleur `coche` autour de lui | le cadre, la coche ✓, le rond à point |
-| **Fermé** | texte éteint, cadre en pointillés, cadenas devant le texte | idem | idem | pointillés et cadenas |
+| **Fermé** | texte éteint (4,7:1 sur le fond de nuit), même taille, cadre en pointillés | idem | idem | pointillés (et cadenas quand c'est un niveau qui ferme) |
 
 Les états d'une chose (quête, session, objet) se disent par une **case** : un carré au cadre plat avec un signe.
 

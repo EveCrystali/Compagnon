@@ -338,13 +338,13 @@ final class PageAccueil extends Page {
         bande.addView(sc, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         // Étiquette posée sur le décor : cadre plat de nuit, police pixel (une ligne ; un titre trop long finit par « … »).
         Style.Texte etiquette = new Style.Texte(app, Aventure.signeTon(c.ton) + " " + c.titre + (e.chapitreTotal > 0 ? " · " + e.chapitreNumero + "/" + e.chapitreTotal : ""),
-                Style.PETIT, Vitrine.ARGENT_CLAIR, true);
+                Style.CORPS, Vitrine.ARGENT_CLAIR, true);
         etiquette.setSingleLine(true);
         etiquette.setBackground(Style.plat(app, 0xe6151a2e, Vitrine.VIOLET_FONCE));
         etiquette.setPadding(Style.u(app) + Ui.dp(app, 6), Style.u(app) + Ui.dp(app, 1), Style.u(app) + Ui.dp(app, 6), Style.u(app) + Ui.dp(app, 1));
         FrameLayout.LayoutParams le = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
         le.setMargins(Ui.dp(app, 12), Ui.dp(app, 10), Ui.dp(app, 12), 0);
-        etiquette.setMaxWidth(Ui.dp(app, 260));
+        etiquette.setMaxWidth(Ui.dp(app, 300));
         bande.addView(etiquette, le);
         PilouVue pv = new PilouVue(app, Aventure.pixelPour(app, 66), true);
         pv.equipe(Gains.porte(app, pc));
