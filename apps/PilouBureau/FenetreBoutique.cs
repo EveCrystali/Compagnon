@@ -28,15 +28,16 @@ internal sealed class FenetreBoutique : Window
     // Hauteur : celle de Pilou en dessin fin au zoom net le plus grand (4 unités par pixel de grille : 224), plus sa marge.
     private readonly Grid _scene = new() { Width = 256, Height = 228, ClipToBounds = true };
     private uint[]? _pilouPixels;
-    private readonly TextBlock _nom = Texte(15, Bandeau.ArgentClair, gras: true);
-    private readonly TextBlock _detail = Texte(11.5, Bandeau.Argent);
-    private readonly TextBlock _message = Texte(11.5, Bandeau.Violet);
-    private readonly TextBlock _collection = Texte(11.5, Bandeau.ArgentClair, gras: true);
+    private readonly TextePixel _nom = Texte(15, Bandeau.ArgentClair, gras: true);
+    private readonly TextePixel _detail = Texte(11.5, Bandeau.Argent);
+    private readonly TextePixel _message = Texte(11.5, Bandeau.Violet);
+    private readonly TextePixel _collection = Texte(11.5, Bandeau.ArgentClair, gras: true);
     private readonly StackPanel _jaugeCollection = new() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
-    private readonly Button _essayer = Bouton("Essayer"), _acheter = Bouton("Acheter"), _porter = Bouton("Porter");
+    private readonly BoutonPixel _essayer = Bouton("Essayer"), _acheter = Bouton("Acheter", true), _porter = Bouton("Porter");
     private readonly DispatcherTimer _horloge = new() { Interval = TimeSpan.FromMilliseconds(140) };
     private readonly List<Pixels> _pieces = new();
-    private readonly Pixels _enseigne;
+    private readonly Grid _enseigne;
+    private readonly TextePixel _enseigneTexte;
     private List<(int[,] Motif, Brush?[] Palette)> _imagesPiece = new();
     private string _rayon = Vitrine;
     private Article? _choisi;
@@ -56,18 +57,13 @@ internal sealed class FenetreBoutique : Window
         return b;
     }
 
-    private static TextBlock Texte(double taille, Brush couleur, bool gras = false) => new()
-    {
-        FontSize = taille, Foreground = couleur, FontWeight = gras ? FontWeights.Bold : FontWeights.Normal,
-        FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
-    };
+    // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (étiquettes,
+    // détails) ou « corps » (noms, à partir de 14) ; gras : la police « titre ».
+    private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
+        StylePixel.Texte("", couleur, taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
 
-    private static Button Bouton(string texte) => new()
-    {
-        Content = texte, Margin = new Thickness(0, 0, 6, 0), Padding = new Thickness(10, 5, 10, 5), MinWidth = 72,
-        Background = Gel("#2a3156"), Foreground = Bandeau.ArgentClair, BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2),
-        FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
-    };
+    private static BoutonPixel Bouton(string texte, bool principal = false) =>
+        new(texte, principal, StylePixel.Petit) { Margin = new Thickness(0, 0, 6, 4) };
 
     public FenetreBoutique(FenetrePilou pilou, int vuAvant, string rayon = Vitrine)
     {
@@ -85,10 +81,12 @@ internal sealed class FenetreBoutique : Window
         UseLayoutRounding = true;
 
         // Enseigne néon « BOUTIQUE » : orange qui grésille doucement (immobile si les animations sont coupées).
-        _enseigne = new Pixels(Pixels.Texte("BOUTIQUE"), new Brush?[] { null, Neon }, NeonViolet, 6)
-            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 10, 0, 4) };
+        _enseigne = StylePixel.Enseigne("BOUTIQUE", Neon, NeonViolet, 5);
+        _enseigne.HorizontalAlignment = HorizontalAlignment.Center;
+        _enseigne.Margin = new Thickness(0, 0, 0, 4);
+        _enseigneTexte = (TextePixel)_enseigne.Children[^1];
         var sousTitre = Texte(11.5, Bandeau.Argent);
-        sousTitre.Text = "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.";
+        sousTitre.Texte = "Ton niveau ouvre les rangées, tes pièces d'or achètent. Tout est gratuit : les po se gagnent en quêtes.";
         sousTitre.HorizontalAlignment = HorizontalAlignment.Center;
 
         var racine = new Grid { Margin = new Thickness(14, 10, 14, 10) };
@@ -120,6 +118,7 @@ internal sealed class FenetreBoutique : Window
         Grid.SetColumn(droite, 1);
         corps.Children.Add(droite);
         Content = racine;
+        StylePixel.Defileur(this);
 
         _essayer.Click += (_, _) =>
         {
@@ -146,7 +145,7 @@ internal sealed class FenetreBoutique : Window
         {
             _choisi = a;
             _essai = true;
-            _message.Text = "";
+            _message.Texte = "";
         }
         Remplir();
         _defile.ScrollToTop();
@@ -182,11 +181,14 @@ internal sealed class FenetreBoutique : Window
         };
     }
 
-    private static Pixels Titre(string texte, Brush couleur, double taille = 2) =>
-        new(Pixels.Texte(texte), new Brush?[] { null, couleur }, Bandeau.Encre, taille)
-            { HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 0, 0, 6) };
+    // Titre d'enseigne (« ESSAYAGE », « RANGÉE NIV 5 ») : police « titre », ombre d'un pixel. taille 2 : petit ; 3 : corps.
+    private static Grid Titre(string texte, Brush couleur, double taille = 2)
+    {
+        var t = StylePixel.Enseigne(texte, couleur, Bandeau.Encre, taille >= 3 ? StylePixel.Corps : StylePixel.Petit);
+        t.Margin = new Thickness(0, 0, 0, 6);
+        return t;
+    }
 
-    // Ce que porte Pilou dans l'aperçu : l'équipement actuel, avec l'objet essayé à sa place.
     private Allure AllureApercu(Article? essai)
     {
         var (_, _, equipe) = _pilou.EtatBourse();
@@ -248,8 +250,8 @@ internal sealed class FenetreBoutique : Window
 
         if (_choisi is null)
         {
-            _nom.Text = "Choisis un objet sur les étagères";
-            _detail.Text = "Clic sur un objet : Pilou l'essaie ici. Les rangées s'ouvrent avec ton niveau.";
+            _nom.Texte = "Choisis un objet sur les étagères";
+            _detail.Texte = "Clic sur un objet : Pilou l'essaie ici. Les rangées s'ouvrent avec ton niveau.";
             _essayer.Visibility = _acheter.Visibility = _porter.Visibility = Visibility.Collapsed;
             return;
         }
@@ -260,24 +262,24 @@ internal sealed class FenetreBoutique : Window
         bool porteIci = EstPorte(a, equipe);
         if (a.Recompense) possede = Boutique.PeutPorter(inventaire, a.Slot, a.Id);
         bool dispo = Boutique.Disponible(a, Jour);
-        _nom.Text = $"{Boutique.SigneRarete(a.Rarete)} {a.Nom}";
+        _nom.Texte = $"{Boutique.SigneRarete(a.Rarete)} {a.Nom}";
         string etat = a.Recompense ? (possede ? (porteIci ? "★ porté" : "✓ gagné") : $"▣ à gagner : {CommentGagner(a)}")
             : !Boutique.Ouvert(a, niveau) ? $"🔒 rangée fermée : niveau {a.NiveauMin} (encore {Math.Max(0, Profil.XpPourNiveau(a.NiveauMin) - _pilou.XpTotal)} xp)"
             : porteIci ? "★ porté" : possede ? (bonus ? "✓ actif" : "✓ à toi")
             : !dispo ? Indispo(a)
             : solde >= prix ? $"◉ {prix} po{(prix < a.Prix ? $" (au lieu de {a.Prix})" : "")}"
             : $"◌ {prix} po · il manque {prix - solde} po";
-        _detail.Text = $"{Boutique.Signe(a.Slot)} {Boutique.NomSlot(Boutique.RayonDe(a.Slot))} · {Boutique.NomRarete(a.Rarete)}"
+        _detail.Texte = $"{Boutique.Signe(a.Slot)} {Boutique.NomSlot(Boutique.RayonDe(a.Slot))} · {Boutique.NomRarete(a.Rarete)}"
             + (a.Recompense ? "" : $" · rangée niveau {a.NiveauMin}") + $"\n{etat}" + Precisions(a, inventaire)
             + (consommable ? $"\nEn réserve : {_pilou.Reserve(a.Id)}" : "");
         bool essayable = Boutique.Slots.Contains(a.Slot) || a.Slot == Boutique.Accessoire;
         _essayer.Visibility = essayable ? Visibility.Visible : Visibility.Collapsed;
-        _essayer.Content = _essai ? "Enlever l'essai" : "Essayer";
+        _essayer.Libelle = _essai ? "Enlever l'essai" : "Essayer";
         _acheter.Visibility = possede || a.Recompense ? Visibility.Collapsed : Visibility.Visible;
-        _acheter.Content = dispo ? $"Acheter · {prix} po" : a.Passage ? "✧ pas en vitrine" : "⌛ hors saison";
+        _acheter.Libelle = dispo ? $"Acheter · {prix} po" : a.Passage ? "✧ pas en vitrine" : "⌛ hors saison";
         _acheter.IsEnabled = Boutique.Ouvert(a, niveau) && solde >= prix && dispo;
         _porter.Visibility = possede && !bonus ? Visibility.Visible : Visibility.Collapsed;
-        _porter.Content = porteIci ? "Retirer" : "Porter";
+        _porter.Libelle = porteIci ? "Retirer" : "Porter";
     }
 
     // « ⌛ hors saison · revient le 1er déc. (hiver) » ; « ✧ de passage seulement · prochain passage le 14 déc. ».
@@ -315,11 +317,7 @@ internal sealed class FenetreBoutique : Window
             BorderBrush = Gel(st.Bord), BorderThickness = new Thickness(st.Epaisseur), CornerRadius = new CornerRadius(st.Rayon),
             Background = st.Fond is { } f ? Gel(f) : Gel("#f6f8fa"), Padding = new Thickness(8, 3, 8, 4),
             HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 6, 0, 0),
-            Child = new TextBlock
-            {
-                Text = "ça te va bien !", FontSize = 11, FontStyle = FontStyles.Italic, FontFamily = new FontFamily("Segoe UI"),
-                Foreground = st.Sombre ? Gel("#e6ecf2") : Gel("#1c2128"),
-            },
+            Child = StylePixel.Texte("ça te va bien !", st.Sombre ? Gel("#e6ecf2") : Gel("#1c2128")),
         };
         return b;
     }
@@ -361,7 +359,7 @@ internal sealed class FenetreBoutique : Window
     {
         int n = Boutique.Collection(inventaire), total = Boutique.TotalCollection;
         var p = Boutique.ProchainPalierCollection(n);
-        _collection.Text = $"❖ Collection {n}/{total}" + (p is null ? " · tout est à toi !" : $" · à {Boutique.Seuil(p)} : {p.Nom}");
+        _collection.Texte = $"❖ Collection {n}/{total}" + (p is null ? " · tout est à toi !" : $" · à {Boutique.Seuil(p)} : {p.Nom}");
         _jaugeCollection.Children.Clear();
         const int cases = 30;
         int pleines = total == 0 ? 0 : n * cases / total;
@@ -395,7 +393,7 @@ internal sealed class FenetreBoutique : Window
                 {
                     foreach (var id in e.Pieces.Where(inventaire.Contains))
                         if (Boutique.Trouver(id) is { } x) _pilou.Equiper(x.Slot, id);
-                    _message.Text = $"★ Pilou porte l'ensemble {e.Nom} ({a}/{e.Pieces.Count})";
+                    _message.Texte = $"★ Pilou porte l'ensemble {e.Nom} ({a}/{e.Pieces.Count})";
                     Remplir();
                 };
                 _etageres.Children.Add(tout);
@@ -417,30 +415,35 @@ internal sealed class FenetreBoutique : Window
         }
     }
 
+    // Onglet d'un rayon : cadre pixel sans ombre. Ouvert : fond et bord violets, texte clair (la forme : le cadre plein).
+    // « ! » : du nouveau dans ce rayon (pastille orange, carrée).
     private UIElement Onglet(string rayon, string texte, bool neuf)
     {
         bool actif = _rayon == rayon;
-        var contenu = new StackPanel { Orientation = Orientation.Horizontal };
-        contenu.Children.Add(new TextBlock { Text = texte, FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, FontSize = 12 });
+        var contenu = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5, 0, 5, 0) };
+        var libelle = StylePixel.Texte(texte, actif ? Brushes.White : Bandeau.Argent, StylePixel.Petit, true);
+        libelle.VerticalAlignment = VerticalAlignment.Center;
+        contenu.Children.Add(libelle);
         if (neuf)
             contenu.Children.Add(new Border
             {
-                Background = Porte, Margin = new Thickness(5, 0, 0, 0), Padding = new Thickness(4, 0, 4, 0),
-                Child = new TextBlock { Text = "!", FontWeight = FontWeights.Bold, Foreground = Bandeau.Encre, FontSize = 11 },
+                Background = Porte, Margin = new Thickness(5, 0, 0, 0), Padding = new Thickness(3, 0, 2, 0), VerticalAlignment = VerticalAlignment.Center,
+                Child = StylePixel.Texte("!", Bandeau.Encre, StylePixel.Petit, true),
             });
-        var b = new Button
+        var cadre = new CadrePixel
         {
-            Content = contenu, Margin = new Thickness(0, 0, 4, 4), Padding = new Thickness(9, 4, 9, 4), Cursor = Cursors.Hand,
-            Background = actif ? Gel("#6a5acd") : Gel("#1f2540"), Foreground = actif ? Brushes.White : Bandeau.Argent,
-            BorderBrush = actif ? Gel("#d2caff") : Gel("#3b4654"), BorderThickness = new Thickness(2, 2, 2, actif ? 0 : 2),
+            U = 2, AvecOmbre = false, Retrait = 0, Child = contenu, Margin = new Thickness(0, 0, 4, 4), Cursor = Cursors.Hand,
+            Fond = actif ? Gel("#6a5acd") : Gel("#1f2540"), Couleur = actif ? Gel("#d2caff") : Gel("#3b4654"),
         };
-        b.Click += (_, _) =>
+        cadre.MouseEnter += (_, _) => { if (!actif) cadre.Couleur = Bandeau.Violet; cadre.InvalidateVisual(); };
+        cadre.MouseLeave += (_, _) => { if (!actif) cadre.Couleur = Gel("#3b4654"); cadre.InvalidateVisual(); };
+        cadre.MouseLeftButtonUp += (_, _) =>
         {
             _rayon = rayon;
             Remplir();
             _defile.ScrollToTop();
         };
-        return b;
+        return cadre;
     }
 
     private void RemplirVitrine(int niveau, int solde, List<string> inventaire, Dictionary<string, Port> equipe)
@@ -506,11 +509,12 @@ internal sealed class FenetreBoutique : Window
             ligne.Children.Add(cad);
         }
         var t = Titre(titre, couleur, 3);
-        t.Margin = new Thickness(0);
+        t.Margin = new Thickness(0, -2, 0, 0);
         t.VerticalAlignment = VerticalAlignment.Center;
         ligne.Children.Add(t);
         var s = Texte(11, Bandeau.Argent);
-        s.Text = "  " + sous;
+        s.Texte = sous;
+        s.Margin = new Thickness(10, 0, 0, 0);
         s.VerticalAlignment = VerticalAlignment.Center;
         ligne.Children.Add(s);
         if (flash && Bandeau.Anime)
@@ -548,32 +552,31 @@ internal sealed class FenetreBoutique : Window
             {
                 Width = 70, Height = 40, BorderBrush = ferme ? Ferme : Gel(st.Bord), BorderThickness = new Thickness(st.Epaisseur),
                 CornerRadius = new CornerRadius(st.Rayon), Background = ferme ? Case : st.Fond is { } f ? Gel(f) : Gel("#f6f8fa"),
-                Child = new TextBlock
-                {
-                    Text = "…", FontSize = 16, FontWeight = FontWeights.Bold, HorizontalAlignment = HorizontalAlignment.Center,
-                    Foreground = ferme ? Ferme : st.Sombre ? Gel("#e6ecf2") : Gel("#1c2128"),
-                },
+                Child = Centre(StylePixel.Texte("…", ferme ? Ferme : st.Sombre ? Gel("#e6ecf2") : Gel("#1c2128"), StylePixel.Corps, true)),
             };
         if (a.Slot == Boutique.Titre)
             return new Border
             {
                 Width = 92, Height = 40, BorderBrush = ferme ? Ferme : Gel(Boutique.CouleurRarete(a.Rarete)), BorderThickness = new Thickness(2),
                 Background = Gel("#151a2e"), Padding = new Thickness(3),
-                Child = new TextBlock
-                {
-                    Text = a.Nom, FontSize = 10.5, FontStyle = FontStyles.Italic, TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center, FontFamily = new FontFamily("Segoe UI"),
-                    Foreground = ferme ? Bandeau.Argent : Bandeau.ArgentClair,
-                },
+                Child = new TextePixel(a.Nom, ferme ? Bandeau.Argent : Bandeau.ArgentClair)
+                    { Taille = StylePixel.Petit, Centre = true, MaxLignes = 2, VerticalAlignment = VerticalAlignment.Center, PhysiqueParUnite = () => StylePixel.Physique(this) },
             };
         if (Boutique.RayonDe(a.Slot) == Boutique.Speciaux && a.Slot != Boutique.Accessoire)
             return Apercu.Sprite(Icone(a.Id), 0, ferme) is { } ic ? Apercu.Vue(ic, Math.Min(4, 48.0 / Math.Max(ic.PixelWidth, ic.PixelHeight)))
-                : new TextBlock { Text = Boutique.Signe(a.Slot), FontSize = 28, Foreground = Bandeau.Argent };
+                : StylePixel.Texte(Boutique.Signe(a.Slot), Bandeau.Argent, StylePixel.Grand);
         var allure = new Allure { T = _t, Stade = 2, Expr = "repos" };
         if (a.Slot == Boutique.Couleur) allure.Couleur = Teinte(a.Id);
         else if (a.Slot == Boutique.Accessoire) allure.Accessoire = a.Id;
         else allure.Objets = new[] { a.Id };
         return Apercu.Vue(Apercu.Image(allure, ferme), 1.5);
+    }
+
+    private static FrameworkElement Centre(FrameworkElement e)
+    {
+        e.HorizontalAlignment = HorizontalAlignment.Center;
+        e.VerticalAlignment = VerticalAlignment.Center;
+        return e;
     }
 
     private static string Icone(string id) => id switch
@@ -612,33 +615,33 @@ internal sealed class FenetreBoutique : Window
         }
         haut.Children.Add(vignette);
         if (signe != "")
-            haut.Children.Add(new TextBlock
-            {
-                Text = signe, FontSize = 14, FontWeight = FontWeights.Bold, Foreground = bord, Margin = new Thickness(0, 2, 4, 0),
-                HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top,
-            });
+        {
+            var etat = StylePixel.Texte(signe, bord, StylePixel.Petit, true);
+            etat.Margin = new Thickness(0, 1, 4, 0);
+            etat.HorizontalAlignment = HorizontalAlignment.Right;
+            etat.VerticalAlignment = VerticalAlignment.Top;
+            haut.Children.Add(etat);
+        }
         if (ruban is not null)
             haut.Children.Add(new Border
             {
                 Background = Porte, Padding = new Thickness(4, 0, 4, 1), HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                Child = new TextBlock { Text = ruban, FontSize = 10, FontWeight = FontWeights.Bold, Foreground = Bandeau.Encre, FontFamily = new FontFamily("Consolas") },
+                Child = StylePixel.Texte(ruban, Bandeau.Encre, StylePixel.Petit, true),
             });
         // Rareté : son signe, dans sa couleur, en bas à gauche ; le signe de l'ensemble à côté.
         var ens = Boutique.Ensembles.FirstOrDefault(e => e.Pieces.Contains(a.Id));
-        haut.Children.Add(new TextBlock
-        {
-            Text = Boutique.SigneRarete(a.Rarete) + (ens is null ? "" : " " + ens.Signe), FontSize = 13, FontWeight = FontWeights.Bold,
-            Foreground = Gel(Boutique.CouleurRarete(a.Rarete)), Margin = new Thickness(5, 0, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Bottom,
-        });
+        var rarete = StylePixel.Texte(Boutique.SigneRarete(a.Rarete) + (ens is null ? "" : " " + ens.Signe), Gel(Boutique.CouleurRarete(a.Rarete)), StylePixel.Petit, true);
+        rarete.Margin = new Thickness(5, 0, 0, 0);
+        rarete.HorizontalAlignment = HorizontalAlignment.Left;
+        rarete.VerticalAlignment = VerticalAlignment.Bottom;
+        haut.Children.Add(rarete);
         pile.Children.Add(new Border { Height = 3, Background = Gel(Boutique.CouleurRarete(a.Rarete)), Margin = new Thickness(6, 0, 6, 2) });
         pile.Children.Add(haut);
         var nom = Texte(10.5, ouvert ? Bandeau.ArgentClair : Bandeau.Argent);
-        nom.Text = a.Nom;
-        nom.TextAlignment = TextAlignment.Center;
-        nom.TextTrimming = TextTrimming.CharacterEllipsis;
-        nom.TextWrapping = TextWrapping.NoWrap;
+        nom.Texte = a.Nom;
+        nom.Centre = true;
+        nom.MaxLignes = 1;
         nom.Margin = new Thickness(4, 0, 4, 2);
         pile.Children.Add(nom);
         pile.Children.Add(Etiquette(a, ouvert, possede, porte, consommable, prix, solde, bord, dispo));
@@ -657,7 +660,7 @@ internal sealed class FenetreBoutique : Window
         {
             _choisi = a;
             _essai = true;
-            _message.Text = "";
+            _message.Texte = "";
             Remplir();
         };
         return tuile;
@@ -672,11 +675,12 @@ internal sealed class FenetreBoutique : Window
             Background = Bandeau.Encre, BorderBrush = bord, BorderThickness = new Thickness(1), Padding = new Thickness(5, 1, 6, 1),
             HorizontalAlignment = HorizontalAlignment.Center, Child = ligne,
         };
-        TextBlock T(string s, Brush c) => new()
+        TextePixel T(string s, Brush c)
         {
-            Text = s, Foreground = c, FontSize = 11, FontWeight = FontWeights.Bold, FontFamily = new FontFamily("Consolas"),
-            VerticalAlignment = VerticalAlignment.Center,
-        };
+            var t = StylePixel.Texte(s, c, StylePixel.Petit, true);
+            t.VerticalAlignment = VerticalAlignment.Center;
+            return t;
+        }
         if (a.Recompense && !possede) ligne.Children.Add(T("▣ à gagner", Bandeau.Argent));
         else if (!ouvert)
         {
@@ -701,9 +705,9 @@ internal sealed class FenetreBoutique : Window
                 ligne.Children.Add(piece);
             }
             ligne.Children.Add(T(prix.ToString(), solde >= prix ? Neon : Bandeau.Argent));
-            if (prix < a.Prix) ligne.Children.Add(T($" ({a.Prix})", Bandeau.Argent));
-            if (solde < prix) ligne.Children.Add(T(" ◌", Bandeau.Argent));
-            if (consommable && _pilou.Reserve(a.Id) > 0) ligne.Children.Add(T($" ×{_pilou.Reserve(a.Id)}", AToi));
+            if (prix < a.Prix) ligne.Children.Add(T($" ({a.Prix})", Bandeau.Argent));
+            if (solde < prix) ligne.Children.Add(T(" ◌", Bandeau.Argent));
+            if (consommable && _pilou.Reserve(a.Id) > 0) ligne.Children.Add(T($" ×{_pilou.Reserve(a.Id)}", AToi));
         }
         return fond;
     }
@@ -716,7 +720,7 @@ internal sealed class FenetreBoutique : Window
         var a = _choisi;
         var refus = _pilou.Acheter(a.Id);
         if (refus is null) Sons.Jouer(Son.Achat);
-        _message.Text = refus is null ? $"✓ {a.Nom} est à toi !" : $"✕ {refus}";
+        _message.Texte = refus is null ? $"✓ {a.Nom} est à toi !" : $"✕ {refus}";
         // Un objet portable acheté se porte tout de suite (on peut le retirer).
         if (refus is null && Boutique.Slots.Contains(a.Slot)) _pilou.Equiper(a.Slot, a.Id);
         Remplir();
@@ -729,7 +733,7 @@ internal sealed class FenetreBoutique : Window
         var (_, _, equipe) = _pilou.EtatBourse();
         bool porte = a.Slot == Boutique.Accessoire ? _pilou.AccessoireChoisi == a.Id : EstPorte(a, equipe);
         _pilou.Equiper(a.Slot, porte ? "" : a.Id);
-        _message.Text = porte ? $"{a.Nom} rangé." : $"★ Pilou porte : {a.Nom}";
+        _message.Texte = porte ? $"{a.Nom} rangé." : $"★ Pilou porte : {a.Nom}";
         Remplir();
     }
 
@@ -747,7 +751,7 @@ internal sealed class FenetreBoutique : Window
             }
         }
         int k = (int)(_t / 140);
-        _enseigne.Palette = new Brush?[] { null, k % 37 == 0 || k % 37 == 2 ? NeonClair : Neon };
+        _enseigneTexte.Couleur = k % 37 == 0 || k % 37 == 2 ? NeonClair : Neon;
         if (_pilouVu is not null && Apercu.ImageSiChange(AllureApercu(_choisi), ref _pilouPixels, fin: true) is { } image) _pilouVu.Source = image;
     }
 }
@@ -770,16 +774,17 @@ internal sealed class FenetreRangees : Window
         var neufs = Boutique.Debloques(avant, apres);
         var rayons = Boutique.Rayons.Where(r => neufs.Any(a => Boutique.RayonDe(a.Slot) == r)).ToList();
         var pile = new StackPanel();
-        pile.Children.Add(new Pixels(Pixels.Texte($"NIVEAU {apres} !"), new Brush?[] { null, Bandeau.OrangePo }, Bandeau.Encre, 4)
-            { HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 0, 0, 6) });
-        pile.Children.Add(new Pixels(Pixels.Texte("RANGÉES DÉBLOQUÉES"), new Brush?[] { null, Bandeau.Violet }, Bandeau.Encre, 2)
-            { HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 0, 0, 6) });
-        pile.Children.Add(new TextBlock
-        {
-            Text = string.Join("   ", rayons.Select(r => $"{Boutique.Signe(r)} {Boutique.NomSlot(r)}")),
-            Foreground = Bandeau.ArgentClair, FontSize = 12, FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
-            MaxWidth = 310,
-        });
+        var niveau = StylePixel.Enseigne($"NIVEAU {apres} !", Bandeau.OrangePo, Bandeau.Bord, StylePixel.Grand);
+        niveau.Margin = new Thickness(0, 0, 0, 4);
+        pile.Children.Add(niveau);
+        var sous = StylePixel.Enseigne("RANGÉES DÉBLOQUÉES", Bandeau.Violet, Bandeau.Encre, StylePixel.Petit);
+        sous.Margin = new Thickness(0, 0, 0, 6);
+        pile.Children.Add(sous);
+        // Signe et nom insécables : une ligne ne coupe jamais « ▲ Tête » en deux.
+        var noms = StylePixel.Texte(string.Join(" · ", rayons.Select(r => $"{Boutique.Signe(r)}\u00a0{Boutique.NomSlot(r)}")), Bandeau.ArgentClair, StylePixel.Petit, true);
+        noms.MaxWidth = 310;
+        noms.HorizontalAlignment = HorizontalAlignment.Left;
+        pile.Children.Add(noms);
         var vitrine = new WrapPanel { Margin = new Thickness(0, 8, 0, 8), MaxWidth = 310 };
         foreach (var a in neufs.Where(a => Boutique.SurPilou(a.Slot) && Boutique.Slots.Contains(a.Slot)).Take(5))
             vitrine.Children.Add(new Border
@@ -789,30 +794,19 @@ internal sealed class FenetreRangees : Window
             });
         if (vitrine.Children.Count > 0) pile.Children.Add(vitrine);
         var boutons = new StackPanel { Orientation = Orientation.Horizontal };
-        var aller = new Button
-        {
-            Content = "Voir en boutique", Padding = new Thickness(10, 4, 10, 4), Background = Bandeau.OrangePo, Foreground = Bandeau.Encre,
-            FontWeight = FontWeights.Bold, BorderBrush = Bandeau.Encre, BorderThickness = new Thickness(2), Cursor = Cursors.Hand,
-        };
+        var aller = new BoutonPixel("Voir en boutique", true, StylePixel.Petit);
         aller.Click += (_, _) =>
         {
             Close();
             voir(rayons.FirstOrDefault() ?? "vitrine");
         };
-        var plusTard = new Button
-        {
-            Content = "Plus tard", Padding = new Thickness(10, 4, 10, 4), Margin = new Thickness(6, 0, 0, 0), Background = Bandeau.Nuit2,
-            Foreground = Bandeau.Argent, BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(2), Cursor = Cursors.Hand,
-        };
+        var plusTard = new BoutonPixel("Plus tard", false, StylePixel.Petit) { Margin = new Thickness(6, 0, 0, 0) };
         plusTard.Click += (_, _) => Close();
         boutons.Children.Add(aller);
         boutons.Children.Add(plusTard);
         pile.Children.Add(boutons);
-        Content = new Border
-        {
-            Background = Bandeau.Nuit, BorderBrush = Bandeau.Bord, BorderThickness = new Thickness(3), Padding = new Thickness(14, 12, 14, 12),
-            Child = pile,
-        };
+        pile.Margin = new Thickness(10, 8, 10, 8);
+        Content = new CadrePixel { U = 3, Child = pile };
         var fin = new DispatcherTimer { Interval = TimeSpan.FromSeconds(12) };
         fin.Tick += (_, _) =>
         {

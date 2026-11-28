@@ -51,6 +51,7 @@ public class CapturesStyleTest {
                 Context ctx = RuntimeEnvironment.getApplication();
                 Prefs.de(ctx).edit().clear().commit();
                 essayer("planche", this::planche);
+                Prefs.de(ctx).edit().clear().commit(); // la planche a ouvert l'app : on repart d'un premier lancement
                 essayer("neuf", this::neuf);
                 appairer();
                 essayer("pages", this::pages);
@@ -187,6 +188,7 @@ public class CapturesStyleTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         attendre();
         ecran(c.get(), "neuf-accueil");
+        contenu(c.get().page(Principale.ACCUEIL), "neuf-accueil-long");
         c.pause().stop().destroy();
     }
 
@@ -194,8 +196,8 @@ public class CapturesStyleTest {
         ActivityController<Principale> c = Robolectric.buildActivity(Principale.class).setup().visible();
         Principale a = c.get();
         attendre();
-        int[] onglets = {Principale.ACCUEIL, Principale.JOUER, Principale.BOUTIQUE, Principale.COLLECTION};
-        String[] noms = {"accueil", "jouer", "boutique", "collection"};
+        int[] onglets = {Principale.ACCUEIL, Principale.JOUER, Principale.BOUTIQUE, Principale.COLLECTION, Principale.REGLAGES};
+        String[] noms = {"accueil", "jouer", "boutique", "collection", "reglages"};
         for (int i = 0; i < onglets.length; i++) {
             a.aller(onglets[i], false);
             attendre();
@@ -225,7 +227,10 @@ public class CapturesStyleTest {
 
     // Le même état de démonstration que CapturesTest : rien de personnel.
     private void appairer() {
-        Context ctx = RuntimeEnvironment.getApplication();
+        appairer(RuntimeEnvironment.getApplication());
+    }
+
+    static void appairer(Context ctx) {
         long t = System.currentTimeMillis();
         String etat = "{\"v\":1,\"t\":" + t + ",\"nom\":\"Pilou\",\"niveau\":12,\"titre\":\"Pêcheur du dimanche\",\"couleur\":\"bleu\","
                 + "\"humeur\":\"repos\",\"calmes\":2,\"sessions\":["
@@ -241,7 +246,7 @@ public class CapturesStyleTest {
                 + "\"avance\":{\"codeur-confirme\":412,\"gamer\":34,\"visio-man\":30,\"rempart\":70,\"photographe\":20},"
                 + "\"appareils\":[{\"nom\":\"PC-SALON\",\"xp\":3100,\"t\":" + (t - 20_000) + "},{\"nom\":\"PC-BUREAU\",\"xp\":500,\"t\":" + (t - 7_200_000) + "}]}";
         Prefs.de(ctx).edit().putString("code", "ABCDEFGHJKMNPQRS").putString("etat", etat).putLong("recu", t)
-                .putBoolean("bulle", true).putInt("boutiqueVue", 9).putInt("niveauVu", 12).commit();
+                .putBoolean("bulle", true).putInt("boutiqueVue", 9).putInt("niveauVu", 12).putBoolean("traitsOuverts", true).commit();
     }
 
     private static void attendre() {

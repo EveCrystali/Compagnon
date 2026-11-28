@@ -16,7 +16,7 @@ internal sealed class FenetreExpeditions : Window
     private readonly Bandeau _bandeau = new(compact: true);
     private readonly StackPanel _lieux = new();
     private readonly StackPanel _droite = new() { Margin = new Thickness(14, 0, 0, 0) };
-    private readonly TextBlock _etat = Texte(12, Bandeau.Argent);
+    private readonly TextePixel _etat = Texte(12, Bandeau.Argent);
     private readonly DispatcherTimer _horloge = new() { Interval = TimeSpan.FromSeconds(2) };
     private string _cle = "";
 
@@ -30,37 +30,31 @@ internal sealed class FenetreExpeditions : Window
         return b;
     }
 
-    private static TextBlock Texte(double taille, Brush couleur, bool gras = false) => new()
-    {
-        FontSize = taille, Foreground = couleur, FontWeight = gras ? FontWeights.Bold : FontWeights.Normal,
-        FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
-    };
+    // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (détails), « corps »
+    // (à partir de 14) ou « grand » (à partir de 20, un signe seul) ; gras : la police « titre ».
+    private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
+        StylePixel.Texte("", couleur, taille >= 20 ? StylePixel.Grand : taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
 
-    private static TextBlock Texte(string texte, double taille, Brush couleur, bool gras = false)
+    private static TextePixel Texte(string texte, double taille, Brush couleur, bool gras = false)
     {
         var t = Texte(taille, couleur, gras);
-        t.Text = texte;
+        t.Texte = texte;
         return t;
     }
 
-    private static Button Bouton(string texte, bool principal, Action action)
+    private static BoutonPixel Bouton(string texte, bool principal, Action action)
     {
-        var b = new Button
-        {
-            Content = texte, Padding = new Thickness(10, 3, 10, 3), MinWidth = 70, Cursor = Cursors.Hand,
-            Background = principal ? Bandeau.OrangePo : Bandeau.Nuit2, Foreground = principal ? Bandeau.Encre : Bandeau.ArgentClair,
-            BorderBrush = principal ? Bandeau.Encre : Bandeau.Bord, BorderThickness = new Thickness(2),
-            FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center,
-        };
-        // Même habit que l'Aventure et le journal : sans lui, un bouton désactivé (◀ ▶ d'un seul objet) prend le gris de Windows.
-        if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
+        var b = new BoutonPixel(texte, principal, StylePixel.Petit) { VerticalAlignment = VerticalAlignment.Center };
         b.Click += (_, _) => action();
         return b;
     }
 
-    private static UIElement Titre(string texte) =>
-        new Pixels(Pixels.Texte(texte), new Brush?[] { null, Bandeau.Violet }, Bandeau.Encre, 2)
-            { HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 6) };
+    private static UIElement Titre(string texte)
+    {
+        var t = StylePixel.Enseigne(texte, Bandeau.Violet, Bandeau.Encre, StylePixel.Petit);
+        t.Margin = new Thickness(0, 10, 0, 6);
+        return t;
+    }
 
     public FenetreExpeditions(FenetrePilou pilou)
     {
@@ -79,10 +73,11 @@ internal sealed class FenetreExpeditions : Window
         DockPanel.SetDock(_bandeau, Dock.Top);
         racine.Children.Add(_bandeau);
         var tete = new StackPanel { Margin = new Thickness(0, 8, 0, 6) };
-        tete.Children.Add(new Pixels(Pixels.Texte("EXPÉDITIONS"), new Brush?[] { null, Bandeau.OrangePo }, Gel("#6a5acd"), 5)
-            { HorizontalAlignment = HorizontalAlignment.Center });
+        var enseigne = StylePixel.Enseigne("EXPÉDITIONS", Bandeau.OrangePo, Gel("#6a5acd"), 4);
+        enseigne.HorizontalAlignment = HorizontalAlignment.Center;
+        tete.Children.Add(enseigne);
         _etat.HorizontalAlignment = HorizontalAlignment.Center;
-        _etat.TextAlignment = TextAlignment.Center;
+        _etat.Centre = true;
         _etat.Margin = new Thickness(0, 6, 0, 0);
         tete.Children.Add(_etat);
         DockPanel.SetDock(tete, Dock.Top);
@@ -98,6 +93,7 @@ internal sealed class FenetreExpeditions : Window
         corps.Children.Add(droite);
         racine.Children.Add(corps);
         Content = racine;
+        StylePixel.Defileur(this);
 
         _horloge.Tick += (_, _) => Rafraichir();
         Loaded += (_, _) =>
@@ -126,7 +122,7 @@ internal sealed class FenetreExpeditions : Window
         _cle = cle;
         int reste = Expeditions.Restantes(e, DateTime.Now, autres);
         double libre = Expeditions.LibreA(e, autres);
-        _etat.Text = e.Courante is { } x
+        _etat.Texte = e.Courante is { } x
             ? $"⚔ En route vers {Expeditions.De(Expeditions.Trouver(x.Lieu)?.Nom ?? "l'aventure")} · retour vers {Amis.Heure(DateTime.Now.AddMilliseconds(x.Fin - t))}"
             : reste <= 0 ? $"⚡ {energie}/100 · trois expéditions aujourd'hui : Pilou repart demain"
             : t < libre ? $"⚡ {energie}/100 · Pilou se repose encore {Statut.Duree(libre - t)} · {reste} expédition{(reste > 1 ? "s" : "")} possible{(reste > 1 ? "s" : "")} aujourd'hui"
@@ -231,11 +227,11 @@ internal sealed class FenetreExpeditions : Window
             pile.Children.Add(Texte($"{Expeditions.SigneIssue(d.Issue)} {Expeditions.Trouver(d.Lieu)?.Nom} · {Expeditions.NomIssue(d.Issue)}"
                                     + $" · {Amis.Heure(DateTimeOffset.FromUnixTimeMilliseconds((long)d.Fin).LocalDateTime)}", 13.5, Encre, true));
             foreach (var ligne in d.Journal)
-                pile.Children.Add(new TextBlock
-                {
-                    Text = ligne, FontFamily = new FontFamily("Consolas"), FontSize = 12, Foreground = Encre, TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 3, 0, 0),
-                });
+            {
+                var l = Texte(ligne, 12, Encre);
+                l.Margin = new Thickness(0, 3, 0, 0);
+                pile.Children.Add(l);
+            }
             var gains = new List<string>();
             if (d.Po > 0) gains.Add($"+{d.Po} po");
             if (d.Xp > 0) gains.Add($"+{d.Xp} xp");

@@ -16,16 +16,25 @@ public final class Saynetes {
     private Saynetes() {}
 
     static final String[] CONTINUS = {"assis", "saut", "etire", "penche"};
+    /** Un trait dominant (Traits.java) triple le poids des saynètes qui lui ressemblent : le poids seulement, aucun gain. */
+    public static final int TRAIT = 3;
     private static final String[] ENTIERS = {"regard", "regard_y", "cligne", "baille", "salue"};
 
     /** Contexte du tirage : heure, mois (1…12), stade, objets portés, compagnon porté, main libre, tu travailles. */
     public static final class Contexte {
         final int heure, mois, stade;
-        final Collection<String> objets;
+        final Collection<String> objets, traits;
         final boolean compagnon, mainLibre, travail;
 
         public Contexte(int heure, int mois, int stade, Collection<String> objets, boolean compagnon, boolean mainLibre,
                         boolean travail) {
+            this(heure, mois, stade, objets, compagnon, mainLibre, travail, Collections.<String>emptyList());
+        }
+
+        /** traits : identifiants des traits dominants (Traits.java), vide s'il n'y en a pas. */
+        public Contexte(int heure, int mois, int stade, Collection<String> objets, boolean compagnon, boolean mainLibre,
+                        boolean travail, Collection<String> traits) {
+            this.traits = traits;
             this.heure = heure;
             this.mois = mois;
             this.stade = stade;
@@ -51,6 +60,7 @@ public final class Saynetes {
         final List<Integer> mois = new ArrayList<>();
         int[] stades;
         String[] objetsRequis = new String[0];
+        String[] traits = new String[0];
         boolean compagnon, mainLibre, repos, tourne;
         final Map<String, List<int[]>> cles = new HashMap<>();
         final Map<String, List<int[]>> entiers = new HashMap<>();
@@ -94,6 +104,9 @@ public final class Saynetes {
                             break;
                         case "objet":
                             s.objetsRequis = v.split("\\|");
+                            break;
+                        case "trait":
+                            s.traits = v.split("\\|");
                             break;
                         case "compagnon":
                             s.compagnon = true;
@@ -156,22 +169,40 @@ public final class Saynetes {
         return !(s.repos && c.travail);
     }
 
-    /** L'identifiant tiré (u : 0…9999) parmi les saynètes permises, sauf « evite » ; "" s'il n'y en a pas. */
+    /** Poids de la saynète dans ce contexte : triplé si elle ressemble à l'un des traits dominants. */
+    static int poids(Saynete s, Contexte c) {
+        for (String t : s.traits) if (c.traits.contains(t)) return s.poids * TRAIT;
+        return s.poids;
+    }
+
+    /** L'identifiant tiré (u : 0…9999) parmi les saynètes permises, sauf « evite » ; "" s'il n'y en a pas. Les réactions
+     *  au monde (poids 0) ne sont jamais tirées. */
     public static String tirer(List<Saynete> banque, int u, Contexte c, String evite) {
         List<Saynete> ok = new ArrayList<>();
         long total = 0;
         for (Saynete s : banque)
-            if (!s.id.equals(evite) && permise(s, c)) {
+            if (!s.id.equals(evite) && s.poids > 0 && permise(s, c)) {
                 ok.add(s);
-                total += s.poids;
+                total += poids(s, c);
             }
         if (total == 0) return "";
         long x = Math.floorDiv(u * total, 10000);
         for (Saynete s : ok) {
-            if (x < s.poids) return s.id;
-            x -= s.poids;
+            if (x < poids(s, c)) return s.id;
+            x -= poids(s, c);
         }
         return ok.get(ok.size() - 1).id;
+    }
+
+    /** Éveil (saynetes.py) : sans aucune session d'IA, Pilou est éveillé ; il ne dort que si on s'absente, ou la nuit. */
+    public static final int ABSENT = 10 * 60_000, ABSENT_NUIT = 2 * 60_000;
+
+    public static boolean nuit(int heure) {
+        return Math.floorMod(heure, 24) < 6;
+    }
+
+    public static boolean endormi(int heure, long inactifMs) {
+        return inactifMs >= ABSENT || (nuit(heure) && inactifMs >= ABSENT_NUIT);
     }
 
     public static Saynete trouver(List<Saynete> banque, String id) {

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -206,9 +204,9 @@ final class PresenceVue extends LinearLayout {
         List<Traits.Trait> tous = Traits.tous();
         if (tous.isEmpty()) return;
         List<Traits.Trait> dominants = Traits.dominants(e, Presence.jour(java.time.LocalDateTime.now()));
-        traits.addView(Ui.texte(app, "Ses traits", Ui.T_ETIQUETTE, p.doux, true), Ui.large());
+        traits.addView(Style.texte(app, "Ses traits", Ui.T_ETIQUETTE, p.doux, true), Ui.large());
         if (dominants.isEmpty()) {
-            TextView rien = Ui.texte(app, "Pilou n'a pas encore de trait. Ça vient tout seul, à force de vivre ensemble.", Ui.T_DETAIL, p.doux, false);
+            TextView rien = Style.texte(app, "Pilou n'a pas encore de trait. Ça vient tout seul, à force de vivre ensemble.", Ui.T_DETAIL, p.doux, false);
             rien.setPadding(0, Ui.dp(app, 4), 0, 0);
             traits.addView(rien, Ui.large());
         } else {
@@ -227,10 +225,10 @@ final class PresenceVue extends LinearLayout {
         String compte = reste == 0 ? "★ Tous ses traits sont découverts"
                 : connus == 0 ? "Aucun trait découvert pour l'instant"
                 : connus + " trait" + (connus > 1 ? "s" : "") + " découvert" + (connus > 1 ? "s" : "") + " · " + reste + " encore à découvrir";
-        TextView bascule = Ui.texte(app, compte + (ouvert ? "  ▴" : "  ▾"), Ui.T_DETAIL, p.bleu, true);
+        TextView bascule = Style.texte(app, compte + (ouvert ? "  ▴" : "  ▾"), Ui.T_DETAIL, p.bleu, true);
         bascule.setGravity(Gravity.CENTER);
         bascule.setMinHeight(Ui.dp(app, 48));
-        bascule.setBackground(Ui.touchable(app, Ui.arrondi(app, 0x00000000, 14, 0), 14));
+        Style.fond(bascule, Style.touchable(app, Style.arrondi(app, 0x00000000, 14, 0), 14));
         bascule.setContentDescription(compte + (ouvert ? ". Replier tous ses traits." : ". Voir tous ses traits."));
         bascule.setOnClickListener(v -> {
             Prefs.de(app).edit().putBoolean("traitsOuverts", !ouvert).apply();
@@ -252,7 +250,7 @@ final class PresenceVue extends LinearLayout {
             r.addView(vignette(p, x, (t.traits & x.bit()) != 0, dominants.contains(x), 40), new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
         }
         for (int k = tous.size(); r != null && k % COLONNES_TRAITS != 0; k++) r.addView(new View(app), new LayoutParams(0, 1, 1));
-        TextView note = Ui.texte(app, "Pilou attrape ses traits à force de vivre avec toi. On ne les choisit pas, et un trait découvert reste.",
+        TextView note = Style.texte(app, "Pilou attrape ses traits à force de vivre avec toi. On ne les choisit pas, et un trait découvert reste.",
                 Ui.T_ETIQUETTE, p.doux, false);
         note.setGravity(Gravity.CENTER);
         note.setPadding(0, Ui.dp(app, 8), 0, 0);
@@ -272,10 +270,10 @@ final class PresenceVue extends LinearLayout {
         im.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         Bitmap b = icone(app, connu ? x.sprite() : "trait-inconnu", tailleDp);
         if (b != null) im.setImageBitmap(b);
-        GradientDrawable cadre = Ui.arrondi(app, p.surface2, 12, 0);
-        if (connu) cadre.setStroke(Ui.dp(app, dominant ? 2 : 1), dominant ? p.orange : p.bord);
-        else cadre.setStroke(Ui.dp(app, 1.5f), p.argent, Ui.dp(app, 4), Ui.dp(app, 3));
-        im.setBackground(cadre);
+        // Case en pixels (docs/STYLE.md) : cadre plat, orange pour un dominant, en pointillés pour un trait inconnu.
+        Style.Palette st = Style.p(app);
+        im.setBackground(connu ? Style.plat(app, st.creux, dominant ? st.orange : st.bord)
+                : new Style.Cadre(Style.u(app), Style.Cadre.PLAT, st.creux, st.eteint, 0, 0, 0).pointille());
         int cote = Ui.dp(app, tailleDp + 12);
         // Dans la grille (petites cases), l'étoile du dominant se pose dans le coin de la case : devant le nom, elle
         // resterait seule sur sa ligne dès que le nom est long.
@@ -283,7 +281,7 @@ final class PresenceVue extends LinearLayout {
         if (coin) {
             android.widget.FrameLayout boite = new android.widget.FrameLayout(app);
             boite.addView(im, new android.widget.FrameLayout.LayoutParams(cote, cote));
-            TextView etoile = Ui.texte(app, "★", 11, p.orange, true);
+            TextView etoile = Style.texte(app, "★", 11, p.orange, true);
             etoile.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
             android.widget.FrameLayout.LayoutParams le = new android.widget.FrameLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
@@ -292,7 +290,7 @@ final class PresenceVue extends LinearLayout {
             boite.addView(etoile, le);
             c.addView(boite, new LayoutParams(cote, cote));
         } else c.addView(im, new LayoutParams(cote, cote));
-        TextView nom = Ui.texte(app, dominant && !coin ? "★ " + x.nom : connu ? x.nom : "? ? ?", Ui.T_ETIQUETTE,
+        TextView nom = Style.texte(app, dominant && !coin ? "★ " + x.nom : connu ? x.nom : "? ? ?", Ui.T_ETIQUETTE,
                 dominant ? p.orange : connu ? p.texte : p.doux, connu);
         nom.setGravity(Gravity.CENTER);
         nom.setPadding(0, Ui.dp(app, 4), 0, 0);
@@ -367,10 +365,7 @@ final class PresenceVue extends LinearLayout {
         e.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         e.setSingleLine(true);
         e.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(Presence.PRENOM_MAX)});
-        e.setTextColor(p.texte);
-        e.setHintTextColor(p.doux);
-        Style.fond(e, Style.arrondi(a, p.surface2, 12, p.bord));
-        e.setPadding(Ui.dp(a, 14), Ui.dp(a, 12), Ui.dp(a, 14), Ui.dp(a, 12));
+        Style.champ(e);
         return e;
     }
 
@@ -391,7 +386,8 @@ final class PresenceVue extends LinearLayout {
         r.setPadding(Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4), Ui.dp(a, 4));
         TextView[] t = new TextView[noms.length];
         for (int k = 0; k < noms.length; k++) {
-            TextView x = Style.texte(a, noms[k], Ui.T_ETIQUETTE, p.doux, true);
+            TextView x = new Style.Texte(a, noms[k], Style.pixelOptions(a, noms), p.doux, true, true);
+            x.setSingleLine(true);
             x.setGravity(Gravity.CENTER);
             x.setMinHeight(Ui.dp(a, 40));
             int kk = k;
@@ -439,13 +435,13 @@ final class PresenceVue extends LinearLayout {
                     MotDuSoir.programmer(a);
                 }));
         c.addView(Style.separateur(a));
-        Ui.interrupteur(a, c, "Son journal", "Une page par jour, de son point de vue, à partir de ce qu'il a vécu", e.journalActif, oui -> {
+        Style.interrupteur(a, c, "Son journal", "Une page par jour, de son point de vue, à partir de ce qu'il a vécu", e.journalActif, oui -> {
             Presence.Etat x = PresenceTel.etat(a);
             x.journalActif = oui;
             PresenceTel.garder(a, x);
         });
         c.addView(Style.separateur(a));
-        Ui.interrupteur(a, c, "Petits gestes de complicité", "Il te fait signe quand tu reviens", e.gestes, oui -> {
+        Style.interrupteur(a, c, "Petits gestes de complicité", "Il te fait signe quand tu reviens", e.gestes, oui -> {
             Presence.Etat x = PresenceTel.etat(a);
             x.gestes = oui;
             PresenceTel.garder(a, x);
@@ -468,12 +464,12 @@ final class PresenceVue extends LinearLayout {
             String n = Presence.nettoyerPrenom(champ.getText().toString());
             PresenceTel.prenom(a, n, false);
             champ.setText(n);
-            Toast.makeText(a, n.isEmpty() ? "Prénom effacé." : "Pilou s'en souviendra : " + n, Toast.LENGTH_SHORT).show();
+            Style.dire(a, n.isEmpty() ? "Prénom effacé." : "Pilou s'en souviendra : " + n, false);
         }), l1);
         r.addView(Style.bouton(a, "Effacer", false, v -> {
             PresenceTel.prenom(a, "", false);
             champ.setText("");
-            Toast.makeText(a, "Prénom effacé. Pilou ne le redemandera pas.", Toast.LENGTH_SHORT).show();
+            Style.dire(a, "Prénom effacé. Pilou ne le redemandera pas.", false);
         }), new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
         bloc.addView(r, Ui.large());
         c.addView(bloc, Ui.large());

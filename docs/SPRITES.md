@@ -236,24 +236,46 @@ Au calme, Pilou s'occupe tout seul quelques secondes, à la place d'une occupati
 `Saynetes.java` ; tirages et poses sont vérifiés des deux côtés par `saynetes-reference.txt`. Les accessoires sont
 des sprites `sc-<nom>-<k>`, une image par étape (`saynetes_sprites.py`) : c'est la saynète qui choisit l'étape.
 
-| Saynète | Poids | Condition | Ce qu'il fait |
-|---|---|---|---|
-| lit | 16 | stade 2 à 4, main libre | s'assoit avec le livre de lecture, suit les lignes, sourit à un passage |
-| compte | 12 | main libre | assis, empile ses pièces une à une ; le compte est bon |
-| etincelle | 10 | — | poursuit une petite étincelle à petits bonds, la rattrape sur l'antenne |
-| endort | 8 | 12 h – 16 h, 20 h – 7 h | assis, clignements lents, bâillement, la tête tombe… et le sursaut |
-| bord | 8 | — (miroir vers le bord le plus proche) | se penche par-dessus le bord, découvre le vide, recule |
-| etire | 16 | — | s'étire, un bras en l'air, les yeux fermés |
-| ciel | 10 | — | regarde les nuages passer |
-| danse | 8 | pas au travail | petite danse à petits bonds, notes de musique |
-| flocon | 10 | décembre à février | un flocon descend sur son nez |
-| feuille | 10 | septembre à novembre | une feuille lui tombe sur la tête, il se secoue |
-| papillon | 10 | mars à août | un papillon passe, se pose sur l'antenne, repart |
-| boit | 12 | tasse de café ou chocolat porté | assis, petites gorgées les yeux fermés |
-| guette | 12 | lunette ou jumelles portées | guette au loin, et tiens ! un petit bond |
-| compagnon | 12 | un compagnon porté | un regard, un bond, un cœur sur l'antenne |
-| eternue | 1 (rare) | — | éternue une bulle d'encre qui monte et éclate |
-| salue | 1 (rare) | — (miroir) | salue… personne, et fait mine de rien |
+| Saynète | Poids | Condition | Trait dominant (poids × 3) | Ce qu'il fait |
+|---|---|---|---|---|
+| lit | 16 | stade 2 à 4, main libre | grand lecteur, amateur d'histoires | s'assoit avec le livre de lecture, suit les lignes, sourit à un passage |
+| compte | 12 | main libre | chineur, veinard | assis, empile ses pièces une à une ; le compte est bon |
+| etincelle | 10 | — | — | poursuit une petite étincelle à petits bonds, la rattrape sur l'antenne |
+| endort | 8 | 12 h – 16 h, 20 h – 7 h | douillet | assis, clignements lents, bâillement, la tête tombe… et le sursaut |
+| bord | 8 | — (miroir vers le bord le plus proche) | — | se penche par-dessus le bord, découvre le vide, recule |
+| etire | 16 | — | lève-tôt | s'étire, un bras en l'air, les yeux fermés |
+| ciel | 10 | — | tête en l'air, flâneur | regarde les nuages passer |
+| danse | 8 | pas au travail | bon public | petite danse à petits bonds, notes de musique |
+| flocon | 10 | décembre à février | — | un flocon descend sur son nez |
+| feuille | 10 | septembre à novembre | — | une feuille lui tombe sur la tête, il se secoue |
+| papillon | 10 | mars à août | — | un papillon passe, se pose sur l'antenne, repart |
+| boit | 12 | tasse de café ou chocolat porté | douillet | assis, petites gorgées les yeux fermés |
+| guette | 12 | lunette ou jumelles portées | voyageur | guette au loin, et tiens ! un petit bond |
+| compagnon | 12 | un compagnon porté | câlin, bon voisin | un regard, un bond, un cœur sur l'antenne |
+| etoiles | 10 | 21 h – 6 h | couche-tard | regarde les étoiles ; une étoile filante passe |
+| peche | 10 | main libre | pêcheur du dimanche | assis, surveille sa canne ; le bouchon danse, plonge |
+| bulles | 8 | — | tête en l'air | souffle une bulle de savon, la regarde monter, elle éclate |
+| fredonne | 10 | — | siffloteur | fredonne les yeux fermés, les notes montent, il se balance |
+| pirouette | 8 | pas au travail | — | tourne sur lui-même d'un petit bond |
+| secoue | 8 | — | — | un frisson, il s'ébroue des pieds à l'antenne |
+| grignote | 10 | main libre | gourmand | assis, grignote un biscuit ; des miettes |
+| reve | 10 | — | tête en l'air, amateur d'histoires | assis, une petite pensée flotte au-dessus de sa tête |
+| equilibre | 8 | — (miroir) | — | tient en équilibre, penche, se rattrape, fier de lui |
+| souffle | 6 | — | — | souffle sur son antenne, l'étincelle vacille, il rit |
+| hoquet | 4 | — | — | hic… hic… hic, puis plus rien |
+| ecoute | 8 | — | — | tend l'oreille, à gauche, à droite… rien |
+| eternue | 1 (rare) | — | — | éternue une bulle d'encre qui monte et éclate |
+| salue | 1 (rare) | — (miroir) | — | salue… personne, et fait mine de rien |
+| trebuche | 1 (rare) | — (miroir) | — | trébuche sur rien, tombe assis, fait mine de rien |
+| voeu | 1 (rare) | — | — | fait un vœu, les yeux fermés ; une étoile filante, un cœur |
+
+Réactions au monde (poids 0 : jamais tirées au sort ; sur le PC seulement, le téléphone n'a ni bord ni souris) :
+
+| Réaction | Quand | Ce qu'il fait |
+|---|---|---|
+| freine | au bout d'une marche contre le bord de l'écran, une fois sur deux | freine, se penche vers le vide, le regarde, recule |
+| lache | pris et lâché, une fois retombé (après le ressort de la réception) | un temps sonné, il se secoue, ça va |
+| survol | la souris reste 6 s sur lui (une fois par survol, après le ronron) | lève les yeux, tente de l'attraper d'un bond, un cœur |
 
 Règles :
 - **Retenue** : seulement au calme (expression « repos »), jamais pendant la saisie, jamais caché (plein écran,
@@ -261,6 +283,12 @@ Règles :
   deux (80 s au travail), jamais deux fois la même de suite ; sur le téléphone, une toutes les 25 à 45 s tant que
   il est affiché et animé. Interrompue dès que quelque chose se passe (caresse, IA qui attend, jeu, campagne, prise).
 - **Rien à gagner** : aucune xp, aucune pièce n'est liée à une saynète.
+- **Traits** : un trait parmi les trois dominants (docs/TRAITS.md) triple le poids des saynètes qui lui ressemblent
+  (`trait=` dans la banque). Le poids seulement.
+- **Éveil** : sans aucune session d'IA, Pilou est éveillé (« un compagnon de tout », docs/DECISIONS.md). Il ne dort
+  que si tu t'absentes 10 min (2 min de minuit à 6 h), règle commune `endormi(heure, inactif)` vérifiée des deux côtés ;
+  le téléphone sans PC (pas appairé, ou PC éteint) le montre éveillé, endormi seulement la nuit. Essai :
+  `--essai=eveil:<secondes d'absence>[:<heure>]`.
 - **Raccords** : chaque mouvement part de 0 et y revient (il se ramasse avant, retombe après) ; `saynetes.verifier()`
   le contrôle, ainsi que les durées (3 à 8 s).
 - **Pas de faux signal** : les expressions qui disent quelque chose d'une session (concentre, attente, inquiet,
@@ -268,7 +296,8 @@ Règles :
 - **Réglage ✧** : complètes, tout ; réduites, sans saut, étirement ni penché (posture, regard, visage, objets) ;
   aucune, pas de saynète.
 
-Essai sur le PC : `--essai=saynete[:<id>][:completes|reduites|aucune]` (toutes à la suite, ou une seule en boucle).
+Essai sur le PC : `--essai=saynete[:<id>][:completes|reduites|aucune]` (toutes à la suite, ou une seule en boucle ;
+les réactions aussi, par leur nom).
 Planche : `python3 outils/sprites/planches_saynetes.py [dossier] [pas_ms]` → une bande par saynète dans
 `outils/sprites/planches/saynetes`.
 

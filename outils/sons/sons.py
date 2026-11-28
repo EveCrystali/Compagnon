@@ -3,7 +3,8 @@
 
 Lit assets/sons.txt et calcule les échantillons exactement comme Sons.cs (PC) et Sons.java (Android) : tout est en
 entiers (accumulateur de phase 32 bits, enveloppe en 1/4096, décalages à droite qui arrondissent vers le bas dans les
-trois langages), donc les trois donnent les mêmes octets.
+trois langages), donc les trois donnent les mêmes octets. Lit aussi assets/musiques.txt : les boucles de musique
+et d'ambiance de l'Aventure, synthétisées de la même manière (références dans musiques-reference.txt).
 
     py outils/sons/sons.py               # écrit outils/sons/ecoute/*.wav, ecoute.html et affiche les mesures
     py outils/sons/sons.py --reference   # réécrit outils/sons/sons-reference.txt (si un son change)
@@ -146,7 +147,31 @@ def ecrire_wav(chemin, s):
         w.writeframes(octets(s))
 
 
-def page(sons, toutes):
+def page(sons, toutes, boucles=None):
+    boucles = boucles or {}
+    musique = []
+    for nom, m in boucles.items():
+        barres = "".join(
+            f"<span class=\"barre\" title=\"{lo}–{hi} Hz : {pc} %\"><i style=\"width:{max(1, round(pc))}%\"></i>"
+            f"<small>{lo if lo < 1000 else str(lo // 1000) + ' k'}</small></span>"
+            for (lo, hi), pc in zip(BANDES, m["spectre"]))
+        musique.append(
+            f"<tr><td><b>{nom}</b>{' (ambiance)' if nom not in TONS else ''}</td>"
+            f"<td><button onclick=\"boucler('{nom}')\">▶ normale</button> "
+            f"<button onclick=\"boucler('{nom}-discrete')\">▷ discrète</button> "
+            f"<button class=\"jonction\" onclick=\"jouer('{nom}-jonction')\">⇄ jonction</button></td>"
+            f"<td>{m['duree_ms'] / 1000:.1f} s</td><td>{m['crete_db']} dBFS</td><td>{m['rms_db']} dBFS</td>"
+            f"<td>{m['jonction']} / {m['p99']}</td><td class=\"spectre\">{barres}</td></tr>")
+    bloc_musique = "" if not boucles else f"""
+<h2>Musiques et ambiances</h2>
+<p>Boucles de <code>assets/musiques.txt</code>, lues en boucle comme dans l'Aventure (fondu d'entrée et de sortie
+à la lecture). « Jonction » fait entendre les 4 dernières secondes suivies des 4 premières : on ne doit rien entendre
+au passage. Saut : écart entre le dernier et le premier échantillon, comparé au 99ᵉ centile des écarts dans la boucle.
+Spectre : part d'énergie par bande (Hz).</p>
+<p><button onclick="arreter()">⏹ arrêter</button></p>
+<div class="tableau"><table><tr><th>Boucle</th><th>Écouter</th><th>Durée</th><th>Crête</th><th>RMS</th><th>Saut / p99</th><th>Spectre</th></tr>
+{''.join(musique)}
+</table></div>"""
     lignes = []
     for nom, m in toutes.items():
         lignes.append(
@@ -168,6 +193,11 @@ td, th {{ border-bottom:1px solid var(--ligne); padding:6px 8px; text-align:left
 button {{ font:inherit; border:2px solid var(--bleu); background:none; color:var(--bleu); border-radius:6px; padding:2px 10px; cursor:pointer; }}
 button + button {{ border-color:var(--orange); color:var(--orange); border-style:dashed; }}
 .tableau {{ overflow-x:auto; }}
+button.jonction {{ border-style:dotted; }}
+.spectre {{ white-space:nowrap; }}
+.barre {{ display:inline-block; width:54px; margin-right:4px; vertical-align:middle; }}
+.barre i {{ display:block; height:8px; background:var(--bleu); border-radius:2px; }}
+.barre small {{ font-size:11px; opacity:.75; }}
 </style></head><body><main>
 <h1>Sons de Pilou</h1>
 <p>Synthétisés depuis <code>assets/sons.txt</code> par <code>outils/sons/sons.py</code> ; le PC et le téléphone
@@ -177,9 +207,12 @@ bas = plus doux).</p>
 <div class="tableau"><table><tr><th>Son</th><th>Écouter</th><th>Durée</th><th>Crête</th><th>RMS</th><th>Aigu</th><th>Notes</th></tr>
 {''.join(lignes)}
 </table></div>
+{bloc_musique}
 <script>
 let lecteur = null;
 function jouer(n) {{ if (lecteur) lecteur.pause(); lecteur = new Audio(n + '.wav'); lecteur.play(); return lecteur; }}
+function boucler(n) {{ const a = jouer(n); a.loop = true; return a; }}
+function arreter() {{ if (lecteur) lecteur.pause(); }}
 async function tout() {{
   for (const n of {list(toutes)!r}) {{
     const a = jouer(n);
@@ -221,22 +254,228 @@ def verifier(sons):
     return erreurs
 
 
+# ---------------------------------------------------------------- musiques et ambiances (assets/musiques.txt)
+
+MUSIQUES = RACINE / "assets" / "musiques.txt"
+REFERENCE_MUSIQUES = Path(__file__).resolve().parent / "musiques-reference.txt"
+TONS = ("prologue", "humour", "mystere", "emotion")   # une boucle par ton, plus le prologue ; le reste : ambiances
+DISCRETE = 3           # « discrète » : × 3 / 8 à la lecture (environ -8,5 dB)
+CRETE_BOUCLE_MAX = 6000                # -14,7 dBFS : la musique reste bien sous les sons
+DUREE_BOUCLE_MS = (30000, 60000)
+DUREE_AMBIANCE_MS = (20000, 60000)
+NOTE_MAX_BOUCLE_HZ = 1175
+
+# Fréquences de l'octave 4 en milli-hertz ; les autres octaves par décalage (entiers positifs : mêmes partout).
+GAMME = {"C": 261626, "C#": 277183, "D": 293665, "D#": 311127, "E": 329628, "F": 349228, "F#": 369994,
+         "G": 391995, "G#": 415305, "A": 440000, "A#": 466164, "B": 493883}
+
+
+def frequence(jeton):
+    """Jeton → milli-hertz : « A4 », « F#3 » ou un nombre de hertz (bruit)."""
+    if jeton[0].isdigit():
+        return int(jeton) * 1000
+    nom, octave = jeton[:-1], int(jeton[-1])
+    f = GAMME[nom]
+    return f << (octave - 4) if octave >= 4 else f >> (4 - octave)
+
+
+def lire_musiques(chemin=MUSIQUES):
+    """Renvoie ({id: morceau}, {décor: ambiance}). Un morceau : dict(ms, pas, filtre, voix=[...])."""
+    morceaux, decors, voix, courant = {}, {}, None, None
+    for n, ligne in enumerate(chemin.read_text(encoding="utf-8").splitlines(), 1):
+        ligne = ligne.strip()
+        if not ligne or ligne.startswith("#"):
+            continue
+        p = [x.strip() for x in ligne.split("|")]
+        if p[0] == "morceau":
+            courant = morceaux[p[1]] = {"ms": int(p[2]), "pas": int(p[3]), "filtre": int(p[4]), "voix": []}
+        elif p[0] == "voix":
+            if p[1] not in ("tri", "puls", "bruit"):
+                raise ValueError(f"musiques.txt:{n} : onde inconnue {p[1]}")
+            voix = {"onde": p[1], "volume": int(p[2]), "attaque": int(p[3]), "relache": int(p[4]),
+                    "declin": int(p[5]), "tenue": int(p[6]), "jetons": p[7].split()}
+            courant["voix"].append(voix)
+        elif p[0] == "+":
+            voix["jetons"] += p[1].split()
+        elif p[0] == "decors":
+            for d in p[2].split():
+                decors[d] = p[1]
+        else:
+            raise ValueError(f"musiques.txt:{n} : ligne inconnue {p[0]}")
+    return morceaux, decors
+
+
+def notes_voix(jetons, pas):
+    """[(pas de départ, longueur en pas, f0, f1)] ; la suite se répète, une note tenue au bout repart au début."""
+    e = [jetons[k % len(jetons)] for k in range(pas)]
+    notes = []
+    for k, j in enumerate(e):
+        if j in ("-", "."):
+            continue
+        longueur = 1
+        while longueur < pas and e[(k + longueur) % pas] == "-":
+            longueur += 1
+        f = j.split(">")
+        notes.append((k, longueur, frequence(f[0]), frequence(f[-1])))
+    return notes
+
+
+def synthetiser_boucle(m):
+    """Échantillons 16 bits de la boucle, au réglage « normale ». Le dernier échantillon enchaîne sur le premier."""
+    pas_ech = TAUX * m["ms"] // 1000
+    total = pas_ech * m["pas"]
+    acc = [0] * total
+    for v in m["voix"]:
+        onde, volume, d = v["onde"], v["volume"], v["declin"]
+        for k, longueur, f0, f1 in notes_voix(v["jetons"], m["pas"]):
+            s0 = k * pas_ech
+            n = longueur * pas_ech
+            if v["tenue"] > 0:
+                n = min(n, TAUX * v["tenue"] // 1000)
+            a = min(n // 2, TAUX * v["attaque"] // 1000)
+            r = min(n // 2, TAUX * v["relache"] // 1000)
+            phase = 0
+            lfsr = 1
+            for i in range(n):
+                fm = (f0 * (n - i) + f1 * i) // n
+                inc = fm * 4294967296 // (TAUX * 1000)
+                avant = phase
+                phase = (phase + inc) & 0xFFFFFFFF
+                p = phase >> 16
+                if onde == "tri":
+                    t = p if p < 32768 else 65535 - p
+                    x = ((t >> 11) * 2 - 15) * 2184
+                elif onde == "puls":
+                    x = 24000 if p < 16384 else -8000
+                else:
+                    if phase < avant:
+                        b = (lfsr ^ (lfsr >> 1)) & 1
+                        lfsr = (lfsr >> 1) | (b << 14)
+                    x = 20000 if lfsr & 1 else -20000
+                e = 4096
+                if i < a:
+                    e = 4096 * i // a
+                if r > 0 and i >= n - r:
+                    q = n - i
+                    e = min(e, 4096 * q * q // (r * r))
+                e = e * (4096 - d * i // n) // 4096
+                acc[(s0 + i) % total] += (x * e * volume * 10) >> 24
+    # Passe-bas en anneau : un premier tour met le filtre en régime, le second donne la sortie ; ainsi la fin
+    # enchaîne sur le début comme si la boucle tournait depuis toujours.
+    f = m["filtre"]
+    sortie = [0] * total
+    y1 = y2 = 0
+    for tour in range(2):
+        for i in range(total):
+            y1 += (((acc[i] << 8) - y1) * f) >> 8
+            y2 += ((y1 - y2) * f) >> 8
+            if tour:
+                sortie[i] = max(-32767, min(32767, y2 >> 8))
+    return sortie
+
+
+def fft(x):
+    n = len(x)
+    if n == 1:
+        return x
+    pair, impair = fft(x[0::2]), fft(x[1::2])
+    w = [complex(math.cos(2 * math.pi * k / n), -math.sin(2 * math.pi * k / n)) * impair[k] for k in range(n // 2)]
+    return [pair[k] + w[k] for k in range(n // 2)] + [pair[k] - w[k] for k in range(n // 2)]
+
+
+BANDES = ((0, 150), (150, 500), (500, 1500), (1500, 4000), (4000, 11025))
+
+
+def spectre(s, taille=4096, fenetres=12):
+    """Part d'énergie (en %) par bande de fréquences, moyennée sur des fenêtres de Hann réparties sur la boucle."""
+    energie = [0.0] * len(BANDES)
+    hann = [0.5 - 0.5 * math.cos(2 * math.pi * i / taille) for i in range(taille)]
+    for w in range(fenetres):
+        d = (len(s) - taille) * w // max(1, fenetres - 1)
+        X = fft([s[d + i] * hann[i] for i in range(taille)])
+        for k in range(1, taille // 2):
+            hz = k * TAUX / taille
+            for b, (lo, hi) in enumerate(BANDES):
+                if lo <= hz < hi:
+                    energie[b] += abs(X[k]) ** 2
+    t = sum(energie) or 1
+    return [round(100 * e / t, 1) for e in energie]
+
+
+def mesures_boucle(s):
+    m = mesures(s)
+    diffs = sorted(abs(s[i] - s[i - 1]) for i in range(1, len(s)))
+    m["jonction"] = abs(s[0] - s[-1])
+    m["p99"] = diffs[len(diffs) * 99 // 100]
+    m["spectre"] = spectre(s)
+    return m
+
+
+def discrete(s):
+    return [(x * DISCRETE) >> 3 for x in s]
+
+
+def verifier_musiques(morceaux, decors):
+    erreurs = []
+    attendu = {}
+    if REFERENCE_MUSIQUES.exists():
+        for l in REFERENCE_MUSIQUES.read_text(encoding="utf-8").splitlines():
+            if l.startswith("#") or not l.strip():
+                continue
+            p = [x.strip() for x in l.split("|")]
+            attendu[p[0]] = p
+    if set(attendu) != set(morceaux):
+        erreurs.append(f"référence des musiques : {sorted(set(attendu) ^ set(morceaux))} manquants ou en trop")
+    for t in TONS:
+        if t not in morceaux:
+            erreurs.append(f"musique « {t} » absente")
+    for a in set(decors.values()):
+        if a not in morceaux:
+            erreurs.append(f"ambiance « {a} » citée par des décors mais absente")
+    for nom, m in morceaux.items():
+        s = synthetiser_boucle(m)
+        me = mesures_boucle(s)
+        if nom in attendu and attendu[nom][3] != empreinte(s):
+            erreurs.append(f"{nom} : empreinte différente de la référence")
+        if me["crete"] > CRETE_BOUCLE_MAX:
+            erreurs.append(f"{nom} : crête {me['crete']} > {CRETE_BOUCLE_MAX}")
+        lo, hi = DUREE_BOUCLE_MS if nom in TONS else DUREE_AMBIANCE_MS
+        if not lo <= me["duree_ms"] <= hi:
+            erreurs.append(f"{nom} : {me['duree_ms']} ms hors de {lo}–{hi}")
+        if me["jonction"] > me["p99"]:
+            erreurs.append(f"{nom} : saut à la jonction {me['jonction']} > p99 {me['p99']} (clic de boucle)")
+        for v in m["voix"]:
+            if len(v["jetons"]) > m["pas"] or m["pas"] % len(v["jetons"]):
+                erreurs.append(f"{nom} : une voix a {len(v['jetons'])} jetons pour {m['pas']} pas")
+            if v["onde"] != "bruit":
+                for _, _, f0, f1 in notes_voix(v["jetons"], m["pas"]):
+                    if max(f0, f1) > NOTE_MAX_BOUCLE_HZ * 1000:
+                        erreurs.append(f"{nom} : note à {max(f0, f1) // 1000} Hz > {NOTE_MAX_BOUCLE_HZ}")
+    return erreurs
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     sons = lire()
+    morceaux, decors = lire_musiques()
     if "--reference" in sys.argv:
         l = ["# son | échantillons | crête | sha256 des échantillons 16 bits petit-boutiste (« normaux »)"]
         for nom, notes in sons.items():
             s = synthetiser(notes)
             l.append(f"{nom} | {len(s)} | {max(abs(x) for x in s)} | {empreinte(s)}")
         REFERENCE.write_text("\n".join(l) + "\n", encoding="utf-8", newline="\n")
-        print(f"{REFERENCE.name} : {len(sons)} sons")
+        l = ["# boucle | échantillons | crête | sha256 des échantillons 16 bits petit-boutiste (« normale »)"]
+        for nom, m in morceaux.items():
+            s = synthetiser_boucle(m)
+            l.append(f"{nom} | {len(s)} | {max(abs(x) for x in s)} | {empreinte(s)}")
+        REFERENCE_MUSIQUES.write_text("\n".join(l) + "\n", encoding="utf-8", newline="\n")
+        print(f"{REFERENCE.name} : {len(sons)} sons ; {REFERENCE_MUSIQUES.name} : {len(morceaux)} boucles")
         return 0
     if "--verifier" in sys.argv:
-        erreurs = verifier(sons)
+        erreurs = verifier(sons) + verifier_musiques(morceaux, decors)
         for e in erreurs:
             print("ERREUR", e)
-        print(f"{len(sons)} sons, {len(erreurs)} erreur(s)")
+        print(f"{len(sons)} sons, {len(morceaux)} boucles, {len(erreurs)} erreur(s)")
         return 1 if erreurs else 0
     ECOUTE.mkdir(exist_ok=True)
     toutes = {}
@@ -248,7 +487,18 @@ def main():
         m = toutes[nom] = mesures(s)
         print(f"{nom:<12}{m['duree_ms']:>5}ms{m['crete_db']:>7}dB{m['rms_db']:>6}dB{m['aigu']:>7}{m['saut_max']:>7}"
               f"{m['debut']:>5},{m['fin']:<3}")
-    (ECOUTE / "ecoute.html").write_text(page(sons, toutes), encoding="utf-8")
+    boucles = {}
+    print(f"\n{'boucle':<12}{'durée':>7}{'crête':>9}{'rms':>8}{'saut':>7}{'p99':>6}  spectre % (<150, <500, <1,5 k, <4 k, plus)")
+    for nom, m in morceaux.items():
+        s = synthetiser_boucle(m)
+        ecrire_wav(ECOUTE / f"{nom}.wav", s)
+        ecrire_wav(ECOUTE / f"{nom}-discrete.wav", discrete(s))
+        q = TAUX * 4
+        ecrire_wav(ECOUTE / f"{nom}-jonction.wav", s[-q:] + s[:q])
+        me = boucles[nom] = mesures_boucle(s)
+        print(f"{nom:<12}{me['duree_ms'] / 1000:>6.1f}s{me['crete_db']:>7}dB{me['rms_db']:>6}dB{me['jonction']:>7}"
+              f"{me['p99']:>6}  {me['spectre']}")
+    (ECOUTE / "ecoute.html").write_text(page(sons, toutes, boucles), encoding="utf-8")
     print(f"→ {ECOUTE / 'ecoute.html'}")
     return 0
 

@@ -99,7 +99,7 @@ final class PageJouer extends Page {
     }
 
     private void verrou(String jeu) {
-        android.widget.Toast.makeText(app, Acces.nomJeu(jeu) + " s'ouvre au niveau " + Acces.niveauJeu(jeu), android.widget.Toast.LENGTH_SHORT).show();
+        Style.dire(app, Acces.nomJeu(jeu) + " s'ouvre au niveau " + Acces.niveauJeu(jeu), false);
     }
 
     private void ouvrirChasse() {

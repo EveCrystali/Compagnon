@@ -1,6 +1,6 @@
 # Saynètes de repos : écrit par outils/sprites/saynetes.py (ne pas modifier à la main).
 # saynete <id> <poids> <duree> [conditions] ; puis <ms> champ=valeur … (docs/SPRITES.md).
-saynete lit 16 7200 stade=2-4 mainlibre
+saynete lit 16 7200 stade=2-4 mainlibre trait=grand-lecteur|amateur-d-histoires
 0 assis=0 etire=0
 300 etire=-200
 600 assis=1000 etire=0 expr=neutre regard_y=1 objets=tenue-lecture-livre
@@ -15,7 +15,7 @@ saynete lit 16 7200 stade=2-4 mainlibre
 6200 assis=1000 etire=0
 6650 assis=0 etire=180
 6850 etire=0
-saynete compte 12 7400 mainlibre
+saynete compte 12 7400 mainlibre trait=chineur|veinard
 0 assis=0 etire=0
 250 etire=-200
 500 assis=1000 etire=0 expr=neutre regard_y=1
@@ -68,7 +68,7 @@ saynete etincelle 10 6600
 4940 etire=0
 5000 expr=fete regard_y=0 objets=sc-etincelle-6
 5800 expr=repos objets=-
-saynete endort 8 8000 heure=12-16,20-7
+saynete endort 8 8000 heure=12-16,20-7 trait=douillet
 0 assis=0 etire=0
 250 etire=-200
 500 assis=1000 etire=0
@@ -99,7 +99,7 @@ saynete bord 8 5600 tourne
 3300 penche=2300
 3700 etire=150 penche=0 expr=repos regard=0 regard_y=0
 4000 etire=0
-saynete etire 16 4400
+saynete etire 16 4400 trait=leve-tot
 0 etire=0
 350 etire=-300
 800 etire=650 expr=soulage cligne=1 salue=1
@@ -128,7 +128,7 @@ saynete eternue 1 5400
 3400 objets=sc-encre-4
 3800 expr=joie regard_y=0 objets=-
 4600 expr=repos
-saynete ciel 10 6200
+saynete ciel 10 6200 trait=tete-en-l-air|flaneur
 0 etire=0
 300 etire=-120
 550 etire=120 regard_y=-1
@@ -139,7 +139,7 @@ saynete ciel 10 6200
 4100 regard=-1
 5200 regard=0 regard_y=0
 5500 expr=repos
-saynete danse 8 5800 repos
+saynete danse 8 5800 repos trait=bon-public
 0 expr=repos
 250 expr=joie objets=tenue-musique-notes
 400 saut=0 etire=0 regard=1
@@ -225,7 +225,7 @@ saynete papillon 10 6400 mois=3,4,5,6,7,8
 4100 cligne=0
 4900 regard=1 regard_y=-1 objets=sc-papillon-6
 5800 expr=repos regard=0 regard_y=0 objets=-
-saynete boit 12 6000 objet=tasse-cafe|chocolat-chaud
+saynete boit 12 6000 objet=tasse-cafe|chocolat-chaud trait=douillet
 0 assis=0 etire=0
 250 etire=-200
 500 assis=1000 etire=0 regard_y=1
@@ -238,7 +238,7 @@ saynete boit 12 6000 objet=tasse-cafe|chocolat-chaud
 4700 assis=1000 etire=0
 5150 assis=0 etire=180
 5350 etire=0
-saynete guette 12 6400 objet=telescope|jumelles
+saynete guette 12 6400 objet=telescope|jumelles trait=voyageur
 0 etire=0
 300 etire=-150
 600 etire=200 expr=neutre regard=1 regard_y=-1
@@ -255,7 +255,7 @@ saynete guette 12 6400 objet=telescope|jumelles
 4540 etire=0
 4700 expr=joie
 5600 expr=repos regard=0 regard_y=0
-saynete compagnon 12 5200 compagnon
+saynete compagnon 12 5200 compagnon trait=calin|bon-voisin
 0 regard=1
 400 expr=joie
 700 saut=0 etire=0
@@ -287,3 +287,257 @@ saynete salue 1 5000 tourne
 3450 etire=100
 3700 etire=0
 4300 expr=repos
+saynete etoiles 10 7000 heure=21-6 trait=couche-tard
+0 etire=0
+300 etire=-150
+600 etire=150 regard_y=-1
+850 etire=0 expr=tendre
+1800 regard=-1
+2600 regard=1 objets=sc-filante-1
+2900 objets=sc-filante-2
+3200 expr=joie objets=sc-filante-3
+3600 cligne=1 objets=-
+4600 expr=tendre cligne=0
+5600 regard=0 regard_y=0
+6200 expr=repos
+saynete peche 10 7400 mainlibre trait=pecheur-du-dimanche
+0 assis=0 etire=0
+250 etire=-200
+500 assis=1000 etire=0 expr=neutre regard=1 regard_y=1 objets=sc-canne-1
+1500 objets=sc-canne-2
+2300 objets=sc-canne-1
+3100 objets=sc-canne-2
+3900 etire=0 expr=malice objets=sc-canne-3
+4000 etire=250
+4250 etire=-100
+4450 etire=0
+4700 expr=soulage objets=sc-canne-1
+5800 expr=repos regard=0 regard_y=0 objets=-
+6200 assis=1000 etire=0
+6650 assis=0 etire=180
+6850 etire=0
+saynete bulles 8 5600 trait=tete-en-l-air
+0 etire=0
+300 etire=-250 expr=malice
+700 etire=300 objets=sc-bulle-1
+1000 etire=0
+1300 expr=tendre regard_y=-1 objets=sc-bulle-2
+2100 objets=sc-bulle-3
+2900 objets=sc-bulle-4
+3100 expr=joie cligne=1
+3300 cligne=0 objets=-
+3400 saut=0 etire=0
+3460 saut=0 etire=-300
+3510 saut=0 etire=250
+3690 saut=700 etire=0
+3870 saut=0 etire=-350
+3960 etire=120
+4040 etire=0
+4400 expr=repos regard_y=0
+saynete fredonne 10 5600 trait=siffloteur
+0 expr=soulage cligne=1
+300 penche=0 regard=1 objets=sc-note-1
+550 penche=400
+1000 penche=0
+1300 penche=0 regard=-1 objets=sc-note-2
+1550 penche=-400
+2000 penche=0
+2300 penche=0 regard=1 objets=sc-note-3
+2550 penche=400
+3000 penche=0
+3300 penche=0 regard=-1 objets=sc-note-1
+3550 penche=-400
+4000 penche=0
+4300 regard=0 cligne=0 objets=-
+4700 expr=repos
+saynete pirouette 8 4400 repos
+0 expr=malice
+300 regard=1
+400 saut=0 etire=0
+460 saut=0 etire=-300
+510 saut=0 etire=250
+600 regard=0
+690 saut=1300 etire=0
+750 regard=-1
+870 saut=0 etire=-350
+900 regard=0
+960 etire=120
+1040 etire=0
+1050 regard=1
+1250 regard=0
+1700 expr=joie
+3000 expr=repos
+saynete secoue 8 4200
+0 etire=0 expr=fatigue
+400 etire=-200
+700 penche=0
+760 penche=900
+820 penche=-810
+880 penche=720
+940 penche=-630
+1000 etire=150 penche=540
+1060 penche=-450
+1120 penche=360
+1180 penche=-270
+1240 penche=180
+1300 penche=-90
+1360 penche=0
+1400 etire=0
+1500 expr=joie cligne=1
+1800 cligne=0
+2800 expr=repos
+saynete grignote 10 7000 mainlibre trait=gourmand
+0 assis=0 etire=0
+250 etire=-200
+500 assis=1000 etire=0 expr=malice regard_y=1 objets=sc-biscuit-1
+1400 expr=soulage cligne=1
+1700 cligne=0
+1800 objets=sc-biscuit-2
+2000 etire=0
+2150 etire=-120
+2300 etire=0
+3000 objets=sc-biscuit-3
+3200 etire=-120
+3350 etire=0
+3600 expr=joie regard_y=0
+5000 expr=repos objets=-
+5600 assis=1000 etire=0
+6050 assis=0 etire=180
+6250 etire=0
+saynete reve 10 6800 trait=tete-en-l-air|amateur-d-histoires
+0 assis=0 etire=0
+250 etire=-200
+500 assis=1000 etire=0 expr=tendre regard=-1 regard_y=-1
+1100 objets=sc-pensee-1
+1600 objets=sc-pensee-2
+2100 objets=sc-pensee-3
+3300 cligne=1
+3500 cligne=0
+4600 regard=0 regard_y=0 objets=-
+4800 expr=repos
+5300 assis=1000 etire=0
+5750 assis=0 etire=180
+5950 etire=0
+saynete equilibre 8 5200 tourne
+0 etire=0 penche=0 expr=neutre
+400 etire=250
+900 etire=300 penche=700
+1500 penche=-600
+2100 penche=1100 expr=peur
+2400 penche=1300
+2700 etire=100 penche=-300 expr=neutre
+3100 etire=0 penche=0
+3300 expr=joie
+3400 saut=0 etire=0
+3460 saut=0 etire=-300
+3510 saut=0 etire=250
+3690 saut=700 etire=0
+3870 saut=0 etire=-350
+3960 etire=120
+4040 etire=0
+4600 expr=repos
+saynete souffle 6 4600
+0 etire=0
+300 expr=malice regard_y=-1
+600 etire=-200
+1000 etire=200 cligne=1
+1500 etire=0 penche=0 cligne=0
+1580 penche=300
+1660 penche=-225
+1740 penche=150
+1820 penche=-75
+1900 penche=0
+2100 expr=joie
+3200 expr=repos regard_y=0
+saynete hoquet 4 6200
+0 saut=0 etire=0 expr=neutre
+500 saut=0 etire=0
+570 saut=700 etire=350
+680 saut=0 etire=-150
+800 etire=0
+1500 saut=0 etire=0
+1570 saut=700 etire=350
+1600 expr=fatigue
+1680 saut=0 etire=-150
+1800 etire=0
+2300 saut=0 etire=0
+2370 saut=700 etire=350
+2480 saut=0 etire=-150
+2600 etire=0
+3600 saut=0 etire=0
+3670 saut=700 etire=350
+3780 saut=0 etire=-150
+3900 etire=0
+4200 expr=neutre
+5000 expr=joie
+5800 expr=repos
+saynete ecoute 8 5000
+0 etire=0
+300 etire=200 expr=neutre
+600 etire=250 regard=-1
+1600 regard=1
+2600 etire=0 regard=0
+2900 expr=malice
+3800 expr=repos
+saynete trebuche 1 5600 tourne
+0 assis=0 etire=0 penche=0
+300 etire=-200 penche=900 expr=peur
+550 assis=0 penche=1500
+700 assis=1000 etire=-500 penche=0
+850 etire=200
+1000 etire=0
+1600 expr=malice regard=1
+2400 regard=-1
+3000 expr=joie regard=0
+3600 assis=1000 etire=0
+4050 assis=0 etire=180
+4250 etire=0
+4800 expr=repos
+saynete voeu 1 5400
+0 etire=0
+300 etire=-200
+700 etire=150 expr=soulage
+1100 etire=0
+1500 objets=sc-filante-1
+1800 objets=sc-filante-2
+2100 objets=sc-filante-3
+2500 expr=tendre objets=etincelle-coeur
+3500 expr=joie
+4300 expr=repos objets=-
+saynete freine 0 3000 tourne
+0 etire=0 penche=0
+80 etire=-350 penche=900
+250 etire=150 penche=1300 regard=1 regard_y=1
+400 etire=0 expr=neutre
+1500 expr=malice
+2100 penche=0 regard=0 regard_y=0
+2500 expr=repos
+saynete lache 0 2600
+0 etire=0 expr=fatigue cligne=1
+350 cligne=0
+500 etire=-150
+600 penche=0
+660 penche=800
+720 penche=-700
+780 penche=600
+840 penche=-500
+900 penche=400
+960 penche=-300
+1020 penche=200
+1080 penche=-100
+1140 penche=0
+1200 etire=0
+1300 expr=joie
+2100 expr=repos
+saynete survol 0 3600
+0 etire=0 expr=malice regard_y=-1
+500 saut=0 etire=0
+560 saut=0 etire=-300
+610 saut=0 etire=250
+790 saut=1500 etire=0
+970 saut=0 etire=-350
+1060 etire=120
+1140 etire=0
+1300 expr=joie objets=etincelle-coeur
+2700 regard_y=0 objets=-
+3100 expr=repos

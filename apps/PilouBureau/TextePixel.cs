@@ -26,6 +26,9 @@ public sealed class TextePixel : FrameworkElement
 
     public int MaxLignes { get; set; }
 
+    // Chaque ligne centrée dans la largeur de l'élément (étiquettes sous une image, titres).
+    public bool Centre { get; set; }
+
     public TextePixel(string texte, Brush couleur)
     {
         _texte = texte;
@@ -69,9 +72,9 @@ public sealed class TextePixel : FrameworkElement
         _unite = n / ppu;
         if (p is null) return new Size(0, 0);
         _largeurMax = double.IsInfinity(dispo.Width) ? 0 : Math.Max(1, (int)Math.Floor(dispo.Width / _unite));
-        _lignes = p.Couper(_texte, _largeurMax, MaxLignes);
+        _lignes = p.Couper(StylePixel.Preparer(_texte), _largeurMax, MaxLignes);
         var (w, h) = p.Boite(_lignes);
-        return new Size(w * _unite, h * _unite);
+        return new Size(Centre && !double.IsInfinity(dispo.Width) ? dispo.Width : w * _unite, h * _unite);
     }
 
     protected override void OnRender(DrawingContext dc)
@@ -85,13 +88,26 @@ public sealed class TextePixel : FrameworkElement
         var dessin = PoliceDessin(n) ?? p;
         double pas = _unite / dessin.Echelle;
         var geo = new StreamGeometry();
+        // Lignes centrées : le décalage de chacune, en unités.
+        double[]? decal = null;
+        if (Centre)
+        {
+            decal = new double[_lignes.Count];
+            for (int i = 0; i < decal.Length; i++) decal[i] = Math.Floor(Math.Max(0, RenderSize.Width - p.Largeur(_lignes[i]) * _unite) / 2 / _unite) * _unite;
+        }
         using (var g = geo.Open())
         {
-            foreach (var pose in dessin.Poser(_lignes))
+            foreach (var pose0 in dessin.Poser(_lignes))
             {
+                var pose = pose0;
+                double dxl = decal is null ? 0 : decal[Math.Min(decal.Length - 1, pose.Y / dessin.Ligne)];
                 if (pose.Dessin is null)
                 {
-                    if (pose.Code is not (' ' or 0xA0 or 0x202F or 0x2009)) Systeme(dc, pose, p);
+                    if (pose.Code is (' ' or 0xA0 or 0x202F or 0x2009)) continue;
+                    // Un signe d'interface (assets/signes.txt) : son sprite 7 × 7, à la hauteur des capitales.
+                    if (StylePixel.Signe(pose.Code, n % 2 == 0 && Finesse.Active) is { } signe)
+                        StylePixel.Dessiner(dc, signe, dxl + pose.X * _unite, (pose.Y + 3) * _unite, signe.Images[0].Length > 7 ? _unite / 2 : _unite, _couleur);
+                    else Systeme(dc, pose, p, dxl);
                     continue;
                 }
                 var rangs = pose.Dessin.Rangs;
@@ -107,7 +123,7 @@ public sealed class TextePixel : FrameworkElement
                         }
                         int fin = k;
                         while (fin < rangs[r].Length && rangs[r][fin] == '#') fin++;
-                        double x = pose.X * _unite + k * pas, y = pose.Y * _unite + (pose.Dessin.Haut + r) * pas;
+                        double x = dxl + pose.X * _unite + k * pas, y = pose.Y * _unite + (pose.Dessin.Haut + r) * pas;
                         g.BeginFigure(new Point(x, y), true, true);
                         g.LineTo(new Point(x + (fin - k) * pas, y), false, false);
                         g.LineTo(new Point(x + (fin - k) * pas, y + pas), false, false);
@@ -122,11 +138,11 @@ public sealed class TextePixel : FrameworkElement
     }
 
     // Secours : un caractère sans dessin, écrit par la police système au milieu de sa case.
-    private void Systeme(DrawingContext dc, PolicePixel.Pose pose, PolicePixel p)
+    private void Systeme(DrawingContext dc, PolicePixel.Pose pose, PolicePixel p, double dx = 0)
     {
         var ft = new FormattedText(char.ConvertFromUtf32(pose.Code), CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
             new Typeface("Segoe UI Symbol"), 9 * _unite, _couleur, 1.0);
-        double cx = pose.X * _unite + p.Inconnu * _unite / 2, cy = pose.Y * _unite + 6.5 * _unite;
+        double cx = dx + pose.X * _unite + p.Inconnu * _unite / 2, cy = pose.Y * _unite + 6.5 * _unite;
         dc.DrawText(ft, new Point(cx - ft.Width / 2, cy - ft.Height / 2));
     }
 }

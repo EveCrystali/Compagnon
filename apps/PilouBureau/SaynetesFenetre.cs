@@ -19,6 +19,49 @@ public sealed partial class FenetrePilou
 
     private bool EssaiEveille => _essaiVie || _essaiSaynete is not null;
 
+    // Essai « eveil » (--essai=eveil:<secondes>[:<heure>]) : l'absence vue par Pilou est fixée, pour voir quand il dort
+    // (Saynetes.Endormi) sans dépendre de qui est devant le PC.
+    private double? _essaiInactif;
+
+    private void EssaiEveil(string nom)
+    {
+        var parts = nom.Split(':');
+        _essaiInactif = parts.Length > 1 && double.TryParse(parts[1], out var s) ? s * 1000 : 0;
+        if (parts.Length > 2 && int.TryParse(parts[2], out var h)) _essaiHeure = h;
+        _dortBureau = false; // les premières images ont pu voir la vraie absence : on repart éveillé
+    }
+
+    // ---- Réactions au monde (saynètes de poids 0 : jamais tirées au sort)
+    private bool _lache, _survolReagi;
+
+    // Une réaction : seulement s'il est libre (pas pris, pas en jeu ni en campagne), et pas au niveau « aucune ».
+    private bool Reagir(string id, double t, int sens)
+    {
+        if (NiveauSaynete == AnimationsCampagne.Aucune || _attrape || CampagneOccupe || _jeuEnCours != Jeu.Aucun
+            || _geste is Geste.SauteSouris or Geste.Ballon) return false;
+        if (Saynetes.Trouver(Saynetes.Commune, id) is not { } s) return false;
+        _saynete = s;
+        _sayneteDebut = t;
+        _sayneteSens = sens >= 0 ? 1 : -1;
+        _geste = Geste.Saynete;
+        return true;
+    }
+
+    // Arrivé au bout de sa marche contre le bord de l'écran : une fois sur deux, il freine et regarde le vide.
+    private void AuBord(double t, double min, double max)
+    {
+        bool gauche = _x - min < 3, droite = max - _x < 3;
+        if ((gauche || droite) && !EnSaisie && _hasard.NextDouble() < 0.5) Reagir("freine", t, droite ? 1 : -1);
+    }
+
+    // La souris reste longtemps sur lui (6 s) : une fois par survol, il tente de l'attraper.
+    private void SurvolLong(double t)
+    {
+        if (_survolSceneDebut < 0) _survolReagi = false;
+        else if (!_survolReagi && t - _survolSceneDebut > 6000 && _geste is Geste.Rien or Geste.Assis)
+            _survolReagi = Reagir("survol", t, 1) || true;
+    }
+
     private string NiveauSaynete => _essaiNiveauSaynete ?? NiveauVie;
 
     private Saynetes.Contexte ContexteSaynete(bool travail)
@@ -29,7 +72,9 @@ public sealed partial class FenetrePilou
         var maintenant = DateTime.Now;
         return new Saynetes.Contexte(_essaiHeure ?? maintenant.Hour, maintenant.Month, stade, portes,
             !string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Compagnon)),
-            string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Main)), travail);
+            string.IsNullOrEmpty(equipe.GetValueOrDefault(PilouBureau.Boutique.Main)), travail,
+            // Traits dominants (Traits.cs) : ils changent les poids, rien d'autre.
+            TraitsDominants().Select(x => x.Id).ToList());
     }
 
     // Au calme, à la place d'une occupation : peut-être une saynète. Vrai si elle commence.
@@ -70,6 +115,7 @@ public sealed partial class FenetrePilou
     // Ce que la saynète impose à la pose (après HabillerVie).
     private void HabillerSaynete(Pose p, double t)
     {
+        SurvolLong(t);
         if (_geste != Geste.Saynete) _saynete = null;
         if (_saynete is not { } s) return;
         if (Saynetes.Jouer(s, (long)(t - _sayneteDebut), NiveauSaynete, _sayneteSens) is not { } j) return;
@@ -92,6 +138,7 @@ public sealed partial class FenetrePilou
     private void EssaiSaynete(string nom)
     {
         _essaiSaynete = "";
+        _dortBureau = false; // les premières images ont pu voir la vraie absence : on repart éveillé, sans « bien dormi »
         foreach (var part in nom.Split(':').Skip(1))
         {
             if (Array.IndexOf(AnimationsCampagne.Niveaux, part) >= 0) _essaiNiveauSaynete = part;

@@ -12,14 +12,14 @@ namespace PilouBureau;
 internal sealed class FenetreJournal : Window
 {
     private readonly FenetrePilou _pilou;
-    private readonly TextBlock _date = Texte(13, Bandeau.Violet, true);
-    private readonly TextBlock _texte = Texte(15.5, Bandeau.ArgentClair);
-    private readonly TextBlock _humeur = Texte(12, Bandeau.Argent);
-    private readonly TextBlock _page = Texte(11.5, Bandeau.Argent);
-    private readonly TextBlock _complicite = Texte(12, Bandeau.ArgentClair, true);
-    private readonly TextBlock _jauge = Texte(12, Bandeau.OrangePo);
+    private readonly TextePixel _date = Texte(13, Bandeau.Violet, true);
+    private readonly TextePixel _texte = Texte(15.5, Bandeau.ArgentClair);
+    private readonly TextePixel _humeur = Texte(12, Bandeau.Argent);
+    private readonly TextePixel _page = Texte(11.5, Bandeau.Argent);
+    private readonly TextePixel _complicite = Texte(12, Bandeau.ArgentClair, true);
+    private readonly TextePixel _jauge = Texte(12, Bandeau.OrangePo);
     private readonly Border _dessin = new() { Width = 120, Height = 136, Margin = new Thickness(0, 0, 18, 0), VerticalAlignment = VerticalAlignment.Top };
-    private readonly Button _avant = Bouton("◀  Plus ancien"), _apres = Bouton("Plus récent  ▶"), _aujourdhui = Bouton("Dernière page");
+    private readonly BoutonPixel _avant = Bouton("◀ Plus ancien"), _apres = Bouton("Plus récent ▶"), _aujourdhui = Bouton("Dernière page");
     private List<Presence.Entree> _entrees = new();
     private int _i;
 
@@ -32,25 +32,12 @@ internal sealed class FenetreJournal : Window
         return b;
     }
 
-    private static TextBlock Texte(double taille, Brush couleur, bool gras = false) => new()
-    {
-        FontSize = taille, Foreground = couleur, FontWeight = gras ? FontWeights.Bold : FontWeights.Normal,
-        FontFamily = new FontFamily("Segoe UI"), TextWrapping = TextWrapping.Wrap,
-    };
+    // Police pixel de Pilou (docs/STYLE.md) : les anciennes tailles du système deviennent « petit » (détails) ou
+    // « corps » (à partir de 14) ; gras : la police « titre ».
+    private static TextePixel Texte(double taille, Brush couleur, bool gras = false) =>
+        StylePixel.Texte("", couleur, taille >= 14 ? StylePixel.Corps : StylePixel.Petit, gras);
 
-    // Habit rétro de l'Aventure : sans lui, Windows peint le bouton désactivé en gris clair et le texte argent disparaît.
-    private static Button Bouton(string texte)
-    {
-        var b = new Button
-        {
-            Content = texte, Margin = new Thickness(0, 0, 8, 0), Padding = new Thickness(12, 5, 12, 5), MinWidth = 90,
-            Background = Gel("#2a3156"), Foreground = Bandeau.ArgentClair, BorderBrush = Gel("#6a5acd"), BorderThickness = new Thickness(2),
-            FontFamily = new FontFamily("Segoe UI"), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
-            HorizontalContentAlignment = HorizontalAlignment.Center,
-        };
-        if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
-        return b;
-    }
+    private static BoutonPixel Bouton(string texte) => new(texte, false, StylePixel.Petit) { Margin = new Thickness(0, 0, 8, 0) };
 
     public FenetreJournal(FenetrePilou pilou, string? jour)
     {
@@ -67,11 +54,13 @@ internal sealed class FenetreJournal : Window
 
         var racine = new DockPanel { Margin = new Thickness(18, 12, 18, 14) };
         var tete = new StackPanel { Margin = new Thickness(0, 0, 0, 10) };
-        tete.Children.Add(new Pixels(Pixels.Texte("JOURNAL"), new Brush?[] { null, Bandeau.OrangePo }, Bandeau.Violet, 5)
-            { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 4) });
+        var enseigne = StylePixel.Enseigne("JOURNAL", Bandeau.OrangePo, Bandeau.Violet, 4);
+        enseigne.HorizontalAlignment = HorizontalAlignment.Center;
+        enseigne.Margin = new Thickness(0, 0, 0, 4);
+        tete.Children.Add(enseigne);
         var sous = Texte(11.5, Bandeau.Argent);
-        sous.Text = "Ce que Pilou écrit le soir, chaque jour où il s'est passé quelque chose. Rien de personnel : seulement ce qu'il a vécu.";
-        sous.TextAlignment = TextAlignment.Center;
+        sous.Texte = "Ce que Pilou écrit le soir, chaque jour où il s'est passé quelque chose. Rien de personnel : seulement ce qu'il a vécu.";
+        sous.Centre = true;
         tete.Children.Add(sous);
         DockPanel.SetDock(tete, Dock.Top);
         racine.Children.Add(tete);
@@ -110,14 +99,12 @@ internal sealed class FenetreJournal : Window
         droite.Children.Add(_date);
         _humeur.Margin = new Thickness(0, 2, 0, 10);
         droite.Children.Add(_humeur);
-        _texte.LineHeight = 23;
         droite.Children.Add(_texte);
         page.Children.Add(new ScrollViewer { Content = droite, VerticalScrollBarVisibility = ScrollBarVisibility.Auto });
-        racine.Children.Add(new Border
-        {
-            Background = Feuille, BorderBrush = Liseré, BorderThickness = new Thickness(2), Padding = new Thickness(18, 16, 18, 16), Child = page,
-        });
+        page.Margin = new Thickness(12, 10, 12, 10);
+        racine.Children.Add(new CadrePixel { U = 3, Fond = Feuille, Couleur = Liseré, Child = page });
         Content = racine;
+        StylePixel.Defileur(this);
 
         _avant.Click += (_, _) => Feuilleter(1);
         _apres.Click += (_, _) => Feuilleter(-1);
@@ -140,8 +127,8 @@ internal sealed class FenetreJournal : Window
             _entrees = e.JournalActif || e.Journal.Count > 0 ? e.Entrees(Presence.Gabarits) : new List<Presence.Entree>();
             var t = e.Totaux();
             int suivant = t.Palier + 1 < Presence.Seuils.Length ? Presence.Seuils[t.Palier + 1] : -1;
-            _complicite.Text = $"♥ {Presence.NomPalier(t.Palier)} · {t.Jours} jour{(t.Jours > 1 ? "s" : "")} ensemble";
-            _jauge.Text = suivant > 0 ? $"{FenetrePilou.JaugeComplicite(t.Points, Presence.Seuils[t.Palier], suivant)}  vers « {Presence.NomPalier(t.Palier + 1)} »" : "★ le plus haut palier";
+            _complicite.Texte = $"♥ {Presence.NomPalier(t.Palier)} · {t.Jours} jour{(t.Jours > 1 ? "s" : "")} ensemble";
+            _jauge.Texte = suivant > 0 ? $"{FenetrePilou.JaugeComplicite(t.Points, Presence.Seuils[t.Palier], suivant)}  vers « {Presence.NomPalier(t.Palier + 1)} »" : "★ le plus haut palier";
         }
         catch (Exception x) when (x is not OutOfMemoryException)
         {
@@ -175,22 +162,22 @@ internal sealed class FenetreJournal : Window
         _aujourdhui.IsEnabled = _i > 0;
         if (_entrees.Count == 0)
         {
-            _date.Text = "Pas encore de page";
-            _humeur.Text = "";
-            _texte.Text = _pilou.Pres.JournalActif
+            _date.Texte = "Pas encore de page";
+            _humeur.Texte = "";
+            _texte.Texte = _pilou.Pres.JournalActif
                 ? "Pilou n'a encore rien écrit. Ce soir, s'il s'est passé quelque chose, il prendra sa plume."
                 : "Le journal est en pause (clic droit sur Pilou → Réglages → Tenir son journal). Les pages déjà écrites restent ici.";
-            _page.Text = "";
+            _page.Texte = "";
             Dessiner("repos");
             return;
         }
         var x = _entrees[_i];
         var d = DateOnly.ParseExact(x.Jour, "yyyy-MM-dd", CultureInfo.InvariantCulture);
         var texteDate = d.ToString("dddd d MMMM yyyy", CultureInfo.GetCultureInfo("fr-FR"));
-        _date.Text = char.ToUpperInvariant(texteDate[0]) + texteDate[1..];
-        _humeur.Text = Signe(x.Humeur);
-        _texte.Text = x.Texte;
-        _page.Text = $"page {_entrees.Count - _i} sur {_entrees.Count}";
+        _date.Texte = char.ToUpperInvariant(texteDate[0]) + texteDate[1..];
+        _humeur.Texte = Signe(x.Humeur);
+        _texte.Texte = x.Texte;
+        _page.Texte = $"page {_entrees.Count - _i} sur {_entrees.Count}";
         Dessiner(x.Humeur);
     }
 
@@ -228,18 +215,11 @@ internal sealed class FenetrePrenom : Window
         Topmost = true;
         Background = new SolidColorBrush(Color.FromRgb(0x0f, 0x13, 0x24));
         var p = new StackPanel { Margin = new Thickness(20, 16, 20, 18) };
-        p.Children.Add(new TextBlock
-        {
-            Text = "Comment veux-tu que je t'appelle ?", Foreground = Bandeau.ArgentClair, FontSize = 16, FontWeight = FontWeights.Bold,
-            FontFamily = new FontFamily("Segoe UI"),
-        });
-        p.Children.Add(new TextBlock
-        {
-            Text = "Un prénom ou un surnom. Il reste entre tes appareils (dans le groupe chiffré), jamais chez tes amis. "
-                   + "Tu peux le changer ou l'effacer quand tu veux (clic droit → Réglages).",
-            Foreground = Bandeau.Argent, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 10),
-            FontFamily = new FontFamily("Segoe UI"),
-        });
+        p.Children.Add(StylePixel.Texte("Comment veux-tu que je t'appelle ?", Bandeau.ArgentClair, StylePixel.Corps, true));
+        var aide = StylePixel.Texte("Un prénom ou un surnom. Il reste entre tes appareils (dans le groupe chiffré), jamais chez tes amis. "
+            + "Tu peux le changer ou l'effacer quand tu veux (clic droit → Réglages).", Bandeau.Argent);
+        aide.Margin = new Thickness(0, 6, 0, 10);
+        p.Children.Add(aide);
         _champ = new TextBox
         {
             Text = actuel, MaxLength = Presence.PrenomMax, FontSize = 15, Padding = new Thickness(6, 4, 6, 4),
@@ -248,21 +228,11 @@ internal sealed class FenetrePrenom : Window
         };
         p.Children.Add(_champ);
         var boutons = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 14, 0, 0) };
-        Button B(string t)
-        {
-            var b = new Button
-            {
-                Content = t, Padding = new Thickness(14, 6, 14, 6), Margin = new Thickness(0, 0, 10, 0), MinWidth = 150,
-                Background = new SolidColorBrush(Color.FromRgb(0x2a, 0x31, 0x56)), Foreground = Bandeau.ArgentClair, BorderBrush = Bandeau.Bord,
-                BorderThickness = new Thickness(2), FontWeight = FontWeights.SemiBold, Cursor = Cursors.Hand,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-            };
-            if (FenetreAventure.GabaritBouton() is { } g) b.Template = g;
-            return b;
-        }
-        var oui = B("C'est ça");
+        // Champ de saisie : police du système (docs/STYLE.md), cadre carré. Boutons : cadre pixel, « C'est ça » en principal.
+        BoutonPixel B(string t, bool principal) => new(t, principal, StylePixel.Petit) { Margin = new Thickness(0, 0, 10, 0) };
+        var oui = B("C'est ça", true);
         oui.IsDefault = true;
-        var non = B("Je préfère ne pas dire");
+        var non = B("Je préfère ne pas dire", false);
         oui.Click += (_, _) => Fin(_champ.Text, false);
         non.Click += (_, _) => Fin("", true);
         boutons.Children.Add(oui);

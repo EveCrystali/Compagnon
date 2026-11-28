@@ -75,6 +75,7 @@ final class Lecture extends FrameLayout {
         super(a);
         this.app = a;
         this.page = page;
+        Musique.suivre(this, () -> campagne == null ? null : campagne.id, () -> campagne == null ? null : campagne.ton, () -> lieuTheatre.contains("|") ? lieuTheatre.substring(lieuTheatre.indexOf('|') + 1) : null); // docs/SONS.md
         p = Ui.p(a);
         d = a.getResources().getDisplayMetrics().density;
         u = uniteEcran(a);

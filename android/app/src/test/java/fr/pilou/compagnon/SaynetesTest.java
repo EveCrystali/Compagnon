@@ -55,9 +55,14 @@ public class SaynetesTest {
                 Saynetes.Contexte ctx = new Saynetes.Contexte(Integer.parseInt(c.get("heure")), Integer.parseInt(c.get("mois")),
                         Integer.parseInt(c.get("stade")), c.get("objets").equals("-") ? Collections.<String>emptyList()
                         : Arrays.asList(c.get("objets").split(",")), c.get("compagnon").equals("1"),
-                        c.get("mainlibre").equals("1"), c.get("travail").equals("1"));
+                        c.get("mainlibre").equals("1"), c.get("travail").equals("1"), c.get("traits").equals("-")
+                        ? Collections.<String>emptyList() : Arrays.asList(c.get("traits").split(",")));
                 String id = Saynetes.tirer(b, Integer.parseInt(c.get("u")), ctx, c.get("evite").equals("-") ? "" : c.get("evite"));
                 obtenu = id.isEmpty() ? "-" : id;
+            } else if (m[0].equals("eveil")) {
+                int h = Integer.parseInt(m[1].substring("heure=".length()));
+                long inactif = Long.parseLong(m[2].substring("inactif=".length()));
+                obtenu = (Saynetes.endormi(h, inactif) ? "dort" : "eveille") + " nuit=" + (Saynetes.nuit(h) ? 1 : 0);
             } else {
                 obtenu = texte(Saynetes.jouer(Saynetes.trouver(b, m[1]), Long.parseLong(m[2]), m[3], Integer.parseInt(m[4])));
             }

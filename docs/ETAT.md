@@ -38,22 +38,28 @@ Dernière mise à jour : 28 novembre 2026.
   clavier. Appliqué au téléphone hors Aventure : en-tête (« Prochaine rangée… » reformulée, plus jamais tronquée),
   barre du bas (libellés qui ne se touchent plus en grande police), Accueil, Jouer, Boutique, Collection, « Rangées
   débloquées » (`Style.java`). Captures Robolectric 1078 × 2400 à 440 dpi en clair, sombre et grande police, relues
-  une par une (`CapturesStyleTest`, docs/captures/style/). **Jamais vu sur un vrai téléphone.** Restent en style
-  système : Réglages, liste des aventures, épreuves, atelier, installation ; et toutes les fenêtres du PC hors menu,
-  bulle et Aventure.
+  une par une (`CapturesStyleTest`, docs/captures/style/). Finition du même jour : Réglages (cases à cocher du
+  menu, options, curseur, champs), carte « Pilou et moi » et ses traits, ligne de premier lancement, icône du besoin
+  de soin, messages brefs ; `TextesSystemeTest` échoue dès qu'un texte de ces écrans est écrit en police système.
+  **Jamais vu sur un vrai téléphone.** Restent en style système : liste des aventures, épreuves, atelier, chasse aux
+  bugs, installation, bulle flottante. PC : la boutique et « Rangées débloquées » sont au guide (`StylePixel.cs` :
+  texte, bouton et ses états, icône, barre de défilement en pixels), le journal, la question du prénom, « Pilou et moi » et les expéditions aussi, vus dans l'exe
+  d'essai à 100 % ; restent amis et connecteurs (formulaires au thème clair du système), l'invitation, et l'en-tête
+  commun (`Bandeau.cs`).
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
   comme après) ; jamais vu sur un vrai téléphone.
-- **Saynètes de repos** (docs/SPRITES.md) : 16 petites scènes de 3 à 8 s (lit, compte ses pièces, poursuit son
-  étincelle, s'endort, regarde par-dessus le bord… deux rares), tirées avec des poids, selon l'heure, le mois, le stade,
-  l'objet porté, le compagnon ; même banque et mêmes tirages sur le PC et le téléphone. Vu dans l'exe d'essai sur le PC
-  d'Antoine (`--essai=saynete`) ; jamais vu sur un vrai téléphone. À venir : 14 de plus et les réactions au monde
-  (pris et lâché, bord d'écran, long survol).
+- **Saynètes de repos** (docs/SPRITES.md) : 30 petites scènes de 3 à 8 s (lit, compte ses pièces, poursuit son
+  étincelle, s'endort, regarde les étoiles, pêche, grignote… quatre rares), tirées avec des poids, selon l'heure, le
+  mois, le stade, l'objet porté, le compagnon et les traits dominants ; trois réactions au monde sur le PC (freine au
+  bord, lâché, long survol). Même banque et mêmes tirages sur le PC et le téléphone. Sans aucune session d'IA, Pilou est
+  désormais éveillé (il ne dort que si on s'absente, ou la nuit). Vu dans l'exe d'essai sur le PC d'Antoine
+  (`--essai=saynete`, `--essai=eveil`) ; jamais vu sur un vrai téléphone.
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
-  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets.
+  téléphone et `outils/sons/sons.py` ; **normaux par défaut** (choix d'Antoine), réglables en aucun / discrets. Musiques et ambiances de l'Aventure : 4 boucles (prologue, humour, mystère, émotion) et 4 ambiances (vent, pluie, hall, mer), réglage « Musique » à part, « discrète » par défaut.
 - **Première minute et mode d'emploi** : au tout premier lancement, trois bulles de Pilou qui passent seules (il
   s'installe ; clic gauche, clic droit ; l'Aventure), jamais pendant la saisie, une seule fois ; sur Android, une ligne
   discrète sur l'Accueil, qui part à la première caresse. Page joueur [MODE-EMPLOI.md](MODE-EMPLOI.md), rangée comme
@@ -123,6 +129,8 @@ Dernière mise à jour : 28 novembre 2026.
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 - Les sons : écoutés par personne ; sur PC, seule la lecture du retour d'expédition a été vérifiée (Windows ouvre sa
   sortie audio) ; sur téléphone, aucune lecture réelle.
+- Les musiques : écoutées par personne. Sur PC, la boucle du prologue joue dans l'exe d'essai (session audio active, crête
+  mesurée vers -30 dBFS) et se coupe quand la fenêtre est réduite ; les autres boucles et le téléphone : jamais lus en vrai.
 
 ## Points connus
 
