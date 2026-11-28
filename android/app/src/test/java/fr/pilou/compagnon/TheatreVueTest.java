@@ -79,6 +79,7 @@ public class TheatreVueTest {
     public void toucherSurLaSceneEstUnClicAuxCoordonneesDuDecor() {
         Context c = RuntimeEnvironment.getApplication();
         TheatreVue v = vue(c, Animations.COMPLETES);
+        v.ancienneSeule = true;                         // le repère de l'ancienne définition (192 × 80 à k)
         assertTrue(v.lieu("evolution", "fond-du-jardin-matin", false));
         avancer(6000);
         long now = TheatreVue.maintenant();
@@ -172,6 +173,7 @@ public class TheatreVueTest {
         dessiner(v);
         assertEquals(2, v.echelleDessinee());
         // Un lieu sans décor HD : l'ancien, 192 × 80, sans travelling entre deux définitions (changement net).
+        v.ancienneSeule = true;
         assertTrue(v.lieu("evolution", "fond-du-jardin-matin", true));
         assertFalse(v.hd());
         assertEquals(192, v.largeurBitmap());
@@ -179,6 +181,7 @@ public class TheatreVueTest {
         assertTrue(v.avancer(TheatreVue.maintenant()));
         assertEquals(192 * 80, v.image().length);
         // Et retour en HD.
+        v.ancienneSeule = false;
         assertTrue(v.lieu("prologue", "jardin", true));
         assertTrue(v.hd());
         assertTrue(v.avancer(TheatreVue.maintenant()));
@@ -226,9 +229,35 @@ public class TheatreVueTest {
     }
 
     @Test
+    public void laMetamorphoseFondLAncienneFormeDansLaNouvelle() {
+        Context c = RuntimeEnvironment.getApplication();
+        TheatreVue v = vue(c, Animations.COMPLETES), w = vue(c, Animations.COMPLETES);
+        assertTrue(v.lieu("evolution", "fond-du-jardin-nuit", false, 150));
+        assertTrue(w.lieu("evolution", "fond-du-jardin-nuit", false, 150));
+        assertTrue(v.hd());
+        long t0 = TheatreVue.maintenant();
+        v.metamorphose(3, "", 4, "", t0 + 2200);
+        w.pilou(4, "");
+        // Avant : l'ancienne forme (pas celle du stade 4).
+        v.avancer(t0 + 1500);
+        w.avancer(t0 + 1500);
+        assertFalse(java.util.Arrays.equals(v.image(), w.image()));
+        // Pendant le fondu : ni l'une ni l'autre.
+        v.avancer(t0 + 2200 + 2000);
+        w.avancer(t0 + 2200 + 2000);
+        assertFalse(java.util.Arrays.equals(v.image(), w.image()));
+        // Après : exactement le Pilou du stade 4.
+        long apres = t0 + 2200 + TheatreVue.DUREE_METAMORPHOSE + 500;
+        v.avancer(apres);
+        w.avancer(apres);
+        assertArrayEquals(w.image(), v.image());
+    }
+
+    @Test
     public void leTravellingAncienResteEntreDeuxLieuxAnciens() {
         Context c = RuntimeEnvironment.getApplication();
         TheatreVue v = vue(c, Animations.COMPLETES);
+        v.ancienneSeule = true;
         assertTrue(v.lieu("evolution", "fond-du-jardin-matin", false));
         long t0 = TheatreVue.maintenant();
         v.avancer(t0 + 3000);
