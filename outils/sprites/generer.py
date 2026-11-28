@@ -18,6 +18,7 @@ import boutique_sprites
 import meteo_sprites
 import visites_sprites
 import gestes_sprites
+import saynetes_sprites
 import expedition_sprites
 import defense_sprites
 import garde_robe
@@ -1872,6 +1873,7 @@ def dessiner():
     garde_robe.objets()
     visites_sprites.tout()
     gestes_sprites.tout()
+    saynetes_sprites.tout()
     expedition_sprites.tout()
     defense_sprites.tout()
     voyage_sprites.tout()

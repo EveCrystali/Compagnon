@@ -31,6 +31,11 @@ Dernière mise à jour : 28 novembre 2026.
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
   comme après) ; jamais vu sur un vrai téléphone.
+- **Saynètes de repos** (docs/SPRITES.md) : 16 petites scènes de 3 à 8 s (lit, compte ses pièces, poursuit son
+  étincelle, s'endort, regarde par-dessus le bord… deux rares), tirées avec des poids, selon l'heure, le mois, le stade,
+  l'objet porté, le compagnon ; même banque et mêmes tirages sur le PC et le téléphone. Vu dans l'exe d'essai sur le PC
+  d'Antoine (`--essai=saynete`) ; jamais vu sur un vrai téléphone. À venir : 14 de plus et les réactions au monde
+  (pris et lâché, bord d'écran, long survol).
 - **Test de jeu automatisé** (docs/TEST-JEU.md) : 1 500 marches à graine fixe par campagne rejouées par le moteur,
   20 parties complètes comparées entre PC et téléphone, synchronisation avec messages perdus, interfaces dessinées.
 - **Sons de Pilou** (docs/SONS.md) : dix sons 8 bits décrits dans `assets/sons.txt`, mêmes échantillons sur PC,
