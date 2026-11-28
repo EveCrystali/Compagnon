@@ -26,6 +26,8 @@ public sealed partial class FenetrePilou
     private double _presEnvoi = -1e12, _presLu = -1e12, _presPause = -1e12;
     private bool _presEnvoiEnCours, _presLectureEnCours;
     private FenetreJournal? _fenetreJournal;
+    private FenetreTraits? _fenetreTraits;
+    private double _traitsVus = -1e12;
     private DispatcherTimer? _essaiMots;
 
     private bool PresenceCoupee => _presenceErreurs >= 3;
@@ -138,6 +140,14 @@ public sealed partial class FenetrePilou
             _presJour = jour;
             e.Compacter(auj);
             _presenceChange = true;
+            _traitsVus = -1e12;
+        }
+        // Les traits de personnalité (Traits.cs) : relus au changement de jour, puis toutes les dix minutes. Un trait
+        // découvert est gardé tout de suite (il se voit dans « Pilou et moi ») ; Pilou l'annonce à son prochain bonjour.
+        if (t - _traitsVus > 600_000)
+        {
+            _traitsVus = t;
+            if (Traits.Decouvrir(e)) _presenceChange = _presenceUrgent = true;
         }
         bool present = _inactif < 60_000;
         // Le temps passé ensemble : la personne est là, et Pilou est à l'écran.
@@ -181,6 +191,7 @@ public sealed partial class FenetrePilou
                 .FirstOrDefault() is { Key: not null } top && (int)(top.Value / 60) >= f.Am)
             (f.Ac, f.Am) = (top.Key, (int)(top.Value / 60));
         if (present && now.Hour >= 21) f.Ta = Math.Max(f.Ta, now.Hour * 60 + now.Minute);
+        if (present && Presence.TotLeMatin(now.Hour, now.Minute)) f.Ma = 1;
         if (MeteoDuJour() is { Length: > 0 } me) f.Me = FaitsDuJour.Fusion(f, new FaitsDuJour { Me = me }).Me;
         // Visites et expéditions : un départ vu en direct.
         bool visite = _visites.Occupe;
@@ -247,11 +258,14 @@ public sealed partial class FenetrePilou
         var hier = e.FaitsDu(Presence.JourTexte(auj - 1));
         var ajd = e.FaitsDu(jour);
         int stade = StadeAffiche();
+        // Traits : un seul à annoncer, au bonjour ; les répliques ne viennent que des dominants déjà annoncés.
+        var nouveau_ = m is Presence.Moment.Premier ? Traits.AAnnoncer(Traits.Tous, tot.Traits, tot.TraitsDits)?.Id ?? "" : "";
+        var dominants = string.Join(",", Traits.Dominants(Traits.Tous, tot.Traits & tot.TraitsDits, Traits.Journal(e), auj).Select(x => x.Id));
         return new Presence.Contexte(now, m, e.Cadence.AttenteAbsence, e.Cadence.PresenceJourMin, Cadences.SeanceMin(e.Cadence, epoque),
             _activite, MeteoDuJour(), tot.Palier, stade, NomVariante(stade), tot.Prenom,
             Metier: ajd.Mo != "" ? ajd.Mo : hier.Mo, Niveau: ajd.Nv, Objet: ObjetPorte(jour), Prise: hier.Px, Plat: hier.Cx,
             Souvenir: Souvenir(e, tot, jour), DateAFeter: date, PalierNouveau: nouveau, DemanderPrenom: demander, JoursEnsemble: tot.Jours,
-            Annees: date.StartsWith('a') && int.TryParse(date[1..], out var a) ? a : 0);
+            Annees: date.StartsWith('a') && int.TryParse(date[1..], out var a) ? a : 0, TraitNouveau: nouveau_, Traits: dominants);
     }
 
     private void Parler(Presence.Moment m, DateTime now, long epoque)
@@ -259,7 +273,7 @@ public sealed partial class FenetrePilou
         var e = Pres;
         var c = ContexteQuotidien(m, now, epoque);
         var tot = e.Totaux();
-        var choix = Presence.Mot(c, Presence.Mots, e.Dits, $"{Presence.JourTexte(now)}|{e.Moi.Id}|{e.Cadence.Dits}");
+        var choix = Presence.Mot(c, Presence.Banque, e.Dits, $"{Presence.JourTexte(now)}|{e.Moi.Id}|{e.Cadence.Dits}");
         Cadences.Noter(e.Cadence, epoque, m);
         _presenceChange = true;
         if (choix is null) return;
@@ -274,6 +288,13 @@ public sealed partial class FenetrePilou
             e.Moi.PalierAnnonce = Math.Max(e.Moi.PalierAnnonce, tot.Palier);
             _presenceUrgent = true;
         }
+        // Un trait n'est annoncé qu'une fois dans le groupe.
+        bool trait = choix.Famille.StartsWith("annonce-", StringComparison.Ordinal);
+        if (trait && Traits.Trouver(choix.Famille["annonce-".Length..]) is { } annonce)
+        {
+            e.Moi.TraitsDits |= annonce.Bit;
+            _presenceUrgent = true;
+        }
         Dosage.Noter(Maintenant);
         bool question = choix.Famille == "prenom-demande";
         if (question)
@@ -281,8 +302,8 @@ public sealed partial class FenetrePilou
             e.Moi.PrenomDemande = true;
             _presenceUrgent = true;
         }
-        Sons.Jouer(choix.Famille.StartsWith("palier-", StringComparison.Ordinal) ? Son.Palier : Son.Mot);
-        Dire(choix.Texte, question ? 15000 : 7000);
+        Sons.Jouer(trait || choix.Famille.StartsWith("palier-", StringComparison.Ordinal) ? Son.Palier : Son.Mot);
+        Dire(choix.Texte, question ? 15000 : trait ? 9000 : 7000);
         if (question)
         {
             _messageTag = "prenom";
@@ -393,6 +414,54 @@ public sealed partial class FenetrePilou
         if (_demo || _presenceDemo) PoserPresDePilou(w);
         w.Show();
     });
+
+    // ---- Traits de personnalité (Traits.cs, docs/TRAITS.md)
+
+    // Les trois traits dominants de Pilou en ce moment (au plus) : pour les répliques, « Pilou et moi » et les saynètes.
+    internal IReadOnlyList<Traits.Trait> TraitsDominants() =>
+        Quotidien2(() => Traits.Dominants(Pres, Presence.Jour(DateTime.Now)), new List<Traits.Trait>());
+
+    // La fenêtre « Pilou et moi » : complicité, traits dominants, traits découverts et silhouettes des autres.
+    internal void OuvrirTraits() => Quotidien(() =>
+    {
+        if (_fenetreTraits is { IsVisible: true } f)
+        {
+            f.Charger();
+            f.Activate();
+            return;
+        }
+        var w = new FenetreTraits(this);
+        w.Closed += (_, _) => _fenetreTraits = null;
+        _fenetreTraits = w;
+        if (_demo || _presenceDemo) PoserPresDePilou(w);
+        w.Show();
+    });
+
+    // Données de démonstration des traits (--essai=traits) : huit traits acquis, dont un pas encore annoncé.
+    internal static EtatPresence TraitsDemo()
+    {
+        var e = PresenceDemo();
+        int auj = Presence.Jour(DateTime.Now);
+        for (int d = 60; d >= 1; d--)
+        {
+            int j = auj - d;
+            e.Marquer(j);
+            var f = e.Aujourdhui(Presence.JourTexte(j));
+            f.Mn = Math.Max(f.Mn, 90);
+            if (d % 2 == 0) f.Ta = 23 * 60 + 20;                       // couche-tard
+            if (d % 3 == 0) f.Ca = 6;                                  // câlin
+            if (d % 4 == 0) f.Cu = 1;                                  // gourmand
+            if (Traits.JourDeSemaine(j) >= 6) f.Pc = Math.Max(f.Pc, 1); // pêcheur du dimanche, flâneur
+            if (d % 5 == 0) (f.Ac, f.Am) = ("lecture", 45);            // grand lecteur
+            if (d % 7 == 0) f.Ex = "Forêt des onglets";                // voyageur
+            if (d is 11 or 23 or 37) (f.Px, f.Pq, f.Pc) = ("une perle de lune", 3, 1); // veinard
+        }
+        Traits.Decouvrir(e);
+        // Tout est annoncé, sauf le dernier découvert : Pilou le dira à son prochain bonjour.
+        var acquis = Traits.Parmi(Traits.Tous, e.Moi.Traits);
+        e.Moi.TraitsDits = e.Moi.Traits & ~(acquis.Count > 0 ? acquis[^1].Bit : 0);
+        return e;
+    }
 
     // ---- Synchronisation (sujet à part du relais, chiffré avec le code du groupe ; jamais vers les amis)
 
@@ -525,7 +594,7 @@ public sealed partial class FenetrePilou
                 void Un()
                 {
                     var c = ContexteQuotidien(moments[i % moments.Length], DateTime.Now, (long)Epoque) with { DemanderPrenom = false };
-                    if (Presence.Mot(c, Presence.Mots, e.Dits, $"essai|{DateTime.Now.Ticks}|{i}") is { } ch)
+                    if (Presence.Mot(c, Presence.Banque, e.Dits, $"essai|{DateTime.Now.Ticks}|{i}") is { } ch)
                     {
                         Presence.Retenir(e.Dits, ch.Ligne.Id, Presence.Jour(DateTime.Now) + i);
                         Dire(ch.Texte, 6000);
@@ -547,6 +616,22 @@ public sealed partial class FenetrePilou
             case "journal":
                 OuvrirJournal();
                 break;
+            case "traits":
+            {
+                // Pilou annonce un trait, puis « Pilou et moi » s'ouvre.
+                _presence = e = TraitsDemo();
+                var t = e.Totaux();
+                if (Traits.AAnnoncer(Traits.Tous, t.Traits, t.TraitsDits) is { } neuf
+                    && Presence.Choisir(Presence.Repliques, "annonce-" + neuf.Id, new Presence.Qui(9, 2, ""), new Dictionary<string, string>(),
+                        e.Dits, "essai-traits") is { } l)
+                {
+                    Dire(l.Texte, 9000);
+                    _salueJusque = Maintenant + 1800;
+                    _tSaut = Maintenant;
+                }
+                OuvrirTraits();
+                break;
+            }
             case "complicite":
             {
                 var t = e.Totaux();

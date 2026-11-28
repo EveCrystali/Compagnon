@@ -1,0 +1,23 @@
+# trait de personnalité : siffloteur
+id: trait-siffloteur
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#9b8cff c=#d2caff
+images:
+................
+.....aaaaaaaa...
+....abbbbbbbba..
+....abbbbbbbba..
+....abaaaaaaba..
+....aba....aba..
+....aba....aba..
+....aba....aba..
+....aba..aaaba..
+..aaaba.abbbba..
+.abbbba.abcbba..
+.abcbba.abbbba..
+.abbbba.abbbba..
+.abbbba..aaaa...
+..aaaa..........
+................

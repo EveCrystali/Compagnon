@@ -1,0 +1,34 @@
+# Les traits de personnalité de Pilou (docs/TRAITS.md), communs au PC (Traits.cs) et au téléphone (Traits.java).
+# Pilou les attrape à force de vivre avec le joueur : on les découvre, on ne les choisit pas, et ils ne se perdent pas.
+#
+#   numéro|identifiant|nom|seuil|condition
+#
+# numéro     : place du trait dans le message entre appareils (un bit). Ne jamais changer ni réutiliser un numéro ;
+#              un nouveau trait prend le numéro suivant (60 au plus).
+# seuil      : nombre de jours du journal de Pilou qui remplissent la condition.
+# condition  : faits du jour (Presence.FaitsDuJour) reliés par « & ». Nombres : >= <= = != ; textes : = != (vide permis).
+#              Faits : mn tv am ta jx ca so pc pq cu qu ce vi nv mg ma (nombres), ac px cx me cf mo ex ob (textes).
+#              En plus : we (1 le samedi et le dimanche), sem (1 lundi … 7 dimanche), abs (jours écoulés depuis la
+#              page précédente du journal).
+# Icône      : sprite « trait-<identifiant> » (outils/sprites/traits_sprites.py).
+# Textes     : assets/presence/traits.txt (une annonce et trois répliques au moins par trait).
+1|couche-tard|Couche-tard|8|ta>=1380
+2|leve-tot|Lève-tôt|8|ma>=1
+3|pecheur-du-dimanche|Pêcheur du dimanche|4|pc>=1&we=1
+4|gourmand|Gourmand|8|cu>=1
+5|grand-lecteur|Grand lecteur|5|ac=lecture&am>=20
+6|codeur-au-long-cours|Codeur au long cours|10|ac=code&am>=180
+7|casanier|Casanier|30|mn>=30&ex=&vi=0
+8|voyageur|Voyageur|5|ex!=
+9|calin|Câlin|7|ca>=5
+10|tete-en-l-air|Tête en l'air|3|abs>=5
+11|siffloteur|Siffloteur|5|ac=musique&am>=30
+12|bon-joueur|Bon joueur|6|jx>=3
+13|bon-voisin|Bon voisin|4|vi>=1
+14|douillet|Douillet|7|so>=2
+15|flaneur|Flâneur|6|we=1&mn>=30
+16|amateur-d-histoires|Amateur d'histoires|6|ce>=1
+17|barbouilleur|Barbouilleur|4|ac=dessin&am>=20
+18|bon-public|Bon public|5|ac=video&am>=30
+19|veinard|Veinard|3|pq>=2
+20|chineur|Chineur|6|ob!=

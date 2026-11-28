@@ -1,0 +1,23 @@
+# trait de personnalité : amateur-d-histoires
+id: trait-amateur-d-histoires
+slot: objet
+ancre: aucun
+decalage: 0 0
+palette: a=#1c2128 b=#768390 c=#f6f8fa d=#f69d50 e=#ffc89a f=#c9d1d9
+images:
+................
+................
+................
+.aaaaaaaaaaaaaa.
+abccccccccccccba
+acbccccccccccbca
+accbccccccccbcca
+acccbbcddcbbccca
+acccccddddccccca
+acccccdeddccccca
+acccccddddccccca
+accccccddcccccca
+affffffffffffffa
+.aaaaaaaaaaaaaa.
+................
+................

@@ -45,6 +45,8 @@ flottante, et dans la notification du soir.
   veille), pensee, curiosite-(code, tableur, texte, mail, musique, video, lecture, dessin, jeu : l'activité seulement,
   **jamais un titre de fenêtre ni un nom de fichier**), palier-1…4, date-(j7, m1, m6, j100, j200, j500, j1000, a),
   prenom-(demande, merci, refus), tel-soir.
+- **Traits de personnalité** : leurs annonces et leurs répliques (`annonce-<trait>`, `trait-<trait>`) sont à part, dans
+  `assets/presence/traits.txt`, et passent par le même choix et la même cadence ([TRAITS.md](TRAITS.md)).
 - **Écrire** : jamais de reproche (« tu m'as manqué » oui, « tu m'as abandonné » jamais), jamais d'injonction (pas de
   « tu devrais »), jamais de culpabilité, rien de personnel. Le test `La_banque_a_plus_de_400_mots…` refuse quelques
   tournures interdites et toute ligne trop longue.

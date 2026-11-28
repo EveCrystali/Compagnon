@@ -90,6 +90,11 @@ internal sealed class FenetreJournal : Window
         lien.Children.Add(_complicite);
         _jauge.Margin = new Thickness(10, 0, 0, 0);
         lien.Children.Add(_jauge);
+        // « Pilou et moi » : ses traits de personnalité (FenetreTraits.cs).
+        var traits = Bouton("Ses traits…");
+        traits.Margin = new Thickness(14, -4, 0, 0);
+        traits.Click += (_, _) => _pilou.OuvrirTraits();
+        lien.Children.Add(traits);
         pied.Children.Add(lien);
         DockPanel.SetDock(pied, Dock.Bottom);
         racine.Children.Add(pied);
