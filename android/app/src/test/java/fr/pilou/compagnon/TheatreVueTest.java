@@ -79,12 +79,12 @@ public class TheatreVueTest {
     public void toucherSurLaSceneEstUnClicAuxCoordonneesDuDecor() {
         Context c = RuntimeEnvironment.getApplication();
         TheatreVue v = vue(c, Animations.COMPLETES);
-        assertTrue(v.lieu("petit-nuage", "jardin-lave", false));
+        assertTrue(v.lieu("evolution", "fond-du-jardin-matin", false));
         avancer(6000);
         long now = TheatreVue.maintenant();
         v.avancer(now);
         dessiner(v);                                    // la vue connaît alors sa place à l'écran
-        Theatre.Scene sc = Theatre.lireScenes(Sprites.ressource("/scenes/petit-nuage.txt")).get("jardin-lave");
+        Theatre.Scene sc = Theatre.lireScenes(Sprites.ressource("/scenes/evolution.txt")).get("fond-du-jardin-matin");
         int x = sc.place, y = Theatre.sol(sc, x) - 8;
         long avant = Theatre.fnv(v.image().clone());
         int k = TheatreVue.echelle(960);
@@ -172,7 +172,7 @@ public class TheatreVueTest {
         dessiner(v);
         assertEquals(2, v.echelleDessinee());
         // Un lieu sans décor HD : l'ancien, 192 × 80, sans travelling entre deux définitions (changement net).
-        assertTrue(v.lieu("petit-nuage", "jardin-lave", true));
+        assertTrue(v.lieu("evolution", "fond-du-jardin-matin", true));
         assertFalse(v.hd());
         assertEquals(192, v.largeurBitmap());
         assertEquals(80, v.hauteurBitmap());
@@ -229,10 +229,10 @@ public class TheatreVueTest {
     public void leTravellingAncienResteEntreDeuxLieuxAnciens() {
         Context c = RuntimeEnvironment.getApplication();
         TheatreVue v = vue(c, Animations.COMPLETES);
-        assertTrue(v.lieu("petit-nuage", "jardin-lave", false));
+        assertTrue(v.lieu("evolution", "fond-du-jardin-matin", false));
         long t0 = TheatreVue.maintenant();
         v.avancer(t0 + 3000);
-        assertTrue(v.lieu("petit-nuage", "chemin-creux", true));
+        assertTrue(v.lieu("evolution", "fond-du-jardin-soir", true));
         assertFalse(v.hd());
         long g = TheatreVue.maintenant();
         assertTrue(v.avancer(g + 300));

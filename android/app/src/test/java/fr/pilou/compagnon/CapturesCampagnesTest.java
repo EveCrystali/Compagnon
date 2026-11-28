@@ -788,11 +788,12 @@ public class CapturesCampagnesTest {
             ac = new ActivityController[1];
             Lecture ln = ouvrirLecture(pn, "ch1-orage", ac);
             org.junit.Assert.assertEquals(View.VISIBLE, ln.theatre().getVisibility());
-            org.junit.Assert.assertFalse(ln.theatre().hd());
-            org.junit.Assert.assertEquals(192, ln.theatre().largeurBitmap());
-            org.junit.Assert.assertEquals(80, ln.theatre().hauteurBitmap());
-            org.junit.Assert.assertEquals(400, ln.tete().getHeight());
-            ecran(ac[0].get(), "petit-nuage-ancien");
+            // Petit Nuage a aussi ses décors HD : le jardin lavé se joue en 480 × 240 (seules les scènes d'évolution
+            // restent à l'ancienne définition, voir TheatreVueTest).
+            org.junit.Assert.assertTrue(ln.theatre().hd());
+            org.junit.Assert.assertEquals(480, ln.theatre().largeurBitmap());
+            org.junit.Assert.assertEquals(240, ln.theatre().hauteurBitmap());
+            ecran(ac[0].get(), "petit-nuage-jardin-hd");
             ac[0].pause().stop().destroy();
         } finally {
             CampagnesTel.horloge = System::currentTimeMillis;

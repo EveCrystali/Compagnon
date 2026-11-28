@@ -70,11 +70,11 @@ public final class TheatreHd {
         public final int w, h;
         public final List<Plan> plans;
         private final List<Plan> fonds = new ArrayList<>(), devants = new ArrayList<>();
-        // Au plus 16 fonds aplatis gardés (≈ 7 Mo en 480 × 240) : les plus anciens s'en vont.
+        // Au plus 8 fonds aplatis gardés (un cycle d'animation, ≈ 3,7 Mo en 480 × 240) : les plus anciens s'en vont.
         private final Map<Long, int[]> aplatis = new LinkedHashMap<Long, int[]>(16, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<Long, int[]> e) {
-                return size() > 16;
+                return size() > 8;
             }
         };
 
