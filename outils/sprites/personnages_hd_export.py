@@ -26,7 +26,7 @@ ICI = os.path.dirname(os.path.abspath(__file__))
 SORTIE = os.path.normpath(os.path.join(ICI, "..", "..", "assets", "sprites-hd"))
 REFERENCE = os.path.join(ICI, "personnages-hd-reference.txt")
 LETTRES = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&*+-/<>?@^_~"
-CAMPAGNES = ("grande-panne", "phare-eteint")                      # campagnes exportées (une par PR)
+CAMPAGNES = ("grande-panne", "phare-eteint", "petit-nuage")                      # campagnes exportées (une par PR)
 IMAGES = ((0, 0, 0, 0), (0, 0, 1, 1), (2, 0, 0, 0), (0, 1, 0, 0), (0, 3, 0, 1))     # (paup, bouche, souffle, t)
 DUREE = 150
 

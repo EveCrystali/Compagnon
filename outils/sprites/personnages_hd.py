@@ -497,3 +497,4 @@ def etats_planche():
 # Les autres personnages, campagne par campagne (ils s'inscrivent dans PERSOS à l'import).
 import personnages_hd_panne  # noqa: E402,F401
 import personnages_hd_phare  # noqa: E402,F401
+import personnages_hd_nuage  # noqa: E402,F401
