@@ -23,6 +23,10 @@ Dernière mise à jour : 27 novembre 2026.
   « Encore agrandis automatiquement : 0 »).
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
   téléphone), complicité, journal identique des deux côtés, prénom, « Pilou et moi ».
+- **Police pixel de Pilou** (docs/POLICE.md) : 223 glyphes dessinés à la main, tout le français, quatre tailles (texte,
+  titre, et leur dessin fin), mise en page identique PC / Android. Première vague : la phrase de Pilou en tête de bulle
+  (PC), le mot du jour dans la bulle flottante, l'Accueil et le widget (Android). Le reste des fenêtres reste en police
+  système (chantier suivant).
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
@@ -53,7 +57,7 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 
 - Sous Windows (liste passée le 27 novembre 2026, détail dans `TEST-JEU.md`) : vus et corrigés sur le PC d'Antoine, la
   fenêtre Aventure (taille minimale), la fenêtre des expéditions, le journal, la charge du dessin fin (≈ 5 % d'un cœur),
-  la relance en pleine campagne, une fin versée une fois. Restent : un vrai écran à 125 % et 150 %, les épreuves jouées
+  la relance en pleine campagne, une fin versée une fois. Restent : un vrai écran à 125 % et 150 % (dont la police pixel de la bulle, vue à 100 % seulement), les épreuves jouées
   au clavier et à la souris, les extensions d'éditeur, les animations à l'œil.
 - Sur téléphone : les métiers, la boutique garnie, la fluidité du dessin fin, l'onglet Aventure et la notification de retour.
 - La présence au quotidien : la cadence d'une vraie journée, la fenêtre Journal sur de vraies pages, le mot du soir (notification, Doze), le

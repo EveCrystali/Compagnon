@@ -564,18 +564,7 @@ public sealed partial class FenetrePilou : Window
 
         _lignes.Children.Clear();
         if (Maintenant < _messageJusque)
-            _lignes.Children.Add(new TextBlock
-            {
-                Tag = _messageTag == "" ? null : _messageTag,
-                Text = _message,
-                FontFamily = new FontFamily("Segoe UI"),
-                FontSize = 12.5,
-                FontStyle = FontStyles.Italic,
-                Foreground = Couleurs.Texte,
-                // Une phrase plus large que la bulle passe à la ligne au lieu d'être coupée net (vu sur un vrai Windows).
-                TextWrapping = TextWrapping.Wrap,
-                Margin = new Thickness(0, 1, 0, 1),
-            });
+            _lignes.Children.Add(Phrase(_message, _messageTag == "" ? null : _messageTag)); // police pixel : BullePixel.cs
         if (BlocDiagnostics() is { } diag) _lignes.Children.Add(diag);
         foreach (var l in lignes) _lignes.Children.Add(Ligne(l));
         if (detail && autres > 0)

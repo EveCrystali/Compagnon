@@ -19,7 +19,8 @@ import java.util.List;
  */
 final class PageAccueil extends Page {
 
-    private final TextView salut, nom, niveau, xp, etatPc, titreSessions, motDuJour;
+    private final TextView salut, nom, niveau, xp, etatPc, titreSessions;
+    private final TextePixelVue motDuJour;
     private final PresenceVue presence;
     private final Ui.Barre barre;
     private final PilouVue pilou;
@@ -530,7 +531,7 @@ final class PageAccueil extends Page {
         try {
             String m = PresenceTel.motDuJour(app);
             motDuJour.setVisibility(m.isEmpty() ? View.GONE : View.VISIBLE);
-            motDuJour.setText(m.isEmpty() ? "" : "« " + m + " »");
+            motDuJour.texte(m.isEmpty() ? "" : "« " + m + " »");
             motDuJour.setContentDescription(m.isEmpty() ? null : "Pilou dit : " + m);
             presence.rafraichir();
             Presence.Etat e = PresenceTel.etat(app);
