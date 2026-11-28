@@ -501,6 +501,9 @@ public sealed partial class FenetrePilou
 
     // ---- ⚙ Réglages
 
+    // Une page pour le joueur, rangée comme ce menu (docs/MODE-EMPLOI.md).
+    private const string ModeEmploi = "https://github.com/EveCrystali/Compagnon/blob/main/docs/MODE-EMPLOI.md";
+
     private MenuItem PorteReglages()
     {
         var m = Signe(new MenuItem { Header = PlanMenu.Reglages.Titre }, PlanMenu.Reglages.Signe);
@@ -554,6 +557,8 @@ public sealed partial class FenetrePilou
             ? "Un dossier commun à tes PC (OneDrive, partage réseau…). Pour un code entre appareils : Amis et appareils ▸ Groupe d'appareils."
             : $"Dossier : {_reglages.DossierPartage}";
         m.Items.Add(partage);
+        m.Items.Add(new Separator());
+        m.Items.Add(Entree("Mode d'emploi…", () => Ouvrir(ModeEmploi)));
         m.Items.Add(MenuVersion());
         m.Items.Add(Entree("Redémarrer Pilou", Redemarrer));
         return m;

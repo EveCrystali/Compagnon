@@ -120,7 +120,7 @@ question, une plus discrète quand une session finit (chacune se coupe dans l'ap
 
 1. Télécharger `Pilou.apk` depuis la dernière release du dépôt, l'ouvrir sur le téléphone et accepter
    l'installation d'une app hors Play Store.
-2. Sur le PC : clic droit sur Pilou → Intégrations → **Android : appairer mon téléphone…**
+2. Sur le PC : clic droit sur Pilou → Amis et appareils → Groupe d'appareils → **Partager l'XP entre mes appareils…**
 3. Viser le QR code avec l'appareil photo : l'app s'ouvre et s'appaire. Sinon, taper le code de 16
    caractères dans l'app.
 4. Dans l'app : autoriser les notifications, cocher « Pilou flottant » si tu le veux, ajouter le widget.
@@ -177,7 +177,7 @@ PilouBureau ── POST chiffré ──▶ relais ntfy ── flux JSON ──�
   usages). Le relais ne voit qu'un texte en base64 ; sans le code, on ne trouve même pas le sujet.
 - Seuls les changements d'état partent (attente, travail, fini…), pas chaque outil : le téléphone
   calcule les durées lui-même. ntfy.sh gratuit limite le nombre de messages par jour ; au-delà,
-  Pilou se tait 5 min et réessaie. Avec ton propre serveur ntfy, pas de limite (Intégrations →
+  Pilou se tait 5 min et réessaie. Avec ton propre serveur ntfy, pas de limite (Amis et appareils → Groupe d'appareils →
   Android : relais…, et le même dans l'app).
 - Sans nouvelles depuis 25 min, le téléphone considère que le PC dort.
 - Format du message déchiffré : `Telephone.Charge` dans `apps/PilouBureau/Telephone.cs`. Le même
@@ -248,7 +248,7 @@ le carnet et les recettes connues s'additionnent.
 
 ## Groupe d'appareils
 
-Le code d'appairage est aussi le code du **groupe** : un autre PC qui le saisit (*Intégrations →
+Le code d'appairage est aussi le code du **groupe** : un autre PC qui le saisit (*Amis et appareils → Groupe d'appareils →
 Rejoindre un groupe*) partage l'XP avec celui-ci, sans dossier commun. Chaque PC publie son propre
 compteur sur un troisième sujet (`pilou-groupe-v1`) et garde, pour chacun des autres, la plus grande
 valeur reçue (compteur G) ; le total est la somme. Les gains du téléphone sont crédités par **chaque**
@@ -313,7 +313,7 @@ et Pilou subit le temps dans l'app, le widget et Pilou flottant, avec les mêmes
 | Alertes (une IA attend, a fini) | webhook | ✓ notifications |
 | Mises à jour | automatiques | notification, un appui, confirmation d'Android |
 | Petits mots de Pilou (docs/PRESENCE.md) | ✓ trois par jour au plus, aux moments calmes | ✓ un par jour au plus : le mot du soir (notification silencieuse), aussi en tête de l'Accueil, dans le widget et la bulle |
-| Journal de Pilou, complicité, prénom | ✓ fenêtre Journal, menu Pilou et moi | ✓ carte Pilou et moi, Réglages ; mêmes pages, mot pour mot |
+| Journal de Pilou, complicité, prénom | ✓ fenêtre Journal, menu (Progrès, Il se montre, Réglages) | ✓ carte Pilou et moi, Réglages ; mêmes pages, mot pour mot |
 | Traînée d'étoiles (niveau 9) | ✓ | pas encore |
 | Thème clair/sombre de la bulle | ✓ | pas encore (bulle claire) |
 | Promenade, suit la souris, s'accroche au curseur, toque à l'écran, ballon | ✓ | sans objet (pas de souris) ; on déplace Pilou au doigt |
