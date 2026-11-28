@@ -138,6 +138,7 @@ public sealed partial class FenetrePilou
     private void EssaiSaynete(string nom)
     {
         _essaiSaynete = "";
+        _dortBureau = false; // les premières images ont pu voir la vraie absence : on repart éveillé, sans « bien dormi »
         foreach (var part in nom.Split(':').Skip(1))
         {
             if (Array.IndexOf(AnimationsCampagne.Niveaux, part) >= 0) _essaiNiveauSaynete = part;
