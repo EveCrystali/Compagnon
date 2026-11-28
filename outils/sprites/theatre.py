@@ -67,6 +67,7 @@ LISSE = [0, 11, 42, 89, 156, 229, 316, 410, 500, 590, 684, 771, 844, 911, 958, 9
 # Rythme (ms par image) et taille (largeur, hauteur) des sprites, remplis par charger() depuis la banque.
 DUREES = {}
 TAILLES = {}
+TAILLES_HD = {}                # sprites HD (assets/sprites-hd) : (largeur, hauteur), pour la cible du clic
 
 # Le personnage en pied (pieds_campagnes.py) : il entre par la droite, se tient sur `interlocuteur`, respire, cligne,
 # parle pendant sa réplique, sautille quand on le touche (et de temps en temps), et ressort par la droite.
@@ -500,7 +501,7 @@ def _cible(sc, A, avant, tc, cx, cy):
         return ("pilou", 0, "", px)
     pp = perso(sc, A, avant, tc)
     if pp is not None:
-        w, h = TAILLES.get(pp[0], (24, 32))
+        w, h = (TAILLES_HD if sc.d is HD else TAILLES).get(pp[0], (E(sc, 24), E(sc, 32)))
         if abs(cx - pp[2]) <= w // 2 and pp[3] - h < cy <= pp[3]:
             return ("perso", 0, "", pp[2])
     for i, (sid, comp, p) in enumerate(sc.acteurs):

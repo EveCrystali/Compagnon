@@ -1,0 +1,46 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-etincelle
+taille: 13 13
+ancre: 6 12
+duree: 80
+palette: a=#f69d50 b=#ffc89a c=#fff6cc d=#ffffff
+images: 3
+13,
+5,a7,
+5,a7,
+5,a7,
+4,b,cb5,
+5,2c6,
+,3a2cd2c3a,
+4,b,cb5,
+6,c6,
+6,a6,
+6,a6,
+6,a6,
+13,
+13.
+5.,7.
+5.,7.
+5.,7.
+4.,.b,5.
+5.,7.
+.3,b3.b3,.
+4.,2.,5.
+6.b6.
+6.,6.
+6.,6.
+6.,6.
+13.
+13.
+13.
+2.a6.a3.
+3.a4.a4.
+4.b.,b5.
+5.2b6.
+4.,b.2,4.
+4.b.,b5.
+3.a2.,.a4.
+2.a6.a3.
+13.
+13.
+13.

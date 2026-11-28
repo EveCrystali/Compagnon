@@ -1,0 +1,59 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-papillon
+taille: 16 13
+ancre: 8 12
+duree: 120
+palette: a=#45281e b=#271e2f c=#ffc89a d=#3b2a3e e=#fff6cc f=#f69d50 g=#ffe1a0 h=#a46cc2 i=#d9803a j=#8a4410
+images: 4
+3,3ab2,b3a3,
+,2a3cd2bd3c2a,
+ace3cdbd4c2fa
+a2cgc2fh3cg2fia
+acg2c2fh3cfgfia
+a5fihfc3f2ia
+,a2fcfihafcf2ia,
+2,a2c2fhf2cfia2,
+2,acj2fh2cjfia2,
+2,a3fih3f2ia2,
+3,ai2jha2ija3,
+4,3ab,3a4,
+16,
+3.2,.a2.a.2,3.
+.3,a2.2a2.a3,.
+3,a3.f3.fa3,
+3,a.g3.g2fa3,
+3,agc4.gia3,
+3,a2.f2.f.ia3,
+.2,af.c.fcija2,.
+2.2,ac2.c.ia2,2.
+2.2,aj3.jia2,2.
+2.2,a5.ja2,2.
+3.2,ai3.a2,3.
+4.2,4.2,4.
+16.
+5.,b2.b,5.
+4.,b.2b.b,4.
+3.2,b.b.b3,3.
+3.3,b.b4,3.
+3.3,b.b4,3.
+3.3,b.b4,3.
+3.3,b.b4,3.
+4.2,b.b3,4.
+4.2,b.b3,4.
+4.2,b.b3,4.
+5.,b.b2,5.
+6.,2.,6.
+16.
+5.2a2.2a5.
+4.ac.2a.ca4.
+3.a2c.f.2cfa3.
+3.acgf.cg2fa3.
+3.agcf.2cgia3.
+3.a3f.3fia3.
+3.a2fc.fcija3.
+4.acf.2cia4.
+4.ajf.cjia4.
+4.afi.2fja4.
+5.ai.aia5.
+6.a2.a6.
+16.

@@ -49,6 +49,8 @@ def lire_decor_hd(texte):
         val = val.strip()
         if cle == "id":
             d["id"] = val
+        elif cle == "ancre":
+            d["ancre"] = tuple(int(v) for v in val.split())
         elif cle == "taille":
             d["w"], d["h"] = (int(v) for v in val.split())
         elif cle == "plan":
@@ -96,6 +98,53 @@ def charger_decor_hd(campagne, decor):
         return None
     with open(f, encoding="utf-8") as fh:
         return lire_decor_hd(fh.read())
+
+
+# ---- Les sprites HD : acteurs et personnages en pied (assets/sprites-hd, docs/SCENES-HD.md § 6 et 7)
+
+class SpriteHd:
+    """Un sprite HD : images ARGB à plat (0 : transparent), ancre (x, y) des pieds, durée d'une image."""
+    def __init__(self, d):
+        self.id, self.w, self.h = d["id"], d["w"], d["h"]
+        self.ax, self.ay = d.get("ancre", (d["w"] // 2, d["h"] - 1))
+        _, _, _, self.duree, self.images = d["plans"][0]
+
+
+def lire_sprite_hd(texte):
+    return SpriteHd(lire_decor_hd(texte))
+
+
+def charger_sprites_hd():
+    """{id: SpriteHd} de assets/sprites-hd ; renseigne aussi theatre.TAILLES_HD."""
+    B = {}
+    dossier = os.path.join(ASSETS, "sprites-hd")
+    if not os.path.isdir(dossier):
+        return B
+    for f in sorted(os.listdir(dossier)):
+        if f.endswith(".txt"):
+            with open(os.path.join(dossier, f), encoding="utf-8") as fh:
+                s = lire_sprite_hd(fh.read())
+            B[s.id] = s
+            theatre.TAILLES_HD[s.id] = (s.w, s.h)
+    return B
+
+
+def _poser_hd(px, w, h, s, im, x, y, miroir):
+    g = s.images[im % len(s.images)]
+    ox = x - (s.w - 1 - s.ax if miroir else s.ax)
+    oy = y - s.ay
+    for j in range(s.h):
+        Y = oy + j
+        if Y < 0 or Y >= h:
+            continue
+        o = j * s.w
+        for i in range(s.w):
+            c = g[o + i]
+            if not c:
+                continue
+            X = ox + (s.w - 1 - i if miroir else i)
+            if 0 <= X < w:
+                _melanger(px, Y * w + X, c)
 
 
 # ---- Les scènes HD
@@ -240,9 +289,10 @@ def _poser_grille(px, w, h, g, x, y, ax, ay):
                 _melanger(px, Y * w + X, c)
 
 
-def composer_hd(decor, sc, A, B, evts, t, rendre, teinte, regard=0, niv=animations.COMPLETES):
+def composer_hd(decor, sc, A, B, evts, t, rendre, regard=0, niv=animations.COMPLETES):
     """L'image HD de la scène à l'instant t : liste de 480 × 240 entiers ARGB. B : les sprites HD des acteurs et des
-    personnages (ceux qui manquent ne sont pas dessinés : jamais d'ancien sprite agrandi, docs/SCENES-HD.md § 2)."""
+    personnages, {id: SpriteHd} (ceux qui manquent ne sont pas dessinés : jamais d'ancien sprite agrandi,
+    docs/SCENES-HD.md § 2). Un personnage HD est dessiné regardant à droite : il est retourné pour regarder Pilou."""
     w, h = sc.d.w, sc.d.h
     px = [0xFF000000] * (w * h)
     devant = []
@@ -255,7 +305,7 @@ def composer_hd(decor, sc, A, B, evts, t, rendre, teinte, regard=0, niv=animatio
     poses = [(y, 0, ("s", sid, im, x, m)) for (sid, im, x, y, m) in theatre.acteurs(sc, A, B, evts, t, niv)]
     pp = theatre.perso(sc, A, evts, t, niv)
     if pp is not None and pp[0] in B:
-        poses.append((pp[3], 0, ("s", pp[0], pp[1], pp[2], pp[4])))
+        poses.append((pp[3], 0, ("s", pp[0], pp[1], pp[2], not pp[4])))
     etat = theatre.pilou_etat(sc, A, evts, t, regard, niv)
     if etat[5]:
         poses.append((etat[1], 1, ("p", etat)))
@@ -265,11 +315,11 @@ def composer_hd(decor, sc, A, B, evts, t, rendre, teinte, regard=0, niv=animatio
             _poser_grille(px, w, h, rendre(theatre.pose_hd(q[1], t)), q[1][0], y, PILOU_HD_X, PILOU_HD_Y)
         else:
             _, sid, im, x, m = q
-            theatre.poser(px, B, sid, im, x, y, m, teinte, w=w, h=h)
+            _poser_hd(px, w, h, B[sid], im, x, y, m)
     for im in devant:
         _calque(px, im)
     for (sid, im, x, y, m) in theatre.effets(sc, A, B, evts, t, niv):
-        theatre.poser(px, B, sid, im, x, y, m, teinte, w=w, h=h)
+        _poser_hd(px, w, h, B[sid], im, x, y, m)
     return px
 
 
@@ -281,11 +331,19 @@ SCENARIOS_HD = [
       (6000, "humeur", "surpris", 0), (7000, "depart", 1, 0)],
      [0, 1000, 2600, 3100, 3240, 5100, 5400, 6100, 8000, 12000]),
     ("seuil-hd-reduites", "prologue", "seuil", "reduites", 0, [(0, "entree", 0, 0)], [0, 4150, 4299]),
+    ("mare-hd-clics", "prologue", "mare", "completes", 0,
+     [(0, "entree", 0, 0), (4000, "clic", 240, 175), (5200, "clic", 150, 215), (5600, "clic", 160, 214), (6000, "clic", 170, 216)],
+     [4100, 4400, 5000, 5300, 5800, 6100, 6400, 7000]),
+    ("hall-hd-perso", "grande-panne", "hall-pas-comptes", "completes", 0,
+     [(0, "entree", 0, 0), (800, "perso", "pied-grande-panne-raccourcis", 0), (3500, "parle-perso", 5600, 0),
+      (6500, "clic", 370, 200)],
+     [800, 2000, 3600, 3740, 6550, 6700, 9000]),
 ]
 
 
 def ecrire_reference():
-    B, A = theatre.charger()
+    _, A = theatre.charger()
+    B = charger_sprites_hd()
     rendre = rendeur_pilou()
     lignes = ["# Théâtre HD : valeurs de référence (outils/sprites/theatre_hd.py), relues par TheatreTests.cs et",
               "# TheatreTest.java. decor id plan largeur hauteur images duree empreintes… ; scenario nom campagne décor",
@@ -310,7 +368,12 @@ def ecrire_reference():
             lignes.append("pilou %d %d %d %s %d %d %d %s" % (t, et[0], et[1], et[2], et[3], int(et[4]), int(et[5]), et[6]))
             pose = theatre.pose_hd(et, t)
             lignes.append("pose %d %s" % (t, " ".join("%s=%s" % (k, _texte(v)) for k, v in sorted(pose.items()))))
-            px = composer_hd(decor, sc, A, {}, evts, t, rendre, theatre.TEINTES["bleu"], regard, niv)
+            for (s, i, ax, ay, am) in theatre.acteurs(sc, A, B, evts, t, niv) + theatre.effets(sc, A, B, evts, t, niv):
+                lignes.append("acteur %d %s %d %d %d %d" % (t, s, i, ax, ay, int(am)))
+            pp = theatre.perso(sc, A, evts, t, niv)
+            if pp is not None:
+                lignes.append("perso %d %s %d %d %d %d" % (t, pp[0], pp[1], pp[2], pp[3], int(pp[4])))
+            px = composer_hd(decor, sc, A, B, evts, t, rendre, regard, niv)
             lignes.append("image %d %d" % (t, fnv(px)))
     with open(os.path.join(ICI, "theatre-hd-reference.txt"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(lignes) + "\n")

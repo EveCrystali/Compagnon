@@ -6,7 +6,8 @@ Les sessions « paysages » et « personnages HD » produisent à ce format ; le
 `Theatre.cs`, `Theatre.java`) les lit à l'identique. Le format d'aujourd'hui (192 × 80) est décrit dans
 [SCENES.md](SCENES.md) ; il reste en service pendant la migration.
 
-Statut : **format décidé, moteur pas encore écrit** (branche `claude/theatre-hd`, à venir).
+Statut : **format décidé ; moteur de référence écrit** (`outils/sprites/theatre_hd.py`, branche `claude/theatre-hd`) ;
+PC et téléphone en cours.
 
 ## 1. L'unité et le cadre
 
@@ -79,9 +80,11 @@ plan: herbes 100 devant
 ## 4. Les scènes : `assets/scenes-hd/<campagne>.txt`
 
 La syntaxe d'`assets/scenes/<campagne>.txt` (SCENES.md), **en unités HD** : `scene`, `sol`, `place`, `interlocuteur`,
-`cle`, `acteur`, `sensible`. Les scènes HD sont replacées à l'œil sur chaque tableau (le cadre passe de 2,4:1 à 2:1 :
-on ne multiplie pas les anciennes coordonnées). Les vitesses et amplitudes de mouvement du moteur sont multipliées par
-2,5 (480 / 192).
+`cle`, `acteur`, `sensible`. Les tableaux HD sont peints dans le **repère des paysages** : un point (x, y) de l'ancienne
+scène devient (2,5 x, 2,5 y + 40). Les scènes HD sont donc **écrites par la conversion** de l'ancienne scène
+(`py outils/sprites/theatre_hd.py`), jamais à la main ; quand un tableau demande une retouche (le Pilou fin est plus
+large que le mini-Pilou), elle va dans la table `AJUSTEMENTS` de `theatre_hd.py`. Les longueurs et vitesses du moteur
+sont multipliées par 5/2 (`E(sc, v)`).
 
 ## 5. Pilou : le Pilou fin du bureau
 
@@ -92,12 +95,14 @@ expressions. Plus de `scene-pilou` en HD.
 | | |
 |---|---|
 | Toile | 96 × 112 unités |
-| Ancrage | colonne 48, **ligne des pieds 108** (à confirmer à l'écriture du moteur, sur les quatre stades) |
+| Ancrage | colonne 48, **ligne des pieds 107** (vérifiée sur les stades 1 et 2 ; Nimbus et Astral descendent de 3 à 4 unités sous ses pieds : son nuage, sa traîne) |
 | Taille mesurée (pose de repos) | Gouttelette 46 × 68, Pilou 62 × 87, Nimbus 86 × 84, Astral 80 × 102 |
 | Ce que le Théâtre lui demande | une pose du bureau : expression (humeur), bouche (parle), marche, regard, saut (décalage vertical), et l'évolution (0 à 1) pour la métamorphose |
 
-Le rendu fin est déjà le même sur le PC et le téléphone (`rendus-reference-2x.txt`). La correspondance « événement de
-scène → pose du bureau » est une fonction du moteur, avec sa référence.
+Le rendu fin est déjà le même sur le PC et le téléphone (`rendus-reference-2x.txt`). La correspondance « état de scène →
+pose du bureau » est `theatre.pose_hd` : marche, bouche ouverte une image sur deux pendant une réplique (champ `parle` du
+rendu, ajouté pour le Théâtre), clin d'œil, regard, saut de joie, coucou (antenne qui salue), sursaut ; l'humeur donne
+l'expression. Le stade, la variante, la couleur et les accessoires viennent du joueur.
 
 ## 6. Les personnages en pied : `assets/sprites-hd/pied-<campagne>-<personnage>.txt`
 

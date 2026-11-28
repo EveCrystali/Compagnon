@@ -1,5 +1,34 @@
-# Personnages en pied HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images duree, puis
-# l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000, rangée par rangée).
+# Personnages en pied et acteurs HD (personnages_hd_export.py) : id largeur hauteur ancre_x ancre_y images
+# duree, puis l'empreinte FNV-1a de chaque image décodée (ARGB 0xFFrrggbb, transparent 0x00000000).
+acteur-abeille 15 11 7 10 2 60 93afa998 e7e39119
+acteur-aiguille 10 6 5 5 4 220 e628a62d d559a3fb 11dcaaab 63865535
+acteur-brume 56 14 28 13 4 600 05d15041 058e8439 e573fdcd f08152b5
+acteur-bulle 20 15 10 14 4 150 2e49a651 5f58e4fd c4cdf8ee 5f58e4fd
+acteur-bulle-marais 14 14 7 13 3 200 eb91a26a 4f11382e 7ddd3513
+acteur-chat 28 23 14 22 4 260 79e13c2c 502836b4 93a0fe28 bedd5abc
+acteur-crabe 20 13 10 12 2 120 7e203725 bae7067a
+acteur-curseur 14 21 7 20 2 400 fcc52d65 fcc52d65
+acteur-eclats 35 31 17 30 5 70 3b0e4551 284ae591 cde94655 d5b2ffd5 efae7fb5
+acteur-etincelle 13 13 6 12 3 80 a2be8611 eaeecc31 d93a6159
+acteur-feuille 11 10 5 9 4 160 d3ca7730 6a941ad3 47d8da84 7fdb8e00
+acteur-flocon 9 9 4 8 4 300 744d8b11 8df77851 6f2d8529 8df77851
+acteur-graine 13 12 6 11 2 300 b9efbde7 f72975f4
+acteur-libellule 22 14 11 13 2 50 8aaef69f a90e22e0
+acteur-mouette 26 16 13 15 4 140 678ae3f6 d9d2b561 5433bca3 d9d2b561
+acteur-note 11 15 5 14 2 180 897962ed 38f8449c
+acteur-nuage 52 20 26 19 4 520 e9448b6d 38636a05 a4982243 2655bd20
+acteur-oiseau 15 9 7 8 4 140 281361c2 1cc1a392 eccfedc2 1cc1a392
+acteur-papillon 16 13 8 12 4 120 220ffe46 25a3365c 92b9c899 25a3365c
+acteur-papillon-nuit 10 7 5 6 2 70 b7f31b94 d53beee9
+acteur-paquet 15 11 7 10 4 120 119ea180 b041ec50 b154ffb5 54afdaa9
+acteur-plouf 24 12 12 11 4 90 35e93843 d08e49ad 9492ceed 1c1804d1
+acteur-poisson 16 11 8 10 3 233 c1e67b4a 3d62b3ab 9a3ff8fb
+acteur-poussiere 5 5 2 4 4 160 c85c0ea3 289238a2 e1991462 18da6f23
+acteur-rafale 36 10 18 9 4 90 aa7d4cbc 40b79ac5 2984a0e1 eb0237ec
+acteur-rond 39 13 19 12 5 280 e2945075 7046b0c8 98ed458d c730a89d 409ea219
+acteur-rond-trame 39 13 19 12 5 280 0cb09329 802298b3 0d2d7b75 d813fbf5 c83d8915
+acteur-ticket 11 11 5 10 4 160 84b635be 56387c0e ba3eeba1 56387c0e
+acteur-vapeur 19 26 9 25 5 1000 9dfb9b61 19891a04 50dfa5a1 910c54c5 eb3db134
 pied-grande-panne-balayeur 42 103 20 102 5 150 bd6d7b8a ac344de3 f16f858c 6926dd1a b8e8d2cf
 pied-grande-panne-balayeur-triste 42 103 20 102 5 150 dcfb7b68 f768a1a9 b520ee3a 988f2bfc 95928549
 pied-grande-panne-brouillon 38 62 19 61 5 150 ee8a1147 048c9677 d0971fcc 3f47d294 fa4ac7f1
@@ -33,6 +62,25 @@ pied-grande-panne-tic-tac-joie 34 77 16 76 5 150 f01cf29d 6a1df4a2 f01cf29d 2d43
 pied-grande-panne-tic-tac-triste 34 77 16 76 5 150 a2091234 bb1bdaaf 330e8b80 af8c4815 eede91cd
 pied-grande-panne-touche-s 32 38 15 37 5 150 c2e046bd 27b5b47b 57905e87 380c5f41 1be3c9ef
 pied-grande-panne-touche-s-joie 32 38 15 37 5 150 ae14d6ff ddc66b85 ae14d6ff d55b84ea 6ef6471b
+pied-petit-nuage-bergeronnette 52 36 25 35 5 150 6c726d08 c5b172ac e5c5bb38 bef397f7 0e474ba6
+pied-petit-nuage-brouillon 80 69 36 68 5 150 8b9713f7 4189b8dc f12e09df b5c6ff8c 7dc44898
+pied-petit-nuage-brouillon-joie 80 69 36 68 5 150 edd05cc8 dc575363 edd05cc8 656d991f 7d7c26b4
+pied-petit-nuage-brouillon-peur 80 69 36 68 5 150 e344b54b 9c8d5ac1 5af50c58 b16f0280 89deddea
+pied-petit-nuage-brouillon-triste 80 69 36 68 5 150 9935c893 6b9a01d0 68752fc9 88ccfd73 f31b617b
+pied-petit-nuage-dentelle 53 130 26 129 5 150 00407398 ee988dba 5c5a918a da0cb4df 8cc34dae
+pied-petit-nuage-dentelle-malice 53 130 26 129 5 150 41b9e964 2cf0bf96 7819db21 c9993aee 50c2ac3d
+pied-petit-nuage-enclumes 123 108 61 107 5 150 88439a7c 529d380c 757568e7 f1ba477d 1607f06d
+pied-petit-nuage-enclumes-colere 123 108 61 107 5 150 f74d8cef 6aaa02d4 56e3a18f f4c114f6 e52b7edd
+pied-petit-nuage-froisseuses 102 83 50 82 5 150 c578ee13 f0828560 63ddf38f c230806a 9e9a9741
+pied-petit-nuage-madame-bocal 50 74 24 73 5 150 39042430 2372e752 d2841362 cf7dbd1c 4963e501
+pied-petit-nuage-madame-bocal-joie 50 74 24 73 5 150 6dfb0da3 407fe155 6dfb0da3 2d571090 8ab9692f
+pied-petit-nuage-mi-bemol 49 49 24 48 5 150 b186a4cf fea3175a 5558bad9 c085f70b 5cc0a968
+pied-petit-nuage-mi-bemol-joie 49 49 24 48 5 150 d06f2514 b662cfcb d06f2514 a597ef0b af388160
+pied-petit-nuage-ondee 124 105 61 104 5 150 f5f6e2fa 665f8a6e b9047635 b2f80d7f 1e75997d
+pied-petit-nuage-ondee-tendre 124 105 61 104 5 150 aa2f2026 3c2181fa fed16339 70c20558 87b925ec
+pied-petit-nuage-tournebise 63 115 31 114 5 150 9b11e41d 5eb5a00f 1bda221f 432fb883 0877326a
+pied-petit-nuage-tournebise-tendre 63 115 31 114 5 150 fa20e655 e3ff7dd7 d2d91d73 6256e9cb 8083da62
+pied-petit-nuage-tournebise-triste 63 115 31 114 5 150 df0a97be e3cbadd4 f7c8c283 b5001b61 b9d7596a
 pied-phare-eteint-anselme 46 118 21 117 5 150 556590f6 45706245 3fa107a7 7d31c61f 201a1dd5
 pied-phare-eteint-anselme-joie 46 118 21 117 5 150 ee30786f 9a1b7240 ee30786f 929282ed abe3baea
 pied-phare-eteint-anselme-triste 46 118 21 117 5 150 7ebe38dc 29a488db c337ea23 c0cefc66 f2c477bc

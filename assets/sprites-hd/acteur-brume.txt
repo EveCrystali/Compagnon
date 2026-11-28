@@ -1,0 +1,63 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-brume
+taille: 56 14
+ancre: 28 13
+duree: 600
+palette: a=#e3e9f4
+images: 4
+20,a3,a3,a3,a3,a19,
+21,a3,a3,a3,a22,
+10,a,a,a,a,a,a,a,a,3a,a,a,a,a,a,a,a,a,a9,
+11,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a12,
+4,a,a,a,a,3a,3a,3a,3a,3a,3a,3a,3a,a,a,a,a,a3,
+5,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a6,
+2,a,a,a,a,3a,3a,3a,3a,3a,3a,3a,3a,3a,a,a,a,a,a,
+7,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a8,
+4,a,a,3a,3a,3a,3a,3a,3a,3a,3a,3a,3a,a,a,a3,
+9,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a3,a6,
+6,a,a,a,a,a,a,3a,3a,3a,3a,3a,3a,a,a,a,a,a5,
+15,a3,a,a,a,a,a,a,a,a,a,a,a16,
+12,a3,a,a,a,a,a,a,a,a,a,a,a,a,a3,a11,
+56,
+20.,a2.,a2.,a2.,a2.,19.
+21.,a2.,a2.,a2.,a21.
+10.,a,a,a,a,a,a,a,a,2.a,a,a,a,a,a,a,a,.,a8.
+11.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a11.
+4.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,a,a2.
+5.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a5.
+2.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,.,.
+7.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a7.
+.a.a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a2.
+6.a2.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a2.,6.
+6.,a,a,a,a,a.a,2.a,2.a,2.a,2.a,2.a,.,a,a,a,a,.,5.
+15.,a.a,a,a,a,a,a,a,a,a,a,.,a15.
+12.,a.a,a,a,a,a,a,a,a,a,a,a,a,a,a2.,11.
+56.
+21.,a2.,a2.,a2.,a21.
+19.a2.,a2.,a2.,a2.,a20.
+8.a2.,a,a,a,a,a,a,a.a,2.a,a,a,a,a,a,a,a2.,8.
+12.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,.,a10.
+2.a.a,a,a,a.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,.,2.
+6.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,.,5.
+3.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a3.
+5.a.a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a6.
+.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,.,a,a,a,a.
+6.,a.a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a8.
+7.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,a,a7.
+16.,a,a,a,a,a,a,a,a,a,a,a2.,a14.
+13.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a13.
+56.
+19.a2.,a2.,a2.,a2.,a20.
+19.,a2.,a2.,a2.,a2.,a19.
+8.,a.a,a,a,a,a,a,a,2.a,2.a,a,a,a,a,a,a,a10.
+10.a2.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a2.,10.
+2.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a4.
+7.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a7.
+.a.a,a,a,a.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,.,a,a,a,a2.
+5.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a5.
+2.,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,.,.
+7.,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a7.
+5.a.a,a,a,a,a,2.a,2.a,2.a,2.a,2.a,2.a,a,a,a,a,a6.
+14.a2.,a,a,a,a,a,a,a,a,a,a,a2.,14.
+11.a2.,a,a,a,a,a,a,a,a,a,a,a,a,a,.,a12.
+56.
