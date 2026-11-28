@@ -107,6 +107,9 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 - **Un pré sans limite descend jusqu'en bas** et couvre l'eau : lui donner `jusque=` (un masque).
 - **Les liserés continus font « pointillés »** : les rompre par un bruit lent, pas par un tirage par pixel.
 - **Trop de trame brouille** : sur les petites formes, `trame` de 0 à 0,5.
+- **Les bêtes qui réagissent sont des acteurs, pas du décor** : grenouille, canard, escargot (et ce que la scène rend
+  cliquable) sont dessinés par la session des personnages (`assets/sprites-hd/acteur-*.txt`) et posés par la scène.
+  Le décor peint leur place (le nénuphar, la feuille, l'eau) et la laisse vide.
 - **Contenu original** : aucune forme, aucun cadrage repris d'un jeu ou d'une image existante.
 - **Cohérence d'une campagne** : mêmes tons, mêmes repères (dans le prologue : la maison, la colline et son arbre),
   l'heure qui avance d'un lieu à l'autre.
