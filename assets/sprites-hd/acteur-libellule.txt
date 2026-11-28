@@ -1,0 +1,35 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-libellule
+taille: 22 14
+ancre: 11 13
+duree: 50
+palette: a=#e2d9ff b=#ffffff c=#271e2f d=#503a21 e=#d6b8ec f=#a46cc2 g=#ffe08f h=#1c2128 i=#f2bd3c j=#6e3d86 k=#3b2a3e
+images: 2
+22,
+3,a,a,b,a,a,b8,
+2,3a2b2a,a2b,2a6,
+,a,2ba,a,2ba,a,a6,
+2,b,3a,b2a,3a2c3d2,
+,4ca5ca2c2ef3gd,
+c16egh2id
+c2jfkfjkjfkfje3fg2id,
+,13cf2jdid2,
+14,3c,d3,
+22,
+22,
+22,
+22,
+22.
+3.,.,.,.,.,.,8.
+2.7,.3,.2,6.
+.,.3,.,.3,.,.,6.
+2.,.3,.3,.2,c7.
+5.c5.c10.
+22.
+22.
+4.3a2.2a.2a8.
+2.ba.a.aba.a.a8.
+2.a2b.3a2b2a.2a6.
+3.a.2ba.a.2ba8.
+4.3ab.2a.ab8.
+22.

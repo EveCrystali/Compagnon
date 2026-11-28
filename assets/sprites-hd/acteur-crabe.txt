@@ -1,0 +1,33 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-crabe
+taille: 20 13
+ancre: 10 12
+duree: 120
+palette: a=#45281e b=#1b1b27 c=#fff6cc d=#ffc89a e=#1c2128 f=#8a4410 g=#f69d50 h=#633f2e i=#d9803a
+images: 2
+,2a4,b4,b4,2a,
+acda2,beb2,beb2,acda
+cfcga,hih2,hih,a2cfg
+3dga,ai4aia,a3dg
+a2gd2a5c2dg2ac2ga
+,ag2d5c4dgdgia,
+2,ai5cdc2d2gifa2,
+2,2h8d2g2i2h2,
+,h2ih3d4fg2ih2ih,
+hih2ia4g3ifh2ihih
+ih2ih,8a,h2ihi
+fhifa10,afiaf
+2afa12,af2a
+a2ca12.a2ca
+cf.da10.ac.fd
+.2d14.2d.
+agi14.gia
+,a2.g10.cdia,
+.,ag12.ia,.
+2.,a12.a,2.
+20.
+20.
+2.ih12.hi2.
+hi.hih8.hih.ih
+iafih10.hifhi
+f.afa10.afa.f

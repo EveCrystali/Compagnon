@@ -1,0 +1,40 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-poisson
+taille: 16 11
+ancre: 8 10
+duree: 233
+palette: a=#45281e b=#d9803a c=#fff6cc d=#ffffff e=#ffc89a f=#f69d50 g=#1c2128 h=#8a4410
+images: 3
+16,
+9,a6,
+7,2ab5a,
+6,a3b2cdefa
+5,2a4cegefa
+3,2a3c4e2fba
+,2a4ce2ce2fha,
+a2bc2e5ce2a2,
+a2b2ef3c2ea4,
+a4b2h4a5,
+a2b4a9,
+8.2a6.
+.a5.a2ba5.
+aba.3aec.b3.,.
+a2baececece3.a,
+a2b2c6e5.
+a2befe2.3c5.
+a2ba2b.c2.ce.b2.
+2.a,3a4ea4.
+,a5,4a,4.
+11,5.
+7,9.
+a2b4a2.ba5.
+a3b2ef9.
+2.b2cec.3e.2,2.
+3.e.e.e.e.e2a,.
+,2ab2f6.d.a,
+3,2ab6.gef.
+5,2a2.2e.e2fa
+3,.3,ah2b2fbha
+.,5.,3.4a.
+16.
+16.

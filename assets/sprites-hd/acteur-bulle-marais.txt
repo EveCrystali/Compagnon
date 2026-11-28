@@ -1,0 +1,49 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-bulle-marais
+taille: 14 14
+ancre: 7 13
+duree: 200
+palette: a=#a9c8ee b=#ffffff c=#d6e6fa
+images: 3
+14,
+14,
+14,
+14,
+5,ab2a5,
+4,ab2,2a4,
+4,a,c,ca4,
+4,a4,a4,
+4,2ac,2a4,
+5,4a5,
+14,
+14,
+14,
+14,
+14.
+14.
+5.4a5.
+3.3a2.3a3.
+3.a.,.,c.a3.
+2.2a,3.,c2a2.
+2.a.c4.,.a2.
+2.a.,4.,.a2.
+2.2ac,2.c,2a2.
+3.a.c3,.a3.
+3.3a2.3a3.
+5.4a5.
+14.
+14.
+6.2a6.
+3.a.a2.a.a3.
+2.a2.4,2.a2.
+3.2,b2.3,3.
+.a.,b.,.,.,.a.
+.a2,.,3.3,a.
+2.,.,.,.,2.,2.
+a.,8.,.a
+2.3,.,.,.2,a.
+.a.,.,4.,3.
+.a.3,2.3,.a.
+5.4,2.a2.
+3.2a3.2a4.
+6.2a6.
