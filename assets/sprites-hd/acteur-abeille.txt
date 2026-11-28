@@ -1,0 +1,29 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-abeille
+taille: 15 11
+ancre: 7 10
+duree: 60
+palette: a=#ffffff b=#503a21 c=#ffe08f d=#2a2238 e=#f2bd3c f=#201b2d g=#6e6090 h=#4a3e60 i=#a8741a
+images: 2
+6,a2,a5,
+5,a,a,a,a3,
+4,a,3a,2a3,
+4,babababa3,
+3,bc2dc2de2f2,
+2,b2c2dc2d3gf,
+,f3c2dc2d2gahf
+fde2c2dc2d2g2hf
+,fbec2de2de2hf,
+3,be2de2dibf2,
+4,7b4,
+6.,2.,5.
+11.,3.
+15.
+3.a11.
+11.a3.
+15.
+15.
+15.
+15.
+15.
+15.

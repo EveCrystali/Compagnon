@@ -1,0 +1,31 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-aiguille
+taille: 10 6
+ancre: 5 5
+duree: 220
+palette: a=#e8a03a b=#b8732a c=#ffd08a
+images: 4
+10,
+2a8,
+4b2a4,
+4,4bc,
+10,
+10,
+2.a7.
+2,ba6.
+3,2.,4.
+5.a3,.
+5.bc3.
+6.b3.
+2.,3.a3.
+2.2,.ab3.
+3.,.b4.
+3.a.,4.
+2.c.b2,3.
+3.b2.,3.
+6.,3.
+5.2,2a.
+3.a.2a2b.
+c2ab.2b3.
+.2b.,5.
+3.,6.

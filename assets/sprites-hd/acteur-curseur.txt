@@ -1,0 +1,49 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-curseur
+taille: 14 21
+ancre: 7 20
+duree: 400
+palette: a=#1c2128 b=#ffffff c=#dbe3f0
+images: 2
+2a12,
+aba11,
+a2ba10,
+a3ba9,
+abc2ba8,
+abc3ba7,
+abc4ba6,
+abc5ba5,
+abc6ba4,
+abc7ba3,
+abc8ba2,
+abc9ba,
+abc4b7a
+abcba3ba5,
+a2b2a3b2a4,
+aba2,a3ba4,
+2a3,a3b2a3,
+a5,a3ba3,
+6,ab2a4,
+7,a6,
+14,
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.
+14.

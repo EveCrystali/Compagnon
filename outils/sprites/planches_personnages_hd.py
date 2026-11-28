@@ -215,11 +215,51 @@ def groupe(campagne, z=2):
     return im, [(c[1], _boite(c)[1][3] - _boite(c)[1][1], P.PERSOS[c]["vol"]) for c in cles]
 
 
+def acteurs(z=4):
+    """La planche des acteurs : pour chacun, l'acteur d'aujourd'hui à sa taille d'écran (5 px par unité), le nouveau
+    à la sienne (2 px par unité), puis toutes ses images agrandies ; sur fond sombre, puis sur fond clair."""
+    import acteurs_hd as A
+    import planches as PL
+    import rendu
+    fins = rendu._dossier("sprites2x")
+    W = 1500
+    bandes = []
+    for fond in ((40, 48, 82), (226, 222, 206)):
+        o = Image.new("RGBA", (W, 4000), fond + (255,))
+        x, y, hmax = 6, 6, 0
+        for nom in A.ORDRE:
+            a = A.ACTEURS[nom]
+            vieux = PL.sprite_image(fins["acteur-" + nom], 5, 0)
+            large = vieux.width + 8 + a["w"] * 2 + 14 + a["n"] * (a["w"] * z + 4) + 18
+            if x + large > W - 6:
+                x, y, hmax = 6, y + hmax + 12, 0
+            o.alpha_composite(vieux, (x, y))
+            x += vieux.width + 8
+            o.alpha_composite(en_image(A.image(nom, 0), 2), (x, y))
+            x += a["w"] * 2 + 14
+            for i in range(a["n"]):
+                o.alpha_composite(en_image(A.image(nom, i), z), (x, y))
+                x += a["w"] * z + 4
+            x += 18
+            hmax = max(hmax, a["h"] * z, vieux.height)
+        bandes.append(o.crop((0, 0, W, y + hmax + 8)))
+    im = Image.new("RGB", (W, sum(b.height for b in bandes)), FOND)
+    y = 0
+    for b in bandes:
+        im.paste(b.convert("RGB"), (0, y))
+        y += b.height
+    return im
+
+
 def main():
     os.makedirs(SORTIE, exist_ok=True)
     quoi = sys.argv[1] if len(sys.argv) > 1 else "tout"
     if quoi == "apercu":
         return apercu(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 6)
+    if quoi in ("tout", "acteurs"):
+        acteurs().save(os.path.join(SORTIE, "acteurs.png"))
+    if quoi == "acteurs":
+        return
     if quoi in ("tout", "essai"):
         essai().save(os.path.join(SORTIE, "essai.png"))
     if quoi == "essai":

@@ -1,0 +1,87 @@
+# Acteur de scène, haute définition (acteurs_hd.py, docs/SCENES-HD.md)
+id: acteur-nuage
+taille: 52 20
+ancre: 26 19
+duree: 520
+palette: a=#6f7fa6 b=#ffffff c=#f7f5ef d=#dbe3f0 e=#b4c2e0
+images: 4
+16,4a5,3a4b3a17,
+13,3a4b5a9bc2a15,
+12,a9bc12b2ca14,
+11,a22b4ca13,
+10,a24b3cd4a9,
+7,3a22bcb3c5bc2a7,
+5,2a30bc5b2ca6,
+4,a31b6c2b2ca5,
+3,a31bcb9ca5,
+2,a29bcb10c2da5,
+2,a28bcb10c3da5,
+2,a3bc17bcbcb12c6da5,
+3,abcbcbcbc7bcbcbcb14c6da6,
+4,a27cdc8de2a7,
+5,2a6d12cdcdc10d4a9,
+7,12a13de6a13,
+8,e,e,e,e,e,eaeaeaeaeaeaeae,e,e,e,e,e,e7,
+9,e3,e3,e3,e3,e3,e3,e3,e3,e3,e6,
+52,
+52,
+19.,7.b4.2b.2a15.
+12.a6.a2.2,10.2bca14.
+11.ab8.c2a13.ca13.
+10.ab10.c11.2b2.ca12.
+9.ab10.c16.c4.a8.
+9.b10.2c10.b3.b5.bc8.
+43.b8.
+52.
+46.da4.
+46.da4.
+46.da4.
+52.
+52.
+52.
+52.
+52.
+8.,e,e,e,e,e,eaeaeaeaeaeaeae,e,e,e,e,e,e6.
+9.,3.,3.,3.,3.,3.,3.,3.,3.,3.,6.
+52.
+52.
+15.a2.,15.b17.
+15.b2.a19.a13.
+35.2b.ca12.
+20.2c30.
+39.d12.
+45.a6.
+45.ca5.
+52.
+46.c5.
+52.
+52.
+52.
+52.
+52.
+52.
+52.
+8.e,e,e,e,e,eaeaeaeaeaeaeae,e,e,e,e,e,e,6.
+9.e3.e3.e3.e3.e3.e3.e3.e3.e3.e6.
+52.
+52.
+15.,2.a8.a5.2a.,15.
+12.,2.a2.b4.a10.2ca2,13.
+12.a10.b11.2ca2,12.
+20.3b11.2c2.a,12.
+21.b17.a12.
+9.a11.b23.,6.
+43.c.a,5.
+52.
+46.d5.
+52.
+46.a,4.
+52.
+52.
+52.
+52.
+52.
+8.,e,e,e,e,e,eaeaeaeaeaeaeae,e,e,e,e,e,e6.
+9.,3.,3.,3.,3.,3.,3.,3.,3.,3.,6.
+52.
+52.

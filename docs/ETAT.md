@@ -26,7 +26,8 @@ Dernière mise à jour : 28 novembre 2026.
 - **Personnages haute définition** (docs/SPRITES.md) : les 29 personnages en pied des trois campagnes sont redessinés
   à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, 69 fichiers, 438 Ko, format de docs/SCENES-HD.md, référence
   `personnages-hd-reference.txt`). Pas encore affichés dans l'app (le Théâtre HD ne les lit pas encore) ; jamais vus
-  sur un vrai Windows ni un vrai téléphone. Restent les acteurs de scène.
+  sur un vrai Windows ni un vrai téléphone. Les 29 acteurs de scène (bêtes et effets) sont redessinés et exportés
+  eux aussi (`acteur-<nom>.txt`). Les effets clairs (brume, vapeur, ronds) ne se lisent que sur un décor, pas sur fond clair.
 - **Dessin fin 2×** : 664 sprites redessinés sur 693, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
   automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.
 - **Présence de Pilou** (docs/PRESENCE.md) : petits mots (banque de 573), cadence (3 par jour sur PC, 1 le soir sur
