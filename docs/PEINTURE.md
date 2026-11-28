@@ -126,6 +126,14 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
   trouve à la même distance au-dessus de la ligne `axe`. Il ne voit que les plans déjà terminés (`tab.derriere()`), pas
   le plan en cours. Une lumière colorée dans un sol clair ne se lit pas en mélange (`voile` retombe sur le beige) : la
   poser en traînées de ton franc (`P.remplir` sur un tirage `hz` par ligne).
+- **Une lumière calculée plutôt que posée après coup** (`decors_hd_phare_eteint.py`, troisième passe) :
+  `lumiere(P, sources)` donne à chaque pixel sa part de lumière, et chaque surface se peint par
+  `P.rampe(masque, teinte × lumière, rampe)` avec une rampe qui va de l'ombre froide à la lumière chaude (`R_BOIS`,
+  `R_GRANIT`, `R_PLATRE`, `R_FROID`…). Une ombre portée se retire de la lumière avant de peindre le sol. Les matières :
+  `lames` (planches veinées, nœuds, joints), `appareil` (pierres de taille au biseau éclairé), `enduit`, `plancher`,
+  `paves` (dalles mouillées, lune et feux), `flammes`, `fumerolle`, `boule_verre`, `cylindre`, `lisere`. Piège :
+  `voile` et `teinte` choisissent le ton le plus proche parmi tous les tons du décor, herbe comprise ; sur un mur gris
+  ou une brume, ils tirent vers le sarcelle. Peindre alors la brume en tons pleins (`nappe` dans `port_trebrume`).
 - **Les bêtes qui réagissent sont des acteurs, pas du décor** : grenouille, canard, escargot (et ce que la scène rend
   cliquable) sont dessinés par la session des personnages (`assets/sprites-hd/acteur-*.txt`) et posés par la scène.
   Le décor peint leur place (le nénuphar, la feuille, l'eau) et la laisse vide.
@@ -139,6 +147,11 @@ la rampe, et les paliers se mélangent en damier ordonné sur la part `trame`. `
 `outils/sprites/decors-hd-reference.txt`. Chaque `tab.plan(nom, profondeur)` devient un plan du fichier (cinq au
 plus ; le premier doit couvrir tout le cadre). Un plan qui ne bouge pas n'est écrit qu'une fois : mettre ce qui
 bouge dans peu de plans allège le fichier et le travail du moteur.
+
+**Ne repeindre que ce qui change.** `py outils/sprites/decors_hd.py <campagne> <lieu> [<lieu>…]` repeint ces lieux
+(une à deux minutes chacun) et réécrit quand même toute la référence : les autres décors sont relus dans
+`assets/decors/`. Avant une PR : fusionner `main`, puis relancer cette commande sur les lieux touchés. Le lancement
+sans argument repeint tout (25 minutes) et ne sert plus qu'après un changement d'une brique de `paysage.py`.
 
 **Après tout changement d'un décor**, régénérer aussi la référence du Théâtre, qui porte l'empreinte de chaque plan :
 `py outils/sprites/theatre_hd.py` (réécrit `outils/sprites/theatre-hd-reference.txt` ; les tests du PC et du
