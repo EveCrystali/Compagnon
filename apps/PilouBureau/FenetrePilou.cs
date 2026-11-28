@@ -630,7 +630,8 @@ public sealed partial class FenetrePilou : Window
         if (_attend && expr is not Expr.Caresse) expr = Expr.Inquiet;
         bool fatigue = (_suivi.Courant?.Fatigue ?? false) || TenueAffichee == "nuit";
         _inactif = Natif.InactifMs();
-        if (EssaiEveille) _inactif = 0; // essai « vie » : il reste éveillé, même devant un écran délaissé
+        if (EssaiEveille) _inactif = 0;
+        if (_essaiInactif is { } inactifEssai) _inactif = inactifEssai; // essai « eveil » : une absence fixée // essai « vie » : il reste éveillé, même devant un écran délaissé
         Observer(t);
         expr = Sommeil(expr, t);
         expr = NuitTardive(expr, t);
@@ -673,6 +674,8 @@ public sealed partial class FenetrePilou : Window
                 {
                     _vy = 0;
                     _auSol = true;
+                    if (_lache) Reagir("lache", t, _sens);
+                    _lache = false;
                 }
                 _atterri = t;
             }
@@ -876,6 +879,7 @@ public sealed partial class FenetrePilou : Window
                 {
                     _geste = Geste.Rien;
                     _pauseJusque = t + (2500 + _hasard.NextDouble() * 6000) * pause;
+                    AuBord(t, min, max);
                     return false;
                 }
                 _sens = Math.Sign(ecart);
@@ -1163,6 +1167,7 @@ public sealed partial class FenetrePilou : Window
         if (_attrape)
         {
             _attrape = false;
+            _lache = true; // une fois retombé, il se secoue (SaynetesFenetre.cs)
             _zone = ZoneSous(_x, _yPieds);
             _cible = _x;
             _pauseJusque = Maintenant + 4000;

@@ -1,0 +1,16 @@
+# Saynète « grignote » : le biscuit, étape 3 sur 3
+id: sc-biscuit-3
+slot: effet
+ancre: main
+decalage: -3 -4
+palette: a=#8a4a1f b=#d9803a c=#ffc89a d=#f69d50
+images:
+.abba....
+abcba....
+bbaba....
+bbbba....
+bbbbaa...
+abbabba..
+.abbba.a.
+.aaaaaaba
+ada.adaa.

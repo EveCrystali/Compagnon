@@ -453,9 +453,14 @@ public final class Etat {
         return String.join("  ·  ", m);
     }
 
-    /** Expression de Pilou : il dort si le PC se tait, s'inquiète si on attend, sinon suit le PC. */
+    /** Expression de Pilou : s'inquiète si on attend, sinon suit le PC. PC muet (éteint, ou jamais appairé) : éveillé,
+     *  sauf la nuit (Saynetes.nuit) ; c'est un compagnon de tout, pas seulement des IA. */
     public String expression(long maintenant) {
-        if (muet(maintenant)) return "dort";
+        return expression(maintenant, java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY));
+    }
+
+    public String expression(long maintenant, int heure) {
+        if (muet(maintenant)) return Saynetes.nuit(heure) ? "dort" : "repos";
         if (attend()) return "inquiet";
         for (Session s : sessions) if (s.etat.equals("travail")) return "concentre";
         return humeur.isEmpty() ? "repos" : humeur;

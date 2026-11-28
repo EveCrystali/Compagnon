@@ -480,7 +480,8 @@ final class PageAccueil extends Page {
         int h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         salut.setText(h < 6 ? "Il se fait tard…" : h < 12 ? "Bonjour !" : h < 18 ? "Bon après-midi !" : h < 22 ? "Bonsoir !" : "Il se fait tard…");
         nom.setText(e.nom);
-        pilou.montrer(appaire ? e.expression(maintenant) : "dort", e.couleur);
+        // Pas appairé (un joueur sans PC) : éveillé, sauf la nuit ; jamais un Pilou endormi pour un nouveau venu.
+        pilou.montrer(appaire ? e.expression(maintenant, h) : Saynetes.nuit(h) ? "dort" : "repos", e.couleur);
         pilou.accessoire(e.accessoire);
         pilou.equipe(Gains.porte(app, e));
         decor(Gains.porte(app, e).get(Boutique.FOND));

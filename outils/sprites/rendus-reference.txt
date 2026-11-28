@@ -117,3 +117,9 @@ expr=neutre t=0 regard_y=0 objets=sc-flocon-4 vie=1 | 6f34a0d9790174bd41a67093d7
 expr=neutre t=0 objets=sc-feuille-4 vie=1 stade=3 | a921980e815c4e284cb57e15a1f150171a8699f5c9541725305c24c74c1c33e6
 expr=joie t=0 cligne=1 objets=sc-papillon-5 vie=1 | 69ab81439469a40125a829c662ef5ba11d1adeb046c1b5cd2143fd09ce63e301
 expr=tendre t=0 regard=1 regard_y=-1 objets=sc-papillon-4,sc-encre-4 vie=1 stade=2 | 0c5d844f1dfd0f43a813dba083019644be342a7678bbb76d14adb49494462f11
+expr=tendre t=0 regard_y=-1 objets=sc-filante-2 vie=1 | e2e15bfd82ab6848f47b903f134b90d9ff266b223dd7392e5e535d3fed92a3f0
+expr=neutre t=0 assis=1 regard=1 regard_y=1 objets=sc-canne-3 vie=1 stade=3 | d8fb0d34592e9e383e04da3ae1905b93f9f0707e806ec446d95c1895f90fd7f0
+expr=malice t=0 etire=0.3 objets=sc-bulle-2 vie=1 | 070190b3742de7c327337c4a98dc0c22db90f5d6b142980ffef1c7783678862b
+expr=soulage t=0 tremble=-0.4 objets=sc-note-3 vie=1 stade=1 | f0d54f40c5be0362556f696b785d3c72f3f56543b09de52e6f29483b59204c26
+expr=malice t=0 assis=1 regard_y=1 objets=sc-biscuit-2 vie=1 | a0a24726f35a3d1fe4cdd3617b52f053bf5f702558b7224ee6bb62c9c6e5e455
+expr=tendre t=0 assis=1 regard=-1 regard_y=-1 objets=sc-pensee-3 vie=1 stade=4 | 62511cdfd681eac7b6f8ed837986455a560b9a896b9deef50333d06fae743c5a

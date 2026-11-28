@@ -137,6 +137,12 @@ POSES = [
     "expr=neutre t=0 objets=sc-feuille-4 vie=1 stade=3",
     "expr=joie t=0 cligne=1 objets=sc-papillon-5 vie=1",
     "expr=tendre t=0 regard=1 regard_y=-1 objets=sc-papillon-4,sc-encre-4 vie=1 stade=2",
+    "expr=tendre t=0 regard_y=-1 objets=sc-filante-2 vie=1",
+    "expr=neutre t=0 assis=1 regard=1 regard_y=1 objets=sc-canne-3 vie=1 stade=3",
+    "expr=malice t=0 etire=0.3 objets=sc-bulle-2 vie=1",
+    "expr=soulage t=0 tremble=-0.4 objets=sc-note-3 vie=1 stade=1",
+    "expr=malice t=0 assis=1 regard_y=1 objets=sc-biscuit-2 vie=1",
+    "expr=tendre t=0 assis=1 regard=-1 regard_y=-1 objets=sc-pensee-3 vie=1 stade=4",
 ]
 
 
