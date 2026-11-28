@@ -1,4 +1,4 @@
-"""Décors haute définition du prologue « La colline d'en face » (384 × 160), peints avec paysage.py.
+"""Décors haute définition du prologue « La colline d'en face » (480 × 240), peints avec paysage.py.
 
 Une seule fin de journée, qui avance d'un lieu à l'autre : fin d'après-midi dorée devant la porte et au jardin, heure
 dorée à la mare et au pied de la colline, puis le couchant au sommet. Le soleil descend sur la droite de la maison,
@@ -6,7 +6,7 @@ vers la colline d'en face (le but du voyage) ; la même maison, la même colline
 en lieu. Ce que Pilou raconte doit se voir : les trois nénuphars en ligne, la grenouille, le canard, les roseaux à
 compter, le caillou de l'autre rive.
 
-Coordonnées : unités du monde (192 × 80, celles des scènes d'avant) ; la grille est deux fois plus fine.
+Coordonnées : unités du monde (x de 0 à 192, y de -16 à 80 ; de 0 à 80, celles des scènes d'avant).
 Places à laisser dégagées : Pilou vers x = 18 à 24, son interlocuteur vers x = 165, le sol à y = 78.
 """
 import math
@@ -60,8 +60,9 @@ def mare(P, tab):
     tab.plan("ciel", 0.0)
     pg.ciel(P, haut=0.08, halo=0.36, disque=5.2)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=11.0, epais=8.0, seuil=0.6)
-    pg.cumulus(P, [(34, 17, 46, 8.0, 3, 8, 0.0), (171, 19, 34, 5.5, 5, 7, 0.3), (132, 8, 22, 3.6, 9, 5, 0.8)])
+    pg.voiles(P, y=-3.0, epais=10.0, seuil=0.6)
+    pg.cumulus(P, [(34, 17, 46, 8.0, 3, 8, 0.0), (171, 19, 34, 5.5, 5, 7, 0.3), (132, 8, 22, 3.6, 9, 5, 0.8),
+                   (92, -3.5, 42, 7.5, 7, 8, 0.55)])
     pg.barres(P, [(66, 33.0, 17, 1.2), (150, 30.5, 22, 1.4), (22, 35, 14, 1.0)])
     # ---- Les lointains : trois crêtes, la plus lointaine se creuse sous le soleil.
     tab.plan("lointains", 0.2)
@@ -235,7 +236,7 @@ def seuil(P, tab):
     tab.plan("ciel", 0.0)
     pg.ciel(P, horizon=62.0, haut=0.25, halo=0.4, disque=5.4)
     tab.plan("nuages", 0.08)
-    pg.cumulus(P, [(160, 18, 34, 6.0, 31, 7, 0.2), (186, 30, 18, 3.2, 33, 5, 0.6)])
+    pg.cumulus(P, [(160, 18, 34, 6.0, 31, 7, 0.2), (186, 30, 18, 3.2, 33, 5, 0.6), (172, -4, 30, 5.0, 35, 6, 0.4)])
     pg.barres(P, [(150, 47.0, 14, 1.0), (182, 52.0, 12, 0.9)])
     tab.plan("lointains", 0.2)
     pg.crete(P, lambda x: profil(x, 62.0, 9.0, 24.0, 64), [T.L3, T.L4, T.L5, T.CIEL[7]], 0.8)
@@ -283,15 +284,25 @@ def seuil(P, tab):
     for x in range(-2, 198, 13):
         P.trait(x + 3, 75.5, x, 80, T.P1)
     # Avant-toit : tuiles rondes violettes, leur ombre sur le mur.
-    P.remplir(mur & (Y < 9.5) & (P.T < 0.5), T.M2)
-    P.poly([(-6, 0), (137, 0), (140, 6.5), (-6, 6.5)], T.D1)
-    for x in range(-6, 138, 5):
-        P.ell(x + 2.5, 6.3, 2.5, 2.0, T.D2, cond=Y > 6.0)
-        P.ell(x + 3.2, 6.9, 1.2, 0.8, T.L3, cond=Y > 6.0)
-        P.trait(x, 0, x + 1.0, 6.0, T.CIEL[1])
+    P.remplir(mur & (Y < 2.0) & (P.T < 0.5), T.M2)
+    toit = P.poly([(-6, pg.HAUT - 1), (142, pg.HAUT - 1), (140, -2.0), (-6, -2.0)], T.D1)
+    rang = np.floor((Y - pg.HAUT) / 3.4)
+    dans = ((X + rang * 2.5) % 5.0)
+    P.rampe(toit, 0.25 + 0.5 * dans / 5.0 + 0.35 * ((Y - pg.HAUT) % 3.4) / 3.4, [T.CIEL[1], T.D1, T.D2, T.L2], 0.5)
+    P.remplir(toit & (((Y - pg.HAUT) % 3.4) < 0.45), T.CIEL[0])
+    for x in range(-6, 141, 5):                                                           # le rang de rive, en festons
+        P.ell(x + 2.5, -2.2, 2.5, 2.2, T.D2, cond=Y > -2.4)
+        P.ell(x + 3.3, -1.4, 1.2, 0.9, T.L3, cond=Y > -2.4)
+    # Un nid d'hirondelle sous l'avant-toit ; l'hirondelle passe la tête.
+    P.ell(118.0, 1.8, 3.4, 2.4, T.BR2, cond=Y > 0.4)
+    P.ell(118.0, 2.0, 2.4, 1.5, T.BR1, cond=Y > 0.8)
+    if p < 0.6:
+        P.ell(118.0, 0.6, 1.3, 1.1, T.ENCRE)
+        P.point(119.2, 0.8, T.O3)
+        P.point(118.4, 0.2, T.BLANC)
     # Le coin du mur, en plein soleil.
-    P.rect(128, 6.5, 4, 69, T.M4)
-    P.rect(131, 6.5, 1, 69, T.OR3)
+    P.rect(128, -2.0, 4, 77.5, T.M4)
+    P.rect(131, -2.0, 1, 77.5, T.OR3)
     # ---- La porte ronde : pierre de taille, planches bleu-violet, hublot de laiton, poignée.
     cx, haut_p, bas_p = 60.0, 30.0, 75.0
     arche = lambda r: (((X - cx) ** 2 + (Y - haut_p) ** 2 <= r * r) & (Y <= haut_p)) | ((np.abs(X - cx) <= r) & (Y > haut_p)
@@ -457,8 +468,9 @@ def jardin(P, tab):
     tab.plan("ciel", 0.0)
     pg.ciel(P, horizon=62.0, haut=0.0, halo=0.3, disque=5.8)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=9.0, epais=7.0, seuil=0.62, graine=23)
-    pg.cumulus(P, [(46, 19, 40, 7.5, 51, 8, 0.0), (104, 11, 26, 4.4, 53, 6, 0.4), (184, 30, 24, 4.2, 55, 6, 0.7)])
+    pg.voiles(P, y=-4.0, epais=9.0, seuil=0.6, graine=23)
+    pg.cumulus(P, [(46, 19, 40, 7.5, 51, 8, 0.0), (104, 5, 30, 5.4, 53, 6, 0.4), (184, 30, 24, 4.2, 55, 6, 0.7),
+                   (20, -5, 34, 6.0, 57, 7, 0.2)])
     tab.plan("lointains", 0.2)
     pg.crete(P, lambda x: profil(x, 55.0, 9.0, 26.0, 65), [T.L3, T.L4, T.L5, T.CIEL[7]], 0.8)
     colline_au_loin(P, 150.0, 55.5, 50.0, 12.0)
@@ -494,7 +506,8 @@ def jardin(P, tab):
     pg.cailloux(P, f_sol, n=30, y0=77.0, graine=62)
     for i, (x, h, pen, l) in enumerate(((-2, 70, 6, 9), (6, 52, -5, 7), (12, 34, 7, 6), (58, 26, -6, 6), (128, 30, 8, 6),
                                         (170, 46, 7, 8), (180, 72, -9, 10), (189, 58, -5, 8), (195, 40, -8, 7), (22, 20, -4, 5),
-                                        (136, 18, -5, 5), (150, 24, 5, 5), (64, 16, 5, 4), (30, 44, 9, 7), (160, 60, -6, 8))):
+                                        (136, 18, -5, 5), (150, 24, 5, 5), (64, 16, 5, 4), (30, 44, 9, 7), (160, 60, -6, 8),
+                                        (-4, 92, 10, 11), (184, 90, -12, 12))):
         brin(P, x, 81.0, h, pen, l, T.S0 if i % 2 else T.S1, T.S1 if i % 2 else T.S2, T.OR2 if i % 3 else T.OR3)
     # La feuille : large, nervurée, une goutte qui brille.
     fe = P.poly([(66, 81), (72, 70), (88, 62.5), (112, 60), (126, 63), (116, 72), (96, 81)], T.S2)
@@ -555,7 +568,7 @@ def pied_colline(P, tab):
     tab.plan("ciel", 0.0)
     pg.ciel(P, horizon=52.0, haut=0.06, halo=0.4, disque=5.4)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=8.0, epais=7.0, seuil=0.6, graine=25)
+    pg.voiles(P, y=-5.0, epais=9.0, seuil=0.6, graine=25)
     pg.cumulus(P, [(70, 16, 40, 7.0, 71, 8, 0.1), (16, 13, 22, 4.0, 73, 5, 0.5)])
     pg.barres(P, [(52, 38.0, 16, 1.1), (10, 41.0, 12, 0.9)])
     tab.plan("lointains", 0.2)
@@ -582,10 +595,11 @@ def pied_colline(P, tab):
     pg.bosquets(P, f_col, 70, 198, 62.0, n=26, graine=79, sauf=lambda x, y: abs(x - (98 + (64 - y) * 0.9)) < 7 or (
         abs(x - (84 - (64 - y) * 0.1)) < 5))
     # Le sentier (à gauche, long, en lacets, bordé de pâquerettes) et le raccourci (à droite, tout droit, raide).
-    lacets = [(88, 72), (76, 64), (96, 55), (80, 46), (104, 37), (92, 28), (112, 19), (104, 10), (120, 2)]
+    lacets = [(88, 72), (76, 64), (96, 55), (80, 46), (104, 37), (92, 28), (112, 19), (104, 10), (122, 3), (116, -3),
+              (136, -6.4), (147, -7.4)]
     for i in range(len(lacets) - 1):
         (xa, ya), (xb, yb) = lacets[i], lacets[i + 1]
-        l = 2.6 - 0.24 * i
+        l = max(0.7, 2.6 - 0.2 * i)
         for j in range(25):
             u = j / 24.0
             P.ell(xa + (xb - xa) * u, ya + (yb - ya) * u, l, l * 0.45, T.M4 if (i + j // 6) % 2 else T.OR3)
@@ -593,9 +607,10 @@ def pied_colline(P, tab):
             u = (j + 0.5) / 4.0
             paquerette(P, xa + (xb - xa) * u + (3.4 - 0.2 * i) * (1 if j % 2 else -1), ya + (yb - ya) * u - 0.6,
                        max(0.5, 1.0 - 0.08 * i))
-    for j in range(40):
-        u = j / 39.0
-        P.ell(98 + 44 * u + 1.5 * math.sin(u * 9), 72 - 70 * u, 2.2 - 1.4 * u, 0.8, T.M2 if j % 3 else T.M3)
+    pg.grand_arbre(P, 150.0, float(f_col(150.0)) + 0.3, k=0.7, graine=80)
+    for j in range(46):
+        u = j / 45.0
+        P.ell(98 + 51 * u + 1.5 * math.sin(u * 9), 72 - 79 * u, 2.2 - 1.5 * u, 0.8, T.M2 if j % 3 else T.M3)
     for (x, y, r) in ((112, 52, 1.6), (124, 36, 1.3), (106, 62, 1.2), (133, 20, 1.0)):
         pg.pierre(P, x, y, r, eau=False)
     P.courbe([(116, 46), (120, 44.4), (125, 45.2)], T.BR1, P.ep(0.6))                           # une racine à attraper
@@ -656,8 +671,8 @@ def pente(P, tab):
     tab.plan("ciel", 0.0)
     pg.ciel(P, horizon=58.0, haut=0.02, halo=0.46, disque=5.8)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=7.0, epais=6.0, seuil=0.6, graine=27)
-    pg.cumulus(P, [(78, 15, 44, 7.5, 111, 8, 0.0), (22, 20, 24, 4.2, 113, 6, 0.4)])
+    pg.voiles(P, y=-4.0, epais=9.0, seuil=0.58, graine=27)
+    pg.cumulus(P, [(78, 15, 44, 7.5, 111, 8, 0.0), (22, 20, 24, 4.2, 113, 6, 0.4), (120, -2, 36, 6.0, 115, 7, 0.6)])
     pg.barres(P, [(60, 44.0, 18, 1.2), (14, 50.0, 12, 1.0), (96, 36.0, 12, 0.9)])
     tab.plan("lointains", 0.2)
     pg.crete(P, lambda x: profil(x, 57.0, 10.0, 30.0, 68), [T.L3, T.L4, T.L5, T.CIEL[7]], 0.9)
@@ -751,9 +766,9 @@ def sommet(P, tab):
     p = P.p
     X, Y = P.X, P.Y
     tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=57.0, haut=0.0, halo=0.44, etoiles=0.24, lune=(30.0, 12.0, 2.6), disque=7.4)
+    pg.ciel(P, horizon=57.0, haut=0.0, halo=0.44, etoiles=0.3, lune=(96.0, -7.0, 3.0), disque=7.4)
     tab.plan("nuages", 0.08)
-    pg.voiles(P, y=14.0, epais=10.0, seuil=0.56, graine=29)
+    pg.voiles(P, y=4.0, epais=12.0, seuil=0.56, graine=29)
     pg.cumulus(P, [(60, 26, 50, 8.5, 141, 9, 0.0), (168, 22, 36, 6.0, 143, 7, 0.4), (112, 10, 26, 4.2, 145, 6, 0.7)])
     pg.barres(P, [(100, 44.0, 20, 1.3), (160, 47.5, 18, 1.1), (132, 40.0, 12, 0.9), (58, 49.0, 16, 1.0)])
     pg.oiseaux(P, 104, 31, 8)
@@ -812,7 +827,7 @@ def sommet(P, tab):
     P.rect(tx + 14.0 + bal, 66.0, 8.4, 1.4, T.O3)
     P.rect(tx + 14.0 + bal, 67.2, 8.4, 0.5, T.BR2)
     pg.feuillage(P, lambda x: 36.0 - 0.0045 * (_a(x) - 22) ** 2 * 6 + 3.0 * np.sin(_a(x) / 6.0) + 1.4 * np.sin(_a(x) / 2.2),
-                 x0=-6, x1=62, n=900, epais=14.0, graine=163, y_max=42.0,
+                 x0=-6, x1=62, n=1300, epais=14.0, graine=163, y_max=42.0,
                  tons=([T.N0, T.N1, T.N2, T.S1], [T.N2, T.S1, T.S2], [T.S1, T.S2, T.OR1, T.O2, T.O3]))
     # Les buissons qui font des bruits : deux yeux y clignent (ce sont des hérissons, ils sont polis).
     P.volumes([(180, 74, 8), (190, 70, 7), (172, 77, 5), (197, 76, 6)], [T.N0, T.N1, T.N2, T.S1, T.OR1],

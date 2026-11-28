@@ -20,8 +20,8 @@ Dernière mise à jour : 28 novembre 2026.
   `expression` des nœuds, relus un par un le 27 novembre), 20 souvenirs, une vignette par campagne et un emblème par
   ton, objets exclusifs des fins.
 - **Paysages haute définition** (docs/PEINTURE.md) : moteur de peinture `outils/sprites/paysage.py`, format « décor compact »
-  (`assets/decors/`, docs/SPRITES.md) ; les six lieux du prologue sont peints en 384 × 160 (planches avant / après dans
-  `docs/maquettes/paysages/prologue/`). Pas encore affichés dans l'app (le Théâtre 384 × 160 est un autre chantier) ;
+  (`assets/decors/`, docs/SPRITES.md) ; les six lieux du prologue sont peints en 480 × 240 (règle 9 ; planches avant / après
+  dans `docs/maquettes/paysages/prologue/`). Pas encore affichés dans l'app (le Théâtre HD est un autre chantier) ;
   restent les 40 décors des trois grandes campagnes.
 - **Dessin fin 2×** : 664 sprites redessinés sur 693, dont les 54 icônes d'interface (docs/STYLE.md) ; restent agrandis
   automatiquement les 29 particules des saynètes (`sc-*`), d'après `python3 outils/sprites/fin.py`.

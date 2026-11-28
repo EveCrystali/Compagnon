@@ -1,8 +1,8 @@
 # Décors haute définition (decors_hd.py) : id largeur hauteur images duree, puis l'empreinte FNV-1a de
 # chaque image décodée (pixels ARGB 0xFFrrggbb, rangée par rangée). Lu par les tests C# et Java.
-decor-prologue-jardin 384 160 8 200 50bdc836 99dd40e5 5c50d460 67c3b0d7 c366fe60 bc868b26 e50d63f9 d3fce131
-decor-prologue-mare 384 160 8 200 5830b973 9fcaaa7b 339f36a6 61150786 803903ab ce33a37c 3ddc7874 623d688e
-decor-prologue-pente 384 160 8 200 bf61f864 6caadacb 2c53c2e3 52fb54ae 7a0b84e9 ee31b5bc d774b9a7 113b8029
-decor-prologue-pied-colline 384 160 8 200 1444c1a8 7337e626 129eb61e d37f1cfb 1c27d40f fb806a09 09957cee bae038f9
-decor-prologue-seuil 384 160 8 200 7aa559fe bdd816c8 a8e95486 b77605c8 e8bbfed5 50f3ca5f d3f909b9 b7d85888
-decor-prologue-sommet 384 160 8 200 4aaa69b7 7d5cadef ca6e2ae3 25b51c2b b5e22e86 fb004fd2 3c73b41f d603fd41
+decor-prologue-jardin 480 240 8 200 4ce614a4 70541fbb 0054f828 1bacba85 c88c8614 bb525a00 1bebdc5b 5757e175
+decor-prologue-mare 480 240 8 200 1ebd98ab 4d1f437e 725eb1b8 55177e65 7079c2bc 5faeeb6a 3a312b58 f7288bee
+decor-prologue-pente 480 240 8 200 71a56ce8 ee97f900 0c67e325 c2bedea5 b07cca8a d5a758bc 23743cf3 f0e901e6
+decor-prologue-pied-colline 480 240 8 200 d22810bf 0e2f518e 4f7ecb22 e4930d35 d1ea80fe 3e9522a7 4b0817bd 0bf6f6b5
+decor-prologue-seuil 480 240 8 200 abf637d9 19bec950 206c509a 689937ee e6c7b781 60cf0c38 fda7bad4 b94f36bf
+decor-prologue-sommet 480 240 8 200 2d1fbcf9 6d68fe5f 80af24df be8376ea 01c1b39b 6480cbcb 8c7ee2cb 5e1254db
