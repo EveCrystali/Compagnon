@@ -2337,23 +2337,67 @@ def dossier_temp(P, tab):
     for i in range(9):                                        # les chevrons
         x = -10 + i * 26
         P.poly([(x, -16.0), (x + 3.0, -16.0), (x + 43.0, 30.0), (x + 40.0, 30.0)], G2)
+    tout = np.ones(X.shape, dtype=bool)
+    vol = ((Y + 16.0 + (X * 0.0)) % 3.4) < 0.4
+    voile(P, tout & vol & (Y < 30.0), G1, 0.4)                   # les voliges du toit
+    voile(P, tout & (pg.fbm(X / 8.0, Y / 5.0, 3, 400) > 0.63) & (Y < 30.0), G1, 0.3)       # des auréoles de pluie
+    for i in range(9):                                          # l'arête des chevrons, tournée vers la lucarne
+        x = -10 + i * 26
+        P.poly([(x + 2.4, -16.0), (x + 3.0, -16.0), (x + 43.0, 30.0), (x + 42.4, 30.0)], G4 if x < 110 else G1)
     P.rect(-6.0, 8.0, 204.0, 1.6, G2)
-    voile(P, Y < 30, G3, 0.4)
+    P.rect(-6.0, 8.0, 204.0, 0.4, G4)
+    luc = [(104.0, -16.0), (134.0, -16.0), (146.0, -3.0), (116.0, -3.0)]            # la lucarne
+    P.poly([(102.0, -16.0), (136.0, -16.0), (149.0, -2.0), (114.0, -2.0)], G0)
+    P.poly(luc, T.CIEL[10])
+    ml = P.masque_poly(luc)
+    P.rampe(ml, 0.5 + 0.3 * (pg.fbm((X + 3.0 * onde(p)) / 7.0, Y / 3.0, 2, 401) - 0.5) - 0.02 * (Y + 10.0), [T.CIEL[8], T.CIEL[10], T.CIEL[11], BLANC], 0.4)
+    P.trait(119.0, -16.0, 131.0, -3.0, G0, P.ep(0.6))             # ses petits bois
+    P.trait(110.0, -9.6, 140.0, -9.6, G0, P.ep(0.6))
+    dl = np.hypot((X - 124.0) / 70.0, (Y + 8.0) / 40.0)
+    voile(P, tout & (dl < 1.0) & ~ml, BLANC, 0.35 * (1 - dl), lumiere=True)
+    voile(P, tout & (Y < 30.0) & (X < 60.0), G0, np.clip((60.0 - X) / 120.0, 0, 0.4))   # le fond du toit, à gauche, reste sombre
+    for i in range(40):                                         # tout au fond : la ville de piles, à peine plus grise que l'air
+        x = -4.0 + 5.0 * i + 2.0 * hz(i, 0, 402)
+        h_ = 6.0 + 20.0 * hz(i, 1, 402)
+        P.rect(x, 60.0 - h_, 3.4, h_, T.CIEL[8] if i % 3 else T.CIEL[9])
+        P.rect(x, 60.0 - h_, 3.4, 0.4, T.CIEL[10])
+    voile(P, tout & (Y > 30.0) & (Y < 62.0), T.CIEL[9], 0.3)
     tab.plan("lointains", 0.2)
     # ---- Les piles lointaines : une ville de dossiers, pâle dans la poussière.
     pale = (G3, G4, T.CIEL[7], G3, G4, T.CIEL[8])
     for i in range(16):
         x = -2 + 13 * i + 4 * hz(i, 1, 361)
         tour_dossiers(P, x, 6 + 4 * hz(i, 2, 361), 6 + 30 * hz(i, 3, 361), 62.0, 362 + i, teintes=pale)
-    rai(P, 120.0, -16.0, 78.0, 30.0, -0.3, T.CIEL[10], 0.34, 40, 363)
+    voile(P, (P.a >= 0), T.CIEL[9], 0.25)
+    for i in range(16):                                         # leur flanc tourné vers la lucarne s'éclaire
+        x = -2 + 13 * i + 4 * hz(i, 1, 361)
+        w_ = 6 + 4 * hz(i, 2, 361)
+        sens = 1 if x < 118 else -1
+        voile(P, (P.a >= 0) & (np.abs(X - x - sens * w_ * 0.36) < w_ * 0.16) & (Y < 62.0), BLANC, 0.35, lumiere=True)
+        voile(P, (P.a >= 0) & (np.abs(X - x + sens * w_ * 0.3) < w_ * 0.22) & (Y < 62.0), G1, 0.3)
+    rai(P, 120.0, -3.0, 78.0, 30.0, -0.3, T.CIEL[11], 0.42, 40, 363)
     tab.plan("moyen", 0.5)
     # ---- L'allée : un plancher gris de poussière qui fuit entre les piles ; des traces de pas (les seuls, les nôtres).
     sol = Y > 60.0
     dallage(P, sol, 104.0, 48.0, G3, G2, larg=5.0, prof=0.9, joint=G1)
     voile(P, sol & (np.abs(X - 104 - (Y - 48) * -0.3) < (Y - 48) * 0.5), T.CIEL[9], 0.3)
+    tx = 100.0 - (Y - 66.0) * 0.3
+    tache = sol & (np.abs(X - tx) < 13.0 + (Y - 62.0) * 0.4) & (Y > 62.5) & (Y < 76.0)
+    voile(P, tache, BLANC, 0.45, lumiere=True)
+    voile(P, tache & ((np.abs(X - tx) < 0.7) | (np.abs(Y - 69.0) < 0.5)), G2, 0.6)               # l'ombre des petits bois
+    dj = np.hypot((X - 130.0) / 16.0, (Y - 66.0) / 5.0)
+    voile(P, sol & (dj < 1.0), J2, 0.5 * (1 - dj))                                                # la lampe de chantier
+    P.remplir(sol & (hz(P.YI // 2, P.XI // 9, 403) < 0.03) & (Y > 64.0), G4)                     # des moutons de poussière
     # Les piles du milieu : de chaque côté de l'allée, hautes, colorées, étiquetées ; elles penchent.
     for i, (x, w, top) in enumerate(((10, 15, -18), (30, 12, 6), (52, 10, 20), (154, 12, 12), (174, 15, -18), (136, 9, 26), (70, 8, 30))):
-        tour_dossiers(P, x, w, top, 72.0 - abs(x - 100) * 0.06, 380 + i, sombre=0.12 if x < 100 else 0.0)
+        bas_ = 72.0 - abs(x - 100) * 0.06
+        sens = 1 if x < 112 else -1
+        voile(P, sol & (np.abs(X - x + sens * (4.0 + (Y - bas_ + 6.0) * 1.4)) < w * 0.6) & (Y > bas_ - 6.0) & (Y < bas_ + 5.0), G0, 0.45)   # son ombre, sur le plancher
+        tour_dossiers(P, x, w, top, bas_, 380 + i, sombre=0.0)
+        pile = (np.abs(X - x) < w / 2 + 2.0) & (Y > top) & (Y < bas_) & (P.a >= 0)
+        voile(P, pile & ((X - x) * sens < -w * 0.12), G0, 0.4)   # le côté opposé à la lucarne
+        voile(P, pile & ((X - x) * sens > w * 0.3), BLANC, 0.3, lumiere=True)
+        voile(P, pile & (Y < top + 30.0), G1, np.clip((top + 30.0 - Y) / 60.0, 0, 0.3) if top < 0 else 0.0)
     # Les mots raturés sur le mur de carton du fond : des lignes barrées, une seule épargnée.
     P.rect(84.0, 30.0, 40.0, 24.0, E3)
     P.rect(84.0, 30.0, 40.0, 0.8, E4)
@@ -2432,6 +2476,7 @@ def cabane_brouillon(P, tab):
             m = P.masque_poly(pts)
             dd = math.hypot(x + 6 - lx, (y + 4 - ly) * 1.2)
             clair = max(0.0, 1.0 - dd / 120.0)
+            voile(P, P.masque_poly([(px_ + 0.7, py_ + 0.9) for px_, py_ in pts]) & ~m, B1, 0.4)
             voile(P, m, (E5, E4, BLANC)[(i + j) % 3], 0.25 + 0.5 * clair)
             P.remplir(P.crete(m), E5 if clair > 0.4 else E3)
             for k in range(3):
@@ -2441,6 +2486,21 @@ def cabane_brouillon(P, tab):
             if hz(i, j + 60, 401) < 0.25:                       # une rature
                 P.trait(x + 2, y + 3, x + 10, y + 6, O1)
     voile(P, d > 70, B1, np.clip((d - 70) / 90.0, 0, 0.6))
+    tout = np.ones(X.shape, dtype=bool)
+    voile(P, tout & (d < 64.0), J3, 0.4 * (1 - d / 64.0), lumiere=True)          # la flaque chaude de la lampe
+    toit_y = -16.0 + np.abs(X - 96.0) * 0.3
+    toit = tout & (Y < toit_y)
+    voile(P, toit, B1, 0.4)                                     # les pans du toit, plus sombres que le mur
+    voile(P, toit & (((X * 0.3 * np.sign(X - 96.0) + Y) % 6.0) < 0.5), B1, 0.5)   # ses lattes
+    P.remplir(tout & (np.abs(Y - toit_y) < 0.9), K2)            # la sablière : deux règles plates
+    P.remplir(tout & (np.abs(Y - toit_y + 0.6) < 0.25), E5)
+    P.remplir(tout & (np.abs(Y - toit_y) < 0.9) & ((X % 5.0) < 0.4), B1)         # leurs graduations
+    voile(P, tout & (Y > toit_y + 0.9) & (Y < toit_y + 4.0), B1, 0.4)            # l'ombre du toit sur le mur
+    for (xa, xb, s_) in ((-6.0, 15.0, 1), (198.0, 177.0, -1)):  # les murs de côté fuient vers le fond
+        cote = tout & ((X - xb - (Y - 62.0) * -0.12 * s_) * s_ < 0)
+        voile(P, cote, B1, 0.35)
+        P.remplir(tout & (np.abs(X - xb - (Y - 62.0) * -0.12 * s_) < 0.4) & (Y > toit_y), B2)
+    voile(P, tout & (Y > 56.0), B1, np.clip((Y - 56.0) / 8.0, 0, 0.5))          # le bas du mur, dans l'ombre des meubles
     tab.plan("lointains", 0.2)
     # ---- La fenêtre en papier calque : le dehors y passe en ombres bleues ; une croisée de ruban adhésif.
     wx, wy, ww, wh = 132.0, 14.0, 34.0, 28.0
@@ -2449,6 +2509,17 @@ def cabane_brouillon(P, tab):
     P.rampe(fen, 0.6 + 0.3 * (pg.fbm((X + 2 * onde(p)) / 10.0, Y / 8.0, 3, 403) - 0.5), [T.CIEL[5], T.CIEL[7], T.CIEL[9], BLANC], 0.8)
     for i in range(4):                                        # des ombres de piles de dossiers, dehors
         P.remplir(fen & (np.abs(X - (wx + 5 + i * 8.4)) < 2.0 + i % 2) & (Y > wy + 8 + (i * 5) % 9) & (P.T < 0.6), T.CIEL[6])
+    P.rect(wx - 2.0, wy - 2.0, ww + 4.0, 0.6, K2)
+    P.rect(wx - 2.0, wy - 2.0, 0.6, wh + 4.0, K2)
+    P.rect(wx, wy, ww, 1.0, T.CIEL[4])                           # l'ombre du cadre sur le calque
+    P.rect(wx, wy, 1.0, wh, T.CIEL[4])
+    P.rect(wx - 3.0, wy + wh + 2.0, ww + 6.0, 1.6, B3)           # l'appui : une gomme
+    P.rect(wx - 3.0, wy + wh + 2.0, ww + 6.0, 0.5, E5)
+    voile(P, (X > wx - 3.0) & (X < wx + ww + 3.0) & (Y > wy + wh + 3.6) & (Y < wy + wh + 6.0), B1, 0.5)
+    for (cx_, cy_) in ((wx - 2.0, wy - 2.0), (wx + ww + 2.0, wy - 2.0), (wx - 2.0, wy + wh + 2.0), (wx + ww + 2.0, wy + wh + 2.0)):
+        P.poly([(cx_ - 2.4, cy_ - 0.6), (cx_ + 0.6, cy_ - 2.4), (cx_ + 2.4, cy_ + 0.6), (cx_ - 0.6, cy_ + 2.4)], J3)   # un bout de ruban à chaque coin
+    t_o = (p + 0.2) % 1.0                                       # dehors, une ombre passe derrière le calque
+    P.remplir(fen & (np.hypot(X - (wx - 4.0 + (ww + 8.0) * t_o), Y - (wy + 9.0)) < 2.6), T.CIEL[6])
     P.rect(wx + ww / 2 - 0.9, wy, 1.8, wh, J2)
     P.rect(wx, wy + wh / 2 - 0.9, ww, 1.8, J2)
     voile(P, (X > wx - 30 + (Y - wy) * 0.2) & (X < wx + ww - 20 + (Y - wy) * 0.2) & (Y > wy + wh + 2) & (Y < 80), T.CIEL[9], 0.16)
@@ -2472,7 +2543,14 @@ def cabane_brouillon(P, tab):
     # ---- Le plancher : des cartons aplatis, un tapis de buvards ; puis les meubles.
     sol = Y > 62.0
     dallage(P, sol, 96.0, 46.0, K2, B3, larg=8.0, prof=0.7, joint=B2)
-    voile(P, sol & (np.hypot(X - lx, (Y - 70) * 3.0) < 60), J3, 0.3)
+    dsol = np.hypot(X - lx, (Y - 70) * 3.0)
+    voile(P, sol & (dsol < 60), J3, 0.45 * (1 - dsol / 60.0), lumiere=True)
+    fb = sol & (np.abs(X - 136.0 + (Y - 62.0) * 0.6) < 13.0) & (Y < 76.0)
+    voile(P, fb & (np.abs(X - 136.0 + (Y - 62.0) * 0.6) > 0.8) & (np.abs(Y - 69.0) > 0.5), T.CIEL[9], 0.4)   # le jour bleu du calque, et sa croisée
+    voile(P, sol & (np.hypot((X - 101.0) / 26.0, (Y - 74.6) / 2.6) < 1.0), B1, 0.5)               # l'ombre de la table
+    for (x_, w_) in ((8.0, 5.0), (62.0, 5.0), (68.5, 4.0), (23.0, 7.0)):                            # l'ombre des crayons, du réveil, de la plante
+        sens = -1 if x_ < lx else 1
+        voile(P, sol & (np.abs(X - x_ - sens * (2.0 + (Y - 66.0) * 0.9)) < w_ * 0.5) & (Y > 64.0) & (Y < 72.0), B1, 0.45)
     voile(P, sol & (np.hypot(X - lx, (Y - 70) * 3.0) > 80), B1, 0.5)
     P.ell(96.0, 73.0, 34.0, 4.6, V2)                            # le tapis
     P.ell(96.0, 73.0, 31.0, 3.8, V3)
@@ -2488,6 +2566,7 @@ def cabane_brouillon(P, tab):
         P.poly([(x - 0.5, 19.0), (x + 0.5, 19.0), (x, 17.0)], ENCRE)
     bal = 0.6 * onde(p)
     toile_pts = [(hx0, hy - 6), (hx0 + 14, hy + 4 + bal), (hx0 + 27, hy + 7 + bal), (hx0 + 40, hy + 4 + bal), (hx1, hy - 6)]
+    P.courbe([(x_ - 2.0, y_ + 3.0) for x_, y_ in toile_pts], B1, P.ep(2.2))                          # son ombre
     P.courbe(toile_pts, J1, P.ep(3.2))
     P.courbe([(x, y - 0.8) for x, y in toile_pts], J3, P.ep(1.4))
     for i in range(9):
@@ -2523,6 +2602,8 @@ def cabane_brouillon(P, tab):
     P.trait(lx, -16.0, lx + 0.4 * onde(p), ly - 6.0, B1)
     halo(P, lx, ly + 2.0, 54.0, J3, 0.5, ry=40)
     halo(P, lx, ly + 2.0, 22.0, BLANC, 0.5)
+    cone = (np.abs(X - lx) < 10.0 + (Y - ly - 2.0) * 0.9) & (Y > ly + 2.0) & (Y < 62.0) & (P.a >= 0)
+    voile(P, cone, J3, 0.16, lumiere=True)
     P.poly([(lx - 2.0, ly - 6.0), (lx + 2.0, ly - 6.0), (lx + 10.0, ly + 2.0), (lx - 10.0, ly + 2.0)], O3)
     for k in range(-4, 5):
         P.trait(lx + k * 0.5, ly - 6.0, lx + k * 2.4, ly + 2.0, O2 if k % 2 else J3)
@@ -2532,6 +2613,15 @@ def cabane_brouillon(P, tab):
     # ---- Premier plan : le bord de la porte (un rabat de carton), une pile de brouillons froissés en boule, une plante.
     P.poly([(-6.0, -16.0), (4.0, -16.0), (7.0, 80.0), (-6.0, 80.0)], B1)
     P.poly([(4.0, -16.0), (5.2, -16.0), (8.2, 80.0), (7.0, 80.0)], K2)
+    lint = (Y < -12.4 + 0.8 * np.sin(X / 3.1) + 0.5 * np.sin(X / 1.3))                             # le linteau, bord déchiré
+    P.rampe(lint, 0.4 + 0.3 * (pg.fbm(X / 3.0, Y / 1.5, 2, 420) - 0.5), [ENCRE, B1, B2], 0.4)
+    P.remplir(lint & ~np.roll(lint, -1, axis=0), K2)
+    mont = (X > 188.4 + (Y + 16.0) * 0.02)
+    P.rampe(mont, 0.4 + 0.3 * (pg.fbm(X / 1.5, Y / 9.0, 2, 421) - 0.5), [ENCRE, B1, B2], 0.4)
+    P.remplir(mont & ~np.roll(mont, 1, axis=1), K2)
+    P.trait(150.0, -12.0, 150.0 + 0.5 * onde(p, 0.4), -4.0, G3)                                   # un trombone pendu au linteau, en carillon
+    P.ell(150.0 + 0.5 * onde(p, 0.4), -2.6, 1.2, 1.8, G4)
+    P.ell(150.0 + 0.5 * onde(p, 0.4), -2.6, 0.5, 1.0, B1)
     for i, (x, y, r) in enumerate(((172.0, 76.0, 4.4), (180.0, 73.0, 3.6), (186.0, 77.0, 4.0), (176.0, 70.4, 2.8), (166.0, 78.2, 2.6))):
         P.volumes([(x, y, r), (x + r * 0.5, y - r * 0.3, r * 0.6), (x - r * 0.5, y + r * 0.2, r * 0.6)], [B2, E2, E3, E4, E5, BLANC],
                   (-0.6, -0.5, 0.4), grain=1.2, graine=410 + i, gain=0.6, base=0.5, trame=0.5)
@@ -2575,6 +2665,36 @@ def horloge_systeme(P, tab):
     # ---- La salle ronde : un mur courbe bleu nuit, plus clair là où tombe la lumière d'en haut.
     P.rampe(np.ones(X.shape, dtype=bool), 0.62 - np.abs(X - 104) / 150.0 - 0.004 * (Y + 16) + 0.16 * (pg.fbm(X / 16.0, Y / 12.0, 3, 420) - 0.5),
             [ENCRE, N0, N1, N2, N3], 0.8)
+    tout = np.ones(X.shape, dtype=bool)
+    um = np.clip((X - 104.0) / 108.0, -1, 1)
+    th_ = np.arcsin(um)                                         # l'angle sur le mur courbe
+    yc_ = Y + 0.16 * (70.0 - Y) * (um * um)                     # les rangs remontent vers les bords : on est dans un cylindre
+    rg_ = np.floor((yc_ + 20.0) / 9.0)
+    cl_ = np.floor(th_ / 0.2 + 0.5 * (rg_ % 2))
+    voile(P, tout, N0, 0.3 * (hz(rg_, cl_, 430) > 0.6))         # des plaques plus sombres que d'autres
+    jh = ((yc_ + 20.0) % 9.0) < 0.5
+    jv = (np.abs((th_ / 0.2 + 0.5 * (rg_ % 2)) % 1.0) < 0.035) & ~jh
+    voile(P, tout & (jh | jv), ENCRE, 0.5)
+    riv = (np.abs(((yc_ + 20.0) % 9.0) - 1.6) < 0.4) & (np.abs(((th_ / 0.2 + 0.5 * (rg_ % 2)) * 4.0) % 1.0 - 0.5) < 0.1)
+    P.remplir(tout & riv, N3)                                   # les rivets, que la lumière d'en haut accroche
+    for k in range(-5, 6):                                      # les membrures
+        xm = 104.0 + 108.0 * math.sin(k * 0.27)
+        wm = 1.6 * math.cos(k * 0.27) + 0.4
+        P.rect(xm - wm, -16.0, 2 * wm, 80.0, N0)
+        P.rect(xm - wm if k > 0 else xm + wm - 0.5, -16.0, 0.5, 80.0, N2)
+    P.ell(104.0, -16.0, 34.0, 7.0, T.CIEL[6])                    # l'oculus
+    P.ell(104.0, -16.0, 30.0, 5.6, T.CIEL[9])
+    P.ell(104.0, -16.0, 22.0, 3.6, T.CIEL[11])
+    for k in range(-3, 4):
+        P.trait(104.0 + k * 8.0, -16.0, 104.0 + k * 9.6, -9.6, N1)   # ses barreaux
+    do = np.hypot((X - 104.0) / 60.0, (Y + 16.0) / 70.0)
+    voile(P, tout & (do < 1.0) & (Y > -9.0), T.CIEL[7], 0.45 * (1 - do), lumiere=True)   # la lumière bleutée descend le long du mur
+    dcad = np.hypot(X - 104.0, Y - 22.0)                         # le cadran mural, éteint : un anneau, douze repères
+    P.remplir(tout & (np.abs(dcad - 33.0) < 0.6), N3)
+    P.remplir(tout & (np.abs(dcad - 30.0) < 0.3), N2)
+    for k in range(12):
+        a = k * math.pi / 6
+        P.trait(104.0 + 26.0 * math.cos(a), 22.0 + 26.0 * math.sin(a), 104.0 + 29.4 * math.cos(a), 22.0 + 29.4 * math.sin(a), N3 if k % 3 else T.CIEL[6], P.ep(0.5 if k % 3 else 0.9))
     tab.plan("lointains", 0.2)
     # ---- Les roues dentées du mur, immobiles : de toutes tailles, cuivre, laiton, acier bleui, engrenées les unes dans
     # les autres. Une seule, toute petite, tressaille encore.
@@ -2584,7 +2704,21 @@ def horloge_systeme(P, tab):
     tons3 = ((K1, K2, N0), (J1, J2, N0), (N2, N3, N0))
     for i, (x, y, r, dents, t) in enumerate(roues):
         a = 0.06 * math.sin(p * 4 * math.pi) if i == 9 else 0.3 * i
+        voile(P, (np.hypot(X - x - 1.6, Y - y - 2.4) < r + 1.0), ENCRE, 0.5)        # son ombre (elle se pose sur les roues de derrière)
+        avant = P.a.copy()
         roue(P, x, y, r, dents, tons3[t][0], tons3[t][1], tons3[t][2], angle=a)
+        neuf = (P.a != avant)
+        voile(P, neuf & (Y < y - r * 0.35), T.CIEL[9], 0.3 * max(0.0, 1.0 - abs(x - 104.0) / 110.0), lumiere=True)
+        voile(P, neuf & (Y > y + r * 0.3), ENCRE, 0.3)
+        P.ell(x, y, 1.2 + r * 0.06, 1.2 + r * 0.06, G3)             # la tête de l'axe
+        P.point(x - 0.4, y - 0.4, BLANC)
+    for (i0_, i1_) in ((0, 3), (1, 2), (4, 10), (5, 6), (9, 1), (6, 11)):   # les ponts : des bras de laiton d'un axe à l'autre
+        xa, ya, xb, yb = roues[i0_][0], roues[i0_][1], roues[i1_][0], roues[i1_][1]
+        P.trait(xa, ya, xb, yb, J1, P.ep(1.0))
+        P.trait(xa, ya - 0.4, xb, yb - 0.4, J2, 1)
+        for (xv, yv) in ((xa, ya), (xb, yb)):
+            P.ell(xv, yv, 1.6, 1.6, J1)
+            P.point(xv, yv, ENCRE)
     voile(P, np.abs(X - 104) > 44, N0, np.clip((np.abs(X - 104) - 44) / 110.0, 0, 0.45))
     # La trappe ronde, au fond : un hublot de laiton entrouvert, une lueur orange dessous.
     tx, ty = 160.0, 60.0
@@ -2599,8 +2733,8 @@ def horloge_systeme(P, tab):
         P.point(tx + 5.8 * math.cos(k * 0.785), ty + 2.6 * math.sin(k * 0.785), J3)
     tab.plan("moyen", 0.5)
     # ---- La lumière bleutée qui tombe d'en haut, sur le balancier.
-    rai(P, 104.0, -16.0, 78.0, 36.0, 0.0, T.CIEL[5], 0.2, 44, 421)
-    rai(P, 104.0, -16.0, 78.0, 12.0, 0.0, T.CIEL[8], 0.16, 0, 422)
+    rai(P, 104.0, -14.0, 78.0, 40.0, 0.0, T.CIEL[6], 0.3, 44, 421)
+    rai(P, 104.0, -14.0, 78.0, 16.0, 0.0, T.CIEL[9], 0.22, 0, 422)
     # ---- Le sol : un cadran géant, ses chiffres en bâtons, vu en perspective ; il est à 13 h 37.
     sol = Y > 62.0
     P.rampe(sol, 0.5 - 0.02 * (Y - 62) + 0.15 * (pg.fbm(X / 8.0, Y / 2.0, 3, 423) - 0.5), [N0, N1, N2, G2], 0.8)
@@ -2613,7 +2747,11 @@ def horloge_systeme(P, tab):
         x1, y1 = 104 + (88 if k % 2 else 91) * math.cos(a), 76 + (88 if k % 2 else 91) / 4.2 * math.sin(a)
         if y0 > 62:
             P.trait(x0, y0, x1, y1, J2 if k % 2 == 0 else G3, P.ep(0.6 if k % 2 == 0 else 0.3))
-    voile(P, sol & (np.hypot(X - 104, (Y - 74) * 3.4) < 30), T.CIEL[6], 0.3)
+    reflet(P, sol, tab.derriere(), 62.0, force=0.3, etire=0.45)
+    P.remplir(sol & (Y < 62.6), N3)                              # l'arête du cadran
+    dfl = np.hypot(X - 104, (Y - 74) * 3.4)
+    voile(P, sol & (dfl < 36), T.CIEL[8], 0.45 * (1 - dfl / 36.0), lumiere=True)
+    P.remplir(sol & (dfl < 30) & (hz(P.YI, (P.XI + int(p * 8)) // 5, 431) < 0.07), T.CIEL[11])   # le poli accroche
     # ---- Le grand balancier doré : arrêté, penché d'un côté. Sa tige descend du plafond, sa lentille luit.
     px_, py_ = 104.0, -18.0
     ang = 0.2 + 0.006 * math.sin(p * 2 * math.pi)                # il frémit à peine
@@ -2633,6 +2771,9 @@ def horloge_systeme(P, tab):
     P.ell(bx, by, 3.0, 3.0, J1)
     P.ell(bx, by, 1.4, 1.4, K1)
     P.ell(bx + 2.0, 76.6, 13.0, 1.6, ENCRE)                     # son ombre sur le cadran
+    refl = sol & (np.abs(X - bx) < 8.0) & (Y > 70.0) & (Y < 75.4) & (hz(P.YI, (P.XI + int(p * 8)) // 3, 432) < 0.4)
+    P.remplir(refl, J1)                                         # et son reflet doré, en traînées
+    P.remplir(refl & (np.abs(X - bx + 2.0) < 3.0), J2)
     voile(P, np.hypot(X - bx - 2.0, (Y - 76.6) * 6.0) < 16, N0, 0.6)
     # Le levier, à son pied : socle de fonte, manche de laiton, pommeau orange ; un voyant qui attend.
     lx, ly = 84.0, 78.0
@@ -2649,6 +2790,10 @@ def horloge_systeme(P, tab):
     # ---- Premier plan : deux grandes roues à contre-jour dans les coins du bas, une chaîne qui pend, des contrepoids.
     roue(P, -4.0, 86.0, 26.0, 20, ENCRE, N1, N0, angle=0.2, moyeu=N2)
     roue(P, 198.0, 90.0, 30.0, 24, ENCRE, N1, N0, angle=0.5, moyeu=N2)
+    for (cx_, cy_, r_) in ((-4.0, 86.0, 26.0), (198.0, 90.0, 30.0)):
+        dr = np.hypot(X - cx_, Y - cy_)
+        bord = (P.a >= 0) & (np.abs(dr - r_ * 0.86) < 0.5) & ((X - cx_) * (104.0 - cx_) > 0) & (Y < cy_ - 4.0)
+        P.remplir(bord, T.CIEL[6])
     for (x, l, d) in ((14.0, 46.0, 0.0), (20.0, 30.0, 0.3), (182.0, 40.0, 0.6)):
         bal = 0.5 * onde(p, d)
         for j in range(int(l / 2.0)):
