@@ -138,6 +138,11 @@ public class RenduPilouTest {
         Sprites.Banque b = Sprites.banque();
         assertTrue(b.fins.size() + " sprites fins", b.fins.size() >= 100);
         for (Sprites.Sprite f : b.fins.values()) {
+            // Les sprites du théâtre (docs/SCENES.md) n'existent qu'en dessin fin : la scène est toujours fine.
+            if (f.id.startsWith("scene-") || f.id.startsWith("acteur-")) {
+                assertNull(f.id, b.get(f.id));
+                continue;
+            }
             Sprites.Sprite s = b.get(f.id);
             assertNotNull(f.id + " : pas de sprite 1×", s);
             assertEquals(f.id, s.slot + s.ancre + s.derriere + s.coiffe + s.duree + s.images.size(),

@@ -61,6 +61,12 @@ Ce qu'Antoine a tranché, avec la raison. Avant de revenir sur l'une d'elles, lu
 - **Pendant une attente, Pilou reste à l'écran, occupé** (tenue de voyage), il ne disparaît pas.
 - **Retour annoncé une seule fois** (bulle sur PC, notification sur téléphone), jamais de relance.
 - Le téléphone avance PC éteint ; les récompenses attendent le PC, qui reste l'arbitre des pièces.
+- **La scène est un théâtre** (27 novembre 2026, docs/SCENES.md) : le décor entier sur toute la largeur, Pilou en pied
+  qui y vit (taille M), des acteurs d'ambiance, des réactions aux clics ; la réplique dans une boîte de dialogue, les
+  choix posés sur la scène. Tous les personnages seront dessinés en pied. Le Pilou du bureau suit l'aventure (échos,
+  bout de décor, départ et retour joués, objets du sac), toujours muet et rare.
+- **Le réglage « ✧ » décide des animations** (28 novembre 2026) ; le réglage du système (Windows « Afficher les
+  animations », échelle d'Android) n'est que la valeur de départ tant qu'on n'a rien choisi.
 
 ## Livraison
 

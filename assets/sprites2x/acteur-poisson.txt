@@ -1,0 +1,22 @@
+# Acteur de scène (acteurs_scenes.py, docs/SCENES.md)
+id: acteur-poisson
+slot: objet
+ancre: aucun
+decalage: 0 0
+duree: 233
+palette: a=#f69d50 b=#ffc89a c=#1c2128 d=#d9803a
+images:
+..aa..
+.abcc.
+da....
+......
+---
+......
+daaac.
+.abb..
+......
+---
+......
+da....
+.abac.
+..aa..

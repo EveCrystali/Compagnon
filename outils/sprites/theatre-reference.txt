@@ -1,0 +1,1058 @@
+# Théâtre des campagnes : valeurs de référence (outils/sprites/theatre.py).
+# Relues par TheatreTests.cs (PC) et TheatreTest.java (téléphone).
+# scenario nom campagne décor teinte niveau regard ; evenement t sorte a b ;
+# pilou t x y image miroir visible ; acteurs t sprite:image:x:y:miroir … ; image t empreinte
+scenario mare-entree prologue mare bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 78 41 0 1
+acteurs 0 acteur-libellule:0:89:54:0 acteur-rond:0:70:68:0 acteur-rond:4:125:72:0
+image 0 1092016076
+pilou 250 -8 78 44 0 1
+acteurs 250 acteur-libellule:1:89:54:0 acteur-rond:0:70:68:0
+pilou 500 -2 78 47 0 1
+acteurs 500 acteur-libellule:0:89:54:0 acteur-rond:1:70:68:0
+pilou 750 4 78 42 0 1
+acteurs 750 acteur-libellule:1:89:55:0 acteur-rond:2:70:68:0
+pilou 1000 10 78 45 0 1
+acteurs 1000 acteur-libellule:0:89:55:0 acteur-rond:3:70:68:0
+image 1000 3787897672
+pilou 1250 16 78 48 0 1
+acteurs 1250 acteur-libellule:1:89:55:0 acteur-rond:4:70:68:0
+pilou 1500 18 78 2 0 1
+acteurs 1500 acteur-libellule:0:101:51:0
+pilou 1750 18 78 3 0 1
+acteurs 1750 acteur-libellule:1:111:47:1
+pilou 2000 18 78 1 0 1
+acteurs 2000 acteur-libellule:0:111:46:1
+image 2000 2746783994
+pilou 2250 18 78 2 0 1
+acteurs 2250 acteur-libellule:1:111:46:1 acteur-rond:0:125:72:0
+pilou 2500 18 78 3 0 1
+acteurs 2500 acteur-libellule:0:111:46:1 acteur-rond:1:125:72:0
+pilou 2750 18 78 0 0 1
+acteurs 2750 acteur-libellule:1:111:46:1 acteur-rond:0:70:68:0 acteur-rond:2:125:72:0
+pilou 3000 18 78 1 0 1
+acteurs 3000 acteur-libellule:0:110:45:1 acteur-rond:1:70:68:0 acteur-rond:3:125:72:0
+image 3000 2957808915
+pilou 3250 18 78 2 0 1
+acteurs 3250 acteur-libellule:1:96:51:1 acteur-rond:2:70:68:0 acteur-rond:4:125:72:0
+pilou 3500 18 78 3 0 1
+acteurs 3500 acteur-libellule:0:91:54:1 acteur-rond:3:70:68:0
+pilou 3750 18 78 1 0 1
+acteurs 3750 acteur-libellule:1:91:54:1 acteur-rond:4:70:68:0
+pilou 4000 18 78 2 0 1
+acteurs 4000 acteur-libellule:0:91:54:1
+image 4000 184943591
+pilou 4250 18 78 40 0 1
+acteurs 4250 acteur-libellule:1:91:55:1
+pilou 4500 18 78 0 0 1
+acteurs 4500 acteur-libellule:0:91:55:1
+pilou 4750 18 78 1 0 1
+acteurs 4750 acteur-libellule:1:85:55:1
+pilou 5000 18 78 2 0 1
+acteurs 5000 acteur-libellule:0:66:52:1
+image 5000 1065910462
+pilou 5250 18 78 3 0 1
+acteurs 5250 acteur-libellule:1:61:52:0 acteur-rond:0:70:68:0
+pilou 5500 18 78 1 0 1
+acteurs 5500 acteur-libellule:0:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0
+pilou 5750 18 78 2 0 1
+acteurs 5750 acteur-libellule:1:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0
+pilou 6000 18 78 3 0 1
+acteurs 6000 acteur-libellule:0:61:52:0 acteur-rond:2:70:68:0 acteur-rond:1:125:72:0 acteur-poisson:0:112:68:0
+image 6000 2285879837
+pilou 6250 18 78 0 0 1
+acteurs 6250 acteur-libellule:1:61:52:0 acteur-rond:3:70:68:0 acteur-rond:2:125:72:0 acteur-poisson:0:119:57:0
+pilou 6500 18 78 1 0 1
+acteurs 6500 acteur-libellule:0:76:51:0 acteur-rond:4:70:68:0 acteur-rond:3:125:72:0 acteur-poisson:2:126:59:0
+pilou 6750 18 78 2 0 1
+acteurs 6750 acteur-libellule:1:108:52:0 acteur-rond:4:125:72:0
+pilou 7000 18 78 3 0 1
+acteurs 7000 acteur-libellule:0:111:53:1
+image 7000 4273939523
+pilou 7250 18 78 0 0 1
+acteurs 7250 acteur-libellule:1:111:53:1
+pilou 7500 18 78 2 0 1
+acteurs 7500 acteur-libellule:0:111:52:1
+pilou 7750 18 78 3 0 1
+acteurs 7750 acteur-libellule:1:111:52:1
+pilou 8000 18 78 0 0 1
+acteurs 8000 acteur-libellule:0:111:52:1 acteur-rond:0:70:68:0 acteur-oiseau:1:-12:14:0
+image 8000 1869546339
+pilou 8250 18 78 1 0 1
+acteurs 8250 acteur-libellule:1:100:54:1 acteur-rond:1:70:68:0 acteur-oiseau:2:-5:14:0
+pilou 8500 18 78 40 0 1
+acteurs 8500 acteur-libellule:0:88:56:0 acteur-rond:2:70:68:0 acteur-oiseau:0:3:13:0
+pilou 8750 18 78 3 0 1
+acteurs 8750 acteur-libellule:1:88:57:0 acteur-rond:3:70:68:0 acteur-oiseau:2:10:13:0
+pilou 9000 18 78 0 0 1
+acteurs 9000 acteur-libellule:0:88:57:0 acteur-rond:4:70:68:0 acteur-rond:0:125:72:0 acteur-oiseau:0:18:13:0
+image 9000 415626995
+scenario mare-clics prologue mare bleu completes 0
+evenement 0 entree 0 0
+evenement 4000 clic 24 70
+evenement 5200 clic 96 54
+evenement 7000 clic 60 64
+evenement 7300 clic 70 66
+evenement 7600 clic 80 62
+evenement 9000 clic 24 70
+pilou 3500 18 78 3 0 1
+acteurs 3500 acteur-libellule:0:91:54:1 acteur-rond:3:70:68:0
+image 3500 454723716
+pilou 3625 18 78 0 0 1
+acteurs 3625 acteur-libellule:0:91:54:1 acteur-rond:3:70:68:0
+image 3625 4186251659
+pilou 3750 18 78 1 0 1
+acteurs 3750 acteur-libellule:1:91:54:1 acteur-rond:4:70:68:0
+image 3750 1450269221
+pilou 3875 18 78 1 0 1
+acteurs 3875 acteur-libellule:1:91:54:1 acteur-rond:4:70:68:0
+image 3875 1151128087
+pilou 4000 18 78 49 0 1
+acteurs 4000 acteur-libellule:0:91:54:1 acteur-eclats:0:18:54:0
+image 4000 147259815
+pilou 4125 18 78 50 0 1
+acteurs 4125 acteur-libellule:0:91:55:1 acteur-eclats:1:18:54:0
+image 4125 215917307
+pilou 4250 18 78 52 0 1
+acteurs 4250 acteur-libellule:1:91:55:1 acteur-eclats:3:18:54:0
+image 4250 2459927939
+pilou 4375 18 78 53 0 1
+acteurs 4375 acteur-libellule:1:91:55:1
+image 4375 874490357
+pilou 4500 18 78 55 0 1
+acteurs 4500 acteur-libellule:0:91:55:1
+image 4500 2143855017
+pilou 4625 18 78 56 0 1
+acteurs 4625 acteur-libellule:0:91:55:1
+image 4625 1354216920
+pilou 4750 18 78 58 0 1
+acteurs 4750 acteur-libellule:1:85:55:1
+image 4750 1295459501
+pilou 4875 18 78 2 0 1
+acteurs 4875 acteur-libellule:1:76:53:1
+image 4875 2263956734
+pilou 5000 18 78 2 0 1
+acteurs 5000 acteur-libellule:0:66:52:1
+image 5000 1065910462
+pilou 5125 18 78 3 0 1
+acteurs 5125 acteur-libellule:0:61:52:0
+image 5125 3344761338
+pilou 5250 18 78 90 0 1
+acteurs 5250 acteur-libellule:1:61:52:0 acteur-rond:0:70:68:0 acteur-bulle:0:93:55:0 acteur-note:1:98:50:0
+image 5250 1668968153
+pilou 5375 18 78 91 0 1
+acteurs 5375 acteur-libellule:1:61:52:0 acteur-rond:0:70:68:0 acteur-bulle:1:93:55:0 acteur-note:1:98:49:0
+image 5375 2099196374
+pilou 5500 18 78 92 0 1
+acteurs 5500 acteur-libellule:0:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0 acteur-bulle:2:93:55:0 acteur-note:0:98:47:0
+image 5500 1071421334
+pilou 5625 18 78 8 0 1
+acteurs 5625 acteur-libellule:0:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0 acteur-bulle:2:93:55:0 acteur-note:1:98:46:0
+image 5625 1129491499
+pilou 5750 18 78 10 0 1
+acteurs 5750 acteur-libellule:1:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0 acteur-bulle:1:93:55:0 acteur-note:1:98:45:0
+image 5750 2352706453
+pilou 5875 18 78 11 0 1
+acteurs 5875 acteur-libellule:1:61:52:0 acteur-rond:2:70:68:0 acteur-rond:1:125:72:0 acteur-bulle:2:93:55:0 acteur-note:0:98:44:0
+image 5875 4236094020
+pilou 6000 18 78 8 0 1
+acteurs 6000 acteur-libellule:0:61:52:0 acteur-rond:2:70:68:0 acteur-rond:1:125:72:0 acteur-poisson:0:112:68:0 acteur-bulle:3:93:55:0 acteur-note:1:98:42:0
+image 6000 2136961879
+pilou 6125 18 78 10 0 1
+acteurs 6125 acteur-libellule:0:61:52:0 acteur-rond:3:70:68:0 acteur-rond:2:125:72:0 acteur-poisson:0:115:61:0 acteur-bulle:0:93:55:0 acteur-note:0:98:41:0
+image 6125 1224309674
+pilou 6250 18 78 11 0 1
+acteurs 6250 acteur-libellule:1:61:52:0 acteur-rond:3:70:68:0 acteur-rond:2:125:72:0 acteur-poisson:0:119:57:0 acteur-note:0:98:40:0
+image 6250 3583998310
+pilou 6375 18 78 9 0 1
+acteurs 6375 acteur-libellule:1:63:51:0 acteur-rond:4:70:68:0 acteur-rond:3:125:72:0 acteur-poisson:1:122:57:0
+image 6375 1755111099
+pilou 6500 18 78 10 0 1
+acteurs 6500 acteur-libellule:0:76:51:0 acteur-rond:4:70:68:0 acteur-rond:3:125:72:0 acteur-poisson:2:126:59:0
+image 6500 771122135
+pilou 6625 18 78 11 0 1
+acteurs 6625 acteur-libellule:0:95:52:0 acteur-rond:4:125:72:0 acteur-poisson:2:129:64:0
+image 6625 1581825100
+pilou 6750 18 78 2 0 1
+acteurs 6750 acteur-libellule:1:108:52:0 acteur-rond:4:125:72:0
+image 6750 314931983
+pilou 6875 18 78 3 0 1
+acteurs 6875 acteur-libellule:1:111:53:1 acteur-rond:4:125:72:0
+image 6875 4099934339
+pilou 7000 18 78 64 0 1
+acteurs 7000 acteur-libellule:0:111:53:1 acteur-rond:0:60:66:0
+image 7000 2063889692
+pilou 7125 18 78 64 0 1
+acteurs 7125 acteur-libellule:0:111:53:1 acteur-rond:0:60:66:0
+image 7125 2063889692
+pilou 7250 18 78 64 0 1
+acteurs 7250 acteur-libellule:1:111:53:1 acteur-rond:0:60:66:0
+image 7250 839931585
+pilou 7375 18 78 64 0 1
+acteurs 7375 acteur-libellule:1:111:52:1 acteur-rond:1:60:66:0 acteur-rond:0:70:68:0
+image 7375 4119700700
+pilou 7500 18 78 64 0 1
+acteurs 7500 acteur-libellule:0:111:52:1 acteur-rond:1:60:66:0 acteur-rond:0:70:68:0
+image 7500 137925433
+pilou 7625 18 78 64 0 1
+acteurs 7625 acteur-libellule:0:111:52:1 acteur-rond:2:60:66:0 acteur-rond:1:70:68:0 acteur-rond:0:80:64:0 acteur-poisson:0:80:61:0 acteur-plouf:0:80:62:0
+image 7625 3526854755
+pilou 7750 18 78 64 0 1
+acteurs 7750 acteur-libellule:1:111:52:1 acteur-rond:2:60:66:0 acteur-rond:1:70:68:0 acteur-rond:0:80:64:0 acteur-poisson:0:84:54:0 acteur-plouf:1:80:62:0
+image 7750 274464293
+pilou 7875 18 78 64 0 1
+acteurs 7875 acteur-libellule:1:111:52:1 acteur-rond:0:70:68:0 acteur-rond:3:60:66:0 acteur-rond:2:70:68:0 acteur-rond:0:80:64:0 acteur-poisson:0:87:51:0 acteur-plouf:3:80:62:0
+image 7875 4070901606
+pilou 8000 18 78 64 0 1
+acteurs 8000 acteur-libellule:0:111:52:1 acteur-rond:0:70:68:0 acteur-oiseau:1:-12:14:0 acteur-rond:3:60:66:0 acteur-rond:2:70:68:0 acteur-rond:1:80:64:0 acteur-poisson:1:91:51:0
+image 8000 1536871629
+pilou 8125 18 78 64 0 1
+acteurs 8125 acteur-libellule:0:108:52:1 acteur-rond:1:70:68:0 acteur-oiseau:2:-9:14:0 acteur-rond:4:60:66:0 acteur-rond:2:70:68:0 acteur-rond:1:80:64:0 acteur-poisson:2:95:53:0
+image 8125 2464781398
+pilou 8250 18 78 64 0 1
+acteurs 8250 acteur-libellule:1:100:54:1 acteur-rond:1:70:68:0 acteur-oiseau:2:-5:14:0 acteur-rond:4:60:66:0 acteur-rond:3:70:68:0 acteur-rond:2:80:64:0 acteur-poisson:2:98:59:0
+image 8250 2476949709
+pilou 8375 18 78 64 0 1
+acteurs 8375 acteur-libellule:1:92:55:1 acteur-rond:2:70:68:0 acteur-oiseau:3:-1:14:0 acteur-rond:4:60:66:0 acteur-rond:3:70:68:0 acteur-rond:2:80:64:0 acteur-plouf:0:100:62:0
+image 8375 3510264408
+pilou 8500 18 78 40 0 1
+acteurs 8500 acteur-libellule:0:88:56:0 acteur-rond:2:70:68:0 acteur-oiseau:0:3:13:0 acteur-rond:4:70:68:0 acteur-rond:3:80:64:0 acteur-plouf:2:100:62:0
+image 8500 2193788406
+pilou 8625 18 78 3 0 1
+acteurs 8625 acteur-libellule:0:88:57:0 acteur-rond:2:70:68:0 acteur-oiseau:1:6:13:0 acteur-rond:4:70:68:0 acteur-rond:3:80:64:0 acteur-plouf:3:100:62:0
+image 8625 3120067140
+pilou 8750 18 78 3 0 1
+acteurs 8750 acteur-libellule:1:88:57:0 acteur-rond:3:70:68:0 acteur-oiseau:2:10:13:0 acteur-rond:4:80:64:0
+image 8750 1869797364
+pilou 8875 18 78 0 0 1
+acteurs 8875 acteur-libellule:1:88:57:0 acteur-rond:3:70:68:0 acteur-oiseau:3:14:13:0 acteur-rond:4:80:64:0
+image 8875 3200908902
+pilou 9000 18 78 74 0 1
+acteurs 9000 acteur-libellule:0:88:57:0 acteur-rond:4:70:68:0 acteur-rond:0:125:72:0 acteur-oiseau:0:18:13:0 acteur-eclats:0:18:54:0
+image 9000 2814792839
+pilou 9125 18 78 75 0 1
+acteurs 9125 acteur-libellule:0:88:57:0 acteur-rond:4:70:68:0 acteur-rond:0:125:72:0 acteur-oiseau:1:21:13:0 acteur-eclats:1:18:54:0
+image 9125 2012062551
+pilou 9250 18 78 76 0 1
+acteurs 9250 acteur-libellule:1:88:57:0 acteur-rond:1:125:72:0 acteur-oiseau:2:25:13:0 acteur-eclats:3:18:54:0
+image 9250 488173406
+pilou 9375 18 78 77 0 1
+acteurs 9375 acteur-libellule:1:88:57:0 acteur-rond:1:125:72:0 acteur-oiseau:2:29:13:0
+image 9375 3393039381
+pilou 9500 18 78 79 0 1
+acteurs 9500 acteur-libellule:0:88:57:0 acteur-rond:2:125:72:0 acteur-oiseau:3:33:13:0
+image 9500 2344695422
+pilou 9625 18 78 80 0 1
+acteurs 9625 acteur-libellule:0:88:58:0 acteur-rond:2:125:72:0 acteur-oiseau:0:36:14:0
+image 9625 59468960
+pilou 9750 18 78 81 0 1
+acteurs 9750 acteur-libellule:1:88:58:0 acteur-rond:3:125:72:0 acteur-oiseau:1:40:14:0
+image 9750 710170737
+pilou 9875 18 78 0 0 1
+acteurs 9875 acteur-libellule:1:88:56:0 acteur-rond:3:125:72:0 acteur-oiseau:2:44:14:0
+image 9875 133730158
+pilou 10000 18 78 63 0 1
+acteurs 10000 acteur-libellule:0:89:51:0 acteur-rond:3:125:72:0 acteur-oiseau:3:48:14:0
+image 10000 3663400606
+pilou 10125 18 78 63 0 1
+acteurs 10125 acteur-libellule:0:90:48:0 acteur-rond:4:125:72:0 acteur-oiseau:0:51:14:0
+image 10125 4177685996
+pilou 10250 18 78 63 0 1
+acteurs 10250 acteur-libellule:1:91:46:0 acteur-rond:4:125:72:0 acteur-oiseau:1:55:14:0
+image 10250 2253972912
+pilou 10375 18 78 63 0 1
+acteurs 10375 acteur-libellule:1:91:46:0 acteur-oiseau:2:59:14:0
+image 10375 2284980692
+pilou 10500 18 78 63 0 1
+acteurs 10500 acteur-libellule:0:91:46:0 acteur-rond:0:70:68:0 acteur-oiseau:3:63:14:0
+image 10500 4113923982
+pilou 10625 18 78 63 0 1
+acteurs 10625 acteur-libellule:0:91:46:0 acteur-rond:0:70:68:0 acteur-oiseau:3:66:14:0
+image 10625 1701365656
+pilou 10750 18 78 63 0 1
+acteurs 10750 acteur-libellule:1:91:46:0 acteur-rond:1:70:68:0 acteur-oiseau:0:70:14:0
+image 10750 2307467053
+pilou 10875 18 78 63 0 1
+acteurs 10875 acteur-libellule:1:91:45:0 acteur-rond:1:70:68:0 acteur-oiseau:1:74:14:0
+image 10875 1866464813
+pilou 11000 18 78 63 0 1
+acteurs 11000 acteur-libellule:0:91:45:0 acteur-rond:2:70:68:0 acteur-oiseau:2:78:14:0
+image 11000 1244891018
+scenario mare-recit prologue mare orange completes 1
+evenement 0 humeur peur 0
+evenement 500 parle 3200 0
+evenement 4000 humeur joie 0
+evenement 6000 depart 1 0
+pilou 0 18 78 64 0 1
+acteurs 0 acteur-libellule:0:89:54:0 acteur-rond:0:70:68:0 acteur-rond:4:125:72:0
+image 0 1499318242
+pilou 250 18 78 64 0 1
+acteurs 250 acteur-libellule:1:89:54:0 acteur-rond:0:70:68:0
+pilou 500 18 78 82 0 1
+acteurs 500 acteur-libellule:0:89:54:0 acteur-rond:1:70:68:0
+pilou 750 18 78 84 0 1
+acteurs 750 acteur-libellule:1:89:55:0 acteur-rond:2:70:68:0
+pilou 1000 18 78 82 0 1
+acteurs 1000 acteur-libellule:0:89:55:0 acteur-rond:3:70:68:0
+image 1000 506248981
+pilou 1250 18 78 84 0 1
+acteurs 1250 acteur-libellule:1:89:55:0 acteur-rond:4:70:68:0
+pilou 1500 18 78 83 0 1
+acteurs 1500 acteur-libellule:0:101:51:0
+pilou 1750 18 78 85 0 1
+acteurs 1750 acteur-libellule:1:111:47:1
+pilou 2000 18 78 83 0 1
+acteurs 2000 acteur-libellule:0:111:46:1
+image 2000 4110453929
+pilou 2250 18 78 85 0 1
+acteurs 2250 acteur-libellule:1:111:46:1 acteur-rond:0:125:72:0
+pilou 2500 18 78 84 0 1
+acteurs 2500 acteur-libellule:0:111:46:1 acteur-rond:1:125:72:0
+pilou 2750 18 78 82 0 1
+acteurs 2750 acteur-libellule:1:111:46:1 acteur-rond:0:70:68:0 acteur-rond:2:125:72:0
+pilou 3000 18 78 84 0 1
+acteurs 3000 acteur-libellule:0:110:45:1 acteur-rond:1:70:68:0 acteur-rond:3:125:72:0
+image 3000 409844972
+pilou 3250 18 78 64 0 1
+acteurs 3250 acteur-libellule:1:96:51:1 acteur-rond:2:70:68:0 acteur-rond:4:125:72:0
+pilou 3500 18 78 64 0 1
+acteurs 3500 acteur-libellule:0:91:54:1 acteur-rond:3:70:68:0
+pilou 3750 18 78 64 0 1
+acteurs 3750 acteur-libellule:1:91:54:1 acteur-rond:4:70:68:0
+pilou 4000 18 78 49 0 1
+acteurs 4000 acteur-libellule:0:91:54:1
+image 4000 1133223644
+pilou 4250 18 78 52 0 1
+acteurs 4250 acteur-libellule:1:91:55:1
+pilou 4500 18 78 55 0 1
+acteurs 4500 acteur-libellule:0:91:55:1
+pilou 4750 18 78 58 0 1
+acteurs 4750 acteur-libellule:1:85:55:1
+pilou 5000 18 78 64 0 1
+acteurs 5000 acteur-libellule:0:66:52:1
+image 5000 440794505
+pilou 5250 18 78 64 0 1
+acteurs 5250 acteur-libellule:1:61:52:0 acteur-rond:0:70:68:0
+pilou 5500 18 78 64 0 1
+acteurs 5500 acteur-libellule:0:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0
+pilou 5750 18 78 64 0 1
+acteurs 5750 acteur-libellule:1:61:52:0 acteur-rond:1:70:68:0 acteur-rond:0:125:72:0
+pilou 6000 18 78 41 0 1
+acteurs 6000 acteur-libellule:0:61:52:0 acteur-rond:2:70:68:0 acteur-rond:1:125:72:0 acteur-poisson:0:112:68:0
+image 6000 3476909344
+pilou 6250 24 78 44 0 1
+acteurs 6250 acteur-libellule:1:61:52:0 acteur-rond:3:70:68:0 acteur-rond:2:125:72:0 acteur-poisson:0:119:57:0
+pilou 6500 30 78 47 0 1
+acteurs 6500 acteur-libellule:0:76:51:0 acteur-rond:4:70:68:0 acteur-rond:3:125:72:0 acteur-poisson:2:126:59:0
+pilou 6750 36 78 42 0 1
+acteurs 6750 acteur-libellule:1:108:52:0 acteur-rond:4:125:72:0
+pilou 7000 42 78 45 0 1
+acteurs 7000 acteur-libellule:0:111:53:1
+image 7000 2144075004
+pilou 7250 48 78 48 0 1
+acteurs 7250 acteur-libellule:1:111:53:1
+pilou 7500 54 78 43 0 1
+acteurs 7500 acteur-libellule:0:111:52:1
+pilou 7750 60 78 46 0 1
+acteurs 7750 acteur-libellule:1:111:52:1
+pilou 8000 66 78 41 0 1
+acteurs 8000 acteur-libellule:0:111:52:1 acteur-rond:0:70:68:0 acteur-oiseau:1:-12:14:0
+image 8000 3424412218
+pilou 8250 72 78 44 0 1
+acteurs 8250 acteur-libellule:1:100:54:1 acteur-rond:1:70:68:0 acteur-oiseau:2:-5:14:0
+pilou 8500 78 78 47 0 1
+acteurs 8500 acteur-libellule:0:88:56:0 acteur-rond:2:70:68:0 acteur-oiseau:0:3:13:0
+pilou 8750 84 78 42 0 1
+acteurs 8750 acteur-libellule:1:88:57:0 acteur-rond:3:70:68:0 acteur-oiseau:2:10:13:0
+pilou 9000 90 78 45 0 1
+acteurs 9000 acteur-libellule:0:88:57:0 acteur-rond:4:70:68:0 acteur-rond:0:125:72:0 acteur-oiseau:0:18:13:0
+image 9000 4060722260
+pilou 9250 96 78 48 0 1
+acteurs 9250 acteur-libellule:1:88:57:0 acteur-rond:1:125:72:0 acteur-oiseau:2:25:13:0
+pilou 9500 102 78 43 0 1
+acteurs 9500 acteur-libellule:0:88:57:0 acteur-rond:2:125:72:0 acteur-oiseau:3:33:13:0
+pilou 9750 108 78 46 0 1
+acteurs 9750 acteur-libellule:1:88:58:0 acteur-rond:3:125:72:0 acteur-oiseau:1:40:14:0
+pilou 10000 114 78 41 0 1
+acteurs 10000 acteur-libellule:0:89:51:0 acteur-rond:3:125:72:0 acteur-oiseau:3:48:14:0
+image 10000 3490053993
+pilou 10250 120 78 44 0 1
+acteurs 10250 acteur-libellule:1:91:46:0 acteur-rond:4:125:72:0 acteur-oiseau:1:55:14:0
+pilou 10500 126 78 47 0 1
+acteurs 10500 acteur-libellule:0:91:46:0 acteur-rond:0:70:68:0 acteur-oiseau:3:63:14:0
+pilou 10750 132 78 42 0 1
+acteurs 10750 acteur-libellule:1:91:46:0 acteur-rond:1:70:68:0 acteur-oiseau:0:70:14:0
+pilou 11000 138 78 45 0 1
+acteurs 11000 acteur-libellule:0:91:45:0 acteur-rond:2:70:68:0 acteur-oiseau:2:78:14:0
+image 11000 1266288433
+pilou 11250 144 78 48 0 1
+acteurs 11250 acteur-libellule:1:91:45:0 acteur-rond:3:70:68:0 acteur-oiseau:0:85:15:0
+pilou 11500 150 78 43 0 1
+acteurs 11500 acteur-libellule:0:93:45:0 acteur-rond:3:70:68:0 acteur-oiseau:2:93:15:0
+pilou 11750 156 78 46 0 1
+acteurs 11750 acteur-libellule:1:115:52:0 acteur-rond:4:70:68:0 acteur-oiseau:3:100:15:0
+pilou 12000 162 78 41 0 1
+acteurs 12000 acteur-libellule:0:123:54:0 acteur-oiseau:1:108:15:0
+image 12000 4294569498
+pilou 12250 168 78 44 0 1
+acteurs 12250 acteur-libellule:1:123:54:0 acteur-oiseau:3:115:14:0
+pilou 12500 174 78 47 0 1
+acteurs 12500 acteur-libellule:0:123:54:0 acteur-rond:0:125:72:0 acteur-oiseau:1:123:14:0
+pilou 12750 180 78 42 0 1
+acteurs 12750 acteur-libellule:1:123:54:0 acteur-rond:1:125:72:0 acteur-oiseau:3:130:14:0
+pilou 13000 186 78 45 0 1
+acteurs 13000 acteur-libellule:0:123:54:0 acteur-rond:0:70:68:0 acteur-rond:2:125:72:0 acteur-oiseau:0:138:14:0
+image 13000 3279862076
+pilou 13250 192 78 48 0 1
+acteurs 13250 acteur-libellule:1:123:52:0 acteur-rond:0:70:68:0 acteur-rond:3:125:72:0 acteur-oiseau:2:145:14:0
+pilou 13500 198 78 43 0 1
+acteurs 13500 acteur-libellule:0:125:44:0 acteur-rond:1:70:68:0 acteur-rond:4:125:72:0 acteur-oiseau:0:153:14:0
+pilou 13750 204 78 46 0 1
+acteurs 13750 acteur-libellule:1:126:41:0 acteur-rond:2:70:68:0 acteur-oiseau:2:160:13:0
+pilou 14000 206 78 4 0 0
+acteurs 14000 acteur-libellule:0:126:42:0 acteur-rond:3:70:68:0 acteur-oiseau:0:168:13:0
+image 14000 2401462593
+pilou 14250 206 78 4 0 0
+acteurs 14250 acteur-libellule:1:126:42:0 acteur-rond:4:70:68:0 acteur-oiseau:1:175:13:0
+pilou 14500 206 78 4 0 0
+acteurs 14500 acteur-libellule:0:126:42:0 acteur-oiseau:3:183:13:0
+pilou 14750 206 78 4 0 0
+acteurs 14750 acteur-libellule:1:126:42:0 acteur-oiseau:1:190:14:0
+pilou 15000 206 78 4 0 0
+acteurs 15000 acteur-libellule:0:132:44:0 acteur-oiseau:3:198:14:0
+image 15000 2161434149
+pilou 15250 206 78 4 0 0
+acteurs 15250 acteur-libellule:1:145:48:0
+pilou 15500 206 78 4 0 0
+acteurs 15500 acteur-libellule:0:146:48:1
+pilou 15750 206 78 4 0 0
+acteurs 15750 acteur-libellule:1:146:48:1 acteur-rond:0:70:68:0 acteur-rond:0:125:72:0
+pilou 16000 206 78 4 0 0
+acteurs 16000 acteur-libellule:0:146:48:1 acteur-rond:1:70:68:0 acteur-rond:1:125:72:0
+image 16000 289263402
+scenario seuil-traverse prologue seuil bleu completes 0
+evenement 0 entree 40 0
+evenement 900 parle 4000 0
+evenement 1500 parle 1500 0
+evenement 2600 depart -1 0
+pilou 0 40 76 41 1 1
+acteurs 0 acteur-papillon:0:17:53:0 acteur-abeille:0:27:48:0 acteur-oiseau:0:84:14:0
+image 0 4206255555
+pilou 200 36 76 43 1 1
+acteurs 200 acteur-papillon:1:17:53:0 acteur-abeille:1:27:48:0 acteur-oiseau:1:88:14:0
+pilou 400 31 76 45 1 1
+acteurs 400 acteur-papillon:3:17:53:0 acteur-abeille:0:27:48:0 acteur-oiseau:2:93:14:0
+pilou 600 30 76 2 0 1
+acteurs 600 acteur-papillon:1:17:54:0 acteur-abeille:0:27:49:0 acteur-oiseau:0:98:14:0
+pilou 800 30 76 3 0 1
+acteurs 800 acteur-papillon:2:17:54:0 acteur-abeille:1:27:49:0 acteur-oiseau:1:103:15:0
+pilou 1000 30 76 82 0 1
+acteurs 1000 acteur-papillon:0:17:54:0 acteur-abeille:0:27:49:0 acteur-oiseau:3:108:15:0
+image 1000 2803733440
+pilou 1200 30 76 84 0 1
+acteurs 1200 acteur-papillon:2:17:54:0 acteur-abeille:0:27:49:0 acteur-oiseau:0:112:15:0
+pilou 1400 30 76 82 0 1
+acteurs 1400 acteur-papillon:3:21:51:0 acteur-abeille:1:27:50:0 acteur-oiseau:2:117:15:0
+pilou 1600 30 76 3 0 1
+acteurs 1600 acteur-papillon:1:29:46:0 acteur-abeille:0:27:53:0 acteur-oiseau:3:122:15:0
+pilou 1800 30 76 0 0 1
+acteurs 1800 acteur-papillon:3:32:44:1 acteur-abeille:0:27:54:0 acteur-oiseau:0:127:15:0
+pilou 2000 30 76 1 0 1
+acteurs 2000 acteur-papillon:0:32:43:1 acteur-abeille:1:27:53:0 acteur-oiseau:2:132:14:0
+image 2000 3335964421
+pilou 2200 30 76 2 0 1
+acteurs 2200 acteur-papillon:2:32:43:1 acteur-abeille:0:27:53:0 acteur-oiseau:3:136:14:0
+pilou 2400 30 76 2 0 1
+acteurs 2400 acteur-papillon:0:32:43:1 acteur-abeille:0:27:53:0 acteur-oiseau:1:141:14:0
+pilou 2600 30 76 41 1 1
+acteurs 2600 acteur-papillon:1:32:43:1 acteur-abeille:1:27:53:0 acteur-oiseau:2:146:14:0
+pilou 2800 26 76 43 1 1
+acteurs 2800 acteur-papillon:3:32:42:1 acteur-abeille:0:27:52:0 acteur-oiseau:0:151:14:0
+pilou 3000 21 76 45 1 1
+acteurs 3000 acteur-papillon:1:32:42:1 acteur-abeille:0:27:52:0 acteur-oiseau:1:156:14:0
+image 3000 1086863046
+pilou 3200 16 76 48 1 1
+acteurs 3200 acteur-papillon:2:29:45:1 acteur-abeille:1:28:51:0 acteur-oiseau:2:160:14:0
+pilou 3400 11 76 42 1 1
+acteurs 3400 acteur-papillon:0:26:48:0 acteur-abeille:0:30:50:0 acteur-oiseau:0:165:13:0
+pilou 3600 6 76 45 1 1
+acteurs 3600 acteur-papillon:2:26:48:0 acteur-abeille:0:30:50:0 acteur-oiseau:1:170:13:0
+pilou 3800 2 76 47 1 1
+acteurs 3800 acteur-papillon:3:26:48:0 acteur-abeille:1:30:50:0 acteur-oiseau:3:175:13:0
+pilou 4000 -3 76 41 1 1
+acteurs 4000 acteur-papillon:1:26:48:0 acteur-abeille:0:30:50:0 acteur-oiseau:0:180:13:0
+image 4000 1364451328
+pilou 4200 -8 76 44 1 1
+acteurs 4200 acteur-papillon:3:26:49:0 acteur-abeille:0:30:51:0 acteur-oiseau:2:184:13:0
+pilou 4400 -13 76 46 1 1
+acteurs 4400 acteur-papillon:0:26:49:0 acteur-abeille:1:30:51:0 acteur-oiseau:3:189:13:0
+pilou 4600 -14 76 0 0 0
+acteurs 4600 acteur-papillon:2:26:49:0 acteur-abeille:0:30:51:0 acteur-oiseau:0:194:14:0
+pilou 4800 -14 76 0 0 0
+acteurs 4800 acteur-papillon:0:26:50:0 acteur-abeille:0:30:49:0 acteur-oiseau:2:199:14:0
+pilou 5000 -14 76 0 0 0
+acteurs 5000 acteur-papillon:1:28:52:0 acteur-abeille:1:30:46:0 acteur-oiseau:3:204:14:0
+image 5000 3224559550
+pilou 5200 -14 76 0 0 0
+acteurs 5200 acteur-papillon:3:29:54:1 acteur-abeille:0:30:45:1
+pilou 5400 -14 76 0 0 0
+acteurs 5400 acteur-papillon:1:29:54:1 acteur-abeille:0:30:45:1
+pilou 5600 -14 76 0 0 0
+acteurs 5600 acteur-papillon:2:29:54:1 acteur-abeille:1:30:45:1
+pilou 5800 -14 76 0 0 0
+acteurs 5800 acteur-papillon:0:29:54:1 acteur-abeille:0:30:45:1
+pilou 6000 -14 76 0 0 0
+acteurs 6000 acteur-papillon:2:29:54:1 acteur-abeille:0:30:45:1
+image 6000 4152197082
+scenario mare-reduites prologue mare bleu reduites 0
+evenement 0 entree 0 0
+evenement 2000 clic 24 70
+pilou 0 18 78 0 0 1
+acteurs 0 -
+image 0 287368121
+pilou 1000 18 78 0 0 1
+acteurs 1000 -
+image 1000 287368121
+pilou 4150 18 78 40 0 1
+acteurs 4150 -
+pilou 4299 18 78 40 0 1
+acteurs 4299 -
+pilou 8000 18 78 0 0 1
+acteurs 8000 -
+image 8000 287368121
+scenario mare-aucune prologue mare bleu aucune 0
+evenement 0 entree 0 0
+pilou 0 18 78 0 0 1
+acteurs 0 -
+image 0 287368121
+pilou 4200 18 78 0 0 1
+acteurs 4200 -
+pilou 9000 18 78 0 0 1
+acteurs 9000 -
+image 9000 287368121
+scenario jardin-vie prologue jardin bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 78 41 0 1
+acteurs 0 acteur-papillon:0:121:41:1 acteur-oiseau:0:144:11:0 acteur-abeille:0:122:58:1
+image 0 168479468
+pilou 500 -2 78 47 0 1
+acteurs 500 acteur-papillon:0:121:41:1 acteur-oiseau:3:157:11:0 acteur-abeille:0:122:58:1
+pilou 1000 10 78 45 0 1
+acteurs 1000 acteur-papillon:0:121:42:1 acteur-oiseau:3:170:12:0 acteur-abeille:0:122:59:1
+image 1000 186880391
+pilou 1500 22 78 43 0 1
+acteurs 1500 acteur-papillon:0:97:43:1 acteur-oiseau:2:183:12:0 acteur-abeille:1:118:61:1
+pilou 2000 34 78 41 0 1
+acteurs 2000 acteur-papillon:0:79:44:0 acteur-oiseau:2:196:11:0 acteur-abeille:1:114:63:1
+image 2000 175068533
+pilou 2500 40 78 3 0 1
+acteurs 2500 acteur-papillon:0:79:44:0 acteur-abeille:1:114:63:1
+pilou 3000 40 78 1 0 1
+acteurs 3000 acteur-papillon:1:79:43:0 acteur-abeille:0:113:62:1
+image 3000 2636074321
+pilou 3500 40 78 3 0 1
+acteurs 3500 acteur-papillon:1:88:36:0 acteur-abeille:0:102:52:0
+pilou 4000 40 78 2 0 1
+acteurs 4000 acteur-papillon:1:88:36:0 acteur-abeille:0:102:52:0
+image 4000 3237436014
+pilou 4500 40 78 0 0 1
+acteurs 4500 acteur-papillon:1:88:37:0 acteur-abeille:1:102:53:0
+pilou 5000 40 78 2 0 1
+acteurs 5000 acteur-papillon:1:131:34:0 acteur-abeille:1:137:58:0
+image 5000 2315935602
+pilou 5500 40 78 1 0 1
+acteurs 5500 acteur-papillon:1:140:34:1 acteur-abeille:1:144:61:1
+pilou 6000 40 78 3 0 1
+acteurs 6000 acteur-papillon:2:140:34:1 acteur-abeille:0:144:61:1
+image 6000 1138492179
+pilou 6500 40 78 1 0 1
+acteurs 6500 acteur-papillon:2:119:38:1 acteur-abeille:0:143:60:1
+pilou 7000 40 78 3 0 1
+acteurs 7000 acteur-papillon:2:73:50:0 acteur-abeille:0:138:63:1
+image 7000 2678299732
+pilou 7500 40 78 2 0 1
+acteurs 7500 acteur-papillon:2:73:49:0 acteur-abeille:1:138:62:1
+pilou 8000 40 78 0 0 1
+acteurs 8000 acteur-papillon:2:73:49:0 acteur-abeille:1:138:62:1
+image 8000 3096576175
+pilou 8500 40 78 40 0 1
+acteurs 8500 acteur-papillon:2:105:48:0 acteur-abeille:1:124:54:1
+pilou 9000 40 78 0 0 1
+acteurs 9000 acteur-papillon:3:105:49:0 acteur-abeille:0:124:55:1
+image 9000 2024206061
+pilou 9500 40 78 3 0 1
+acteurs 9500 acteur-papillon:3:105:49:0 acteur-abeille:0:124:55:1
+pilou 10000 40 78 63 0 1
+acteurs 10000 acteur-papillon:3:115:46:0 acteur-abeille:0:119:56:1
+image 10000 850184477
+pilou 10500 40 78 63 0 1
+acteurs 10500 acteur-papillon:3:123:43:1 acteur-abeille:1:114:55:0
+pilou 11000 40 78 63 0 1
+acteurs 11000 acteur-papillon:3:123:42:1 acteur-oiseau:2:-12:19:0 acteur-abeille:1:114:54:0
+image 11000 1803378178
+pilou 11500 40 78 0 0 1
+acteurs 11500 acteur-papillon:3:123:42:1 acteur-oiseau:2:1:20:0 acteur-abeille:1:116:54:0
+pilou 12000 40 78 2 0 1
+acteurs 12000 acteur-papillon:0:116:31:1 acteur-oiseau:1:14:20:0 acteur-abeille:0:139:56:1
+image 12000 684028081
+pilou 12500 40 78 0 0 1
+acteurs 12500 acteur-papillon:0:116:31:1 acteur-oiseau:1:27:19:0 acteur-abeille:0:139:56:1
+pilou 13000 40 78 3 0 1
+acteurs 13000 acteur-papillon:0:116:31:1 acteur-oiseau:0:40:19:0 acteur-abeille:0:139:56:1
+image 13000 3336130712
+pilou 13500 40 78 1 0 1
+acteurs 13500 acteur-papillon:0:84:39:1 acteur-oiseau:0:53:19:0 acteur-abeille:1:138:59:1
+pilou 14000 40 78 3 0 1
+acteurs 14000 acteur-papillon:0:78:42:0 acteur-oiseau:0:66:18:0 acteur-abeille:1:137:61:1
+image 14000 2103472886
+pilou 14500 40 78 1 0 1
+acteurs 14500 acteur-papillon:0:78:42:0 acteur-oiseau:3:79:18:0 acteur-abeille:1:137:61:1
+pilou 15000 40 78 0 0 1
+acteurs 15000 acteur-papillon:1:106:44:0 acteur-oiseau:3:92:19:0 acteur-abeille:0:137:61:1
+image 15000 113710306
+pilou 15500 40 78 2 0 1
+acteurs 15500 acteur-papillon:1:169:50:1 acteur-oiseau:2:105:19:0 acteur-abeille:0:135:63:0
+pilou 16000 40 78 0 0 1
+acteurs 16000 acteur-papillon:1:169:50:1 acteur-oiseau:2:118:19:0 acteur-abeille:0:135:63:0
+image 16000 2853711
+pilou 16500 40 78 3 0 1
+acteurs 16500 acteur-papillon:1:169:49:1 acteur-oiseau:1:131:20:0 acteur-abeille:1:135:62:0
+pilou 17000 40 78 1 0 1
+acteurs 17000 acteur-papillon:1:139:55:1 acteur-oiseau:1:144:20:0 acteur-abeille:1:138:64:1
+image 17000 2781386163
+pilou 17500 40 78 3 0 1
+acteurs 17500 acteur-papillon:1:139:56:1 acteur-oiseau:1:157:19:0 acteur-abeille:1:138:65:1
+pilou 18000 40 78 1 0 1
+acteurs 18000 acteur-papillon:2:139:56:1 acteur-oiseau:0:170:19:0 acteur-abeille:0:138:65:1
+image 18000 1804582992
+pilou 18500 40 78 0 0 1
+acteurs 18500 acteur-papillon:2:102:53:1 acteur-oiseau:0:183:19:0 acteur-abeille:0:118:64:1
+pilou 19000 40 78 2 0 1
+acteurs 19000 acteur-papillon:2:75:49:0 acteur-oiseau:3:196:18:0 acteur-abeille:0:104:61:1
+image 19000 871531880
+pilou 19500 40 78 0 0 1
+acteurs 19500 acteur-papillon:2:75:49:0 acteur-abeille:1:104:61:1
+pilou 20000 40 78 2 0 1
+acteurs 20000 acteur-papillon:2:78:48:0 acteur-abeille:1:104:60:1
+image 20000 309712292
+scenario pente-vie prologue pente bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 77 41 0 1
+acteurs 0 acteur-graine:0:158:34:0 acteur-graine:0:111:13:0 acteur-papillon:0:62:44:0
+image 0 712260713
+pilou 500 -2 77 47 0 1
+acteurs 500 acteur-graine:1:151:33:0 acteur-graine:1:105:11:0 acteur-papillon:0:62:44:0
+pilou 1000 10 76 45 0 1
+acteurs 1000 acteur-graine:1:145:31:0 acteur-graine:1:100:9:0 acteur-papillon:0:62:45:0
+image 1000 244766941
+pilou 1500 22 73 43 0 1
+acteurs 1500 acteur-graine:1:138:30:0 acteur-graine:1:95:7:0 acteur-papillon:0:80:37:0
+pilou 2000 34 69 1 0 1
+acteurs 2000 acteur-graine:0:131:28:0 acteur-graine:0:90:5:0 acteur-papillon:0:94:29:1
+image 2000 2806677901
+pilou 2500 34 69 3 0 1
+acteurs 2500 acteur-graine:0:124:27:0 acteur-graine:0:85:3:0 acteur-papillon:0:94:29:1
+pilou 3000 34 69 1 0 1
+acteurs 3000 acteur-graine:0:116:25:0 acteur-graine:0:80:1:0 acteur-papillon:1:92:29:1
+image 3000 1448124082
+pilou 3500 34 69 3 0 1
+acteurs 3500 acteur-graine:1:109:24:0 acteur-graine:1:75:-1:0 acteur-papillon:1:63:41:0
+pilou 4000 34 69 2 0 1
+acteurs 4000 acteur-graine:1:101:22:0 acteur-graine:1:69:-3:0 acteur-papillon:1:63:41:0
+image 4000 1822424358
+pilou 4500 34 69 0 0 1
+acteurs 4500 acteur-graine:1:94:21:0 acteur-graine:1:161:31:0 acteur-papillon:1:63:42:0
+pilou 5000 34 69 2 0 1
+acteurs 5000 acteur-graine:0:87:19:0 acteur-graine:0:156:29:0 acteur-papillon:1:108:40:0
+image 5000 4264322515
+pilou 5500 34 69 1 0 1
+acteurs 5500 acteur-graine:0:80:18:0 acteur-graine:0:151:27:0 acteur-papillon:1:117:40:1
+pilou 6000 34 69 3 0 1
+acteurs 6000 acteur-graine:0:74:16:0 acteur-graine:0:146:25:0 acteur-papillon:2:117:40:1
+image 6000 3457449515
+pilou 6500 34 69 1 0 1
+acteurs 6500 acteur-graine:1:67:15:0 acteur-graine:1:140:23:0 acteur-papillon:2:97:38:1
+pilou 7000 34 69 3 0 1
+acteurs 7000 acteur-graine:1:61:13:0 acteur-graine:1:135:21:0 acteur-papillon:2:52:33:0
+image 7000 650249740
+pilou 7500 34 69 2 0 1
+acteurs 7500 acteur-graine:1:54:12:0 acteur-graine:1:128:19:0 acteur-papillon:2:52:32:0
+pilou 8000 34 69 0 0 1
+acteurs 8000 acteur-graine:0:48:10:0 acteur-graine:0:123:17:0 acteur-papillon:2:52:32:0
+image 8000 2742922782
+pilou 8500 34 69 40 0 1
+acteurs 8500 acteur-graine:0:40:9:0 acteur-graine:0:116:15:0 acteur-papillon:2:112:40:1
+pilou 9000 34 69 0 0 1
+acteurs 9000 acteur-graine:0:158:34:0 acteur-graine:0:111:13:0 acteur-papillon:3:112:41:1
+image 9000 2149636516
+pilou 9500 34 69 3 0 1
+acteurs 9500 acteur-graine:1:151:33:0 acteur-graine:1:105:11:0 acteur-papillon:3:112:41:1
+pilou 10000 34 69 63 0 1
+acteurs 10000 acteur-graine:1:145:31:0 acteur-graine:1:100:9:0 acteur-papillon:3:98:40:1
+image 10000 2786383437
+pilou 10500 34 69 63 0 1
+acteurs 10500 acteur-graine:1:138:30:0 acteur-graine:1:95:7:0 acteur-papillon:3:87:37:0
+pilou 11000 34 69 63 0 1
+acteurs 11000 acteur-graine:0:131:28:0 acteur-graine:0:90:5:0 acteur-papillon:3:87:36:0
+image 11000 1829289743
+pilou 11500 34 69 0 0 1
+acteurs 11500 acteur-graine:0:124:27:0 acteur-graine:0:85:3:0 acteur-papillon:3:88:36:0
+pilou 12000 34 69 2 0 1
+acteurs 12000 acteur-graine:0:116:25:0 acteur-graine:0:80:1:0 acteur-papillon:0:108:28:0
+image 12000 3966984213
+pilou 12500 34 69 0 0 1
+acteurs 12500 acteur-graine:1:109:24:0 acteur-graine:1:75:-1:0 acteur-papillon:0:108:28:0
+pilou 13000 34 69 3 0 1
+acteurs 13000 acteur-graine:1:101:22:0 acteur-graine:1:69:-3:0 acteur-papillon:0:108:28:0
+image 13000 3032170671
+pilou 13500 34 69 1 0 1
+acteurs 13500 acteur-graine:1:94:21:0 acteur-graine:1:161:31:0 acteur-papillon:0:113:37:0
+pilou 14000 34 69 3 0 1
+acteurs 14000 acteur-graine:0:87:19:0 acteur-graine:0:156:29:0 acteur-papillon:0:115:40:1
+image 14000 3487051377
+pilou 14500 34 69 1 0 1
+acteurs 14500 acteur-graine:0:80:18:0 acteur-graine:0:151:27:0 acteur-papillon:0:115:40:1
+pilou 15000 34 69 0 0 1
+acteurs 15000 acteur-graine:0:74:16:0 acteur-graine:0:146:25:0 acteur-papillon:1:108:37:1
+image 15000 4270048920
+pilou 15500 34 69 2 0 1
+acteurs 15500 acteur-graine:1:67:15:0 acteur-graine:1:140:23:0 acteur-papillon:1:91:29:1
+pilou 16000 34 69 0 0 1
+acteurs 16000 acteur-graine:1:61:13:0 acteur-graine:1:135:21:0 acteur-papillon:1:91:29:1
+image 16000 650301686
+pilou 16500 34 69 3 0 1
+acteurs 16500 acteur-graine:1:54:12:0 acteur-graine:1:128:19:0 acteur-papillon:1:91:28:1
+pilou 17000 34 69 1 0 1
+acteurs 17000 acteur-graine:0:48:10:0 acteur-graine:0:123:17:0 acteur-papillon:1:74:22:1
+image 17000 2912093743
+pilou 17500 34 69 3 0 1
+acteurs 17500 acteur-graine:0:40:9:0 acteur-graine:0:116:15:0 acteur-papillon:1:74:23:1
+pilou 18000 34 69 1 0 1
+acteurs 18000 acteur-graine:0:158:34:0 acteur-graine:0:111:13:0 acteur-papillon:2:74:23:1
+image 18000 1980307658
+pilou 18500 34 69 0 0 1
+acteurs 18500 acteur-graine:1:151:33:0 acteur-graine:1:105:11:0 acteur-papillon:2:55:30:1
+pilou 19000 34 69 2 0 1
+acteurs 19000 acteur-graine:1:145:31:0 acteur-graine:1:100:9:0 acteur-papillon:2:41:35:0
+image 19000 1489298426
+pilou 19500 34 69 0 0 1
+acteurs 19500 acteur-graine:1:138:30:0 acteur-graine:1:95:7:0 acteur-papillon:2:41:35:0
+pilou 20000 34 69 2 0 1
+acteurs 20000 acteur-graine:0:131:28:0 acteur-graine:0:90:5:0 acteur-papillon:2:46:34:0
+image 20000 1177834306
+scenario pied-colline-vie prologue pied-colline bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 75 41 0 1
+acteurs 0 acteur-oiseau:0:44:7:0 acteur-oiseau:0:186:9:0 acteur-papillon:0:73:63:0
+image 0 1178964724
+pilou 500 -2 75 47 0 1
+acteurs 500 acteur-oiseau:3:58:7:0 acteur-oiseau:3:197:9:0 acteur-papillon:0:73:63:0
+pilou 1000 10 75 45 0 1
+acteurs 1000 acteur-oiseau:3:72:8:0 acteur-papillon:0:73:64:0
+image 1000 2628350960
+pilou 1500 22 75 43 0 1
+acteurs 1500 acteur-oiseau:2:86:8:0 acteur-papillon:0:80:59:0
+pilou 2000 34 75 41 0 1
+acteurs 2000 acteur-oiseau:2:100:7:0 acteur-papillon:0:85:54:1
+image 2000 3133147956
+pilou 2500 36 75 3 0 1
+acteurs 2500 acteur-oiseau:1:114:7:0 acteur-papillon:0:85:54:1
+pilou 3000 36 75 1 0 1
+acteurs 3000 acteur-oiseau:1:128:7:0 acteur-papillon:1:80:53:1
+image 3000 3192412191
+pilou 3500 36 75 3 0 1
+acteurs 3500 acteur-oiseau:1:142:6:0 acteur-papillon:1:27:57:0
+pilou 4000 36 75 2 0 1
+acteurs 4000 acteur-oiseau:0:156:6:0 acteur-papillon:1:27:57:0
+image 4000 1697947059
+pilou 4500 36 75 0 0 1
+acteurs 4500 acteur-oiseau:0:170:7:0 acteur-papillon:1:27:58:0
+pilou 5000 36 75 2 0 1
+acteurs 5000 acteur-oiseau:3:184:7:0 acteur-papillon:1:44:60:0
+image 5000 642277575
+pilou 5500 36 75 1 0 1
+acteurs 5500 acteur-oiseau:3:198:7:0 acteur-papillon:1:48:62:0
+pilou 6000 36 75 3 0 1
+acteurs 6000 acteur-oiseau:2:-12:18:0 acteur-papillon:2:48:62:0
+image 6000 3251161992
+pilou 6500 36 75 1 0 1
+acteurs 6500 acteur-oiseau:2:-1:18:0 acteur-papillon:2:48:58:0
+pilou 7000 36 75 3 0 1
+acteurs 7000 acteur-oiseau:2:10:18:0 acteur-papillon:2:48:50:0
+image 7000 2558759312
+pilou 7500 36 75 2 0 1
+acteurs 7500 acteur-oiseau:1:21:17:0 acteur-papillon:2:48:49:0
+pilou 8000 36 75 0 0 1
+acteurs 8000 acteur-oiseau:1:32:17:0 acteur-papillon:2:48:49:0
+image 8000 2862784796
+pilou 8500 36 75 40 0 1
+acteurs 8500 acteur-oiseau:0:43:16:0 acteur-papillon:2:72:60:0
+pilou 9000 36 75 0 0 1
+acteurs 9000 acteur-oiseau:0:54:16:0 acteur-papillon:3:72:61:0
+image 9000 3709286935
+pilou 9500 36 75 3 0 1
+acteurs 9500 acteur-oiseau:3:65:16:0 acteur-papillon:3:72:61:0
+pilou 10000 36 75 63 0 1
+acteurs 10000 acteur-oiseau:3:76:17:0 acteur-papillon:3:78:58:0
+image 10000 1028819874
+pilou 10500 36 75 63 0 1
+acteurs 10500 acteur-oiseau:3:87:17:0 acteur-papillon:3:83:54:0
+pilou 11000 36 75 63 0 1
+acteurs 11000 acteur-oiseau:2:98:17:0 acteur-papillon:3:83:53:0
+image 11000 339979114
+pilou 11500 36 75 0 0 1
+acteurs 11500 acteur-oiseau:2:109:18:0 acteur-papillon:3:83:53:0
+pilou 12000 36 75 2 0 1
+acteurs 12000 acteur-oiseau:1:120:18:0 acteur-papillon:0:87:51:1
+image 12000 2005200745
+pilou 12500 36 75 0 0 1
+acteurs 12500 acteur-oiseau:1:131:17:0 acteur-papillon:0:87:51:1
+pilou 13000 36 75 3 0 1
+acteurs 13000 acteur-oiseau:0:-12:15:0 acteur-oiseau:0:142:17:0 acteur-papillon:0:87:51:1
+image 13000 2883940324
+pilou 13500 36 75 1 0 1
+acteurs 13500 acteur-oiseau:0:2:15:0 acteur-oiseau:0:153:17:0 acteur-papillon:0:85:51:1
+pilou 14000 36 75 3 0 1
+acteurs 14000 acteur-oiseau:0:16:14:0 acteur-oiseau:0:164:16:0 acteur-papillon:0:84:51:1
+image 14000 4250258868
+pilou 14500 36 75 1 0 1
+acteurs 14500 acteur-oiseau:3:30:14:0 acteur-oiseau:3:175:16:0 acteur-papillon:0:84:51:1
+pilou 15000 36 75 0 0 1
+acteurs 15000 acteur-oiseau:3:44:15:0 acteur-oiseau:3:186:17:0 acteur-papillon:1:67:53:1
+image 15000 3477193406
+pilou 15500 36 75 2 0 1
+acteurs 15500 acteur-oiseau:2:58:15:0 acteur-oiseau:2:197:17:0 acteur-papillon:1:29:57:0
+pilou 16000 36 75 0 0 1
+acteurs 16000 acteur-oiseau:2:72:15:0 acteur-papillon:1:29:57:0
+image 16000 156890103
+pilou 16500 36 75 3 0 1
+acteurs 16500 acteur-oiseau:1:86:16:0 acteur-papillon:1:29:56:0
+pilou 17000 36 75 1 0 1
+acteurs 17000 acteur-oiseau:1:100:16:0 acteur-papillon:1:53:61:1
+image 17000 2481439788
+pilou 17500 36 75 3 0 1
+acteurs 17500 acteur-oiseau:1:114:15:0 acteur-papillon:1:53:62:1
+pilou 18000 36 75 1 0 1
+acteurs 18000 acteur-oiseau:0:128:15:0 acteur-papillon:2:53:62:1
+image 18000 2034321940
+pilou 18500 36 75 0 0 1
+acteurs 18500 acteur-oiseau:0:142:15:0 acteur-papillon:2:53:63:1
+pilou 19000 36 75 2 0 1
+acteurs 19000 acteur-oiseau:3:156:14:0 acteur-papillon:2:52:62:1
+image 19000 2988725201
+pilou 19500 36 75 0 0 1
+acteurs 19500 acteur-oiseau:3:170:14:0 acteur-papillon:2:52:62:1
+pilou 20000 36 75 2 0 1
+acteurs 20000 acteur-oiseau:2:184:15:0 acteur-papillon:2:51:61:1
+image 20000 3009693029
+scenario seuil-vie prologue seuil bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 76 41 0 1
+acteurs 0 acteur-papillon:0:17:53:0 acteur-abeille:0:27:48:0 acteur-oiseau:0:84:14:0
+image 0 385318324
+pilou 500 -2 76 47 0 1
+acteurs 500 acteur-papillon:0:17:53:0 acteur-abeille:0:27:48:0 acteur-oiseau:3:96:14:0
+pilou 1000 10 76 45 0 1
+acteurs 1000 acteur-papillon:0:17:54:0 acteur-abeille:0:27:49:0 acteur-oiseau:3:108:15:0
+image 1000 3932349327
+pilou 1500 22 76 43 0 1
+acteurs 1500 acteur-papillon:0:25:49:0 acteur-abeille:1:27:51:0 acteur-oiseau:2:120:15:0
+pilou 2000 30 76 1 0 1
+acteurs 2000 acteur-papillon:0:32:43:1 acteur-abeille:1:27:53:0 acteur-oiseau:2:132:14:0
+image 2000 3335964421
+pilou 2500 30 76 3 0 1
+acteurs 2500 acteur-papillon:0:32:43:1 acteur-abeille:1:27:53:0 acteur-oiseau:1:144:14:0
+pilou 3000 30 76 1 0 1
+acteurs 3000 acteur-papillon:1:32:42:1 acteur-abeille:0:27:52:0 acteur-oiseau:1:156:14:0
+image 3000 1595676974
+pilou 3500 30 76 3 0 1
+acteurs 3500 acteur-papillon:1:26:48:0 acteur-abeille:0:30:50:0 acteur-oiseau:1:168:13:0
+pilou 4000 30 76 2 0 1
+acteurs 4000 acteur-papillon:1:26:48:0 acteur-abeille:0:30:50:0 acteur-oiseau:0:180:13:0
+image 4000 1679880991
+pilou 4500 30 76 0 0 1
+acteurs 4500 acteur-papillon:1:26:49:0 acteur-abeille:1:30:51:0 acteur-oiseau:0:192:14:0
+pilou 5000 30 76 2 0 1
+acteurs 5000 acteur-papillon:1:28:52:0 acteur-abeille:1:30:46:0 acteur-oiseau:3:204:14:0
+image 5000 123152978
+pilou 5500 30 76 1 0 1
+acteurs 5500 acteur-papillon:1:29:54:1 acteur-abeille:1:30:45:1
+pilou 6000 30 76 3 0 1
+acteurs 6000 acteur-papillon:2:29:54:1 acteur-abeille:0:30:45:1
+image 6000 2129701717
+pilou 6500 30 76 1 0 1
+acteurs 6500 acteur-papillon:2:29:49:1 acteur-abeille:0:30:47:1
+pilou 7000 30 76 3 0 1
+acteurs 7000 acteur-papillon:2:27:38:1 acteur-abeille:0:28:55:1
+image 7000 1395894312
+pilou 7500 30 76 2 0 1
+acteurs 7500 acteur-papillon:2:27:37:1 acteur-abeille:1:28:54:1
+pilou 8000 30 76 0 0 1
+acteurs 8000 acteur-papillon:2:27:37:1 acteur-abeille:1:28:54:1
+image 8000 1263774998
+pilou 8500 30 76 40 0 1
+acteurs 8500 acteur-papillon:2:21:51:1 acteur-abeille:1:18:45:1
+pilou 9000 30 76 0 0 1
+acteurs 9000 acteur-papillon:3:21:52:1 acteur-abeille:0:18:46:1
+image 9000 4007347380
+pilou 9500 30 76 3 0 1
+acteurs 9500 acteur-papillon:3:21:52:1 acteur-abeille:0:18:46:1
+pilou 10000 30 76 63 0 1
+acteurs 10000 acteur-papillon:3:20:53:1 acteur-abeille:0:15:47:1
+image 10000 1581464924
+pilou 10500 30 76 63 0 1
+acteurs 10500 acteur-papillon:3:19:53:1 acteur-abeille:1:12:46:0
+pilou 11000 30 76 63 0 1
+acteurs 11000 acteur-papillon:3:19:52:1 acteur-abeille:1:12:45:0
+image 11000 1565859995
+pilou 11500 30 76 0 0 1
+acteurs 11500 acteur-papillon:3:19:51:1 acteur-abeille:1:12:45:0
+pilou 12000 30 76 2 0 1
+acteurs 12000 acteur-papillon:0:16:34:1 acteur-abeille:0:20:39:1
+image 12000 3636173271
+pilou 12500 30 76 0 0 1
+acteurs 12500 acteur-papillon:0:16:34:1 acteur-abeille:0:20:39:1
+pilou 13000 30 76 3 0 1
+acteurs 13000 acteur-papillon:0:16:34:1 acteur-abeille:0:20:39:1
+image 13000 3778004296
+pilou 13500 30 76 1 0 1
+acteurs 13500 acteur-papillon:0:13:41:1 acteur-abeille:1:14:44:1
+pilou 14000 30 76 3 0 1
+acteurs 14000 acteur-papillon:0:12:44:1 acteur-abeille:1:12:46:0
+image 14000 1486121320
+pilou 14500 30 76 1 0 1
+acteurs 14500 acteur-papillon:0:12:44:1 acteur-abeille:1:12:46:0
+pilou 15000 30 76 0 0 1
+acteurs 15000 acteur-papillon:1:12:43:1 acteur-abeille:0:14:46:0 acteur-oiseau:3:-12:27:0
+image 15000 3939319017
+pilou 15500 30 76 2 0 1
+acteurs 15500 acteur-papillon:1:11:38:0 acteur-abeille:0:20:46:0 acteur-oiseau:2:0:27:0
+pilou 16000 30 76 0 0 1
+acteurs 16000 acteur-papillon:1:11:38:0 acteur-abeille:0:20:46:0 acteur-oiseau:2:12:27:0
+image 16000 878292048
+pilou 16500 30 76 3 0 1
+acteurs 16500 acteur-papillon:1:11:37:0 acteur-abeille:1:20:45:0 acteur-oiseau:1:24:28:0
+pilou 17000 30 76 1 0 1
+acteurs 17000 acteur-papillon:1:33:42:1 acteur-abeille:1:21:49:0 acteur-oiseau:1:36:28:0
+image 17000 1641497805
+pilou 17500 30 76 3 0 1
+acteurs 17500 acteur-papillon:1:33:43:1 acteur-abeille:1:21:50:0 acteur-oiseau:1:48:27:0
+pilou 18000 30 76 1 0 1
+acteurs 18000 acteur-papillon:2:33:43:1 acteur-abeille:0:21:50:0 acteur-oiseau:0:60:27:0
+image 18000 3030023762
+pilou 18500 30 76 0 0 1
+acteurs 18500 acteur-papillon:2:31:43:1 acteur-abeille:0:22:46:0 acteur-oiseau:0:72:27:0
+pilou 19000 30 76 2 0 1
+acteurs 19000 acteur-papillon:2:29:42:1 acteur-abeille:0:24:42:1 acteur-oiseau:3:84:26:0
+image 19000 1066324030
+pilou 19500 30 76 0 0 1
+acteurs 19500 acteur-papillon:2:29:42:1 acteur-abeille:1:24:42:1 acteur-oiseau:3:96:26:0
+pilou 20000 30 76 2 0 1
+acteurs 20000 acteur-papillon:2:28:41:1 acteur-abeille:1:24:42:1 acteur-oiseau:2:108:27:0
+image 20000 682558142
+scenario sommet-vie prologue sommet bleu completes 0
+evenement 0 entree 0 0
+pilou 0 -14 78 41 0 1
+acteurs 0 acteur-feuille:0:36:54:0 acteur-oiseau:0:-12:13:0 acteur-oiseau:0:113:17:0
+image 0 2608657778
+pilou 500 -2 78 47 0 1
+acteurs 500 acteur-feuille:3:34:61:0 acteur-oiseau:3:-2:13:0 acteur-oiseau:3:125:17:0
+pilou 1000 10 78 45 0 1
+acteurs 1000 acteur-feuille:2:32:68:0 acteur-oiseau:3:8:14:0 acteur-oiseau:3:138:18:0
+image 1000 1375963498
+pilou 1500 22 78 43 0 1
+acteurs 1500 acteur-feuille:1:31:75:0 acteur-oiseau:2:18:14:0 acteur-oiseau:2:150:18:0
+pilou 2000 34 78 41 0 1
+acteurs 2000 acteur-feuille:1:31:82:0 acteur-feuille:0:44:24:0 acteur-oiseau:2:28:13:0 acteur-oiseau:2:163:17:0
+image 2000 765984052
+pilou 2500 46 78 47 0 1
+acteurs 2500 acteur-feuille:3:46:31:0 acteur-oiseau:1:38:13:0 acteur-oiseau:1:175:17:0
+pilou 3000 58 78 45 0 1
+acteurs 3000 acteur-feuille:2:47:38:0 acteur-oiseau:1:48:13:0 acteur-oiseau:1:188:17:0
+image 3000 3312272337
+pilou 3500 70 78 3 0 1
+acteurs 3500 acteur-feuille:1:47:45:0 acteur-oiseau:1:58:12:0 acteur-oiseau:1:200:16:0
+pilou 4000 70 78 2 0 1
+acteurs 4000 acteur-feuille:0:46:52:0 acteur-oiseau:0:68:12:0
+image 4000 953112896
+pilou 4500 70 78 0 0 1
+acteurs 4500 acteur-feuille:3:44:59:0 acteur-oiseau:0:78:13:0
+pilou 5000 70 78 2 0 1
+acteurs 5000 acteur-feuille:2:42:66:0 acteur-oiseau:3:88:13:0
+image 5000 3529183702
+pilou 5500 70 78 1 0 1
+acteurs 5500 acteur-feuille:1:41:73:0 acteur-oiseau:3:98:13:0
+pilou 6000 70 78 3 0 1
+acteurs 6000 acteur-feuille:0:34:26:0 acteur-feuille:1:41:80:0 acteur-oiseau:2:108:14:0
+image 6000 3758085352
+pilou 6500 70 78 1 0 1
+acteurs 6500 acteur-feuille:3:36:33:0 acteur-oiseau:2:118:14:0
+pilou 7000 70 78 3 0 1
+acteurs 7000 acteur-feuille:2:37:40:0 acteur-oiseau:2:128:14:0
+image 7000 1936970866
+pilou 7500 70 78 2 0 1
+acteurs 7500 acteur-feuille:1:37:47:0 acteur-oiseau:1:138:13:0
+pilou 8000 70 78 0 0 1
+acteurs 8000 acteur-feuille:0:36:54:0 acteur-oiseau:1:148:13:0
+image 8000 2174937806
+pilou 8500 70 78 40 0 1
+acteurs 8500 acteur-feuille:3:34:61:0 acteur-oiseau:0:158:12:0
+pilou 9000 70 78 0 0 1
+acteurs 9000 acteur-feuille:2:32:68:0 acteur-oiseau:0:168:12:0 acteur-oiseau:0:-12:26:0
+image 9000 2582996130
+pilou 9500 70 78 3 0 1
+acteurs 9500 acteur-feuille:1:31:75:0 acteur-oiseau:3:178:12:0 acteur-oiseau:3:0:26:0
+pilou 10000 70 78 63 0 1
+acteurs 10000 acteur-feuille:1:31:82:0 acteur-feuille:0:44:24:0 acteur-oiseau:3:188:13:0 acteur-oiseau:3:13:27:0
+image 10000 1375121870
+pilou 10500 70 78 63 0 1
+acteurs 10500 acteur-feuille:3:46:31:0 acteur-oiseau:3:198:13:0 acteur-oiseau:3:25:27:0
+pilou 11000 70 78 63 0 1
+acteurs 11000 acteur-feuille:2:47:38:0 acteur-oiseau:2:38:27:0
+image 11000 3324946603
+pilou 11500 70 78 0 0 1
+acteurs 11500 acteur-feuille:1:47:45:0 acteur-oiseau:2:50:28:0
+pilou 12000 70 78 2 0 1
+acteurs 12000 acteur-feuille:0:46:52:0 acteur-oiseau:1:63:28:0
+image 12000 3392410942
+pilou 12500 70 78 0 0 1
+acteurs 12500 acteur-feuille:3:44:59:0 acteur-oiseau:1:75:27:0
+pilou 13000 70 78 3 0 1
+acteurs 13000 acteur-feuille:2:42:66:0 acteur-oiseau:0:88:27:0
+image 13000 2465871539
+pilou 13500 70 78 1 0 1
+acteurs 13500 acteur-feuille:1:41:73:0 acteur-oiseau:0:100:27:0
+pilou 14000 70 78 3 0 1
+acteurs 14000 acteur-feuille:0:34:26:0 acteur-feuille:1:41:80:0 acteur-oiseau:0:-12:22:0 acteur-oiseau:0:113:26:0
+image 14000 3813969262
+pilou 14500 70 78 1 0 1
+acteurs 14500 acteur-feuille:3:36:33:0 acteur-oiseau:3:-2:22:0 acteur-oiseau:3:125:26:0
+pilou 15000 70 78 0 0 1
+acteurs 15000 acteur-feuille:2:37:40:0 acteur-oiseau:3:8:23:0 acteur-oiseau:3:138:27:0
+image 15000 754514658
+pilou 15500 70 78 2 0 1
+acteurs 15500 acteur-feuille:1:37:47:0 acteur-oiseau:2:18:23:0 acteur-oiseau:2:150:27:0
+pilou 16000 70 78 0 0 1
+acteurs 16000 acteur-feuille:0:36:54:0 acteur-oiseau:2:28:23:0 acteur-oiseau:2:163:27:0
+image 16000 838873832
+pilou 16500 70 78 3 0 1
+acteurs 16500 acteur-feuille:3:34:61:0 acteur-oiseau:1:38:24:0 acteur-oiseau:1:175:28:0
+pilou 17000 70 78 1 0 1
+acteurs 17000 acteur-feuille:2:32:68:0 acteur-oiseau:1:48:24:0 acteur-oiseau:1:188:28:0
+image 17000 479006650
+pilou 17500 70 78 3 0 1
+acteurs 17500 acteur-feuille:1:31:75:0 acteur-oiseau:1:58:23:0 acteur-oiseau:1:200:27:0
+pilou 18000 70 78 1 0 1
+acteurs 18000 acteur-feuille:1:31:82:0 acteur-feuille:0:44:24:0 acteur-oiseau:0:68:23:0
+image 18000 656736752
+pilou 18500 70 78 0 0 1
+acteurs 18500 acteur-feuille:3:46:31:0 acteur-oiseau:0:78:23:0
+pilou 19000 70 78 2 0 1
+acteurs 19000 acteur-feuille:2:47:38:0 acteur-oiseau:3:88:22:0
+image 19000 335402044
+pilou 19500 70 78 0 0 1
+acteurs 19500 acteur-feuille:1:47:45:0 acteur-oiseau:3:98:22:0
+pilou 20000 70 78 2 0 1
+acteurs 20000 acteur-feuille:0:46:52:0 acteur-oiseau:2:108:23:0
+image 20000 126555141

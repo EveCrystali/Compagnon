@@ -1,9 +1,9 @@
 # Animations des campagnes : valeurs de référence (outils/sprites/animations.py, écrites par reference.py).
 # Relues par AnimationsCampagneTests.cs (PC) et AnimationsTest.java (téléphone).
 niveau completes 1 completes
-niveau completes 0 aucune
+niveau completes 0 completes
 niveau reduites 1 reduites
-niveau reduites 0 aucune
+niveau reduites 0 reduites
 niveau aucune 1 aucune
 niveau aucune 0 aucune
 niveau inconnu 1 completes

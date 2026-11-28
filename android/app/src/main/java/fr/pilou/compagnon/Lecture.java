@@ -29,6 +29,13 @@ final class Lecture extends FrameLayout {
     private final FrameLayout tete;
     private final Aventure.Scene scene;
     private final PilouVue pilou;
+    /** La scène vivante (docs/SCENES.md) : décor entier, mini-Pilou, acteurs, touchers. Le décor fixe et PilouVue ne montrent
+     *  que le repli, pour un lieu sans dessin fin. */
+    private final TheatreVue theatre;
+    private static final int BANDEAU_DP = 48;
+    private String lieuTheatre = "";
+    /** Pilou est parti en route (attente, repos) : la scène montre le lieu sans lui jusqu'à son retour. */
+    private boolean enRoute;
     private final TextView numero, chapitre, lieu;
     private final View jauge, jaugeVide;
     private final ScrollView defil;
@@ -77,42 +84,50 @@ final class Lecture extends FrameLayout {
         scene = new Aventure.Scene(a);
         scene.plein(true);
         tete.addView(scene, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        pilou = new PilouVue(a, Aventure.pixelPour(a, 104), true);
+        pilou = new PilouVue(a, Aventure.pixelUnite(1), true);
         pilou.setContentDescription("Pilou");
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.START);
         lp.leftMargin = Ui.dp(a, 10);
         lp.bottomMargin = Ui.dp(a, 2);
         tete.addView(pilou, lp);
         pilou.setOnClickListener(v -> pilou.jouer("caresse", 1600));
+        // Par-dessus le repli : la scène du théâtre, sur toute la largeur. Un toucher y fait réagir la scène (jamais accélérer le texte).
+        theatre = new TheatreVue(a);
+        theatre.setVisibility(View.GONE);
+        theatre.setContentDescription("Scène : Pilou dans le lieu de l'aventure");
+        tete.addView(theatre, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        tete.setBackgroundColor(0xff0a0d1a);
 
+        // Le bandeau au-dessus de la scène : ‹ à gauche, chapitre et titre au milieu, ⋯ à droite. Rien de tout cela
+        // ne se pose sur le décor (il porte seulement le petit cartouche du lieu).
         LinearLayout barreHaut = Ui.rangee(a);
-        barreHaut.setGravity(Gravity.TOP);
+        barreHaut.setGravity(Gravity.CENTER_VERTICAL);
+        barreHaut.setBackgroundColor(0xff0a0d1a);
         TextView retour = bouton("‹", "Retour aux aventures");
         retour.setOnClickListener(v -> page.fermerLecture());
         barreHaut.addView(retour);
         LinearLayout titres = Ui.pile(a);
-        titres.setGravity(Gravity.CENTER_HORIZONTAL);
-        titres.setPadding(0, Ui.dp(a, 8), 0, 0);
+        titres.setGravity(Gravity.CENTER);
         numero = Ui.texte(a, "", Ui.T_ETIQUETTE, Vitrine.ARGENT_CLAIR, true);
         numero.setLetterSpacing(0.12f);
         numero.setGravity(Gravity.CENTER);
-        numero.setShadowLayer(Ui.dp(a, 3), 0, Ui.dp(a, 1), 0xcc000000);
+        numero.setSingleLine(true);
         titres.addView(numero, Ui.large());
-        chapitre = Ui.texte(a, "", 16, 0xffffffff, true);
+        chapitre = Ui.texte(a, "", 15, 0xffffffff, true);
         chapitre.setGravity(Gravity.CENTER);
-        chapitre.setMaxLines(2);
-        chapitre.setShadowLayer(Ui.dp(a, 4), 0, Ui.dp(a, 1), 0xdd000000);
+        chapitre.setSingleLine(true);
+        chapitre.setEllipsize(android.text.TextUtils.TruncateAt.END);
         titres.addView(chapitre, Ui.large());
         barreHaut.addView(titres, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         TextView menu = bouton("⋯", "Plus : carnet, mettre de côté");
         menu.setOnClickListener(v -> menu());
         barreHaut.addView(menu);
-        tete.addView(barreHaut, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP));
+        colonne.addView(barreHaut, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, BANDEAU_DP)));
 
         // Le personnage que le message fait parler ou décrit : au bord droit de la scène, au-dessus du lieu.
         perso = new ScenesAnimees.Portrait(a);
         perso.setVisibility(View.GONE);
-        LayoutParams lpp = new LayoutParams(Ui.dp(a, 96), Ui.dp(a, 96), Gravity.BOTTOM | Gravity.END);
+        LayoutParams lpp = new LayoutParams(64, 64, Gravity.BOTTOM | Gravity.END);
         lpp.rightMargin = Ui.dp(a, 14);
         lpp.bottomMargin = Ui.dp(a, 40);
         tete.addView(perso, lpp);
@@ -135,7 +150,15 @@ final class Lecture extends FrameLayout {
         colonne.addView(tete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(a, 184)));
 
         // ---- Le fil.
-        defil = new ScrollView(a);
+        // Un fondu sous la scène (bord haut seulement) : aucune ligne du fil n apparaît tranchée net par le bord de la scène.
+        defil = new ScrollView(a) {
+            @Override
+            protected float getBottomFadingEdgeStrength() {
+                return 0;
+            }
+        };
+        defil.setVerticalFadingEdgeEnabled(true);
+        defil.setFadingEdgeLength(Ui.dp(a, 40));
         defil.setVerticalScrollBarEnabled(false);
         defil.setClipToPadding(false);
         fil = Ui.pile(a);
@@ -181,20 +204,51 @@ final class Lecture extends FrameLayout {
             // colonne, scène comprise. On retire la scène, et on garde au fil au moins un bon tiers.
             if (MeasureSpec.getMode(hauteur) != MeasureSpec.UNSPECIFIED) {
                 ViewGroup.LayoutParams lp = scene.getLayoutParams();
-                int dispo = MeasureSpec.getSize(hauteur) - (lp != null && lp.height > 0 ? lp.height : 0);
+                int dispo = MeasureSpec.getSize(hauteur) - (lp != null && lp.height > 0 ? lp.height : 0) - Ui.dp(getContext(), BANDEAU_DP);
                 hauteur = MeasureSpec.makeMeasureSpec(Math.max(Ui.dp(getContext(), 120), dispo * 65 / 100), MeasureSpec.AT_MOST);
             }
             super.onMeasure(largeur, hauteur);
         }
     }
 
-    // La scène rapetisse un peu sur un petit écran (de 184 à 156 dp) : la place va au fil et aux options.
+    // UNE seule unité de pixel pour tout l'écran : k = le plus grand entier qui tient dans la largeur (au moins 1 ; réduit
+    // seulement si la scène dépasserait 42 % de la hauteur, en paysage). La scène fait exactement 192k × 80k ; le portrait
+    // (64 × 64 fin) 64k × 64k ; le mini-Pilou de repli k pixels d'écran par pixel fin. On ajuste la taille des vues, jamais
+    // l'échelle d'une couche.
+    private int unite = 1;
+
+    /** Pour les tests : l'unité de pixel de l'écran. */
+    int unite() {
+        return unite;
+    }
+
+    ScenesAnimees.Portrait portrait() {
+        return perso;
+    }
+
+    TheatreVue theatre() {
+        return theatre;
+    }
+
+    PilouVue pilouRepli() {
+        return pilou;
+    }
+
     @Override
     protected void onMeasure(int largeur, int hauteur) {
         if (MeasureSpec.getMode(hauteur) != MeasureSpec.UNSPECIFIED) {
-            int h = Math.max(Ui.dp(app, 156), Math.min(Ui.dp(app, 184), MeasureSpec.getSize(hauteur) * 32 / 100));
+            int k = Aventure.unite(MeasureSpec.getSize(largeur));
+            int kMax = MeasureSpec.getSize(hauteur) * 42 / 100 / Theatre.H;
+            k = Math.max(1, Math.min(k, kMax));
             ViewGroup.LayoutParams lp = tete.getLayoutParams();
-            if (lp != null && lp.height != h) lp.height = h;
+            if (lp != null && lp.height != k * Theatre.H) lp.height = k * Theatre.H;
+            if (k != unite) {
+                unite = k;
+                ViewGroup.LayoutParams lq = perso.getLayoutParams();
+                lq.width = lq.height = 64 * k;
+                perso.setLayoutParams(lq);
+                pilou.pixel(Aventure.pixelUnite(k));
+            }
         }
         super.onMeasure(largeur, hauteur);
     }
@@ -203,11 +257,11 @@ final class Lecture extends FrameLayout {
         TextView t = Ui.texte(app, signe, 24, 0xffffffff, true);
         t.setGravity(Gravity.CENTER);
         t.setContentDescription(description);
-        t.setBackground(Ui.touchable(app, Ui.arrondi(app, 0x66000000, 24, 0), 24));
-        LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(Ui.dp(app, 44), Ui.dp(app, 44));
-        l.setMargins(Ui.dp(app, 8), Ui.dp(app, 8), Ui.dp(app, 8), 0);
+        t.setBackground(Ui.touchable(app, Ui.arrondi(app, 0x33ffffff, 24, 0), 24));
+        LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(Ui.dp(app, 40), Ui.dp(app, 40));
+        l.setMargins(Ui.dp(app, 8), 0, Ui.dp(app, 8), 0);
         t.setLayoutParams(l);
-        t.setMinWidth(Ui.dp(app, 44));
+        t.setMinWidth(Ui.dp(app, 40));
         t.setPadding(0, 0, 0, Ui.dp(app, 3));
         return t;
     }
@@ -225,6 +279,8 @@ final class Lecture extends FrameLayout {
         vite = ScenesAnimees.texteInstantane(app);
         enCours = null;
         perso.montrer(null, "");
+        enRoute = false;
+        lieuTheatre = "";
         dockCle = chapitreVu = lieuVu = "";
         dernierT = 0;
         repriseVue = false;
@@ -252,8 +308,44 @@ final class Lecture extends FrameLayout {
         etat = e;
         entete();
         lireFil();
-        if (!ecrit && aEcrire.isEmpty()) majDock();
+        if (!ecrit && aEcrire.isEmpty()) {
+            majTheatre();
+            majDock();
+        }
         tic();
+    }
+
+    // ---- La scène vivante (mêmes moments qu'au PC : FenetreAventure.cs)
+
+    /** Montre le lieu (décor de la campagne) ; sans dessin fin, le repli (décor fixe et PilouVue) reprend la place. */
+    private void lieuTheatre(String decor, boolean glisser) {
+        if (campagne == null) return;
+        String k = campagne.id + "|" + decor;
+        if (k.equals(lieuTheatre)) return;
+        lieuTheatre = k;
+        boolean ok = false;
+        try {
+            ok = theatre.lieu(campagne.id, decor, glisser);
+        } catch (RuntimeException x) {
+            Journal.noter("lecture : théâtre", x);
+        }
+        theatre.setVisibility(ok ? View.VISIBLE : View.GONE);
+        scene.setVisibility(ok ? View.GONE : View.VISIBLE);
+        pilou.setVisibility(ok ? View.GONE : View.VISIBLE);
+    }
+
+    /** Tout est écrit : le lieu de l'état (sans travelling), l'humeur du dernier message, et Pilou en route s'il attend. */
+    private void majTheatre() {
+        if (etat == null) return;
+        lieuTheatre(etat.decor, false);
+        theatre.humeur(humeur, false);
+        // Revenu de sa route : la prochaine réplique le fait rentrer dans la scène.
+        if (enRoute && !etat.enAttente() && etat.phase != Campagnes.Phase.Repos) enRoute = false;
+        // Ouverte pendant une attente : il est déjà en route, la scène montre le lieu sans lui.
+        if (!enRoute && (etat.phase == Campagnes.Phase.Attente || etat.phase == Campagnes.Phase.Repos)) {
+            theatre.absent();
+            enRoute = true;
+        }
     }
 
     private void entete() {
@@ -270,8 +362,12 @@ final class Lecture extends FrameLayout {
         ((LinearLayout.LayoutParams) jaugeVide.getLayoutParams()).weight = 1 - part;
         jauge.requestLayout();
         Etat pc = Prefs.etat(app);
-        pilou.equipe(Gains.porte(app, pc));
+        java.util.Map<String, String> porte = Gains.porte(app, pc);
+        pilou.equipe(porte);
         pilou.accessoire(pc.accessoire);
+        // La couleur de Pilou : celle du niveau, ou la couleur achetée à la boutique (comme PilouVue).
+        String achetee = porte.get(Boutique.COULEUR);
+        theatre.couleur(achetee != null && !achetee.isEmpty() ? Vitrine.teinte(achetee) : pc.couleur);
         boolean fini = !ecrit && aEcrire.isEmpty();
         if (fini && etat.phase == Campagnes.Phase.Attente) {
             pilou.tenue("voyage-" + etat.tenue);
@@ -321,7 +417,7 @@ final class Lecture extends FrameLayout {
             boolean nouveau = m.qui.equals("pilou") && CampagnesTel.nonLu(app, m) && !m.reprise;
             if (nouveau && !vite) aEcrire.add(m);
             else if (!aEcrire.isEmpty()) aEcrire.add(m);
-            else ajouter(m, !premier);
+            else ajouter(m, !premier, false);
         }
         if (!aEcrire.isEmpty() && !ecrit) ecrire();
         else if (aEcrire.isEmpty() && !ecrit) toutLu();
@@ -353,7 +449,7 @@ final class Lecture extends FrameLayout {
         int g = gen;
         if (!m.qui.equals("pilou")) {
             aEcrire.pollFirst();
-            ajouter(m, true);
+            ajouter(m, true, false);
             postDelayed(() -> {
                 if (g == gen) ecrire();
             }, vite ? 30 : 380);
@@ -376,15 +472,20 @@ final class Lecture extends FrameLayout {
             fil.removeView(r);
             points = null;
             Campagnes.Message x = aEcrire.pollFirst();
-            TextView t = x != null ? ajouter(x, true) : null;
+            // Un message nouveau, écrit lettre à lettre : le lieu arrive en travelling (au rattrapage, d'un coup).
+            TextView t = x != null ? ajouter(x, true, !vite && x.qui.equals("pilou")) : null;
             Runnable suite = () -> postDelayed(() -> {
                 if (g == gen) ecrire();
             }, vite ? 40 : 420);
             if (t != null && !vite && x.qui.equals("pilou")) {
                 // Lettre à lettre (la bulle a déjà sa taille) ; le personnage parle pendant ses répliques.
                 perso.parle(Animations.parle(x.texte));
+                if (!enRoute) theatre.revient();
+                theatre.humeur(humeur, true);
+                theatre.parle(Animations.dureeEcriture(x.texte));
                 enCours = new ScenesAnimees.Ecriture(t, x.texte, () -> {
                     perso.parle(false);
+                    theatre.tait();
                     if (g == gen) suite.run();
                 });
             } else suite.run();
@@ -414,12 +515,13 @@ final class Lecture extends FrameLayout {
             enCours = null;
         }
         perso.parle(false);
+        theatre.tait();
         if (points != null) {
 
             fil.removeView(points);
             points = null;
         }
-        while (!aEcrire.isEmpty()) ajouter(aEcrire.pollFirst(), false);
+        while (!aEcrire.isEmpty()) ajouter(aEcrire.pollFirst(), false, false);
         ecrit = false;
         toutLu();
         dockCle = "";
@@ -503,9 +605,12 @@ final class Lecture extends FrameLayout {
         fil.addView(r, Ui.large());
     }
 
-    private TextView ajouter(Campagnes.Message m, boolean anime) {
+    private TextView ajouter(Campagnes.Message m, boolean anime, boolean nouveau) {
         boolean joueur = m.qui.equals("joueur");
-        if (!joueur) dividers(m);
+        if (!joueur) {
+            dividers(m);
+            lieuTheatre(m.decor, nouveau);
+        }
         LinearLayout r = rangee(joueur);
         TextView t = Ui.texte(app, m.texte, 16, joueur ? p.surAccent : p.texte, joueur);
         t.setLineSpacing(0, 1.28f);
@@ -887,6 +992,14 @@ final class Lecture extends FrameLayout {
         } catch (RuntimeException x) {
             Journal.noter("campagne : décision", x);
             r = "petit souci, réessaie";
+        }
+        // Un choix, « vas-y » ou une épreuve qui mène à une attente ou un repos : Pilou part pour de vrai, il sort de la scène en marchant.
+        if (r == null && !enRoute) {
+            Campagnes.Etat suite = CampagnesTel.etat(app);
+            if (suite != null && (suite.phase == Campagnes.Phase.Attente || suite.phase == Campagnes.Phase.Repos)) {
+                theatre.depart();
+                enRoute = true;
+            }
         }
         dockCle = "";
         if (r != null) {

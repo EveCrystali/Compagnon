@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scène vivante — planche 1</title>
+<style>
+  :root {
+    --nuit: #151a2e; --nuit2: #1f2540; --fond: #0f1324; --bord: #6a5acd; --violet: #9b8cff; --argent: #adbac7;
+    --argent-clair: #e6ecf2; --orange: #f69d50; --encre: #1c2128; --parchemin: #efe0c0; --parchemin-bord: #8a6e4b;
+    --case: #2a3156; --page: #0b0e1a; --texte: #e6ecf2;
+  }
+  html { background: var(--page); }
+  body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--texte); background: var(--page); }
+  body > header { max-width: 1060px; margin: 0 auto; padding: 18px 16px 6px; }
+  body > header h1 { margin: 0 0 6px; font-size: 20px; color: var(--orange); letter-spacing: .5px; }
+  body > header p { margin: 4px 0; color: var(--argent); font-size: 14px; line-height: 1.45; max-width: 900px; }
+  .options { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 6px; }
+  .opt { border: 2px solid var(--bord); background: var(--nuit2); color: var(--texte); padding: 8px 12px; cursor: pointer; text-align: left; max-width: 330px; font: inherit; }
+  .opt b { color: var(--orange); }
+  .opt small { display: block; color: var(--argent); font-size: 12.5px; margin-top: 3px; line-height: 1.35; }
+  .opt[aria-pressed="true"] { background: var(--case); border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange) inset; }
+  .barre { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0 10px; font-size: 13px; color: var(--argent); }
+  .barre button { font: inherit; background: var(--nuit2); color: var(--texte); border: 2px solid var(--bord); padding: 4px 10px; cursor: pointer; }
+  .barre button[aria-pressed="true"] { border-color: var(--orange); }
+  .prends { background: var(--orange) !important; color: var(--encre) !important; border-color: var(--orange) !important; font-weight: 700; }
+  .scene-zone { overflow-x: auto; padding: 0 16px 30px; }
+
+  /* ---- La fenêtre Aventure (taille réelle 1020 × 720) */
+  .fenetre { width: 1020px; height: 720px; margin: 0 auto; background: #1a1d33; border: 1px solid #333a5c; display: flex; flex-direction: column; position: relative; }
+  .titre-os { height: 30px; background: #f3f3f3; color: #222; font-size: 12px; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+  .entete { margin: 8px 16px 0; border: 2px solid var(--bord); height: 56px; display: flex; align-items: center; padding: 0 12px; gap: 12px; background: var(--nuit); }
+  .niv { border: 2px solid var(--violet); width: 34px; height: 40px; display: grid; place-items: center; font: 700 15px Consolas, monospace; }
+  .po { margin-left: auto; color: var(--orange); font: 700 18px Consolas, monospace; }
+  .titre { margin: 8px 16px 6px; display: flex; align-items: center; gap: 12px; }
+  .titre strong { font: 900 26px Consolas, monospace; color: var(--violet); letter-spacing: 2px; text-shadow: 2px 2px 0 #3d2f63; }
+  .titre em { color: var(--argent); font-size: 12px; }
+  .corps { flex: 1; margin: 0 16px 14px; display: flex; gap: 12px; min-height: 0; }
+  .cadre { border: 2px solid var(--bord); background: var(--nuit); }
+  canvas.scene { image-rendering: pixelated; display: block; }
+  .col { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+  .info-chap { font: 700 12px Consolas, monospace; color: var(--orange); letter-spacing: 1px; }
+  .info-titre { font-weight: 700; font-size: 14px; }
+  .info-lieu { font-size: 12.5px; color: var(--argent); }
+  .sac { font-size: 12px; border: 2px solid var(--argent-clair); padding: 2px 6px; display: inline-block; margin-top: 4px; }
+  .fil { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; min-height: 0; background: #121729; }
+  .msg { display: flex; gap: 8px; align-items: flex-start; animation: entre .25s ease-out; }
+  .msg .bulle { background: var(--parchemin); color: var(--encre); border: 2px solid var(--parchemin-bord); padding: 8px 12px; font-size: 13.5px; line-height: 1.5; max-width: 560px; }
+  .msg.joueur { justify-content: flex-end; }
+  .msg.joueur .bulle { background: var(--case); color: var(--texte); border-color: var(--violet); }
+  @keyframes entre { from { opacity: 0; transform: translateY(6px); } }
+  .actions { padding: 10px 14px; background: var(--nuit2); border-top: 2px solid var(--bord); min-height: 46px; }
+  .actions h4 { margin: 0 0 6px; font: 700 12px Consolas, monospace; color: var(--orange); letter-spacing: 1px; }
+  .choix { display: inline-flex; gap: 8px; align-items: center; margin: 0 8px 6px 0; padding: 7px 12px; background: var(--case); border: 2px solid var(--bord); color: var(--texte); cursor: pointer; font: 600 13.5px "Segoe UI", system-ui, sans-serif; }
+  .choix:hover, .choix:focus-visible { border-color: var(--orange); outline: none; }
+  .choix span { border: 2px solid var(--orange); color: var(--orange); font: 700 11px Consolas, monospace; padding: 0 4px; }
+  .portrait-pilou { display: block; image-rendering: pixelated; margin: 0 auto; }
+  .medaillon { position: absolute; right: 10px; bottom: 10px; border: 2px solid var(--parchemin-bord); background: rgba(15,19,36,.55); transition: transform .38s cubic-bezier(.2,.9,.3,1.2), opacity .3s; }
+  .medaillon.cache { opacity: 0; transform: translateX(24px); }
+  .medaillon .nom { position: absolute; left: 0; right: 0; bottom: -2px; transform: translateY(100%); text-align: center; font: 700 11px Consolas, monospace; color: var(--parchemin); background: rgba(15,19,36,.8); }
+  .legende { position: absolute; left: 12px; top: 8px; font: 700 13px Consolas, monospace; color: #fff; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000; letter-spacing: 1px; pointer-events: none; }
+  .legende small { display: block; font: 11px "Segoe UI", system-ui, sans-serif; color: var(--argent-clair); letter-spacing: 0; }
+  /* Option C : boîte de dialogue */
+  .dialogue { display: flex; gap: 12px; padding: 10px 14px; background: var(--parchemin); color: var(--encre); border: 3px solid var(--parchemin-bord); min-height: 118px; position: relative; }
+  .dialogue .texte { font-size: 15px; line-height: 1.55; flex: 1; }
+  .dialogue .qui { font: 700 12px Consolas, monospace; color: #6e3d86; margin-bottom: 2px; letter-spacing: 1px; }
+  .dialogue .suite { position: absolute; right: 12px; bottom: 6px; color: #8a6e4b; animation: hop .7s steps(2) infinite; }
+  @keyframes hop { 50% { transform: translateY(3px); } }
+  .reduit .medaillon, .reduit .msg { transition: none; animation: none; }
+  .note { max-width: 1060px; margin: 0 auto; padding: 0 16px 24px; color: var(--argent); font-size: 13px; line-height: 1.5; }
+  .note b { color: var(--texte); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Planche 1 — La mise en scène de l'Aventure</h1>
+  <p><b>Ce qui change ici : où vit la scène.</b> Aujourd'hui la bande de décor ne montre que le haut du dessin (à « La mare », on ne voit ni la mare ni les nénuphars) et Pilou vit dans une boîte à part. Les trois options montrent le <b>même moteur</b> : décor entier, mini-Pilou dans le lieu, acteurs d'ambiance, travelling d'un lieu à l'autre.</p>
+  <p><b>À toucher :</b> clique Pilou, la grenouille, l'eau (trois fois…), la libellule ; survole les choix ; choisis. Au port : la mouette, le chat sur les casiers, la lanterne. Les sprites sont des premiers jets (le mini-Pilou surtout) : juge la <b>mise en scène</b>, pas encore le dessin.</p>
+  <div class="options" role="group" aria-label="Options">
+    <button class="opt" data-opt="A" aria-pressed="false"><b>A · Bandeau entier</b><small>On garde la fenêtre d'aujourd'hui ; le décor se voit en entier (×3) et vit. Pilou reste dans sa boîte à gauche. Le moins de changement.</small></button>
+    <button class="opt" data-opt="B" aria-pressed="true"><b>B · Scène et fil</b><small>Une grande scène (×4) en haut où Pilou vit dans le lieu ; le fil des messages dessous ; une colonne fine pour le chapitre et le sac. Équilibre lecture / spectacle.</small></button>
+    <button class="opt" data-opt="C" aria-pressed="false"><b>C · Théâtre</b><small>La scène prend toute la largeur (×5) ; le texte vient par répliques dans une boîte de dialogue, portrait de qui parle. Le plus « dessin animé » ; l'historique passe dans un carnet.</small></button>
+  </div>
+  <div class="barre">
+    <span>Animations :</span>
+    <button data-niv="completes" aria-pressed="true">complètes</button>
+    <button data-niv="reduites" aria-pressed="false">réduites</button>
+    <button data-niv="aucune" aria-pressed="false">aucune</button>
+    <button id="rejouer">↺ rejouer depuis la mare</button>
+    <button class="prends" id="prends">Je prends <span id="lettre">B</span></button>
+    <button id="copier">Copier ma réponse</button>
+    <span id="copie" aria-live="polite"></span>
+  </div>
+</header>
+<div class="scene-zone"><div class="fenetre" id="fenetre"></div></div>
+<div class="note">
+  <p><b>Non vérifié :</b> la fluidité sur un vrai PC modeste et sur téléphone ; le rendu exact de WPF (ici, une page web imite la fenêtre). Taille réelle : la fenêtre fait 1020 × 720 comme aujourd'hui.</p>
+  <p><b>Ce qui viendra ensuite</b> (planches suivantes, une question à la fois) : le dessin du mini-Pilou et des personnages en pied, la richesse des acteurs par campagne, les interactions, puis le lien avec le Pilou du bureau.</p>
+</div>
+<script>
+window.DONNEES = {"decor-prologue-mare": {"src": "data:image/png;base64,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", "w": 192, "h": 80, "n": 6, "duree": 240}, "decor-phare-eteint-port-trebrume": {"src": "data:image/png;base64,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", "w": 192, "h": 80, "n": 6, "duree": 240}, "portrait-phare-eteint-tudal": {"src": "data:image/png;base64,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", "w": 64, "h": 64, "n": 5, "duree": 150}, "portrait-phare-eteint-tudal-colere": {"src": "data:image/png;base64,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", "w": 64, "h": 64, "n": 5, "duree": 150}, "pilou": {"repos": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOAAAAAeCAYAAAA1tRKIAAACF0lEQVR42u2ZvUrDUBiGv5QODt6CClWQIPYCnLqKLZaO3oBDwa1ehO1UyVChq6PUn6Gjo3NFSikKeg0ibnFK7W+ak6Qn5eR5lpB8IU/enJOTcI4IAAAAAAAAAAAAAAAAAAAAJM9Pu+ziIyPZEvD9tMuu+3Lj6pIm4nNdV3cHNfWZmt5+uvMxopGRbDH5MmGF9sOR1s5pus/0jPSXmF9AiJed0yv38/7SMtUHvIAAa4elOmrOO76KkXSRa1VO032622+RU8dX13PqdIXNl1WRlM5rc+uPIrEFXuaK2+n5nEZNukN9Pl35dLffdKecdnquVfnGneOudc1nBZE5jX+Jbydt1SOFnHYt80V1mu7T3X741H0Z1Q7jR+m8tvTXKggne/r+wbtDvT6d+XS3Hz51n+Un8z6v18ciWzlbRETKTn/ivHm1MCMNPnxp9AWaBfUuqFoLCz58afGxDAGQIEtnQT8G71J2+vIxeJfc/u7MNn/xNNr3zo8CPnyqTP8GBq2tQ76M3zrUY6s+I+k1i6P9TtWeqb8934WaafJ84zc97hMR6VTtmTq+9Wq/pPtLp2r7Ps+wM6GryhdoGeKgUJk41msWRUQkf/E0cTzsw8Rnhs+b8VPxRVmfM8FnRRHHFQwfvrT6skGlB4XK6MIqtbDgw5cG38I3dGNz+yzKDf5+f92qnI8PXxp9VgDxoaLoNcqN4sOHDwC08AfQvA2zeWgBCAAAAABJRU5ErkJggg==", "w": 28, "h": 30, "n": 8}, "cligne": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABGklEQVR42mNgGAWjYBSMAmLBt7kB/8nRx0SuZZzaXmRbOvh9yMDAwKC5yYqBrhaSC+huISMpiuX9u7DG28ONZUSbw0KKRb7ppVjlNzMw/CfWYkZiLJvag7Box23cajfP7CZoKRMplhECvumlOIOdoA/l/bv+w4JwsicDQ+524uMan0+JSqWkWEaVRLMhWxPODph6nWg5siy8d/MuQ8DU6wz3bt5lUFJXxqD18rbA+TD1ZCWahxvLGDfP7Maw5NIkHzh/Q7YmhvzVA+vwplSisoW2QxCK2KVJPgwMDAwMenlbUMQJWUZ0SQNL6ugWI1tEbMZnITZ1aTsEwQ0mRY5oH3LwyEVRkvx/fHm0jKwg5eCR0yXRosuDqjEEAMsWhUEePzFAAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 1}, "marche": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOAAAAAeCAYAAAA1tRKIAAACZUlEQVR42u2ay07CQBSGT00XmvgKSoIaQ4g8AyvjBQJx6QtgYmAHD4GuMCxcuHVJJGhkyTNgCDFeEnwGY9yNCx0symXaTqczk//bQNPSjzM/cwp0iAAAAAAAAAAAAAAAAAAAAAAAQDEfV0UGH/Kz1beke3gr6QNlg2q7D/lZkp9KIToo8oPvj5AxxlSJE4W60gJt9yE/s32xzHqEiPzgi3nWI0TkZ6PPCSMctWtOXEXJdosMoEqnirFFfvHX55KG8MLyperMYzpETNagJgp11jyvUvdp/nEdIibLp7I+5Kdvfo5uHYYPJmfhoF6ehfLa7kN+evtc0eBEO0yYIHlxh5tEd89ir8mXqoE7W6JQZ/mSWp/K+pCf/vm5fmb73tb8Gc8vyUEK5IPZffp2XOwTrSVTRERUbA4njp23z6+PiKh8r86nqj7kZ0Z+SyLdRfRyKxNegN998CE/k3wLv4KW739n9clutB0byAf56Y2rU4d5fXyh5PYGvT6+ULE5nNj2PmYqt+Nt1b4wP+JV14f89M9Pu8XY/E17H/uN3Hj75jQ1sT/ogI7aNWfQa/n2mVIf8jMjP1eXjvbzJlk6e/RvX6ZyS/1GbvycM+i1IvlwRuGLoz7kp39+zqIf8tOE/UZuLPI+H/Raoe8n8b/Np3m9hcm8b2WrT/f8ZNVocn5OUKF3xsssUPTGscplRenskfRuvag+WU4/+cmc9N5zxr0MLYqrrKxldo4J6xZBdJOB5+c9FnmqY+ZAL6+uH4c58ef727Xf1wR1BnHZ7kN+ZvgcAemOT9lD2K4g6pThst2H/Mz3AQAi4gtnMBWOuzyhwgAAAABJRU5ErkJggg==", "w": 28, "h": 30, "n": 8}, "joie": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAAeCAYAAAD3oAElAAAFi0lEQVR42u1cz08bRxh963Jo0qrHnOo2IkEIofgP4MQR6tJYVk49JgcOkTkVn3OuOdXiECT32FPl2AUCR04VZyoLWRRUV/4LosbppdoekjHDMrs7u/PNrHfzfRJa2Fnx2Jl5b75fBmCbGZt0ar4LnOGLFX/SqfnDFytO8PzTPZ9X9+O0Ek9B9uaf7vmTTs2/s/wNJp2ab5OQ/umeXy7fw52nr1Au33NC/neD17zIbGzswdgRTvnKq8zGlgHpAeDrxz8WEsvlHLJxiJQrcRFhiwvCj/pNr4jzuPTbCljM2Ngy3LAuPYqi4snhGO/c2bA5ngKd07fnhHTiZ1uejGs813b3Wc+bdODffdbzeOeywMy82QpbBLE3NreV4/sAKfFd44WJmosw0OaBwJbcWOkzEJfdnWuiH1+EP7v/smVMetd4caK2/7IF215TkfNZLDA5FxXVfUrSyWS3TXoVXhQWhciIORS4YXi2hYZFBuT5rTShJ4dI0oaMCiGoNuvxBdBeBxpHbt4nKd7G5nbq91UJ2tqCWmTEXFPObRYhWR5Jn76amjy/VeJy4DUx1hbCSUdZBWkcAb3nS6HjUWOzjnd8AVQfXn8f5zFRrqEQVflL3OcWChglz98NXiONmJVm/eVsC1rw1HUhMr3nS6jtniuJHTWWF7zGkTthkddQ5YHKQlOk3hsT0sNhL1MpDy9nW9BcnrjtcQu13XMAmF5lk8fa45YR1tXwEu1xC5WtAwCYXq+Gl9Nrbfd8ejXBC4aYuh6TKfnlA2JtAc680CwP2ywaGOG6TO2yHGirv0GQwkV+Yipmb+uY/0Du+cUHt4hY2TrA/OIDXA0v0VjcBpCO9B/+Rr+6Wp/+PhnvTDwYwKOoJMleUVBEo8bSrl/1IXD4Z3wSm2L9ZqX3Ji/5pTlueLu58ZOOpfUsxLWydYBfv/gBAPDkzc6tcRMTIgPUtfBMxGXUb3r7gP9XFbhSeExCxIIe0/1D80qS7YT5x9h7o/L25Hu6a8ZVJIcnriD88mr9xn1B9KANTrrG5LsWGUDgBvEGJ12yknH1bf2GaKk8JjFeRR1AN3cHhGqObXsUVIQ3bcpEwubMOZP+kOD9vJYEK5onrqlHEUZ4lbBQz+fyan36e5OMmQqoymOiFFCXB0SWngQV4an6pnTbDOYomqaoXzLJmAmWcOs3Nre1chRUhHBFePk9R/1m1DgplkuPCYB20tx2Qyb1gWuD8LpFD5HTspaDEQk0OSsf1jRF8ZJBMdMRNCpR082J5JHwWZlLAZU9zrOfvr0lMPI4hbC4OHBVCWxYLETIjZlJKqlxeF5cybG9/v5eeX5JeRK019VjSRKGspjpVgSoW+rDwhVqd56NPoQIrh11SKY6/JLsz6Qfi4jqKrfFB1WbgW5OKwqrpJOhFwKisqgxpOgCFU1aLhu1Rv2mF3WisrjMrqnW7smbHVJxEc16oks5zSlv2ofjsvObsjGzNKufAUo6oSYLKE7BwUlX+bW8WkcR282LLDK2DghRErdJ+FG/6QmvJw3hTbx50QgaLGyIq1wQaY9bsWGnF0c6uUlL95rWPZMTrXLmPxhjV7YOplcbCVi2fIZJcTkfkxDa9f4U73T4Wfd9c6YG79rjFhpfpm+WVIWb4j2C3+uKtxcXd6YBTJPY0smDcAjDlmWpWCa8jolnKTlhSvi0mLL3kgTLSzK5UYAUpUc5DBF4YRMqn1YsLmyuu1vl/QlFTxXV/nTJvzjnIg2WR/kPm6m7CYX9d/YzAOCTylMUobGPrVht9Off/Q7g9ocPbfHBBf+oQs7QBz79/KvvTf7If//5+5ckz7vGS4NtgqGLbQOj6Hgu1q/ofLCF52kAP0oI9IfhZnGKp4NNicFmVcweZbVHisKHLPnHxsbGlsj+BwZEqJx1TyWvAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 10}, "peur": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAeCAYAAAD0HpphAAABnklEQVR42u2Yv0rDQBzHvxc6KPgKVSh1CEEfwKmjNYrS0RdwkDipD2EdxOLQwdWxoBHSsc+gFJFiQX0FEbc4hNS0kD/nXY7e9feBcCQ98rlv+eVyF4AgCIIgCIIgCIIgCILQgO/bg9AEh875LBHxsrNTakgVjkXNR0+g7k8gANgPW6X/iSocC5lvbf8iNNGlWz4LhNYwmVXyfn/OVFWkLJfu+SpFZTeXZwCA/ii9rw+EIkFVukzJx/KEsSxJlnh7HTg+bXOHVOkyKV/uO7A/Atx6dKQJO00505hKlyn5rKyK2Tv6q5hqzZ6IZ4XVmo1OM6oYtx5NETwrK5Uu0/JVZFdz3rSgo2ue8xXaRngB8Dl+gRfk/yYaTqXLhHxW1jLW77YBAOPXN3hB1Mbnyda9mj73u3wv+diVdr9kOzsOXpdp+ViR+dtptKauPV3vYvPkcdImGQ56QqtCVS5T8jGe/YvTaKUKh4MeZO7LVLhMyMd4Kie+cZlfKlS6TMiX2mlpZfVQZKA/Xx93PP3J9z8fKyDe4BQ9iwyUfHJ9xJzzC3V8EnwIi2SZAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 4}, "regard-g": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABHElEQVR42mNgGAWjYBSMAmLBt7kB/8nRx0SuZZzaXmRbOvh9yMDAwKC5yYqBrhaSC+huISMpiuX9u7DG28ONZUSbw0KKRb7ppVjlNzMw/CfWYkZiLJvag7Box23cajfP7CZoKRMplhECvumlOIOdoA/l/bv++6aXMkz2ZGCQVdJkYGBgYAiYeh1FDS45fD4lmEphBpIqN2iyBcFUqpe3hUFJXZnh3s27DAwMDAz3bt6F8wOmXkfhI6sj2YcPN5Yxbp7ZjWLYhmxNOP/SJB+sll09sA5vSiUqW2g7BMH5lyb5wH2ODghZRnRJA0vqyBajW0RsxmchNrK1HYLgBpMiR7QPOXjkoihJjT++PFpGVpBy8MjpkmjR5UHVGAIA5YWC68YBtXoAAAAASUVORK5CYII=", "w": 28, "h": 30, "n": 1}, "regard-d": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABNElEQVR42mNgGAWjYBSMAmLBt7kB/8nRx0SuZZzaXmRbOvh9yMDAwKC5yYqBrhaSC+huISMpiuX9u7DG28ONZUSbw0KKRb7ppVjlNzMw/CfWYkZiLJvag7Box23cajfP7CZoKRMplhECvumlOIOdYJDK+3f9900vZdhxm4FhsidETFZJk4GBgYEhYOp1FLWTPVHlNjMw/MflU6JSae52hIHYAD65Ac8WBFPpvZt3GZTUlRn08rYwKKkrM9y7eRdF/N7NuwwBU6+j8Mny4cONZYybZ3bDDUGmN2RrwvmXJvmgyF89sA5vSiUqW2g7BGGIX5rkw8DAwMCgl7cFLkbIMqJLGlhSx2YxzCJiMz4LsZGt7RAEN5gUOaJ9yMEjF0VJavzx5dEysoKUg0dOl0SLLg+qxhAAUl6FgJqiD4wAAAAASUVORK5CYII=", "w": 28, "h": 30, "n": 1}, "regard-h": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABF0lEQVR42mNgGAWjYBSMAmLBt7kB/8nRx0SuZZzaXmRbOvh9yMDAwKC5yYqBrhaSC+huISMpiuX9u7DG28ONZUSbw0KKRb7ppVjlNzMw/CfWYkZiLJvag7Box23cajfP7CZoKQsxlnmrMDDIKmkyMDAwMARMvY6iZrInqtxmBob/+CxlwmeZb3opw47bCAOxAXQ53/RSnHE9IKmUqESDHozEypHlw3s376LQG7I14fwN2ZoY8jCarFQKi8d7N+8yKKkrw2mYpXp5W1DE7928y3D1wDq8KZWobKHtEERUcBGyjOiSBpbqcFl89cA6okscFmIjW9shCG4wKXJE+5CDRy6KkuT/48ujZWQFKQePnC6JFl0eVI0hAFm7fhIDEVvoAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 1}, "triste": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAeCAYAAAB5c901AAABdElEQVR42mNgGAWjYBSMglEwCkbBKEAG3+YG/B8qbmUix3Oc2l509STdA5Tenvt/YtZ/unpS3r/r/7DPEvT0JL0DdEAsJdc+piETomQCRnI85JteysDAwMCweWY3irqHG8sY6RVjxNrFQoxFU3tK4fwdtzE9CgObGRj+U+pJmMem9pSi2IUONjMw/CfGo4ykeA7dg1gtntlNdkzSwj4mfJb5pkNC0VuFOMtgsUpOHqWVfSzEWC6rpAlnB0y9jiK3IRu3HLkgdzv1ChmWwVjy4Qs0UgOUKA/iM4hasTYg1QQsX9y7eZdBSV0ZTsNCUS9vC4r4vZt3Ga4eWEdRIYPNPnw0IfsYiSmytR2C4GKXJvkw6OVtwWAzMDAwXD2wjqL6EJt9MHtgAYoMiLGPkRKLqeUxfPZhC1BS7CO6kNF2CIIbTIocuQBmJrNeEtxsGJsU+3CGAAePXBQlDvzx5dEyUtTTyj5GIizWJdGiy5Q4lN72DXkAAPoN9c+5BWN1AAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 2}, "bond": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOAAAAAeCAYAAAA1tRKIAAAD/0lEQVR42u1cvU4bQRD+LrkiQXmFxBIhipCFHyAVVRQCyJbLlKEgUgSd/RCGCuSCgpQpIzuGQJlncISQxY/kPENE0kSXgqxZH7d3e97duTt7vsbgO/u7uZlvZ3bmAGAwGAwGg8EAANwc1gLmZFDgAd+C+0H5uPyWNDhnhZPB2Yg5OetyBsz7Kr349RW5rbPAyVmXM6A2StVWwHycAWd+D5hFZmCwP6ngFeEiS9VWMOw2vSwyg0teVRai5KS6r9R+LAr8IlzksNv0XDpPDsr1zcbYsR4Q2A5WwRfmCnPa5qOybxbFd3NYC+Y2Ot7UZUDXK3ap2grau3dBeXqhPrd3sGPMP+18ecq41M2l32ffkFaEHrXiTbNE72DHmiPDwek6SKP44rhc8FGJkMJ/WceoDS7frJ0MJwaWqq1AVZ6J93uAlZLm9ALYXwGOL5PFYMMmwQcAT+cXAQC19vnYufsr48dMbKWyLyv/ZRWjiGwudWj2gHMbHc+l+HSyxPpmw8iJcpBsndwG6YfX7gUh+DofF5XHBZctEVDaR+W/LGMUeRhDuGgni6BZXdArl9Y3G9bmWXFBb0MQWYPCviz9V9SRRy67oGLF1inRHlbeF0YE14MrzL98juvBFWrt87Hf5dfK9tHo9yIiD/7LcnQ1FWMI1yv2sNv0ekBQXq5HBr1KLJM2Kf5/JgDqkaIblaTSdZjyUdo3SxVFWHDyvjZtx9c3Ubn8XpHby3JQitf+3hr6ACrbR/eOm4heiDCKN3w9tsRAZV/exOEiC8aNdaJmrEn8vq4x7d1GfPva8kA3XLaojom2tokgyst1rfPPvn8xtu1OhIDMW9k+GuOxcR+zsI/Sf3HZKCouTe+paqwTt8dNEqGfhuzNC/WmWjbctLsVtTfq762NnCe/b6MUpRKEjPJyffS9aY4VwT4K/wnhJXVcVYJMa6vcYDq+BFYX7IyRfJ2ZVVrCSVvM8r4lqTy7HlxZXbGpBCHsHHabccetl2YU9lH5Tx6xCEHoPNRgYw65dXL7KkY6pntcn5pQtxQKl03yii2v2kUVBIifpaW0j9J/Ij7TzDnBY4jEkglxexebmY8xHf6j7rrq7nGNBDjp3Mp0b1aqtoKkkgmOH2Vi5N9/qr1kOD5VXWEbe1sxQhL66O+tjekhih86D2OLTW7UKiZIwj+7algwGCqRT1oiT7r3VHGKJlNUqR3H5el2m8LEYUIWHiPLmZ8cn1EJQs7GpqOIKE7V/jaJy7P5qA2Lj5GX/9/zt/8JwPijbjb/wFmnq6zDpzzh0ZNn70wu8s+vn59NPp/Eb/r9uryueKadz7X/qOPTFZ+nQbyUkuiHZUcuufx+hlu49h91fGatBwaDYRH/AAaOG7Hgj80pAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 8}, "coucou": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOAAAAAeCAYAAAA1tRKIAAAB1UlEQVR42u3ZsU7CQByA8X8Jg4PxDdQEB0OIPoATq1EiIU6+AJuT8BDCJGGQhNXJmCDGODoyawgxRhMMT2AU3c4JpAjSa8uR9L5vIdrK766ltLYiRERERERERERERERERGR9qlVTbAX2J4VTTPcPvtq3xgfZr2cV5nwyuT9Nzi9ylmrVVL+eVaOvpianlFKmN2jUTdP70+T8ompxNsLECtnSvgRNXu8YvwTFjIaJFVLrB6fGv6lNm1H3TJvsv5DOgCIi3UbRWcQHhsL9wHQbRYctsdicMI7yee1IPLyoe3EdKJMvTFzeFFFhThQPzxbP8YJVy7/Q3fP0dZvnpcCTxMOzyYvpYLPK5AuB/vnFw7PNc/7DBqfYyq7IaiIpIiLZase13qRlfr5p8PBs9DzdBR28oe4yv+Hh2eLFhIgW1sy7oJVeSaTakdenF0lsbvx53T6+Gf5c6ZVk7zMXaEB4eDZ5jpfr3lHk4WzftU52bDDt+yvfd5rw8GzzPD2GSKXdR/HlyomIiBy+l12/DzI5PDwbPUfnweM4PAqJhP+gEw8v6l7cK5pK54ZvrLPMb3h4NnhTj9Cl5bWjIAP8/ni70FkfD89Gz/EAb2lCj0EGioeHR0RG+gGdKDx1906stAAAAABJRU5ErkJggg==", "w": 28, "h": 30, "n": 8}, "parle": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAeCAYAAAD0HpphAAABg0lEQVR42u2Yv0rDQBzHv1c6KIhvoEIdJAT7AE5dFYuhOPkCHYRO1ofQTkoGB1cnKWo7OPoMipQiLegjiIhbna42MWnuT1Kjfj9LyN2PfO6X+8PdAYQQQgghhBBCCPn7vJ97I/p+3lcwlc27WzNLkj7OCM7AMM7NxkyXbPpS7kCSD9iBvxyhE7yycxS5Tj9fH4osGkdfMkUdUbXejKzvAKM0E6VP3SdUZH7rS3T7FB/bOTu2TpI+PV9BR5ZEtd6MXRZMkqMv2SemyeQUP90ElkoOAMDze4G4qDqTkUqfmU9pFyo/qFtnCn08RvwbEnehw/4Ant/DsD9AaW3127Pc6I7fZbwN9On5hMq6PSm5P9kOxIQb83jXNt6pxflkUlf7TuY+6QEQ+Jl5zU/pGOFWaoGyy8UDAMDuaytQbpPcNJ8cNOVGlz6Tmxi5lQ2LJ0VZHHTpS/YVVaVupTb+sE6dKfS17e5C5xaW92wa+PH2cqETT5+ZTyiI1zVFDzYNpS9dH8k5nw+1AN3glLCIAAAAAElFTkSuQmCC", "w": 28, "h": 30, "n": 4}, "pense": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAeCAYAAAD0HpphAAABlElEQVR42u2Yv07CUBSHz0UGB19BTdDENEQfwInVaGPD6OjSgTjWh1AnDYMkXR0JSqKMjMyaxhACiTyDqW7XydJqa++f0lD8fcsNnAPfOWl7uBciAAAAAAAAAAAAEB+0eBHqLKl+0HetXBvM2/fhPdLS9ue7FueDFs9L6rsW55zn4vvuK7wuU3//5gksik95hBoP+7mOGPgyvoCg4JsYsBgwmeTN44vYOf12f87mURx86ZRlRKbtxMa7RDzLRuET9zERWfNqJuqNknO7t5faTcIn52OissNtovWKQUREVvM1kndzMIut7J0qNwmfvK/0l8y0HeqNorI4wjHTdhJne1pz8Mn7hHahZ0/57qzgE6csmvjzMReNqQJfRufAyXD8a+00jOB1p2HE5qkCn5yPicztyXBMlZ2tyPp8fRTcLeH3vX5b60cePjmf0DGiWqsLFajTHHxqPiZz8EwSe/02zeOgC1+6T3gTU63Vgy+WiakCX1vvv9DVtY0TnQI/36d3MvnwqfmYgHhXUvSiUyh82frAgvMFTIcVURNR6y4AAAAASUVORK5CYII=", "w": 28, "h": 30, "n": 4}, "surpris": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAAAeCAYAAACyqDnLAAACd0lEQVR42u2YMUzbQBSG/6sytFJnNlMppaosVGbExNgotUoZO3bAA0o2Z2YuDKgRA0h07EiJkhJGRmaqCFkQS6k3ZkTYrgNxuCR38cV+Nmnqt1jxXfz7ff9757OBLLLIIossspiV4OcHPKPwGM/i/NndWuHd1gncrZUMalyg/PyAG8YcXnz5CcOYS6VS/4VuiAyULW8w379B9/sn+P4N2PIGS/pmu62T2S/xVx+/plKZd4drXDwmrXl3uMZnEuZTJCmaN7Mw09aMCpNRJdOpVVjSMJPWoNDL6V7csp2xc+pAqglPa+R0YO7tDMI8vRqdZ9kOKVRZR4jnptU8plOZ1cLD71/XcpjVAlBq9ip1fztWsgG0vR1HqtXviP1tcrCqZW0SjZzuRCNvwvcuR5KsFh7HAqhxEhK74f0bKKEGSxBFVwQgVctaHeC6YHPT1jKnVxjoCFmIHUFRlaKJquVM1zytN6VSE8oKHDc2aWJihRh5E8UFOUwjb/ahW7YTeTslwpRpiZq6WtqvnuOAUVVL2ntay35Yp4sLdAaGAvXc9sjxeNPE8aYpHaeINDriST6OdGoV1jo7UkIbPh/3CS9er9SUmwkAxV1aEykNjPS1aancwFK5QeqsyjzPbePi2wdlR1CZOGxSmLmRn/K9m+UAsLi6Lp3TOjsi2RMGWiodmW5UzU6twuoAt2wHnttG/u3r/jEwD+XGwHnPbYdqam+bFlfX++AmGYsKVTRwuBsoDaz3DNRZ1nQMZNP6BNYxkPo1l6ID//uPGdQGagF9/nL+s868+9s/P+IkpqtDoRtVK0yTTXgT7xQX/01ZMSqdJHR1tZLKNYuQ+Av9aM26k5EeOgAAAABJRU5ErkJggg==", "w": 28, "h": 30, "n": 3}}, "pilou-ancre": {"x": 14, "y": 27}, "libellule": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAFCAYAAABM6GxJAAAAK0lEQVR42mN4dPP/GQYoQGaTBCgxhDHPtu0/NgkzfRuGmCl2BOVp7kKCmgG08SQyLsMMeAAAAABJRU5ErkJggg==", "w": 8, "h": 5, "n": 2}, "poisson": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAFCAYAAACaTbYsAAAAWklEQVR42mNgoAb4Njfg/7e5Af9J0cMI08ip7cUgG9nHwMDAwLA3XohBVlYMrkit5QZcjCt5AyNc4maDFVYbv80N+P//xKz//0/M+o8u9m1uwH8ZRY3/FHkPAGxELyg1OwYxAAAAAElFTkSuQmCC", "w": 5, "h": 5, "n": 3}, "rond": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAAAFCAYAAAANHBH2AAAAYElEQVR42mNkGCbg+NUvHehilto8FaSoxwVg5jDSwNFnsFhmQoxHsXkOlxyyZ4kNFEttngpi9WHTz4jLw8geROfjCyhs6vDpxxdQuNQQo4dQSiJH72jKojRljZZZ2M0BAGfraU4oZq0bAAAAAElFTkSuQmCC", "w": 15, "h": 5, "n": 5}, "bulle": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAYAAABW1IzHAAAAUklEQVR42mNkoCF4/+DAfxhbUMGBkYGBgYGR2gYiywnI2zN8eHgQRQ8TMYYiG4xuIDbLYWx0ywhaiGwoNkuxGUgIMBIbbOhBRkyQoqsXVHBgBACNpTl4m2yEZQAAAABJRU5ErkJggg==", "w": 7, "h": 5, "n": 4}, "mouette": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAFCAYAAAAt8E4LAAAAUElEQVR42mOwdgv5z4AHEJKnCVi76/h/fOLWbiH/8akh1tEkmbN21/H/z958gmNsGumphoGBgYEBWdGnlX7/SVUDMxhdDTYLibGLIkCttAgAwuanWXtnRAMAAAAASUVORK5CYII=", "w": 9, "h": 5, "n": 4}, "chat": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAAICAYAAABd92c+AAAAgElEQVR42mNgYGBgEJHS+88ABchsbGAoqWUh1kBchg9mtUwwxr1+BRQaHxgMaokBjNhC4c2zS4zEhthgVstEyCB0QE21yI6khRuYqJ3WSSkYaG0uEy6DiDUAWS0xDkRWSyjpkWMuSp7DJvjm2SVGbOmaGLUwBxNSi+wxapqLrB4AcwuJIaYYMaAAAAAASUVORK5CYII=", "w": 11, "h": 8, "n": 5}, "papillon": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAAI0lEQVR42mP4/2L/fwYGBgYYjQJunlwAl7x5csH//y/2/wcAvhcVF7oZJloAAAAASUVORK5CYII=", "w": 3, "h": 2, "n": 2}, "goutte": {"src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAHklEQVR42mNgYGBgWHni3X8GGOP/////UQQYGBgYAFI8EXWTQd5yAAAAAElFTkSuQmCC", "w": 3, "h": 3, "n": 1}};
+
+</script>
+<script>
+// Prototype du moteur de scène : un décor fin (192 × 80) où vivent le mini-Pilou et des acteurs d'ambiance.
+// Tout se dessine sur une toile de 192 × 80 pixels fins, agrandie sans lissage à un multiple entier.
+// Le mouvement avance par pas de 83 ms (douze images par seconde, « en deux » comme un dessin animé).
+(function () {
+  const D = window.DONNEES;
+  const PAS = 83;
+  const images = {};
+  function img(d) {
+    if (!images[d.src]) { const i = new Image(); i.src = d.src; images[d.src] = i; }
+    return images[d.src];
+  }
+  function dessiner(ctx, d, k, x, y, miroir) {
+    k = ((k % d.n) + d.n) % d.n;
+    const i = img(d);
+    if (!i.complete) return;
+    if (miroir) {
+      ctx.save(); ctx.translate(Math.round(x) + d.w, Math.round(y)); ctx.scale(-1, 1);
+      ctx.drawImage(i, k * d.w, 0, d.w, d.h, 0, 0, d.w, d.h); ctx.restore();
+    } else ctx.drawImage(i, k * d.w, 0, d.w, d.h, Math.round(x), Math.round(y), d.w, d.h);
+  }
+  const lisse = (p) => p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p);
+  const hasard = (n) => { let s = n * 9301 + 49297; s = (s * 233280 + 12345) % 2147483647; return (s % 10000) / 10000; };
+
+  // ---- Les lieux : décor, sol, places de Pilou, acteurs, points sensibles
+  const LIEUX = {
+    mare: {
+      decor: "decor-prologue-mare",
+      sol: (x) => 77, entree: { x: 10, y: 77 }, place: { x: 16, y: 77 },
+      nenuphars: [{ x: 60, y: 64 }, { x: 97, y: 64 }, { x: 136, y: 64 }],
+      grenouille: { x: 96, y: 56 },
+      eau: (x, y) => ((x - 97) / 76) ** 2 + ((y - 61) / 16) ** 2 < 1,
+      tour: [{ x: 16, y: 77 }, { x: 40, y: 78 }, { x: 96, y: 78 }, { x: 150, y: 78 }, { x: 182, y: 77 }],
+      tempsNuit: false,
+    },
+    port: {
+      decor: "decor-phare-eteint-port-trebrume",
+      sol: (x) => 66, entree: { x: 10, y: 66 }, place: { x: 30, y: 66 },
+      lanterne: { x: 176, y: 32 }, chat: { x: 104, y: 44 },
+      quai: { x: 92, y: 66 }, auberge: { x: 186, y: 66 },
+      brume: true,
+    },
+  };
+
+  class Scene {
+    constructor(toile) {
+      this.vue = toile;
+      this.c = document.createElement("canvas");
+      this.c.width = 192; this.c.height = 80;
+      this.x = this.c.getContext("2d");
+      this.niveau = "completes";
+      this.t = 0; this.pas = 0;
+      this.lieu = null; this.vientDe = null; this.transition = -1;
+      this.pilou = { x: 16, y: 79, dir: 1, anim: "repos", debut: 0, boucle: true, hauteur: 0 };
+      this.file = []; this.etape = null;
+      this.acteurs = []; this.part = [];
+      this.souris = null; this.survol = null;
+      this.parle = false; this.surChoix = false;
+      this.prochainGeste = 3000;
+      this.ecouter();
+    }
+
+    // ---- Lieux et acteurs
+    aller(nom, travelling) {
+      const L = LIEUX[nom];
+      if (travelling && this.lieu && this.niveau === "completes") {
+        this.vientDe = this.lieu; this.transition = this.t;
+      }
+      this.lieu = L; this.nomLieu = nom;
+      this.acteurs = []; this.part = [];
+      if (nom === "mare") {
+        this.acteurs.push({ sorte: "libellule", x: 150, y: 50, cx: 120, cy: 50, phase: 0, fuite: 0 });
+        this.acteurs.push({ sorte: "rond", x: 70, y: 66, debut: 0, periode: 2600 });
+        this.acteurs.push({ sorte: "rond", x: 125, y: 70, debut: 1300, periode: 3400 });
+        this.acteurs.push({ sorte: "bulle", x: L.grenouille.x - 3, y: L.grenouille.y - 1, debut: -99999 });
+      } else if (nom === "port") {
+        this.acteurs.push({ sorte: "mouette", x: -10, y: 22, vx: 0.32, phase: 0 });
+        this.acteurs.push({ sorte: "mouette", x: 90, y: 14, vx: 0.22, phase: 2 });
+        this.acteurs.push({ sorte: "chat", x: L.chat.x, y: L.chat.y, debut: 0 });
+        for (let i = 0; i < 3; i++) this.acteurs.push({ sorte: "papillon", i, x: L.lanterne.x, y: L.lanterne.y });
+      }
+      const p = this.pilou;
+      if (!travelling) { p.x = L.place.x; p.y = L.place.y; }
+    }
+
+    // ---- File de gestes de Pilou
+    geste(anim, ms, boucle) { this.file.push({ type: "anim", anim, ms, boucle }); return this; }
+    marcher(x, y) { this.file.push({ type: "marche", x, y }); return this; }
+    bondir(x, y) { this.file.push({ type: "bond", x, y }); return this; }
+    attendre(ms) { this.file.push({ type: "attente", ms }); return this; }
+    alors(f) { this.file.push({ type: "fn", f }); return this; }
+    occupe() { return this.etape || this.file.length > 0; }
+
+    jouer(anim, boucle) {
+      const p = this.pilou;
+      if (p.anim === anim && boucle) return;
+      p.anim = anim; p.debut = this.t; p.boucle = boucle;
+    }
+
+    avancerGestes() {
+      const p = this.pilou;
+      if (!this.etape && this.file.length) {
+        this.etape = this.file.shift(); this.etape.debut = this.t;
+        const e = this.etape;
+        if (e.type === "anim") this.jouer(e.anim, e.boucle);
+        if (e.type === "marche") { e.x0 = p.x; e.y0 = p.y; e.d = Math.max(1, Math.hypot(e.x - p.x, e.y - p.y)); p.dir = e.x >= p.x ? 1 : -1; this.jouer("marche", true); }
+        if (e.type === "bond") { e.x0 = p.x; e.y0 = p.y; p.dir = e.x >= p.x ? 1 : -1; this.jouer("bond", false); }
+        if (e.type === "fn") { e.f(); this.etape = null; return; }
+      }
+      const e = this.etape;
+      if (!e) return;
+      const dt = this.t - e.debut;
+      if (e.type === "anim" && dt >= e.ms) this.etape = null;
+      if (e.type === "attente" && dt >= e.ms) this.etape = null;
+      if (e.type === "marche") {
+        const v = 0.024;                                   // pixels fins par ms : une belle petite allure
+        const f = Math.min(1, dt * v / e.d);
+        p.x = e.x0 + (e.x - e.x0) * f; p.y = e.y0 + (e.y - e.y0) * f;
+        if (f >= 1) { this.etape = null; this.jouer("repos", true); }
+      }
+      if (e.type === "bond") {
+        const n = D.pilou.bond.n, duree = n * PAS;
+        const vol0 = 1 * PAS, vol1 = 6 * PAS;              // il quitte le sol à l'image 1, retombe à la 6
+        const f = lisse((dt - vol0) / (vol1 - vol0));
+        p.x = e.x0 + (e.x - e.x0) * f; p.y = e.y0 + (e.y - e.y0) * f;
+        p.hauteur = dt > vol0 && dt < vol1 ? Math.sin(Math.PI * (dt - vol0) / (vol1 - vol0)) * 10 : 0;
+        if (dt >= duree) {
+          this.etape = null; p.hauteur = 0; this.jouer("repos", true);
+          this.eclabousser(p.x, p.y - 1, 3);
+        }
+      }
+    }
+
+    // ---- Particules
+    eclabousser(x, y, n) {
+      if (this.niveau !== "completes") return;
+      for (let i = 0; i < n; i++) this.part.push({ sorte: "goutte", x, y, vx: (i - (n - 1) / 2) * 0.03, vy: -0.06 - 0.02 * (i % 2), debut: this.t, vie: 520 });
+      this.acteurs.push({ sorte: "rond", x: x, y: y, debut: this.t, periode: 0, unique: true });
+    }
+    etincelles(x, y) {
+      if (this.niveau === "aucune") return;
+      for (let i = 0; i < 8; i++) {
+        const a = i / 8 * Math.PI * 2;
+        this.part.push({ sorte: "eclat", x, y, vx: Math.cos(a) * 0.045, vy: Math.sin(a) * 0.045 - 0.01, debut: this.t, vie: 560 });
+      }
+    }
+    note(x, y) { if (this.niveau !== "aucune") this.part.push({ sorte: "note", x, y, vx: 0.01, vy: -0.018, debut: this.t, vie: 1100 }); }
+
+    // ---- Souris : regard, survol, clics
+    ecouter() {
+      const pos = (ev) => {
+        const r = this.vue.getBoundingClientRect();
+        return { x: (ev.clientX - r.left) / r.width * 192, y: (ev.clientY - r.top) / r.height * 80 };
+      };
+      this.vue.addEventListener("mousemove", (ev) => { this.souris = pos(ev); this.survol = this.cible(this.souris); this.vue.style.cursor = this.survol ? "pointer" : "default"; });
+      this.vue.addEventListener("mouseleave", () => { this.souris = null; this.survol = null; });
+      this.vue.addEventListener("click", (ev) => this.clic(pos(ev)));
+    }
+    cible(m) {
+      const p = this.pilou, L = this.lieu;
+      if (!L || this.transition >= 0) return null;
+      if (Math.abs(m.x - p.x) < 10 && m.y < p.y + 2 && m.y > p.y - 22 - p.hauteur) return "pilou";
+      for (const a of this.acteurs) {
+        if (a.sorte === "libellule" && Math.abs(m.x - a.x - 4) < 7 && Math.abs(m.y - a.y - 2) < 6) return a;
+        if (a.sorte === "mouette" && Math.abs(m.x - a.x - 4) < 8 && Math.abs(m.y - a.y - 2) < 6) return a;
+        if (a.sorte === "chat" && Math.abs(m.x - a.x - 5) < 7 && Math.abs(m.y - a.y - 4) < 7) return a;
+      }
+      if (L.grenouille && Math.abs(m.x - L.grenouille.x) < 6 && Math.abs(m.y - L.grenouille.y + 2) < 6) return "grenouille";
+      if (L.lanterne && Math.abs(m.x - L.lanterne.x) < 7 && Math.abs(m.y - L.lanterne.y) < 8) return "lanterne";
+      if (L.eau && L.eau(m.x, m.y)) return "eau";
+      return null;
+    }
+    clic(m) {
+      if (this.niveau === "aucune") return;
+      const c = this.cible(m), p = this.pilou;
+      if (!c) return;
+      if (c === "pilou") {
+        if (this.occupe()) return;
+        const choix = ["joie", "coucou"][Math.floor(hasard(Math.floor(this.t)) * 2)];
+        this.geste(choix, D.pilou[choix].n * PAS, false).alors(() => this.jouer("repos", true));
+        this.etincelles(p.x, p.y - 22);
+      } else if (c === "grenouille") {
+        const b = this.acteurs.find((a) => a.sorte === "bulle"); b.debut = this.t;
+        this.note(this.lieu.grenouille.x + 2, this.lieu.grenouille.y - 8);
+        if (!this.occupe()) { p.dir = this.lieu.grenouille.x > p.x ? 1 : -1; this.geste("surpris", 3 * PAS * 2, false).geste("peur", 900, true).alors(() => this.jouer("repos", true)); }
+      } else if (c === "eau") {
+        this.acteurs.push({ sorte: "rond", x: m.x, y: m.y, debut: this.t, periode: 0, unique: true });
+        this.ploufs = (this.ploufs || 0) + 1;
+        if (this.ploufs % 3 === 0) this.acteurs.push({ sorte: "poisson", x0: m.x - 10, y0: m.y, debut: this.t });
+      } else if (c === "lanterne") {
+        this.lanterneVive = this.t;
+        for (const a of this.acteurs) if (a.sorte === "papillon") a.fuite = this.t;
+      } else if (c.sorte === "libellule") {
+        c.fuite = this.t;
+      } else if (c.sorte === "mouette") {
+        c.vx = 0.9; c.vy = -0.12;
+      } else if (c.sorte === "chat") {
+        c.debut = this.t; this.note(c.x + 4, c.y - 4);
+      }
+    }
+
+    // ---- Une image
+    avancer(t) {
+      const dt = t - this.t; this.t = t;
+      const pas = Math.floor(t / PAS);
+      const nouveauPas = pas !== this.pas; this.pas = pas;
+      if (!this.lieu) return;
+      if (this.niveau !== "aucune") this.avancerGestes();
+      this.vivre(dt);
+      if (nouveauPas || this.transition >= 0) this.peindre();
+    }
+
+    // Petite vie de Pilou quand rien ne se passe : il regarde la souris, cligne, fait un petit geste de temps en temps.
+    vivre(dt) {
+      const p = this.pilou;
+      if (this.occupe() || this.niveau === "aucune") return;
+      if (this.parle && this.niveau === "completes") { this.jouer("parle", true); return; }
+      if (this.surChoix) { this.jouer("pense", true); return; }
+      let anim = "repos";
+      if (this.souris && this.niveau === "completes") {
+        const ecart = this.souris.x - p.x;
+        if (Math.abs(ecart) > 14) { p.dir = 1; anim = ecart > 0 ? "regard-d" : "regard-g"; }
+        else if (this.souris.y < p.y - 26) anim = "regard-h";
+      }
+      if ((Math.floor(this.t / 4300) !== Math.floor((this.t - dt) / 4300))) { this.cligneJusque = this.t + 150; }
+      if (this.cligneJusque > this.t) anim = "cligne";
+      this.jouer(anim, true);
+      if (this.niveau === "completes" && this.t > this.prochainGeste) {
+        this.prochainGeste = this.t + 6000 + hasard(Math.floor(this.t)) * 6000;
+        if (!this.souris) this.geste(hasard(this.t + 3) < 0.5 ? "regard-g" : "regard-d", 1200, true).geste("cligne", 150, true);
+      }
+    }
+
+    peindre() {
+      const x = this.x, L = this.lieu, t = this.t;
+      x.clearRect(0, 0, 192, 80);
+      if (this.transition >= 0) {
+        // Travelling : l'ancien lieu part à gauche, le nouveau arrive ; Pilou marche au milieu.
+        const f = lisse((t - this.transition) / 1400);
+        const dx = Math.round(-f * 192);
+        this.peindreDecor(this.vientDe, dx);
+        this.peindreDecor(L, dx + 192);
+        this.peindrePilouA(28, L.entree.y + (1 - f) * 0, "marche", true);
+        if (f >= 1) { this.transition = -1; this.vientDe = null; const p = this.pilou; p.x = 28; p.y = L.entree.y; this.file = []; this.etape = null; this.marcher(L.place.x, L.place.y); }
+        this.blit(); return;
+      }
+      this.peindreDecor(L, 0);
+      // Acteurs derrière Pilou.
+      for (const a of this.acteurs) this.peindreActeur(a, false);
+      this.peindrePilou();
+      for (const a of this.acteurs) this.peindreActeur(a, true);
+      if (L.brume) this.peindreBrume();
+      this.peindreParticules();
+      this.acteurs = this.acteurs.filter((a) => !a.fini);
+      this.blit();
+    }
+
+    peindreDecor(L, dx) {
+      const d = D[L.decor];
+      const k = this.niveau === "completes" ? Math.floor(this.t / d.duree) : 0;
+      dessiner(this.x, d, k, dx, 0);
+      if (L.lanterne && this.lanterneVive && this.t - this.lanterneVive < 900 && dx === 0) {
+        const f = 1 - (this.t - this.lanterneVive) / 900;
+        this.x.fillStyle = `rgba(255,200,120,${0.35 * f})`;
+        this.x.beginPath(); this.x.arc(L.lanterne.x, L.lanterne.y, 9 + 4 * f, 0, Math.PI * 2); this.x.fill();
+      }
+    }
+
+    peindrePilouA(px, py, anim, boucle, debut) {
+      const d = D.pilou[anim];
+      const k = Math.floor((this.t - (debut ?? 0)) / PAS);
+      const kk = boucle ? k % d.n : Math.min(k, d.n - 1);
+      const A = D["pilou-ancre"];
+      dessiner(this.x, d, kk, Math.round(px) - A.x, Math.round(py) - A.y - Math.round(this.pilou.hauteur || 0) * 0, this.pilou.dir < 0);
+    }
+
+    peindrePilou() {
+      const p = this.pilou;
+      // Le saut est déjà dessiné dans les images du bond ; la courbe ajoute le déplacement.
+      const d = D.pilou[p.anim];
+      const k = Math.floor((this.t - p.debut) / PAS);
+      const kk = p.boucle ? k % d.n : Math.min(k, d.n - 1);
+      const A = D["pilou-ancre"];
+      const leve = p.anim === "bond" ? Math.round(p.hauteur * 0.6) : 0;
+      dessiner(this.x, d, kk, Math.round(p.x) - A.x, Math.round(p.y) - A.y - leve, p.dir < 0);
+    }
+
+    peindreActeur(a, devant) {
+      const x = this.x, t = this.t, vif = this.niveau === "completes";
+      if (!vif && a.sorte !== "chat") return;
+      if (a.sorte === "libellule" && devant) {
+        if (a.fuite && t - a.fuite < 2500) {
+          const f = (t - a.fuite) / 2500;
+          a.x = a.cx + 40 + f * 120; a.y = a.cy - 20 * Math.sin(f * 3);
+        } else {
+          // Elle vole par petits arrêts : un point fixe, puis un trait, comme une vraie libellule.
+          const cycle = Math.floor(t / 1700), u = (t % 1700) / 1700;
+          const ax = 70 + hasard(cycle) * 90, ay = 40 + hasard(cycle + 7) * 18;
+          const bx = 70 + hasard(cycle + 1) * 90, by = 40 + hasard(cycle + 8) * 18;
+          const f = lisse(Math.max(0, (u - 0.7) / 0.3));
+          a.x = ax + (bx - ax) * f; a.y = ay + (by - ay) * f + Math.sin(t / 140) * 0.6;
+          a.dir = bx >= ax ? 1 : -1;
+        }
+        dessiner(x, D.libellule, Math.floor(t / 50), a.x, a.y, a.dir < 0);
+      }
+      if (a.sorte === "rond" && !devant) {
+        const per = a.periode || 1400, dt = t - a.debut;
+        if (a.unique && dt > 1400) { a.fini = true; return; }
+        if (dt < 0) return;
+        const k = Math.floor((dt % per) / (Math.min(per, 1400) / 5));
+        if (k < 5) dessiner(x, D.rond, k, a.x - 7, a.y - 2);
+      }
+      if (a.sorte === "bulle" && devant) {
+        const dt = t - a.debut;
+        if (dt >= 0 && dt < 1200) {
+          const k = [1, 2, 3, 2, 3, 2, 1, 0][Math.floor(dt / 150)] ?? 0;
+          dessiner(x, D.bulle, k, a.x, a.y);
+        }
+      }
+      if (a.sorte === "poisson" && devant) {
+        const dt = t - a.debut, f = dt / 700;
+        if (f > 1) { a.fini = true; this.eclabousser(a.x0 + 20, a.y0, 3); return; }
+        const px = a.x0 + f * 20, py = a.y0 - Math.sin(f * Math.PI) * 12;
+        dessiner(x, D.poisson, f < 0.4 ? 0 : f < 0.6 ? 1 : 2, px, py - 4);
+        if (dt < PAS) this.eclabousser(a.x0, a.y0, 2);
+      }
+      if (a.sorte === "mouette" && devant) {
+        a.x += a.vx * 2.2; if (a.vy) a.y += a.vy * 2.2;
+        if (a.x > 200 || a.y < -10) { a.x = -12; a.y = 12 + hasard(Math.floor(t)) * 14; a.vx = 0.22 + hasard(t) * 0.12; a.vy = 0; }
+        const plane = Math.floor(t / 900) % 3 === 2;           // elle plane un instant, ailes tendues
+        dessiner(x, D.mouette, plane ? 1 : Math.floor(t / 120) + (a.phase || 0), a.x, a.y + Math.sin(t / 600 + a.phase) * 1.2);
+      }
+      if (a.sorte === "chat" && !devant) {
+        const dt = t - a.debut;
+        let k = 0;
+        if (vif) k = dt < 1300 ? [1, 2, 3, 2, 1, 0][Math.floor(dt / 210)] ?? 0 : (Math.floor(t / 520) % 9 === 0 ? 1 : 0);
+        if (Math.floor(t / 3700) % 3 === 0 && t % 3700 < 160) k = 4;   // il cligne, lentement
+        dessiner(x, D.chat, k, a.x, a.y);
+      }
+      if (a.sorte === "papillon" && devant) {
+        const L = this.lieu, r = 6 + a.i * 2;
+        let ang = t / (300 + a.i * 90) + a.i * 2;
+        let ex = 0;
+        if (a.fuite && t - a.fuite < 1200) ex = (1 - (t - a.fuite) / 1200) * 10;
+        const px = L.lanterne.x + Math.cos(ang) * (r + ex), py = L.lanterne.y + Math.sin(ang * 1.3) * (r * 0.6 + ex);
+        dessiner(x, D.papillon, Math.floor(t / 70 + a.i), px - 1, py - 1);
+      }
+    }
+
+    peindreBrume() {
+      if (this.niveau !== "completes") return;
+      const x = this.x, t = this.t;
+      // Deux nappes de brume qui glissent à des vitesses différentes (parallaxe), en bandes de pixels.
+      for (const [y0, h, v, a] of [[44, 6, 0.0035, 0.18], [58, 5, 0.006, 0.14]]) {
+        for (let i = 0; i < 6; i++) {
+          const w = 30 + (i * 13) % 22;
+          let bx = ((i * 47 + t * v) % 260) - 40;
+          x.fillStyle = `rgba(200,210,235,${a})`;
+          x.fillRect(Math.round(bx), y0 + (i % 2), w, h - (i % 3));
+          x.fillRect(Math.round(bx) + 4, y0 - 1 + (i % 2), w - 8, 1);
+        }
+      }
+    }
+
+    peindreParticules() {
+      const x = this.x, t = this.t;
+      for (const q of this.part) {
+        const dt = t - q.debut;
+        if (dt > q.vie) { q.fini = true; continue; }
+        const px = Math.round(q.x + q.vx * dt), py = Math.round(q.y + q.vy * dt + (q.sorte === "goutte" ? 0.00028 * dt * dt : 0));
+        if (q.sorte === "goutte") { x.fillStyle = "#cfe0ff"; x.fillRect(px, py, 1, 1); }
+        if (q.sorte === "eclat") {
+          const a = 1 - dt / q.vie; x.fillStyle = dt % 160 < 80 ? `rgba(255,200,154,${a})` : `rgba(255,246,204,${a})`;
+          x.fillRect(px, py, 1, 1); if (dt < 250) { x.fillRect(px - 1, py, 1, 1); x.fillRect(px, py - 1, 1, 1); }
+        }
+        if (q.sorte === "note") {
+          x.fillStyle = "#efe0c0";
+          const nx = px + Math.round(Math.sin(dt / 160)), ny = py;
+          x.fillRect(nx, ny, 1, 4); x.fillRect(nx - 2, ny + 3, 2, 2); x.fillRect(nx + 1, ny, 2, 1);
+        }
+      }
+      this.part = this.part.filter((q) => !q.fini);
+    }
+
+    blit() {
+      const v = this.vue, cx = v.getContext("2d");
+      cx.imageSmoothingEnabled = false;
+      cx.clearRect(0, 0, v.width, v.height);
+      cx.drawImage(this.c, 0, 0, v.width, v.height);
+    }
+  }
+
+  // ---- Portrait animé (règles d'aujourd'hui : repos, respiration, clignement, parole 3-4-3-0)
+  function imagePortrait(n, t, parle) {
+    if (n < 5) return 0;
+    if (t % 4300 < 150) return 2;
+    if (parle) return [3, 4, 3, 0][Math.floor(t / 140) % 4];
+    return Math.floor(t / 900) % 2;
+  }
+
+  window.Scene = Scene;
+  window.Moteur = { dessiner, imagePortrait, PAS, D };
+})();
+
+</script>
+<script>
+(function () {
+  const { dessiner, imagePortrait, PAS, D } = window.Moteur;
+
+  // ---- Le récit du prototype : vrais textes du prologue et du « Phare éteint »
+  const RECIT = {
+    mare: {
+      lieu: "mare", titre: "LA MARE", chap: "La colline d'en face · chapitre 1 · Le sac à dos", humeur: "peur",
+      textes: [{ qui: "pilou", t: "Devant moi, la mare. Dessus, trois nénuphars. Dessous, je préfère ne pas savoir. La colline est juste de l'autre côté. Je passe comment ? Réfléchis bien : c'est moi qui me mouille." }],
+      choix: [
+        { l: "Saute de nénuphar en nénuphar", f: (s) => { const L = s.lieu; s.geste("pense", 600, true); L.nenuphars.forEach((n) => s.bondir(n.x, n.y).attendre(220)); s.bondir(178, 77).geste("joie", 10 * PAS, false); } },
+        { l: "Fais le tour, tranquillement", f: (s) => { s.lieu.tour.slice(1).forEach((p) => s.marcher(p.x, p.y)); s.geste("coucou", 8 * PAS, false); } },
+      ],
+      reponse: ["Excellent choix. C'était mon idée.", "Tranquillement, c'est ma vitesse préférée."],
+      suite: "port",
+    },
+    port: {
+      lieu: "port", titre: "TRÉBRUME", chap: "Le phare éteint · chapitre 1 · La lettre", humeur: "peur",
+      textes: [
+        { qui: "pilou", t: "Me voilà à Trébrume. Le nom ne ment pas : la brume est si épaisse que j'en ai les bords un peu flous. Et au large, plantée sur son rocher, une grande dent noire : le phare. Éteint." },
+        { qui: "pilou", t: "Où je vais en attendant ? Sur le quai, quelqu'un cogne au marteau. L'auberge a des fenêtres jaunes et sent la soupe jusqu'ici. Tu choisis ?" },
+      ],
+      choix: [
+        { l: "Au quai, voir qui cogne", f: (s) => { s.marcher(s.lieu.quai.x, s.lieu.quai.y); s.alors(() => histoire.quai()); } },
+        { l: "À l'auberge, là où il fait chaud", f: (s) => { s.marcher(s.lieu.auberge.x, s.lieu.auberge.y); s.geste("coucou", 8 * PAS, false); } },
+      ],
+      reponse: ["", ""],
+    },
+  };
+  const QUAI = [
+    { qui: "pilou", t: "Celui qui cogne s'appelle Tudal. Il est large comme une porte de grange et il goudronne la coque d'une barque, la Puce. Sur le flanc, une longue éraflure toute fraîche. Je demande ce qui lui est arrivé." },
+    { qui: "tudal", t: "« Un tronc qui flottait. »" },
+    { qui: "pilou", t: "Il ne me regarde pas en le disant. Alors je demande pour le phare." },
+    { qui: "tudal", t: "« Trois nuits qu'il est noir. Et la nuit d'avant, mieux aurait valu qu'il le soit. »", expr: "colere" },
+  ];
+
+  // ---- Mise en page selon l'option
+  let option = "B", niveau = "completes", scene = null, histoire = null;
+  const fen = document.getElementById("fenetre");
+
+  function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+  function construire() {
+    fen.innerHTML = "";
+    fen.classList.toggle("reduit", niveau !== "completes");
+    const os = el("div", "titre-os", "<span>💧</span> Aventure de Pilou");
+    const ent = el("div", "entete", '<div class="niv">9</div><div><div style="font-size:12px">« Codeur nocturne »</div><div style="font-size:11px;color:#adbac7">73 / 425 xp</div></div><div class="po">● 753 po</div>');
+    const tit = el("div", "titre", "<strong>AVENTURE</strong><em>Pilou t'écrit, tu choisis, il part pour de vrai.</em>");
+    const corps = el("div", "corps");
+    fen.append(os, ent, tit, corps);
+    const ui = {};
+    const echelle = option === "A" ? 3 : option === "B" ? 4 : 5;
+    const toile = el("canvas", "scene"); toile.width = 192 * echelle; toile.height = 80 * echelle;
+    const scBox = el("div", "cadre"); scBox.style.position = "relative"; scBox.style.lineHeight = 0;
+    scBox.append(toile);
+    const leg = el("div", "legende"); scBox.append(leg); ui.legende = leg;
+    const med = el("div", "medaillon cache"); const medC = el("canvas"); medC.width = 64 * 2; medC.height = 64 * 2; medC.style.imageRendering = "pixelated"; medC.style.display = "block";
+    const medN = el("div", "nom", "TUDAL"); med.append(medC, medN); scBox.append(med); ui.med = med; ui.medC = medC;
+
+    if (option === "A") {
+      const g = el("div", "cadre col"); g.style.width = "210px";
+      const pc = el("canvas", "portrait-pilou"); pc.width = 168; pc.height = 180; pc.style.background = "linear-gradient(#24305a,#e9a070 75%,#1a2a50 76%)"; pc.style.border = "2px solid #0a0d1a";
+      g.append(pc, el("div", "info-lieu", "<i>◌ Pilou a un peu peur</i>"), el("div", "info-chap", "CHAPITRE 1/2"), el("div", "info-titre", "Le sac à dos"), ui.lieu = el("div", "info-lieu", "▸ La mare"), el("div", "info-chap", "SAC"), el("div", "", '<span class="sac">Lampe de poche</span>'));
+      ui.grandPilou = pc;
+      const d = el("div", "cadre"); d.style.flex = "1"; d.style.display = "flex"; d.style.flexDirection = "column"; d.style.minWidth = "0";
+      const haut = el("div"); haut.style.background = "#0a0d1a"; haut.style.display = "flex"; haut.style.justifyContent = "center"; haut.style.borderBottom = "2px solid #6a5acd";
+      haut.append(scBox); scBox.style.border = "0";
+      const fil = el("div", "fil"); const act = el("div", "actions");
+      d.append(haut, fil, act); corps.append(g, d); ui.fil = fil; ui.act = act;
+    } else if (option === "B") {
+      const g = el("div", "cadre col"); g.style.width = "160px"; g.style.flex = "none";
+      g.append(el("div", "info-chap", "CHAPITRE 1/2"), el("div", "info-titre", "Le sac à dos"), el("div", "", '<div style="height:8px;background:repeating-linear-gradient(90deg,#f69d50 0 7px,transparent 7px 9px);width:30%"></div>'),
+        ui.lieu = el("div", "info-lieu", "▸ La mare"), ui.humeur = el("div", "info-lieu", "<i>◌ Pilou a un peu peur</i>"), el("div", "info-chap", "SAC"), el("div", "", '<span class="sac">Lampe de poche</span>'));
+      const d = el("div", ""); d.style.flex = "1"; d.style.display = "flex"; d.style.flexDirection = "column"; d.style.minWidth = "0"; d.style.gap = "0";
+      const fil = el("div", "fil cadre"); fil.style.borderTop = "0"; const act = el("div", "actions cadre"); act.style.borderTop = "0";
+      d.append(scBox, fil, act); corps.append(g, d); ui.fil = fil; ui.act = act;
+    } else {
+      const d = el("div", ""); d.style.flex = "1"; d.style.display = "flex"; d.style.flexDirection = "column"; d.style.gap = "8px"; d.style.alignItems = "center";
+      const dia = el("div", "dialogue"); dia.style.width = "954px"; dia.style.boxSizing = "border-box";
+      const pc = el("canvas"); pc.width = 96; pc.height = 96; pc.style.imageRendering = "pixelated"; pc.style.border = "2px solid #8a6e4b"; pc.style.background = "#2a3156"; pc.style.flex = "none";
+      const tx = el("div", "texte"); const qui = el("div", "qui"); const corpsT = el("div"); tx.append(qui, corpsT);
+      const suite = el("div", "suite", "▼"); dia.append(pc, tx, suite);
+      const act = el("div", ""); act.style.position = "absolute"; act.style.left = "50%"; act.style.transform = "translateX(-50%)"; act.style.top = "38%"; act.style.display = "flex"; act.style.flexDirection = "column"; act.style.gap = "6px"; act.style.alignItems = "center"; act.style.lineHeight = "normal";
+      scBox.append(act);
+      d.append(scBox, dia); corps.append(d);
+      ui.dia = { pc, qui, corpsT, suite, boite: dia }; ui.act = act;
+      med.style.display = "none";
+    }
+    scene = new window.Scene(toile);
+    scene.niveau = niveau;
+    histoire = new Histoire(scene, ui);
+    histoire.lieu("mare", false);
+  }
+
+  // ---- Le déroulé : écriture lettre à lettre, choix, chorégraphies
+  class Histoire {
+    constructor(s, ui) { this.s = s; this.ui = ui; this.file = []; this.cour = null; this.parleur = null; this.expr = ""; }
+    lieu(nom, travelling) {
+      const R = RECIT[nom]; this.R = R;
+      this.s.aller(R.lieu, travelling);
+      this.ui.legende.innerHTML = `${R.titre}<small>${R.chap}</small>`;
+      if (this.ui.lieu) this.ui.lieu.textContent = "▸ " + (nom === "mare" ? "La mare" : "Trébrume");
+      if (this.ui.fil) this.ui.fil.innerHTML = nom === "mare" ? "" : this.ui.fil.innerHTML;
+      this.ui.act.innerHTML = "";
+      const delai = travelling && niveau === "completes" ? 1900 : 300;
+      setTimeout(() => { R.textes.forEach((x) => this.file.push(x)); this.apres = () => this.choix(R); }, delai);
+    }
+    quai() {
+      QUAI.forEach((x) => this.file.push(x));
+      this.apres = () => { this.ui.act.innerHTML = '<div style="color:#adbac7;font-size:13px">— fin du prototype — <button class="choix" id="rj">↺ rejouer</button></div>'; document.getElementById("rj").onclick = construire; };
+    }
+    choix(R) {
+      const act = this.ui.act; act.innerHTML = option === "C" ? "" : "<h4>QUE FAIT PILOU ?</h4>";
+      R.choix.forEach((c, i) => {
+        const b = el("button", "choix", `<span>${i + 1}</span>${c.l}`);
+        b.onmouseenter = () => (this.s.surChoix = true); b.onmouseleave = () => (this.s.surChoix = false);
+        b.onclick = () => {
+          this.s.surChoix = false; act.innerHTML = "";
+          if (this.ui.fil) { const m = el("div", "msg joueur"); m.append(el("div", "bulle", c.l)); this.ui.fil.append(m); this.ui.fil.scrollTop = 1e9; }
+          c.f(this.s);
+          if (R.suite) {
+            this.s.alors(() => { this.s.pilou.dir = 1; }).marcher(200, this.s.lieu.sol(200)).alors(() => this.lieu(R.suite, true));
+          }
+          if (R.reponse[i]) setTimeout(() => this.file.push({ qui: "pilou", t: R.reponse[i] }), 200);
+        };
+        act.append(b);
+      });
+    }
+    // Appelée à chaque image : écrit le message en cours.
+    avancer(t) {
+      if (!this.cour && this.file.length && !this.pause) {
+        const x = this.file.shift();
+        this.cour = { ...x, debut: t };
+        this.parleur = x.qui; this.expr = x.expr || "";
+        if (this.ui.fil) {
+          const m = el("div", "msg"); const b = el("div", "bulle");
+          if (x.qui === "tudal") b.style.background = "#e6dcc8";
+          m.append(el("div", "", x.qui === "pilou" ? "<span style='font:700 10px Consolas;color:#6cb6ff'>PILOU</span>" : "<span style='font:700 10px Consolas;color:#9b8cff'>TUDAL</span>"), b);
+          this.ui.fil.append(m); this.cour.b = b;
+        } else {
+          this.ui.dia.qui.textContent = x.qui === "pilou" ? "PILOU" : "TUDAL"; this.cour.b = this.ui.dia.corpsT;
+        }
+        this.ui.med.classList.toggle("cache", x.qui !== "tudal" && !(this.ui.med.dataset.reste === "1"));
+        if (x.qui === "tudal") this.ui.med.dataset.reste = "1";
+      }
+      const c = this.cour;
+      if (c) {
+        const n = niveau === "aucune" ? c.t.length : lettres(c.t, t - c.debut);
+        c.b.textContent = c.t.slice(0, n) + (n < c.t.length ? (Math.floor(t / 280) % 2 ? "▌" : " ") : "");
+        if (this.ui.fil) this.ui.fil.scrollTop = 1e9;
+        this.s.parle = n < c.t.length && c.qui === "pilou";
+        this.tudalParle = n < c.t.length && c.qui === "tudal";
+        if (n >= c.t.length) {
+          this.cour = null; this.s.parle = false; this.tudalParle = false;
+          this.pause = true; setTimeout(() => { this.pause = false; if (!this.file.length && !this.cour && this.apres) { const a = this.apres; this.apres = null; a(); } }, option === "C" ? 900 : 500);
+        }
+      }
+      // Médaillon de Tudal (B, A) ou portrait de la boîte (C).
+      const medCtx = this.ui.medC.getContext("2d"); medCtx.imageSmoothingEnabled = false;
+      const port = D[this.expr === "colere" ? "portrait-phare-eteint-tudal-colere" : "portrait-phare-eteint-tudal"];
+      const kp = niveau === "aucune" ? 0 : imagePortrait(port.n, t, !!this.tudalParle);
+      if (option !== "C") { medCtx.clearRect(0, 0, 128, 128); medCtx.save(); medCtx.scale(2, 2); dessiner(medCtx, port, kp, 0, 0); medCtx.restore(); }
+      if (option === "C") {
+        const pc = this.ui.dia.pc.getContext("2d"); pc.imageSmoothingEnabled = false; pc.clearRect(0, 0, 96, 96);
+        if (this.parleur === "tudal") { pc.save(); pc.scale(1.5, 1.5); dessiner(pc, port, kp, 0, 0); pc.restore(); }
+        else { pc.save(); pc.scale(3, 3); const pa = D.pilou[this.s.parle ? "parle" : "repos"]; dessiner(pc, pa, Math.floor(t / PAS), 2, 4); pc.restore(); }
+        this.ui.dia.suite.style.visibility = this.cour ? "hidden" : "visible";
+      }
+      if (option === "A" && this.ui.grandPilou) {
+        const g = this.ui.grandPilou.getContext("2d"); g.imageSmoothingEnabled = false; g.clearRect(0, 0, 168, 180);
+        g.save(); g.scale(5, 5); const pa = D.pilou[this.s.parle ? "parle" : (Math.floor(t / 4300) !== Math.floor((t - 150) / 4300) ? "cligne" : "repos")]; dessiner(g, pa, Math.floor(t / PAS), 3, 6); g.restore();
+      }
+    }
+  }
+  // Écriture : environ 34 lettres par seconde, une pause aux virgules et aux points (cinq secondes au plus).
+  function lettres(texte, ms) {
+    let tps = 0;
+    for (let i = 0; i < texte.length; i++) {
+      const ch = texte[i];
+      tps += ch === "," || ch === ";" ? 140 : ch === "." || ch === "?" || ch === "!" || ch === ":" ? 300 : 28;
+      if (tps > ms) return i;
+    }
+    return texte.length;
+  }
+
+  function boucle(t) { if (scene) { scene.avancer(t); histoire.avancer(t); } requestAnimationFrame(boucle); }
+  requestAnimationFrame(boucle);
+
+  // ---- Commandes de la planche
+  document.querySelectorAll(".opt").forEach((b) => b.onclick = () => {
+    option = b.dataset.opt; document.querySelectorAll(".opt").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    document.getElementById("lettre").textContent = option; construire();
+  });
+  document.querySelectorAll("[data-niv]").forEach((b) => b.onclick = () => {
+    niveau = b.dataset.niv; document.querySelectorAll("[data-niv]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    if (scene) scene.niveau = niveau; fen.classList.toggle("reduit", niveau !== "completes");
+  });
+  document.getElementById("rejouer").onclick = construire;
+  let pris = [];
+  document.getElementById("prends").onclick = () => { if (!pris.includes(option)) pris.push(option); document.getElementById("copie").textContent = "Retenu : " + pris.join(" + "); };
+  document.getElementById("copier").onclick = () => {
+    const txt = `Planche 1 (mise en scène) : je prends ${pris.length ? pris.join(" + ") : option}.`;
+    navigator.clipboard?.writeText(txt).then(() => (document.getElementById("copie").textContent = "Copié : " + txt), () => (document.getElementById("copie").textContent = txt));
+  };
+  construire();
+})();
+</script>
+</body>
+</html>

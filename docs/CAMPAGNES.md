@@ -410,10 +410,15 @@ avec leur logique sans WPF, testée, dans `Aventure.cs` et `Epreuves.cs`.
   récompenses, fins restantes) ; carnet (fins, souvenirs, titres, objets exclusifs) ; « mettre de côté » avec
   confirmation. Pas de réponse depuis la bulle : la bulle est recomposée plusieurs fois par seconde dans une
   fenêtre qui ne s'active pas, des boutons y seraient peu fiables ; un clic ouvre la fenêtre.
+- **Le théâtre** (`VueTheatre.cs`, calcul commun `Theatre.cs`, voir [SCENES.md](SCENES.md)) : la lecture est une
+  scène vivante sur toute la largeur (le décor entier, ×5), où le mini-Pilou entre, parle pendant l'écriture, réagit
+  aux clics et s'en va quand un choix l'envoie en route ; des bêtes y passent ; un nouveau lieu arrive en travelling.
+  Dessous, une boîte de dialogue montre la réplique en cours (portrait de Pilou, et de qui parle), avec le temps de la
+  lire puis « ▼ » ; un clic ou Espace passe à la suite ; « ☰ Relire » rouvre tout le fil. Les choix, « vas-y » et la
+  fin se posent sur la scène ; l'attente, l'épreuve et « mettre de côté » s'affichent à la place de la boîte.
 - **Animations** (`ScenesAnimees.cs`, règles communes dans `AnimationsCampagne.cs`, voir SPRITES.md « Animations des
-  campagnes ») : le décor boucle en dessin fin et passe au suivant par un **volet pixelisé** (fondu en animations
-  réduites) ; le **personnage** du message (champ `personnage`) entre au bord droit de la scène, respire, cligne, et
-  parle tant que Pilou écrit une de ses répliques ; Pilou cligne au même rythme. L'écriture lettre à lettre suit la
+  campagnes ») : le **personnage** du message (champ `personnage`) a son portrait animé dans la boîte de dialogue ; il
+  respire, cligne, et parle tant que Pilou écrit une de ses répliques. L'écriture lettre à lettre suit la
   ponctuation (une pause aux virgules, une plus longue aux points ; cinq secondes au plus), les « … » durent selon le
   message qui vient ; un clic ou Espace écrit tout. Le fond de la fenêtre respire selon le ton et l'heure (dégradé et
   quelques particules lentes) ; les vignettes de la bibliothèque bougent un peu ; l'emblème du ton se pose au début d'un

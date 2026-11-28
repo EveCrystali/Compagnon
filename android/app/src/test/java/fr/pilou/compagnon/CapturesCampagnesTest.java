@@ -304,4 +304,91 @@ public class CapturesCampagnesTest {
             System.out.println("CAPTURE " + fichier + " " + (i + 1) + "/" + n + " " + s.substring(i * 4000, Math.min(s.length(), (i + 1) * 4000)));
         System.out.println(String.format(Locale.ROOT, "CAPTURE-TAILLE %s %dx%d", fichier, b.getWidth(), b.getHeight()));
     }
+
+    // ---- Une seule unité de pixel sur tout l'écran Aventure (téléphone portrait 1080 × 2400, densité 2,75)
+
+    /** Un nœud de La Grande Panne où un personnage parle, dans un lieu dessiné (comme l'essai PC « personnage »). */
+    private static String noeudAvecPersonnage(Campagnes.Campagne c) {
+        List<String> ids = new ArrayList<>(c.noeuds.keySet());
+        java.util.Collections.sort(ids);
+        Map<String, String[]> h = herites(c);
+        for (String id : ids) {
+            Campagnes.Noeud n = c.noeuds.get(id);
+            String[] d = h.get(id);
+            if (n.personnage.isEmpty() || n.texte.isEmpty() || d == null || d[0].isEmpty()) continue;
+            if (!n.type.equals("texte") && !n.type.equals("choix")) continue;
+            if (Animations.portrait(Sprites.banque(), c.id, n.personnage, n.expression, 2) == null) continue;
+            if (Sprites.decor(Sprites.banque(), c.id, d[0], 2) == null) continue;
+            return id;
+        }
+        throw new AssertionError("aucun nœud avec personnage dans " + c.id);
+    }
+
+    private Lecture ouvrirLecture(Campagnes.Campagne c, String noeud, ActivityController<Principale>[] ac) {
+        Context ctx = RuntimeEnvironment.getApplication();
+        Prefs.de(ctx).edit().clear().commit();
+        appairer(ctx);
+        horloge[0] = 1_790_000_000_000L;
+        CampagnesTel.horloge = () -> horloge[0];
+        android.provider.Settings.Global.putFloat(ctx.getContentResolver(), android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+        CampagnesTel.prechargerMaintenant();
+        Campagnes.Carnet k = new Campagnes.Carnet();
+        k.courante = Campagnes.lirePartie(partie(c, noeud, true, horloge[0], false));
+        Prefs.de(ctx).edit().putString("campagnes", Campagnes.sauver(k)).commit();
+        ac[0] = Robolectric.buildActivity(Principale.class).setup().visible();
+        Principale a = ac[0].get();
+        a.ouvrirLecture();
+        attendre();
+        Lecture l = ((PageAventure) a.page(Principale.AVENTURE)).lecture();
+        l.accelerer();
+        attendre();
+        org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMillis(4000));   // Pilou est entré dans la scène
+        attendre();
+        return l;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void uneSeuleUniteDePixelSurTelephonePortrait() {
+        dossier = new File("build/captures");
+        dossier.mkdirs();
+        format = "jeu-telephone-portrait";
+        RuntimeEnvironment.setQualifiers("w392dp-h873dp-notnight-440dpi");
+        RuntimeEnvironment.setFontScale(1f);
+        try {
+            Campagnes.Campagne gp = Campagnes.charger("grande-panne");
+            String noeud = noeudAvecPersonnage(gp);
+            ActivityController<Principale>[] ac = new ActivityController[1];
+            Lecture l = ouvrirLecture(gp, noeud, ac);
+            Activity a = ac[0].get();
+            ecran(a, "grande-panne-personnage");
+            int largeur = a.getResources().getDisplayMetrics().widthPixels;
+            int k = l.unite();
+            org.junit.Assert.assertEquals(Math.max(1, largeur / 192), k);
+            org.junit.Assert.assertEquals(5, k);
+            // La scène : 192k × 80k, le décor entier ; Pilou y est à l'échelle du décor (même grille fine).
+            org.junit.Assert.assertEquals(View.VISIBLE, l.theatre().getVisibility());
+            org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
+            org.junit.Assert.assertEquals(k, l.theatre().echelleDessinee());
+            // Le portrait du personnage : 64k × 64k, k pixels d'écran par pixel fin.
+            org.junit.Assert.assertEquals(View.VISIBLE, l.portrait().getVisibility());
+            org.junit.Assert.assertEquals(64 * k, l.portrait().getWidth());
+            org.junit.Assert.assertEquals(64 * k, l.portrait().getHeight());
+            org.junit.Assert.assertEquals(k, l.portrait().echelle());
+            // Le mini-Pilou de repli (jamais montré avec le théâtre, mais prêt) : même pixel fin.
+            org.junit.Assert.assertEquals((float) k, l.pilouRepli().pixelFin(), 0.001f);
+            ac[0].pause().stop().destroy();
+
+            Campagnes.Campagne pro = Campagnes.charger("prologue");
+            ac = new ActivityController[1];
+            l = ouvrirLecture(pro, pro.depart, ac);
+            ecran(ac[0].get(), "prologue");
+            org.junit.Assert.assertEquals(k, l.unite());
+            org.junit.Assert.assertEquals(80 * k, l.theatre().getHeight());
+            ac[0].pause().stop().destroy();
+        } finally {
+            CampagnesTel.horloge = System::currentTimeMillis;
+            RuntimeEnvironment.setQualifiers("");
+        }
+    }
 }

@@ -55,6 +55,11 @@ public final class PilouVue extends View {
         }
     }
 
+    /** Pour les tests : pixels d'écran par pixel fin de Pilou (-1 : rendu 1×). */
+    public float pixelFin() {
+        return fine != null ? p / 2 : -1;
+    }
+
     /** Vrai si la vue dessine Pilou en rendu fin. */
     public boolean fin() {
         return fine != null;

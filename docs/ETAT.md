@@ -1,7 +1,7 @@
 # État du travail
 
 À mettre à jour à la fin de chaque session : ce qui est fait, ce qui est en cours, ce qui attend.
-Dernière mise à jour : 27 novembre 2026.
+Dernière mise à jour : 28 novembre 2026.
 
 ## En ligne (v0.9.75 et suivantes)
 
@@ -28,11 +28,20 @@ Dernière mise à jour : 27 novembre 2026.
 
 ## En cours
 
-Aucune branche : tout est fusionné dans `main`. La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la
-pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la complicité et le Journal.
+- **Le théâtre des campagnes** (branche `claude/campaign-animations-pixel-art-66992c`, docs/SCENES.md) : la lecture de
+  l'Aventure devient une scène vivante. Fait et testé : le moteur commun (référence Python, C#, Java, 3 tests de chaque
+  côté qui retombent sur les mêmes pixels), le mini-Pilou de scène (taille M, une quarantaine d'images), 13 acteurs et
+  effets, les six scènes du prologue (acteurs et réactions aux clics), la fenêtre PC en « Théâtre » (scène ×5, boîte
+  de dialogue, choix sur la scène, travelling, départ en route, absence pendant l'attente), vue dans l'essai
+  `campagne:lecture` / `attente` / `personnage` sur le PC d'Antoine. Le réglage « ✧ » décide désormais des animations
+  (chez Antoine, Windows a « Afficher les animations » coupé : tout était figé). Sur téléphone, même scène en haut de la lecture, à une seule unité de pixel (k = largeur ÷ 192) pour décor, mini-Pilou, portrait et ciel de repli ; captures Robolectric 1080 × 2400 relues.
+- La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
+  épreuve, fin), un petit mot, la complicité et le Journal.
 
 ## Ensuite
 
+0. **Suite du théâtre** (docs/SCENES.md, « Ce qui reste ») : scènes et acteurs des trois grandes campagnes, les 29
+   personnages en pied, les chorégraphies des choix, puis les quatre liens avec le Pilou du bureau.
 1. **Vidéo de promo** avec les campagnes : tourner sur le PC d'Antoine (`outils/tourner-ecran-gauche.ps1`, décor
    fictif), puis monter (cartons, caméra qui suit les rectangles de `chronologie.json`).
 2. **Liste de contrôle manuelle de `TEST-JEU.md`** sur un vrai Windows et un vrai téléphone (fenêtre Aventure à 100, 125
@@ -50,6 +59,9 @@ pêche, la cuisine, l'Aventure (personnage, épreuve, fin), un petit mot, la com
 - Entre deux PC : le cumul des métiers et des succès, une visite entre amis.
 
 ## Points connus
+
+- `PresenceTests.Vecteurs_partages_avec_le_telephone` échoue sur le PC d'Antoine, déjà sur `main` (28 novembre) : un
+  écart d'une heure pile entre l'heure locale et l'époque, donc une question de fuseau ; la CI ne le voit pas.
 
 - Lecture des notifications Windows : attend un paquet signé (voir `NOTIFICATIONS.md`).
 - Deux écrans à des échelles différentes : Windows étire encore la fenêtre de Pilou sur le second.
