@@ -261,7 +261,7 @@ final class PresenceVue extends LinearLayout {
 
     /**
      * Un trait : son icône dans une case, son nom dessous. Jamais la couleur seule : un dominant a un cadre orange et une
-     * étoile devant son nom, un trait inconnu la silhouette « ? », un cadre pointillé et « ? ? ? ».
+     * étoile (devant son nom, ou dans le coin de sa case dans la grille), un trait inconnu la silhouette « ? », un cadre pointillé et « ? ? ? ».
      */
     private LinearLayout vignette(Ui.Palette p, Traits.Trait x, boolean connu, boolean dominant, int tailleDp) {
         LinearLayout c = Ui.pile(app);
@@ -277,8 +277,22 @@ final class PresenceVue extends LinearLayout {
         else cadre.setStroke(Ui.dp(app, 1.5f), p.argent, Ui.dp(app, 4), Ui.dp(app, 3));
         im.setBackground(cadre);
         int cote = Ui.dp(app, tailleDp + 12);
-        c.addView(im, new LayoutParams(cote, cote));
-        TextView nom = Ui.texte(app, dominant ? "★ " + x.nom : connu ? x.nom : "? ? ?", Ui.T_ETIQUETTE,
+        // Dans la grille (petites cases), l'étoile du dominant se pose dans le coin de la case : devant le nom, elle
+        // resterait seule sur sa ligne dès que le nom est long.
+        boolean coin = dominant && tailleDp < 48;
+        if (coin) {
+            android.widget.FrameLayout boite = new android.widget.FrameLayout(app);
+            boite.addView(im, new android.widget.FrameLayout.LayoutParams(cote, cote));
+            TextView etoile = Ui.texte(app, "★", 11, p.orange, true);
+            etoile.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+            android.widget.FrameLayout.LayoutParams le = new android.widget.FrameLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
+            le.topMargin = Ui.dp(app, 2);
+            le.rightMargin = Ui.dp(app, 5);
+            boite.addView(etoile, le);
+            c.addView(boite, new LayoutParams(cote, cote));
+        } else c.addView(im, new LayoutParams(cote, cote));
+        TextView nom = Ui.texte(app, dominant && !coin ? "★ " + x.nom : connu ? x.nom : "? ? ?", Ui.T_ETIQUETTE,
                 dominant ? p.orange : connu ? p.texte : p.doux, connu);
         nom.setGravity(Gravity.CENTER);
         nom.setPadding(0, Ui.dp(app, 4), 0, 0);
