@@ -193,11 +193,17 @@ AJUSTEMENTS = {
     ("prologue", "mare"): {
         "place": 80,                                # loin du tronc du grand arbre, à gauche
         "sensible:grenouille": "sensible grenouille 228 176 252 197 bulle 240 186",
+        "acteur:libellule": "acteur libellule vol 150 105 400 150 7",   # au-dessus des roseaux, jamais posée sur l'eau
         "+": ["acteur grenouille pose 240 195",       # sur le nénuphar du milieu
               "acteur canard pose 190 180"],          # sur l'eau libre
     },
     ("prologue", "jardin"): {"+": ["acteur escargot pose 235 200"]},          # sur la grande feuille
     ("grande-panne", "marais-majs"): {"+": ["acteur canard pose 355 200"]},
+    ("phare-eteint", "guet-de-nuit"): {"cle": "240 50 300 145"},              # le phare vu par la fenêtre, pas toute la fenêtre
+    # Le fond du jardin (scènes d'évolution) : le pot-cabane du tableau HD, centre x 75, du sol (215) à y 100.
+    ("evolution", "fond-du-jardin-matin"): {"cle": "38 100 112 215"},
+    ("evolution", "fond-du-jardin-soir"): {"cle": "38 100 112 215"},
+    ("evolution", "fond-du-jardin-nuit"): {"cle": "38 100 112 215"},
     ("petit-nuage", "etang-qui-fume"): {
         "+": ["acteur grenouille pose 195 228"],                              # sur la berge
         "sensible:grenouille": "sensible grenouille 183 210 207 229 bulle 195 219",
@@ -222,7 +228,7 @@ def convertir_scenes(campagne):
         out.extend(aj.get("+", []))
         # Une réaction demandée qui n'existait pas dans la scène d'origine.
         for k, v in aj.items():
-            if k.startswith("sensible:") and v not in out:
+            if k.startswith(("sensible:", "acteur:")) and v not in out:
                 out.append(v)
         out.append("")
 
@@ -240,6 +246,8 @@ def convertir_scenes(campagne):
         aj = AJUSTEMENTS.get((campagne, nom), {})
         if m[0] == "sensible" and "sensible:" + m[1] in aj:
             out.append(aj["sensible:" + m[1]])
+        elif m[0] == "acteur" and "acteur:" + m[1] in aj:
+            out.append(aj["acteur:" + m[1]])
         elif m[0] in aj:
             out.append("%s %s" % (m[0], aj[m[0]]))
         elif m[0] == "sol" or m[0] == "cle":

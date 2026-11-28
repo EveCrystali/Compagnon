@@ -19,7 +19,7 @@ import numpy as np
 
 import paysage as pg
 from decors_hd import decor
-from paysage import Tons, cs, hz, onde, voile, halo, dallage, rai, poussiere, roue
+from paysage import Tons, cs, hz, onde, voile, halo, dallage, rai, poussiere, roue, reflet
 
 N0, N1, N2, N3 = cs("#141a33", "#1f2a52", "#2f3f78", "#4a5fa8")
 E1, E2, E3, E4, E5 = cs("#5e5446", "#8a7d68", "#b8a98c", "#ddd0b2", "#f3ead2")
@@ -146,20 +146,73 @@ def tickets(P, x, y0, y1, n=4, graine=0, coul=None):
 # Le bureau, 13 h 37 : le bas d'un écran vu de près, au petit matin. La barre des tâches est le sol ; la grande horloge
 # figée (le 7 penche) est la clé.
 # =====================================================================================================================
-@decor("grande-panne", "bureau-1337", soleil=(40.0, 6.0), tons=PANNE, nom="Le bureau, 13 h 37", matiere=True)
+@decor("grande-panne", "bureau-1337", soleil=(40.0, 41.0), tons=PANNE, nom="Le bureau, 13 h 37", matiere=True)
 def bureau_1337(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
-    # ---- Le fond d'écran : une aube froide, des collines floues comme une photo de fond d'écran.
+    # ---- Le fond d'écran : une aube sur un lac, peinte ; le soleil sort derrière les collines, à gauche.
+    C = T.CIEL
+    sx, sy = 40.0, 29.0
     tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=52.0, haut=0.28, halo=0.3, disque=0)
+    pg.ciel(P, horizon=50.0, haut=0.28, halo=0.3, disque=0)
+    for k, (r_, c0, f_) in enumerate(((20.0, J2, 0.2), (11.0, J2, 0.3), (7.0, J3, 0.45))):       # l'aube : des anneaux de lumière chaude
+        halo(P, sx, sy, r_, c0, f_)
+    P.ell(sx, sy, 4.6, 4.6, J3)
+    P.ell(sx, sy, 3.4, 3.4, BLANC)
+    for k in range(7):                                          # des rayons fins, entre les nuages
+        a = -math.pi * (0.1 + 0.13 * k)
+        m = (np.abs((X - sx) * math.sin(a) - (Y - sy) * math.cos(a)) < 0.25 + 0.012 * np.hypot(X - sx, Y - sy)) & (
+            (X - sx) * math.cos(a) + (Y - sy) * math.sin(a) > 8.0) & (np.hypot(X - sx, Y - sy) < 30.0 + 10.0 * hz(k, 0, 277))
+        voile(P, m, J2, 0.12 + 0.05 * onde(p, k * 0.13), lumiere=True)
     tab.plan("nuages", 0.08)
-    pg.cumulus(P, [(52, 4, 44, 7.0, 201, 8, 0.0), (150, 14, 36, 5.5, 203, 7, 0.4), (104, -6, 28, 4.5, 205, 6, 0.7)], dessous=-0.5)
+    pg.cumulus(P, [(60, 4, 46, 7.5, 201, 9, 0.0), (150, 16, 40, 6.0, 203, 8, 0.4), (104, -8, 34, 5.0, 205, 7, 0.7),
+                   (14, -6, 36, 5.5, 278, 7, 0.2), (112, 26, 44, 5.0, 279, 7, 0.55), (176, -4, 30, 5.0, 280, 6, 0.85)], dessous=-0.5)
+    for k in range(5):                                          # des filets de nuages, dorés par-dessous
+        y_ = 24.0 + k * 2.4
+        m = (np.abs(Y - y_ - 1.2 * np.sin(X / 17.0 + k)) < 0.5 + 0.9 * (pg.fbm((X + 3.0 * p) / 20.0, Y / 2.0, 2, 281 + k) - 0.35)) & (X > 4 + 20 * k)
+        P.remplir(m, C[9] if k % 2 else C[10])
+        P.remplir(m & (X < 80) & (Y > y_ + 0.4) & (np.abs(X - sx) < 30), E5)
+    for i in range(5):                                          # un vol d'oiseaux, loin
+        bx_, by_ = 66.0 + i * 3.4 + 8.0 * p, 22.0 + abs(i - 2) * 1.5 - 2.0 * p
+        P.trait(bx_ - 1.0, by_ - 0.5 * onde(p * 2, i * 0.2), bx_, by_, C[4])
+        P.trait(bx_, by_, bx_ + 1.0, by_ - 0.5 * onde(p * 2, i * 0.2), C[4])
     tab.plan("lointains", 0.2)
-    for i, (base, amp, ech, rampe) in enumerate(((44, 12, 40, [T.L3, T.L4, T.L5, T.CIEL[8]]), (50, 9, 26, [T.L2, T.L3, T.L4, T.L5]),
-                                                 (56, 6, 17, [N2, N3, T.L3, T.L4]))):
-        pg.crete(P, lambda x, b=base, a=amp, e=ech, g=210 + i: pg.profil(x, b, a, e, g), rampe, 0.6)
+    # Les collines : quatre crêtes ; les plus lointaines sont pâles et bleues, les plus proches sombres et violettes.
+    for i, (base, amp, ech, rampe) in enumerate(((35, 9, 46, [C[7], C[8], C[9], C[10]]), (38, 8, 34, [C[5], C[6], C[7], C[8]]),
+                                                 (41, 6, 25, [T.L3, T.L4, T.L5, C[7]]), (43.5, 4, 18, [T.L2, T.L3, T.L4, T.L5]))):
+        avant = P.a.copy()
+        pg.crete(P, lambda x, b=base, a=amp, e=ech, g=210 + i: pg.profil(x, b, a, e, g), rampe, 0.5)
+        neuf = (P.a != avant)
+        voile(P, neuf & (np.hypot((X - sx) / 1.6, Y - sy) < 26.0) & (Y < base + 2), J2, 0.3 - 0.05 * i, lumiere=True)   # le liseré d'aube sur chaque crête
+        m = np.abs(Y - (base + 3.0 + 1.0 * np.sin(X / 13.0 + i))) < 0.7 * pg.fbm((X + 4.0 * p * (1 + i)) / 15.0, Y, 2, 283 + i)   # la brume dans les creux
+        voile(P, m & (P.a >= 0), C[10], 0.4)
+    # Le lac : il prend le ciel, et le soleil y pose une colonne d'éclats.
+    lac = (Y > 46.0) & (Y < 56.5)
+    P.rampe(lac, 0.2 + 0.075 * (Y - 46.0) + 0.2 * (pg.fbm(X / 12.0, Y * 2.0, 2, 287) - 0.5), [C[9], C[8], C[7], C[6], C[5]], 0.4)
+    P.remplir(lac & (hz(P.YI, (P.XI + int(p * 8) * (P.YI % 3)) // 6, 288) < 0.12), C[10])        # les rides
+    voile(P, lac & (Y < 49.0), T.L4, np.clip((49.0 - Y) / 3.0, 0, 0.5))                           # le reflet des collines, au bord
+    eclat = lac & (np.abs(X - sx) < 1.2 + (Y - 46.0) * 0.45) & (hz(P.YI, (P.XI + int(p * 8)) // 2, 289) < 0.6)
+    P.remplir(eclat, J3)
+    P.remplir(eclat & (np.abs(X - sx) < 1.6), BLANC)
+    for k in range(3):                                          # une île et ses sapins, une barque
+        P.ell(120.0 + k * 3.0, 49.6, 5.0 - k, 0.9, T.L3)
+    for x in (116.0, 119.0, 123.0):
+        P.poly([(x - 1.2, 49.0), (x + 1.2, 49.0), (x, 45.4 - (x % 2))], N3)
+        P.rect(x - 0.8, 50.4, 1.6, 1.6, C[6])                       # et leur reflet
+    P.rect(74.0 + 1.0 * onde(p, 0.3), 51.2, 4.4, 0.7, N2)
+    P.rect(75.6 + 1.0 * onde(p, 0.3), 49.4, 0.4, 1.8, N2)
+    P.rect(74.4 + 1.0 * onde(p, 0.3), 52.0, 3.6, 0.4, C[6])
+    # La rive proche : une lisière de sapins sombres, à contre-jour, qui porte la barre des tâches.
+    pg.crete(P, lambda x: pg.profil(x, 55.6, 1.0, 14, 290), [N1, N2, N3, T.L3], 0.4)
+    for i in range(46):
+        x = -4.0 + i * 4.4 + 2.0 * hz(i, 0, 291)
+        h_ = 2.2 + 2.6 * hz(i, 1, 291)
+        if 28 < x < 92:
+            h_ *= 0.35                                           # une trouée : on voit le lac
+        yb = float(np.asarray(pg.profil(np.array([x]), 55.6, 1.0, 14, 290)).ravel()[0]) + 0.6
+        P.poly([(x - 1.5, yb), (x + 1.5, yb), (x, yb - h_)], N1)
+        P.poly([(x - 1.5, yb), (x, yb), (x, yb - h_)], N2 if abs(x - sx) > 26 else J1)            # le côté tourné vers l'aube
     tab.plan("moyen", 0.5)
     # ---- Les icônes du bureau, la fenêtre qui ne répond plus, le curseur et son sablier.
     for i, (x, y, sorte) in enumerate(((8, -8, 0), (8, 6, 1), (8, 20, 2), (24, -8, 1), (24, 6, 0), (8, 34, 3))):
@@ -186,6 +239,13 @@ def bureau_1337(P, tab):
         P.rect(x + 0.6, y + 8.4, 6.8, 0.5, BLANC)             # son nom, illisible
         P.rect(x + 1.8, y + 9.5, 4.4, 0.5, T.CIEL[9])
     fx, fy, fw, fh = 104.0, -10.0, 70.0, 46.0                # la fenêtre « ne répond pas »
+    for k in (3, 2, 1):                                        # la traînée de la fenêtre qu'on a secouée
+        gx_, gy_ = fx - 3.2 * k, fy + 2.4 * k
+        c0 = (BLANC, T.CIEL[11], T.CIEL[10])[k - 1]
+        P.rect(gx_, gy_, fw, 0.5, c0)
+        P.rect(gx_, gy_, 0.5, fh, c0)
+        P.rect(gx_, gy_ + fh - 0.5, 3.2, 0.5, c0)
+        P.rect(gx_, gy_ + 1.6, fw * 0.3, 0.4, c0)
     voile(P, (X > fx + 2) & (X < fx + fw + 2) & (Y > fy + 2) & (Y < fy + fh + 2), N1, 0.5)
     P.rect(fx, fy, fw, fh, E5)
     P.rect(fx, fy, fw, 5.0, N2)
@@ -194,6 +254,13 @@ def bureau_1337(P, tab):
         P.rect(fx + fw - 5.0 - i * 4.4, fy + 1.2, 3.0, 2.6, c0)
     P.rect(fx + 2, fy + 1.8, 22, 0.6, BLANC)
     voile(P, (X > fx) & (X < fx + fw) & (Y > fy + 5) & (Y < fy + fh), BLANC, 0.5)       # elle blanchit : elle est figée
+    vitre = (X > fx) & (X < fx + fw) & (Y > fy + 5) & (Y < fy + fh)
+    P.rampe(vitre, 0.5 + 0.3 * (X - fx) / fw - 0.3 * (Y - fy) / fh + 0.2 * (pg.fbm(X / 8.0, Y / 6.0, 2, 292) - 0.5), [E4, E5, BLANC], 0.4)
+    P.remplir(vitre & (np.abs(X - fx - 46.0 + (Y - fy) * 0.5) < 3.0), BLANC)                     # un reflet de vitre, en biais
+    P.remplir(vitre & (np.abs(X - fx - 53.0 + (Y - fy) * 0.5) < 0.8), BLANC)
+    P.rect(fx, fy + 5.0, fw, 0.5, E3)
+    P.rect(fx + fw - 2.6, fy + 7.0, 1.4, fh - 9.0, E4)                                          # l'ascenseur de défilement
+    P.rect(fx + fw - 2.6, fy + 9.0, 1.4, 8.0, G3)
     for j in range(7):
         P.rect(fx + 5, fy + 10 + j * 4.2, (44, 58, 30, 52, 40, 56, 22)[j], 0.8, G4 if j % 3 else G3)
     P.rect(fx + 5, fy + 40.2, 60, 2.6, G4)                    # sa barre de progression, arrêtée
@@ -220,7 +287,11 @@ def bureau_1337(P, tab):
     P.rampe(barre, 0.75 - 0.03 * (Y - 56) + 0.25 * (pg.fbm(X / 30.0, Y / 3.0, 2, 221) - 0.5), [N0, N1, N2], 0.7)
     P.remplir(barre & (Y < 56.5), N3)
     P.remplir(barre & (Y >= 56.5) & (Y < 57.0), T.CIEL[4])
-    voile(P, barre & (Y > 72), T.ENCRE, 0.35)
+    reflet(P, barre & (Y > 57.0), tab.derriere(), 56.5, force=0.32, etire=0.55)
+    glace = barre & (np.abs(X - 40.0) < 1.4 + (Y - 56.0) * 0.16) & (Y < 71.0) & (hz(P.YI + int(p * 8), 0, 293) < 0.5)
+    P.remplir(glace, J1)                                        # la colonne du soleil, jusque dans la barre
+    P.remplir(glace & (np.abs(X - 40.0) < 1.0) & (Y < 63.0), J2)
+    voile(P, barre & (Y > 73), T.ENCRE, 0.35)
     dallage(P, barre & (Y > 74.0) & (P.T < 0.45), 96.0, 50.0, N2, N1, larg=9.0, prof=1.2)   # le grain de la dalle d'écran
     # Le bouton de démarrage et les icônes épinglées, à gauche.
     P.rect(4, 59.5, 12, 9, N2)
@@ -255,10 +326,10 @@ def bureau_1337(P, tab):
     # ---- Seconde passe : la petite vie de l'écran.
     if int(p * 8) % 2:                                          # le curseur de texte de la fenêtre figée clignote encore
         P.rect(104.0 + 5 + 22.6, -10.0 + 39.0, 0.5, 3.0, N2)
-    P.poly([(40.0, 22.0), (52.0, 21.0), (52.6, 32.0 + 0.5 * onde(p)), (41.0, 33.0)], J3)          # un pense-bête collé sur l'écran
-    P.poly([(48.6, 32.4 + 0.5 * onde(p)), (52.6, 32.0 + 0.5 * onde(p)), (52.0, 29.0)], J1)
+    P.poly([(22.0, 22.0), (34.0, 21.0), (34.6, 32.0 + 0.5 * onde(p)), (23.0, 33.0)], J3)          # un pense-bête collé sur l'écran
+    P.poly([(30.6, 32.4 + 0.5 * onde(p)), (34.6, 32.0 + 0.5 * onde(p)), (34.0, 29.0)], J1)
     for j in range(3):
-        P.rect(42.0, 24.0 + j * 2.2, 8.0 - j * 2, 0.4, B2)
+        P.rect(24.0, 24.0 + j * 2.2, 8.0 - j * 2, 0.4, B2)
     pg.toile_araignee(P, 198.0, -16.0, 14.0, sens=(-1, 1), coul=T.CIEL[10])
     pg.araignee(P, 186.0, -16.0, 9.0, d=0.3)
     pg.papillon_de_nuit(P, 185.0, -10.0, 5.0, coul=BLANC)
@@ -268,256 +339,650 @@ def bureau_1337(P, tab):
     for i in range(6):                                          # la neige de l'écran : quelques pixels qui tombent
         t = (p + i / 6.0) % 1.0
         P.point(60 + 22 * i, -14 + 60 * t, T.CIEL[10])
+    # Le cadre de l'écran : on est dedans. Coins arrondis, un liseré où le jour accroche, une étiquette collée.
+    coin = lambda cx_, cy_: (np.hypot(X - cx_, Y - cy_) > 5.0) & ((X - cx_) * (96 - cx_) < 0) & ((Y - cy_) * (30 - cy_) < 0)
+    cadre = (X < 2.6) | (X > 189.4) | (Y < -14.0) | coin(7.6, -9.0) | coin(184.4, -9.0)
+    P.remplir(cadre, ENCRE)
+    P.remplir(cadre & ((X < 0.8) | (X > 191.2) | (Y < -15.4)), N0)
+    bord = ~cadre & (np.roll(cadre, 1, axis=1) | np.roll(cadre, 1, axis=0))
+    P.remplir(bord, N2)
+    P.remplir(cadre & (X < 2.6) & (X > 1.6) & (np.abs(Y - 20.0 - 6.0 * onde(p)) < 7.0), N1)       # un reflet glisse sur le montant
+    P.poly([(183.0, 40.0), (192.0, 39.4), (192.0, 47.0), (183.6, 47.4 + 0.4 * onde(p, 0.4))], J2)   # une étiquette collée sur le bord
+    P.poly([(183.0, 40.0), (192.0, 39.4), (192.0, 40.6), (183.0, 41.2)], J3)
+    for j in range(2):
+        P.rect(185.0, 42.6 + j * 1.8, 5.0 - j * 1.6, 0.4, B2)
+    for i in range(7):                                          # des grains de poussière sur la vitre, devant tout
+        P.point(20.0 + 24.0 * i + 3.0 * hz(i, 0, 294), 4.0 + 44.0 * hz(i, 1, 294) + 0.6 * onde(p, i * 0.14), BLANC)
 
 
 # =====================================================================================================================
 # Le Hall des Pas Comptés : un hall de gare immense, des guichets aux rideaux baissés (« Retour à 13 h 38 »), une file
 # en serpentin, l'afficheur « 1 337 » (la clé), un banc de bois au premier plan.
 # =====================================================================================================================
-@decor("grande-panne", "hall-pas-comptes", soleil=(96.0, -10.0), tons=PANNE, nom="Le Hall des Pas Comptés", matiere=True)
+@decor("grande-panne", "hall-pas-comptes", soleil=(30.0, -40.0), tons=PANNE, nom="Le Hall des Pas Comptés", matiere=True)
 def hall(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
-    fx, fy = 96.0, 44.0                                       # le point de fuite
+    # ---- La géométrie : une nef en perspective. Point de fuite (fx, fy) ; une profondeur d vaut 1 au ras du cadre et
+    # DB au mur du fond ; sur un mur latéral, h va de HT (la naissance de la voûte) à HS (le sol).
+    fx, fy = 96.0, 44.0
+    DB, HT, HS = 2.6, -0.75, 0.6
+    px_ = lambda d, cote: fx + cote * 104.0 / d
+    py_ = lambda d, h: fy + h * 60.0 / d
+    ax = np.abs(X - fx)
+    dw = 104.0 / np.maximum(ax, 1e-3)
+    hw = (Y - fy) * dw / 60.0
+    mur = (ax >= 40.0) & (hw >= HT) & (hw <= HS)
+    fond = (ax < 40.0) & (Y >= py_(DB, HT)) & (Y <= py_(DB, HS))
+    df = 36.0 / np.maximum(Y - fy, 1e-3)
+    uf = (X - fx) * df / 104.0
+    sol = (Y > fy) & (df <= DB) & (np.abs(uf) <= 1.0)
+    # La voûte en berceau : pour chaque pixel, à quelle profondeur dv et sous quel angle th on la touche.
+    a_, b_ = X - fx, fy - Y
+    qa = a_ * a_ / 104.0 ** 2 + b_ * b_ / 93.6 ** 2
+    qb = -2 * 45.0 * b_ / 93.6 ** 2
+    qc = 45.0 ** 2 / 93.6 ** 2 - 1
+    dv = (-qb + np.sqrt(np.maximum(qb * qb - 4 * qa * qc, 0))) / (2 * np.maximum(qa, 1e-9))
+    th = np.arctan2((b_ * dv - 45.0) / 93.6, a_ * dv / 104.0)
+    voute = ~mur & ~fond & ~sol & (Y < fy) & (b_ * dv >= 45.0)
+    lunette = voute & (dv > DB)
+    berceau = voute & (dv <= DB)
+    LUM = 2.15                                                  # l'angle d'où vient le jour (haut, à gauche)
+    TRAVEES = [1.0, 1.21, 1.46, 1.77, 2.14, 2.6]
+    # ---- Le ciel, dehors : on le voit à travers les carreaux clairs ; ses nuages passent.
     tab.plan("ciel", 0.0)
-    # ---- La verrière : une voûte de verre laiteux à nervures, le jour blanc qui tombe.
-    r = np.hypot(X - fx, (Y - fy) * 1.25)
-    P.rampe(np.ones(X.shape, dtype=bool), 0.95 - r / 150.0 + 0.1 * (pg.fbm(X / 20.0, Y / 9.0, 2, 230) - 0.5),
-            [E2, E3, E4, E5, BLANC], 0.7)
-    ang = np.arctan2(Y - fy, X - fx)
-    P.remplir((np.abs(((ang * 14 / math.pi) % 1.0) - 0.5) > 0.44) & (Y < fy) & (r > 16), E2)     # les nervures
-    for rr in (30, 52, 78, 108):
-        P.remplir((np.abs(r - rr) < 0.5 + rr / 160.0) & (Y < fy), E2)
-    P.remplir((np.abs(((ang * 14 / math.pi) % 1.0) - 0.5) < 0.2) & (Y < fy) & (r > 30) & (r < 52) & (P.T < 0.4), T.CIEL[8])
+    pg.ciel(P, horizon=70.0, haut=0.3, halo=0.36, disque=0)
+    pg.cumulus(P, [(40, 4, 50, 9.0, 231, 9, 0.0), (130, -4, 44, 8.0, 232, 8, 0.4), (90, 18, 34, 6.0, 233, 7, 0.7)], dessous=-0.5)
+    # ---- La verrière : fer peint et verre. Des arcs à chaque travée, des pannes qui fuient, des carreaux dépolis, clairs
+    # ou sales ; le jour entre par la gauche.
     tab.plan("lointains", 0.2)
-    # ---- Le mur du fond : la grande horloge de gare (arrêtée), une arcade, des guichets minuscules.
-    fond = (np.abs(X - fx) < 40) & (Y > 24) & (Y < 52)
-    P.rampe(fond, 0.5 + 0.02 * (Y - 24), [E2, E3, E4], 0.5)
-    for i in range(7):
-        ax = fx - 33 + i * 11
-        P.ell(ax, 40.0, 3.6, 5.0, E1, cond=Y < 40.5)
-        P.rect(ax - 3.6, 40.0, 7.2, 9.0, E1)
-        P.rect(ax - 2.8, 41.0, 5.6, 6.0, G2)
+    ci = np.searchsorted(np.array(TRAVEES), dv)
+    ki = np.floor(th / (math.pi / 12.0)).astype(np.int64)
+    sous = np.floor((th / (math.pi / 12.0) - ki) * 2).astype(np.int64)       # deux carreaux par panne
+    hc = hz(ci * 31 + ki, sous, 234)
+    jour = 0.5 + 0.5 * np.cos(th - LUM)
+    depoli = berceau & (hc < 0.62)
+    P.rampe(depoli, 0.42 + 0.42 * jour + 0.3 * (hc - 0.3) + 0.1 * (pg.fbm(X / 6.0, Y / 4.0, 2, 235) - 0.5), [T.CIEL[6], T.CIEL[8], T.CIEL[10], T.CIEL[11], BLANC], 0.5)
+    P.remplir(berceau & (hc > 0.9), E4)                                       # des carreaux jaunis, jamais remplacés
+    voile(P, berceau & (hc > 0.9) & (pg.fbm(X / 2.0, Y / 2.0, 2, 236) > 0.5), E3, 0.6)
+    casse = berceau & (hc > 0.62) & (hc < 0.66)                              # un carreau fêlé
+    P.remplir(casse & (np.abs(((X * 0.7 + Y) % 5.0) - 2.5) < 0.3), T.CIEL[11])
+    # Le fer : petits bois entre les carreaux, pannes, arcs (plus épais), faîtage ; l'arête tournée vers le jour est claire.
+    fr = th / (math.pi / 12.0) - ki
+    petit_bois = berceau & (np.abs(fr - 0.5) < 0.035)
+    panne = berceau & ((fr < 0.07) | (fr > 0.93))
+    arc = np.zeros(X.shape, dtype=bool)
+    arc_clair = np.zeros(X.shape, dtype=bool)
+    for t in TRAVEES[1:]:
+        arc |= berceau & (np.abs(dv - t) < 0.022 * dv)
+        arc_clair |= berceau & (dv - t > -0.022 * dv) & (dv - t < -0.008 * dv)
+    faite = berceau & (np.abs(th - math.pi / 2) < 0.045)
+    P.remplir(petit_bois, G3)
+    P.remplir(panne, G1)
+    P.remplir(panne & (fr > 0.93) & (th < LUM) | panne & (fr < 0.07) & (th >= LUM), G3)
+    P.remplir(arc, N1)
+    P.remplir(arc & arc_clair, G3)
+    P.remplir(arc & (np.abs(((th * 14.0) % 1.0) - 0.5) < 0.12) & ~arc_clair, G2)     # les rivets
+    P.remplir(faite, N1)
+    P.remplir(faite & (th > math.pi / 2), G2)
+    for t in TRAVEES[1:-1]:                                                  # des tirants de fer d'un mur à l'autre, et leurs lanternes
+        yy = py_(t, HT) + 1.0 / t
+        P.trait(px_(t, -1) + 2, yy, px_(t, 1) - 2, yy, N1)
+        for cote in (-1, 1):
+            lx_ = fx + cote * 46.0 / t
+            P.trait(lx_, yy, lx_, yy + 5.0 / t, N1)
+            vif = (p + 0.21 * t + 0.3 * cote) % 1.0 > 0.1
+            P.ell(lx_, yy + 6.6 / t, 1.9 / t + 0.3, 2.2 / t + 0.3, J3 if vif else J1)
+            if vif:
+                halo(P, lx_, yy + 6.6 / t, 9.0 / t + 2, J2, 0.4)
+    # Les ombres des nuages glissent sur le verre.
+    passe = pg.fbm((X + 30.0 * p) / 34.0, Y / 16.0, 3, 237)
+    voile(P, depoli & (passe > 0.6), T.CIEL[7], 0.35)
+    # La brume de la distance : plus c'est loin, plus c'est pâle.
+    voile(P, berceau, T.CIEL[10], np.clip((dv - 1.5) / 2.2, 0, 0.45))
+    # ---- Le tympan du fond : une grande rosace en éventail, quelques carreaux de couleur ; elle est à contre-jour de
+    # l'afficheur et l'auréole.
+    yl = py_(DB, HT)
+    rl = np.hypot((X - fx) / 40.0, (Y - yl) / 36.0)
+    al = np.arctan2(yl - Y, X - fx)
+    P.rampe(lunette, 0.6 + 0.3 * (1 - rl) + 0.1 * (pg.fbm(X / 5.0, Y / 4.0, 2, 238) - 0.5), [T.CIEL[8], T.CIEL[10], T.CIEL[11], BLANC], 0.5)
+    sect = np.floor(al / (math.pi / 9.0)).astype(np.int64)
+    anneau = np.searchsorted(np.array([0.34, 0.66, 0.9]), rl)
+    hv = hz(sect, anneau, 239)
+    for seuil, coul in ((0.12, J3), (0.22, C3), (0.3, O3), (0.36, V4)):
+        P.remplir(lunette & (anneau == 2) & (hv < seuil) & (hv >= seuil - 0.1), coul)
+    P.remplir(lunette & (anneau == 0), J3)
+    P.remplir(lunette & (np.abs((al / (math.pi / 9.0)) - sect - 0.5) > 0.44), N1)
+    for r0 in (0.34, 0.66, 0.9):
+        P.remplir(lunette & (np.abs(rl - r0) < 0.022), N1)
+    P.remplir(lunette & (rl > 0.94), E3)
+    P.remplir(lunette & (rl > 0.97), E2)
+    # ---- Le mur du fond, déjà pâli par la distance : corniche, frise de petites baies, arcade de guichets, deux passages.
+    P.rampe(fond, 0.62 + 0.012 * (Y - yl) + 0.12 * (pg.fbm(X / 9.0, Y / 6.0, 3, 240) - 0.5), [E3, E4, E5, BLANC], 0.5)
+    P.remplir(fond & (Y < yl + 1.0), BLANC)
+    P.remplir(fond & (Y >= yl + 1.0) & (Y < yl + 1.6), E2)
+    for i in range(11):                                                       # la frise de petites baies
+        bx_ = fx - 35.0 + i * 7.0
+        vif = hz(i, 0, 241) < 0.45 and (p + hz(i, 1, 241)) % 1.0 < 0.9
+        P.rect(bx_ - 1.6, yl + 3.4, 3.2, 4.0, E2)
+        P.rect(bx_ - 1.1, yl + 3.9, 2.2, 3.0, J3 if vif else N2)
+    P.rect(fx - 40.0, yl + 9.0, 80.0, 0.7, E2)
+    for i in range(7):                                                        # l'arcade des guichets du fond
+        gx_ = fx - 27.0 + i * 9.0
+        if i in (0, 6):                                                       # aux deux bouts : un passage vers un autre hall
+            P.ell(gx_, 45.6, 3.4, 4.0, N1, cond=Y < 46.0)
+            P.rect(gx_ - 3.4, 45.6, 6.8, 12.2, N1)
+            P.rect(gx_ - 2.0, 48.0, 4.0, 9.8, N2)
+            P.rect(gx_ - 1.0, 50.6, 2.0, 7.2, T.CIEL[4])
+            P.point(gx_, 52.0, J3)
+            continue
+        P.ell(gx_, 46.6, 3.2, 3.6, E2, cond=Y < 47.0)
+        P.rect(gx_ - 3.2, 46.6, 6.4, 8.4, E2)
+        P.ell(gx_, 47.0, 2.5, 2.9, G2, cond=Y < 47.4)
+        P.rect(gx_ - 2.5, 47.0, 5.0, 6.4, G2)
+        for j in range(5):
+            P.rect(gx_ - 2.5, 47.6 + j * 1.2, 5.0, 0.4, G3)
+        P.rect(gx_ - 1.4, 49.4, 2.8, 1.8, BLANC)
+        P.rect(gx_ - 0.8, 50.0, 1.6, 0.5, O2)
+        P.rect(gx_ - 3.2, 53.4, 6.4, 1.2, B3)
+        P.rect(gx_ - 3.2, 54.6, 6.4, 3.3, B2)
+        P.point(gx_, 44.0, J3 if (p + 0.13 * i) % 1.0 > 0.1 else J1)
+    for cote in (-1, 1):                                                      # deux tableaux des départs, lignes qui clignotent
+        tx_ = fx + cote * 21.0
+        P.rect(tx_ - 9.5, 36.2, 19.0, 6.2, N1)
+        P.rect(tx_ - 9.0, 36.7, 18.0, 5.2, N0)
         for j in range(4):
-            P.rect(ax - 2.8, 41.6 + j * 1.5, 5.6, 0.4, G1)
-        P.rect(ax - 1.6, 43.0, 3.2, 2.0, BLANC)
-        P.rect(ax - 1.0, 43.8, 2.0, 0.5, O2)
-    P.ell(fx, 31.0, 5.0, 5.0, B2)
-    P.ell(fx, 31.0, 4.2, 4.2, E5)
+            vif = (int(p * 8) + j + (cote > 0)) % 5 != 0
+            P.rect(tx_ - 8.0, 37.3 + j * 1.2, 5.0 + 3.0 * hz(j, cote, 247), 0.5, J2 if vif else B1)
+            P.rect(tx_ + 3.0, 37.3 + j * 1.2, 4.0, 0.5, O2 if j == 1 else C3)
+    P.ell(fx, 36.4, 4.6, 4.6, B2)                                             # l'horloge du hall, sous l'afficheur
+    P.ell(fx, 36.4, 3.8, 3.8, T.CREME)
     for k in range(12):
-        P.point(fx + 3.5 * math.cos(k * math.pi / 6), 31.0 + 3.5 * math.sin(k * math.pi / 6), G1)
-    P.trait(fx, 31.0, fx + 1.4, 29.4, ENCRE)                    # 13 h 37
-    P.trait(fx, 31.0, fx + 0.9 + 0.2 * (int(p * 8) % 2), 34.0, ENCRE)      # la grande aiguille frémit, sans avancer
+        P.point(fx + 3.1 * math.cos(k * math.pi / 6), 36.4 + 3.1 * math.sin(k * math.pi / 6), G1)
+    P.trait(fx, 36.4, fx + 1.3, 34.9, ENCRE)                                  # 13 h 37
+    P.trait(fx, 36.4, fx + 0.9 + 0.2 * (int(p * 8) % 2), 39.2, ENCRE)
+    voile(P, fond, T.CIEL[11], 0.3)
+    halo(P, fx, yl - 12.0, 64.0, BLANC, 0.5, ry=44)
+    # ---- Les murs latéraux : celui de gauche dans l'ombre, celui de droite au jour ; cinq guichets de chaque côté.
     tab.plan("moyen", 0.5)
-    # ---- Les deux murs latéraux, en fuite : une rangée de guichets, rideau de fer baissé, néon jaune, petit panneau.
+    cote_px = np.where(X < fx, -1.0, 1.0)
+    v = 0.46 + 0.24 * cote_px - 0.16 * hw + 0.16 * (pg.fbm(X / 10.0, Y / 7.0, 3, 242) - 0.5)
+    P.rampe(mur, v, [E1, E2, E3, E4, E5], 0.5)
+    assise = np.floor(hw * 11.0)
+    joint = (hw * 11.0 - assise < 0.07) | (((np.log(dw) * 9.0 + 0.5 * (assise % 2)) % 1.0) < 0.05)
+    voile(P, mur & joint & (hw < 0.2), E2, 0.45)
+    voile(P, mur & (hz(assise, np.floor(np.log(dw) * 9.0 + 0.5 * (assise % 2)), 246) > 0.8) & (hw < 0.2), E3, 0.3)       # des pierres plus sombres
+    P.remplir(mur & (hw < HT + 0.035), BLANC)                                 # la corniche et son ombre
+    P.remplir(mur & (hw >= HT + 0.035) & (hw < HT + 0.07), E1)
+    P.remplir(mur & (np.abs(hw + 0.6) < 0.012), E2)
     for cote in (-1, 1):
-        mur = ((X - fx) * cote > 40 + (0)) & (Y < fy + ((X - fx) * cote - 40) * 0.62) & (Y > fy - ((X - fx) * cote - 40) * 0.9)
-        P.rampe(mur, 0.42 + 0.004 * (X - fx) * cote + 0.2 * (pg.fbm(X / 12.0, Y / 8.0, 2, 231) - 0.5), [E1, E2, E3, E4], 0.6)
+        clair, moyen, sombre = (E4, E3, E2) if cote > 0 else (E3, E2, E1)
         for i in range(5):
-            d0, d1 = 42 + i * 13 + i * i * 1.4, 42 + (i + 1) * 13 + (i + 1) ** 2 * 1.4 - 3
-            xa, xb = fx + cote * d0, fx + cote * d1
-            k0, k1 = (d0 - 40) / 60.0, (d1 - 40) / 60.0
-            haut = lambda k: fy - 4 - 22 * k
-            bas = lambda k: fy + 2 + 36 * k
-            # pilier, linteau, guichet
-            P.poly([(xa, haut(k0)), (xb, haut(k1)), (xb, bas(k1)), (xa, bas(k0))], G2)
-            P.poly([(xa, haut(k0) + 3 + 5 * k0), (xb, haut(k1) + 3 + 5 * k1), (xb, bas(k1) - 8 - 14 * k1),
-                    (xa, bas(k0) - 8 - 14 * k0)], G1)
-            n = 9
-            for j in range(n):                                # les lames du rideau de fer
-                u = (j + 0.5) / n
-                ya = haut(k0) + 3 + 5 * k0 + (bas(k0) - 8 - 14 * k0 - haut(k0) - 3 - 5 * k0) * u
-                yb = haut(k1) + 3 + 5 * k1 + (bas(k1) - 8 - 14 * k1 - haut(k1) - 3 - 5 * k1) * u
-                P.trait(xa, ya, xb, yb, G3 if j % 2 else G0)
-            mxp, kp = (xa + xb) / 2, (k0 + k1) / 2            # le panneau « Retour à 13 h 38 », dessiné : une horloge, une flèche
-            ph = 3.0 + 5.0 * kp
-            P.rect(mxp - ph, fy + 2 * kp, ph * 2, ph * 1.2, BLANC)
-            P.ell(mxp - ph * 0.45, fy + 2 * kp + ph * 0.6, ph * 0.36, ph * 0.36, O2)
-            P.rect(mxp, fy + 2 * kp + ph * 0.5, ph * 0.7, max(0.4, ph * 0.14), ENCRE)
-            P.poly([(xa, bas(k0) - 8 - 14 * k0), (xb, bas(k1) - 8 - 14 * k1), (xb, bas(k1) - 5 - 10 * k1), (xa, bas(k0) - 5 - 10 * k0)], B2)
-            P.trait(xa, bas(k0) - 8 - 14 * k0, xb, bas(k1) - 8 - 14 * k1, B3)
-            if (p + 0.17 * i + (0.4 if cote > 0 else 0)) % 1.0 > 0.12:                     # le néon du guichet
-                P.trait(xa + cote * 1, haut(k0) + 1.2 + 2 * k0, xb - cote * 1, haut(k1) + 1.2 + 2 * k1, J3, P.ep(0.5))
-                halo(P, mxp, haut(kp) + 4 + 4 * kp, 6 + 8 * kp, J2, 0.3)
-    # ---- Le sol : un dallage beige et gris qui fuit, ciré, où tombe la lumière de la verrière.
-    sol = (Y > fy + np.maximum(np.abs(X - fx) - 40, 0) * 0.62) & (Y > fy + 6)
-    dallage(P, sol, fx, fy, E4, E3, larg=6.0, prof=1.5, joint=E2)
-    voile(P, sol, G3, np.clip((np.abs(X - fx) - 30) / 110.0, 0, 0.5))
-    voile(P, sol & (np.abs(X - fx) < (Y - fy) * 0.55), BLANC, 0.22)
-    # La file en serpentin : poteaux dorés et cordons orange, des feuilles qui attendent debout.
-    for rang, yq in enumerate((57.0, 61.5, 67.0)):
-        k = 0.5 + 0.25 * rang
-        x0, x1 = fx - 34 * (0.7 + 0.3 * rang), fx + 34 * (0.7 + 0.3 * rang)
+            d0, d1 = TRAVEES[i] * 1.03, TRAVEES[i + 1] * 0.94
+            dm = (d0 + d1) / 2
+            k = 1.0 / dm
+            q = lambda d, h: (px_(d, cote), py_(d, h))
+            # Le pilastre entre deux travées, son arête éclairée, son chapiteau.
+            P.poly([q(d1, HT + 0.07), q(TRAVEES[i + 1] * 1.03, HT + 0.07), q(TRAVEES[i + 1] * 1.03, HS), q(d1, HS)], clair)
+            P.poly([q(d1, HT + 0.07), q(d1 * 1.012, HT + 0.07), q(d1 * 1.012, HS), q(d1, HS)], BLANC if cote > 0 else moyen)
+            P.poly([q(d1 * 0.985, HT + 0.07), q(TRAVEES[i + 1] * 1.045, HT + 0.07), q(TRAVEES[i + 1] * 1.045, HT + 0.12), q(d1 * 0.985, HT + 0.12)], clair)
+            # La baie : une arche, un renfoncement sombre, le rideau de fer baissé (pas tout à fait).
+            baie = [q(d0, -0.4), q(d0 + (d1 - d0) * 0.22, -0.5), q(d1 - (d1 - d0) * 0.22, -0.5), q(d1, -0.4), q(d1, 0.22), q(d0, 0.22)]
+            P.poly(baie, N1)
+            P.poly([q(d0, -0.4), q(d0 + (d1 - d0) * 0.22, -0.5), q(d1 - (d1 - d0) * 0.22, -0.5), q(d1, -0.4), q(d1, -0.37), q(d0, -0.37)], N0)
+            n = 12
+            for j in range(n):
+                hj = -0.37 + (0.52 if (i == 2 and cote < 0) else 0.55) * (j + 0.5) / n      # un rideau est resté entrouvert
+                P.trait(q(d0, hj)[0], q(d0, hj)[1], q(d1, hj)[0], q(d1, hj)[1], (G3 if cote > 0 else G2) if j % 2 else G1, max(1, P.ep(0.5 * k)))
+            P.trait(q(d0, 0.17)[0], q(d0, 0.17)[1], q(d1, 0.17)[0], q(d1, 0.17)[1], G4)
+            P.poly([q(d0, -0.4), q(d0 * 1.02, -0.4), q(d0 * 1.02, 0.22), q(d0, 0.22)], sombre)                 # l'épaisseur du mur
+            # Le néon jaune au-dessus, le numéro du guichet, le petit panneau « retour à 13 h 38 » qui se balance.
+            allume = (p + 0.17 * i + (0.4 if cote > 0 else 0)) % 1.0 > 0.12
+            P.trait(q(d0 * 1.03, -0.56)[0], q(d0 * 1.03, -0.56)[1], q(d1 * 0.97, -0.56)[0], q(d1 * 0.97, -0.56)[1], J3 if allume else J1, max(1, P.ep(0.7 * k)))
+            if allume:
+                halo(P, q(dm, -0.5)[0], q(dm, -0.42)[1], 13.0 * k + 2, J2, 0.45)
+            nx_, ny_ = q(dm, -0.66)
+            P.rect(nx_ - 2.4 * k, ny_ - 1.4 * k, 4.8 * k, 2.8 * k, N0)
+            P.point(nx_ - 0.8 * k, ny_, J2)
+            P.point(nx_ + 0.8 * k, ny_, J2 if (i + (cote > 0)) % 2 else J3)
+            bal = 0.5 * k * onde(p, 0.19 * i + 0.3 * cote)
+            sx_, sy_ = q(dm, -0.22)
+            sw, sh = 8.5 * k, 6.5 * k
+            P.trait(sx_, q(dm, -0.37)[1], sx_ + bal, sy_, G4)
+            P.rect(sx_ - sw / 2 + bal, sy_, sw, sh, BLANC)
+            P.rect(sx_ - sw / 2 + bal, sy_ + sh - 0.5 * k - 0.2, sw, 0.5 * k + 0.2, E3)
+            P.ell(sx_ - sw * 0.22 + bal, sy_ + sh * 0.46, sh * 0.3, sh * 0.3, O2)                              # une horloge
+            P.trait(sx_ - sw * 0.22 + bal, sy_ + sh * 0.46, sx_ - sw * 0.22 + bal, sy_ + sh * 0.26, BLANC)
+            P.rect(sx_ + sw * 0.05 + bal, sy_ + sh * 0.34, sw * 0.3, max(0.4, 0.14 * sh), ENCRE)                # une flèche
+            P.rect(sx_ + sw * 0.05 + bal, sy_ + sh * 0.62, sw * 0.2, max(0.4, 0.1 * sh), G3)
+            # Le comptoir : tablette de bois, panneaux, plinthe ; dessus, ce qu'on y a laissé.
+            P.poly([q(d0 * 0.99, 0.2), q(d1 * 1.01, 0.2), q(d1 * 1.01, 0.26), q(d0 * 0.99, 0.26)], B3)
+            P.trait(q(d0 * 0.99, 0.2)[0], q(d0 * 0.99, 0.2)[1], q(d1 * 1.01, 0.2)[0], q(d1 * 1.01, 0.2)[1], E4)
+            P.poly([q(d0, 0.26), q(d1, 0.26), q(d1, HS), q(d0, HS)], B2 if cote > 0 else B1)
+            P.poly([q(d0 * 1.03, 0.3), q(d1 * 0.97, 0.3), q(d1 * 0.97, 0.52), q(d0 * 1.03, 0.52)], B3 if cote > 0 else B2)
+            P.poly([q(d0 * 1.05, 0.32), q(d1 * 0.95, 0.32), q(d1 * 0.95, 0.5), q(d0 * 1.05, 0.5)], B2 if cote > 0 else B1)
+            P.poly([q(d0, 0.55), q(d1, 0.55), q(d1, HS), q(d0, HS)], G2)
+            ox, oy = q(dm, 0.2)
+            objet = (i + (2 if cote > 0 else 0)) % 5
+            if objet == 0:                                                    # une sonnette
+                P.ell(ox, oy - 1.2 * k, 2.2 * k, 1.4 * k, J2, cond=Y < oy)
+                P.point(ox, oy - 2.8 * k, J3)
+            elif objet == 1:                                                  # une pile de formulaires
+                for j in range(4):
+                    P.rect(ox - 3.0 * k, oy - (j + 1) * 0.9 * k, 6.0 * k, 0.9 * k, BLANC if j % 2 else E5)
+            elif objet == 2:                                                  # une plante verte (sarcelle) qui a soif
+                P.rect(ox - 1.4 * k, oy - 2.6 * k, 2.8 * k, 2.6 * k, O1)
+                for j in range(4):
+                    P.trait(ox, oy - 2.6 * k, ox + (j - 1.5) * 1.6 * k + 0.2 * onde(p, 0.1 * j), oy - 7.0 * k, T.S2 if j % 2 else T.S1)
+            elif objet == 3:                                                  # un tampon sur son encrier
+                P.rect(ox - 1.8 * k, oy - 1.0 * k, 3.6 * k, 1.0 * k, V2)
+                P.rect(ox - 0.6 * k, oy - 4.2 * k, 1.2 * k, 3.2 * k, B3)
+            else:                                                             # un gobelet oublié
+                P.rect(ox - 1.0 * k, oy - 2.6 * k, 2.0 * k, 2.6 * k, E5)
+                P.rect(ox - 1.0 * k, oy - 2.6 * k, 2.0 * k, 0.6 * k, O2)
+    yeux_x, yeux_y = (px_(1.58, -1), py_(1.58, 0.19))                         # dans la baie entrouverte : quelqu'un regarde
+    pg.yeux(P, yeux_x - 1.0, yeux_y - 1.2, coul=J3, d=0.4)
+    voile(P, mur, T.CIEL[11], np.clip((dw - 1.5) / 2.4, 0, 0.4))               # la distance pâlit les murs aussi
+    voile(P, mur & (X < fx), N2, 0.22)                                         # le mur de gauche, à l'ombre
+    voile(P, mur & (X < fx) & (hw > -0.1), N2, 0.15)
+    carreau = (((np.log(dw) * 5.0 + hw * 1.6) % 1.0) < 0.62) & (((np.log(dw) * 5.0 - hw * 2.4) % 1.0) > 0.08)
+    voile(P, mur & (X > fx) & carreau & (hw > -0.7) & (hw < 0.3), BLANC, 0.4, lumiere=True)
+    # ---- Le sol : un dallage de marbre en damier, veiné, ciré ; une bordure de pierre grise, un filet de laiton, une
+    # allée centrale. Il fuit vers le fond et pâlit avec lui.
+    cu, cz = np.floor(uf * 5.0 + 50.0), np.floor(df * 7.0)
+    pair = ((cu + cz) % 2 == 0)
+    veine = pg.fbm(uf * 14.0 + cz * 3.1, df * 9.0 + cu * 1.7, 3, 243)
+    vs = 0.4 + 0.24 * pair + 0.22 * (veine - 0.5) + 0.1 * uf - 0.1 * np.abs(uf)
+    P.rampe(sol, vs, [E1, E2, E3, E4, E5], 0.4)
+    P.remplir(sol & (np.abs(veine - 0.5) < 0.012) & pair, E3)                  # les veines du marbre clair
+    P.remplir(sol & (np.abs(veine - 0.62) < 0.01) & ~pair, E2)
+    fu, fz = uf * 5.0 + 50.0 - cu, df * 7.0 - cz
+    P.remplir(sol & ((fu < 0.035 * df) | (fz < 0.05)), E2)                     # les joints
+    bordure = sol & (np.abs(uf) > 0.88)
+    P.rampe(bordure, 0.5 + 0.3 * (pg.fbm(uf * 30.0, df * 6.0, 2, 244) - 0.5) + 0.1 * cote_px, [G2, G3, G4], 0.4)
+    P.remplir(sol & (np.abs(np.abs(uf) - 0.86) < 0.012), J1)                   # le filet de laiton
+    P.remplir(sol & (np.abs(np.abs(uf) - 0.86) < 0.005), J2)
+    allee = sol & (np.abs(uf) < 0.1)
+    los = (np.abs(((df * 7.0) % 1.0) - 0.5) + np.abs(uf) * 5.0 < 0.42)
+    P.remplir(allee, E4)
+    P.remplir(allee & los, G3)
+    P.remplir(sol & (np.abs(np.abs(uf) - 0.1) < 0.008), J1)
+    voile(P, sol, T.CIEL[11], np.clip((df - 1.5) / 1.6, 0, 0.5))                # la distance
+    # Le reflet du mur du fond dans le marbre ciré ; la flaque de lumière orange de l'afficheur ; les néons des guichets.
+    reflet(P, sol & (ax < 44.0) & (Y < py_(DB, HS) + 9.0), tab.derriere(), py_(DB, HS), force=0.55, etire=0.8, ondule=0.0)
+    lueur_aff = 0.8 if int(p * 8) % 4 else 1.0
+    ell_aff = np.hypot((X - fx) / 40.0, (Y - 69.0) / 9.0)
+    voile(P, sol & (ell_aff < 1.0), O2, 0.5 * lueur_aff * (1 - ell_aff))
+    for i in range(4):                                                        # les quatre chiffres, en traînées dans le marbre ciré
+        tx_ = fx - 20.0 + i * 13.4
+        tr_ = sol & (np.abs(X - tx_ - (X - fx) * 0.0) < (1.2 if i == 0 else 3.6)) & (Y > 62.5) & (Y < 76.5) & ((P.YI + int(p * 8)) % 3 != 0)
+        P.remplir(tr_ & (hz(P.YI, P.XI // 2, 248 + i) < 0.75 * lueur_aff * np.clip(1.0 - np.abs(Y - 68.5) / 8.0, 0, 1)), O2)
+        P.remplir(tr_ & (np.abs(X - tx_) < 0.8) & (hz(P.YI, 0, 252 + i) < 0.6) & (np.abs(Y - 68.0) < 5.0), O3)
+    eclat = sol & (ell_aff < 1.0) & (hz(P.YI, (P.XI + P.YI % 2 * 2) // 4, 256) < 0.3 * lueur_aff * (1 - ell_aff))
+    P.remplir(eclat, O1)                                                      # et des éclats orange épars autour
+    voile(P, sol & (np.hypot((X - fx) / 26.0, (Y - 68.0) / 5.0) < 1.0), O2, 0.3 * lueur_aff)
+    for cote in (-1, 1):
+        for i in range(5):
+            dm = (TRAVEES[i] * 1.03 + TRAVEES[i + 1] * 0.94) / 2
+            if (p + 0.17 * i + (0.4 if cote > 0 else 0)) % 1.0 > 0.12:
+                gx_, gy_ = px_(dm, cote) - cote * 9.0 / dm, py_(dm, HS) + 1.0 / dm
+                voile(P, sol & (np.hypot((X - gx_) / (11.0 / dm), (Y - gy_) / (3.4 / dm)) < 1.0), J2, 0.4, lumiere=True)
+    # ---- Le jour : trois rais tombent de la verrière, à gauche, et posent leurs carreaux de lumière sur le dallage.
+    for i, (x0, largeur, y_sol) in enumerate(((44.0, 13.0, 66.0), (70.0, 10.0, 62.0), (22.0, 15.0, 73.0))):
+        pg.rai(P, x0, -16.0, y_sol, largeur, 0.36, BLANC, 0.46, 16, 245 + i)
+        cx_ = x0 + (y_sol + 16.0) * 0.36
+        tache = sol & (np.abs(X - cx_ - (Y - y_sol) * 1.6) < largeur * 0.8) & (np.abs(Y - y_sol) < 2.6 + 0.02 * y_sol)
+        voile(P, tache, BLANC, 0.6, lumiere=True)
+        voile(P, tache & (((X - (Y - y_sol) * 1.6) % (largeur * 0.4)) < 0.6), E4, 0.5)                          # l'ombre des petits bois
+    # ---- L'afficheur « 1 337 » : suspendu à sa poutrelle, orange ; c'est lui qu'on regarde.
+    axb, ayb, awb, ahb = 66.0, 6.0, 60.0, 24.0
+    P.rect(axb - 6.0, -16.0, awb + 12.0, 2.0, N1)                              # la poutrelle en treillis
+    for x in np.arange(axb - 6.0, axb + awb + 6.0, 6.0):
+        P.trait(x, -14.0, x + 3.0, -10.6, N1)
+        P.trait(x + 3.0, -10.6, x + 6.0, -14.0, N1)
+    P.rect(axb - 6.0, -10.6, awb + 12.0, 1.2, N1)
+    P.rect(axb - 6.0, -10.6, awb + 12.0, 0.4, G3)
+    for dx in (8.0, 52.0):
+        P.rect(axb + dx, -9.4, 1.4, 14.0, G1)
+        P.rect(axb + dx, -9.4, 0.5, 14.0, G3)
+    P.courbe([(axb + 30.0, -9.4), (axb + 34.0, -2.0), (axb + 30.0, 4.6)], ENCRE, 1)                             # son câble
+    P.poly([(axb + awb + 1.5, ayb - 1.5), (axb + awb + 5.0, ayb + 0.5), (axb + awb + 5.0, ayb + ahb + 0.5), (axb + awb + 1.5, ayb + ahb + 1.5)], G0)   # son flanc
+    P.rect(axb - 1.5, ayb - 1.5, awb + 3, ahb + 3, G1)
+    P.rect(axb - 1.5, ayb - 1.5, awb + 3, 0.6, G4)
+    P.rect(axb - 1.5, ayb - 1.5, 0.6, ahb + 3, G3)
+    P.rect(axb, ayb, awb, ahb, ENCRE)
+    P.remplir((X > axb) & (X < axb + awb) & (Y > ayb) & (Y < ayb + ahb) & (P.XI % 2 == 0) & (P.YI % 2 == 0), B1)   # la trame des diodes
+    for i in range(4):                                                        # les segments éteints, en filigrane
+        sept(P, axb + 5.5 + i * 13.4, ayb + 4.5, "8", B1, l=9.0, h=15.0, ep=P.ep(1.4))
+    halo(P, axb + awb / 2, ayb + ahb / 2, 40, O1, 0.5 * lueur_aff, ry=18)
+    sept(P, axb + 5.5, ayb + 4.5, "1337", K1, l=9.0, h=15.0, ep=P.ep(2.0), pas=13.4)
+    sept(P, axb + 5.5, ayb + 4.5, "1337", O2, l=9.0, h=15.0, ep=P.ep(1.4), pas=13.4)
+    if int(p * 8) % 4:
+        sept(P, axb + 5.5, ayb + 4.5, "1337", O3, l=9.0, h=15.0, ep=P.ep(0.5), pas=13.4)
+    for i in range(6):                                                        # des voyants courent sous les chiffres
+        voyant(P, axb + 6 + i * 9.6, ayb + ahb - 2.0, J3, B1, d=i / 6.0, part=0.3, r=0.6)
+    P.rect(axb + 6.0, ayb + ahb + 1.5, awb - 12.0, 2.4, N1)                    # le bandeau : un pictogramme de file, une flèche
+    for i in range(5):
+        P.rect(axb + 10.0 + i * 3.0, ayb + ahb + 2.1, 1.6, 1.2, E5)
+    P.trait(axb + 40.0, ayb + ahb + 2.7, axb + 50.0, ayb + ahb + 2.7, O2)
+    # ---- La file en serpentin : poteaux de laiton, cordons, ceux qui attendent debout ; leurs ombres vers la droite.
+    for rang, dq in enumerate((2.3, 1.95, 1.62)):
+        k = 1.0 / dq * 1.6
+        yq = py_(dq, HS)
+        x0, x1 = fx - 72.0 / dq, fx + 72.0 / dq
         nb = 6 + rang
         for i in range(nb + 1):
             x = x0 + (x1 - x0) * i / nb
+            voile(P, sol & (np.hypot((X - x - 2.4 * k) / (3.0 * k), (Y - yq - 0.2) / (0.5 * k)) < 1.0), E1, 0.45)
             if i < nb:
-                P.courbe([(x, yq - 4.4 * k), (x + (x1 - x0) / nb / 2, yq - 3.2 * k), (x + (x1 - x0) / nb, yq - 4.4 * k)], O2, 1)
+                P.courbe([(x, yq - 4.4 * k), (x + (x1 - x0) / nb / 2, yq - 3.0 * k), (x + (x1 - x0) / nb, yq - 4.4 * k)], O2 if rang else O1, 1)
             P.rect(x - 0.4 * k, yq - 5.0 * k, 0.9 * k, 5.0 * k, J1)
+            P.rect(x - 0.4 * k, yq - 5.0 * k, 0.35 * k, 5.0 * k, J3)
             P.ell(x, yq - 5.2 * k, 0.8 * k, 0.8 * k, J2)
             P.ell(x, yq, 1.2 * k, 0.4 * k, G1)
-        for i in range(nb * 2):                              # ceux qui attendent : de petites feuilles debout
+        for i in range(nb * 2):
             x = x0 + 3 + (x1 - x0 - 6) * i / (nb * 2 - 1)
-            if 128 < x < 170 and rang == 2 or 26 < x < 66 and rang == 2:
-                continue
-            hgt = (3.6 + 1.0 * hz(i, rang, 232)) * k
-            dy = 0.25 * k * (1 if int(p * 8 + i) % 5 == 0 else 0)
-            P.rect(x - 0.8 * k, yq - hgt - dy, 1.7 * k, hgt, (BLANC, E5, C3, E5)[(i + rang) % 4])
-            P.point(x - 0.3 * k, yq - hgt * 0.72 - dy, ENCRE)
-            P.point(x + 0.4 * k, yq - hgt * 0.72 - dy, ENCRE)
-    # ---- L'afficheur « 1 337 » : suspendu sous la verrière, orange, c'est lui qu'on regarde.
-    ax, ay, aw, ah = 66.0, 6.0, 60.0, 24.0
-    for dx in (8.0, 52.0):
-        P.rect(ax + dx, -17.0, 1.0, 23.5, G1)
-    P.rect(ax - 1.5, ay - 1.5, aw + 3, ah + 3, G1)
-    P.rect(ax - 1.5, ay - 1.5, aw + 3, 0.6, G3)
-    P.rect(ax, ay, aw, ah, ENCRE)
-    trame_led = ((P.XI % 2 == 0) & (P.YI % 2 == 0))
-    P.remplir((X > ax) & (X < ax + aw) & (Y > ay) & (Y < ay + ah) & trame_led, B1)
-    halo(P, ax + aw / 2, ay + ah / 2, 44, O1, 0.4, ry=20)
-    sept(P, ax + 5.5, ay + 4.5, "1337", K1, l=9.0, h=15.0, ep=P.ep(2.0), pas=13.4)
-    sept(P, ax + 5.5, ay + 4.5, "1337", O2, l=9.0, h=15.0, ep=P.ep(1.4), pas=13.4)
-    if int(p * 8) % 4:
-        sept(P, ax + 5.5, ay + 4.5, "1337", O3, l=9.0, h=15.0, ep=P.ep(0.5), pas=13.4)
-    for i in range(6):                                       # des voyants courent sous les chiffres
-        voyant(P, ax + 6 + i * 9.6, ay + ah - 2.0, J3, B1, d=i / 6.0, part=0.3, r=0.6)
-    rai(P, 60.0, -16.0, 78.0, 16.0, -0.34, BLANC, 0.3, 22, 233)
-    rai(P, 138.0, -16.0, 78.0, 13.0, 0.3, BLANC, 0.26, 18, 234)
-    # ---- Premier plan : le banc de bois (au milieu, bas), le distributeur de tickets, deux pigeons de gare.
+            if rang == 2 and (26 < x < 66 or 128 < x < 170):
+                continue                                                      # la place de Pilou et de son interlocuteur
+            hgt = (3.8 + 1.2 * hz(i, rang, 232)) * k
+            dy = 0.3 * k * (1 if int(p * 8 + i) % 5 == 0 else 0)
+            voile(P, sol & (np.hypot((X - x - 1.8 * k) / (2.2 * k), (Y - yq - 0.2) / (0.4 * k)) < 1.0), E1, 0.45)
+            c0 = (BLANC, E5, C3, E5)[(i + rang) % 4]
+            P.rect(x - 0.8 * k, yq - hgt - dy, 1.7 * k, hgt, c0)
+            P.rect(x + 0.5 * k, yq - hgt - dy, 0.4 * k, hgt, E3 if c0 != C3 else C1)       # leur côté à l'ombre
+            P.point(x - 0.4 * k, yq - hgt * 0.72 - dy, ENCRE)
+            P.point(x + 0.2 * k, yq - hgt * 0.72 - dy, ENCRE)
+            if (i + rang * 3) % 7 == 0:
+                P.rect(x - 1.4 * k, yq - hgt * 0.5 - dy, 0.8 * k, 1.0 * k, O2)              # un ticket, à la main
+    # Un moineau vole sous la verrière ; un avion de papier plane ; un papillon tourne près de la rosace.
+    t = (p + 0.3) % 1.0
+    mx_, my_ = 30.0 + 130.0 * t, 14.0 + 10.0 * math.sin(t * 6.283 * 1.5)
+    aile = onde(p * 2)
+    P.trait(mx_ - 1.6, my_ - 0.8 * aile, mx_, my_, B1)
+    P.trait(mx_, my_, mx_ + 1.6, my_ - 0.8 * aile, B1)
+    pg.avion_papier(P, 20.0, 34.0, 172.0, 46.0, d=0.1)
+    pg.papillon_de_nuit(P, 140.0, 4.0, 8.0, coul=T.CREME, d=0.5)
+    poussiere(P, 20, -6, 150, 60, 30, BLANC, 237)
+    # ---- Premier plan : deux colonnes de fonte qui cadrent, la lampe-globe, le banc, ce qui traîne.
     tab.plan("premier", 1.0)
+    for (cx_, cote) in ((4.0, 1), (188.0, -1)):
+        col = (np.abs(X - cx_) < 5.0 + 0.6 * np.cos((Y - 30.0) / 30.0))
+        uc = (X - cx_) / 5.6
+        P.rampe(col, 0.34 + 0.3 * uc * (-1 if cx_ < fx else 1) * -1 + 0.2 * (uc * uc) + 0.06 * np.sin(X * 3.0), [ENCRE, N0, N1, G1, G2], 0.4)
+        P.remplir(col & (np.abs(uc - 0.55 * cote) < 0.12), G3)                 # l'arête que le jour touche
+        for yb in (60.0, 64.0, 6.0, 2.0):                                      # bagues, base et chapiteau
+            P.rect(cx_ - 6.8, yb, 13.6, 1.6, N0)
+            P.rect(cx_ - 6.8, yb, 13.6, 0.5, G2)
+        P.poly([(cx_ - 8.0, 66.0), (cx_ + 8.0, 66.0), (cx_ + 9.0, 80.0), (cx_ - 9.0, 80.0)], N0)
+        P.rect(cx_ - 8.0, 66.0, 16.0, 0.6, G2)
+        P.poly([(cx_ - 5.6, 2.0), (cx_ + 5.6, 2.0), (cx_ + 10.0, -8.0), (cx_ - 10.0, -8.0)], N0)
+        for j in range(5):                                                    # les volutes de la console
+            P.courbe([(cx_ + cote * 4.0, -2.0 - j * 2.6), (cx_ + cote * (9.0 + j * 2.0), -5.0 - j * 2.2), (cx_ + cote * (11.0 + j * 2.4), -16.0)], N0, P.ep(0.7))
+        voile(P, sol & (np.abs(Y - 77.0 - (X - cx_) * 0.06) < 2.2) & (X > cx_) & (X < cx_ + 60.0), E1, 0.4)      # son ombre sur le dallage
+    lgx, lgy = 20.0, 4.0                                                      # la lampe-globe, à la console de gauche
+    P.courbe([(7.0, -6.0), (15.0, -8.0), (lgx, -3.0)], N0, P.ep(0.8))
+    P.trait(lgx, -3.0, lgx + 0.3 * onde(p), lgy - 3.2, N0)
+    halo(P, lgx, lgy, 20.0, J2, 0.5)
+    P.ell(lgx + 0.3 * onde(p), lgy, 3.4, 3.4, J3 if int(p * 8) % 7 else J2)
+    P.ell(lgx - 0.8 + 0.3 * onde(p), lgy - 0.9, 1.4, 1.4, BLANC)
+    P.rect(lgx - 1.4 + 0.3 * onde(p), lgy - 3.6, 2.8, 0.8, N0)
+    pg.papillon_de_nuit(P, lgx, lgy, 5.0, coul=T.CREME)
+    # Le banc de bois, au milieu, bas : son ombre, son reflet ciré, le journal oublié, le ballon noué.
     bx0, bx1, by = 74.0, 120.0, 72.0
-    voile(P, (X > bx0 - 2) & (X < bx1 + 2) & (Y > 77.5) & (Y < 79.6), G1, 0.6)
+    voile(P, (X > bx0 + 4) & (X < bx1 + 12) & (Y > 77.0) & (Y < 79.8) & (P.a >= 0), E1, 0.5)
     for x in (bx0 + 3, bx1 - 5):
         P.rect(x, by, 2.4, 7.0, B1)
-        P.rect(x, by, 0.8, 7.0, B2)
+        P.rect(x, by, 0.8, 7.0, B3)
     P.rect(bx0, by - 1.8, bx1 - bx0, 2.6, B2)
     P.rect(bx0, by - 1.8, bx1 - bx0, 0.8, B3)
+    P.rect(bx0, by - 1.8, bx1 - bx0, 0.3, E4)
     P.rect(bx0, by + 0.6, bx1 - bx0, 0.4, B1)
     for x in np.arange(bx0 + 6, bx1, 7.5):
         P.trait(x, by - 1.0, x + 2.0, by - 1.0, B1)
-    P.rect(bx0 + 3, by - 8.0, bx1 - bx0 - 6, 1.6, B2)           # le dossier du banc
-    P.rect(bx0 + 3, by - 8.0, bx1 - bx0 - 6, 0.5, B3)
+    P.rect(bx0 + 3, by - 8.0, bx1 - bx0 - 6, 1.6, B2)
+    P.rect(bx0 + 3, by - 8.0, bx1 - bx0 - 6, 0.5, E4)
     P.rect(bx0 + 3, by - 5.2, bx1 - bx0 - 6, 1.4, B2)
+    P.rect(bx0 + 3, by - 5.2, bx1 - bx0 - 6, 0.4, B3)
     P.rect(bx0 + 4, by - 8.0, 1.2, 6.4, B1)
     P.rect(bx1 - 5.2, by - 8.0, 1.2, 6.4, B1)
-    papiers(P, 100.0, by - 1.8, 7.0, 3, 235)                    # un journal oublié
-    dx_ = 176.0                                               # le distributeur de tickets
+    papiers(P, 100.0, by - 1.8, 7.0, 3, 235)
+    bal = 0.8 * onde(p)
+    P.trait(118.0, by - 7.6, 119.0 + bal, 52.0, G1)
+    P.ell(119.0 + bal, 47.6, 3.4, 4.4, O2)
+    P.ell(118.0 + bal, 46.0, 1.3, 1.7, O3)
+    P.point(119.0 + bal, 52.2, O1)
+    # Le distributeur de tickets : il en sort un, qui rentre ; d'autres sont tombés.
+    dx_ = 176.0
+    voile(P, (X > dx_ + 13) & (X < dx_ + 22) & (Y > 76.0) & (P.a >= 0), E1, 0.4)
     P.rect(dx_, 50.0, 13.0, 28.0, G2)
-    P.rect(dx_, 50.0, 2.0, 28.0, G3)
-    P.rect(dx_ + 11.6, 50.0, 1.4, 28.0, G1)
+    P.rampe((X > dx_) & (X < dx_ + 13.0) & (Y > 50.0) & (Y < 78.0), 0.3 + 0.5 * (dx_ + 13.0 - X) / 13.0, [G1, G2, G3, G4], 0.4)
+    P.rect(dx_, 50.0, 13.0, 0.8, G4)
     P.rect(dx_ + 2.6, 52.6, 7.8, 5.0, ENCRE)
     sept(P, dx_ + 3.2, 53.4, "1338", O2, l=1.2, h=3.2, ep=1, pas=1.9)
     P.ell(dx_ + 6.5, 63.0, 2.6, 2.6, O1)
     P.ell(dx_ + 6.2, 62.6, 1.8, 1.8, O2)
+    P.point(dx_ + 5.4, 61.8, O3)
     P.rect(dx_ + 3.0, 68.0, 7.0, 1.0, ENCRE)
     P.rect(dx_ + 4.4, 68.4, 4.0, 2.2 + 0.6 * onde(p), BLANC)
     tickets(P, dx_ + 5.0, 70.0, 79.5, 3, 236)
-    for i, (x, sens) in enumerate(((16.0, 1), (22.5, -1))):                               # les pigeons
+    # La fuite de la verrière et son seau ; la valise oubliée ; les pigeons ; la souris.
+    P.poly([(124.0, 71.0), (131.0, 71.0), (130.0, 78.0), (125.0, 78.0)], G3)
+    P.rect(123.6, 70.4, 7.8, 1.0, G4)
+    P.ell(127.5, 70.9, 3.0, 0.5, C3)
+    pg.goutte(P, 127.5, -10.0, 70.9, coul=C3, d=0.2, flaque=BLANC)
+    P.rect(12.0, 68.0, 10.0, 8.0, B2)
+    P.rect(12.0, 68.0, 10.0, 1.0, B3)
+    P.rect(12.0, 71.6, 10.0, 0.6, B1)
+    P.rect(15.4, 66.2, 3.2, 1.8, B1)
+    P.poly([(22.0, 69.0), (24.8, 69.4 + 0.5 * onde(p, 0.3)), (24.4, 71.6 + 0.5 * onde(p, 0.3)), (22.0, 71.0)], BLANC)
+    for i, (x, sens) in enumerate(((60.0, 1), (66.5, -1))):
         picore = int(p * 8 + i * 3) % 4 == 0
-        P.ell(x, 76.6, 2.4, 1.5, G3)
-        P.ell(x - sens * 0.8, 76.9, 1.5, 0.9, G4)
-        P.poly([(x - sens * 2.0, 76.4), (x - sens * 4.0, 75.6), (x - sens * 2.2, 77.6)], G2)
-        hx_, hy_ = x + sens * 2.1, 76.8 if picore else 74.8
+        voile(P, (np.hypot((X - x - 1.6) / 3.0, (Y - 78.4) / 0.5) < 1.0) & (P.a >= 0), E1, 0.45)
+        P.ell(x, 76.8, 2.4, 1.5, G3)
+        P.ell(x - sens * 0.8, 77.1, 1.5, 0.9, G4)
+        P.poly([(x - sens * 2.0, 76.6), (x - sens * 4.0, 75.8), (x - sens * 2.2, 77.8)], G2)
+        hx_, hy_ = x + sens * 2.1, 77.0 if picore else 75.0
         P.ell(hx_, hy_, 1.0, 1.0, V3)
         P.point(hx_ + sens * 0.3, hy_ - 0.3, ENCRE)
         P.rect(min(hx_ + sens * 0.9, hx_ + sens * 1.8), hy_ + 0.1, 0.9, 0.5, O2)
-        P.trait(x, 78.0, x, 79.0, O1)
-    poussiere(P, 30, 0, 160, 60, 24, BLANC, 237)
-    # ---- Seconde passe : ce qui traîne dans un hall où l'on attend depuis 13 h 37.
-    P.poly([(120.0, 71.0), (127.0, 71.0), (126.0, 78.0), (121.0, 78.0)], G3)                      # un seau sous une fuite de la verrière
-    P.rect(119.6, 70.4, 7.8, 1.0, G4)
-    pg.goutte(P, 123.5, 20.0, 71.0, coul=C3, d=0.2, flaque=C3)
-    bal = 0.8 * onde(p)                                         # un ballon oublié, noué au banc
-    P.trait(120.0, 64.0, 121.0 + bal, 50.0, G1)
-    P.ell(121.0 + bal, 45.6, 3.4, 4.4, O2)
-    P.ell(120.0 + bal, 44.0, 1.2, 1.6, O3)
-    pg.souris(P, 70.0, 78.4, sens=-1, coul=G3)
-    pg.avion_papier(P, 20.0, 30.0, 170.0, 44.0, d=0.1)
-    pg.papillon_de_nuit(P, 96.0, 4.0, 34.0, coul=E5, d=0.5)
-    # Une valise oubliée, son étiquette qui bat.
-    P.rect(8.0, 66.0, 9.0, 7.0, B2)
-    P.rect(8.0, 66.0, 9.0, 1.0, B3)
-    P.rect(11.0, 64.4, 3.0, 1.6, B1)
-    P.poly([(17.0, 67.0), (19.6, 67.4 + 0.5 * onde(p, 0.3)), (19.2, 69.4 + 0.5 * onde(p, 0.3)), (17.0, 69.0)], BLANC)
-    pg.yeux(P, 4.0, 40.0, coul=J3, d=0.4)                       # quelqu'un, derrière un rideau de fer
+        P.trait(x, 78.2, x, 79.2, O1)
+    pg.souris(P, 140.0, 78.6, sens=-1, coul=G3)
+    voile(P, (Y > 78.6) & (P.a >= 0), E1, 0.25)
 
 
 # =====================================================================================================================
 # Le pied de la Tour du tampon : une tour de pierre grise qui se perd dans la brume (la clé), la file enroulée trois
 # fois autour de sa base, une porte basse gardée par un tabouret trop petit, la lumière jaune des néons.
 # =====================================================================================================================
-@decor("grande-panne", "tour-tampon", soleil=(96.0, -30.0), tons=PANNE, nom="Le pied de la Tour du tampon", matiere=True)
+@decor("grande-panne", "tour-tampon", soleil=(30.0, -30.0), tons=PANNE, nom="Le pied de la Tour du tampon", matiere=True)
 def tour_tampon(P, tab):
     T = pg.T
     p = P.p
     X, Y = P.X, P.Y
-    tab.plan("ciel", 0.0)
-    pg.ciel(P, horizon=74.0, haut=0.14, halo=0.0, disque=0)
-    brume = lambda y0, ep, g, f=0.55: voile(P, np.abs(Y - y0 - 3 * np.sin(X / 23.0 + g)) < ep * (0.6 + 0.8 * pg.fbm(
-        (X + 2.0 * onde(p, g * 0.1)) / 26.0, Y / 5.0, 3, 240 + g)), T.CIEL[7], f * 0.8)
-    tab.plan("lointains", 0.2)
-    # ---- Au loin, d'autres tours dans la brume, des passerelles, des lucarnes allumées.
-    for i, (x, w, top) in enumerate(((14, 14, 8), (40, 9, 22), (148, 11, 14), (174, 16, 0), (126, 7, 30), (62, 6, 34))):
-        m = (np.abs(X - x) < w / 2 * (1 + (Y - top) / 300.0)) & (Y > top)
-        P.rampe(m, 0.3 + 0.012 * (Y - top) + 0.2 * (X - x) / w, [T.CIEL[2], T.CIEL[3], T.CIEL[4], T.CIEL[5]], 0.6)
-        P.rect(x - w / 2 - 1, top, w + 2, 1.4, T.CIEL[2])
-        for j in range(6):
-            if hz(i, j, 241) < 0.6:
-                vif = (p + hz(i, j, 242)) % 1.0 < 0.8
-                P.rect(x - w * 0.25 + (j % 2) * w * 0.3, top + 6 + j * 7, 1.4, 2.2, J3 if vif else T.CIEL[1])
-    P.rect(40, 40, 88, 1.0, T.CIEL[2])                         # une passerelle
-    for x in range(42, 128, 6):
-        P.rect(x, 41, 0.5, 3.0, T.CIEL[3])
-    brume(30.0, 6.0, 1)
-    brume(54.0, 7.0, 2, 0.6)
-    tab.plan("moyen", 0.5)
-    # ---- La tour : pierre grise, cerclée de corniches, elle se perd dans la brume du haut ; des tampons géants y sont
-    # frappés, des fenêtres de bureau s'allument.
     cx = 96.0
+    C = T.CIEL
+    # ---- Le ciel : un jour gris-bleu, des bancs de nuages en volumes ; la lumière vient d'en haut à gauche.
+    tab.plan("ciel", 0.0)
+    pg.ciel(P, horizon=74.0, haut=0.2, halo=0.34, disque=0)
+    pg.cumulus(P, [(26, 4, 74, 12.0, 260, 10, 0.0), (150, -6, 84, 13.0, 261, 11, 0.3), (100, 26, 96, 9.0, 262, 9, 0.6),
+                   (8, 42, 66, 7.0, 263, 7, 0.8), (178, 38, 64, 8.0, 264, 7, 0.5)], dessous=-0.4)
+    brume = lambda y0, ep, g, f=0.55, ton=7: voile(P, np.abs(Y - y0 - 3 * np.sin(X / 23.0 + g)) < ep * (0.6 + 0.8 * pg.fbm(
+        (X + 2.0 * onde(p, g * 0.1)) / 26.0, Y / 5.0, 3, 240 + g)), C[ton], f * 0.8)
+    # ---- Les autres tours de l'administration : trois rangs, de plus en plus pâles et bleus en s'éloignant.
+    tab.plan("lointains", 0.2)
+    rangs = (([(26, 7, 30, 0), (54, 5, 38, 1), (74, 6, 33, 2), (120, 5, 40, 0), (138, 8, 28, 1), (162, 6, 36, 2)], 8),
+             ([(8, 12, 14, 1), (44, 9, 24, 2), (150, 11, 18, 0), (186, 10, 26, 1)], 6),
+             ([(22, 13, 2, 2), (170, 15, -6, 0)], 4))
+    for r, (tours, b) in enumerate(rangs):
+        tons_r = [C[max(b - 2, 0)], C[b - 1], C[b], C[min(b + 1, 11)], C[min(b + 2, 11)]]
+        for i, (x, w, top, style) in enumerate(tours):
+            dm = w / 2 * (1 + (Y - top) / 300.0)
+            m = (np.abs(X - x) < dm) & (Y > top)
+            uu = (X - x) / np.maximum(dm, 1e-3)
+            P.rampe(m, 0.62 - 0.36 * uu - 0.1 * uu * uu + 0.004 * (Y - top) + 0.12 * (pg.fbm(X / 4.0, Y / 3.0, 2, 265 + r) - 0.5), tons_r, 0.5)
+            P.remplir(m & (uu < -0.82), tons_r[4])                              # l'arête au jour
+            if r > 0:
+                P.remplir(m & (((Y - top) % 7.0) < 0.5), tons_r[1])             # les corniches d'étage
+                P.remplir(m & (((Y - top) % 7.0) > 0.5) & (((Y - top) % 7.0) < 1.0) & (uu > -0.8), tons_r[0])
+            if style == 0:                                                      # créneaux
+                for k in range(int(w // 2) + 1):
+                    P.rect(x - w / 2 + k * 2.2, top - 1.6, 1.2, 1.6, tons_r[2])
+                P.rect(x - w / 2 - 0.8, top, w + 1.6, 1.0, tons_r[1])
+            elif style == 1:                                                    # toit pointu et sa hampe
+                P.poly([(x - w / 2 - 1, top), (x + w / 2 + 1, top), (x, top - w * 0.9)], tons_r[1])
+                P.poly([(x - w / 2 - 1, top), (x, top), (x, top - w * 0.9)], tons_r[3])
+                P.trait(x, top - w * 0.9, x, top - w * 0.9 - 3.0, tons_r[0])
+            else:                                                               # une citerne sur ses pattes
+                P.rect(x - w * 0.3, top - 2.0, 0.5, 2.0, tons_r[0])
+                P.rect(x + w * 0.25, top - 2.0, 0.5, 2.0, tons_r[0])
+                P.ell(x, top - 4.4, w * 0.42, 2.8, tons_r[2])
+                P.ell(x - w * 0.12, top - 5.0, w * 0.2, 1.4, tons_r[4])
+                P.rect(x - w / 2 - 0.8, top, w + 1.6, 1.0, tons_r[1])
+            for j in range(8):                                                  # les lucarnes ; certaines veillent
+                if hz(i + 10 * r, j, 241) < 0.6 and top + 5 + j * 7 < 72:
+                    vif = (p + hz(i + 10 * r, j, 242)) % 1.0 < 0.8
+                    wx = x - w * 0.25 + (j % 2) * w * 0.3
+                    P.rect(wx, top + 5 + j * 7, 1.0 + 0.2 * r, 1.6 + 0.3 * r, (J3 if r else J2) if vif else tons_r[0])
+        if r == 1:                                                              # une passerelle à arches, de tour en tour
+            P.rect(44, 39.4, 106, 1.2, C[5])
+            P.rect(44, 39.4, 106, 0.4, C[8])
+            for x in range(47, 150, 8):
+                P.rect(x, 40.6, 0.8, 4.0 + (x % 16) * 0.1, C[5])
+                P.courbe([(x + 0.8, 43.0), (x + 4.4, 40.8), (x + 8.0, 43.0)], C[5], 1)
+            t = (p + 0.2) % 1.0                                                 # quelqu'un la traverse, un dossier sous le bras
+            P.rect(60 + 70 * t, 37.4, 0.9, 2.0, C[3])
+            P.rect(60.8 + 70 * t, 38.2, 0.8, 0.8, E5)
+        brume(30.0 + 12 * r, 5.0 + r, 1 + r, 0.5, ton=9 - r)
+    pg.fumee(P, 44.0, 20.0, p)
+    v = onde(p)                                                 # le fanion d'une tour lointaine
+    P.trait(170.0, -6.0, 170.0, -14.0, C[2])
+    P.poly([(170.0, -14.0), (176.0, -13.0 + 0.6 * v), (170.0, -11.0)], O2)
+    for i in range(5):                                          # un vol de pigeons tourne autour des tours
+        a = 2 * math.pi * (p + i * 0.05)
+        bx_, by_ = 60.0 + 34.0 * math.cos(a) + i * 2.0, 12.0 + 7.0 * math.sin(a) + i
+        P.trait(bx_ - 1.2, by_ - 0.6 * onde(p * 2, i * 0.2), bx_, by_, C[3])
+        P.trait(bx_, by_, bx_ + 1.2, by_ - 0.6 * onde(p * 2, i * 0.2), C[3])
+    tab.plan("moyen", 0.5)
+    # ---- La tour : un fût de pierre grise, éclairé par la gauche, cerclé de corniches ; elle se perd dans la brume.
     demi = lambda y: 25.0 + (_a(y) - 30) * 0.05
     tour = np.abs(X - cx) < demi(Y)
-    u = (X - cx) / demi(Y)
-    v = 0.58 - 0.34 * u + 0.16 * (pg.fbm(X / 3.0, Y / 2.0, 3, 243) - 0.5) - 0.1 * u * u
-    P.rampe(tour, v, [G0, G1, G2, G3, G4], 0.7)
-    assise = np.floor((Y + 16) / 3.0)                           # les assises de pierre, joints décalés
-    P.remplir(tour & (((Y + 16) % 3.0) < 0.4), G1)
-    P.remplir(tour & ((((X - cx) / demi(Y) * 7 + assise * 0.5) % 1.0) < 0.06) & (((Y + 16) % 3.0) > 0.4), G1)
-    for yc in (0.0, 30.0, 54.0):                               # corniches
-        P.remplir((np.abs(X - cx) < demi(Y) + 1.6) & (np.abs(Y - yc) < 1.1), G3)
-        P.remplir((np.abs(X - cx) < demi(Y) + 1.6) & (np.abs(Y - yc - 1.1) < 0.4), G0)
+    u = np.clip((X - cx) / demi(Y), -1, 1)
+    rond = np.sqrt(1 - u * u)
+    yc_ = Y + 0.05 * (72.0 - Y) * rond                           # les anneaux se cintrent : on la regarde d'en bas
+    jour = np.clip(-0.62 * u + 0.78 * rond, 0, 1)
+    grain = pg.fbm(X / 3.0, Y / 2.0, 3, 243)
+    assise = np.floor((yc_ + 16) / 3.0)
+    col_ = np.floor(np.arcsin(u) / 0.24 + 0.5 * (assise % 2))
+    vp = 0.16 + 0.62 * jour + 0.16 * (grain - 0.5) + 0.12 * (hz(assise, col_, 266) - 0.5) + 0.1 * (u > 0.9)
+    P.rampe(tour, vp, [G0, G1, G2, G3, G3, G4], 0.5)
+    P.remplir(tour & (u < -0.93) & (Y > 4), E5)                                 # le liseré de jour, à gauche
+    joint_h = ((yc_ + 16) % 3.0) < 0.4
+    joint_v = (np.abs((np.arcsin(u) / 0.24 + 0.5 * (assise % 2)) % 1.0) < 0.07) & ~joint_h
+    voile(P, tour & (joint_h | joint_v), G0, 0.5)
+    P.remplir(tour & (((yc_ + 16) % 3.0) > 0.4) & (((yc_ + 16) % 3.0) < 0.75) & (u < 0.1), G4)      # le haut de chaque pierre accroche le jour
+    voile(P, tour & (pg.fbm(X / 5.0, Y / 9.0, 3, 267) > 0.62) & (u > -0.4), G0, 0.3)                 # coulures d'humidité
+    voile(P, tour & (np.abs(u + 0.2 - 0.1 * np.sin(Y / 6.0)) < 0.02) & (Y > 2) & (Y < 26), G0, 0.6)   # une lézarde
+    for yb in (0.0, 30.0, 54.0):                                # corniches : dessus clair, ombre portée dessous
+        co = (np.abs(X - cx) < demi(Y) + 1.8) & (np.abs(yc_ - yb) < 1.2)
+        P.rampe(co, 0.2 + 0.7 * jour, [G1, G2, G3, G4, E5], 0.4)
+        P.remplir((np.abs(X - cx) < demi(Y) + 1.8) & (np.abs(yc_ - yb + 1.0) < 0.3) & (u < 0.3), E5)
+        voile(P, tour & (yc_ - yb > 1.2) & (yc_ - yb < 3.4), G0, 0.5)
+        for k in range(-5, 6):                                  # les modillons
+            a = k * 0.27
+            P.rect(cx + demi(yb) * math.sin(a) - 0.5, yb + 1.2 - 0.05 * (72 - yb) * math.cos(a), 1.0, 1.4, G1)
+    # Les tampons géants frappés dans la pierre : encre un peu passée, un peu de travers.
     for i, (dx, y, a, c0) in enumerate(((-11, 12, -0.3, V4), (10, 22, 0.25, O2), (-8, 42, 0.15, C2), (13, 47, -0.2, V4))):
-        d = np.hypot(X - cx - dx, Y - y)                        # les tampons : un cercle, une étoile ou des barres au milieu
-        voile(P, tour & (np.abs(d - 4.6) < 0.5), c0, 0.8)
-        voile(P, tour & (np.abs(d - 3.6) < 0.25), c0, 0.6)
+        d = np.hypot(X - cx - dx, Y - y)
+        use = pg.fbm(X / 1.5, Y / 1.5, 2, 268 + i) > 0.3
+        voile(P, tour & (np.abs(d - 4.6) < 0.5) & use, c0, 0.8)
+        voile(P, tour & (np.abs(d - 3.6) < 0.25) & use, c0, 0.6)
         voile(P, tour & (np.abs((X - cx - dx) * math.cos(a) + (Y - y) * math.sin(a)) < 2.6) & (np.abs(
-            -(X - cx - dx) * math.sin(a) + (Y - y) * math.cos(a)) < 0.5), c0, 0.8)
+            -(X - cx - dx) * math.sin(a) + (Y - y) * math.cos(a)) < 0.5) & use, c0, 0.8)
+        voile(P, tour & (d < 3.4) & (((X + Y * 0.6) % 1.6) < 0.4) & use, c0, 0.25)
+    # À chaque étage, un guichet : fenêtre en arche, appui de pierre, store, lumière jaune.
     for j, y in enumerate((-8.0, 6.0, 18.0, 36.0)):
         for i in (-1, 0, 1):
             if (i + j) % 2 == 0:
                 vif = (p + hz(i + 2, j, 244)) % 1.0 < 0.85
-                P.rect(cx + i * 9.0 - 1.4, y, 2.8, 4.4, G0)
-                P.rect(cx + i * 9.0 - 1.0, y + 0.4, 2.0, 3.6, J3 if vif else J1)
-                P.rect(cx + i * 9.0 - 1.0, y + 2.0, 2.0, 0.4, G0)
-    voile(P, tour & (Y < 8), T.CIEL[6], np.clip((8 - Y) / 26.0, 0, 0.95))                   # elle se perd dans la brume
-    # La porte basse et son néon jaune ; le tabouret trop petit qui la garde.
+                wx = cx + demi(y) * math.sin(i * 0.38)
+                ww = 1.5 * math.cos(i * 0.38) + 0.3
+                P.ell(wx, y + 0.6, ww + 0.5, 1.6, G0, cond=Y < y + 0.8)
+                P.rect(wx - ww - 0.5, y + 0.6, 2 * ww + 1.0, 4.2, G0)
+                P.rect(wx - ww, y + 0.8, 2 * ww, 3.6, J3 if vif else J1)
+                P.rect(wx - ww, y + 0.8, 2 * ww, 1.0 + 0.6 * hz(i, j, 269), E4 if vif else G2)       # le store, plus ou moins baissé
+                P.rect(wx - 0.15, y + 0.8, 0.3, 3.6, G0)
+                P.rect(wx - ww - 1.0, y + 4.8, 2 * ww + 2.0, 0.7, G4)
+                P.rect(wx - ww - 1.0, y + 5.5, 2 * ww + 2.0, 0.4, G0)
+                if vif:
+                    halo(P, wx, y + 2.6, 5.0, J2, 0.35)
+    P.rect(cx - demi(20) + 2.0, 1.0, 1.0, 53.0, G1)             # une descente de gouttière, et ses colliers
+    P.rect(cx - demi(20) + 2.0, 1.0, 0.4, 53.0, G4)
+    for yb in (8.0, 20.0, 40.0, 50.0):
+        P.rect(cx - demi(20) + 1.6, yb, 1.8, 0.6, G0)
+    pg.goutte(P, cx - demi(20) + 2.5, 54.0, 75.0, coul=C[9], d=0.3)
+    voile(P, tour & (Y < 4), C[7], np.clip((4 - Y) / 20.0, 0, 0.95))                   # elle se perd dans la brume
+    # La porte basse : arche de pierre, vantaux de bois cloutés, la règle gravée au-dessus, le néon jaune.
+    P.rect(cx - 12.0, 55.6, 24.0, 3.0, G3)                       # la plaque : « Chaque étage attend que le précédent se vide. »
+    P.rect(cx - 12.0, 55.6, 24.0, 0.4, E5)
+    P.rect(cx - 12.0, 58.2, 24.0, 0.4, G0)
+    for k in range(2):
+        for x in np.arange(cx - 10.6 + k * 1.4, cx + 10.0 - k * 3, 2.3):
+            P.rect(x, 56.4 + k * 0.9, 1.5, 0.4, G0)
+    for k in range(9):                                          # les claveaux de l'arche
+        a = math.pi * (1.0 + k / 8.0)
+        P.poly([(cx + 6.0 * math.cos(a), 67.0 + 6.0 * math.sin(a)), (cx + 8.2 * math.cos(a), 67.0 + 8.2 * math.sin(a)),
+                (cx + 8.2 * math.cos(a + 0.36), 67.0 + 8.2 * math.sin(a + 0.36)), (cx + 6.0 * math.cos(a + 0.36), 67.0 + 6.0 * math.sin(a + 0.36))], G4 if k % 2 else G3)
+    P.rect(cx - 8.2, 67.0, 2.2, 9.0, G3)
+    P.rect(cx + 6.0, 67.0, 2.2, 9.0, G2)
     P.ell(cx, 67.0, 6.0, 6.0, G0, cond=Y < 67.5)
     P.rect(cx - 6.0, 67.0, 12.0, 9.0, G0)
     P.ell(cx, 67.5, 4.8, 4.8, B1, cond=Y < 68)
     P.rect(cx - 4.8, 67.5, 9.6, 8.5, B1)
+    P.rampe((np.abs(X - cx) < 4.8) & (Y > 63.0) & (Y < 76.0) & (P.a == B1), 0.5 - 0.3 * (X - cx) / 4.8 + 0.2 * (pg.fbm(X * 2.0, Y / 3.0, 2, 270) - 0.5), [B1, B2, B3], 0.4)
     for i in range(-2, 3):
-        P.rect(cx + i * 1.9 - 0.2, 64.0 if abs(i) < 2 else 66.0, 0.4, 12.0, B2)
-    P.ell(cx + 3.0, 71.0, 0.6, 0.6, J2)
-    neon(P, cx - 8.0, cx + 8.0, 58.6, J2, J3, vacille=0.12, lueur=10.0)
+        P.rect(cx + i * 1.9 - 0.2, 64.0 if abs(i) < 2 else 66.0, 0.4, 12.0, B1)
+    P.rect(cx - 0.2, 62.8, 0.4, 13.2, G0)
+    for yb in (66.0, 72.0):                                     # les pentures de fer et leurs clous
+        P.rect(cx - 4.6, yb, 9.2, 0.6, G1)
+        for i in range(-2, 3):
+            P.point(cx + i * 1.9 + 0.8, yb + 0.2, G4)
+    P.ell(cx + 1.6, 70.0, 0.7, 0.7, J2)
+    P.rect(cx - 2.2, 68.0, 1.6, 1.0, G0)                         # le judas
+    neon(P, cx - 9.0, cx + 9.0, 60.0, J2, J3, vacille=0.12, lueur=10.0)
+    P.rect(cx - 9.6, 59.2, 0.6, 1.6, G0)
+    P.rect(cx + 9.0, 59.2, 0.6, 1.6, G0)
     halo(P, cx, 66.0, 34.0, J2, 0.5, ry=16)
-    voile(P, (np.abs(X - cx) < 26 - (78 - Y) * 0.8) & (Y > 60) & (Y < 80), J3, 0.3)
-    brume(6.0, 6.0, 3, 0.6)
-    brume(-9.0, 8.0, 4, 0.8)
-    # ---- Le parvis : pavés gris, la file enroulée trois fois autour de la base (poteaux, cordons, ceux qui attendent).
+    for k, (w_, y_) in enumerate(((13.0, 76.0), (16.0, 77.2))):  # deux marches usées
+        P.rect(cx - w_, y_, 2 * w_, 1.2, G4 if k == 0 else G3)
+        P.rect(cx - w_, y_, 2 * w_, 0.4, E5)
+    brume(2.0, 4.0, 3, 0.45)
+    brume(-10.0, 7.0, 4, 0.8)
+    # ---- Le parvis : des pavés mouillés, en perspective ; la tour y pose son ombre (vers la droite) et son reflet, le néon
+    # y coule en traînées jaunes.
     sol = (Y > 68.0) & ~(tour & (Y < 75.0))
-    dallage(P, sol, cx, 58.0, G3, G2, larg=7.0, prof=1.6, joint=G1)
-    voile(P, sol & (np.hypot(X - cx, (Y - 76) * 3) < 46), J2, 0.3)
-    voile(P, sol & (np.abs(X - cx) > 60), G1, 0.4)
+    dp = 10.0 / np.maximum(Y - 58.0, 1e-3)
+    rang_ = np.floor(dp * 22.0)
+    colp = np.floor((X - cx) * dp * 0.42 + 0.5 * (rang_ % 2))
+    hp = hz(rang_, colp, 271)
+    P.rampe(sol, 0.42 + 0.3 * (hp - 0.5) + 0.2 * (pg.fbm(X / 14.0, Y / 3.0, 3, 272) - 0.5) - 0.0016 * (X - 40.0), [G1, G2, G3, G4, E4], 0.4)
+    fr_ = dp * 22.0 - rang_
+    fc_ = (X - cx) * dp * 0.42 + 0.5 * (rang_ % 2) - colp
+    P.remplir(sol & ((fr_ < 0.12) | (fc_ < 0.09)), G1)
+    P.remplir(sol & (fr_ > 0.8) & (fc_ > 0.2) & (hp > 0.45), E5)                 # le bord de chaque pavé accroche le jour
+    voile(P, sol & (X > cx + 8) & (X - cx < 24 + (Y - 68.0) * 9.0) & (Y < 79.5), G0, 0.5)          # l'ombre de la tour
+    flaque = sol & (pg.fbm(X / 11.0, Y / 2.2, 3, 273) > 0.58)
+    voile(P, flaque, C[8], 0.5)
+    P.remplir(flaque & (hz(P.YI, (P.XI + int(p * 8)) // 5, 276) < 0.08), BLANC)   # un éclat, ici ou là                                # les flaques prennent le ciel
+    voile(P, flaque & (np.abs(X - cx) < 24) & (Y > 75.5), G0, 0.4)               # et le pied de la tour
+    lueur = sol & (np.hypot(X - cx, (Y - 77) * 3.2) < 46)
+    voile(P, lueur, J2, 0.3)
+    coulee = sol & (np.abs(X - cx) < 10.0 + (Y - 76.0)) & (Y > 77.8) & (hz(P.YI, (P.XI + int(p * 8)) // 3, 274) < 0.5)
+    P.remplir(coulee & (np.abs(X - cx) < 5.0), J3)
+    P.remplir(coulee & (np.abs(X - cx) >= 5.0), J2)
+    voile(P, sol & (np.abs(X - cx) > 62), G1, 0.25)
+    voile(P, sol & (Y < 71.5), C[8], np.clip((71.5 - Y) / 3.5, 0, 0.6))          # la brume traîne au ras du parvis, au loin
+    # La file enroulée trois fois autour de la base : poteaux de laiton, cordons, ceux qui attendent, leurs ombres.
     for tour_n, (rx, ry, yc) in enumerate(((34.0, 3.4, 71.0), (52.0, 4.6, 72.0), (74.0, 5.4, 73.4))):
         nb = 14 + tour_n * 6
         k = 0.7 + 0.2 * tour_n
@@ -526,31 +991,84 @@ def tour_tampon(P, tab):
             x, y = cx + rx * math.cos(a), yc - ry * math.sin(a)
             a2 = math.pi * (1.0 + (i + 1) / (nb - 1.0))
             if i < nb - 1:
-                P.trait(x, y - 4.0 * k, cx + rx * math.cos(a2), yc - ry * math.sin(a2) - 4.0 * k, O2)
+                x2, y2 = cx + rx * math.cos(a2), yc - ry * math.sin(a2)
+                P.courbe([(x, y - 4.0 * k), ((x + x2) / 2, (y + y2) / 2 - 3.0 * k), (x2, y2 - 4.0 * k)], O2 if tour_n else O1, 1)
             if (34 < x < 72 or 122 < x < 162) and tour_n > 0:
                 continue                                      # la place de Pilou et de son interlocuteur
-            P.rect(x - 0.3, y - 4.6 * k, 0.7, 4.6 * k, J1)
-            P.point(x - 0.3, y - 4.8 * k, J3)
+            voile(P, sol & (np.hypot((X - x - 1.6 * k) / (2.4 * k), (Y - y - 0.2) / 0.5) < 1.0), G0, 0.45)
+            P.rect(x - 0.4, y - 4.6 * k, 0.9, 4.6 * k, J1)
+            P.rect(x - 0.4, y - 4.6 * k, 0.4, 4.6 * k, J3)
+            P.ell(x, y - 4.8 * k, 0.7 * k, 0.7 * k, J2)
+            P.ell(x, y, 1.0 * k, 0.4, G0)
             if i % 2 == 0 and tour_n < 2:
                 hgt = (3.0 + hz(i, tour_n, 245)) * k
                 dy = 0.3 if int(p * 8 + i) % 6 == 0 else 0.0
-                P.rect(x + 1.2, y - hgt - dy, 1.6 * k, hgt, (BLANC, E5, C3)[i % 3])
+                c0 = (BLANC, E5, C3)[i % 3]
+                P.rect(x + 1.2, y - hgt - dy, 1.6 * k, hgt, c0)
+                P.rect(x + 1.2 + 1.2 * k, y - hgt - dy, 0.4 * k, hgt, E3 if c0 != C3 else C1)
                 P.point(x + 1.5, y - hgt * 0.7 - dy, ENCRE)
-    P.rect(cx + 9.0, 73.4, 3.2, 0.7, B3)                         # le tabouret
+    P.rect(cx + 9.0, 73.4, 3.2, 0.7, B3)                         # le tabouret trop petit
     for dx in (9.3, 11.6):
         P.rect(cx + dx, 74.0, 0.5, 2.2, B2)
     P.rect(cx + 9.6, 71.0, 2.0, 2.4, E5)                         # le képi posé dessus : le gardien s'est absenté
     P.rect(cx + 9.2, 73.0, 3.0, 0.5, N1)
+    P.rect(cx + 9.6, 71.0, 2.0, 0.5, O2)
+    for i in range(3):                                          # des pigeons sur la corniche ; l'un s'ébroue
+        x = 82.0 + i * 5.0
+        P.ell(x, 27.6, 1.8, 1.2, G4)
+        P.ell(x + 1.2, 26.4 - (0.5 if (i == 1 and int(p * 8) % 4 == 0) else 0), 0.8, 0.8, V3)
+    pg.yeux(P, cx - 1.4, 68.4, coul=J3, d=0.6)                   # derrière le judas
+    t = p % 1.0                                                 # là-haut, un grand tampon s'abat sur une feuille, et remonte
+    ty = 10.0 + 6.0 * (1 - abs(math.sin(math.pi * t)) ** 6)
+    P.poly([(118.0, 17.6), (131.0, 17.6), (131.0, 19.0), (119.0, 24.0), (118.0, 24.0)], G1)      # la console de pierre du guichet extérieur
+    P.rect(117.0, 17.2, 14.6, 0.8, G4)
+    P.trait(131.0, 17.2, 131.0, 12.0, G1)                       # son garde-corps
+    P.trait(120.0, 12.4, 131.0, 12.4, G1)
+    P.rect(120.0, 16.2, 9.0, 1.0, BLANC)
+    P.rect(123.0, ty - 6.0, 3.0, 6.0, B2)
+    P.rect(123.0, ty - 6.0, 1.0, 6.0, B3)
+    P.rect(121.6, ty, 5.8, 1.6, V3)
     tab.plan("premier", 1.0)
-    # ---- Premier plan : deux réverbères à néon qui encadrent, des formulaires qui volent, un panneau fléché.
+    # ---- Premier plan : deux réverbères de fonte qui cadrent, un fil de formulaires tendu de l'un à l'autre, un panneau
+    # fléché, des cartons d'archives ; des formulaires passent dans le courant d'air.
     for (x, cote) in ((10.0, 1), (184.0, -1)):
-        P.rect(x - 0.9, 12.0, 1.8, 68.0, N0)
-        P.rect(x - 0.9 + (1.2 if cote > 0 else 0), 12.0, 0.6, 68.0, G1)
-        P.courbe([(x, 12.0), (x + cote * 2, 5.0), (x + cote * 12, 4.0)], N0, P.ep(1.2))
-        neon(P, x + cote * 7 - 5, x + cote * 7 + 5, 6.6, J2, J3, vacille=0.1 if cote > 0 else 0.0, lueur=9.0)
-        voile(P, (np.abs(X - x - cote * 7) < 4 + (Y - 6) * 0.2) & (Y > 7) & (Y < 80), J2, 0.07)
-        P.rect(x - 2.4, 76.0, 4.8, 4.0, N0)
-    for i in range(6):                                        # des formulaires emportés par le courant d'air
+        P.rect(x - 1.3, 10.0, 2.6, 70.0, ENCRE)
+        P.rect(x - 1.3 if cote > 0 else x + 0.5, 10.0, 0.8, 70.0, N1)
+        P.rect(x - 0.3, 10.0, 0.5, 70.0, G1 if cote > 0 else N0)
+        for yb in (22.0, 58.0):
+            P.rect(x - 2.0, yb, 4.0, 1.4, ENCRE)
+            P.rect(x - 2.0, yb, 4.0, 0.4, G1)
+        P.poly([(x - 2.0, 70.0), (x + 2.0, 70.0), (x + 3.6, 80.0), (x - 3.6, 80.0)], ENCRE)
+        P.rect(x - 2.6, 70.0, 5.2, 0.5, G1)
+        P.courbe([(x, 10.0), (x + cote * 2, 3.0), (x + cote * 13, 2.4)], ENCRE, P.ep(1.4))
+        P.courbe([(x, 16.0), (x + cote * 5, 12.0), (x + cote * 9, 3.6)], ENCRE, P.ep(0.6))             # la volute
+        P.poly([(x + cote * 2, 3.6), (x + cote * 13, 3.6), (x + cote * 12, 6.0), (x + cote * 3, 6.0)], N0)
+        neon(P, x + cote * 7.5 - 4.5, x + cote * 7.5 + 4.5, 6.6, J2, J3, vacille=0.1 if cote > 0 else 0.0, lueur=9.0)
+        voile(P, (np.abs(X - x - cote * 7.5) < 4 + (Y - 6) * 0.22) & (Y > 7) & (Y < 80) & (P.a >= 0), J2, 0.1, lumiere=True)
+    P.rect(12.0, 44.0, 12.0, 7.0, N0)                            # le panneau : « file → », et le temps d'attente
+    P.rect(12.6, 44.6, 10.8, 5.8, E4)
+    P.trait(14.0, 46.4, 20.0, 46.4, ENCRE, P.ep(0.5))
+    P.poly([(20.0, 45.2), (22.4, 46.4), (20.0, 47.6)], ENCRE)
+    sept(P, 14.0, 48.0, "3" if int(p * 8) % 8 < 6 else "4", O2, l=1.2, h=2.0, ep=1)
+    P.rect(16.4, 49.4, 5.0, 0.4, G3)
+    fil = lambda x: -9.0 + 7.0 * (1 - ((x - 97.0) / 87.0) ** 2) + 0.4 * onde(p)                         # le fil de formulaires
+    for x in np.arange(11.0, 183.0, 1.0):
+        P.point(x, fil(x), ENCRE)
+    for i, x in enumerate(np.arange(22.0, 176.0, 9.5)):
+        bal = 0.5 * onde(p, i * 0.17)
+        c0 = (BLANC, E5, J2, BLANC, C3, E5, O2)[i % 7]
+        P.poly([(x, fil(x) + 0.4), (x + 4.0, fil(x + 4.0) + 0.4), (x + 4.0 + bal, fil(x + 4.0) + 5.6), (x + bal, fil(x) + 5.6)], c0)
+        P.trait(x + 0.8 + bal * 0.5, fil(x) + 2.2, x + 3.2 + bal * 0.5, fil(x) + 2.2, G2)
+        P.trait(x + 0.8 + bal * 0.7, fil(x) + 3.6, x + 2.6 + bal * 0.7, fil(x) + 3.6, G2)
+        P.point(x + 2.0, fil(x + 2.0) + 0.2, O1)
+    for k, (bx_, by_, bw, bh) in enumerate(((171.0, 70.0, 11.0, 10.0), (178.0, 62.0, 10.0, 8.0), (166.0, 75.0, 7.0, 5.0))):   # les cartons d'archives
+        P.rect(bx_, by_, bw, bh, B1)
+        P.rect(bx_, by_, bw, 1.2, B2)
+        P.rect(bx_, by_, 0.6, bh, B3)
+        P.rect(bx_ + bw * 0.3, by_ + bh * 0.4, bw * 0.4, 2.0, E4)
+        P.trait(bx_ + bw * 0.36, by_ + bh * 0.4 + 0.9, bx_ + bw * 0.62, by_ + bh * 0.4 + 0.9, G1)
+    papiers(P, 179.0, 62.0, 7.0, 3, 275)
+    for i in range(6):                                          # des formulaires emportés par le courant d'air
         t = (p + i / 6.0) % 1.0
         x, y = 20 + 150 * ((hz(i, 1, 246) + t * 0.2) % 1.0), 10 + 50 * hz(i, 2, 246) + 5 * math.sin(t * 6.28 + i)
         if int(t * 8 + i) % 2:
@@ -558,25 +1076,8 @@ def tour_tampon(P, tab):
             P.trait(x + 0.8, y + 0.6, x + 2.6, y + 0.2, G3)
         else:
             P.poly([(x, y + 0.6), (x + 3.2, y), (x + 3.0, y + 1.0), (x + 0.2, y + 1.4)], E5)
-    voile(P, (Y > 76.5), N0, 0.25)
-    # ---- Seconde passe : la vie autour de la tour.
-    pg.papillon_de_nuit(P, 17.0, 8.0, 5.0, coul=BLANC)
-    pg.papillon_de_nuit(P, 177.0, 8.0, 5.0, coul=BLANC, d=0.4)
-    pg.fumee(P, 40.0, 21.0, p)
-    v = onde(p)                                                 # le fanion d'une tour lointaine
-    P.trait(174.0, 0.0, 174.0, -8.0, T.CIEL[2])
-    P.poly([(174.0, -8.0), (180.0, -7.0 + 0.6 * v), (174.0, -5.0)], O2)
-    pg.goutte(P, 76.0, 31.0, 54.0, coul=T.CIEL[9], d=0.3)
-    t = (p * 1.0) % 1.0                                         # là-haut, un grand tampon s'abat sur une feuille, et remonte
-    ty = 10.0 + 6.0 * (1 - abs(math.sin(math.pi * t)) ** 6)
-    P.rect(120.0, 16.0, 9.0, 1.2, BLANC)
-    P.rect(123.0, ty - 6.0, 3.0, 6.0, B2)
-    P.rect(121.6, ty, 5.8, 1.6, V3)
-    for i in range(3):                                          # des pigeons sur la corniche ; l'un s'ébroue
-        x = 82.0 + i * 5.0
-        P.ell(x, 28.4, 1.8, 1.2, G4)
-        P.ell(x + 1.2, 27.2 - (0.5 if (i == 1 and int(p * 8) % 4 == 0) else 0), 0.8, 0.8, V3)
-    pg.yeux(P, 95.0, 71.0, coul=J3, d=0.6)                      # derrière le judas de la porte
+    pg.papillon_de_nuit(P, 17.5, 8.0, 5.0, coul=BLANC)
+    pg.papillon_de_nuit(P, 176.5, 8.0, 5.0, coul=BLANC, d=0.4)
 
 
 # =====================================================================================================================

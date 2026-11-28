@@ -6,8 +6,34 @@ namespace PilouBureau;
 //   fenetre:boutique[:<rayon>[:<article>]]   la boutique, sur un rayon, un article choisi
 //   fenetre:rangees                          « Rangées débloquées » (du niveau 9 au niveau 15)
 //   fenetre:prenom                           la question du prénom
+//   fenetre:amis[:bas]                       « Amis de Pilou » (amis fictifs, code fictif, rien ne part) ; bas : défilée
+//   fenetre:connecteurs[:bas|:<n>]           « Connecteurs de Pilou » (dossier de données jetable) ; défilée en bas, ou de n
+//   fenetre:renommer                         la petite boîte de saisie (« Renommer » un ami)
+//   fenetre:invite                           le Pilou d'un ami en visite, avec sa bulle
 public sealed partial class FenetrePilou
 {
+    // Fait défiler le contenu d'une fenêtre d'essai : « bas », ou un nombre d'unités depuis le haut.
+    private static void Defiler(System.Windows.Window f, string ou)
+    {
+        f.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, () =>
+        {
+            if (Trouver(f) is not { } d) return;
+            if (double.TryParse(ou, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var y)) d.ScrollToVerticalOffset(y);
+            else d.ScrollToEnd();
+        });
+
+        static System.Windows.Controls.ScrollViewer? Trouver(System.Windows.DependencyObject o)
+        {
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(o); i++)
+            {
+                var e = System.Windows.Media.VisualTreeHelper.GetChild(o, i);
+                if (e is System.Windows.Controls.ScrollViewer d) return d;
+                if (Trouver(e) is { } t) return t;
+            }
+            return null;
+        }
+    }
+
     private void EssaiFenetre(string quoi)
     {
         var p = quoi.Split(':');
@@ -25,6 +51,33 @@ public sealed partial class FenetrePilou
             case "prenom":
                 new FenetrePrenom("").Show();
                 break;
+            case "amis":
+                _carnet = Tournage.CarnetDemo(Epoque);
+                _essaiAmis = true;
+            {
+                var amis = new FenetreListeAmis(this);
+                amis.Show();
+                if (p.Length > 1) Defiler(amis, p[1]);
+                break;
+            }
+            case "connecteurs":
+                if (_registre is not null)
+                {
+                    var connecteurs = new FenetreDesConnecteurs(this, _registre);
+                    connecteurs.Show();
+                    if (p.Length > 1) Defiler(connecteurs, p[1]);
+                }
+                break;
+            case "renommer":
+                Dispatcher.BeginInvoke(() => Saisie.Demander("Renommer", "Le nom que tu donnes à cet ami (seulement sur ce PC).", "Léo"));
+                break;
+            case "invite":
+            {
+                var invite = new FenetreInvite("Léo", 1, sombre: true) { Left = 200, Top = 200 };
+                invite.Show();
+                invite.Dire("ma plus belle prise ? un brochet doré !", Epoque, 600_000);
+                break;
+            }
             case "rangees":
                 new FenetreRangees(9, 15, _ => { }).Show();
                 break;

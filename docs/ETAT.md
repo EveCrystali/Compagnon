@@ -26,6 +26,9 @@ Dernière mise à jour : 28 novembre 2026.
   anciens décors 192 × 80 restent en service jusqu'à la bascule. Jamais vus sur un vrai Windows ni un vrai téléphone.
   Seconde passe faite sur les trois grandes campagnes (matière au lieu du damier, douze détails vivants au moins par
   décor, les deux pics de Petit Nuage en fil du voyage) ; le prologue n'a pas eu de seconde passe.
+  Troisième passe « en profondeur » en cours sur La Grande Panne (méthode dans docs/PEINTURE.md, étalon : la mare) :
+  faits, le bureau 13 h 37, le hall des Pas Comptés, le pied de la Tour (3 sur 12) ; avant / après en taille réelle
+  dans `docs/maquettes/paysages/grande-panne/profondeur/`.
 - **Personnages haute définition** (docs/SPRITES.md) : les 29 personnages en pied des trois campagnes sont redessinés
   à l'unité 480 × 240 et exportés (`assets/sprites-hd/`, 69 fichiers, 438 Ko, format de docs/SCENES-HD.md, référence
   `personnages-hd-reference.txt`). Pas encore affichés dans l'app (le Théâtre HD ne les lit pas encore) ; jamais vus
@@ -64,6 +67,15 @@ Dernière mise à jour : 28 novembre 2026.
   posé sur boutique, journal, prénom, « Pilou et moi », expéditions ; essayé pour de vrai sur le PC (ouverture, déplacement,
   redimensionnement, taille minimale, réduire, ✕, Alt+F4, Échap). Pas encore sur l'Aventure, la scène d'évolution, amis,
   connecteurs.
+  Titres-logos et en-tête commun du PC au pixel fin (`LogoPixel`, `Bandeau`) : le pixel des titres passe de 4 ou 5 px
+  à 2 px, celui de la scène en haute définition ; l'en-tête (niveau, XP, pièces) quitte la police système. Vu dans l'exe
+  d'essai à 100 % (boutique, journal, « Pilou et moi », expéditions, Aventure, menu). Reste : le téléphone.
+  Amis, connecteurs, boîte « Renommer » et bulle de l'invité au guide (`ReglagesPixel.cs` : case à cocher, options,
+  dépliant, champ) : de nuit, en police pixel, sous l'habillage commun. Vu dans l'exe d'essai à 100 % ; les clics réels
+  dans ces deux fenêtres ne sont pas essayés.
+  Téléphone : le nombre du niveau et les grands titres (« BOUTIQUE », « NIVEAU 12 ! ») sont des titres-logos au dessin
+  fin (`Style.logo`), « NIV » et la pièce d'or aussi ; vu sur captures Robolectric (clair, sombre, grande police), jamais
+  sur un vrai téléphone.
 - **Vie du personnage** (docs/SPRITES.md) : sauts en arc avec ressorts, antenne en retard, ombre tramée en l'air,
   poussière en marchant et à l'atterrissage, lumière du moment ; réglage « ✧ » respecté, « aucune » = mouvements
   d'avant. Vu dans l'exe d'essai sur le PC d'Antoine (`--essai=vie`), processeur inchangé (≈ 6 % d'un cœur avant
@@ -129,7 +141,8 @@ Dernière mise à jour : 28 novembre 2026.
 - **Théâtre HD** (branche `claude/theatre-hd`, docs/SCENES-HD.md) : la scène passe à 480 × 240 unités (×2) avec le
   Pilou fin du bureau, les décors peints à plans et les personnages et acteurs HD, pour le prologue, La Grande Panne et
   Le phare éteint ; moteur commun (référence Python, C#, Java) ; fenêtre Aventure qui tient dans l'écran ; pas plus de
-  processeur qu'avant. Petit Nuage et les scènes d'évolution attendent leurs décors HD. Jamais vu sur un vrai téléphone.
+  processeur qu'avant. Petit Nuage et les scènes d'évolution aussi (métamorphose jouée par le Pilou fin, PC et
+  téléphone, capturée). Jamais vu sur un vrai téléphone.
 - La visite guidée (`outils/tourner-ecran-gauche.ps1`) joue aussi la pêche, la cuisine, l'Aventure (personnage,
   épreuve, fin), un petit mot, la complicité et le Journal.
 
