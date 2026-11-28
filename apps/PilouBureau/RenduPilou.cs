@@ -15,6 +15,8 @@ public sealed class Allure
     public string Tenue = "";
     public IReadOnlyList<string> Objets = Array.Empty<string>(); // objets de boutique équipés
     public bool Cligne, Clin, Marche, Course, Baille, Etourdi, Fatigue, Salue;
+    // Bouche ouverte : le Théâtre HD fait parler le Pilou du bureau (docs/SCENES-HD.md, une image sur deux).
+    public bool Parle;
     public bool Boude, Dos;                  // il boude (moue, sourcils froncés au repos) ; dos tourné (pas de visage)
     public int Regard, RegardY;              // -1, 0, 1
     public double Saut, Chute, Assis, Suspendu, Tremble; // en « anciens pixels » (grille 26 × 30)
@@ -593,7 +595,7 @@ public static class RenduPilou
             if (S("oeil-" + od + "-d") is { } sdd) Poser(sdd, false, (C + 4 - ecart) * ec + dxf + sdd.Dx, ey + sdd.Dy);
             else if (S("oeil-" + od) is { } sd) Poser(sd, true, (C + 10 - ecart) * ec + dxf - sd.Dx - sd.W, ey + sd.Dy);
         }
-        var bo = a.Dos ? null : S(a.Baille ? "bouche-baille" : moue ? "bouche-boude" : "bouche-" + a.Expr) ?? S("bouche-repos");
+        var bo = a.Dos ? null : S(a.Baille ? "bouche-baille" : a.Parle ? "bouche-surpris" : moue ? "bouche-boude" : "bouche-" + a.Expr) ?? S("bouche-repos");
         if (bo is not null) Poser(bo, false, c0 - bo.W / 2 + dxf, ey + 9 * ec + bo.Dy);
         if (a.Expr is "fete" or "caresse" or "joie" or "tendre" && !a.Dos)
         {

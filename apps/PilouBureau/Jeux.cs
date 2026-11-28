@@ -260,6 +260,8 @@ public sealed partial class FenetrePilou
             _essaiMeteo = parts[0];
             if (parts.Length > 1) _essaiObjet = parts[1];
         }
+        // --essai=lieu:<campagne>:<décor> : la vue de scène seule (HD si le décor HD existe), pour les captures.
+        if (nom.StartsWith("lieu:") && nom.Split(':') is [_, var lc, var ld]) new FenetreLieu(this, lc, ld).Show();
         // --essai=scene-evolution:2|3|4 : la scène d'évolution de ce stade, en démonstration (rien n'est gardé).
         if (nom.StartsWith("scene-evolution:") && int.TryParse(nom[16..], out int stadeScene)) OuvrirSceneEvolution(stadeScene, demo: true);
         if (nom == "evolution")

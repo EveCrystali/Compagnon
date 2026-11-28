@@ -6,7 +6,10 @@ Les sessions « paysages » et « personnages HD » produisent à ce format ; le
 `Theatre.cs`, `Theatre.java`) les lit à l'identique. Le format d'aujourd'hui (192 × 80) est décrit dans
 [SCENES.md](SCENES.md) ; il reste en service pendant la migration.
 
-Statut : **format décidé, moteur pas encore écrit** (branche `claude/theatre-hd`, à venir).
+Statut : **moteur écrit et branché** sur PC et téléphone (branche `claude/theatre-hd`) : le prologue, La Grande Panne
+et Le phare éteint se jouent en HD (leurs décors HD existent) ; Petit Nuage et les scènes d'évolution restent à
+l'ancienne définition tant que leurs décors HD manquent. Captures : `docs/maquettes/animations/pc-prologue-hd-six-lieux.png`,
+`tel-prologue-mare-hd.png`, `pc-aventure-hd-zones.png`, `cadres-avant-apres-hd.png`.
 
 ## 1. L'unité et le cadre
 
@@ -79,9 +82,11 @@ plan: herbes 100 devant
 ## 4. Les scènes : `assets/scenes-hd/<campagne>.txt`
 
 La syntaxe d'`assets/scenes/<campagne>.txt` (SCENES.md), **en unités HD** : `scene`, `sol`, `place`, `interlocuteur`,
-`cle`, `acteur`, `sensible`. Les scènes HD sont replacées à l'œil sur chaque tableau (le cadre passe de 2,4:1 à 2:1 :
-on ne multiplie pas les anciennes coordonnées). Les vitesses et amplitudes de mouvement du moteur sont multipliées par
-2,5 (480 / 192).
+`cle`, `acteur`, `sensible`. Les tableaux HD sont peints dans le **repère des paysages** : un point (x, y) de l'ancienne
+scène devient (2,5 x, 2,5 y + 40). Les scènes HD sont donc **écrites par la conversion** de l'ancienne scène
+(`py outils/sprites/theatre_hd.py`), jamais à la main ; quand un tableau demande une retouche (le Pilou fin est plus
+large que le mini-Pilou), elle va dans la table `AJUSTEMENTS` de `theatre_hd.py`. Les longueurs et vitesses du moteur
+sont multipliées par 5/2 (`E(sc, v)`).
 
 ## 5. Pilou : le Pilou fin du bureau
 
@@ -92,12 +97,14 @@ expressions. Plus de `scene-pilou` en HD.
 | | |
 |---|---|
 | Toile | 96 × 112 unités |
-| Ancrage | colonne 48, **ligne des pieds 108** (à confirmer à l'écriture du moteur, sur les quatre stades) |
+| Ancrage | colonne 48, **ligne des pieds 107** (vérifiée sur les stades 1 et 2 ; Nimbus et Astral descendent de 3 à 4 unités sous ses pieds : son nuage, sa traîne) |
 | Taille mesurée (pose de repos) | Gouttelette 46 × 68, Pilou 62 × 87, Nimbus 86 × 84, Astral 80 × 102 |
 | Ce que le Théâtre lui demande | une pose du bureau : expression (humeur), bouche (parle), marche, regard, saut (décalage vertical), et l'évolution (0 à 1) pour la métamorphose |
 
-Le rendu fin est déjà le même sur le PC et le téléphone (`rendus-reference-2x.txt`). La correspondance « événement de
-scène → pose du bureau » est une fonction du moteur, avec sa référence.
+Le rendu fin est déjà le même sur le PC et le téléphone (`rendus-reference-2x.txt`). La correspondance « état de scène →
+pose du bureau » est `theatre.pose_hd` : marche, bouche ouverte une image sur deux pendant une réplique (champ `parle` du
+rendu, ajouté pour le Théâtre), clin d'œil, regard, saut de joie, coucou (antenne qui salue), sursaut ; l'humeur donne
+l'expression. Le stade, la variante, la couleur et les accessoires viennent du joueur.
 
 ## 6. Les personnages en pied : `assets/sprites-hd/pied-<campagne>-<personnage>.txt`
 
@@ -129,6 +136,27 @@ acteurs qui réagissent (vol, traverse, rond…).
   Pilou, effets. Les plans fixes sont aplatis une fois.
 - Mesures à donner (avant / après, PC et test Java) : temps de chargement d'un décor, temps de composition d'une image,
   processeur du PC pendant une lecture.
+
+## 8 bis. Ce qui est mesuré, et la fenêtre
+
+| Mesure | Avant (192 × 80) | Après (HD 480 × 240) |
+|---|---|---|
+| Composer une image (test PC, Debug) | 0,08 ms | 0,16 ms avec le cache des plans de fond (0,53 ms sans) |
+| Composer une image (test Java sur le PC) | 0,14 ms | 0,18 ms |
+| Charger un décor (PC / Java) | — | 4 ms / 8 ms |
+| Processeur du PC, Aventure ouverte 20 s, processus entier | 12,5 à 13,2 % d'un cœur | 10,5 à 11,3 % d'un cœur |
+
+- **Mémoire** : un décor HD est gardé en indices de palette (un octet par pixel) sur le téléphone, au plus trois décors
+  et seize fonds aplatis en cache ; même borne de trois décors sur le PC.
+- **Fenêtre Aventure (PC)** : 1020 × 880 au plus, jamais plus grande que la zone de travail de l'écran. Quand la hauteur
+  manque, la boîte de dialogue passe de cinq à trois lignes, puis la scène est cadrée par le haut (le ciel est caché, le
+  sol et Pilou restent), à la même unité entière. `PILOU_ZONE_ESSAI=1366x728` simule une zone de travail.
+- **Personnages** : la variante de l'humeur du message (`pied-<campagne>-<id>-<humeur>`) quand elle est dessinée, sinon
+  la neutre (PC et téléphone).
+- **Essai** `--essai=lieu:<campagne>:<décor>` : la vue de scène seule ; elle écrit son rendu dans
+  `%TEMP%\pilou-lieu-<campagne>-<décor>.png` au bout de 4 s (captures).
+- **Scènes d'évolution** : la métamorphose est prête (Pilou entre sous son ancienne forme, le bureau fond l'ancienne forme
+  dans la nouvelle, puis il parle) ; elle se jouera quand les décors HD du fond du jardin existeront.
 
 ## 9. Nommage et outils
 
