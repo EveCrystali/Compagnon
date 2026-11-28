@@ -33,6 +33,16 @@ public static class Theatre
 
     private static long Div(long a, long b) => a / b;      // C# tronque vers zéro, comme la référence (div)
 
+    // La taille de la scène et l'échelle des longueurs du moteur (docs/SCENES-HD.md) : l'ancienne (192 × 80) et la haute
+    // définition (480 × 240, longueurs × 5/2). Une scène porte la sienne ; on ne mélange jamais les deux.
+    public sealed record Definition(string Nom, int W, int H, int Num, int Den);
+
+    public static readonly Definition Ancienne = new("ancienne", 192, 80, 1, 1);
+    public static readonly Definition Hd = new("hd", 480, 240, 5, 2);
+
+    // Une longueur ou une vitesse du moteur (écrite à l'ancienne unité) dans la définition de la scène.
+    public static int E(Scene sc, long v) => (int)Div(v * sc.D.Num, sc.D.Den);
+
     private static int Lisse(long num, long den)
     {
         if (den <= 0 || num >= den) return 1000;
@@ -51,7 +61,9 @@ public static class Theatre
     public sealed class Scene
     {
         public string Nom { get; init; } = "";
-        public (int X0, int Y0, int X1, int Y1) Sol { get; set; } = (0, 78, W, 78);
+        public Definition D { get; init; } = Ancienne;
+        private (int X0, int Y0, int X1, int Y1)? _sol;
+        public (int X0, int Y0, int X1, int Y1) Sol { get => _sol ?? (0, D.H - 2, D.W, D.H - 2); set => _sol = value; }
         public int Place { get; set; } = 24;
         public int Interlocuteur { get; set; } = 150;
         // L'accessoire dont parle le texte (le panneau des choix l'évite), ou null.
@@ -72,13 +84,13 @@ public static class Theatre
 
     private static int Ent(string s) => int.Parse(s, CultureInfo.InvariantCulture);
 
-    public static Dictionary<string, Scene> LireScenes(string texte)
+    public static Dictionary<string, Scene> LireScenes(string texte, Definition? d = null)
     {
         var scenes = new Dictionary<string, Scene>();
         Scene? sc = null;
         foreach (var m in Mots(texte))
         {
-            if (m[0] == "scene") scenes[m[1]] = sc = new Scene { Nom = m[1] };
+            if (m[0] == "scene") scenes[m[1]] = sc = new Scene { Nom = m[1], D = d ?? Ancienne };
             else if (sc is null) continue;
             else if (m[0] == "sol") sc.Sol = (Ent(m[1]), Ent(m[2]), Ent(m[3]), Ent(m[4]));
             else if (m[0] == "place") sc.Place = Ent(m[1]);
@@ -215,7 +227,18 @@ public static class Theatre
         public long Duree;
     }
 
+    // Quelle animation, depuis quand : Dt = -1 pour « sa première image, fixe » (Anim : un nom de assets/scenes/animations.txt).
+    public readonly record struct EtatPilouFin(int X, int Y, string Anim, long Dt, bool Miroir, bool Visible, string Humeur);
+
+    // Le mini-Pilou de scene-pilou : l'image se déduit de l'état (le Pilou fin de la scène HD s'en sert autrement).
     public static EtatPilou Pilou(Contexte cx, IReadOnlyList<Evenement> evts, long t, int regard = 0, string niveau = AnimationsCampagne.Completes)
+    {
+        var e = PilouEtat(cx, evts, t, regard, niveau);
+        var a = cx.P[e.Anim];
+        return new EtatPilou(e.X, e.Y, e.Dt < 0 ? a.Premiere : a.Image(e.Dt), e.Miroir, e.Visible);
+    }
+
+    public static EtatPilouFin PilouEtat(Contexte cx, IReadOnlyList<Evenement> evts, long t, int regard = 0, string niveau = AnimationsCampagne.Completes)
     {
         var sc = cx.Scene;
         var P = cx.P;
@@ -225,10 +248,10 @@ public static class Theatre
         {
             foreach (var e in evts)
                 if (e.T <= t && e.Sorte == "humeur") humeur = e.Humeur;
-            int im = P[Face(humeur)].Premiere;
-            if (niveau == AnimationsCampagne.Reduites && AnimationsCampagne.Cligne(t)) im = P["cligne"].Premiere;
-            return new EtatPilou(x, Sol(sc, x), im, x > W / 2, true);
+            string nomR = niveau == AnimationsCampagne.Reduites && AnimationsCampagne.Cligne(t) ? "cligne" : Face(humeur);
+            return new EtatPilouFin(x, Sol(sc, x), nomR, -1, x > sc.D.W / 2, true, humeur);
         }
+        int entree = E(sc, Entree), sortieD = sc.D.W + E(sc, SortieD - W), sortieG = E(sc, SortieG);
         var action = new Action { Sorte = "" };
         bool parti = false;
         var paroles = new List<(long, long)>();
@@ -237,11 +260,11 @@ public static class Theatre
         {
             if (action.Sorte == "marche")
             {
-                long fait = (jusque - action.T0) * Vitesse / 1000;
+                long fait = (jusque - action.T0) * E(sc, Vitesse) / 1000;
                 if (fait >= Math.Abs(action.X1 - action.X0))
                 {
                     x = action.X1;
-                    parti = action.X1 >= SortieD || action.X1 <= SortieG;
+                    parti = action.X1 >= sortieD || action.X1 <= sortieG;
                     action.Sorte = "";
                 }
             }
@@ -251,7 +274,7 @@ public static class Theatre
         int Position(long jusque)
         {
             if (action.Sorte != "marche") return x;
-            long fait = (jusque - action.T0) * Vitesse / 1000;
+            long fait = (jusque - action.T0) * E(sc, Vitesse) / 1000;
             return (int)(action.X1 >= action.X0 ? action.X0 + fait : action.X0 - fait);
         }
 
@@ -266,7 +289,7 @@ public static class Theatre
             {
                 case "entree":
                 {
-                    int x0 = e.A != 0 ? (int)e.A : Entree;     // A : d'où il entre (0 : du bord gauche)
+                    int x0 = e.A != 0 ? (int)e.A : entree;     // A : d'où il entre (0 : du bord gauche)
                     x = x0;
                     parti = false;
                     action = new Action { Sorte = "marche", T0 = e.T, X0 = x0, X1 = sc.Place };
@@ -275,7 +298,7 @@ public static class Theatre
                 case "depart":
                 {
                     x = Position(e.T);
-                    action = new Action { Sorte = "marche", T0 = e.T, X0 = x, X1 = e.A >= 0 ? SortieD : SortieG };
+                    action = new Action { Sorte = "marche", T0 = e.T, X0 = x, X1 = e.A >= 0 ? sortieD : sortieG };
                     break;
                 }
                 case "humeur":
@@ -306,32 +329,60 @@ public static class Theatre
             }
         }
         Finir(t);
-        if (parti) return new EtatPilou(x, Sol(sc, x), P[Face(humeur)].Premiere, false, false);
+        if (parti) return new EtatPilouFin(x, Sol(sc, x), Face(humeur), -1, false, false, humeur);
         if (action.Sorte == "marche")
         {
             int px = Position(t);
-            return new EtatPilou(px, Sol(sc, px), P["marche"].Image(t - action.T0), action.X1 < action.X0, true);
+            return new EtatPilouFin(px, Sol(sc, px), "marche", t - action.T0, action.X1 < action.X0, true, humeur);
         }
-        bool miroir = x > W / 2;
+        bool miroir = x > sc.D.W / 2;
         int y = Sol(sc, x);
         if (action.Sorte == "anim")
         {
             var nom = action.Nom ?? "repos";
-            if (nom == "surpris" && t - action.T0 >= P["surpris"].Duree) return new EtatPilou(x, y, P["repos-peur"].Image(t - action.T0), miroir, true);
-            if (nom is "regard-d" or "regard-g") return new EtatPilou(x, y, P[nom].Premiere, false, true);
-            return new EtatPilou(x, y, P[nom].Image(t - action.T0), miroir, true);
+            if (nom == "surpris" && t - action.T0 >= P["surpris"].Duree) return new EtatPilouFin(x, y, "repos-peur", t - action.T0, miroir, true, humeur);
+            if (nom is "regard-d" or "regard-g") return new EtatPilouFin(x, y, nom, -1, false, true, humeur);
+            return new EtatPilouFin(x, y, nom, t - action.T0, miroir, true, humeur);
         }
         foreach (var (t0, t1) in paroles)
-            if (t0 <= t && t < t1) return new EtatPilou(x, y, P["parle"].Image(t - t0), miroir, true);
-        if (AnimationsCampagne.Cligne(t)) return new EtatPilou(x, y, P["cligne"].Premiere, miroir, true);
-        if (regard != 0) return new EtatPilou(x, y, P[regard > 0 ? "regard-d" : "regard-g"].Premiere, false, true);
+            if (t0 <= t && t < t1) return new EtatPilouFin(x, y, "parle", t - t0, miroir, true, humeur);
+        if (AnimationsCampagne.Cligne(t)) return new EtatPilouFin(x, y, "cligne", -1, miroir, true, humeur);
+        if (regard != 0) return new EtatPilouFin(x, y, regard > 0 ? "regard-d" : "regard-g", -1, false, true, humeur);
         long cy = t / RegardCycle, u = t % RegardCycle;
         if (AnimationsCampagne.Hasard(cy, 11, 3) < 4000 && u >= RegardDebut && u < RegardDebut + RegardDuree)
         {
             var nom = AnimationsCampagne.Hasard(cy, 12, 3) < 5000 ? "regard-g" : "regard-d";
-            return new EtatPilou(x, y, P[nom].Premiere, false, true);
+            return new EtatPilouFin(x, y, nom, -1, false, true, humeur);
         }
-        return new EtatPilou(x, y, P[Face(humeur)].Image(t), miroir, true);
+        return new EtatPilouFin(x, y, Face(humeur), t, miroir, true, humeur);
+    }
+
+    // La pose du Pilou fin du bureau (champs d'Allure seulement) pour l'état de PilouEtat : en HD, le Pilou de scène est le
+    // vrai Pilou du bureau (docs/SCENES-HD.md, § 5). Arithmétique entière, puis un seul double exact (Saut).
+    // (le type PoseHd est déclaré en bas de ce fichier)
+
+    public static PoseHd PoseHd(EtatPilouFin etat, long t)
+    {
+        string expr = etat.Humeur == "neutre" ? "repos" : etat.Humeur;
+        var p = new PoseHd(expr, t, false, false, false, 0, 0.0, false);
+        long dt = etat.Dt;
+        switch (etat.Anim)
+        {
+            case "marche": return p with { Marche = true };
+            case "parle": return p with { Parle = dt / 140 % 2 == 0 };
+            case "cligne": return p with { Cligne = true };
+            case "regard-d": return p with { Regard = 1 };
+            case "regard-g": return p with { Regard = -1 };
+            case "joie":
+            {
+                long f = Math.Min(1000, dt * 1000 / 700);
+                return p with { Expr = "joie", Saut = 12 * f * (1000 - f) / 1000 / 1000.0 };
+            }
+            case "coucou": return p with { Expr = "joie", Salue = true };
+            case "surpris": return p with { Expr = "surpris", Saut = dt < 250 ? 1.5 : 0.0 };
+            case "repos-peur": return p with { Expr = "peur" };
+        }
+        return p;
     }
 
     // ---- Où poser un panneau sur la scène (les choix, sur le PC)
@@ -380,7 +431,7 @@ public static class Theatre
 
     // ---- Le personnage en pied
 
-    private static int XEntree(Scene sc, long tIn, long t) => (int)Math.Max(sc.Interlocuteur, EntreePerso - (t - tIn) * VitessePerso / 1000);
+    private static int XEntree(Scene sc, long tIn, long t) => (int)Math.Max(sc.Interlocuteur, sc.D.W + E(sc, EntreePerso - W) - (t - tIn) * E(sc, VitessePerso) / 1000);
 
     private static (string Cur, long TIn, (string Sid, long T, int X)? Sortie, List<(long, long)> Paroles) EtatPerso(Scene sc, IReadOnlyList<Evenement> evts, long t)
     {
@@ -425,10 +476,10 @@ public static class Theatre
         if (cur == "")
         {
             if (sortie is not { } so || !cx.Anims.TryGetValue(so.Sid, out var a0)) return null;
-            long xs = so.X + (t - so.T) * VitessePerso / 1000;
-            if (xs > W + 30) return null;
+            long xs = so.X + (t - so.T) * E(sc, VitessePerso) / 1000;
+            if (xs > sc.D.W + E(sc, 30)) return null;
             int k0 = (int)(t / 166 % 2);
-            return new Pose(so.Sid, a0["repos"].Image(t), (int)xs, Sol(sc, (int)Math.Min(xs, W)) - k0, false);
+            return new Pose(so.Sid, a0["repos"].Image(t), (int)xs, Sol(sc, (int)Math.Min(xs, sc.D.W)) - k0, false);
         }
         if (!cx.Anims.TryGetValue(cur, out var a)) return null;
         int x = XEntree(sc, tIn, t), y = Sol(sc, x);
@@ -447,7 +498,7 @@ public static class Theatre
         long cy = t / PersoCycle, u = t % PersoCycle;
         if (saut < 0 && t - tIn > PersoCycle && AnimationsCampagne.Hasard(cy, 21, 7) < 3000 && u >= PersoSaut && u < PersoSaut + SautPerso.Length * Pas)
             saut = (u - PersoSaut) / Pas;
-        if (saut >= 0) return new Pose(cur, a["repos"].Premiere, x, y + SautPerso[saut], miroir);
+        if (saut >= 0) return new Pose(cur, a["repos"].Premiere, x, y + E(sc, SautPerso[saut]), miroir);
         foreach (var (t0, t1) in paroles)
             if (t0 <= t && t < t1 && a.TryGetValue("parle", out var pa)) return new Pose(cur, pa.Image(t - t0), x, y, miroir);
         if (a.TryGetValue("cligne", out var c2) && AnimationsCampagne.Cligne(t + 1700)) return new Pose(cur, c2.Premiere, x, y, miroir);
@@ -470,7 +521,7 @@ public static class Theatre
         return f;
     }
 
-    private static (int X, int Y, bool Miroir) Vol(int[] p, long t)
+    private static (int X, int Y, bool Miroir) Vol(Scene sc, int[] p, long t)
     {
         int x0 = p[0], y0 = p[1], x1 = p[2], y1 = p[3], g = p[4];
         long c = t / VolCycle, u = t % VolCycle;
@@ -480,13 +531,14 @@ public static class Theatre
         int by = y0 + AnimationsCampagne.Hasard(c + 1, 2, g) * (y1 - y0) / 10000;
         int f = u < VolPose ? 0 : Lisse(u - VolPose, VolCycle - VolPose);
         int x = ax + (int)Div((long)(bx - ax) * f, 1000);
-        int y = ay + (int)Div((long)(by - ay) * f, 1000) + (int)Div(Sin(t / 140), 700);
+        int y = ay + (int)Div((long)(by - ay) * f, 1000) + (int)Div(Sin(t / 140) * sc.D.Num, 700L * sc.D.Den);
         return (x, y, bx < ax);
     }
 
     internal static (int X, int Y, int Image, bool Miroir) PositionActeur(Contexte cx, IReadOnlyList<Evenement> evts, int i, long t)
     {
-        var a = cx.Scene.Acteurs[i];
+        var sc = cx.Scene;
+        var a = sc.Acteurs[i];
         var p = a.P;
         long duree = Math.Max(1, cx.Duree(a.Sprite));
         var fuites = a.Comportement is "vol" or "traverse" ? Fuites(cx, evts, i, t) : new List<long>();
@@ -500,27 +552,27 @@ public static class Theatre
                     if (t < tf + FuiteAbsent)
                     {
                         if (t >= tf + FuiteVol) return (0, 0, -1, false);
-                        var (fx, fy, _) = Vol(p, tf);
-                        int d = fx < W / 2 ? 1 : -1;
-                        return ((int)(fx - d * ((t - tf) * 90 / 1000)), (int)(fy - (t - tf) * 30 / 1000), (int)(t / duree), d > 0);
+                        var (fx, fy, _) = Vol(sc, p, tf);
+                        int d = fx < sc.D.W / 2 ? 1 : -1;
+                        return ((int)(fx - d * ((t - tf) * E(sc, 90) / 1000)), (int)(fy - (t - tf) * E(sc, 30) / 1000), (int)(t / duree), d > 0);
                     }
                 }
-                var (x, y, m) = Vol(p, t);
+                var (x, y, m) = Vol(sc, p, t);
                 return (x, y, (int)(t / duree), m);
             }
             case "traverse":
             {
                 int y0 = p[0], y1 = p[1], periode = p[2], decalage = p[3], vitesse = p[4];
                 long tt = t + decalage, c = tt / periode, u = tt % periode;
-                long x = -12 + u * vitesse / 1000;
-                long y = y0 + AnimationsCampagne.Hasard(c, 3, 5) * (y1 - y0) / 10000 + Div(Sin(t / 160), 800);
+                long x = -E(sc, 12) + u * vitesse / 1000;
+                long y = y0 + AnimationsCampagne.Hasard(c, 3, 5) * (y1 - y0) / 10000 + Div(Sin(t / 160) * sc.D.Num, 800L * sc.D.Den);
                 foreach (var tf in fuites)
                     if ((tf + decalage) / periode == c)
                     {
-                        x += (t - tf) * 60 / 1000;
-                        y -= (t - tf) * 25 / 1000;
+                        x += (t - tf) * E(sc, 60) / 1000;
+                        y -= (t - tf) * E(sc, 25) / 1000;
                     }
-                if (x > W + 12 || y < -8) return (0, 0, -1, false);
+                if (x > sc.D.W + E(sc, 12) || y < -E(sc, 8)) return (0, 0, -1, false);
                 return ((int)x, (int)y, (int)(t / duree), false);
             }
             case "rond":
@@ -534,25 +586,26 @@ public static class Theatre
                 long u = (t + p[3]) % p[2];
                 if (u >= 700) return (0, 0, -1, false);
                 long f = u * 1000 / 700;
-                long arc = 12 * 4 * f * (1000 - f) / 1000000;
-                return ((int)(p[0] + 20 * f / 1000), (int)(p[1] - arc), f < 400 ? 0 : f < 600 ? 1 : 2, false);
+                long arc = E(sc, 12) * 4 * f * (1000 - f) / 1000000;
+                return ((int)(p[0] + E(sc, 20) * f / 1000), (int)(p[1] - arc), f < 400 ? 0 : f < 600 ? 1 : 2, false);
             }
             case "pose":
                 return (p[0], p[1], (int)(t / duree), false);
             case "flotte":
             {
                 long u = (t + p[3]) % p[2];
-                long px = p[0] + Div(u * p[4], 1000) + Div(Sin(u / 200) * 2L, 1000);
+                long px = p[0] + Div(u * p[4], 1000) + Div(Sin(u / 200) * E(sc, 2), 1000);
                 long py = p[1] + Div(u * p[5], 1000);
-                if (px < -8 || px > W + 8 || py < -8 || py > H + 8) return (0, 0, -1, false);
+                long m8 = E(sc, 8);
+                if (px < -m8 || px > sc.D.W + m8 || py < -m8 || py > sc.D.H + m8) return (0, 0, -1, false);
                 return ((int)px, (int)py, (int)(t / duree), false);
             }
             case "chute":
             {
                 long u = (t + p[3]) % p[2];
-                long py = p[1] + u * 14 / 1000;
-                long px = p[0] + Div(Sin(u / 150) * 4L, 1000);
-                if (py > H + 4) return (0, 0, -1, false);
+                long py = p[1] + u * E(sc, 14) / 1000;
+                long px = p[0] + Div(Sin(u / 150) * E(sc, 4), 1000);
+                if (py > sc.D.H + E(sc, 4)) return (0, 0, -1, false);
                 return ((int)px, (int)py, (int)(u / duree), false);
             }
         }
@@ -562,19 +615,20 @@ public static class Theatre
     private static Cible CibleA(Contexte cx, IReadOnlyList<Evenement> avant, long tc, int x, int y)
     {
         var sc = cx.Scene;
-        var p = Pilou(cx, avant, tc);
-        if (p.Visible && Math.Abs(x - p.X) <= 10 && y >= p.Y - 22 && y <= p.Y + 1) return new Cible("pilou", 0, "", p.X);
+        var p = PilouEtat(cx, avant, tc);
+        var (lx, ly) = ReferenceEquals(sc.D, Ancienne) ? (E(sc, 10), E(sc, 22)) : (31, 87);
+        if (p.Visible && Math.Abs(x - p.X) <= lx && y >= p.Y - ly && y <= p.Y + 1) return new Cible("pilou", 0, "", p.X);
         if (Perso(cx, avant, tc) is { } pp)
         {
             var sp = cx.Sprites(pp.Sprite);
-            int w = sp?.W ?? 24, h = sp?.H ?? 32;
+            int w = sp?.W ?? E(sc, 24), h = sp?.H ?? E(sc, 32);
             if (Math.Abs(x - pp.X) <= w / 2 && y > pp.Y - h && y <= pp.Y) return new Cible("perso", 0, "", pp.X);
         }
         for (int i = 0; i < sc.Acteurs.Count; i++)
         {
             if (sc.Acteurs[i].Comportement is not ("vol" or "traverse")) continue;
             var (ax, ay, im, _) = PositionActeur(cx, avant, i, tc);
-            if (im >= 0 && Math.Abs(x - ax) <= 6 && y >= ay - 7 && y <= ay + 2) return new Cible("acteur", i, "", 0);
+            if (im >= 0 && Math.Abs(x - ax) <= E(sc, 6) && y >= ay - E(sc, 7) && y <= ay + E(sc, 2)) return new Cible("acteur", i, "", 0);
         }
         for (int j = 0; j < sc.Sensibles.Count; j++)
         {
@@ -624,32 +678,32 @@ public static class Theatre
             if (c.Sorte == "pilou" && dt < 350)
             {
                 var p = Pilou(cx, new Prefixe(evts, k), tc);
-                o.Add(new Pose("acteur-eclats", (int)(dt / 70), p.X, p.Y - 24, false));
+                o.Add(new Pose("acteur-eclats", (int)(dt / 70), p.X, p.Y - E(sc, 24), false));
             }
             else if (c.Sorte == "sensible")
             {
                 var pr = sc.Sensibles[c.I].P;
                 if (c.Reaction == "bulle" && dt < 1050) o.Add(new Pose("acteur-bulle", Bulle[dt / 150], pr[0], pr[1], false));
                 if (c.Reaction == "bulle" && dt < 1100)
-                    o.Add(new Pose("acteur-note", (int)(t / 180 % 2), pr[0] + 5, (int)(pr[1] - 5 - dt * 10 / 1000), false));
+                    o.Add(new Pose("acteur-note", (int)(t / 180 % 2), pr[0] + E(sc, 5), (int)(pr[1] - E(sc, 5) - dt * E(sc, 10) / 1000), false));
                 if (c.Reaction == "rond")
                 {
                     ronds[c.I] = ronds.GetValueOrDefault(c.I) + 1;
-                    if (dt < 1400) o.Add(new Pose("acteur-rond", (int)(dt / 280), ex, ey + 2, false));
+                    if (dt < 1400) o.Add(new Pose("acteur-rond", (int)(dt / 280), ex, ey + E(sc, 2), false));
                     if (ronds[c.I] % 3 == 0 && dt < 700)
                     {
                         long f = dt * 1000 / 700;
-                        long arc = 12 * 4 * f * (1000 - f) / 1000000;
-                        o.Add(new Pose("acteur-poisson", f < 400 ? 0 : f < 600 ? 1 : 2, (int)(ex + 20 * f / 1000), (int)(ey - arc), false));
+                        long arc = E(sc, 12) * 4 * f * (1000 - f) / 1000000;
+                        o.Add(new Pose("acteur-poisson", f < 400 ? 0 : f < 600 ? 1 : 2, (int)(ex + E(sc, 20) * f / 1000), (int)(ey - arc), false));
                         if (dt < 360) o.Add(new Pose("acteur-plouf", (int)(dt / 90), ex, ey, false));
                     }
-                    if (ronds[c.I] % 3 == 0 && dt >= 700 && dt < 1060) o.Add(new Pose("acteur-plouf", (int)((dt - 700) / 90), ex + 20, ey, false));
+                    if (ronds[c.I] % 3 == 0 && dt >= 700 && dt < 1060) o.Add(new Pose("acteur-plouf", (int)((dt - 700) / 90), ex + E(sc, 20), ey, false));
                 }
                 if (c.Reaction == "graines" && dt < 4000)
                     for (int g = 0; g < 5; g++)
                     {
-                        int vx = -8 - g * 3, vy = -6 + g * 2;
-                        long gx = pr[0] + Div(dt * vx, 1000) + Div(Sin(dt / 200 + g * 5) * 2L, 1000);
+                        int vx = E(sc, -8 - g * 3), vy = E(sc, -6 + g * 2);
+                        long gx = pr[0] + Div(dt * vx, 1000) + Div(Sin(dt / 200 + g * 5) * E(sc, 2), 1000);
                         long gy = pr[1] + Div(dt * vy, 1000);
                         o.Add(new Pose("acteur-graine", (int)((t / 300 + g) % 2), (int)gx, (int)gy, false));
                     }
@@ -662,30 +716,30 @@ public static class Theatre
     // ---- Le compositeur : décor, puis acteurs et Pilou triés par leurs pieds, puis les effets.
 
     // teinte : contour, ombre, base, clair (ARGB) pour les couleurs @ du mini-Pilou.
-    public static void Poser(uint[] px, Sprite? s, int im, int x, int y, bool miroir, uint[] teinte, int? ancreX = null, int? ancreY = null)
+    public static void Poser(uint[] px, Sprite? s, int im, int x, int y, bool miroir, uint[] teinte, int? ancreX = null, int? ancreY = null, int largeur = W, int hauteur = H)
     {
         if (s is null || s.Images.Count == 0) return;
         var g = s.Images[((im % s.Images.Count) + s.Images.Count) % s.Images.Count];
         var pal = s.Compilee();
-        int w = s.W, h = s.H;
+        int w = s.W, h = s.H;   // la taille du sprite (le miroir s'y rapporte), pas celle de la scène
         int ax = ancreX ?? w / 2, ay = ancreY ?? h - 1;
         int ox = x - (miroir ? w - 1 - ax : ax), oy = y - ay;
         for (int j = 0; j < g.Length; j++)
         {
             int Y = oy + j;
-            if (Y < 0 || Y >= H) continue;
+            if (Y < 0 || Y >= hauteur) continue;
             var ligne = g[j];
             for (int i = 0; i < ligne.Length; i++)
             {
                 char ch = ligne[i];
                 if (ch == '.' || ch >= 128) continue;
                 int X = ox + (miroir ? w - 1 - i : i);
-                if (X < 0 || X >= W) continue;
+                if (X < 0 || X >= largeur) continue;
                 uint c = pal[ch];
                 if (c is >= 1 and <= 4) c = teinte[c - 1] | 0xFF000000;
                 uint a = c >> 24;
                 if (a == 0) continue;
-                int k = Y * W + X;
+                int k = Y * largeur + X;
                 if (a == 255) px[k] = c;
                 else
                 {
@@ -738,3 +792,6 @@ public static class Theatre
         return h;
     }
 }
+
+// Ce que la référence appelle « pose » (theatre.pose_hd) : les champs d'Allure que la scène HD fixe pour le Pilou fin.
+public readonly record struct PoseHd(string Expr, long T, bool Marche, bool Parle, bool Cligne, int Regard, double Saut, bool Salue);

@@ -43,6 +43,29 @@ public final class Theatre {
 
     public static final String[] HUMEURS = {"joie", "peur", "triste", "surpris", "determine", "fatigue", "tendre", "colere", "malice", "neutre"};
 
+    /** La taille de la scène et l'échelle des longueurs du moteur (docs/SCENES-HD.md) : l'ancienne (192 × 80) et la
+     *  haute définition (480 × 240, longueurs × 5/2). Une scène porte la sienne ; on ne mélange jamais les deux. */
+    public static final class Definition {
+        public final String nom;
+        public final int w, h, num, den;
+
+        Definition(String nom, int w, int h, int num, int den) {
+            this.nom = nom;
+            this.w = w;
+            this.h = h;
+            this.num = num;
+            this.den = den;
+        }
+    }
+
+    public static final Definition ANCIENNE = new Definition("ancienne", 192, 80, 1, 1);
+    public static final Definition HD = new Definition("hd", 480, 240, 5, 2);
+
+    /** Une longueur ou une vitesse du moteur (écrite à l'ancienne unité) dans la définition de la scène. */
+    static int e(Scene sc, long v) {
+        return (int) div(v * sc.d.num, sc.d.den);
+    }
+
     private static long div(long a, long b) {
         return a / b;
     }
@@ -94,13 +117,23 @@ public final class Theatre {
     public static final class Scene {
         public String nom = "";
         /** x0, y0, x1, y1 : la ligne du sol, de gauche à droite. */
-        public int[] sol = {0, 78, W, 78};
+        public final Definition d;
+        public int[] sol;
         public int place = 24;
         public int interlocuteur = 150;
         /** L'accessoire dont parle le texte (x0, y0, x1, y1), ou null : le panneau des choix du PC l'évite. */
         public int[] cle;
         public final List<Acteur> acteurs = new ArrayList<>();
         public final List<Sensible> sensibles = new ArrayList<>();
+
+        public Scene() {
+            this(ANCIENNE);
+        }
+
+        public Scene(Definition d) {
+            this.d = d;
+            this.sol = new int[]{0, d.h - 2, d.w, d.h - 2};
+        }
     }
 
     private static List<String[]> mots(String texte) {
@@ -124,11 +157,15 @@ public final class Theatre {
     }
 
     public static Map<String, Scene> lireScenes(String texte) {
+        return lireScenes(texte, ANCIENNE);
+    }
+
+    public static Map<String, Scene> lireScenes(String texte, Definition d) {
         Map<String, Scene> scenes = new HashMap<>();
         Scene sc = null;
         for (String[] m : mots(texte)) {
             if (m[0].equals("scene")) {
-                sc = new Scene();
+                sc = new Scene(d);
                 sc.nom = m[1];
                 scenes.put(m[1], sc);
             } else if (sc == null) {
@@ -228,16 +265,39 @@ public final class Theatre {
         public final Map<String, Anim> p;
         public final Map<String, Map<String, Anim>> anims;
         public final Function<String, Sprite> sprites;
+        /** Scène HD : les sprites HD des acteurs et des personnages (assets/sprites-hd), ou null (ancienne définition). Les
+         *  durées d'image restent celles de `sprites`, comme la référence. */
+        public final Function<String, TheatreHd.SpriteHd> hd;
         private final Map<Integer, Cible> cibles = new HashMap<>();
         private int evtsVus = -1;
         private List<Evenement> liste;
 
         public Contexte(Scene scene, Map<String, Map<String, Anim>> anims, Function<String, Sprite> sprites) {
+            this(scene, anims, sprites, null);
+        }
+
+        public Contexte(Scene scene, Map<String, Map<String, Anim>> anims, Function<String, Sprite> sprites,
+                        Function<String, TheatreHd.SpriteHd> hd) {
+            this.hd = hd;
             this.scene = scene;
             Map<String, Anim> pi = anims.get(ID_PILOU);
             this.p = pi != null ? pi : new HashMap<String, Anim>();
             this.anims = anims;
             this.sprites = sprites;
+        }
+
+        /** Nombre d'images du sprite à dessiner (acteur, personnage, effet) ; 0 : absent, il n'est pas dessiné. */
+        public int nbImages(String sid) {
+            if (hd != null) {
+                TheatreHd.SpriteHd s = hd.apply(sid);
+                return s == null ? 0 : s.images.length;
+            }
+            Sprite s = sprites.apply(sid);
+            return s == null ? 0 : s.images.size();
+        }
+
+        public boolean existe(String sid) {
+            return hd != null ? hd.apply(sid) != null : sprites.apply(sid) != null;
         }
 
         public int duree(String sid) {
@@ -347,6 +407,13 @@ public final class Theatre {
         long duree;
         int x;
         boolean parti;
+        final int vitesse, sortieD, sortieG;
+
+        Marche(Scene sc) {
+            vitesse = e(sc, VITESSE);
+            sortieD = sc.d.w + e(sc, SORTIE_D - W);
+            sortieG = e(sc, SORTIE_G);
+        }
 
         void action(String sorte, long t0, int x0, int x1, String nom, long duree) {
             this.sorte = sorte;
@@ -359,10 +426,10 @@ public final class Theatre {
 
         void finir(long jusque) {
             if (sorte.equals("marche")) {
-                long fait = (jusque - t0) * VITESSE / 1000;
+                long fait = (jusque - t0) * vitesse / 1000;
                 if (fait >= Math.abs(x1 - x0)) {
                     x = x1;
-                    parti = x1 >= SORTIE_D || x1 <= SORTIE_G;
+                    parti = x1 >= sortieD || x1 <= sortieG;
                     sorte = "";
                 }
             } else if (sorte.equals("anim") && jusque - t0 >= duree) {
@@ -372,8 +439,32 @@ public final class Theatre {
 
         int position(long jusque) {
             if (!sorte.equals("marche")) return x;
-            long fait = (jusque - t0) * VITESSE / 1000;
+            long fait = (jusque - t0) * vitesse / 1000;
             return (int) (x1 >= x0 ? x0 + fait : x0 - fait);
+        }
+    }
+
+    /** Ce que la scène sait de Pilou à l'instant t, sans image : x au centre, y la ligne des pieds, quelle animation et
+     *  depuis quand (dt : ms dans l'animation ; -1 : sa première image, fixe), miroir, visible, humeur. */
+    public static final class Etat {
+        public final int x, y;
+        public final String anim, humeur;
+        public final long dt;
+        public final boolean miroir, visible;
+
+        Etat(int x, int y, String anim, long dt, boolean miroir, boolean visible, String humeur) {
+            this.x = x;
+            this.y = y;
+            this.anim = anim;
+            this.dt = dt;
+            this.miroir = miroir;
+            this.visible = visible;
+            this.humeur = humeur;
+        }
+
+        @Override
+        public String toString() {
+            return "Etat(" + x + ", " + y + ", " + anim + ", " + dt + ", " + miroir + ", " + visible + ", " + humeur + ")";
         }
     }
 
@@ -381,18 +472,25 @@ public final class Theatre {
         return pilou(cx, evts, t, 0, Animations.COMPLETES);
     }
 
+    /** Le mini-Pilou de la scène fine : l'image de l'animation de pilouEtat. */
     public static EtatPilou pilou(Contexte cx, List<Evenement> evts, long t, int regard, String niveau) {
+        Etat s = pilouEtat(cx, evts, t, regard, niveau);
+        Anim a = cx.p.get(s.anim);
+        return new EtatPilou(s.x, s.y, s.dt < 0 ? a.premiere : a.image(s.dt), s.miroir, s.visible);
+    }
+
+    public static Etat pilouEtat(Contexte cx, List<Evenement> evts, long t, int regard, String niveau) {
         Scene sc = cx.scene;
         Map<String, Anim> P = cx.p;
         int x0 = sc.place;
         String humeur = "neutre";
         if (!niveau.equals(Animations.COMPLETES)) {
             for (Evenement e : evts) if (e.t <= t && e.sorte.equals("humeur")) humeur = e.humeur;
-            int im = P.get(face(humeur)).premiere;
-            if (niveau.equals(Animations.REDUITES) && Animations.cligne(t)) im = P.get("cligne").premiere;
-            return new EtatPilou(x0, sol(sc, x0), im, x0 > W / 2, true);
+            String nom = niveau.equals(Animations.REDUITES) && Animations.cligne(t) ? "cligne" : face(humeur);
+            return new Etat(x0, sol(sc, x0), nom, -1, x0 > sc.d.w / 2, true, humeur);
         }
-        Marche m = new Marche();
+        Marche m = new Marche(sc);
+        int entree = e(sc, ENTREE);
         m.x = x0;
         List<long[]> paroles = new ArrayList<>();
         Set<Integer> vus = new HashSet<>(clics(evts));
@@ -403,7 +501,7 @@ public final class Theatre {
             m.finir(e.t);
             switch (e.sorte) {
                 case "entree": {
-                    int xe = e.a != 0 ? (int) e.a : ENTREE;     // a : d'où il entre (0 : du bord gauche)
+                    int xe = e.a != 0 ? (int) e.a : entree;     // a : d'où il entre (0 : du bord gauche)
                     m.x = xe;
                     m.parti = false;
                     m.action("marche", e.t, xe, sc.place, null, 0);
@@ -411,7 +509,7 @@ public final class Theatre {
                 }
                 case "depart": {
                     m.x = m.position(e.t);
-                    m.action("marche", e.t, m.x, e.a >= 0 ? SORTIE_D : SORTIE_G, null, 0);
+                    m.action("marche", e.t, m.x, e.a >= 0 ? m.sortieD : m.sortieG, null, 0);
                     break;
                 }
                 case "humeur":
@@ -444,36 +542,83 @@ public final class Theatre {
         }
         m.finir(t);
         int x = m.x;
-        if (m.parti) return new EtatPilou(x, sol(sc, x), P.get(face(humeur)).premiere, false, false);
+        if (m.parti) return new Etat(x, sol(sc, x), face(humeur), -1, false, false, humeur);
         if (m.sorte.equals("marche")) {
             int px = m.position(t);
-            return new EtatPilou(px, sol(sc, px), P.get("marche").image(t - m.t0), m.x1 < m.x0, true);
+            return new Etat(px, sol(sc, px), "marche", t - m.t0, m.x1 < m.x0, true, humeur);
         }
-        boolean miroir = x > W / 2;
+        boolean miroir = x > sc.d.w / 2;
         int y = sol(sc, x);
         if (m.sorte.equals("anim")) {
             String nom = m.nom != null ? m.nom : "repos";
             if (nom.equals("surpris") && t - m.t0 >= P.get("surpris").duree())
-                return new EtatPilou(x, y, P.get("repos-peur").image(t - m.t0), miroir, true);
-            if (nom.equals("regard-d") || nom.equals("regard-g")) return new EtatPilou(x, y, P.get(nom).premiere, false, true);
-            return new EtatPilou(x, y, P.get(nom).image(t - m.t0), miroir, true);
+                return new Etat(x, y, "repos-peur", t - m.t0, miroir, true, humeur);
+            if (nom.equals("regard-d") || nom.equals("regard-g")) return new Etat(x, y, nom, -1, false, true, humeur);
+            return new Etat(x, y, nom, t - m.t0, miroir, true, humeur);
         }
         for (long[] pa : paroles)
-            if (pa[0] <= t && t < pa[1]) return new EtatPilou(x, y, P.get("parle").image(t - pa[0]), miroir, true);
-        if (Animations.cligne(t)) return new EtatPilou(x, y, P.get("cligne").premiere, miroir, true);
-        if (regard != 0) return new EtatPilou(x, y, P.get(regard > 0 ? "regard-d" : "regard-g").premiere, false, true);
+            if (pa[0] <= t && t < pa[1]) return new Etat(x, y, "parle", t - pa[0], miroir, true, humeur);
+        if (Animations.cligne(t)) return new Etat(x, y, "cligne", -1, miroir, true, humeur);
+        if (regard != 0) return new Etat(x, y, regard > 0 ? "regard-d" : "regard-g", -1, false, true, humeur);
         long cy = t / REGARD_CYCLE, u = t % REGARD_CYCLE;
         if (Animations.hasard(cy, 11, 3) < 4000 && u >= REGARD_DEBUT && u < REGARD_DEBUT + REGARD_DUREE) {
             String nom = Animations.hasard(cy, 12, 3) < 5000 ? "regard-g" : "regard-d";
-            return new EtatPilou(x, y, P.get(nom).premiere, false, true);
+            return new Etat(x, y, nom, -1, false, true, humeur);
         }
-        return new EtatPilou(x, y, P.get(face(humeur)).image(t), miroir, true);
+        return new Etat(x, y, face(humeur), t, miroir, true, humeur);
+    }
+
+    /** La pose du Pilou fin du bureau (champs de rendu.Pose, tels que la référence les écrit) pour un état de
+     *  pilouEtat : en HD, le Pilou de scène est le vrai Pilou du bureau. Arithmétique entière, puis un seul double.
+     *  Valeurs : String (expr), Long (t), Integer (regard), Double (saut), Boolean (les autres). */
+    public static Map<String, Object> poseHd(Etat s, long t) {
+        String expr = s.humeur.equals("neutre") ? "repos" : s.humeur;
+        Map<String, Object> p = new HashMap<>();
+        p.put("expr", expr);
+        p.put("t", t);
+        switch (s.anim) {
+            case "marche":
+                p.put("marche", true);
+                break;
+            case "parle":
+                p.put("parle", (s.dt / 140) % 2 == 0);
+                break;
+            case "cligne":
+                p.put("cligne", true);
+                break;
+            case "regard-d":
+                p.put("regard", 1);
+                break;
+            case "regard-g":
+                p.put("regard", -1);
+                break;
+            case "joie": {
+                long f = Math.min(1000, s.dt * 1000 / 700);
+                p.put("expr", "joie");
+                p.put("saut", (12 * f * (1000 - f) / 1000) / 1000.0);
+                break;
+            }
+            case "coucou":
+                p.put("expr", "joie");
+                p.put("salue", true);
+                break;
+            case "surpris":
+                p.put("expr", "surpris");
+                p.put("saut", s.dt < 250 ? 1.5 : 0.0);
+                break;
+            case "repos-peur":
+                p.put("expr", "peur");
+                break;
+            default:
+                break;
+        }
+        return p;
     }
 
     // ---- Le personnage en pied
 
     private static int xEntree(Scene sc, long tIn, long t) {
-        return (int) Math.max(sc.interlocuteur, ENTREE_PERSO - (t - tIn) * VITESSE_PERSO / 1000);
+        return (int) Math.max(sc.interlocuteur, sc.d.w + e(sc, ENTREE_PERSO - W) - (t - tIn) * e(sc, VITESSE_PERSO) / 1000);
     }
 
     /** Ce que les événements « perso » et « parle-perso » ont fait jusqu'à t. */
@@ -526,10 +671,10 @@ public final class Theatre {
         if (st.cur.isEmpty()) {
             Map<String, Anim> a0 = st.sortieSid == null ? null : cx.anims.get(st.sortieSid);
             if (a0 == null) return null;
-            long xs = st.sortieX + (t - st.sortieT) * VITESSE_PERSO / 1000;
-            if (xs > W + 30) return null;
+            long xs = st.sortieX + (t - st.sortieT) * e(sc, VITESSE_PERSO) / 1000;
+            if (xs > sc.d.w + e(sc, 30)) return null;
             int k0 = (int) (t / 166 % 2);
-            return new Pose(st.sortieSid, a0.get("repos").image(t), (int) xs, sol(sc, (int) Math.min(xs, W)) - k0, false);
+            return new Pose(st.sortieSid, a0.get("repos").image(t), (int) xs, sol(sc, (int) Math.min(xs, sc.d.w)) - k0, false);
         }
         Map<String, Anim> a = cx.anims.get(st.cur);
         if (a == null) return null;
@@ -547,7 +692,7 @@ public final class Theatre {
         long cy = t / PERSO_CYCLE, u = t % PERSO_CYCLE;
         if (saut < 0 && t - st.tIn > PERSO_CYCLE && Animations.hasard(cy, 21, 7) < 3000 && u >= PERSO_SAUT && u < PERSO_SAUT + SAUT_PERSO.length * PAS)
             saut = (u - PERSO_SAUT) / PAS;
-        if (saut >= 0) return new Pose(st.cur, a.get("repos").premiere, x, y + SAUT_PERSO[(int) saut], miroir);
+        if (saut >= 0) return new Pose(st.cur, a.get("repos").premiere, x, y + e(sc, SAUT_PERSO[(int) saut]), miroir);
         Anim pa = a.get("parle");
         for (long[] pr : st.paroles)
             if (pr[0] <= t && t < pr[1] && pa != null) return new Pose(st.cur, pa.image(t - pr[0]), x, y, miroir);
@@ -583,7 +728,7 @@ public final class Theatre {
     }
 
     /** {x, y, miroir (0 ou 1)} du vol d'un acteur à l'instant t. */
-    private static int[] vol(int[] p, long t) {
+    private static int[] vol(Scene sc, int[] p, long t) {
         int x0 = p[0], y0 = p[1], x1 = p[2], y1 = p[3], g = p[4];
         long c = t / VOL_CYCLE, u = t % VOL_CYCLE;
         int ax = x0 + Animations.hasard(c, 1, g) * (x1 - x0) / 10000;
@@ -592,7 +737,7 @@ public final class Theatre {
         int by = y0 + Animations.hasard(c + 1, 2, g) * (y1 - y0) / 10000;
         int f = u < VOL_POSE ? 0 : lisse(u - VOL_POSE, VOL_CYCLE - VOL_POSE);
         int x = ax + (int) div((long) (bx - ax) * f, 1000);
-        int y = ay + (int) div((long) (by - ay) * f, 1000) + (int) div(sin(t / 140), 700);
+        int y = ay + (int) div((long) (by - ay) * f, 1000) + (int) div(sin(t / 140) * (long) sc.d.num, 700L * sc.d.den);
         return new int[]{x, y, bx < ax ? 1 : 0};
     }
 
@@ -600,7 +745,8 @@ public final class Theatre {
 
     /** {x, y, image (-1 : absent), miroir (0 ou 1)}. */
     static int[] positionActeur(Contexte cx, List<Evenement> evts, int i, long t) {
-        Acteur a = cx.scene.acteurs.get(i);
+        Scene sc = cx.scene;
+        Acteur a = sc.acteurs.get(i);
         int[] p = a.p;
         long duree = Math.max(1, cx.duree(a.sprite));
         List<Long> fuites = a.comportement.equals("vol") || a.comportement.equals("traverse")
@@ -611,25 +757,25 @@ public final class Theatre {
                     long tf = fuites.get(k);
                     if (t < tf + FUITE_ABSENT) {
                         if (t >= tf + FUITE_VOL) return ABSENT;
-                        int[] v = vol(p, tf);
-                        int d = v[0] < W / 2 ? 1 : -1;
-                        return new int[]{(int) (v[0] - d * ((t - tf) * 90 / 1000)), (int) (v[1] - (t - tf) * 30 / 1000), (int) (t / duree), d > 0 ? 1 : 0};
+                        int[] v = vol(sc, p, tf);
+                        int d = v[0] < sc.d.w / 2 ? 1 : -1;
+                        return new int[]{(int) (v[0] - d * ((t - tf) * e(sc, 90) / 1000)), (int) (v[1] - (t - tf) * e(sc, 30) / 1000), (int) (t / duree), d > 0 ? 1 : 0};
                     }
                 }
-                int[] v = vol(p, t);
+                int[] v = vol(sc, p, t);
                 return new int[]{v[0], v[1], (int) (t / duree), v[2]};
             }
             case "traverse": {
                 int y0 = p[0], y1 = p[1], periode = p[2], decalage = p[3], vitesse = p[4];
                 long tt = t + decalage, c = tt / periode, u = tt % periode;
-                long x = -12 + u * vitesse / 1000;
-                long y = y0 + Animations.hasard(c, 3, 5) * (y1 - y0) / 10000 + div(sin(t / 160), 800);
+                long x = -e(sc, 12) + u * vitesse / 1000;
+                long y = y0 + Animations.hasard(c, 3, 5) * (y1 - y0) / 10000 + div(sin(t / 160) * (long) sc.d.num, 800L * sc.d.den);
                 for (long tf : fuites)
                     if ((tf + decalage) / periode == c) {
-                        x += (t - tf) * 60 / 1000;
-                        y -= (t - tf) * 25 / 1000;
+                        x += (t - tf) * e(sc, 60) / 1000;
+                        y -= (t - tf) * e(sc, 25) / 1000;
                     }
-                if (x > W + 12 || y < -8) return ABSENT;
+                if (x > sc.d.w + e(sc, 12) || y < -e(sc, 8)) return ABSENT;
                 return new int[]{(int) x, (int) y, (int) (t / duree), 0};
             }
             case "rond": {
@@ -641,23 +787,24 @@ public final class Theatre {
                 long u = (t + p[3]) % p[2];
                 if (u >= 700) return ABSENT;
                 long f = u * 1000 / 700;
-                long arc = 12 * 4 * f * (1000 - f) / 1000000;
-                return new int[]{(int) (p[0] + 20 * f / 1000), (int) (p[1] - arc), f < 400 ? 0 : f < 600 ? 1 : 2, 0};
+                long arc = e(sc, 12) * 4 * f * (1000 - f) / 1000000;
+                return new int[]{(int) (p[0] + e(sc, 20) * f / 1000), (int) (p[1] - arc), f < 400 ? 0 : f < 600 ? 1 : 2, 0};
             }
             case "pose":
                 return new int[]{p[0], p[1], (int) (t / duree), 0};
             case "flotte": {
                 long u = (t + p[3]) % p[2];
-                long px = p[0] + div(u * p[4], 1000) + div(sin(u / 200) * 2L, 1000);
+                long px = p[0] + div(u * p[4], 1000) + div(sin(u / 200) * (long) e(sc, 2), 1000);
                 long py = p[1] + div(u * p[5], 1000);
-                if (px < -8 || px > W + 8 || py < -8 || py > H + 8) return ABSENT;
+                int m8 = e(sc, 8);
+                if (px < -m8 || px > sc.d.w + m8 || py < -m8 || py > sc.d.h + m8) return ABSENT;
                 return new int[]{(int) px, (int) py, (int) (t / duree), 0};
             }
             case "chute": {
                 long u = (t + p[3]) % p[2];
-                long py = p[1] + u * 14 / 1000;
-                long px = p[0] + div(sin(u / 150) * 4L, 1000);
-                if (py > H + 4) return ABSENT;
+                long py = p[1] + u * e(sc, 14) / 1000;
+                long px = p[0] + div(sin(u / 150) * (long) e(sc, 4), 1000);
+                if (py > sc.d.h + e(sc, 4)) return ABSENT;
                 return new int[]{(int) px, (int) py, (int) (u / duree), 0};
             }
             default:
@@ -667,19 +814,28 @@ public final class Theatre {
 
     private static Cible cibleA(Contexte cx, List<Evenement> avant, long tc, int x, int y) {
         Scene sc = cx.scene;
-        EtatPilou p = pilou(cx, avant, tc);
-        if (p.visible && Math.abs(x - p.x) <= 10 && y >= p.y - 22 && y <= p.y + 1) return new Cible("pilou", 0, "", p.x);
+        Etat p = pilouEtat(cx, avant, tc, 0, Animations.COMPLETES);
+        int lx = sc.d == ANCIENNE ? e(sc, 10) : 31, ly = sc.d == ANCIENNE ? e(sc, 22) : 87;
+        if (p.visible && Math.abs(x - p.x) <= lx && y >= p.y - ly && y <= p.y + 1) return new Cible("pilou", 0, "", p.x);
         Pose pp = perso(cx, avant, tc, Animations.COMPLETES);
         if (pp != null) {
-            Sprite sp = cx.sprites.apply(pp.sprite);
-            int w = sp != null ? sp.w() : 24, h = sp != null ? sp.h() : 32;
+            int w, h;
+            if (sc.d == HD) {
+                TheatreHd.SpriteHd sh = cx.hd != null ? cx.hd.apply(pp.sprite) : null;
+                w = sh != null ? sh.w : e(sc, 24);
+                h = sh != null ? sh.h : e(sc, 32);
+            } else {
+                Sprite sp = cx.sprites.apply(pp.sprite);
+                w = sp != null ? sp.w() : 24;
+                h = sp != null ? sp.h() : 32;
+            }
             if (Math.abs(x - pp.x) <= w / 2 && y > pp.y - h && y <= pp.y) return new Cible("perso", 0, "", pp.x);
         }
         for (int i = 0; i < sc.acteurs.size(); i++) {
             String comp = sc.acteurs.get(i).comportement;
             if (!comp.equals("vol") && !comp.equals("traverse")) continue;
             int[] r = positionActeur(cx, avant, i, tc);
-            if (r[2] >= 0 && Math.abs(x - r[0]) <= 6 && y >= r[1] - 7 && y <= r[1] + 2) return new Cible("acteur", i, "", 0);
+            if (r[2] >= 0 && Math.abs(x - r[0]) <= e(sc, 6) && y >= r[1] - e(sc, 7) && y <= r[1] + e(sc, 2)) return new Cible("acteur", i, "", 0);
         }
         for (int j = 0; j < sc.sensibles.size(); j++) {
             Sensible s = sc.sensibles.get(j);
@@ -699,9 +855,10 @@ public final class Theatre {
         Scene sc = cx.scene;
         for (int i = 0; i < sc.acteurs.size(); i++) {
             int[] r = positionActeur(cx, evts, i, t);
-            Sprite s = cx.sprites.apply(sc.acteurs.get(i).sprite);
-            if (r[2] < 0 || s == null || s.images.isEmpty()) continue;
-            o.add(new Pose(sc.acteurs.get(i).sprite, r[2] % s.images.size(), r[0], r[1], r[3] == 1));
+            String sid = sc.acteurs.get(i).sprite;
+            int n = cx.nbImages(sid);
+            if (r[2] < 0 || n == 0) continue;
+            o.add(new Pose(sid, r[2] % n, r[0], r[1], r[3] == 1));
         }
         return o;
     }
@@ -721,38 +878,38 @@ public final class Theatre {
             Cible c = cx.cibleDe(evts, k);
             int ex = (int) e.a, ey = (int) e.b;
             if (c.sorte.equals("pilou") && dt < 350) {
-                EtatPilou p = pilou(cx, new Prefixe(evts, k), tc);
-                o.add(new Pose("acteur-eclats", (int) (dt / 70), p.x, p.y - 24, false));
+                Etat p = pilouEtat(cx, new Prefixe(evts, k), tc, 0, Animations.COMPLETES);
+                o.add(new Pose("acteur-eclats", (int) (dt / 70), p.x, p.y - e(sc, 24), false));
             } else if (c.sorte.equals("sensible")) {
                 int[] pr = sc.sensibles.get(c.i).p;
                 boolean bulle = c.reaction.equals("bulle");
                 if (bulle && dt < 1050) o.add(new Pose("acteur-bulle", BULLE[(int) (dt / 150)], pr[0], pr[1], false));
                 if (bulle && dt < 1100)
-                    o.add(new Pose("acteur-note", (int) (t / 180 % 2), pr[0] + 5, (int) (pr[1] - 5 - dt * 10 / 1000), false));
+                    o.add(new Pose("acteur-note", (int) (t / 180 % 2), pr[0] + e(sc, 5), (int) (pr[1] - e(sc, 5) - dt * e(sc, 10) / 1000), false));
                 if (c.reaction.equals("rond")) {
                     Integer n0 = ronds.get(c.i);
                     int n = (n0 == null ? 0 : n0) + 1;
                     ronds.put(c.i, n);
-                    if (dt < 1400) o.add(new Pose("acteur-rond", (int) (dt / 280), ex, ey + 2, false));
+                    if (dt < 1400) o.add(new Pose("acteur-rond", (int) (dt / 280), ex, ey + e(sc, 2), false));
                     if (n % 3 == 0 && dt < 700) {
                         long f = dt * 1000 / 700;
-                        long arc = 12 * 4 * f * (1000 - f) / 1000000;
-                        o.add(new Pose("acteur-poisson", f < 400 ? 0 : f < 600 ? 1 : 2, (int) (ex + 20 * f / 1000), (int) (ey - arc), false));
+                        long arc = e(sc, 12) * 4 * f * (1000 - f) / 1000000;
+                        o.add(new Pose("acteur-poisson", f < 400 ? 0 : f < 600 ? 1 : 2, (int) (ex + e(sc, 20) * f / 1000), (int) (ey - arc), false));
                         if (dt < 360) o.add(new Pose("acteur-plouf", (int) (dt / 90), ex, ey, false));
                     }
-                    if (n % 3 == 0 && dt >= 700 && dt < 1060) o.add(new Pose("acteur-plouf", (int) ((dt - 700) / 90), ex + 20, ey, false));
+                    if (n % 3 == 0 && dt >= 700 && dt < 1060) o.add(new Pose("acteur-plouf", (int) ((dt - 700) / 90), ex + e(sc, 20), ey, false));
                 }
                 if (c.reaction.equals("graines") && dt < 4000)
                     for (int g = 0; g < 5; g++) {
-                        int vx = -8 - g * 3, vy = -6 + g * 2;
-                        long gx = pr[0] + div(dt * vx, 1000) + div(sin(dt / 200 + g * 5) * 2L, 1000);
+                        int vx = e(sc, -8 - g * 3), vy = e(sc, -6 + g * 2);
+                        long gx = pr[0] + div(dt * vx, 1000) + div(sin(dt / 200 + g * 5) * (long) e(sc, 2), 1000);
                         long gy = pr[1] + div(dt * vy, 1000);
                         o.add(new Pose("acteur-graine", (int) ((t / 300 + g) % 2), (int) gx, (int) gy, false));
                     }
             }
         }
         List<Pose> garde = new ArrayList<>();
-        for (Pose q : o) if (cx.sprites.apply(q.sprite) != null) garde.add(q);
+        for (Pose q : o) if (cx.existe(q.sprite)) garde.add(q);
         return garde;
     }
 
@@ -761,6 +918,11 @@ public final class Theatre {
     /** teinte : contour, ombre, base, clair (ARGB) pour les couleurs @ du mini-Pilou. ancreX / ancreY : -1 pour le
      *  centre du bas du sprite. px : W × H pixels ARGB. */
     public static void poser(int[] px, Sprite s, int im, int x, int y, boolean miroir, int[] teinte, int ancreX, int ancreY) {
+        poser(px, s, im, x, y, miroir, teinte, ancreX, ancreY, W, H);
+    }
+
+    /** Comme au-dessus, dans une image de largeur et de hauteur données (la scène : sa définition). */
+    public static void poser(int[] px, Sprite s, int im, int x, int y, boolean miroir, int[] teinte, int ancreX, int ancreY, int largeur, int hauteur) {
         if (s == null || s.images.isEmpty()) return;
         int n = s.images.size();
         String[] g = s.images.get(((im % n) + n) % n);
@@ -770,18 +932,18 @@ public final class Theatre {
         int ox = x - (miroir ? w - 1 - ax : ax), oy = y - ay;
         for (int j = 0; j < g.length; j++) {
             int yy = oy + j;
-            if (yy < 0 || yy >= H) continue;
+            if (yy < 0 || yy >= hauteur) continue;
             String ligne = g[j];
             for (int i = 0; i < ligne.length(); i++) {
                 char ch = ligne.charAt(i);
                 if (ch == '.' || ch >= 128) continue;
                 int xx = ox + (miroir ? w - 1 - i : i);
-                if (xx < 0 || xx >= W) continue;
+                if (xx < 0 || xx >= largeur) continue;
                 int c = pal[ch];
                 if (c >= 1 && c <= 4) c = teinte[c - 1] | 0xFF000000;
                 int a = c >>> 24;
                 if (a == 0) continue;
-                int k = yy * W + xx;
+                int k = yy * largeur + xx;
                 if (a == 255) {
                     px[k] = c;
                 } else {
